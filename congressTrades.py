@@ -23,6 +23,7 @@ class CongressTrades:
     def __init__(self):
         # Create an instance of the Tickers500 class
         self.tickers = Tickers500().tickers
+        self.asset_dict = self.get_asset_type_dict()
         # self.members = []
         self.members = self.get_congress_members()
         self.junk_members = []
@@ -32,7 +33,35 @@ class CongressTrades:
     def get_trades_by_member(self, member_list = None) -> pd.DataFrame:
         congress_data = self.get_congress_trading_data()
         trades_by_member_df = pd.DataFrame()
-        bad_docs = ["20025620", "20024317", "20025568", "20025705"]
+        bad_docs = [
+            "20025620", 
+            "20024317", 
+            "20025568", 
+            "20025705", 
+            "20025768", 
+            "20026238", 
+            "20024230", 
+            "20025711", 
+            "20024248", 
+            "20024461", 
+            "20024801", 
+            "20025419", 
+            "20025678",
+            "20024300",
+            "20025281",
+            "20026023",
+            "20024231",
+            "20024436",
+            "20024604",
+            # "20024982",
+            # "20025112",
+            # "20025373",
+            # "20025679",
+            # "20025770",
+            # "20025959",
+            # "20026143",
+            
+            ]
         
         try:
             for _, row in congress_data.iterrows():
@@ -109,7 +138,7 @@ class CongressTrades:
         asset_name = df['Asset Name'].values[0]
         return asset_name
 
-    def get_asset_type_df() -> pd.DataFrame:
+    def get_asset_type_df(self) -> pd.DataFrame:
         """
         Get the asset type codes from house.gov website.
         Returns
@@ -126,6 +155,26 @@ class CongressTrades:
         df = pd.read_html(html_io)[0]
 
         return df
+    
+    def get_asset_type_dict(self) -> dict:
+        """
+        Get the asset type codes from house.gov website.
+        Returns
+        -------
+        dict
+            A dictionary containing the asset codes and their names.
+        """
+        url = "https://fd.house.gov/reference/asset-type-codes.aspx"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        table = soup.find_all('table')[0]
+        html_string = str(table)
+        html_io = io.StringIO(html_string)
+        df = pd.read_html(html_io)[0]
+
+        asset_type_dict = df.set_index('Asset Code')['Asset Name'].to_dict()
+
+        return asset_type_dict
 
     def get_congress_trading_data(self) -> pd.DataFrame:
         """
@@ -342,7 +391,9 @@ class CongressTrades:
                 if current_trade["Ticker"] not in self.tickers:
                     print("Not in S&P 500: ", current_trade["Ticker"])
                     try:
-                        current_trade["Ticker"] = self.get_asset_type(current_trade["Ticker"].strip("[]"))
+                        # Check self.asset_dict for the asset type
+                        current_trade["Ticker"] = self.asset_dict[current_trade["Ticker"].strip("[]")]
+                        # current_trade["Ticker"] = self.get_asset_type(current_trade["Ticker"].strip("[]"))
                     except Exception as e:
                         print("download_and_parse_pdf, try get_asset_type: ", e)
                         current_trade["Ticker"] = "Not in S&P 500"

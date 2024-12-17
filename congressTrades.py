@@ -25,28 +25,40 @@ class CongressTrades:
         self.tickers = Tickers500().tickers
         # self.members = []
         self.members = self.get_congress_members()
-        self.junk_members = self.get_junk_members()
+        self.junk_members = []
+        # self.junk_members = self.get_junk_members()
         self.trades = self.get_trades_by_member()
         
     def get_trades_by_member(self, member_list = None) -> pd.DataFrame:
         congress_data = self.get_congress_trading_data()
         trades_by_member_df = pd.DataFrame()
+        bad_docs = ["20025620", "20024317", "20025568", "20025705"]
         
         try:
             for _, row in congress_data.iterrows():
                 member = f"{row['Last']}".strip()
                 # Check if the member is in the junk list
-                # if member not in self.junk_members:
-                if member in member_list:
+                if member:
+                # if member in member_list:
                     doc_id = row['DocID']
                     if doc_id == None:
                         print("DocID is missing, some members of Congress do not have a DocID for downloadable PDFs.")
                         self.junk_members.append(member)
                         continue
                     self.members.append(member)
-                    # print("DocID for download: ", member, ": ", doc_id)
                     
-                    pdf_df = self.download_and_parse_pdf(doc_id)
+                    if doc_id in bad_docs:
+                        print("DocID is bad: ", doc_id)
+                        self.junk_members.append(member)
+                        continue
+                    
+                    if doc_id.startswith("2"):
+                        print("DocID download: ", doc_id)
+                        pdf_df = self.download_and_parse_pdf(doc_id)
+                    else:
+                        print("DocID does not start with 2: ", doc_id)
+                        self.junk_members.append(member)
+                        continue
                     
                     if type(pdf_df) == type(None):
                         self.junk_members.append(member)
@@ -66,7 +78,7 @@ class CongressTrades:
                     continue   
                          
         except Exception as e:
-            print(e)
+            print("get_trades_by_member:", e)
             
         # Save the DataFrame to a CSV file
         trades_by_member_df.to_csv("data/congress/csv/" + datetime.datetime.now().strftime("%Y%m%d") + "_trades_by_member.csv", index=False)
@@ -237,7 +249,7 @@ class CongressTrades:
                 # print("Failed to download the file: ", doc_id)
                 return None
         except Exception as e:
-            print(e)
+            print("download_and_parse_pdf, try response: ", e)
             print("Except: Failed to download the file: ", doc_id)
             return None
 
@@ -332,7 +344,7 @@ class CongressTrades:
                     try:
                         current_trade["Ticker"] = self.get_asset_type(current_trade["Ticker"].strip("[]"))
                     except Exception as e:
-                        print(e)
+                        print("download_and_parse_pdf, try get_asset_type: ", e)
                         current_trade["Ticker"] = "Not in S&P 500"
                     
                 # Append to trade dictionary

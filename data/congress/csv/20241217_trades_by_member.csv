@@ -1,14 +1,142 @@
 Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
-Pelosi,20025819,SP,"REOF XXVI, LLC",Asset-Backed Securities,P,08/13/2024,08/13/2024,"$250,001 - $500,000",New,Investment in LLC which is acquiring and managing a commercial office property at 631 Howard Street in
-Pelosi,20025535,SP,Microsoft Corporation ,MSFT,S (partial),07/26/2024,07/26/2024,"$1,000,001 - $5,000,000",New,"Sold 5,000 shares."
-Pelosi,20025535,SP,NVIDIA Corporation,NVDA,P,07/26/2024,07/26/2024,"$1,000,001 - $5,000,000",New,"Purchased 10,000 shares."
-Pelosi,20025368,SP,Broadcom Inc.,AVGO,P,06/24/2024,06/24/2024,"$1,000,001 - $5,000,000",New,Purchased 20 call options with a strike price of $800 and an expiration date of 6/20/25.
-Pelosi,20025368,SP,NVIDIA Corporation ,NVDA,P,06/26/2024,06/26/2024,"$1,000,001 - $5,000,000",New,"Purchased 10,000 shares."
-Pelosi,20025368,SP,"Tesla, Inc.",TSLA,S,06/24/2024,06/24/2024,"$250,001 - $500,000",New,"Sold 2,500 shares."
-Pelosi,20025368,SP,Visa Inc. ,V,S (partial),07/01/2024,07/01/2024,"$500,001 - $1,000,000",New,"Sold 2,000 shares."
-Pelosi,20024625,SP,"Forge Investments, LLC",Asset-Backed Securities,P,03/04/2024,03/04/2024,"$1,000,001 - $5,000,000",New,Investment in fund that owns Databricks stock. Databricks is a San Francisco engineering and analytic
-Pelosi,20024542,SP,"Palo Alto Networks, Inc.",PANW,P,02/12/2024,02/12/2024,"$500,001 - $1,000,000",New,Purchased 50 call options with a strike price of $200 and an expiration date of 1/17/25.
-Pelosi,20024542,SP,"Palo Alto Networks, Inc.",PANW,P,02/21/2024,02/21/2024,"$100,001 - $250,000",New,Purchased 20 call options with a strike price of $200 and an expiration date of 1/17/25.
-Mast,20024743,DC,"Amazon.com, Inc.",AMZN,Stock,P,03/04/2024,03/04/2024,New,
-Mast,20024743,DC,AT&T Inc.,T,[ST],P,03/04/2024,03/04/2024,New,
-Mast,20024743,DC,AT&T Inc.,T,[ST],P,03/04/2024,03/04/2024,New,
+DelBene,20025379,JT,Maryland ST Go BDS Ser. 2017 B S,Not in S&P 500,06/28/2024,06/28/2024,"$1,001",-,New,
+DelBene,20025312,JT,Illinois ST Sales Tax Rev JR,Not in S&P 500,P,05/22/2024,06/04/2024,"$15,001 - $50,000",New,
+DelBene,20025178,JT,Illinois ST Sales Tax Rev JR,Not in S&P 500,P,05/17/2024,05/17/2024,"$100,001 - $250,000",New,
+DelBene,20025178,JT,Pacific Co B1 Bond,Corporate Securities (Bonds and Notes),P,05/24/2024,05/24/2024,"$1,000,001 - $5,000,000",New,Real estate bond
+DelBene,20025178,JT,Wise CNTY VA Indl Dev Auth,Not in S&P 500,S,05/22/2024,05/22/2024,"$500,001 - $1,000,000",New,
+DelBene,20025178,JT,Wise CNTY VA Indl Dev Auth,Not in S&P 500,P,05/22/2024,05/22/2024,"$500,001 - $1,000,000",New,
+DelBene,20024581,JT,Austin Tex Indpt SCH Dist Unltd,Not in S&P 500,P,02/21/2024,02/21/2024,"$500,001 - $1,000,000",New,
+DelBene,20024581,SP,Microsoft Corporation ,MSFT,S,02/29/2024,02/29/2024,"$100,001 - $250,000",New,Vested shares sold to separate trust not for the benefit of filer or spouse pursuant to forward contract dated
+DelBene,20024581,JT,Seattle WA MN LT PW 3.55% PWR,Not in S&P 500,02/21/2024,02/21/2024,"$15,001",-,New,
+DelBene,20024495,JT,Florida Dev Fin Corp Healthcare,Not in S&P 500,P,02/01/2024,02/01/2024,"$500,001 - $1,000,000",New,
+DelBene,20024495,JT,New Jersey ST Transn TR FD,Not in S&P 500,S,02/01/2024,02/01/2024,"$500,001 - $1,000,000",New,
+DelBene,20024495,JT,New York NY Go BDS Ser.,Not in S&P 500,P,02/05/2024,02/05/2024,"$50,001 - $100,000",New,
+DelBene,20024495,JT,New York NY Go BDS Ser. Fiscal,Not in S&P 500,02/12/2024,02/12/2024,"$15,001",-,New,
+DelBene,20024495,JT,New York NY Go BDS Ser. Fiscal,Not in S&P 500,02/13/2024,02/13/2024,"$15,001",-,New,
+DelBene,20024495,JT,Prince Georges CNTY MD,Not in S&P 500,S,02/01/2024,02/01/2024,"$500,001 - $1,000,000",New,
+DelBene,20024425,JT,Honolulu HI City & 4% Go Utx,Not in S&P 500,P,01/23/2024,01/23/2024,"$15,001 - $50,000",New,
+DelBene,20024425,JT,Illinois ST Sales Tax Rev JR,Not in S&P 500,P,01/31/2024,01/31/2024,"$50,001 - $100,000",New,
+DelBene,20024425,JT,New York N Y Go BDS Ser. Fiscal,Not in S&P 500,01/19/2024,01/19/2024,"$1,001",-,New,
+Connolly,20026009,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,10/10/2024,10/10/2024,"$1,001",-,New,
+Connolly,20026009,JT,Science Applications International S,Not in S&P 500,10/10/2024,10/10/2024,"$1,001",-,New,
+Connolly,20025404,JT,"Dominion Energy, Inc. Common S ",D,07/02/2024,07/02/2024,"$1,001",-,New,
+Connolly,20025404,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,07/02/2024,07/02/2024,"$1,001",-,New,
+Connolly,20025404,JT,Science Applications International S,Not in S&P 500,07/02/2024,07/02/2024,"$1,001",-,New,
+Connolly,20024728,JT,"Dominion Energy, Inc. Common S ",D,03/18/2024,03/18/2024,"$1,001",-,New,
+Connolly,20024728,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,03/18/2024,03/18/2024,"$1,001",-,New,
+Connolly,20024728,JT,Science Applications International S,Not in S&P 500,03/18/2024,03/18/2024,"$1,001",-,New,
+Clark,20024588,JT,United States Treasury Notes,Government Securities and Agency Debt,P,02/16/2024,03/01/2024,"$100,001 - $250,000",New,
+Clark,20024588,SP,United States Treasury Notes,Government Securities and Agency Debt,P,02/16/2024,03/01/2024,"$100,001 - $250,000",New,
+Chu,20024347,SP,"Apollo Medical Holdings,",Not in S&P 500,P,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
+Chu,20024347,SP,"Apollo Medical Holdings,",Not in S&P 500,S,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
+Castor,20025475,JT,Berkshire Hathaway Inc. New,Not in S&P 500,S (partial),07/15/2024,07/15/2024,"$15,001 - $50,000",New,
+Castor,20024754,JT,Berkshire Hathaway Inc. New,Not in S&P 500,S (partial),03/28/2024,03/28/2024,"$15,001 - $50,000",New,
+Burgess,20025791,SP,"Illumina, Inc.",Not in S&P 500,S,09/03/2024,09/05/2024,"$15,001 - $50,000",New,
+Burgess,20025605,SP,Royal Bank Of Canada ,Not in S&P 500,S,07/25/2024,07/28/2024,"$15,001 - $50,000",New,
+Burgess,20025548,SP,Royal Bank Of Canada Common S  ,Not in S&P 500,07/16/2024,07/18/2024,"$1,001",-,New,
+Burgess,20025548,SP,"United Parcel Service, Inc. Common ",UPS,07/22/2024,07/25/2024,"$1,001",-,New,
+Burgess,20024838,SP,Exxon Mobil Corporation ,XOM,S,03/11/2024,03/12/2024,"$15,001 - $50,000",New,
+Burgess,20024838,SP,"Illumina, Inc.",Not in S&P 500,03/11/2024,03/12/2024,"$1,001",-,New,
+Burgess,20024627,SP,"Best Buy Co., Inc. Common",BBY,S,02/26/2024,02/27/2024,"$15,001 - $50,000",New,
+Burgess,20024627,SP,"Illumina, Inc.",Not in S&P 500,02/12/2024,02/13/2024,"$1,001",-,"New* For the complete list of asset type abbreviations, please visit https://fd.house.gov/reference/asset-type-codes.aspx.","Hon. Michael C. Burgess , 03/07/2024"
+Burgess,20024330,SP,"Advanced Micro Devices, Inc. ",AMD,01/02/2024,01/04/2024,"$1,001",-,New,
+Burgess,20024330,SP,Amgen Inc. ,AMGN,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,Blackstone Inc. ,BX,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,Exxon Mobil Corporation ,XOM,P,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,"Illumina, Inc. ",Not in S&P 500,P,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,"Illumina, Inc. ",Not in S&P 500,01/02/2024,01/04/2024,"$1,001",-,New,
+Burgess,20024330,SP,"Palo Alto Networks, Inc.",PANW,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,Royal Bank Of Canada ,Not in S&P 500,01/10/2024,01/12/2024,"$1,001",-,New,
+Burgess,20024330,SP,Royal Bank Of Canada ,Not in S&P 500,01/10/2024,01/12/2024,"$1,001",-,New,
+Burgess,20024330,SP,Valero Energy Corporation,VLO,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024265,SP,"United Parcel Service, Inc. ",UPS,12/15/2023,12/18/2023,"$1,001",-,New,
+Burgess,20024265,SP,"United Parcel Service, Inc. ",UPS,12/15/2023,12/18/2023,"$1,001",-,New,
+Blumenauer,20026347,SP,Bank of America C Var 27,Corporate Securities (Bonds and Notes),P,11/08/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Comcast Corp 1.95%31,Corporate Securities (Bonds and Notes),P,11/21/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Comcast Corp 4.65%33,Corporate Securities (Bonds and Notes),S,11/21/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Northwest Natural Holding Company,Not in S&P 500,11/15/2024,11/25/2024,"$1,001",-,New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,The Kroger Co. 4.5% 29,Corporate Securities (Bonds and Notes),P,11/08/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Toyota Motor Credit 3%/25,Corporate Securities (Bonds and Notes),S,11/08/2024,12/06/2024,"$50,001 - $100,000",New,Part of my spouse's retirement portfolio.ID Owner Asset Transaction Date Notification Amount Cap.
+Blumenauer,20026347,SP,US Treasu NT 4.625%02/26,Government Securities and Agency Debt,P,11/19/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,US Treasur NT 4%01/27,Government Securities and Agency Debt,P,11/19/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026141,SP,Constellation BR 2.25%31,Not in S&P 500,P,10/11/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026141,SP,UnitedHealth Gro 3.75%25,Corporate Securities (Bonds and Notes),S,10/11/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026141,SP,US Treasu Nt 4.125% UST,Not in S&P 500,P,10/21/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026141,SP,US Treasu NT 4.625% Due,Not in S&P 500,P,10/21/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025970,SP,Target Corp 2.35%30,Corporate Securities (Bonds and Notes),P,09/26/2024,10/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025970,SP,Target Corp 3.375%29,Corporate Securities (Bonds and Notes),S,09/26/2024,10/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025970,SP,"Ventas, Inc. Common Stock",VTR,S,09/19/2024,10/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025787,SP,Northwest Natural Holding Company,Not in S&P 500,08/15/2024,08/21/2024,"$1,001",-,New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20025787,SP,US Treasur Nt 2.75%08/32,Government Securities and Agency Debt,P,08/29/2024,09/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025603,SP,Baxter International Inc. ,BAX,P,07/09/2024,08/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025603,SP,Medtronic plc. Ordinary Shares,MDT,07/09/2024,08/06/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20025603,SP,"Warner Bros. Discovery, Inc.",Not in S&P 500,07/09/2024,08/06/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20025403,SP,CVS Health Corporation Common ,CVS,06/27/2024,07/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20025403,SP,US Treasu NT 4.625%04/31,Government Securities and Agency Debt,P,06/07/2024,07/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025403,SP,US Treasury 5.375%02/31UST,Not in S&P 500,S,06/07/2024,07/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025219,SP,Northwest Natural Holding Company,Not in S&P 500,05/15/2024,06/06/2024,"$1,001",-,New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20025194,SP,ECOLAB Inc. 2.125% Due,Not in S&P 500,P,05/17/2024,06/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025194,SP,JPMorgan Chase & Var 35,Not in S&P 500,P,05/17/2024,06/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025194,SP,US Treasur Nt 3.625% Due,Not in S&P 500,P,05/17/2024,06/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Blackstone Inc. Common Stock ,BX,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,"Caterpillar, Inc. Common Stock ",CAT,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Embraer S.A. Common Stock ,Not in S&P 500,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Kroger Company ,KR,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,"Magna International, Inc. Common ",Not in S&P 500,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,McKesson Corporation Common ,MCK,S (partial),04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.ID Owner Asset Transaction Date Notification Amount Cap.
+Blumenauer,20024984,SP,"Nike, Inc. Common Stock ",NKE,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Quest Diagnostics Incorporated,Not in S&P 500,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,RTX Corporation Common Stock,RTX,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Southern Company ,SO,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,TE Connectivity Ltd. New,Not in S&P 500,S,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,The Goldman Sachs Var 33,Not in S&P 500,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Visa Inc. ,V,04/04/2024,05/03/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Wells Fargo & Co Var 29,Not in S&P 500,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024671,SP,Northwest Natural Holding Company,Not in S&P 500,02/15/2024,03/08/2024,"$1,001",-,New,Dividend reinvestment. Part of my spouse’s retirement portfolio.
+Blumenauer,20024580,SP,Alphabet Inc. ,GOOGL,02/01/2024,03/01/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,"Amazon.com, Inc.",AMZN,P,02/12/2024,03/01/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,Koninklijke Philips N.V. NY Registry,Not in S&P 500,02/12/2024,03/01/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,"Pfizer, Inc. Common Stock ",PFE,02/12/2024,03/01/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,QUALCOMM Incorporated,Not in S&P 500,02/12/2024,03/01/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,Unilever PLC Common Stock ,Not in S&P 500,02/12/2024,03/01/2024,"$1,001",-,New,"Hon. Earl Blumenauer , 03/02/2024"
+Blumenauer,20024254,SP,"Alaska Air Group, Inc. ",Not in S&P 500,12/13/2023,01/04/2024,"$1,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024254,SP,Diageo plc ,Not in S&P 500,12/07/2023,01/04/2024,"$15,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024254,SP,US Treas NT 4.5% 11/33 [GS],Not in S&P 500,12/15/2023,01/04/2024,"$15,001",-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20024254,SP,US Treas NT 4.5% 11/33 [GS],Not in S&P 500,12/20/2023,01/04/2024,"$15,001",-,New,Part of my spouse's retirement portfolio.
+Beyer,20026353,JT,Oregon State Housing &,Not in S&P 500,P,11/14/2024,12/02/2024,"$15,001 - $50,000",New,"35,000 shares"
+Beyer,20026353,JT,Virginia State Housing,Not in S&P 500,P,11/21/2024,12/02/2024,"$15,001 - $50,000",New,"40,000 Shares"
+Beyer,20026353,JT,Virginia State Housing,Not in S&P 500,P,11/21/2024,12/02/2024,"$15,001 - $50,000",New,"40,000 shares"
+Beyer,20026134,JT,Aiken Cnty SC Cons Sch,Not in S&P 500,P,10/16/2024,11/01/2024,"$15,001 - $50,000",New,"25,000 units of Aiken County, SC Cons Sch bonds, 4.00%, maturing 04/01/37"
+Beyer,20026134,JT,Chicago Ill O'Hare 4.00%,Not in S&P 500,P,10/09/2024,11/01/2024,"$15,001 - $50,000",New,"30,000 units of Chicago, Illinois O'Hare bonds, 4.00%, maturing 01/01/36"
+Beyer,20026134,JT,Clark Cnty Nev Sch 4.00%,Not in S&P 500,P,10/03/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Clark County, Nevada School bonds, 4.00%, maturing 06/15/37"
+Beyer,20026134,JT,Delaware Valley PA 4.00%,Not in S&P 500,P,10/29/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Delaware Valley, PA bonds, 4.00%, maturing 03/01/33"
+Beyer,20026134,JT,District Columbia Go,Not in S&P 500,E,10/02/2024,11/01/2024,"$15,001 - $50,000",New,tender cash receiptID Owner Asset Transaction Date Notification Amount Cap.
+Beyer,20026134,JT,Jefferson Cnty KY 4.00%,Not in S&P 500,P,10/02/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Jefferson County, KY bonds, 4.00%, maturing 09/01/36"
+Beyer,20026134,JT,Long Island Power Authority,Not in S&P 500,P,10/24/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Long Island Power Authority, NY bonds, 5.00%, maturing 09/01/37"
+Beyer,20026134,JT,New Jersey State 5.00%,Not in S&P 500,P,10/18/2024,11/01/2024,"$15,001 - $50,000",New,"40,000 units of New Jersey State bonds, 5.00%, maturing 06/15/33"
+Beyer,20026134,JT,North Carolina TPK 4.00%,Not in S&P 500,P,10/28/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of North Carolina Turnpike bonds, 4.00%, maturing 01/01/33"
+Beyer,20026134,JT,North Las Vegas Nev 4.00%,Not in S&P 500,P,10/09/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of North Las Vegas Nevada bonds, 4.00%, maturing 06/01/36"
+Beyer,20025776,JT,"Garden of Eden LLC, 40%",Not in S&P 500,S,08/30/2024,09/02/2024,"$5,000,001 - $25,000,000",New,"sale of land and buildings, Frederick County Virginia"
+Beyer,20025133,JT,Metropolitan Wash DC,Not in S&P 500,P,05/02/2024,05/24/2024,"$15,001 - $50,000",New,"20,000 units of Metropolitan Washington DC 5.00% 10/01/31 bonds"
+Beyer,20025133,JT,Putnam Cnty WVA Brd Ed,Not in S&P 500,S,05/23/2024,05/24/2024,"$15,001 - $50,000",New,"Putnam County, WVA Brd Ed 1.123% bonds reached maturity 05/01/24"
+Beyer,20025133,JT,Wise Cnty VA Indl Var 11,Government Securities and Agency Debt,P,05/31/2024,05/31/2024,"$15,001 - $50,000",New,"25,000 units of Wise County Virginia Indl Var bonds, due 11-01-40"
+Beyer,20025133,JT,Wise Cnty VA V,Not in S&P 500,S,05/31/2024,05/31/2024,"$15,001 - $50,000",New,"Called security; 25,000 units"
+Beyer,20024769,JT,Virginia St Hsg Dev 3.65%,Not in S&P 500,P,03/28/2024,03/31/2024,"$15,001 - $50,000",New,"20,000 units of Virginia State Housing Development bond, 3.65%, 04/01/33"
+Banks,20025626,JT,"Yum! Brands, Inc. ",YUM,08/08/2024,08/09/2024,"$1,001",-,New,
+Auchincloss,20026246,SP,State Street Corporation ,STT,S,11/18/2024,11/19/2024,"$15,001 - $50,000",New,RSU distribution
+Auchincloss,20025708,SP,State Street Corporation Common ,STT,S (partial),08/16/2024,08/16/2024,"$15,001 - $50,000",New,RSU distribution
+Allen,20026191,SP,US Treasury Bill 91282CJR3,Government Securities and Agency Debt,P,10/09/2024,11/06/2024,"$100,001 - $250,000",New,
+Allen,20026031,SP,Charles Schwab Corporation,SCHW,S,09/12/2024,10/14/2024,"$15,001 - $50,000",New,
+Allen,20025875,SP,Deere & Company Common Stock,DE,08/14/2024,09/18/2024,"$1,001",-,New,
+Allen,20025601,SP,"AutoZone, Inc. Common Stock",AZO,P,07/16/2024,08/06/2024,"$15,001 - $50,000",New,
+Allen,20025601,SP,Johnson & Johnson Common,JNJ,S,07/16/2024,08/06/2024,"$15,001 - $50,000",New,
+Allen,20025411,SP,Johnson & Johnson Common,JNJ,S,06/13/2024,07/03/2024,"$15,001 - $50,000",New,
+Allen,20025287,SP,Cintas Corporation,CTAS,05/20/2024,06/07/2024,"$1,001",-,New,
+Allen,20025287,SP,Starbucks Corporation ,SBUX,S,05/20/2024,06/07/2024,"$15,001 - $50,000",New,
+Allen,20025031,SP,"Ameriprise Financial, Inc. ",AMP,P,04/09/2024,05/09/2024,"$50,001 - $100,000",New,
+Allen,20025031,SP,US Treasury Bill DUE,Not in S&P 500,P,04/23/2024,05/09/2024,"$15,001 - $50,000",New,
+Allen,20024458,SP,"BlackRock, Inc. Common Stock",BLK,S,01/17/2024,02/05/2024,"$50,001 - $100,000",New,
+Allen,20024277,SP,Albemarle Corporation ,ALB,12/21/2023,01/08/2024,"$1,001",-,New,
+Allen,20024277,SP,Albemarle Corporation ,ALB,12/21/2023,01/08/2024,"$1,001",-,New,
+Allen,20024277,SP,Charles Schwab Corporation,SCHW,P,12/14/2023,01/08/2024,"$50,001 - $100,000",New,
+Allen,20024277,SP,"NextEra Energy, Inc. ",NEE,S,12/21/2023,01/08/2024,"$15,001 - $50,000",New,

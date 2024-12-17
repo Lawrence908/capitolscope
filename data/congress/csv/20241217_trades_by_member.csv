@@ -1,0 +1,14 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Pelosi,20025819,SP,"REOF XXVI, LLC",Asset-Backed Securities,P,08/13/2024,08/13/2024,"$250,001 - $500,000",New,Investment in LLC which is acquiring and managing a commercial office property at 631 Howard Street in
+Pelosi,20025535,SP,Microsoft Corporation ,MSFT,S (partial),07/26/2024,07/26/2024,"$1,000,001 - $5,000,000",New,"Sold 5,000 shares."
+Pelosi,20025535,SP,NVIDIA Corporation,NVDA,P,07/26/2024,07/26/2024,"$1,000,001 - $5,000,000",New,"Purchased 10,000 shares."
+Pelosi,20025368,SP,Broadcom Inc.,AVGO,P,06/24/2024,06/24/2024,"$1,000,001 - $5,000,000",New,Purchased 20 call options with a strike price of $800 and an expiration date of 6/20/25.
+Pelosi,20025368,SP,NVIDIA Corporation ,NVDA,P,06/26/2024,06/26/2024,"$1,000,001 - $5,000,000",New,"Purchased 10,000 shares."
+Pelosi,20025368,SP,"Tesla, Inc.",TSLA,S,06/24/2024,06/24/2024,"$250,001 - $500,000",New,"Sold 2,500 shares."
+Pelosi,20025368,SP,Visa Inc. ,V,S (partial),07/01/2024,07/01/2024,"$500,001 - $1,000,000",New,"Sold 2,000 shares."
+Pelosi,20024625,SP,"Forge Investments, LLC",Asset-Backed Securities,P,03/04/2024,03/04/2024,"$1,000,001 - $5,000,000",New,Investment in fund that owns Databricks stock. Databricks is a San Francisco engineering and analytic
+Pelosi,20024542,SP,"Palo Alto Networks, Inc.",PANW,P,02/12/2024,02/12/2024,"$500,001 - $1,000,000",New,Purchased 50 call options with a strike price of $200 and an expiration date of 1/17/25.
+Pelosi,20024542,SP,"Palo Alto Networks, Inc.",PANW,P,02/21/2024,02/21/2024,"$100,001 - $250,000",New,Purchased 20 call options with a strike price of $200 and an expiration date of 1/17/25.
+Mast,20024743,DC,"Amazon.com, Inc.",AMZN,Stock,P,03/04/2024,03/04/2024,New,
+Mast,20024743,DC,AT&T Inc.,T,[ST],P,03/04/2024,03/04/2024,New,
+Mast,20024743,DC,AT&T Inc.,T,[ST],P,03/04/2024,03/04/2024,New,

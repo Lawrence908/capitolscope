@@ -23,31 +23,55 @@ class CongressTrades:
     def __init__(self):
         # Create an instance of the Tickers500 class
         self.tickers = Tickers500().tickers
+        # self.members = []
         self.members = self.get_congress_members()
+        self.junk_members = self.get_junk_members()
         self.trades = self.get_trades_by_member()
         
-    def get_trades_by_member(self):
+    def get_trades_by_member(self, member_list = None) -> pd.DataFrame:
         congress_data = self.get_congress_trading_data()
-        trades_by_member = {}
+        trades_by_member_df = pd.DataFrame()
         
         try:
             for _, row in congress_data.iterrows():
                 member = f"{row['Last']}".strip()
-                doc_id = row['DocID']
-                if member == "Pelosi":
-                    print("DocID for download: ", doc_id)
-                    pdf_df, trade_data = self.download_and_parse_pdf(doc_id)
+                # Check if the member is in the junk list
+                # if member not in self.junk_members:
+                if member in member_list:
+                    doc_id = row['DocID']
+                    if doc_id == None:
+                        print("DocID is missing, some members of Congress do not have a DocID for downloadable PDFs.")
+                        self.junk_members.append(member)
+                        continue
+                    self.members.append(member)
+                    # print("DocID for download: ", member, ": ", doc_id)
                     
-                    if member not in trades_by_member:
-                        trades_by_member[member] = []
-                    trades_by_member[member].extend(trade_data)
+                    pdf_df = self.download_and_parse_pdf(doc_id)
+                    
+                    if type(pdf_df) == type(None):
+                        self.junk_members.append(member)
+                        print(member)
+                        continue
+                    
+                    # Add the member name to the front of the DataFrame
+                    pdf_df.insert(0, "Member", member)
+                    # Add the docid to the DataFrame
+                    pdf_df.insert(1, "DocID", doc_id)
+                    
+                    # Append the DataFrame to the trades_by_member_df
+                    trades_by_member_df = pd.concat([pdf_df, trades_by_member_df], ignore_index=True)
+                    
                 else:
-                    print("Member: ", member)    
+                    # print("Member: ", member) 
+                    continue   
                          
         except Exception as e:
             print(e)
+            
+        # Save the DataFrame to a CSV file
+        trades_by_member_df.to_csv("data/congress/csv/" + datetime.datetime.now().strftime("%Y%m%d") + "_trades_by_member.csv", index=False)
         
-        return trades_by_member
+        return trades_by_member_df
 
     def get_asset_type(self, asset_code = None) -> str:
         """
@@ -162,6 +186,22 @@ class CongressTrades:
         congress_members = congress_members[1:]
 
         return congress_members
+    
+    def get_junk_members(self):
+        """
+        Get the members of Congress that do not have a DocID for downloadable PDFs.
+        Returns
+        -------
+        list
+            A list containing the members of Congress that do not have a DocID for downloadable PDFs.
+        """
+        junk_members = []
+        
+        with open('data/congress/txt/junk_members.txt', 'r') as f:
+            for line in f:
+                junk_members.append(line.strip())
+        
+        return junk_members
 
     def download_and_parse_pdf(self, doc_id) -> pd.DataFrame:
         """
@@ -189,12 +229,17 @@ class CongressTrades:
         url = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/" + str(current_year) + '/' + pdf_file_name
 
         # Send a GET request to download the zip file
-        response = requests.get(url)
+        try:
+            response = requests.get(url)
 
-        # Check if the request was successful
-        if response.status_code != 200:
-            print("Failed to download the file")
-            sys.exit()
+            # Check if the request was successful
+            if response.status_code != 200:
+                # print("Failed to download the file: ", doc_id)
+                return None
+        except Exception as e:
+            print(e)
+            print("Except: Failed to download the file: ", doc_id)
+            return None
 
         # Use the pdfplumber library to extract text from the PDF
 
@@ -205,6 +250,11 @@ class CongressTrades:
         # Open the PDF file
         with pdfplumber.open(file_path + 'pdf/' + pdf_file_name) as pdf:
             pdf_text = "".join(page.extract_text() for page in pdf.pages)
+
+    
+        if not pdf_text.strip():
+            print("PDF is empty: ", doc_id)
+            return pd.DataFrame()
 
         lines = pdf_text.splitlines()
         
@@ -218,6 +268,12 @@ class CongressTrades:
 
             # Check if this is a new trade line starting with known owner types
             if any(line.startswith(owner_type) for owner_type in owner_types):
+                if current_trade["Owner"]:  # If current_trade is not empty, save it
+                    for key in trade_dict:
+                        trade_dict[key].append(current_trade[key])
+                    current_trade = {key: "" for key in trade_dict}  # Reset current trade
+
+                
                 columns = line.split()
                 current_trade["Owner"] = columns[0]
                 current_trade["Asset"] = " ".join(columns[1:-6]).split("-", 1)[0].strip()
@@ -250,6 +306,7 @@ class CongressTrades:
                     current_trade["Amount"] = "$5,000,001 - $25,000,000"
                 if current_trade["Transaction Type"] == "(partial)":
                     current_trade["Transaction Type"] = columns[-6] + " " + columns[-5]
+
                     # current_trade["Ticker"] = re.search(r'\((.*?)\)', current_trade["Asset"]).group(1)
 
                 # Look ahead for additional information (multi-line)
@@ -263,17 +320,21 @@ class CongressTrades:
                     elif next_line.startswith("Stock"):
                         current_trade["Asset"] += " " + next_line.split("Stock", 1)[0].strip()
                         current_trade["Ticker"] = re.search(r'\((.*?)\)', next_line).group(1)
-                    # elif next_line.startswith("$"):  # Additional amount info
-                    #     current_trade["Amount"] += " " + next_line
-                    elif next_line.__contains__("F"):  # Filing Status
+                    elif next_line.startswith("F"):  # Filing Status
                         current_trade["Filing Status"] = next_line.split(":", 1)[1].strip()
-                    elif next_line.__contains__("D"):  # Description
+                    elif next_line.startswith("D"):  # Description
                         current_trade["Description"] = next_line.split(":", 1)[1].strip()
-                    # else:
                         
 
                     j += 1
-
+                if current_trade["Ticker"] not in self.tickers:
+                    print("Not in S&P 500: ", current_trade["Ticker"])
+                    try:
+                        current_trade["Ticker"] = self.get_asset_type(current_trade["Ticker"].strip("[]"))
+                    except Exception as e:
+                        print(e)
+                        current_trade["Ticker"] = "Not in S&P 500"
+                    
                 # Append to trade dictionary
                 for key in trade_dict:
                     trade_dict[key].append(current_trade[key])

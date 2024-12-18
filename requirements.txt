@@ -1,5 +1,9 @@
 # Interaction
 click
+asyncio
+nest_asyncio
+aiohttp
+datetime
 jupyter
 ipython
 ipykernel
@@ -10,6 +14,8 @@ pandas
 requests
 yfinance
 alpha_vantage
+BeautifulSoup4
+pdfplumber
 
 # Database	
 ## PostgreSQL

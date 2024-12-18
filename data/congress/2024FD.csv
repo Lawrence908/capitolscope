@@ -1,0 +1,1055 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Allen,20024277,SP,Albemarle Corporation ,ALB,S,12/21/2023,01/08/2024,"$1,001 - $15,000",New,
+Allen,20024277,SP,Albemarle Corporation ,ALB,S,12/21/2023,01/08/2024,"$1,001 - $15,000",New,
+Allen,20024277,SP,"NextEra Energy, Inc. ",NEE,S,12/21/2023,01/08/2024,"$15,001 - $50,000",New,
+Allen,20024277,SP,Charles Schwab Corporation,SCHW,P,12/14/2023,01/08/2024,"$50,001 - $100,000",New,
+Allen,20026191,SP,US Treasury Bill 91282CJR3,Government Securities and Agency Debt,P,10/09/2024,11/06/2024,"$100,001 - $250,000",New,
+Allen,20026031,SP,Charles Schwab Corporation,SCHW,S,09/12/2024,10/14/2024,"$15,001 - $50,000",New,
+Allen,20025875,SP,Deere & Company Common Stock,DE,S,08/14/2024,09/18/2024,"$1,001 - $15,000",New,
+Allen,20025601,SP,"AutoZone, Inc. Common Stock",AZO,P,07/16/2024,08/06/2024,"$15,001 - $50,000",New,
+Allen,20025601,SP,Johnson & Johnson Common,JNJ,S,07/16/2024,08/06/2024,"$15,001 - $50,000",New,
+Allen,20025411,SP,Johnson & Johnson Common,JNJ,S,06/13/2024,07/03/2024,"$15,001 - $50,000",New,
+Allen,20025287,SP,Cintas Corporation,CTAS,P,05/20/2024,06/07/2024,"$1,001 - $15,000",New,
+Allen,20025287,SP,Starbucks Corporation ,SBUX,S,05/20/2024,06/07/2024,"$15,001 - $50,000",New,
+Allen,20025031,SP,US Treasury Bill DUE,NaN,P,04/23/2024,05/09/2024,"$15,001 - $50,000",New,
+Allen,20025031,SP,"Ameriprise Financial, Inc. ",AMP,P,04/09/2024,05/09/2024,"$50,001 - $100,000",New,
+Allen,20024458,SP,"BlackRock, Inc. Common Stock",BLK,S,01/17/2024,02/05/2024,"$50,001 - $100,000",New,
+Auchincloss,20026246,SP,State Street Corporation ,STT,S,11/18/2024,11/19/2024,"$15,001 - $50,000",New,RSU distribution
+Auchincloss,20025708,SP,State Street Corporation Common ,STT,S (partial),08/16/2024,08/16/2024,"$15,001 - $50,000",New,RSU distribution
+Banks,20025626,JT,"Yum! Brands, Inc. ",YUM,P,08/08/2024,08/09/2024,"$1,001 - $15,000",New,
+Beyer,20026353,JT,Virginia State Housing,NaN,P,11/21/2024,12/02/2024,"$15,001 - $50,000",New,"40,000 Shares"
+Beyer,20026353,JT,Virginia State Housing,NaN,P,11/21/2024,12/02/2024,"$15,001 - $50,000",New,"40,000 shares"
+Beyer,20026353,JT,Oregon State Housing &,NaN,P,11/14/2024,12/02/2024,"$15,001 - $50,000",New,"35,000 shares"
+Beyer,20026134,JT,Delaware Valley PA 4.00%,NaN,P,10/29/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Delaware Valley, PA bonds, 4.00%, maturing 03/01/33"
+Beyer,20026134,JT,North Carolina TPK 4.00%,NaN,P,10/28/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of North Carolina Turnpike bonds, 4.00%, maturing 01/01/33"
+Beyer,20026134,JT,Long Island Power Authority,NaN,P,10/24/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Long Island Power Authority, NY bonds, 5.00%, maturing 09/01/37"
+Beyer,20026134,JT,New Jersey State 5.00%,NaN,P,10/18/2024,11/01/2024,"$15,001 - $50,000",New,"40,000 units of New Jersey State bonds, 5.00%, maturing 06/15/33"
+Beyer,20026134,JT,Aiken Cnty SC Cons Sch,NaN,P,10/16/2024,11/01/2024,"$15,001 - $50,000",New,"25,000 units of Aiken County, SC Cons Sch bonds, 4.00%, maturing 04/01/37"
+Beyer,20026134,JT,Chicago Ill O'Hare 4.00%,NaN,P,10/09/2024,11/01/2024,"$15,001 - $50,000",New,"30,000 units of Chicago, Illinois O'Hare bonds, 4.00%, maturing 01/01/36"
+Beyer,20026134,JT,North Las Vegas Nev 4.00%,NaN,P,10/09/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of North Las Vegas Nevada bonds, 4.00%, maturing 06/01/36"
+Beyer,20026134,JT,Clark Cnty Nev Sch 4.00%,NaN,P,10/03/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Clark County, Nevada School bonds, 4.00%, maturing 06/15/37"
+Beyer,20026134,JT,District Columbia Go,NaN,E,10/02/2024,11/01/2024,"$15,001 - $50,000",New,tender cash receiptID Owner Asset Transaction Date Notification Amount Cap.
+Beyer,20026134,JT,Jefferson Cnty KY 4.00%,NaN,P,10/02/2024,11/01/2024,"$15,001 - $50,000",New,"35,000 units of Jefferson County, KY bonds, 4.00%, maturing 09/01/36"
+Beyer,20025776,JT,"Garden of Eden LLC, 40%",NaN,S,08/30/2024,09/02/2024,"$5,000,001 - $25,000,000",New,"sale of land and buildings, Frederick County Virginia"
+Beyer,20025133,JT,Wise Cnty VA Indl Var 11,Government Securities and Agency Debt,P,05/31/2024,05/31/2024,"$15,001 - $50,000",New,"25,000 units of Wise County Virginia Indl Var bonds, due 11-01-40"
+Beyer,20025133,JT,Wise Cnty VA V,NaN,S,05/31/2024,05/31/2024,"$15,001 - $50,000",New,"Called security; 25,000 units"
+Beyer,20025133,JT,Putnam Cnty WVA Brd Ed,NaN,S,05/23/2024,05/24/2024,"$15,001 - $50,000",New,"Putnam County, WVA Brd Ed 1.123% bonds reached maturity 05/01/24"
+Beyer,20025133,JT,Metropolitan Wash DC,NaN,P,05/02/2024,05/24/2024,"$15,001 - $50,000",New,"20,000 units of Metropolitan Washington DC 5.00% 10/01/31 bonds"
+Beyer,20024769,JT,Virginia St Hsg Dev 3.65%,NaN,P,03/28/2024,03/31/2024,"$15,001 - $50,000",New,"20,000 units of Virginia State Housing Development bond, 3.65%, 04/01/33"
+Blumenauer,20024254,SP,US Treas NT 4.5% 11/33 [GS],NaN,P,12/20/2023,01/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024254,SP,US Treas NT 4.5% 11/33 [GS],NaN,P,12/15/2023,01/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024254,SP,"Alaska Air Group, Inc. ",NaN,S,12/13/2023,01/04/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024254,SP,Diageo plc ,NaN,P,12/07/2023,01/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Comcast Corp 1.95%31,Corporate Securities (Bonds and Notes),P,11/21/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Comcast Corp 4.65%33,Corporate Securities (Bonds and Notes),S,11/21/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,US Treasu NT 4.625%02/26,Government Securities and Agency Debt,P,11/19/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,US Treasur NT 4%01/27,Government Securities and Agency Debt,P,11/19/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Northwest Natural Holding Company,NaN,P,11/15/2024,11/25/2024,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Bank of America C Var 27,Corporate Securities (Bonds and Notes),P,11/08/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,The Kroger Co. 4.5% 29,Corporate Securities (Bonds and Notes),P,11/08/2024,12/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026347,SP,Toyota Motor Credit 3%/25,Corporate Securities (Bonds and Notes),S,11/08/2024,12/06/2024,"$50,001 - $100,000",New,Part of my spouse's retirement portfolio.ID Owner Asset Transaction Date Notification Amount Cap.
+Blumenauer,20026141,SP,US Treasu Nt 4.125% UST,NaN,P,10/21/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026141,SP,US Treasu NT 4.625% Due,NaN,P,10/21/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026141,SP,Constellation BR 2.25%31,NaN,P,10/11/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20026141,SP,UnitedHealth Gro 3.75%25,Corporate Securities (Bonds and Notes),S,10/11/2024,11/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025970,SP,Target Corp 2.35%30,Corporate Securities (Bonds and Notes),P,09/26/2024,10/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025970,SP,Target Corp 3.375%29,Corporate Securities (Bonds and Notes),S,09/26/2024,10/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025970,SP,"Ventas, Inc. Common Stock",VTR,S,09/19/2024,10/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025787,SP,US Treasur Nt 2.75%08/32,Government Securities and Agency Debt,P,08/29/2024,09/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025787,SP,Northwest Natural Holding Company,NaN,P,08/15/2024,08/21/2024,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20025603,SP,Baxter International Inc. ,BAX,P,07/09/2024,08/06/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025603,SP,Medtronic plc. Ordinary Shares,MDT,S,07/09/2024,08/06/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025603,SP,"Warner Bros. Discovery, Inc.",NaN,S,07/09/2024,08/06/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025403,SP,CVS Health Corporation Common ,CVS,S,06/27/2024,07/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025403,SP,US Treasu NT 4.625%04/31,Government Securities and Agency Debt,P,06/07/2024,07/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025403,SP,US Treasury 5.375%02/31UST,NaN,S,06/07/2024,07/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025194,SP,ECOLAB Inc. 2.125% Due,NaN,P,05/17/2024,06/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025194,SP,JPMorgan Chase & Var 35,NaN,P,05/17/2024,06/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025194,SP,US Treasur Nt 3.625% Due,NaN,P,05/17/2024,06/04/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20025219,SP,Northwest Natural Holding Company,NaN,P,05/15/2024,06/06/2024,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Blackstone Inc. Common Stock ,BX,S (partial),04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,"Caterpillar, Inc. Common Stock ",CAT,S (partial),04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Embraer S.A. Common Stock ,NaN,S (partial),04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Kroger Company ,KR,S,04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,"Magna International, Inc. Common ",NaN,S,04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,McKesson Corporation Common ,MCK,S (partial),04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.ID Owner Asset Transaction Date Notification Amount Cap.
+Blumenauer,20024984,SP,"Nike, Inc. Common Stock ",NKE,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Quest Diagnostics Incorporated,NaN,S,04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,RTX Corporation Common Stock,RTX,P,04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Southern Company ,SO,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,TE Connectivity Ltd. New,NaN,S,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,The Goldman Sachs Var 33,NaN,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Visa Inc. ,V,P,04/04/2024,05/03/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024984,SP,Wells Fargo & Co Var 29,NaN,P,04/04/2024,05/03/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024671,SP,Northwest Natural Holding Company,NaN,P,02/15/2024,03/08/2024,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse’s retirement portfolio.
+Blumenauer,20024580,SP,"Amazon.com, Inc.",AMZN,P,02/12/2024,03/01/2024,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,Koninklijke Philips N.V. NY Registry,NaN,P,02/12/2024,03/01/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,"Pfizer, Inc. Common Stock ",PFE,P,02/12/2024,03/01/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,QUALCOMM Incorporated,NaN,P,02/12/2024,03/01/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20024580,SP,Unilever PLC Common Stock ,NaN,S,02/12/2024,03/01/2024,"$1,001 - $15,000",New,"Hon. Earl Blumenauer , 03/02/2024"
+Blumenauer,20024580,SP,Alphabet Inc. ,GOOGL,S (partial),02/01/2024,03/01/2024,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Burgess,20024265,SP,"United Parcel Service, Inc. ",UPS,S,12/15/2023,12/18/2023,"$1,001 - $15,000",New,
+Burgess,20024265,SP,"United Parcel Service, Inc. ",UPS,P,12/15/2023,12/18/2023,"$1,001 - $15,000",New,
+Burgess,20025791,SP,"Illumina, Inc.",ILMN,S,09/03/2024,09/05/2024,"$15,001 - $50,000",New,
+Burgess,20025605,SP,Royal Bank Of Canada ,NaN,S,07/25/2024,07/28/2024,"$15,001 - $50,000",New,
+Burgess,20025548,SP,"United Parcel Service, Inc. Common ",UPS,S,07/22/2024,07/25/2024,"$1,001 - $15,000",New,
+Burgess,20025548,SP,Royal Bank Of Canada Common S  ,NaN,S (partial),07/16/2024,07/18/2024,"$1,001 - $15,000",New,
+Burgess,20024838,SP,Exxon Mobil Corporation ,XOM,S,03/11/2024,03/12/2024,"$15,001 - $50,000",New,
+Burgess,20024838,SP,"Illumina, Inc.",ILMN,S (partial),03/11/2024,03/12/2024,"$1,001 - $15,000",New,
+Burgess,20024627,SP,"Best Buy Co., Inc. Common",BBY,S,02/26/2024,02/27/2024,"$15,001 - $50,000",New,
+Burgess,20024627,SP,"Illumina, Inc.",ILMN,S (partial),02/12/2024,02/13/2024,"$1,001 - $15,000","New* For the complete list of asset type abbreviations, please visit https://fd.house.gov/reference/asset-type-codes.aspx.","Hon. Michael C. Burgess , 03/07/2024"
+Burgess,20024330,SP,Royal Bank Of Canada ,NaN,P,01/10/2024,01/12/2024,"$1,001 - $15,000",New,
+Burgess,20024330,SP,Royal Bank Of Canada ,NaN,S,01/10/2024,01/12/2024,"$1,001 - $15,000",New,
+Burgess,20024330,SP,"Advanced Micro Devices, Inc. ",AMD,S,01/02/2024,01/04/2024,"$1,001 - $15,000",New,
+Burgess,20024330,SP,Amgen Inc. ,AMGN,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,Blackstone Inc. ,BX,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,Exxon Mobil Corporation ,XOM,P,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,"Illumina, Inc. ",ILMN,P,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,"Illumina, Inc. ",ILMN,S (partial),01/02/2024,01/04/2024,"$1,001 - $15,000",New,
+Burgess,20024330,SP,"Palo Alto Networks, Inc.",PANW,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,Valero Energy Corporation,VLO,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Castor,20025475,JT,Berkshire Hathaway Inc. New,NaN,S (partial),07/15/2024,07/15/2024,"$15,001 - $50,000",New,
+Castor,20024754,JT,Berkshire Hathaway Inc. New,NaN,S (partial),03/28/2024,03/28/2024,"$15,001 - $50,000",New,
+Chu,20024347,SP,"Apollo Medical Holdings,",NaN,P,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
+Chu,20024347,SP,"Apollo Medical Holdings,",NaN,S,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
+Clark,20024588,JT,United States Treasury Notes,Government Securities and Agency Debt,P,02/16/2024,03/01/2024,"$100,001 - $250,000",New,
+Clark,20024588,SP,United States Treasury Notes,Government Securities and Agency Debt,P,02/16/2024,03/01/2024,"$100,001 - $250,000",New,
+Connolly,20026009,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,S (partial),10/10/2024,10/10/2024,"$1,001 - $15,000",New,
+Connolly,20026009,JT,Science Applications International S,NaN,S (partial),10/10/2024,10/10/2024,"$1,001 - $15,000",New,
+Connolly,20025404,JT,"Dominion Energy, Inc. Common S ",D,S (partial),07/02/2024,07/02/2024,"$1,001 - $15,000",New,
+Connolly,20025404,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,S (partial),07/02/2024,07/02/2024,"$1,001 - $15,000",New,
+Connolly,20025404,JT,Science Applications International S,NaN,S (partial),07/02/2024,07/02/2024,"$1,001 - $15,000",New,
+Connolly,20024728,JT,"Dominion Energy, Inc. Common S ",D,S (partial),03/18/2024,03/18/2024,"$1,001 - $15,000",New,
+Connolly,20024728,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,S (partial),03/18/2024,03/18/2024,"$1,001 - $15,000",New,
+Connolly,20024728,JT,Science Applications International S,NaN,S (partial),03/18/2024,03/18/2024,"$1,001 - $15,000",New,
+DelBene,20026123,JT,Florida Dev Fin Corp Healthcare Facs,NaN,P,10/28/2024,10/28/2024,"$1,001 - $15,000",New,
+DelBene,20026123,JT,Chandler Ariz Excise Tax Rev,NaN,S,10/18/2024,10/18/2024,"$500,001 - $1,000,000",New,
+DelBene,20026123,JT,New Jersey ST Transn TR FD,NaN,P,10/18/2024,10/18/2024,"$500,001 - $1,000,000",New,
+DelBene,20025940,JT,Seattle WA MN LT PW 3.4%,PWR,P,09/18/2024,09/18/2024,"$15,001 - $50,000",New,
+DelBene,20025379,JT,Maryland ST Go BDS Ser. 2017 B S,NaN,S (partial),06/28/2024,06/28/2024,"$1,001 - $15,000",New,
+DelBene,20025178,JT,Pacific Co B1 Bond,Corporate Securities (Bonds and Notes),P,05/24/2024,05/24/2024,"$1,000,001 - $5,000,000",New,Real estate bond
+DelBene,20025312,JT,Illinois ST Sales Tax Rev JR,NaN,P,05/22/2024,06/04/2024,"$15,001 - $50,000",New,
+DelBene,20025178,JT,Wise CNTY VA Indl Dev Auth,NaN,S,05/22/2024,05/22/2024,"$500,001 - $1,000,000",New,
+DelBene,20025178,JT,Wise CNTY VA Indl Dev Auth,NaN,P,05/22/2024,05/22/2024,"$500,001 - $1,000,000",New,
+DelBene,20025178,JT,Illinois ST Sales Tax Rev JR,NaN,P,05/17/2024,05/17/2024,"$100,001 - $250,000",New,
+DelBene,20024581,SP,Microsoft Corporation ,MSFT,S,02/29/2024,02/29/2024,"$100,001 - $250,000",New,Vested shares sold to separate trust not for the benefit of filer or spouse pursuant to forward contract dated
+DelBene,20024581,JT,Austin Tex Indpt SCH Dist Unltd,NaN,P,02/21/2024,02/21/2024,"$500,001 - $1,000,000",New,
+DelBene,20024581,JT,Seattle WA MN LT PW 3.55% PWR,NaN,P,02/21/2024,02/21/2024,"$15,001 - $50,000",New,
+DelBene,20024495,JT,New York NY Go BDS Ser. Fiscal,NaN,P,02/13/2024,02/13/2024,"$15,001 - $50,000",New,
+DelBene,20024495,JT,New York NY Go BDS Ser. Fiscal,NaN,P,02/12/2024,02/12/2024,"$15,001 - $50,000",New,
+DelBene,20024495,JT,New York NY Go BDS Ser.,NaN,P,02/05/2024,02/05/2024,"$50,001 - $100,000",New,
+DelBene,20024495,JT,Florida Dev Fin Corp Healthcare,NaN,P,02/01/2024,02/01/2024,"$500,001 - $1,000,000",New,
+DelBene,20024495,JT,New Jersey ST Transn TR FD,NaN,S,02/01/2024,02/01/2024,"$500,001 - $1,000,000",New,
+DelBene,20024495,JT,Prince Georges CNTY MD,NaN,S,02/01/2024,02/01/2024,"$500,001 - $1,000,000",New,
+DelBene,20024425,JT,Illinois ST Sales Tax Rev JR,NaN,P,01/31/2024,01/31/2024,"$50,001 - $100,000",New,
+DelBene,20024425,JT,Honolulu HI City & 4% Go Utx,NaN,P,01/23/2024,01/23/2024,"$15,001 - $50,000",New,
+DelBene,20024425,JT,New York N Y Go BDS Ser. Fiscal,NaN,P,01/19/2024,01/19/2024,"$1,001 - $15,000",New,
+Donalds,20026099,SP,"AppFolio, Inc. ",NaN,S,10/01/2024,10/08/2024,"$1,001 - $15,000",New,
+Donalds,20026099,SP,McKesson Corporation Common  ,MCK,P,10/01/2024,10/08/2024,"$1,001 - $15,000",New,
+Donalds,20026099,SP,Nu Holdings Ltd. Class A Ordinary,SNPS,P,10/01/2024,10/08/2024,"$1,001 - $15,000",New,
+Donalds,20026099,SP,"Synopsys, Inc.",SNPS,S,10/01/2024,10/08/2024,"$1,001 - $15,000",New,
+Foxx,20026376,JT,"Hercules Capital, Inc. Common Stock",NaN,P,11/20/2024,12/11/2024,"$1,001 - $15,000",New,
+Foxx,20026376,JT,Energy Transfer LP Common Units,Exchange Traded Notes,P,11/19/2024,12/11/2024,"$1,001 - $15,000",New,
+Foxx,20026376,JT,"Alliance Resource Partners, L.P.",NaN,P,11/14/2024,12/11/2024,"$1,001 - $15,000",New,
+Foxx,20026376,JT,"AT&T Inc. Depositary Shares, each ",NaN,P,11/01/2024,12/11/2024,"$1,001 - $15,000",New,
+Foxx,20026124,JT,"Hercules Capital, Inc. Common",NaN,P,10/23/2024,11/01/2024,"$15,001 - $50,000",New,
+Foxx,20024825,JT,"Hercules Capital, Inc. Common Stock",NaN,P,03/07/2024,04/08/2024,"$1,001 - $15,000",New,
+Foxx,20024825,JT,Ardmore Shipping Corporation,NaN,P,03/06/2024,04/08/2024,"$1,001 - $15,000",New,
+Foxx,20024825,JT,Ardmore Shipping Corporation,NaN,P,03/04/2024,04/08/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,Duke Energy Corporation,NaN,S,02/28/2024,03/02/2024,"$50,001 - $100,000",New,
+Foxx,20024596,JT,Ardmore Shipping Corporation,NaN,P,02/27/2024,03/02/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Foxx,20024596,JT,"Alliance Resource Partners, L.P.",NaN,P,02/26/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,02/26/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,"Alliance Resource Partners, L.P.",NaN,P,02/23/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,Ardmore Shipping Corporation,NaN,P,02/23/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,02/23/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,Energy Transfer LP Common Units,Exchange Traded Notes,P,02/21/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,"Alliance Resource Partners, L.P.",NaN,P,02/15/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,Ardmore Shipping Corporation,NaN,P,02/15/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,02/09/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,02/07/2024,02/07/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,Ardmore Shipping Corporation,NaN,P,02/05/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,"AT&T Inc. Depositary Shares, each ",NaN,P,02/02/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,02/02/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024596,JT,"Hercules Capital, Inc. Common Stock",NaN,P,02/01/2024,03/02/2024,"$1,001 - $15,000",New,
+Foxx,20024424,JT,Energy Transfer LP Common Units,Exchange Traded Notes,P,01/18/2024,02/01/2024,"$1,001 - $15,000",New,
+Foxx,20024424,JT,Cross Timbers Royalty Trust,NaN,S,01/17/2024,02/01/2024,"$15,001 - $50,000",New,
+Foxx,20024424,JT,Energy Transfer LP Common Units,Exchange Traded Notes,P,01/17/2024,02/01/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Foxx,20024424,JT,Schwab U.S. Large,NaN,P,01/17/2024,02/01/2024,"$1,001 - $15,000",New,
+Foxx,20024424,JT,"Altria Group, Inc. ",MO,S,01/16/2024,02/01/2024,"$1,001 - $15,000",New,
+Foxx,20024424,JT,Duke Energy Corporation Depositary,NaN,P,01/16/2024,02/01/2024,"$1,001 - $15,000",New,
+Foxx,20024424,JT,Energy Transfer LP Common,Exchange Traded Notes,P,01/16/2024,02/01/2024,"$15,001 - $50,000",New,
+Foxx,20024424,JT,"Hercules Capital, Inc. ",NaN,P,01/16/2024,02/01/2024,"$15,001 - $50,000",New,
+Foxx,20024424,JT,"Altria Group, Inc. ",MO,P,01/11/2024,02/01/2024,"$1,001 - $15,000",New,
+Foxx,20024424,JT,"Altria Group, Inc. ",MO,S,01/10/2024,02/01/2024,"$15,001 - $50,000",New,
+Foxx,20024424,JT,Schwab U.S. Large,NaN,P,01/08/2024,02/01/2024,"$1,001 - $15,000",New,
+Franklin,20025170,JT,"The Baldwin Insurance Group, Inc.",NaN,S (partial),05/08/2024,05/10/2024,"$500,001 - $1,000,000",New,
+Franklin,20024916,JT,"BRP Group, Inc. ",NaN,S (partial),04/09/2024,04/11/2024,"$1,001 - $15,000",New,"50 shares of BRP sold at $29.00 for $1,449.98"
+Franklin,20024916,JT,"BRP Group, Inc. ",NaN,S (partial),03/21/2024,03/25/2024,"$1,000,001 - $5,000,000",New,"54,445 shares of BRP sold on 3/21/24 at average price of $30.04 for $1,635,630.16."
+Gottheimer,20026314,JT,"Regeneron Pharmaceuticals, Inc.",NaN,S (partial),11/29/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Netflix, Inc.",NaN,S (partial),11/27/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Tesla, Inc.",NaN,P,11/27/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Vertiv Holdings, LLC Class A S",NaN,S (partial),11/27/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Dominion Energy, Inc. Common ",D,P,11/26/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Johnson & Johnson Common Stock,JNJ,P,11/26/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Tesla, Inc.",NaN,P,11/26/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Eaton Corporation, PLC Ordinary S",NaN,S (partial),11/25/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,ConocoPhillips Common Stock ,COP,S (partial),11/22/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Johnson & Johnson Common Stock,JNJ,P,11/22/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Natera, Inc.",NaN,P,11/20/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Tesla, Inc.",NaN,P,11/20/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Eli Lilly and Company Common Stock S,LLY,S (partial),11/19/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Fox Factory Holding Corp. ,NaN,S,11/19/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,KKR & Co. Inc. Common Stock ,KKR,P,11/19/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,S,11/19/2024,12/03/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $240; Expires 9/19/2025
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,S,11/19/2024,12/03/2024,"$1,000,001 - $5,000,000",NewID Owner Asset Transaction Date Notification Amount Cap.,Call options; Strike price $240; Expires 9/19/2025
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,S,11/19/2024,12/03/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $230; Expires 9/19/2025
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,P,11/19/2024,12/03/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $240; Expires 6/20/2025
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,P,11/19/2024,12/03/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $235; Expires 6/20/2025
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,P,11/19/2024,12/03/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $230; Expires 6/20/2025
+Gottheimer,20026314,JT,"Regeneron Pharmaceuticals, Inc.",NaN,S (partial),11/19/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"MercadoLibre, Inc.",MELI,P,11/15/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Eli Lilly and Company Common Stock S,LLY,S (partial),11/14/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,S (partial),11/14/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Salesforce, Inc. Common Stock ",CRM,P,11/14/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Tesla, Inc.",NaN,P,11/14/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Salesforce, Inc. Common Stock ",CRM,P,11/13/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Shopify Inc. Class A Subordinate,NaN,P,11/13/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Microsoft Corporation ,MSFT,S (partial),11/12/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,NVIDIA Corporation,NVDA,S (partial),11/12/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Salesforce, Inc. Common Stock ",CRM,P,11/12/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Tesla, Inc.",NaN,P,11/12/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,Applovin Corporation,NaN,P,11/11/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"Tesla, Inc.",NaN,P,11/11/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"HealthEquity, Inc.",NaN,S (partial),11/07/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026314,JT,"D.R. Horton, Inc. Common Stock",DHI,P,11/01/2024,12/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"AppFolio, Inc. ",NaN,S (partial),10/31/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Gates Industrial Corporation plc,NaN,P,10/31/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"ICU Medical, Inc.",NaN,S (partial),10/31/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,ITT Inc. Common Stock ,NaN,S (partial),10/31/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Stifel Financial Corporation Common S ,NaN,S (partial),10/31/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Texas Capital Bancshares, Inc.",NaN,P,10/31/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,TECHTRONIC INDUS LTD ADR,NaN,P,10/29/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,DISCO CORP UNSP /ADR ,NaN,P,10/28/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,TECHTRONIC INDUS LTD ADR,NaN,P,10/28/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Alamo Group, Inc. Common Stock",NaN,S,10/25/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,DISCO CORP UNSP /ADR ,NaN,P,10/25/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Enerpac Tool Group Corp. Common ,NaN,P,10/25/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Blackstone Inc. Common Stock ,BX,P,10/24/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"PayPal Holdings, Inc. ",PYPL,P,10/24/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Taiwan Semiconductor Manufacturing S,NaN,S (partial),10/24/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Regeneron Pharmaceuticals, Inc.",NaN,S (partial),10/23/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Lam Research Corporation ,LRCX,S (partial),10/22/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Netflix, Inc.",NaN,S (partial),10/18/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Allegro MicroSystems, Inc. ",NaN,P,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Alphabet Inc.,GOOG,P,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Berkshire Hathaway Inc. New,NaN,P,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Booking Holdings Inc. ,BKNG,S (partial),10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Chord Energy Corporation ,NaN,P,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,EEN ENERGY HLDGS UNSP/ADR,NaN,P,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,KKR & Co. Inc. Common Stock ,KKR,S (partial),10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Lam Research Corporation ,LRCX,S (partial),10/17/2024,11/05/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20026154,JT,"Meta Platforms, Inc.",NaN,S (partial),10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"MongoDB, Inc. ",MDB,S,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,NVIDIA Corporation,NVDA,S (partial),10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Pacific Premier Bancorp Inc,NaN,P,10/17/2024,11/05/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20026154,JT,Transdigm Group Incorporated S,NaN,S (partial),10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"U.S. Physical Therapy, Inc. Common ",NaN,P,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Vertiv Holdings, LLC Class A",NaN,P,10/17/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Alibaba Group Holding Limited,NaN,P,10/16/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Eli Lilly and Company Common Stock S,LLY,S (partial),10/16/2024,11/05/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20026154,JT,Manulife Financial Corporation,NaN,P,10/15/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Tesla, Inc.",NaN,S (partial),10/14/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,International Business Machines,NaN,P,10/10/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"ServiceNow, Inc. Common Stock",NOW,P,10/08/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Manulife Financial Corporation S,NaN,S (partial),10/04/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"ServiceNow, Inc. Common Stock",NOW,P,10/04/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Taiwan Semiconductor Manufacturing S,NaN,S (partial),10/04/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,TE Connectivity plc Ordinary Shares,TEL,P,10/04/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Broadcom Inc.,AVGO,S (partial),10/03/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,"Home Depot, Inc. ",HD,P,10/03/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,Microsoft Corporation ,MSFT,S (partial),10/03/2024,11/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20026154,JT,TE Connectivity plc Ordinary Shares,TEL,P,10/03/2024,11/05/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20026154,JT,Apple Inc.,AAPL,P,10/02/2024,11/05/2024,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20026154,JT,Microsoft Corporation ,MSFT,S (partial),10/02/2024,11/05/2024,"$15,001 - $50,000",New,
+Gottheimer,20025953,JT,Amphenol Corporation Common S ,APH,S (partial),09/27/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Trane Technologies plc ,TT,S (partial),09/27/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"PayPal Holdings, Inc. ",PYPL,P,09/26/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Alamo Group, Inc. Common Stock S",NaN,S (partial),09/25/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Boot Barn Holdings, Inc. Common S ",NaN,S (partial),09/25/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Cohen & Steers Inc Common Stock S,NaN,S (partial),09/25/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Crinetics Pharmaceuticals, Inc.",NaN,P,09/25/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"ICF International, Inc. ",NaN,S (partial),09/25/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Meta Platforms, Inc.",NaN,S (partial),09/25/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Freeport ,FCX,S,09/24/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,HDFC Bank Limited Common Stock,NaN,P,09/24/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Synopsys, Inc.",SNPS,S (partial),09/24/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,ASML Holding N.V.,NaN,S (partial),09/23/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,HDFC Bank Limited Common Stock,NaN,P,09/23/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,ICICI Bank Limited Common Stock S,NaN,S (partial),09/23/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,International Business Machines,NaN,P,09/23/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Lam Research Corporation ,LRCX,S (partial),09/23/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"ServiceNow, Inc. Common Stock",NOW,P,09/23/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Taiwan Semiconductor S,NaN,S (partial),09/23/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Blackstone Inc. Common Stock ,BX,P,09/20/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,HDFC Bank Limited Common Stock,NaN,P,09/20/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,ICICI Bank Limited Common Stock,NaN,S,09/20/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Mastercard Incorporated Common ,MA,P,09/18/2024,10/03/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20025953,JT,International Business Machines,NaN,P,09/17/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Allegro MicroSystems, Inc. ",NaN,S,09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Alphabet Inc.,GOOG,S (partial),09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Celsius Holdings, Inc. ",NaN,S,09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Chord Energy Corporation ,NaN,S,09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Eaton Corporation, PLC Ordinary S",NaN,S (partial),09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,EEN ENERGY HLDGS UNSP/ADR,NaN,S,09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Pacific Premier Bancorp Inc,NaN,S (partial),09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"U.S. Physical Therapy, Inc. Common ",NaN,S,09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Vertiv Holdings, LLC Class A S",NaN,S (partial),09/16/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,International Business Machines,NaN,P,09/13/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Apple Inc.,NaN,P,09/12/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Broadcom Inc.,AVGO,S (partial),09/12/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Eaton Corporation, PLC Ordinary S",NaN,S (partial),09/12/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,McKesson Corporation Common S ,MCK,S (partial),09/12/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Microsoft Corporation ,MSFT,S (partial),09/12/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Broadcom Inc.,AVGO,S (partial),09/11/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,McDonald's Corporation Common ,MCD,P,09/10/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Thermo Fisher Scientific Inc Common ,TMO,P,09/10/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,Broadcom Inc.,AVGO,S (partial),09/09/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Halozyme Therapeutics, Inc.",NaN,S (partial),09/09/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Independence Realty Trust, Inc.",NaN,P,09/09/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,"Ryman Hospitality Properties, Inc. S",NaN,S (partial),09/09/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,SYSMEX CORP UNSP/ASDR,NaN,P,09/09/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,SAP SE ADS ,NaN,S (partial),09/06/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,NESTLE S.A S/ADR ,NaN,P,09/05/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,SAP SE ADS ,NaN,S (partial),09/05/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,BioNTech SE,NaN,S,09/03/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025953,JT,SYSMEX CORP UNSP/ASDR,NaN,P,09/03/2024,10/03/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Air Products and Chemicals, Inc. S",NaN,S (partial),08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Berkshire Hathaway Inc. New,NaN,P,08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,BioNTech SE,NaN,S (partial),08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Eaton Corporation, PLC Ordinary S",NaN,S (partial),08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Lowe's Companies, Inc. Common S ",LOW,S (partial),08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Norfolk Southern Corporation S,NaN,S (partial),08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Synopsys, Inc.",SNPS,S (partial),08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Texas Instruments Incorporated,NaN,S (partial),08/30/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Tesla, Inc.",NaN,S (partial),08/28/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Abbott Laboratories Common Stock,ABT,P,08/19/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Starbucks Corporation ,SBUX,P,08/14/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Microsoft Corporation ,MSFT,P,08/12/2024,09/06/2024,"$15,001 - $50,000",New,
+Gottheimer,20025804,JT,Microsoft Corporation ,MSFT,S,08/12/2024,09/06/2024,"$15,001 - $50,000",New,Call options; Strike price $225; Expires 12/19/2025
+Gottheimer,20025804,JT,HAIER SMART HOME U/ADR S,NaN,S (partial),08/08/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Advanced Micro Devices, Inc. ",AMD,S (partial),08/06/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Chuy's Holdings, Inc. ",NaN,S,08/06/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"First Watch Restaurant Group, Inc.",NaN,P,08/06/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Coca,NaN,P,08/05/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"ServiceNow, Inc. Common Stock",NOW,P,08/05/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Spotify Technology S.A. Ordinary,NaN,P,08/05/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Tandem Diabetes Care, Inc.",NaN,P,08/05/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Booking Holdings Inc. ,BKNG,S (partial),08/02/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Coca,NaN,P,08/02/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Goldman Sachs Group, Inc. ",GS,P,08/02/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Jabil Inc. Common Stock ,JBL,S,08/02/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Marriott International,NaN,S,08/02/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Oracle Corporation Common Stock S,ORCL,S (partial),08/02/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Advanced Micro Devices, Inc. ",AMD,S,08/01/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Apple Inc.,NaN,P,08/01/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Goldman Sachs Group, Inc. ",GS,P,08/01/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,Shopify Inc. Class A Subordinate S,NaN,S (partial),08/01/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025804,JT,"Uber Technologies, Inc. Common S ",UBER,S (partial),08/01/2024,09/06/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Salesforce, Inc. Common Stock S",CRM,S (partial),05/30/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"AMERISAFE, Inc.",NaN,S,05/29/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"The Baldwin Insurance Group, Inc.",NaN,P,05/29/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Insmed Incorporated ,NaN,S (partial),05/28/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Meta Platforms, Inc.",NaN,S (partial),05/23/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Nintendo Co Ltd ADR ,NaN,P,05/22/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,UMB Financial Corporation,NaN,P,05/22/2024,06/05/2024,"$1,001 - $15,000",New,"Hon. Josh Gottheimer , 06/08/2024"
+Gottheimer,20025207,JT,"Align Technology, Inc. ",ALGN,S,05/20/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Blackstone Inc. Common Stock ,BX,S (partial),05/20/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Booking Holdings Inc. ,BKNG,P,05/20/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Haleon plc American Depositary,NaN,P,05/20/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Monster Beverage Corporation,NaN,S,05/20/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,COLOPLAST AS SP/ADR ,NaN,P,05/17/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Rapid7, Inc.",NaN,S,05/15/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Microsoft Corporation ,MSFT,P,05/14/2024,06/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $225; Expires 06/20/2025
+Gottheimer,20025207,JT,Microsoft Corporation ,MSFT,P,05/14/2024,06/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $220; Expires 06/20/2025
+Gottheimer,20025207,JT,Microsoft Corporation ,MSFT,S,05/14/2024,06/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $230; Expires 12/19/2025
+Gottheimer,20025207,JT,Microsoft Corporation ,MSFT,S,05/14/2024,06/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $225; Expires 12/19/2025
+Gottheimer,20025207,JT,Exact Sciences Corporation,NaN,S,05/10/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,KKR & Co. Inc. Common Stock ,KKR,P,05/10/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Intapp, Inc.",NaN,P,05/09/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"SpringWorks Therapeutics, Inc.",NaN,P,05/09/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Uber Technologies, Inc. Common S ",UBER,S (partial),05/07/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Alamo Group, Inc. Common Stock S",NaN,S (partial),05/06/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Grand Canyon Education, Inc.",NaN,P,05/06/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,SYSMEX CORP UNSP/ASDR,NaN,P,05/06/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Texas Roadhouse, Inc. ",NaN,S (partial),05/06/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,Alphabet Inc.,GOOG,P,05/03/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,SYSMEX CORP UNSP/ASDR,NaN,P,05/02/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Lowe's Companies, Inc. Common S ",LOW,S (partial),05/01/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"MercadoLibre, Inc.",MELI,S (partial),05/01/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025207,JT,"Tesla, Inc.",NaN,P,05/01/2024,06/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,TENCENT HLDGS UNSP/ADR,NaN,P,04/30/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Adobe Inc.,NaN,S (partial),04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Alphabet Inc.,GOOG,P,04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Cognizant Technology Solutions,CTSH,S,04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Fair Isaac Corproation Common ,FICO,P,04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Freeport ,FCX,P,04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Shopify Inc. Class A Subordinate S,NaN,S (partial),04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,"Tesla, Inc.",NaN,P,04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,"Vertiv Holdings, LLC Class A",NaN,P,04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,"Workday, Inc. ",WDAY,S,04/29/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Alphabet Inc.,GOOG,P,04/26/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Hillman Solutions Corp. ,NaN,P,04/25/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Terex Corporation Common Stock,NaN,S,04/25/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,"Tesla, Inc.",NaN,P,04/24/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,"Uber Technologies, Inc. Common S ",UBER,S (partial),04/24/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,ZTO Express ,NaN,P,04/17/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,ZTO Express ,NaN,P,04/16/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Agree Realty Corporation Common ,NaN,P,04/15/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,BioNTech SE,NaN,P,04/15/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Endava plc American Depositary,NaN,P,04/15/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Fox Factory Holding Corp. ,NaN,P,04/15/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,"Intapp, Inc.",NaN,P,04/15/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,OceanFirst Financial Corp. ,NaN,P,04/15/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,"Shoals Technologies Group, Inc.",NaN,P,04/15/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,NESTLE S.A S/ADR ,NaN,P,04/10/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Fastenal Company,FAST,S (partial),04/05/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,Integra LifeSciences Holdings S,NaN,S (partial),04/05/2024,05/07/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20025020,JT,"Paragon 28, Inc. Common Stock",NaN,P,04/05/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20025020,JT,CHUGAI PHARM UNSP/ADR S,NaN,S (partial),04/04/2024,05/07/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Freeport ,FCX,S,02/29/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,L'Oreal Co. American Depositary,NaN,P,02/26/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"Advanced Micro Devices, Inc. ",AMD,P,02/22/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"Palo Alto Networks, Inc. ",PANW,S (partial),02/21/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Chord Energy Corporation ,NaN,P,02/13/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,DBS GROUP HLDGS LTD S/ADR,NaN,P,02/13/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,P,02/13/2024,03/05/2024,"$500,001 - $1,000,000",New,Call options; Strike price $170; Expires 01/17/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,P,02/13/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $170; Expires 01/17/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S,02/13/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $240; Expires 06/20/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S,02/13/2024,03/05/2024,"$500,001 - $1,000,000",New,Call options; Strike price $225; Expires 06/20/2025
+Gottheimer,20024612,JT,Terex Corporation Common Stock S,NaN,S (partial),02/13/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Cognizant Technology Solutions S,CTSH,S (partial),02/12/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,P,02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $170; Expires 01/17/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,P,02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $165; Expires 01/17/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,P,02/12/2024,03/05/2024,"$500,001 - $1,000,000",New,Call options; Strike price $165; Expires 01/17/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,P,02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $165; Expires 01/17/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,P,02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $165; Expires 01/17/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S (partial),02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S,02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $235; Expires 06/20/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S,02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $230; Expires 06/20/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S,02/12/2024,03/05/2024,"$500,001 - $1,000,000",New,Call options; Strike price $225; Expires 06/20/2025
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S,02/12/2024,03/05/2024,"$1,000,001 - $5,000,000",New,Call options; Strike price $220; Expires 06/20/2025
+Gottheimer,20024612,JT,Booking Holdings Inc. ,BKNG,P,02/09/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Taiwan Semiconductor S,NaN,S (partial),02/09/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Booking Holdings Inc. ,BKNG,P,02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Eli Lilly and Company Common Stock S,LLY,S (partial),02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,KKR & Co. Inc. Common Stock ,KKR,P,02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"Meta Platforms, Inc.",NaN,S (partial),02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Microsoft Corporation ,MSFT,S (partial),02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"MongoDB, Inc. ",MDB,S (partial),02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"Netflix, Inc.",NaN,S (partial),02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,NVIDIA Corporation,NVDA,S (partial),02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"Regeneron Pharmaceuticals, Inc.",NaN,S (partial),02/08/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Charles Schwab Corporation ,SCHW,S (partial),02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"Cheniere Energy, Inc. Common Stock",NaN,S,02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Deere & Company Common Stock S,DE,S (partial),02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Exact Sciences Corporation,NaN,S (partial),02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"First Solar, Inc.",FSLR,S,02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"Moderna, Inc.",MRNA,S,02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,Morgan Stanley Common Stock ,MS,S,02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,MSCI Inc. Common Stock ,MSCI,S,02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Gottheimer,20024612,JT,"The Trade Desk, Inc.",NaN,S (partial),02/01/2024,03/05/2024,"$1,001 - $15,000",New,
+Green,20026092,JT,NGL ENERGY PARTNERS,NaN,S,10/24/2024,10/28/2024,"$50,001 - $100,000",New,
+Green,20026092,JT,NGL ENERGY PARTNERS,NaN,S,10/16/2024,10/28/2024,"$50,001 - $100,000",New,
+Green,20025948,JT,NGL ENERGY PARTNERS,NaN,S,09/30/2024,10/02/2024,"$100,001 - $250,000",New,
+Green,20025948,JT,NGL ENERGY PARTNERS LP,NaN,S,09/17/2024,10/02/2024,"$1,001 - $15,000",New,
+Green,20025797,JT,NGL ENERGY PARTNERS,NaN,S,08/28/2024,09/05/2024,"$50,001 - $100,000",New,
+Green,20025614,JT,NGL ENERGY PARTNERS,NaN,S,08/05/2024,08/07/2024,"$50,001 - $100,000",New,
+Green,20025614,JT,NGL ENERGY PARTNERS,NaN,S,07/24/2024,08/07/2024,"$15,001 - $50,000",New,
+Guest,20024622,SP,NVIDIA Corporation ,NVDA,P,02/20/2024,03/05/2024,"$1,001 - $15,000",New,
+Hern,20024305,JT,"Home Depot, Inc. ",HD,Transaction,Date,Notification,Amount,New,Dividend Reinvestment
+Hern,20024305,JT,Devon Energy Corporation,DVN,P,12/29/2023,12/30/2023,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20024305,JT,Devon Energy Corporation ,DVN,P,12/29/2023,12/30/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,Lockheed Martin Corporation ,LMT,P,12/29/2023,12/30/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,"Williams Companies, Inc. ",WMB,P,12/26/2023,12/27/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,Pioneer Natural Resources Company,NaN,P,12/22/2023,12/23/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,Linde plc,NaN,P,12/18/2023,12/18/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,"NextEra Energy, Inc. ",NEE,P,12/15/2023,12/16/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,"Home Depot, Inc. ",HD,P,12/14/2023,12/15/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,RTX Corporation ,RTX,P,12/14/2023,12/15/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,UnitedHealth Group Incorporated,NaN,P,12/12/2023,12/13/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,Emerson Electric Company ,EMR,P,12/11/2023,12/12/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,Exxon Mobil Corporation ,XOM,P,12/11/2023,12/12/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024305,JT,"Rockwell Automation, Inc. ",ROK,P,12/11/2023,12/12/2023,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20024305,DC,"CareCloud, Inc. ",NaN,S,12/08/2023,12/09/2023,"$1,001 - $15,000",New,sell to close
+Hern,20024305,JT,Johnson & Johnson ,JNJ,P,12/05/2023,12/06/2023,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20026222,JT,McDonald's Corporation ,MCD,P,10/29/2024,10/30/2024,"$100,001 - $250,000",New,
+Hern,20026222,JT,UNITED STATES TREAS,NaN,S,10/03/2024,10/04/2024,"$100,001 - $250,000",New,full redemption - matured 10/3/24
+Hern,20026222,JT,UNITED STATES TREAS,NaN,S,10/03/2024,10/07/2024,"$1,000,001 - $5,000,000",New,full redemption - matured 10/3/24
+Hern,20026033,JT,Citigroup MTN 9/1/2026,Corporate Securities (Bonds and Notes),S,09/23/2024,09/24/2024,"$250,001 - $500,000",New,full call. Redeemed by the issuer
+Hern,20025634,JT,Barclays Bank Series A MTN,NaN,S,07/26/2024,07/29/2024,"$250,001 - $500,000",New,Note called by issuer
+Hern,20025634,JT,Bank of Montreal MTN 4/19/27,Corporate Securities (Bonds and Notes),S,07/19/2024,07/22/2024,"$250,001 - $500,000",New,Note called by issuer 7/19/24
+Hern,20025634,JT,Chubb Limited Common Stock ,CB,P,07/08/2024,07/09/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025634,JT,Inland Real Estate Income Trust [PS],NaN,P,07/08/2024,07/09/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,Devon Energy Corporation Common ,DVN,P,06/28/2024,06/29/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,Devon Energy Corporation Common ,DVN,P,06/28/2024,06/29/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,Lockheed Martin Corporation,NaN,P,06/28/2024,06/29/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,UnitedHealth Group Incorporated,NaN,P,06/25/2024,06/26/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,"Williams Companies, Inc. ",WMB,P,06/24/2024,06/25/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,Linde plc,NaN,P,06/21/2024,06/22/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,AGCO Corporation Common Stock,NaN,P,06/20/2024,06/21/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,"NextEra Energy, Inc. Common Stock",NEE,P,06/17/2024,06/18/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,"Home Depot, Inc. ",HD,P,06/13/2024,06/14/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,"Home Depot, Inc. ",HD,P,06/13/2024,06/14/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,RTX Corporation Common Stock,RTX,P,06/13/2024,06/14/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,Emerson Electric Company Common ,EMR,P,06/10/2024,06/11/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,Exxon Mobil Corporation Common ,XOM,P,06/10/2024,06/11/2024,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20025473,JT,Exxon Mobil Corporation Common ,XOM,P,06/10/2024,06/11/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,"Rockwell Automation, Inc. Common ",ROK,P,06/10/2024,06/11/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025473,JT,Johnson & Johnson Common Stock,JNJ,P,06/04/2024,06/05/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025232,JT,Texas Instruments Incorporated,NaN,P,05/21/2024,05/22/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025232,JT,Texas Instruments Incorporated,NaN,P,05/21/2024,05/22/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025232,JT,Accenture plc Class A Ordinary,NaN,P,05/17/2024,05/20/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025232,JT,US Treas Bills 05/16/2024,Government Securities and Agency Debt,S,05/16/2024,05/17/2024,"$500,001 - $1,000,000",New,T-Bill redeemed at maturity
+Hern,20025232,JT,"Marsh & McLennan Companies, Inc.",NaN,P,05/15/2024,05/16/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025232,JT,"ONEOK, Inc. Common Stock ",OKE,P,05/15/2024,05/16/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025232,JT,"ONEOK, Inc. Common Stock ",OKE,P,05/15/2024,05/16/2024,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20025232,JT,Exxon Mobil Corporation ,XOM,E,05/03/2024,05/06/2024,"$100,001 - $250,000",New,shares received through merger or PXD
+Hern,20025232,JT,Pioneer Natural Resources,NaN,E,05/03/2024,05/06/2024,"$100,001 - $250,000",New,exchanged for 2.3234 shares of XOM
+Hern,20025040,JT,JP Morgan Chase & Co. Common ,JPM,P,04/30/2024,05/01/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20025040,JT,TORONTO DOMINION BANK SER,NaN,P,04/24/2024,04/25/2024,"$250,001 - $500,000",New,Buy Open
+Hern,20025040,JT,Inland Real Estate Income Trust [PS],NaN,P,04/08/2024,04/09/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,Lockheed Martin Corporation,NaN,P,03/29/2024,04/01/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,Devon Energy Corporation ,DVN,P,03/28/2024,03/29/2024,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20024869,JT,Devon Energy Corporation Common ,DVN,P,03/28/2024,03/29/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,Linde plc,NaN,P,03/28/2024,03/29/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,"Williams Companies, Inc. ",WMB,P,03/25/2024,03/26/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,Pioneer Natural Resources Company,NaN,P,03/22/2024,03/25/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,"Home Depot, Inc. ",HD,P,03/21/2024,03/22/2024,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20024869,JT,"Home Depot, Inc. ",HD,P,03/21/2024,03/22/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,RTX Corporation Common Stock,RTX,P,03/21/2024,03/22/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,UnitedHealth Group Incorporated,NaN,P,03/19/2024,03/20/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,"NextEra Energy, Inc. Common Stock",NEE,P,03/15/2024,03/18/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,Emerson Electric Company Common ,EMR,P,03/11/2024,03/12/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,Exxon Mobil Corporation Common ,XOM,P,03/11/2024,03/12/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,"Rockwell Automation, Inc. Common ",ROK,P,03/11/2024,03/12/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024869,JT,Johnson & Johnson Common Stock,JNJ,P,03/05/2024,03/06/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024669,JT,CITIGROUP GLOBAL MKTS,NaN,S,02/23/2024,02/26/2024,"$250,001 - $500,000",New,Note called by issuer.
+Hern,20024669,JT,Accenture plc Class A Ordinary,NaN,P,02/20/2024,02/21/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024669,JT,"Marsh & McLennan Companies, Inc.",NaN,P,02/15/2024,02/16/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024669,JT,"ONEOK, Inc. Common Stock ",OKE,P,02/14/2024,02/15/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024669,JT,"ONEOK, Inc. Common Stock ",OKE,P,02/14/2024,02/15/2024,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20024669,JT,Texas Instruments Incorporated,NaN,P,02/13/2024,02/14/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024669,JT,Texas Instruments Incorporated,NaN,P,02/13/2024,02/14/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024481,JT,JP Morgan Chase & Co. Common ,JPM,P,01/31/2024,02/01/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024481,JT,Costco Wholesale Corporation,NaN,P,01/12/2024,01/15/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024481,JT,Inland Real Estate Income Trust [PS],NaN,P,01/05/2024,01/08/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20024481,DC,Exact Sciences Corporation,NaN,S,01/02/2024,01/03/2024,"$1,001 - $15,000",New,Sell to Close
+Hern,20024481,DC,Vuzix Corporation ,NaN,S,01/02/2024,01/03/2024,"$1,001 - $15,000",New,"Hon. Kevin Hern , 02/11/2024"
+Jackson,20024253,JT,Heico Corporation ,NaN,S,12/20/2023,01/04/2024,"$15,001 - $50,000",New,
+Jackson,20024253,JT,Wayfair Inc. Class A ,NaN,P,12/20/2023,01/04/2024,"$1,001 - $15,000",New,
+Jackson,20024253,JT,Wayfair Inc. Class A ,NaN,P,12/15/2023,01/04/2024,"$15,001 - $50,000",New,
+Jackson,20024253,JT,"Albertsons Companies, Inc. Class",NaN,P,12/14/2023,01/04/2024,"$15,001 - $50,000",New,
+Jackson,20024253,JT,"Palo Alto Networks, Inc.",PANW,P,12/01/2023,01/04/2024,"$50,001 - $100,000",New,
+Jackson,20026313,JT,"Amazon.com, Inc.",AMZN,P,11/27/2024,12/03/2024,"$15,001 - $50,000",New,
+Jackson,20026313,JT,"Applied Materials, Inc. ",AMAT,S,11/27/2024,12/03/2024,"$15,001 - $50,000",New,
+Jackson,20026313,JT,"Church & Dwight Company,",NaN,P,11/13/2024,12/03/2024,"$15,001 - $50,000",New,
+Jackson,20026313,JT,"Regeneron Pharmaceuticals, Inc.",NaN,S,11/13/2024,12/03/2024,"$15,001 - $50,000",New,
+Jackson,20026313,JT,"Regeneron Pharmaceuticals, Inc.",NaN,S (partial),11/01/2024,12/03/2024,"$1,001 - $15,000",New,
+Jackson,20026125,JT,ASML Holding N.V.,NaN,S,10/28/2024,11/01/2024,"$15,001 - $50,000",New,
+Jackson,20026125,JT,"Salesforce, Inc. Common",CRM,P,10/28/2024,11/01/2024,"$15,001 - $50,000",New,
+Jackson,20025938,JT,General Dynamics,NaN,P,09/24/2024,10/01/2024,"$15,001 - $50,000",New,
+Jackson,20025938,JT,"Merck & Company, Inc. ",MRK,S,09/24/2024,10/01/2024,"$15,001 - $50,000",New,
+Jackson,20025938,JT,Aramark Common Stock,NaN,P,09/19/2024,10/01/2024,"$15,001 - $50,000",New,
+Jackson,20025938,JT,The AES Corporation Common,AES,S,09/19/2024,10/01/2024,"$15,001 - $50,000",New,
+Jackson,20025792,JT,Lam Research Corporation,NaN,S,08/26/2024,09/05/2024,"$15,001 - $50,000",New,
+Jackson,20025792,JT,"Simon Property Group, Inc. ",SPG,P,08/26/2024,09/05/2024,"$15,001 - $50,000",New,
+Jackson,20025635,JT,Teck Resources Ltd Ordinary,NaN,S,07/23/2024,08/10/2024,"$15,001 - $50,000",New,
+Jackson,20025635,JT,"Salesforce, Inc. Common Stock",CRM,S,07/09/2024,08/10/2024,"$15,001 - $50,000",New,
+Jackson,20025635,JT,Teck Resources Ltd Ordinary,NaN,P,07/09/2024,08/10/2024,"$15,001 - $50,000",New,
+Jackson,20025635,JT,The AES Corporation Common,AES,P,07/09/2024,08/10/2024,"$15,001 - $50,000",New,
+Jackson,20025635,JT,ConocoPhillips Common Stock,COP,S,07/05/2024,08/10/2024,"$15,001 - $50,000",New,
+Jackson,20025635,JT,"Albertsons Companies, Inc. Class",A,S,07/03/2024,08/10/2024,"$15,001 - $50,000",New,
+Jackson,20025635,JT,"Coupang, Inc. Class A Common",NaN,P,07/03/2024,08/10/2024,"$15,001 - $50,000",New,
+Jackson,20025000,JT,Hexcel Corporation Common,NaN,S,04/24/2024,05/06/2024,"$15,001 - $50,000",New,
+Jackson,20025000,JT,JP Morgan Chase & Co. ,JPM,P,04/24/2024,05/06/2024,"$15,001 - $50,000",New,
+Jackson,20025000,JT,ConocoPhillips Common Stock,COP,P,04/02/2024,05/06/2024,"$15,001 - $50,000",New,
+Jackson,20025000,JT,lululemon athletica inc. ,LULU,S,04/02/2024,05/06/2024,"$15,001 - $50,000",New,
+Jackson,20024811,JT,"Analog Devices, Inc.",ADI,S (partial),03/13/2024,04/05/2024,"$15,001 - $50,000",New,
+Jackson,20024811,JT,Apple Inc.,AAPL,S,03/13/2024,04/05/2024,"$15,001 - $50,000",New,
+Jackson,20024811,JT,"Applied Materials, Inc. ",AMAT,P,03/13/2024,04/05/2024,"$50,001 - $100,000",New,
+Jackson,20024811,JT,ASML Holding N.V.,NaN,P,03/13/2024,04/05/2024,"$15,001 - $50,000",New,
+Jackson,20024811,JT,Intel Corporation,INTC,S,03/13/2024,04/05/2024,"$15,001 - $50,000",New,
+Jackson,20024606,JT,Hexcel Corporation Common,NaN,P,02/16/2024,03/04/2024,"$15,001 - $50,000",New,
+Jackson,20024450,JT,Lam Research Corporation ,LRCX,P,01/19/2024,02/05/2024,"$15,001 - $50,000",New,
+Jackson,20024450,JT,"Regeneron Pharmaceuticals, Inc.",NaN,P,01/17/2024,02/05/2024,"$1,001 - $15,000",New,
+Jackson,20024450,JT,Wayfair Inc. Class A Common,NaN,S,01/17/2024,02/05/2024,"$15,001 - $50,000",New,"Hon. Jonathan Jackson , 02/15/2024"
+Jackson,20024450,JT,"Cardinal Health, Inc. Common",CAH,P,01/12/2024,02/05/2024,"$50,001 - $100,000",New,
+Jackson,20024450,JT,BP p.l.c. Common Stock ,NaN,S,01/08/2024,02/05/2024,"$15,001 - $50,000",New,
+Jackson,20024450,JT,Intel Corporation,INTC,P,01/08/2024,02/05/2024,"$15,001 - $50,000",New,
+Joyce,20021523,SPDR,Series Trust SPDR S&P,NaN,S,06/30/2023,07/17/2023,"$15,001 - $50,000",New,
+Kelly,20026380,SP,California St Go Call 12/1/27 4% due S,NaN,S (partial),12/02/2024,12/11/2024,"$1,001 - $15,000",New,
+Kelly,20026380,SP,Miami,NaN,P,11/11/2024,12/11/2024,"$50,001 - $100,000",New,
+Kelly,20026380,SP,Intel Corporation,INTC,S,11/08/2024,12/11/2024,"$1,001 - $15,000",New,
+Kelly,20026380,SP,Union Pacific Corporation ,UNP,S,11/08/2024,12/11/2024,"$15,001 - $50,000",New,
+Kelly,20026212,SP,Michigan St Fin Auth Revenue,NaN,S,10/31/2024,11/13/2024,"$100,001 - $250,000",New,
+Kelly,20025773,SP,Michigan St Fin Auth Revenue,NaN,P,08/28/2024,09/03/2024,"$100,001 - $250,000",New,
+Kelly,20025773,SP,Burke Cnty GA Dev Auth Poll Co,NaN,P,08/08/2024,09/03/2024,"$50,001 - $100,000",New,
+Kelly,20025661,SP,Illinois St Fin Auth Revenue IL St,NaN,S (partial),07/31/2024,08/06/2024,"$100,001 - $250,000",New,Revision of ownership - previous filing
+Kelly,20025661,SP,San Antonio TX Elec & Gas,NaN,S,07/31/2024,08/06/2024,"$100,001 - $250,000",New,Revision of ownership - previous filing
+Kelly,20025660,JT,Illinois St Fin Auth Revenue IL St,NaN,S (partial),07/31/2024,08/06/2024,"$100,001 - $250,000",New,
+Kelly,20025660,JT,San Antonio TX Elec & Gas,NaN,S,07/31/2024,08/06/2024,"$100,001 - $250,000",New,
+Kelly,20025660,SP,Florida St Heg Fin Corp Rev due S,NaN,S (partial),07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Kelly,20025280,SP,Chevron Corporation Common Stock,CVX,S,04/12/2024,05/15/2024,"$1,001 - $15,000",New,
+Kelly,20025280,SP,"Meta Platforms, Inc.",NaN,S,04/12/2024,05/15/2024,"$1,001 - $15,000",New,
+Kelly,20025280,SP,T Rowe Pr Mid,NaN,S,04/12/2024,05/15/2024,"$1,001 - $15,000",New,Mutual Fund
+Kelly,20025280,SP,UnitedHealth Group Incorporated,NaN,S,04/12/2024,05/15/2024,"$1,001 - $15,000",New,
+Kelly,20025280,SP,Vanguard International Value Fund,NaN,S,04/12/2024,05/15/2024,"$1,001 - $15,000",New,Mutual Fund
+Kelly,20025280,SP,Verizon Communications Inc.,NaN,S,04/12/2024,05/15/2024,"$1,001 - $15,000",New,
+Kelly,20025280,SP,AT&T Inc. ,T,S,04/11/2024,05/15/2024,"$1,001 - $15,000",New,
+Kelly,20025280,SP,Edwards Lifesciences Corporation,NaN,S,04/11/2024,05/15/2024,"$1,001 - $15,000",New,
+Kelly,20025280,SP,U.S. Bancorp Common Stock ,USB,S,04/11/2024,05/15/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Kelly,20025280,SP,Vanguard Mid Cap ETF [OT],NaN,S (partial),04/11/2024,05/15/2024,"$15,001 - $50,000",New,Mutual Fund
+Kelly,20025280,SP,Cleveland,NaN,P,03/28/2024,05/15/2024,"$50,001 - $100,000",New,
+Kelly,20024654,SP,New Jersey St 19 GO Emer GO,NaN,P,02/21/2024,03/05/2024,"$50,001 - $100,000",New,
+Kelly,20024494,SP,Connecticut St Hlth & Educ Ref Ser,NaN,S,01/24/2024,02/06/2024,"$100,001 - $250,000",New,
+Kelly,20024494,SP,Florida St Hsg Fin Corp Revenue S,NaN,S (partial),01/01/2024,02/06/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"CrowdStrike Holdings, Inc.",NaN,P,12/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Alphabet Inc. ,GOOGL,S,12/14/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Trimble Inc.,NaN,S,11/17/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Cadence Design Systems, Inc.",NaN,P,11/16/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Diamondback Energy, Inc. ",FANG,S,11/16/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"Cadence Design Systems, Inc.",NaN,P,11/15/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20026361,JT,"Ameriprise Financial, Inc. Common ",AMP,P,11/08/2024,12/09/2024,"$1,001 - $15,000",New,
+Landsman,20026361,JT,Eli Lilly and Company Common,LLY,S,11/08/2024,12/09/2024,"$15,001 - $50,000",New,
+Landsman,20026361,JT,"United Rentals, Inc. Common Stock",URI,P,11/08/2024,12/09/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Diamondback Energy, Inc. ",FANG,P,10/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Salesforce, Inc. Common Stock ",CRM,S,10/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20026101,JT,"Amazon.com, Inc.",AMZN,S,10/15/2024,10/29/2024,"$15,001 - $50,000",New,
+Landsman,20026101,SP,"Amazon.com, Inc.",AMZN,S,10/15/2024,10/29/2024,"$15,001 - $50,000",New,
+Landsman,20026101,SP,"Cheniere Energy, Inc. Common Stock",NaN,S,10/15/2024,10/29/2024,"$1,001 - $15,000",New,
+Landsman,20026101,SP,"CrowdStrike Holdings, Inc.",NaN,S,10/15/2024,10/29/2024,"$1,001 - $15,000",New,
+Landsman,20026101,SP,"Diamondback Energy, Inc. ",FANG,S,10/15/2024,10/29/2024,"$15,001 - $50,000",New,
+Landsman,20026101,JT,Exxon Mobil Corporation ,XOM,S,10/15/2024,10/29/2024,"$15,001 - $50,000",New,
+Landsman,20026101,SP,Linde plc,NaN,S,10/15/2024,10/29/2024,"$1,001 - $15,000",New,
+Landsman,20026101,SP,"NextEra Energy, Inc. Common Stock",NEE,S,10/15/2024,10/29/2024,"$1,001 - $15,000",New,
+Landsman,20026101,JT,"NextEra Energy, Inc. Common Stock",NEE,S,10/15/2024,10/29/2024,"$1,001 - $15,000",New,
+Landsman,20026101,JT,"Pfizer, Inc. Common Stock ",PFE,S,10/15/2024,10/29/2024,"$1,001 - $15,000",New,
+Landsman,20026101,JT,Phillips 66 Common Stock ,PSX,S,10/15/2024,10/29/2024,"$15,001 - $50,000",New,
+Landsman,20026101,SP,"Regeneron Pharmaceuticals, Inc.",NaN,S,10/15/2024,10/29/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Alphabet Inc. ,GOOGL,P,10/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Intuitive Surgical, Inc. ",ISRG,S,10/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,RTX Corporation Common Stock,RTX,S,09/21/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"Cheniere Energy, Inc. Common Stock",NaN,P,09/19/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025946,JT,"Diamondback Energy, Inc. ",FANG,S,09/10/2024,10/02/2024,"$1,001 - $15,000",New,
+Landsman,20025946,JT,"NextEra Energy, Inc. Common Stock",NEE,P,09/10/2024,10/02/2024,"$1,001 - $15,000",New,
+Landsman,20025834,JT,"Amazon.com, Inc.",AMZN,S,08/21/2024,09/11/2024,"$15,001 - $50,000",New,
+Landsman,20025834,JT,"Arista Networks, Inc. Common",ANET,P,08/21/2024,09/11/2024,"$15,001 - $50,000",New,
+Landsman,20025622,SP,"Estee Lauder Companies, Inc. ",EL,S,08/15/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025834,SP,Adobe Inc.,ADBE,S,08/14/2024,09/18/2024,"$15,001 - $50,000",New,
+Landsman,20025834,SP,"Arista Networks, Inc. Common Stock",ANET,P,08/14/2024,09/18/2024,"$1,001 - $15,000",New,
+Landsman,20025834,SP,"Ulta Beauty, Inc.",ULTA,S,08/14/2024,09/18/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"Regeneron Pharmaceuticals, Inc.",NaN,P,08/11/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Intuitive Surgical, Inc. ",ISRG,S (partial),08/02/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Microsoft Corporation ,MSFT,S (partial),08/02/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,NVIDIA Corporation,NVDA,S (partial),08/02/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Uber Technologies, Inc. Common S ",UBER,S (partial),08/02/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Diamondback Energy, Inc. ",FANG,P,07/17/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,JT,"Intuitive Surgical, Inc. ",ISRG,S,07/17/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,SP,"Intuitive Surgical, Inc. ",ISRG,S,07/17/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"L3Harris Technologies, Inc. Common ",LHX,P,07/17/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Uber Technologies, Inc. Common ",UBER,P,06/23/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Linde plc,NaN,S,06/22/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Intuitive Surgical, Inc. ",ISRG,P,06/20/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,JT,"United Rentals, Inc. Common",URI,S,06/20/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,SP,Apple Inc.,NaN,P,06/06/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Amazon.com, Inc.",AMZN,P,06/03/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Eli Lilly and Company Common Stock S,LLY,S (partial),06/03/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,NVIDIA Corporation,NVDA,S (partial),06/03/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Parker,NaN,P,06/03/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"United Rentals, Inc. Common Stock",URI,P,06/03/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Analog Devices, Inc.",ADI,S,05/30/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Intuitive Surgical, Inc. ",ISRG,P,05/30/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Microsoft Corporation ,MSFT,P,05/30/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,NVIDIA Corporation,NVDA,S (partial),05/30/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Alphabet Inc. ,GOOGL,S (partial),05/29/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Apple Inc.,NaN,S (partial),05/29/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"Cencora, Inc. Common Stock",COR,P,05/29/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,SP,Exxon Mobil Corporation Common ,XOM,S,05/29/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Microsoft Corporation ,MSFT,S (partial),05/29/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,NVIDIA Corporation,NVDA,S (partial),05/29/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,SP,TE Connectivity Ltd. New,NaN,P,05/29/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,SP,"Ulta Beauty, Inc.",ULTA,P,05/29/2024,08/08/2024,"$15,001 - $50,000",New,
+Landsman,20025622,SP,Veralto Corp Common Stock ,VLTO,S,05/29/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"Uber Technologies, Inc. Common S ",UBER,S (partial),05/25/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Adobe Inc.,NaN,P,05/23/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"CrowdStrike Holdings, Inc.",NaN,P,05/23/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Costco Wholesale Corporation,NaN,P,05/15/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Uber Technologies, Inc. Common ",UBER,S,05/15/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Eli Lilly and Company Common Stock,LLY,P,05/11/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"United Rentals, Inc. Common Stock",URI,S,05/11/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Intuitive Surgical, Inc. ",ISRG,P,05/04/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Parker,NaN,S,05/04/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"CrowdStrike Holdings, Inc.",NaN,S,05/02/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Parker,NaN,P,05/02/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Parker,NaN,S (partial),04/27/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Ameriprise Financial, Inc. Common ",AMP,S,04/24/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Analog Devices, Inc.",ADI,P,04/24/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Salesforce, Inc. Common Stock ",CRM,P,04/24/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Uber Technologies, Inc. Common ",UBER,S,04/24/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Amazon.com, Inc.",AMZN,P,04/12/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Cadence Design Systems, Inc.",NaN,S,04/12/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,NVIDIA Corporation,NVDA,S (partial),03/27/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"BlackRock, Inc. Common Stock ",BLK,S,03/09/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Uber Technologies, Inc. Common ",UBER,P,03/09/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Horizon Therapeutics Public Limited,NaN,S,02/03/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"BlackRock, Inc. Common Stock ",BLK,P,02/02/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Eli Lilly and Company Common Stock,LLY,S,02/02/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Horizon Pharma [OT],NaN,S,02/01/2023,08/08/2024,"$1,001 - $15,000",New,ADR Stock
+Landsman,20025622,SP,"Intuitive Surgical, Inc. ",ISRG,P,02/01/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,NVIDIA Corporation,NVDA,P,02/01/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Ameriprise Financial, Inc. Common ",AMP,P,01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"Diamondback Energy, Inc. ",FANG,S,01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Dollar General Corporation Common ,DG,S,01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Eli Lilly and Company Common Stock,LLY,P,01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Honeywell International Inc. ,HON,S,01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Horizon Pharma [OT],NaN,P,01/18/2023,08/08/2024,"$1,001 - $15,000",New,ADR Stock
+Landsman,20025622,JT,Linde plc,NaN,S (partial),01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"NextEra Energy, Inc. Common Stock",NEE,S,01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Parker,NaN,P,01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"United Rentals, Inc. Common Stock S",URI,S (partial),01/18/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Adobe Inc.,NaN,P,01/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"Ameriprise Financial, Inc. Common ",AMP,P,01/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"BlackRock, Inc. Common Stock ",BLK,P,01/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,Costco Wholesale Corporation,NaN,P,01/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,NVIDIA Corporation,NVDA,P,01/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"Salesforce, Inc. Common Stock ",CRM,P,01/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,SP,"United Rentals, Inc. Common Stock",URI,P,01/12/2023,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,Microsoft Corporation ,MSFT,S,01/04/2024,08/08/2024,"$1,001 - $15,000",New,
+Landsman,20025622,JT,"United Rentals, Inc. Common Stock",URI,P,01/04/2024,08/08/2024,"$1,001 - $15,000",New,
+Latta,20026165,SP,"Farmers & Merchants Bancorp, Inc.",NaN,P,10/20/2024,10/21/2024,"$1,001 - $15,000",New,Dividend reinvestment
+Latta,20025507,SP,"Farmers & Merchants Bancorp, Inc.",NaN,P,07/20/2024,07/21/2024,"$1,001 - $15,000",New,dividend reinvestment
+Latta,20025238,SP,"Farmers & Merchants Bancorp,",NaN,P,06/06/2024,06/07/2024,"$15,001 - $50,000",New,Compensation
+Latta,20024901,SP,"Farmers & Merchants Bancorp, Inc.",NaN,P,04/20/2024,04/20/2024,"$1,001 - $15,000",New,dividend reinvestment
+Latta,20024505,SP,"Farmers & Merchants Bancorp, Inc.",NaN,P,01/22/2024,02/14/2024,"$1,001 - $15,000",New,dividend reinvestment
+Lee,20024249,SP,Alibaba Group Holding Limited,NaN,S (partial),12/29/2023,01/03/2024,"$100,001 - $250,000",New,
+Lee,20026063,SP,GE Vernova Inc. Common,GEV,S,11/08/2024,11/12/2024,"$15,001 - $50,000",New,
+Lee,20026063,SP,"Pfizer, Inc. Common Stock ",PFE,P,10/21/2024,10/23/2024,"$15,001 - $50,000",New,
+Lee,20026063,SP,"TuHURA Biosciences, Inc. ",NaN,E,10/18/2024,11/12/2024,"$100,001 - $250,000",New,The Note SP holds in TuHURA Biosciences was converted as the result of a merger of the company with
+Lee,20026063,SP,Apple Inc.,AAPL,P,10/07/2024,10/22/2024,"$15,001 - $50,000",New,$215 Puts exp. 1/17/25
+Lee,20025714,SP,JP Morgan Chase & Co. ,JPM,P,09/10/2024,09/13/2024,"$50,001 - $100,000",New,
+Lee,20025714,SP,Apple Inc.,AAPL,P,07/31/2024,08/20/2024,"$15,001 - $50,000",New,Purchase to close 01/17/24 Calls
+Lee,20025546,SP,Apple Inc.,AAPL,S,07/05/2024,07/30/2024,"$15,001 - $50,000",New,Sale of 25 Jan 2025 $230 Call contracts
+Lee,20025546,SP,Apple Inc.,AAPL,P,07/05/2024,07/30/2024,"$15,001 - $50,000",New,Purchase of 25 Jan 2025 $215 Put contracts
+Lee,20025096,DC,RHEINMETALL AG UNSP/ADR,NaN,P,05/10/2024,05/16/2024,"$1,001 - $15,000",New,
+Lee,20025116,SP,"TuHURA Biosciences, Inc.",Corporate Securities (Bonds and Notes),P,05/06/2024,05/20/2024,"$100,001 - $250,000",New,Convertible Promissory Note Loan
+Magaziner,20025372,SP,"Galileo, Inc.",Stock (Not Publicly Traded),P,05/31/2024,06/05/2024,"$15,001 - $50,000",New,Exercised stock option
+Manning,20025373,SP,Western Union Company ,Whole/Universal Insurance,S,06/13/2024,07/01/2024,"$1,001 - $15,000",New,
+Mast,20024743,DC,"Amazon.com, Inc.",AMZN,Stock,P,03/04/2024,03/04/2024,New,
+Mast,20024743,DC,AT&T Inc.,T,[ST],P,03/04/2024,03/04/2024,New,
+Mast,20024743,DC,AT&T Inc.,T,[ST],P,03/04/2024,03/04/2024,New,
+Matsui,20025820,SP,U.S. Treasury Note due,NaN,P,09/03/2024,09/04/2024,"$500,001 - $1,000,000",New,
+Matsui,20025152,SP,"Intrinsic Exchange Group, Inc.",Ownership Interest (Holding Investments),P,05/29/2024,05/29/2024,Spouse/DC,New,The investment was made through a Simple Agreement for Future Equity (SAFE).
+Matsui,20025111,SP,U.S. Treasury Note due,NaN,P,04/23/2024,04/23/2024,Spouse/DC,New,
+Matsui,20025111,SP,U.S. Treasury Note due,NaN,P,04/23/2024,04/23/2024,Spouse/DC,New,
+Matsui,20025111,SP,U.S. Treasury Note due,NaN,P,04/23/2024,04/23/2024,Spouse/DC,New,
+Matsui,20025111,SP,U.S. Treasury Note due,NaN,P,04/23/2024,04/23/2024,Spouse/DC,New,
+Matsui,20025111,SP,U.S. Treasury Note due,NaN,P,04/23/2024,04/23/2024,Spouse/DC,New,
+Matsui,20025111,SP,U.S. Treasury Note due,NaN,P,04/23/2024,04/23/2024,Spouse/DC,New,
+Matsui,20024369,SP,U.S. Treasury Note due,NaN,P,01/16/2024,01/16/2024,"$500,001 - $1,000,000",New,
+Matsui,20024369,SP,U.S. Treasury Note due,NaN,P,01/16/2024,01/16/2024,Spouse/DC,New,
+Matsui,20024369,SP,U.S. Treasury Note due,NaN,P,01/16/2024,01/16/2024,Spouse/DC,New,
+Matsui,20024369,SP,U.S. Treasury Note due,NaN,P,01/16/2024,01/16/2024,Spouse/DC,New,
+Matsui,20024369,SP,U.S. Treasury Note due,NaN,P,01/16/2024,01/16/2024,Spouse/DC,New,
+Matsui,20024369,SP,U.S. Treasury Note due,NaN,P,01/16/2024,01/16/2024,Spouse/DC,New,
+McGarvey,20026360,SP,"Amazon.com, Inc.",AMZN,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,Charles Schwab Corporation ,SCHW,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,"Interactive Brokers Group, Inc.",NaN,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,Microsoft Corporation ,MSFT,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,JT,NVIDIA Corporation,NVDA,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,NVIDIA Corporation,NVDA,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,NVIDIA Corporation,NVDA,S,11/13/2024,12/09/2024,"$15,001 - $50,000",New,
+McGarvey,20026360,SP,NVIDIA Corporation,NVDA,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,Shell PLC American Depositary,NaN,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,"Tesla, Inc.",NaN,S,11/13/2024,12/09/2024,"$1,001 - $15,000",New,
+McGarvey,20026360,SP,Trump Media & Technology Group,NaN,S,11/08/2024,12/09/2024,"$1,001 - $15,000",New,Sold for a loss
+McGarvey,20026360,SP,Trump Media & Technology Group,NaN,P,11/06/2024,12/09/2024,"$1,001 - $15,000",New,Purchased without knowledge of filer or spouse.
+McGarvey,20026207,SP,"Tesla, Inc.",NaN,P,10/25/2024,11/12/2024,"$1,001 - $15,000",New,
+McGarvey,20025892,SP,Apple Inc.,NaN,S,08/19/2024,09/24/2024,"$1,001 - $15,000",New,
+McGarvey,20025892,SP,Apple Inc.,NaN,P,08/13/2024,09/24/2024,"$1,001 - $15,000",New,
+McGarvey,20025765,SP,"Delta Air Lines, Inc. Common Stock",DAL,S,07/23/2024,08/26/2024,"$1,001 - $15,000",New,
+McGarvey,20025388,SP,"Delta Air Lines, Inc. Common Stock",DAL,P,06/28/2024,07/02/2024,"$1,001 - $15,000",New,
+McGarvey,20025388,SP,"Interactive Brokers Group, Inc.",NaN,P,06/06/2024,07/02/2024,"$1,001 - $15,000",New,
+McGarvey,20025388,JT,NVIDIA Corporation ,NVDA,P,05/31/2024,07/02/2024,"$1,001 - $15,000",New,
+Meuser,20025438,SP,US Treasury Bill 12/05/2024,Government Securities and Agency Debt,S,07/24/2024,07/24/2024,"$250,001 - $500,000",New,
+Meuser,20025438,SP,US Treasury Bill 12/05/2024,Government Securities and Agency Debt,P,07/13/2024,07/13/2024,"$250,001 - $500,000",New,
+Meuser,20025061,SP,US Treasury Bill 06/13/2024,Government Securities and Agency Debt,P,04/20/2024,04/20/2024,"$250,001 - $500,000",New,
+Meuser,20024710,SP,US Treasury Bill,Government Securities and Agency Debt,P,02/23/2024,03/01/2024,"$250,001 - $500,000",New,
+Meuser,20024710,SP,NVIDIA Corporation ,NVDA,S (partial),02/20/2024,03/01/2024,"$250,001 - $500,000",New,
+Meuser,20024710,DC,NVIDIA Corporation ,NVDA,S (partial),02/20/2024,03/01/2024,"$15,001 - $50,000",New,
+Meuser,20024710,DC,NVIDIA Corporation ,NVDA,S (partial),02/20/2024,03/01/2024,"$15,001 - $50,000",New,
+Moore,20024354,SPDR,S&P 500 ,NaN,P,01/19/2024,01/22/2024,"$100,001 - $250,000",New,
+Moore,20024354,SPDR,S&P 500 ,NaN,P,01/19/2024,01/22/2024,"$15,001 - $50,000",New,
+Moore,20024354,SPDR,S&P 500 ,NaN,P,01/19/2024,01/22/2024,"$15,001 - $50,000",New,
+Moskowitz,20024672,DC,"Oracle Corporation Common Stock P 07/05/2024 07/31/2024 $1,001",ORCL,Transaction,Date,Notification,Amount,New,
+Moskowitz,20024672,DC,Southern Company ,SO,Transaction,Date,Notification,Amount,New,
+Moskowitz,20024672,DC,Comcast Corporation,NaN,S,07/17/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Allstate Corporation ,ALL,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Allstate Corporation ,ALL,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Amazon.com, Inc.",AMZN,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Amazon.com, Inc.",AMZN,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Atmos Energy Corporation Common ,ATO,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Berkshire Hathaway Inc. New,NaN,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Berkshire Hathaway Inc. New,NaN,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Broadcom Inc.,AVGO,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Broadcom Inc.,AVGO,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Comcast Corporation,NaN,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Elevance Health, Inc. Common Stock",ELV,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,FactSet Research Systems Inc.,NaN,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,FactSet Research Systems Inc.,NaN,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,JP Morgan Chase & Co. Common ,JPM,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Linde plc,NaN,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Linde plc,NaN,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Mastercard Incorporated Common S ,MA,S (partial),07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Mastercard Incorporated Common ,MA,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Mondelez International, Inc.",NaN,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Northrop Grumman Corporation,NaN,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,NVIDIA Corporation,NVDA,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,NVIDIA Corporation,NVDA,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Oracle Corporation Common Stock,ORCL,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"PNC Financial Services Group, Inc.",PNC,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Roper Technologies, Inc. ",ROP,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Sherwin,NaN,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Southern Company ,SO,P,07/05/2024,07/05/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Toronto Dominion Bank ,NaN,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"W.W. Grainger, Inc. Common Stock",GWW,P,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Waste Management, Inc. Common S ",WM,S (partial),07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"WEC Energy Group, Inc. Common ",WEC,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Zoetis Inc. Class A Common Stock,ZTS,S,07/05/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Zoetis Inc. Class A Common Stock,ZTS,S,07/05/2024,07/31/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Moskowitz,20024672,DC,Alphabet Inc.,GOOG,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Best Buy Co., Inc. Common Stock",BBY,S,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Elevance Health, Inc. Common Stock",ELV,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,FactSet Research Systems Inc.,NaN,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Johnson & Johnson Common Stock,JNJ,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,JP Morgan Chase & Co. Common ,JPM,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Lockheed Martin Corporation,NaN,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Mondelez International, Inc.",NaN,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"NextEra Energy, Inc. Common Stock",NEE,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Northrop Grumman Corporation,NaN,S,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"PNC Financial Services Group, Inc.",PNC,S,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Snap ,SNA,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Toronto Dominion Bank ,NaN,S,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Tractor Supply Company ,TSCO,P,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"WEC Energy Group, Inc. Common ",WEC,S,07/01/2024,07/31/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Air Products and Chemicals, Inc.",NaN,S,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Air Products and Chemicals, Inc.",NaN,S,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Elevance Health, Inc. Common Stock",ELV,P,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,FactSet Research Systems Inc.,NaN,P,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,FactSet Research Systems Inc.,NaN,P,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Kimberly ,KMB,S,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Kimberly ,KMB,S,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Nike, Inc. Common Stock ",NKE,S,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,"Nike, Inc. Common Stock ",NKE,S,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Moskowitz,20024672,DC,Snap ,SNA,P,02/01/2024,02/29/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Accenture plc Class A Ordinary Shares,ACN,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"Analog Devices, Inc.",ADI,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Bank Amer Corp Dep Sh Repstg,NaN,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Booking Holdings Inc. ,BKNG,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Broadcom Inc.,AVGO,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,CSX Corporation,CSX,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Danaher Corporation Common Stock,DHR,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Deere & Company Common Stock,DE,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Dollar General Corporation Common ,DG,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"Elevance Health, Inc. Common Stock",ELV,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Eli Lilly and Company Common Stock,LLY,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"Estee Lauder Companies, Inc. ",EL,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,FMC Corporation Common Stock,FMC,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"Fortinet, Inc.",FTNT,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Honeywell International Inc. ,HON,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Intuit Inc.,NaN,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Marathon Petroleum Corporation,NaN,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Microsoft Corporation ,MSFT,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"Netflix, Inc.",NaN,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"Nike, Inc. Common Stock ",NKE,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,NiSource Inc Common Stock ,NI,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,NVIDIA Corporation,NVDA,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"PepsiCo, Inc.",NaN,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Philip Morris International Inc Note,NaN,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,due 5/16/2038 06.375 MNID Owner Asset Transaction Date Notification Amount Cap.
+Newhouse,20024917,SP,Procter & Gamble Company ,PG,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,RTX Corporation Common Stock,RTX,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"Salesforce, Inc. Common Stock ",CRM,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,"ServiceNow, Inc. Common Stock",NOW,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,The Hershey Company Common ,HSY,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,V.F. Corporation Common Stock,NaN,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Newhouse,20024917,SP,Walt Disney Co. Global Note 45 [CS],NaN,P,04/10/2024,04/10/2024,"$1,001 - $15,000",New,"due 12/01/2045, 07.750% JD"
+Pelosi,20025819,SP,"REOF XXVI, LLC",Asset-Backed Securities,P,08/13/2024,08/13/2024,"$250,001 - $500,000",New,Investment in LLC which is acquiring and managing a commercial office property at 631 Howard Street in
+Pelosi,20025535,SP,Microsoft Corporation ,MSFT,S (partial),07/26/2024,07/26/2024,"$1,000,001 - $5,000,000",New,"Sold 5,000 shares."
+Pelosi,20025535,SP,NVIDIA Corporation,NVDA,P,07/26/2024,07/26/2024,"$1,000,001 - $5,000,000",New,"Purchased 10,000 shares."
+Pelosi,20025368,SP,Visa Inc. ,V,S (partial),07/01/2024,07/01/2024,"$500,001 - $1,000,000",New,"Sold 2,000 shares."
+Pelosi,20025368,SP,NVIDIA Corporation ,NVDA,P,06/26/2024,06/26/2024,"$1,000,001 - $5,000,000",New,"Purchased 10,000 shares."
+Pelosi,20025368,SP,Broadcom Inc.,AVGO,P,06/24/2024,06/24/2024,"$1,000,001 - $5,000,000",New,Purchased 20 call options with a strike price of $800 and an expiration date of 6/20/25.
+Pelosi,20025368,SP,"Tesla, Inc.",TSLA,S,06/24/2024,06/24/2024,"$250,001 - $500,000",New,"Sold 2,500 shares."
+Pelosi,20024625,SP,"Forge Investments, LLC",Asset-Backed Securities,P,03/04/2024,03/04/2024,"$1,000,001 - $5,000,000",New,Investment in fund that owns Databricks stock. Databricks is a San Francisco engineering and analytic
+Pelosi,20024542,SP,"Palo Alto Networks, Inc.",PANW,P,02/21/2024,02/21/2024,"$100,001 - $250,000",New,Purchased 20 call options with a strike price of $200 and an expiration date of 1/17/25.
+Pelosi,20024542,SP,"Palo Alto Networks, Inc.",PANW,P,02/12/2024,02/12/2024,"$500,001 - $1,000,000",New,Purchased 50 call options with a strike price of $200 and an expiration date of 1/17/25.
+Peters,20024316,SP,U.S Treasury Bills,Government Securities and Agency Debt,P,12/27/2023,12/31/2023,Spouse/DC,New,
+Peters,20024316,SP,U.S. Treasury Notes,Government Securities and Agency Debt,P,12/27/2023,12/31/2023,"$100,001 - $250,000",New,
+Peters,20024316,SP,U.S Treasury Notes,Government Securities and Agency Debt,P,12/26/2023,12/31/2023,Spouse/DC,New,
+Peters,20024316,SP,U.S Treasury Bills [GS],NaN,S (partial),12/21/2023,12/31/2023,"$500,001 - $1,000,000",New,
+Peters,20024316,SP,Solano CA CCD Educ,Government Securities and Agency Debt,P,12/19/2023,12/31/2023,"$250,001 - $500,000",New,
+Peters,20024316,SP,"Paris TX, GO LTX",Government Securities and Agency Debt,P,12/14/2023,12/31/2023,"$250,001 - $500,000",New,
+Peters,20024316,SP,U.S Treasury Bills [GS],NaN,S (partial),12/14/2023,12/31/2023,"$500,001 - $1,000,000",New,
+Peters,20026393,SP,"Stepstone Tactical Growth Fund III,",NaN,P,11/18/2024,11/30/2024,"$1,001 - $15,000",New,Pooled Investment Fund
+Peters,20026393,SP,Visalia CA Uni IMPT SCH,Government Securities and Agency Debt,P,11/07/2024,11/30/2024,"$500,001 - $1,000,000",New,
+Peters,20026188,SP,Orange CTY CA REV UTX,Government Securities and Agency Debt,S,10/15/2024,10/31/2024,"$50,001 - $100,000",New,
+Peters,20026188,SP,San Francisco CA Sewer Util [GS],NaN,S (partial),10/01/2024,10/31/2024,"$500,001 - $1,000,000",New,
+Peters,20026016,SP,Sacramento CA WTR UTIL,Government Securities and Agency Debt,P,09/27/2024,09/30/2024,"$50,001 - $100,000",New,
+Peters,20026016,SP,Allocate Premier Access Fund,Other,P,09/20/2024,09/30/2024,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20026016,SP,Allocate Alpha Fund II LP,Other,P,09/19/2024,09/30/2024,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20026016,SP,Kent Street Group GP,Other,P,09/11/2024,09/30/2024,"$15,001 - $50,000",New,Pooled Investment Fund/Venture Capital
+Peters,20026016,SP,GV Christi LLC,Ownership Interest (Engaged in a Trade or Business),P,09/10/2024,09/30/2024,"$50,001 - $100,000",New,Own/operate mobile home park
+Peters,20026016,SP,Lynett Capital Partners III,Other,P,09/09/2024,09/30/2024,"$100,001 - $250,000",New,Pooled Investment Fund/Venture CapitalID Owner Asset Transaction Date Notification Amount Cap.
+Peters,20026016,SP,San Mateo CA UHSD IMPT SCH,Government Securities and Agency Debt,S,09/03/2024,09/30/2024,"$50,001 - $100,000",New,
+Peters,20025827,SP,CA ST UNIV PUB EDUC,Government Securities and Agency Debt,P,08/29/2024,08/31/2024,"$250,001 - $500,000",New,
+Peters,20025827,SP,San Juan CA USD IMPT SCH,Government Securities and Agency Debt,P,08/20/2024,08/31/2024,"$100,001 - $250,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Peters,20025827,SP,Foothill,Government Securities and Agency Debt,P,08/15/2024,08/31/2024,"$500,001 - $1,000,000",New,
+Peters,20025827,SP,San Diego CA UNI GO UTX,Government Securities and Agency Debt,P,08/08/2024,08/31/2024,"$250,001 - $500,000",New,
+Peters,20025827,SP,U.S Treasury Bills [GS],NaN,S (partial),08/08/2024,08/31/2024,"$500,001 - $1,000,000",New,
+Peters,20025827,SP,Los Angeles CA FINL SCH,Government Securities and Agency Debt,P,08/07/2024,08/31/2024,"$50,001 - $100,000",New,
+Peters,20025827,SP,Cerritos CA CCD COLL EDUC,Government Securities and Agency Debt,S,08/01/2024,08/31/2024,"$50,001 - $100,000",New,156792GD9
+Peters,20025827,SP,San Francisco CA BART,Government Securities and Agency Debt,S,08/01/2024,08/31/2024,"$250,001 - $500,000",New,797661ZA6
+Peters,20025576,SP,U.S Treasury Bills [GS],NaN,S (partial),07/25/2024,07/31/2024,"$250,001 - $500,000",New,
+Peters,20025576,SP,Los Angeles CA IMPT Sch,Government Securities and Agency Debt,P,07/23/2024,07/31/2024,"$500,001 - $1,000,000",New,
+Peters,20025576,SP,Cambrian CA SD,Government Securities and Agency Debt,S,07/17/2024,07/31/2024,"$500,001 - $1,000,000",New,
+Peters,20025576,SP,San Diego CA WTR UTIL,Government Securities and Agency Debt,P,07/12/2024,07/31/2024,"$50,001 - $100,000",New,
+Peters,20025576,SP,Sacramento CA UTIL,Government Securities and Agency Debt,P,07/10/2024,07/31/2024,"$100,001 - $250,000",New,
+Peters,20025576,SP,Santa Clara CN CA HLTH [GS],NaN,P,07/10/2024,07/31/2024,"$15,001 - $50,000",New,
+Peters,20025576,SP,Marin CA MIN WTR UTIL,Government Securities and Agency Debt,S,07/01/2024,07/31/2024,"$50,001 - $100,000",New,
+Peters,20025576,SP,U.S Treasury Bills,Government Securities and Agency Debt,P,07/01/2024,07/31/2024,"$500,001 - $1,000,000",New,
+Peters,20025424,SP,Torch Capital III LP [OT],NaN,P,06/27/2024,06/30/2024,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20025424,SP,UNIV CA PUB EDUC,Government Securities and Agency Debt,P,06/21/2024,06/30/2024,"$50,001 - $100,000","New* For the complete list of asset type abbreviations, please visit https://fd.house.gov/reference/asset-type-codes.aspx.","Hon. Scott H. Peters , 07/15/2024"
+Peters,20025424,SP,U.S Treasury Bills [GS],NaN,S (partial),06/20/2024,06/30/2024,Spouse/DC,New,
+Peters,20025424,SP,San Francisco CA IMPT SCH,Government Securities and Agency Debt,S,06/17/2024,06/30/2024,"$50,001 - $100,000",New,
+Peters,20025424,SP,U.S Treasury Bills [GS],NaN,S (partial),06/11/2024,06/30/2024,"$250,001 - $500,000",New,
+Peters,20025424,SP,U.S Treasury Bills [GS],NaN,S (partial),06/07/2024,06/30/2024,"$250,001 - $500,000",New,
+Peters,20025424,SP,Alhambra CA USD SCH,Government Securities and Agency Debt,P,06/03/2024,06/30/2024,"$250,001 - $500,000",New,
+Peters,20025285,SP,Oceanside CA IMPT SCH,Government Securities and Agency Debt,P,05/22/2024,05/31/2024,"$500,001 - $1,000,000",New,
+Peters,20025285,SP,"Los Angeles County, CA Excise",NaN,P,05/20/2024,05/31/2024,"$50,001 - $100,000",New,
+Peters,20025285,SP,"San Diego, CA IMPT SCH",Government Securities and Agency Debt,P,05/20/2024,05/31/2024,"$50,001 - $100,000",New,
+Peters,20025285,SP,Los Angeles CA GO UTX,Government Securities and Agency Debt,P,05/17/2024,05/31/2024,"$50,001 - $100,000",New,
+Peters,20025285,SP,U.S Treasury Bills [GS],NaN,S (partial),05/16/2024,05/31/2024,"$250,001 - $500,000",New,
+Peters,20025037,SP,U.S Treasury Notes,Government Securities and Agency Debt,P,04/03/2024,04/30/2024,"$500,001 - $1,000,000",New,
+Peters,20024837,SP,U.S Treasury Bills [GS],NaN,S (partial),03/21/2024,03/31/2024,"$500,001 - $1,000,000",New,
+Peters,20024837,SP,U.S Treasury Notes,Government Securities and Agency Debt,P,03/05/2024,03/31/2024,"$500,001 - $1,000,000",New,
+Peters,20024662,SP,U.S Treasury Bills [GS],NaN,S (partial),02/29/2024,02/29/2024,"$500,001 - $1,000,000",New,
+Peters,20024662,SP,U.S Treasury Bills,Government Securities and Agency Debt,P,02/14/2024,02/29/2024,"$500,001 - $1,000,000",New,
+Peters,20024662,SP,U.S Treasury Bills [GS],NaN,S (partial),02/08/2024,02/29/2024,"$500,001 - $1,000,000",New,
+Peters,20024477,SP,U.S Treasury Bills,Government Securities and Agency Debt,P,01/31/2024,01/31/2024,"$250,001 - $500,000",New,
+Peters,20024477,SP,U.S Treasury Bills [GS],NaN,S (partial),01/18/2024,01/31/2024,"$250,001 - $500,000",New,
+Peters,20024477,SP,"Lynett Capital Partners III, LP",Other,P,01/17/2024,01/31/2024,"$100,001 - $250,000",New,Pooled Investment Fund/Venture Capital
+Peters,20024477,SP,U.S Treasury Bills,Government Securities and Agency Debt,P,01/02/2024,01/31/2024,Spouse/DC,New,
+Peters,20024477,SP,U.S Treasury Notes,Government Securities and Agency Debt,P,01/02/2024,01/31/2024,Spouse/DC,New,
+Pocan,20024758,JT,US Treasury I Bond,Government Securities and Agency Debt,P,03/30/2022,03/30/2022,"$15,001 - $50,000",New,
+Pocan,20024758,JT,US Treasury I Bond,Government Securities and Agency Debt,P,01/21/2023,01/21/2023,"$15,001 - $50,000",New,
+Ross,20024986,JT,Microsoft Corporation ,MSFT,S (partial),04/17/2024,04/17/2024,"$1,001 - $15,000",New,
+Roy,20025201,SP,Atlas Energy Solutions Inc. Common ,NaN,S (partial),05/20/2024,05/20/2024,"$100,001 - $250,000",New,
+Roy,20024848,JT,AT&T Inc. ,T,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Roy,20024848,SP,Chevron Corporation Common,CVX,S,04/10/2024,04/10/2024,"$15,001 - $50,000",New,Sold entire holding.
+Roy,20024848,JT,Energy Transfer LP Common Units,Exchange Traded Notes,S,04/10/2024,04/10/2024,"$1,001 - $15,000",New,
+Roy,20024848,SP,Exxon Mobil Corporation ,KMI,S,04/10/2024,04/10/2024,"$15,001 - $50,000",New,Sold entire holding
+Roy,20024848,JT,Nustar Energy L.P. Common Units,NaN,S,04/10/2024,04/10/2024,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Roy,20024848,SP,Atlas Energy Solutions Inc. Common ,NaN,S (partial),03/12/2024,04/10/2024,"$250,001 - $500,000",New,Sold part of holding.
+Salazar,20024296,SP,UNITED STATES TREASURY,NaN,P,12/14/2023,12/14/2023,"$500,001 - $1,000,000",New,
+Salazar,20026184,SP,Antero Resources Corporation,NaN,P,10/31/2024,10/31/2024,"$1,001 - $15,000",New,
+Salazar,20026184,SP,"Clearway Energy, Inc. Class",C,S,10/25/2024,10/25/2024,"$15,001 - $50,000",New,
+Salazar,20026184,SP,Occidental Petroleum,NaN,P,10/25/2024,10/25/2024,"$15,001 - $50,000",New,
+Salazar,20025813,SP,Antero Resources Corporation,NaN,P,08/02/2024,08/02/2024,"$1,001 - $15,000",New,
+Salazar,20025236,SP,"DT Midstream, Inc. Common",NaN,P,05/01/2024,05/01/2024,"$15,001 - $50,000",New,
+Salazar,20025236,SP,New Fortress Energy Inc.,A,S,05/01/2024,05/01/2024,"$15,001 - $50,000",New,
+Salazar,20025014,SP,"Clearway Energy, Inc. Class",C,P,04/26/2024,04/26/2024,"$15,001 - $50,000",New,
+Salazar,20025014,SP,"Civitas Resources, Inc. ",NaN,S,04/08/2024,05/08/2024,"$15,001 - $50,000",New,
+Salazar,20024649,SP,UNITED STATE TREASURY,NaN,P,02/29/2024,02/29/2024,"$500,001 - $1,000,000",New,
+Salazar,20024649,SP,UNITED STATES TREASURY,NaN,P,02/15/2024,02/15/2024,"$500,001 - $1,000,000",New,
+Salazar,20024465,SP,US TREASURY BILL,Government Securities and Agency Debt,P,01/02/2024,01/02/2024,"$500,001 - $1,000,000",New,
+Sessions,20024375,SP,Apple Inc.,NaN,(AAPL),P,02/29/2024,02/29/2024,New,
+Sessions,20024212,SP,Alibaba Group Holding Limited,NaN,S,12/28/2023,12/29/2023,"$1,001 - $15,000",New,45 shares loss ~$5500
+Sessions,20024212,SP,American Tower Corporation ,AMT,S,12/28/2023,12/29/2023,"$1,001 - $15,000",New,sold loss 21.1125 shares
+Sessions,20024212,SP,Crown Castle Inc. ,CCI,S,12/28/2023,12/29/2023,"$1,001 - $15,000",New,$5K 30 day T-Bill 5.1%
+Sessions,20026126,SP,NVIDIA Corporation,NVDA,P,11/01/2024,11/01/2024,"$1,001 - $15,000",New,
+Sessions,20025867,SP,NVIDIA Corporation,NVDA,P,09/16/2024,09/16/2024,"$1,001 - $15,000",New,
+Sessions,20025848,SP,"Altria Group, Inc. ",MO,S,09/10/2024,09/12/2024,"$1,001 - $15,000",New,
+Sessions,20025848,SP,NVIDIA Corporation ,NVDA,P,09/10/2024,09/12/2024,"$1,001 - $15,000",New,
+Sessions,20025848,SP,Microsoft Corporation ,MSFT,P,09/09/2024,09/12/2024,"$1,001 - $15,000",New,
+Sessions,20025214,SP,Envista Holdings Corporation,NaN,S,06/06/2024,06/06/2024,"$1,001 - $15,000",New,
+Sessions,20025115,SP,NVIDIA Corporation,NVDA,S,05/21/2024,05/22/2024,"$50,001 - $100,000",New,
+Sessions,20024632,SP,US Treasury 912797GQ4,Government Securities and Agency Debt,S,03/07/2024,03/07/2024,"$100,001 - $250,000",New,
+Sessions,20024632,SP,US Treasury 912797HR1,Government Securities and Agency Debt,P,03/07/2024,03/07/2024,"$15,001 - $50,000",New,
+Sessions,20024632,SP,US Treasury 91282CFG1,Government Securities and Agency Debt,P,03/07/2024,03/07/2024,"$15,001 - $50,000",New,
+Sessions,20024632,SP,US Treasury 91282CFX4,Government Securities and Agency Debt,P,03/07/2024,03/07/2024,"$15,001 - $50,000",New,
+Sessions,20024632,SP,Visa Inc. ,V,P,02/29/2024,03/07/2024,"$1,001 - $15,000",New,"Hon. Pete Sessions , 03/07/2024"
+Sessions,20024375,SP,Microsoft Corporation ,MSFT,P,02/07/2024,02/09/2024,"$1,001 - $15,000",New,10 shares
+Sessions,20024375,SP,Costco Wholesale Corporation,COST,P,01/31/2024,02/02/2024,"$1,001 - $15,000",New,
+Sherrill,20025087,JT,UBS Group AG Registered Ordinary,NaN,S (partial),05/14/2024,05/14/2024,"$50,001 - $100,000",New,
+Sherrill,20025065,JT,UBS Group AG Registered Ordinary,NaN,S (partial),05/13/2024,05/13/2024,"$250,001 - $500,000",New,
+Smith,20024577,SP,CarterBaldwin [PS],NaN,P,01/30/2024,01/30/2024,"$1,001 - $15,000",New,Partner stock
+Spanberger,20025205,SP,"L3Harris Technologies, Inc. Common ",LHX,S,06/04/2024,06/04/2024,"$1,001 - $15,000",New,"On 6/1/2021, spouse was granted a Restricted Unit Award of L3Harris Technologies, Inc common stock as"
+Spartz,20026136,SP,"Simon Property Group, Inc. Common ",SPG,S (partial),09/20/2024,10/15/2024,"$1,000,001 - $5,000,000",New,This transaction was made by Jason Spartz's Roth IRA.
+Spartz,20025519,SP,"Simon Property Group, Inc. ",SPG,P,06/28/2024,07/09/2024,"$50,001 - $100,000",New,This Transaction was made by Jason Spartz's Roth IRA.
+Spartz,20024515,DC,"Simon Property Group, Inc. Common ",SPG,P,02/02/2024,02/09/2024,"$1,001 - $15,000",New,This transaction was made by Lilianna Spartz's minor Roth IRA.
+Spartz,20024515,DC,"Simon Property Group, Inc. Common ",SPG,P,02/02/2024,02/09/2024,"$1,001 - $15,000",New,This transaction was made by Ingrid Spartz's minor Roth IRA.
+Steube,20024787,SP,Synovus Financial Corp. ,NaN,S,03/28/2024,04/02/2024,"$15,001 - $50,000",New,
+Steube,20024660,SP,Synovus Financial Corp. ,NaN,P,02/16/2024,03/05/2024,"$15,001 - $50,000",New,Employee stock plan distribution.
+Trone,20024730,JT,US Treasury Bill 03/07/2024,Government Securities and Agency Debt,S,11/16/2023,03/25/2024,"$500,001 - $1,000,000",New,
+Trone,20024730,JT,US Treasury Bill 01/18/2024,Government Securities and Agency Debt,S,11/02/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,SP,"Pepsico, Inc. ",PEP,S,11/01/2023,03/25/2024,"$50,001 - $100,000",New,
+Trone,20024730,JT,US Treasury Bill 12/21/2023,Government Securities and Agency Debt,S,10/31/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 02/22/2024,Government Securities and Agency Debt,S,10/25/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 11/16/2023,Government Securities and Agency Debt,S,10/17/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 12/21/2023 [GS],NaN,S (partial),10/17/2023,03/25/2024,"$100,001 - $250,000",New,
+Trone,20024730,JT,US Treasury Bill 10/17/2023,Government Securities and Agency Debt,S,10/12/2023,03/25/2024,"$500,001 - $1,000,000",New,
+Trone,20024730,JT,US Treasury Bill 10/17/2023 [GS],NaN,S (partial),10/02/2023,03/25/2024,"$500,001 - $1,000,000",New,
+Trone,20024730,JT,US Treasury Bill 01/18/2024,Government Securities and Agency Debt,P,09/27/2023,03/25/2024,"$500,001 - $1,000,000",New,
+Trone,20024730,JT,US Treasury Bill 02/22/2024,Government Securities and Agency Debt,P,09/27/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 11/16/2023,Government Securities and Agency Debt,P,09/27/2023,03/25/2024,"$250,001 - $500,000",New,
+Trone,20024730,JT,US Treasury Bill 12/21/2023,Government Securities and Agency Debt,P,09/27/2023,03/25/2024,"$250,001 - $500,000",New,
+Trone,20024730,JT,US Treasury Bill 09/26/2023,Government Securities and Agency Debt,S,09/26/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 01/18/2024,Government Securities and Agency Debt,P,09/13/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 03/07/2024,Government Securities and Agency Debt,P,09/06/2023,03/25/2024,"$500,001 - $1,000,000",New,
+Trone,20024730,JT,US Treasury Bill 02/22/2024,Government Securities and Agency Debt,P,08/25/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 08/24/2023,Government Securities and Agency Debt,S,08/24/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 01/18/2024,Government Securities and Agency Debt,P,08/02/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 02/22/2024,Government Securities and Agency Debt,P,08/02/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 07/20/2023,Government Securities and Agency Debt,S,07/20/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 12/21/2023,Government Securities and Agency Debt,P,07/07/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 11/16/2023,Government Securities and Agency Debt,P,07/05/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 10/17/2023,Government Securities and Agency Debt,P,06/15/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 09/26/2023,Government Securities and Agency Debt,P,06/12/2023,03/25/2024,"$500,001 - $1,000,000",New,
+Trone,20024730,JT,US Treasury Bill 08/24/2023,Government Securities and Agency Debt,P,06/01/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 09/26/2023,Government Securities and Agency Debt,P,06/01/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Trone,20024730,JT,US Treasury Bill 07/20/2023,Government Securities and Agency Debt,P,04/18/2023,03/25/2024,"$1,000,001 - $5,000,000",New,
+Wasserman Schultz,20026247,DC,Baxter International Inc. Common ,BAX,P,11/18/2024,11/19/2024,"$1,001 - $15,000",New,
+Wasserman Schultz,20026247,DC,New Gold Inc. ,NaN,S,11/18/2024,11/19/2024,"$1,001 - $15,000",New,
+Wasserman Schultz,20026247,DC,Patterson ,NaN,P,10/23/2024,10/23/2024,"$1,001 - $15,000",New,
+Wasserman Schultz,20026247,DC,"ViaSat, Inc.",NaN,P,10/23/2024,10/23/2024,"$1,001 - $15,000",New,
+Wasserman Schultz,20025793,DC,Hecla Mining Company Common ,NaN,P,08/09/2024,08/13/2024,"$1,001 - $15,000",New,
+Wasserman Schultz,20025179,DC,Perion Network Ltd,NaN,P,05/16/2024,05/16/2024,"$1,001 - $15,000",New,
+Wasserman Schultz,20024403,DC,MAG Silver Corporation Ordinary,NaN,P,01/08/2024,01/08/2024,"$1,001 - $15,000",New,
+Wasserman Schultz,20024403,DC,MAG Silver Corporation Ordinary S,NaN,S (partial),01/05/2024,01/08/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Walt Disney Company ,DIS,Transaction,Date,Notification,Amount,New,
+Williams,20025151,SP,Caney Creek Tex Mun Util Dist [CS],NaN,P,10/25/2022,05/30/2024,"$1,001 - $15,000",New,Purchase Bond
+Williams,20025151,SP,Walt Disney Company ,DIS,S,07/10/2019,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Alphabet Inc.,GOOG,P,06/30/2022,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Eli Lilly and Company Common Stock,LLY,P,06/30/2022,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,"Meta Platforms, Inc.",NaN,P,06/30/2022,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,NVIDIA Corporation ,NVDA,P,06/30/2022,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Sunshine Biopharma Inc.,NaN,P,06/30/2022,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Truist Financial Corporation,NaN,P,06/30/2022,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Stellantis N.V. Common Shares,NaN,P,06/30/2021,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Walt Disney Company ,DIS,S,06/22/2022,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,Devon Energy Corporation Common ,DVN,S,05/13/2021,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,"Pfizer, Inc. Common Stock ",PFE,S,03/04/2024,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,"Pfizer, Inc. Common Stock ",PFE,S,03/01/2024,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,"Pfizer, Inc. Common Stock ",PFE,P,03/01/2024,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,NVIDIA Corporation ,NVDA,S,03/01/2019,05/30/2024,"$1,001 - $15,000",New,
+Williams,20025151,SP,GE Aerospace Common Stock ,GE,S,02/27/2019,05/30/2024,"$1,001 - $15,000",New,

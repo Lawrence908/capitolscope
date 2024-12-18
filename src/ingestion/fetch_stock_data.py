@@ -63,7 +63,9 @@ load_dotenv()
 ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 BASE_URL = os.getenv("ALPHA_VANTAGE_BASE_URL")
 
-def get_tickers():
+def get_tickers(SNP500: bool = True, NASDAQ: bool = True, DowJones: bool = True) -> list:
+    
+    # Get S&P 500 tickers
     url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -72,7 +74,45 @@ def get_tickers():
     for row in table.find_all('tr')[1:]:
         ticker = row.find('td').text.strip()
         tickers500.append(ticker)
-    return tickers500
+    
+    # Get NASDAQ tickers
+    url = 'https://en.wikipedia.org/wiki/NASDAQ-100'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    table = soup.find('table', {'id': 'constituents'})
+    tickers100 = []
+    for row in table.find_all('tr')[1:]:
+        ticker = row.find_all('td')[1].text.strip()
+        tickers100.append(ticker) 
+        
+    # Get Dow Jones tickers
+    url = 'https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    table = soup.find('table', {'class': 'wikitable'})
+    tickers30 = []
+    for row in table.find_all('tr')[1:]:
+        ticker = row.find_all('td')[2].text.strip()
+        tickers30.append(ticker)
+        
+    if SNP500 and NASDAQ and DowJones:
+        tickers = list(set(tickers500 + tickers100 + tickers30))
+    elif SNP500 and NASDAQ:
+        tickers = list(set(tickers500 + tickers100))
+    elif SNP500 and DowJones:
+        tickers = list(set(tickers500 + tickers30))
+    elif NASDAQ and DowJones:
+        tickers = list(set(tickers100 + tickers30))
+    elif SNP500:
+        tickers = tickers500
+    elif NASDAQ:
+        tickers = tickers100
+    elif DowJones:
+        tickers = tickers30
+    else:
+        tickers = tickers500
+    
+    return tickers
 
 def fetch_time_series(symbol: str, interval: str = "daily", output_size: str = "compact") -> pd.DataFrame:
     """

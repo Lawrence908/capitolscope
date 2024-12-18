@@ -1,11 +1,1022 @@
 Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
-Ashford,20003994,SP,3M Company ,MMM,10/13/2015,10/13/2015,"$15,001",-,New,
-Ashford,20003994,SP,Apache Corporation ,APA,10/13/2015,10/13/2015,"$15,001",-,New,"Hon. Brad Ashford , 10/27/2015"
-Ashford,20003185,SP,Union Pacific Corporation ,UNP,05/5/2015,05/5/2015,"$15,001",-,New,"Hon. Brad Ashford , 05/29/2015"
-Ashford,20002964,JT,Apache Corporation ,APA,04/14/2015,04/14/2015,"$1,001",-,New,"Hon. Brad Ashford , 04/30/2015"
-Ashford,20002963,SP,"Lennox International, Inc. ",Not in S&P 500,04/13/2015,04/13/2015,"$15,001",-,New,"Hon. Brad Ashford , 04/30/2015"
-Ashford,20002949,SP,Apache Corporation ,APA,04/12/2015,04/12/2015,"$15,001",-,New,"Hon. Brad Ashford , 04/30/2015"
-Ashford,20002776,SP,Union Pacific Corporation ,UNP,03/12/2015,03/12/2015,"$15,001",-,New,"Brad Ashford , 03/24/2015"
+Ashford,20003994,SP,3M Company ,MMM,S,10/13/2015,10/13/2015,"$15,001 - $50,000",New,
+Ashford,20003994,SP,Apache Corporation ,APA,S,10/13/2015,10/13/2015,"$15,001 - $50,000",New,"Hon. Brad Ashford , 10/27/2015"
+Ashford,20003185,SP,Union Pacific Corporation ,UNP,S,05/5/2015,05/5/2015,"$15,001 - $50,000",New,"Hon. Brad Ashford , 05/29/2015"
+Ashford,20002964,JT,Apache Corporation ,APA,S,04/14/2015,04/14/2015,"$1,001 - $15,000",New,"Hon. Brad Ashford , 04/30/2015"
+Ashford,20002963,SP,"Lennox International, Inc. ",NaN,S,04/13/2015,04/13/2015,"$15,001 - $50,000",New,"Hon. Brad Ashford , 04/30/2015"
+Ashford,20002949,SP,Apache Corporation ,APA,S,04/12/2015,04/12/2015,"$15,001 - $50,000",New,"Hon. Brad Ashford , 04/30/2015"
+Ashford,20002776,SP,Union Pacific Corporation ,UNP,S,03/12/2015,03/12/2015,"$15,001 - $50,000",New,"Brad Ashford , 03/24/2015"
 Ashford,20002776,DC,Berkshire hathaway Inc. New,BRK.B,P,02/27/2015,02/27/2015,"$25,000,001",New,250 BRK B shares at $148 per share.
-Barletta,20002827,JT,"Kinder Morgan, Inc. ",KMI,10/29/2015,10/29/2015,"$1,001",-,New,The rationale for this transaction was to take tax losses
-Barletta,20002827,JT,"Kinder Morgan, Inc. ",KMI,10/29/2015,10/29/2015,"$1,001",-,New,"Hon. Lou Barletta , 11/6/2015"
+Barletta,20002827,JT,"Kinder Morgan, Inc. ",KMI,S,10/29/2015,10/29/2015,"$1,001 - $15,000",New,The rationale for this transaction was to take tax losses
+Barletta,20002827,JT,"Kinder Morgan, Inc. ",KMI,S,10/29/2015,10/29/2015,"$1,001 - $15,000",New,"Hon. Lou Barletta , 11/6/2015"
+Brooks,20002327,JT,Madison alabama RFDg Wts,NaN,s,12/2/2014,12/2/2014,"$15,001 - $50,000",New,"Hon. Mo Brooks , 01/7/2015"
+Brooks,20004046,JT,North Carolina Cap Facs Fin agy Duke,NaN,P,11/2/2015,11/2/2015,"$1,001 - $15,000",New,"Hon. Mo Brooks , 11/4/2015"
+Brooks,20004046,JT,Huntsville al genl Oblig Warrants,NaN,P,10/19/2015,10/19/2015,"$1,001 - $15,000",New,
+Brooks,20003908,JT,southern Company ,NaN,P,10/1/2015,10/1/2015,"$1,001 - $15,000",New,"Hon. Mo Brooks , 10/7/2015"
+Brooks,20002969,SP,"alexar Therapeutics, Inc.",NaN,P,04/15/2015,04/15/2015,"$1,001 - $15,000",New,"Hon. Susan W. Brooks , 05/11/2015"
+Brooks,20002831,JT,Decatur ala swr Rev Wts,NaN,P,03/31/2015,03/31/2015,"$1,001 - $15,000",New,"Hon. Mo Brooks , 04/4/2015"
+Brooks,20002713,JT,Baldwin County al genl Oblig Wts,NaN,P,03/10/2015,03/10/2015,"$1,001 - $15,000",New,"Hon. Mo Brooks , 03/13/2015"
+Brooks,20002327,JT,Digirad Corporation ,NaN,s,01/5/2015,01/5/2015,"$1,001 - $15,000",New,
+Brooks,20003084,SP,"ZooMI, INC.",NaN,P,01/27/2015,01/27/2015,"$15,001 - $50,000",New,"Hon. Susan W. Brooks , 05/14/2015"
+Brooks,20002454,JT,"Avon Products, Inc. Bonds",NaN,P,01/22/2015,01/22/2015,"$1,001 - $15,000",New,"Hon. Mo Brooks , 01/26/2015"
+Cassidy,20003626,DC,Michigan Educational Savings Plan,NaN,S,12/3/2014,08/13/2015,"$1,001 - $15,000",New,College Savings Plan
+Cassidy,20003626,SP,Chevron Corporation ,CVX,P,12/16/2014,08/13/2015,"$15,001 - $50,000",New,
+Cassidy,20003626,SP,Exxon Mobil Corporation ,XOM,P,12/16/2014,08/13/2015,"$1,001 - $15,000",New,
+Cassidy,20003626,SP,Royal Dutch Shell PLC Royal Dutch,NaN,P,12/16/2014,08/13/2015,"$15,001 - $50,000",New,"Hon. William M. Cassidy , 08/20/2015"
+Cassidy,20003626,SP,Ford Motor Company ,F,S,09/11/2014,08/13/2015,"$1,001 - $15,000",New,
+Cassidy,20003626,SP,Intel Corporation ,INTC,S,09/11/2014,08/13/2015,"$1,001 - $15,000",New,
+Cassidy,20003626,SP,Phillips 66 ,PSX,S,09/11/2014,08/13/2015,"$1,001 - $15,000",New,
+Clark,20003526,SPECTRuM,bRaNDS INC SR NT,NaN,S,07/23/2015,08/3/2015,"$1,001 - $15,000",New,"Hon. Katherine M. Clark , 08/3/2015"
+Conaway,20003907,SP,"SP500 C LIRN Issuer bac 14.54% P 09/23/2015 09/28/2015 $50,001",NaN,asset,transaction,Date,notification,New,SP500 C LIRN Issuer bac 14.54%
+Conaway,20002832,SP,,NaN,(Merrill,Lynch),(Owner:,SP)LOCATION:,,
+Conaway,20003907,SP,Exxon Mobil Corporation ,XOM,P,09/25/2015,09/30/2015,"$1,001 - $15,000",New,
+Conaway,20003907,SP,SP500 C LIRN Issuer barc Cap 12.1,NaN,P,09/23/2015,09/28/2015,"$15,001 - $50,000",New,SP500 C LIRN Issuer barc Cap 12.1
+Conaway,20003907,SP,SX5E LIRN ISSUER HSbC PART,NaN,S,09/23/2015,09/28/2015,"$15,001 - $50,000",New,SX5E LIRN ISSUER HSbC PART 118.00%
+Conaway,20003907,SP,SX5E LIRN ISSUER HSbC PART,NaN,S,09/23/2015,09/28/2015,"$50,001 - $100,000",New,SX5E LIRN ISSUER HSbC PART 118.00%
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,S,09/2/2015,09/8/2015,"$50,001 - $100,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 201
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,S,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 20
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,P,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 201
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,S,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 201
+Conaway,20003907,SP,FT Unit 5221 Sabrient Sale Price,NaN,S,09/2/2015,09/8/2015,"$50,001 - $100,000",New,FT Unit 5221 Sabrient Sale Price
+Conaway,20003907,SP,Ft Unit 5601 Sabrient bakers Dozen,NaN,P,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5601 Sabrient bakers Dozen
+Conaway,20003907,SP,FT Unit 5601 Sabrient bakers Dozen,NaN,P,09/2/2015,09/8/2015,"$50,001 - $100,000",New,FT Unit 5601 Sabrient bakers Dozen
+Conaway,20003907,SP,FT Unit 5601 Sabrientbakers Dozen,NaN,P,09/2/2015,09/8/2015,"$50,001 - $100,000",New,FT Unit 5601 Sabrientbakers Dozen
+Conaway,20003907,SP,R2000 C LIRN Issuer CAP 14.10%,NaN,P,09/2/2015,09/8/2015,"$100,001 - $250,000",New,R2000 C LIRN Issuer CAP 14.10%
+Conaway,20003907,SP,SP500 ARN Issuer bac Cap 10.65%,NaN,S,09/2/2015,09/8/2015,"$50,001 - $100,000",New,SP500 ARN Issuer bac Cap 10.65%
+Conaway,20003907,SP,"Solera Holdings, Inc. Solera Holdings,",NaN,S,09/15/2015,09/18/2015,"$1,001 - $15,000",New,
+Conaway,20003907,SP,Wal,NaN,P,09/1/2015,09/4/2015,"$1,001 - $15,000",New,
+Conaway,20002945,SP,Dallas Co TX Util 5.000% 02/15/2024,NaN,S,08/15/2013,08/18/2013,"$50,001 - $100,000",New,Dallas Co TX Util 5.000% 02/15/2024
+Conaway,20002581,SP,Dallas Co TX Util 5.000% 02/15/2024,NaN,S,08/15/2013,08/17/2013,"$50,001 - $100,000",New,
+Conaway,20002945,SP,bHP billiton plc Sponsored aDR ,NaN,P,07/26/2013,07/29/2013,"$1,001 - $15,000",New,
+Conaway,20002945,SP,Emerson Electric Company ,EMR,P,07/26/2013,07/29/2013,"$1,001 - $15,000",New,
+Conaway,20002581,SP,bHP billiton plc Sponsored aDR ,NaN,P,07/26/2013,07/29/2013,"$1,001 - $15,000",New,
+Conaway,20002581,SP,Emerson Electric Company ,EMR,P,07/26/2013,07/29/2013,"$1,001 - $15,000",New,
+Conaway,20002945,SP,Deere & Company ,DE,P,07/1/2013,07/5/2013,"$15,001 - $50,000",New,
+Conaway,20002581,SP,Deere & Company ,DE,P,07/1/2013,07/5/2013,"$15,001 - $50,000",New,
+Conaway,20002832,SP,DN BMO HARRIS BANK NA,NaN,S,03/6/2015,03/11/2015,"$50,001 - $100,000",New,DN BMO HARRIS BANK NA CALLABLE CD FDIC INSD STEP% FEB 20 2029 ACCOUNT SETTLES 03/11/15
+Conaway,20002832,SP,INDU BUF CAP PART NTS CAP 66.45%,NaN,P,03/6/2015,03/11/2015,"$50,001 - $100,000",New,"INDU BUF CAP PART NTS CAP 66.45% SV 17,900.10 DUE 12/27/19 BUF 30.00%"
+Conaway,20002832,SP,SX5E LIRN ISSUER HSBC PART,NaN,P,03/26/2015,03/30/2015,"$15,001 - $50,000",New,SX5E LIRN ISSUER HSBC PART 118.00%
+Conaway,20002832,SP,SX5E LIRN ISSUER HSBC PART,NaN,P,03/26/2015,03/30/2015,"$15,001 - $50,000",New,SX5E LIRN ISSUER HSBC PART 118.00%
+Conaway,20002832,SP,SX5E LIRN ISSUER HSBC PART,NaN,P,03/26/2015,03/30/2015,"$15,001 - $50,000",New,SX5E LIRN ISSUER HSBC PART 118.00%
+Conaway,20002832,SP,SX5E LIRN ISSUER HSBC PART,NaN,P,03/26/2015,03/30/2015,"$50,001 - $100,000",New,SX5E LIRN ISSUER HSBC PART 118.00%
+Conaway,20002832,SP,ConocoPhillips ,COP,S,03/25/2015,03/30/2015,"$1,001 - $15,000",New,
+Conaway,20002832,SP,DJIA LIRN Issurer RBC PART 111.30%,NaN,P,03/25/2015,03/30/2015,"$15,001 - $50,000",New,DJIA LIRN Issurer RBC PART 111.30%
+Conaway,20002832,SP,SX5E LIRN ISSUER RBC PART,NaN,S,03/24/2015,03/27/2015,"$15,001 - $50,000",New,Sale SX5E LIRN ISSUER RBC PART 145.50% S...
+Conaway,20002832,SP,SX5E LIRN ISSUER RBC PART,NaN,S,03/24/2015,03/27/2015,"$50,001 - $100,000",New,Sale SX5E LIRN ISSUER RBC PART 145.50% S...
+Conaway,20002832,SP,SX5E LIRN ISSUER RBC PART,NaN,S,03/24/2015,03/27/2015,"$100,001 - $250,000",New,Sale SX5E LIRN ISSUER RBC PART 145.50% S...
+Conaway,20002832,SP,SX5E LIRN ISSUER RBC PART,NaN,S,03/24/2015,03/27/2015,"$15,001 - $50,000",New,SX5E LIRN ISSUER RBC PART 145.50% S...
+Conaway,20002832,SP,Boston Scientific Corporation ,BSX,P,03/18/2015,03/23/2015,"$1,001 - $15,000",New,
+Conaway,20002832,SP,Costco Wholesale Corporation ,COST,S,03/16/2015,03/19/2015,"$1,001 - $15,000",New,
+Conaway,20002832,SP,"Dollar Tree, Inc. ",DLTR,P,03/16/2015,03/19/2015,"$1,001 - $15,000",New,
+Conaway,20002832,SP,Hanesbrands Inc. ,NaN,P,03/16/2015,03/19/2015,"$1,001 - $15,000",New,
+Conaway,20002832,SP,PVH Corp. ,NaN,S,03/16/2015,03/19/2015,"$1,001 - $15,000",New,
+Conaway,20002832,SP,EMC Corporation ,NaN,S,03/11/2015,03/16/2015,"$1,001 - $15,000",New,
+Conaway,20002832,SP,Ford Motor Company ,F,S,02/26/2015,03/3/2015,"$1,001 - $15,000",New,
+Conaway,20002628,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,P,01/14/2015,01/20/2015,"$100,001 - $250,000",New,Unit Investment Trust
+Conaway,20002628,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,P,01/14/2015,01/20/2015,"$50,001 - $100,000",New,Unit Investment Trust
+Conaway,20003907,SP,,NaN,M36,(Merrill,Lynch),(Owner:,,
+Conaway,20003907,SP,,NaN,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20003907,SP,,NaN,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20003907,SP,,NaN,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 10/6/2015"
+Conaway,20002945,SP,,NaN,M40,(Merrill,Lynch),(owner:,,"Hon. K. Michael Conaway , 04/25/2015"
+Conaway,20002832,SP,,NaN,M36,(Merrill,Lynch),(Owner:,,
+Conaway,20002832,SP,,NaN,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20002832,SP,,NaN,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 04/5/2015"
+Conaway,20002628,SP,,NaN,M40,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 02/26/2015"
+Conaway,20002581,SP,,NaN,M40,(Merrill,Lynch),(owner:,,"Hon. K. Michael Conaway , 02/17/2015"
+Conaway,20002945,SP,,NaN,E62,(Edward,Jones),(owner:,,
+Conaway,20002581,SP,,NaN,E62,(Edward,Jones),(owner:,,
+Connolly,20003316,JT,"Dominion Resources, Inc. ",D,P,06/24/2015,06/30/2015,"$1,001 - $15,000",New,"Hon. Gerald E. Connolly , 06/29/2015"
+Connolly,20002942,JT,"Dominion Resources, Inc. ",D,P,03/25/2015,03/28/2015,"$1,001 - $15,000",New,"Hon. Gerald E. Connolly , 04/24/2015"
+Curbelo,20004089,SP,"activision Blizzard, Inc ",NaN,S,10/23/2015,11/11/2015,"$1,001 - $15,000",New,
+Curbelo,20004089,SP,alphabet Inc.,NaN,S,10/23/2015,11/11/2015,"$1,001 - $15,000",New,
+Curbelo,20004089,SP,"Facebook, Inc.",NaN,S,10/23/2015,11/11/2015,"$1,001 - $15,000",New,
+Curbelo,20004089,SP,iShares CMBS Bond ETF ,NaN,P,10/23/2015,11/11/2015,"$1,001 - $15,000",New,
+Curbelo,20004089,SP,Magellan Midstream Partners L.P.,NaN,P,10/23/2015,11/11/2015,"$1,001 - $15,000",New,
+Curbelo,20004089,SP,"Netflix, Inc. ",NFLX,P,10/23/2015,11/11/2015,"$1,001 - $15,000",New,"Hon. Carlos Curbelo , 11/12/2015"
+Curbelo,20003812,SP,"Netflix, Inc. ",NFLX,P,08/27/2015,09/19/2015,"$1,001 - $15,000",New,
+Curbelo,20003812,SP,United Technologies Corporation ,NaN,S,08/21/2015,09/19/2015,"$1,001 - $15,000",New,"Hon. Carlos Curbelo , 09/21/2015"
+Curbelo,20003812,SP,SPDR Select Sector Fund,NaN,S,08/17/2015,09/19/2015,"$1,001 - $15,000",New,
+Davis,20004118,SP,AEgON N.V. ,NaN,P,11/2/2015,11/2/2015,"$1,001 - $15,000",New,
+Davis,20004118,JT,general Electric Company ,NaN,S,11/2/2015,11/2/2015,"$1,001 - $15,000",New,"Hon. Susan A. Davis , 11/30/2015"
+DelBene,20003699,JT,SunPower Corporation ,NaN,Asset,Transaction,Date,Notification,New,
+DelBene,20002313,JT,"Energy Recovery, Inc. ",NaN,P,12/5/2014,12/5/2014,"$1,001 - $15,000",New,
+DelBene,20002313,JT,"Energy Recovery, Inc. ",NaN,P,12/4/2014,12/4/2014,"$1,001 - $15,000",New,
+DelBene,20002313,JT,Idaho St univ 4% Due 04/01/15,NaN,S,12/3/2014,12/3/2014,"$100,001 - $250,000",New,
+DelBene,20002313,JT,Texas PFa 5% Tax Due 01/01/18,NaN,S,12/3/2014,12/3/2014,"$250,001 - $500,000",New,
+DelBene,20002313,JT,uS Treasury Note 2% Due 07/31/20,NaN,P,12/3/2014,12/3/2014,"$500,001 - $1,000,000",New,
+DelBene,20002313,JT,Federal Home loan Banks .375% Due,NaN,S,12/24/2014,12/24/2014,"$15,001 - $50,000",New,
+DelBene,20002313,JT,Wells Fargo & Co 4.6% Due 04/01/21,NaN,P,12/24/2014,12/24/2014,"$250,001 - $500,000",NewID Owner Asset Transaction Date Notification Amount,"Hon. Suzan K. DelBene , 01/19/2015"
+DelBene,20002313,JT,"EOg Resources, Inc. ",NaN,S,12/1/2014,12/1/2014,"$15,001 - $50,000",New,
+DelBene,20002313,JT,"Raven Industries, Inc. ",NaN,P,12/1/2014,12/1/2014,"$1,001 - $15,000",New,
+DelBene,20004038,SP,Microsoft Corporation ,MSFT,P,10/9/2015,10/9/2015,"$1,001 - $15,000",New,
+DelBene,20004038,SP,Microsoft Corporation ,MSFT,P,10/27/2015,10/27/2015,"$1,001 - $15,000",New,
+DelBene,20004038,JT,N Dakota HSg FIN 1.3% DuE 07/01/18,NaN,P,10/13/2015,10/13/2015,"$15,001 - $50,000",New,"Hon. Suzan K. DelBene , 11/11/2015"
+DelBene,20003699,JT,Fanuc Corp,NaN,P,08/6/2015,08/6/2015,"$15,001 - $50,000",New,"Foreign Exchange position, ticker 6954JP"
+DelBene,20003699,SP,Microsoft Corporation ,MSFT,P,08/31/2015,08/31/2015,"$100,001 - $250,000",New,
+DelBene,20003699,JT,"SunEdison, Inc. ",NaN,P,08/12/2015,08/12/2015,"$1,001 - $15,000",New,
+DelBene,20003699,JT,SunPower Corporation ,NaN,S,08/12/2015,08/12/2015,"$1,001 - $15,000",New,
+DelBene,20003699,JT,WEllS FaRgO & CO 4.6% DuE,NaN,S,08/11/2015,08/11/2015,"$15,001 - $50,000",New,"Hon. Suzan K. DelBene , 09/14/2015"
+DelBene,20003699,JT,aFlaC INC 2.4% DuE 03/16/20,NaN,S,08/10/2015,08/10/2015,"$15,001 - $50,000",New,
+DelBene,20003699,JT,FHlB .375% DuE 06/24/16,NaN,S,08/10/2015,08/10/2015,"$50,001 - $100,000",New,
+DelBene,20003699,JT,MORgaN STaNlEY 4.75% DuE,NaN,S,08/10/2015,08/10/2015,"$1,001 - $15,000",New,
+DelBene,20003699,JT,ROPER TECHNOlOgIES 2.05% DuE,NaN,S,08/10/2015,08/10/2015,"$15,001 - $50,000",New,
+DelBene,20003699,JT,uS TREaSuRY NT 2% DuE 07/31/20,NaN,S,08/10/2015,08/10/2015,"$250,001 - $500,000",New,
+DelBene,20003525,JT,8point3 Energy Partners lP,NaN,P,07/9/2015,07/9/2015,"$15,001 - $50,000",New,
+DelBene,20003525,JT,acuity Brands Inc ,NaN,S,07/9/2015,07/9/2015,"$1,001 - $15,000",New,
+DelBene,20003525,JT,"Watts Water Technologies, Inc. Class a",NaN,P,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+DelBene,20003525,JT,Xylem Inc. Common Stock New ,NaN,P,07/27/2015,07/27/2015,"$15,001 - $50,000",New,"Hon. Suzan K. DelBene , 08/10/2015"
+DelBene,20003525,JT,"Vivint Solar, Inc. ",NaN,S,07/20/2015,07/20/2015,"$15,001 - $50,000",New,
+DelBene,20003525,JT,DIgNITY HEalTH 3.812% DuE,NaN,P,07/1/2015,07/1/2015,"$15,001 - $50,000",New,
+DelBene,20003326,JT,JP MORgaN CHaSE 5.55% DuE,NaN,P,06/8/2015,06/8/2015,"$15,001 - $50,000",New,
+DelBene,20003326,JT,MORgaN STaNlEY 4.75% DuE,NaN,P,06/30/2015,06/30/2015,"$15,001 - $50,000",New,
+DelBene,20003326,JT,Wa ST COP 4% DuE 01/01/18,NaN,S,06/12/2015,06/12/2015,"$250,001 - $500,000",New,"Hon. Suzan K. DelBene , 07/12/2015"
+DelBene,20003326,JT,auSTIN TX WTR & WST 4% DuE,NaN,S,06/11/2015,06/11/2015,"$250,001 - $500,000",New,
+DelBene,20003326,JT,gEORgIa ST 5% DuE 02/01/21,NaN,P,06/10/2015,06/10/2015,"$500,001 - $1,000,000",New,
+DelBene,20002995,JT,"Itron, Inc. ",NaN,P,04/9/2015,04/9/2015,"$15,001 - $50,000",New,
+DelBene,20002995,JT,gRaNT CNTY Wa PUD 5% Due,NaN,S,04/6/2015,04/6/2015,"$250,001 - $500,000",New,
+DelBene,20002995,JT,aMERICaN ToWER CoRP 4.5% Due,NaN,P,04/29/2015,04/29/2015,"$250,001 - $500,000",New,
+DelBene,20002995,JT,aMERICaN ToWER CoRP 7%,NaN,S,04/29/2015,04/29/2015,"$250,001 - $500,000",New,Called Redemption/Conversion
+DelBene,20002995,JT,US TREaSURY NT 1.375% Due,NaN,P,04/20/2015,04/20/2015,"$250,001 - $500,000",New,
+DelBene,20002995,JT,ENERgY NoRTHWEST 5.25% Due,NaN,S,04/2/2015,04/2/2015,"$100,001 - $250,000",New,
+DelBene,20002995,JT,Wasion group ,NaN,S,04/15/2015,04/15/2015,"$15,001 - $50,000",New,"Hon. Suzan K. DelBene , 05/10/2015"
+DelBene,20002995,JT,aFLaC INC 8.5%,NaN,S,04/11/2015,04/11/2015,"$250,001 - $500,000",New,Called Redemption/Conversion
+DelBene,20002995,JT,CITY oF BoISE 5% Due 08/15/17,NaN,S,04/1/2015,04/1/2015,"$250,001 - $500,000",New,
+DelBene,20002995,JT,N EaST ISD TX 5% Due 08/01/23,NaN,P,04/1/2015,04/1/2015,"$500,001 - $1,000,000",NewID Owner Asset Transaction Date Notification Amount,
+DelBene,20002995,JT,UNIV ID 5.25% Due 04/01/41,NaN,S,04/1/2015,04/1/2015,"$1,001 - $15,000",New,Partial Call
+DelBene,20002834,JT,aflac Incorporate 2.4% Due 03/16/20,NaN,P,03/9/2015,03/9/2015,"$250,001 - $500,000",New,
+DelBene,20002834,JT,"Energy Recovery, Inc. ",NaN,S,03/9/2015,03/9/2015,"$1,001 - $15,000",New,
+DelBene,20002834,JT,"advanced Drainage Systems, Inc.",NaN,P,03/6/2015,03/6/2015,"$15,001 - $50,000",New,
+DelBene,20002834,JT,"Energy Recovery, Inc. ",NaN,S,03/6/2015,03/6/2015,"$1,001 - $15,000",New,
+DelBene,20002834,JT,lKQ Corporation ,NaN,S,03/6/2015,03/6/2015,"$15,001 - $50,000",New,
+DelBene,20002834,JT,Mobileye N.V. ordinary Shares ,NaN,P,03/6/2015,03/6/2015,"$1,001 - $15,000",New,
+DelBene,20002834,JT,ozner Water ,NaN,S,03/26/2015,03/26/2015,"$15,001 - $50,000",New,"Foreign exchange position, ticker 2014 HK"
+DelBene,20002834,JT,uS Treasury Nt 2.0% Due 07/31/2020,NaN,S,03/10/2015,03/10/2015,"$250,001 - $500,000",Newinitial Public offeringS,"Hon. Suzan K. DelBene , 04/16/2015"
+DelBene,20002643,JT,aflac Incorporate 8.5% Due 05/15/19,NaN,P,02/5/2015,02/5/2015,"$250,001 - $500,000",New,
+DelBene,20002643,JT,Denver CO C&C arpt 5% Tran air Due,NaN,S,02/4/2015,02/4/2015,"$500,001 - $1,000,000",New,
+DelBene,20002643,JT,Roper Ind 2.05% Due 10/01/18,NaN,P,02/4/2015,02/4/2015,"$250,001 - $500,000",New,"Hon. Suzan K. DelBene , 03/10/2015"
+DelBene,20002643,JT,Dignity Health 3.812% 24 Due 11/01/24,NaN,P,02/20/2015,02/20/2015,"$15,001 - $50,000",New,
+DelBene,20002643,JT,goose Creek Tx 2% 40 gO uTX Due,NaN,S,02/17/2015,02/17/2015,"$100,001 - $250,000",New,
+DelBene,20002643,JT,amern Tower Corp 7% Due 10/15/17,NaN,P,02/13/2015,02/13/2015,"$250,001 - $500,000",New,
+DelBene,20002494,JT,Canadian Solar Inc.,NaN,S,01/14/2015,01/14/2015,"$15,001 - $50,000",New,
+DelBene,20002494,JT,"Vivint Solar, Inc. ",NaN,P,01/14/2015,01/14/2015,"$15,001 - $50,000",New,"Hon. Suzan K. DelBene , 02/13/2015"
+Dingell,20004117,SP,"Walgreens Boots alliance, Inc. ",NaN,P,11/2/2015,11/10/2015,"$15,001 - $50,000",New,"Hon. Debbie Dingell , 11/18/2015"
+Dingell,20003995,SP,"Caterpillar, Inc. ",NaN,S,10/21/2015,10/26/2015,"$1,001 - $15,000",New,
+Dingell,20003995,JT,Crown Castle International Corp. ,CCI,P,10/21/2015,10/26/2015,"$1,001 - $15,000",New,
+Dingell,20003995,SP,International Business Machines,NaN,S,10/21/2015,10/26/2015,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 11/3/2015"
+Dingell,20002625,SP,general Electric Company ,NaN,P,04/28/2015,04/29/2015,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 05/14/2015"
+Duckworth,20003000,JT,"Walgreens Boots alliance, Inc. ",NaN,P,10/28/2014,10/28/2014,"$1,001 - $15,000",New,"Hon. Tammy Duckworth , 05/15/2015"
+Duckworth,20004004,JT,EMC Corporation ,NaN,P,05/20/2015,06/15/2015,"$1,001 - $15,000",New,
+Duckworth,20004004,JT,Illinois Tool Works Inc. ,ITW,S,05/19/2015,06/15/2015,"$1,001 - $15,000",New,
+Duckworth,20004004,JT,BHP Billiton plc Sponsored ADR ,NaN,P,01/5/2015,02/15/2015,"$1,001 - $15,000",New,
+Duckworth,20004004,JT,"Mondelez International, Inc.",MDLZ,P,01/5/2015,02/15/2015,"$1,001 - $15,000",New,"Hon. Tammy Duckworth , 11/17/2015"
+Duckworth,20004004,JT,gamestop Corporation ,NaN,P,01/30/2015,02/15/2015,"$1,001 - $15,000",New,
+Duckworth,20004004,JT,"Caterpillar, Inc. ",CAT,P,01/16/2015,02/15/2015,"$1,001 - $15,000",New,
+Foxx,20003697,JT,"Old Dominion Freight line, Inc. ",NaN,Asset,Transaction,Date,Notification,New,
+Foxx,20003542,JT,superValu Inc. ,NaN,Asset,Transaction,Date,Notification,New,
+Foxx,20002991,JT,Textron Inc. ,TXT,Asset,Transaction,Date,Notification,New,"Hon. Virginia Foxx , 05/7/2015"
+Foxx,20002345,JT,alcoa Inc. ,NaN,P,12/5/2014,12/5/2014,"$15,001 - $50,000",New,
+Foxx,20002345,JT,"Forum Energy Technologies, Inc. ",NaN,P,12/4/2014,12/4/2014,"$15,001 - $50,000",New,
+Foxx,20002345,JT,schwab International Equity ETF,NaN,P,12/30/2014,12/30/2014,"$1,001 - $15,000",New,
+Foxx,20002345,JT,schwab Emerging Markets Equity ETF,NaN,s,12/3/2014,12/3/2014,"$15,001 - $50,000",New,
+Foxx,20002345,JT,Pitney Bowes Inc. ,NaN,P,12/10/2014,12/10/2014,"$15,001 - $50,000",New,
+Foxx,20004181,JT,guggenheim s&P 500 Equal Weight,NaN,s,11/17/2015,11/17/2015,"$15,001 - $50,000",New,
+Foxx,20004181,JT,Old Republic International Corporation,NaN,P,11/17/2015,11/17/2015,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 12/3/2015"
+Foxx,20003889,JT,ishares Russell 2000 ETF ,NaN,P,09/1/2015,09/1/2015,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 10/6/2015"
+Foxx,20003697,JT,alcoa Inc. ,NaN,s,08/7/2015,08/7/2015,"$1,001 - $15,000",New,
+Foxx,20003697,JT,universal Corporation ,NaN,P,08/7/2015,08/7/2015,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 09/8/2015"
+Foxx,20003697,JT,"Ennis, Inc. ",NaN,P,08/3/2015,08/3/2015,"$15,001 - $50,000",New,
+Foxx,20003697,JT,guggenheim s&P 500 Equal Weight,NaN,P,08/3/2015,08/3/2015,"$15,001 - $50,000",New,
+Foxx,20003697,JT,Frontier Communications Corporation,NaN,P,08/24/2015,08/24/2015,"$1,001 - $15,000",New,
+Foxx,20003697,JT,Headwaters Incorporated ,NaN,s,08/24/2015,08/24/2015,"$15,001 - $50,000",New,
+Foxx,20003697,JT,"Pepsico, Inc. ",PEP,s,08/24/2015,08/24/2015,"$15,001 - $50,000",New,
+Foxx,20003697,DC,abbott laboratories ,NaN,s,08/21/2015,08/21/2015,"$15,001 - $50,000",New,
+Foxx,20003697,JT,Ford Motor Company ,F,s,08/21/2015,08/21/2015,"$15,001 - $50,000",New,
+Foxx,20003697,JT,Mosaic Company ,NaN,s,08/21/2015,08/21/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,"Matson, Inc. ",NaN,P,07/30/2015,07/30/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,Textron Inc. ,TXT,P,07/30/2015,07/30/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,"Cracker Barrel Old Country store, Inc.",NaN,s,07/28/2015,07/28/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,Corning Incorporated ,NaN,s,07/27/2015,07/27/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,Cigna Corporation ,CI,s,07/24/2015,07/24/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,Cooper Tire & Rubber Company ,NaN,s,07/24/2015,07/24/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,Curtiss,NaN,s,07/24/2015,07/24/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,OMNOVa solutions Inc. ,NaN,s,07/24/2015,07/24/2015,"$15,001 - $50,000",New,
+Foxx,20003542,JT,Fidelity Nasdaq Composite Index,NaN,P,07/22/2015,07/22/2015,"$50,001 - $100,000",New,
+Foxx,20003542,JT,Vanguard Mid,NaN,P,07/21/2015,07/21/2015,"$50,001 - $100,000",New,"Hon. Virginia Foxx , 08/12/2015"
+Foxx,20002991,JT,OMNOVa solutions Inc. ,NaN,P,04/8/2015,04/8/2015,"$15,001 - $50,000",New,
+Foxx,20002991,JT,Frontier Communications Corporation,NaN,P,04/27/2015,04/27/2015,"$1,001 - $15,000",New,
+Foxx,20002991,JT,superValu Inc. ,NaN,P,04/27/2015,04/27/2015,"$1,001 - $15,000",New,
+Foxx,20002991,JT,alcoa Inc. ,NaN,P,04/1/2015,04/1/2015,"$1,001 - $15,000",New,
+Foxx,20002991,JT,Frontier Communications Corporation,NaN,s,04/1/2015,04/1/2015,"$15,001 - $50,000",New,
+Foxx,20002991,JT,Mosaic Company ,NaN,P,04/1/2015,04/1/2015,"$15,001 - $50,000",New,
+Foxx,20002991,JT,"Old Dominion Freight line, Inc. ",NaN,P,04/1/2015,04/1/2015,"$15,001 - $50,000",New,
+Foxx,20002991,JT,"spectrum Brands Holdings, Inc. ",NaN,s,04/1/2015,04/1/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,"Forum Energy Technologies, Inc. ",NaN,s,03/9/2015,03/9/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,"Caterpillar, Inc. ",NaN,s,03/5/2015,03/5/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,alcoa Inc. ,NaN,s,03/4/2015,03/4/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,Erie Indemnity Company,ERIE,P,03/26/2015,03/26/2015,"$1,001 - $15,000",New,
+Foxx,20002821,JT,"Blount International, Inc. ",NaN,s,03/25/2015,03/25/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,Curtiss,NaN,P,03/25/2015,03/25/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,Erie Indemnity Company,ERIE,P,03/25/2015,03/25/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,FedEx Corporation ,FDX,s,03/25/2015,03/25/2015,"$50,001 - $100,000",New,
+Foxx,20002821,JT,abbott laboratories ,NaN,P,03/18/2015,03/18/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,"Matson, Inc. ",NaN,P,03/16/2015,03/16/2015,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 04/3/2015"
+Foxx,20002821,JT,Corning Incorporated ,NaN,P,03/12/2015,03/12/2015,"$15,001 - $50,000",New,
+Foxx,20002821,JT,"altria group, Inc. ",MO,s,03/11/2015,03/11/2015,"$50,001 - $100,000",New,
+Foxx,20002654,JT,"Cracker Barrel Old Country store, Inc.",NaN,P,02/6/2015,02/6/2015,"$15,001 - $50,000",New,
+Foxx,20002654,JT,archer,NaN,s,02/4/2015,02/4/2015,"$15,001 - $50,000",New,
+Foxx,20002654,JT,Frontier Communications Corporation,NaN,P,02/25/2015,02/25/2015,"$15,001 - $50,000",New,
+Foxx,20002654,JT,Pitney Bowes Inc. ,NaN,s,02/2/2015,02/2/2015,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 03/9/2015"
+Foxx,20002654,JT,"Blount International, Inc. ",NaN,P,02/18/2015,02/18/2015,"$15,001 - $50,000",New,
+Foxx,20002654,JT,Cooper Tire & Rubber Company ,NaN,P,02/18/2015,02/18/2015,"$15,001 - $50,000",New,
+Foxx,20002527,JT,schwab u.s. TIPs ETF ,NaN,s,01/30/2015,01/30/2015,"$15,001 - $50,000",New,
+Foxx,20002527,JT,archer,NaN,P,01/29/2015,01/29/2015,"$15,001 - $50,000",New,
+Foxx,20002527,JT,Cigna Corporation ,CI,P,01/29/2015,01/29/2015,"$15,001 - $50,000",New,
+Foxx,20002527,JT,Headwaters Incorporated ,NaN,P,01/28/2015,01/28/2015,"$15,001 - $50,000",New,
+Foxx,20002527,JT,"Pepsico, Inc. ",PEP,P,01/27/2015,01/27/2015,"$15,001 - $50,000",New,
+Foxx,20002527,JT,"spectrum Brands Holdings, Inc. ",NaN,P,01/27/2015,01/27/2015,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 02/9/2015"
+Foxx,20002527,JT,"Forum Energy Technologies, Inc. ",NaN,P,01/21/2015,01/21/2015,"$1,001 - $15,000",New,
+Hanna,20004073,SPdR,Select Sector Fund,NaN,S,10/1/2015,11/9/2015,"$50,001 - $100,000",New,"Hon. Richard L. Hanna , 11/9/2015"
+Hanna,20003563,SPdR,S&P 500 ,NaN,P,07/31/2015,08/10/2015,"$15,001 - $50,000",New,
+Hanna,20003563,SPdR,S&P 500 ,NaN,P,07/2/2015,08/10/2015,"$100,001 - $250,000",New,
+Hanna,20003563,JT,"Home depot, Inc. ",NaN,P,07/16/2015,08/10/2015,"$1,001 - $15,000",New,
+Hanna,20003563,JT,"Scripps Networks Interactive, Inc",NaN,S,07/16/2015,08/10/2015,"$1,001 - $15,000",New,
+Hanna,20003563,JT,UnitedHealth group Incorporated,NaN,P,07/16/2015,08/10/2015,"$1,001 - $15,000",New,"Hon. Richard L. Hanna , 08/13/2015"
+Hanna,20002697,JT,Johnson & Johnson ,JNJ,P,02/2/2015,03/9/2015,"$1,001 - $15,000",New,
+Hanna,20002697,JT,Microsoft Corporation ,NaN,P,02/2/2015,03/9/2015,"$1,001 - $15,000",New,"Hon. Richard L. Hanna , 03/11/2015"
+Hanna,20002548,JT,Covidien plc. ordinary Shares ,NaN,S,01/27/2015,02/6/2015,"$1,001 - $15,000",New,MEDTRoNIC INC aND CoVIDIEN MERgED. THIS TRaNSaCTIoN IS FoR THE EXCHaNgE oF SToCK
+Hanna,20002548,JT,Medtronic plc. ordinary Shares ,MDT,E,01/27/2015,02/6/2015,"$1,001 - $15,000",New,MEDTRoNIC INC aND CoVIDIEN MERgED. THIS TRaNSaCTIoN IS FoR THE EXCHaNgE oF SToCK
+Hanna,20002548,JT,Medtronic plc. ordinary Shares ,MDT,E,01/27/2015,02/6/2015,"$1,001 - $15,000",New,"Hon. Richard L. Hanna , 02/13/2015"
+Hinojosa,20002867,SP,Walt Disney Company ,DIS,S,12/31/2013,12/31/2013,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 04/15/2015"
+Hinojosa,20004170,SP,alphabet Inc.,NaN,S,11/27/2015,11/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20004170,SP,alphabet Inc.,NaN,S,11/27/2015,11/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20004170,DC,alphabet Inc.,NaN,S,11/27/2015,11/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20004170,DC,alphabet Inc.,NaN,S,11/27/2015,11/27/2015,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 11/30/2015"
+Hinojosa,20002867,SP,Siemens ag american Depositary,NaN,S,09/20/2013,09/20/2013,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,google Inc.,NaN,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,google Inc.,NaN,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,google Inc.,NaN,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,google Inc.,NaN,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,"Netflix, Inc. ",NFLX,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,"Netflix, Inc. ",NFLX,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,"Netflix, Inc. ",NFLX,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,"Netflix, Inc. ",NFLX,P,08/25/2015,08/25/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,american Express Company ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,"baidu, Inc.",NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,biogen Inc. ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,Cummins Inc. ,CMI,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,Cummins Inc. ,CMI,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,Cummins Inc. ,CMI,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,Deluxe Corporation ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",NewiD owner asset transaction Date notification amount,
+Hinojosa,20003694,SP,Deutsche X,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,First Trust IPOX,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,First Trust IPOX,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,iShares Core S&P Small,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,iShares Core S&P Small,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,iShares MSCI USa Minimum Volatility,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,iShares MSCI USa Minimum Volatility,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,DC,"Natural gas Services group, Inc. ",NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,PowerShares S&P 500 High Quality,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,PowerShares S&P 500 High Quality,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,ProShares UltraShort Yen New ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,ProShares UltraShort Yen New ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,REX american Resources Corporation,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,REX american Resources Corporation,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,SPDR Russell Small Cap Completeness,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,SPDR S&P 600 Small Cap ETF ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,Stryker Corporation ,SYK,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,Vanguard Extended Market ETF,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,Vanguard growth ETF,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,Vanguard S&P 500 ETF ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,
+Hinojosa,20003694,SP,Vanguard S&P 500 ETF ,NaN,S,08/21/2015,08/21/2015,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 08/31/2015"
+Hinojosa,20003471,DC,a.O. Smith Corporation ,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,DC,"amazon.com, Inc. ",NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,DC,"amazon.com, Inc. ",NaN,S,07/27/2015,07/27/2015,"$15,001 - $50,000",New,
+Hinojosa,20003471,SP,"amTrust Financial Services, Inc. ",NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,SP,"amTrust Financial Services, Inc. ",NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,SP,Db 3x german bund Futures Exchange,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,DC,google Inc.,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",NewiD owner asset transaction Date notification amount,
+Hinojosa,20003471,DC,google Inc.,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,SP,iShares U.S. Pharmaceutical ETF ,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,SP,Sunoco LP Common Units representing,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,SP,TrimTabs Float Shrink ETF ,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,DC,Walt Disney Company ,DIS,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,DC,Walt Disney Company ,DIS,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003471,SP,Walt Disney Company ,DIS,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 07/27/2015"
+Hinojosa,20003470,DC,Sunoco LP Common Units representing,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003470,DC,Sunoco LP Common Units representing,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003470,SP,Sunoco LP Common Units representing,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,
+Hinojosa,20003470,SP,Sunoco LP Common Units representing,NaN,S,07/27/2015,07/27/2015,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 07/27/2015"
+Hinojosa,20003290,SP,Stryker Corporation ,SYK,P,06/24/2015,06/24/2015,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 06/24/2015"
+Hinojosa,20003290,SP,ProShares ultraShort Yen New ,NaN,P,06/23/2015,06/23/2015,"$1,001 - $15,000",New,
+Hinojosa,20002867,SP,"Dorman Products, Inc. ",NaN,S,03/7/2013,03/7/2013,"$1,001 - $15,000",New,
+Hinojosa,20002524,SP,"amTrust Financial Services, Inc. ",NaN,P,01/5/2015,01/5/2015,"$1,001 - $15,000",New,
+Hinojosa,20002524,SP,"amTrust Financial Services, Inc. ",NaN,P,01/5/2015,01/5/2015,"$1,001 - $15,000",New,
+Hinojosa,20002524,SP,REX american Resources Corporation,NaN,P,01/5/2015,01/5/2015,"$1,001 - $15,000",New,
+Hinojosa,20002524,SP,REX american Resources Corporation,NaN,P,01/5/2015,01/5/2015,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 02/6/2015"
+Hinojosa,20002524,DC,3M Company ,MMM,S,01/28/2015,01/28/2015,"$1,001 - $15,000",New,
+Lofgren,20003622,JT,Chevron Corporation ,CVX,S,07/30/2015,08/6/2015,"$15,001 - $50,000",New,"Hon. Zoe Lofgren , 08/19/2015"
+Lowenthal,20004219,SP,"Chipotle Mexican grill, Inc. ",NaN,P,12/8/2015,12/10/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 12/10/2015"
+Lowenthal,20002395,SP,"Starwood Hotels & Resorts Worldwide,",NaN,P,12/24/2014,12/31/2014,"$15,001 - $50,000",New,
+Lowenthal,20002395,SP,Mastercard Incorporated ,MA,P,12/19/2014,12/24/2014,"$15,001 - $50,000",New,
+Lowenthal,20002395,SP,Teva Pharmaceutical Industries Limited,NaN,P,12/19/2014,12/24/2014,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 01/14/2015"
+Lowenthal,20004303,SP,Teekay Corporation ,NaN,S,12/17/2015,12/22/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 12/23/2015"
+Lowenthal,20004202,SP,"Pfizer, Inc. ",PFE,S,12/1/2015,12/5/2015,"$15,001 - $50,000",New,
+Lowenthal,20004120,SP,"Activision Blizzard, Inc ",NaN,S,11/6/2015,11/16/2015,"$15,001 - $50,000",New,
+Lowenthal,20004120,SP,"HCA Holdings, Inc. ",HCA,S,11/6/2015,11/16/2015,"$15,001 - $50,000",New,
+Lowenthal,20004120,SP,"Baidu, Inc.",NaN,P,11/5/2015,11/16/2015,"$1,001 - $15,000",New,
+Lowenthal,20004120,SP,union Pacific Corporation ,NaN,P,11/4/2015,11/16/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 11/19/2015"
+Lowenthal,20004202,SP,Teekay Corp SR,NaN,S,11/30/2015,12/5/2015,"$15,001 - $50,000",New,Interest Purchased
+Lowenthal,20004202,SP,"PPg Industries, Inc. ",NaN,P,11/25/2015,12/2/2015,"$1,001 - $15,000",New,
+Lowenthal,20004202,SP,Verizon Communications Inc. ,VZ,P,11/20/2015,11/30/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 12/5/2015"
+Lowenthal,20004120,SP,Synchrony Financial ,SYF,P,11/17/2015,11/19/2015,"$1,001 - $15,000",New,
+Lowenthal,20004120,SP,union Pacific Corporation ,NaN,P,11/17/2015,11/19/2015,"$1,001 - $15,000",New,
+Lowenthal,20004120,SP,"Baidu, Inc.",NaN,P,11/12/2015,11/19/2015,"$1,001 - $15,000",New,
+Lowenthal,20004120,SP,Level 3 FINg INC,NaN,P,11/12/2015,11/19/2015,"$15,001 - $50,000",New,
+Lowenthal,20004120,SP,Synchrony Financial ,SYF,P,11/12/2015,11/19/2015,"$1,001 - $15,000",New,
+Lowenthal,20004016,SP,Allergan plc Ordinary Shares ,NaN,P,10/9/2015,10/20/2015,"$1,001 - $15,000",New,
+Lowenthal,20004035,SP,"PayPal Holdings, Inc. ",PYPL,P,10/8/2015,10/20/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 11/2/2015"
+Lowenthal,20004016,SP,eBay Inc. ,EBAY,S,10/8/2015,10/20/2015,"$15,001 - $50,000",New,
+Lowenthal,20003912,SP,Zoetis Inc. Class A ,ZTS,P,10/7/2015,10/8/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 10/8/2015"
+Lowenthal,20003912,SP,FedEx Corporation ,FDX,P,10/5/2015,10/8/2015,"$15,001 - $50,000",New,
+Lowenthal,20004120,SP,Procter & gamble Company ,NaN,P,10/30/2015,11/5/2015,"$15,001 - $50,000",New,
+Lowenthal,20004120,SP,Service Corporation International ,NaN,P,10/30/2015,11/5/2015,"$15,001 - $50,000",New,
+Lowenthal,20004016,SP,Johnson & Johnson ,JNJ,S,10/13/2015,10/20/2015,"$15,001 - $50,000",New,
+Lowenthal,20004016,SP,"Pfizer, Inc. ",PFE,P,10/13/2015,10/20/2015,"$15,001 - $50,000",New,
+Lowenthal,20004016,SP,Sherwin,NaN,P,10/13/2015,10/20/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 10/31/2015"
+Lowenthal,20003912,SP,Time Warner Inc. New ,NaN,S,09/28/2015,10/2/2015,"$15,001 - $50,000",New,
+Lowenthal,20003912,SP,"Activision Blizzard, Inc ",NaN,S,09/24/2015,09/30/2015,"$1,001 - $15,000",New,
+Lowenthal,20003912,SP,Lincoln National Corporation ,NaN,S,09/24/2015,09/30/2015,"$15,001 - $50,000",New,
+Lowenthal,20003803,SP,Teva Pharmaceutical Industries Limited,NaN,S,09/11/2015,09/17/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 09/18/2015"
+Lowenthal,20003803,SP,"PayPal Holdings, Inc. ",PYPL,P,09/1/2015,09/7/2015,"$1,001 - $15,000",New,
+Lowenthal,20003623,SP,eBay Inc. ,EBAY,P,08/5/2015,08/12/2015,"$1,001 - $15,000",New,
+Lowenthal,20003691,SP,"HCA Holdings, Inc. ",HCA,P,08/26/2015,08/29/2015,"$1,001 - $15,000",New,
+Lowenthal,20003691,SP,"HCA Holdings, Inc. ",HCA,P,08/26/2015,08/29/2015,"$15,001 - $50,000",New,
+Lowenthal,20003691,SP,unitedHealth group Incorporated,NaN,P,08/25/2015,08/29/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 08/29/2015"
+Lowenthal,20003691,SP,"Starwood Hotels & Resorts Worldwide,",NaN,S,08/13/2015,08/20/2015,"$15,001 - $50,000",New,
+Lowenthal,20003623,SP,The Priceline group Inc. ,NaN,S,08/12/2015,08/17/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 08/18/2015"
+Lowenthal,20003469,SP,Costco Wholesale Corporation ,COST,P,07/7/2015,07/10/2015,"$1,001 - $15,000",New,
+Lowenthal,20003535,SP,Adobe Systems Incorporated ,ADBE,P,07/29/2015,08/4/2015,"$1,001 - $15,000",New,
+Lowenthal,20003623,SP,"Starwood Hotels & Resorts Worldwide,",NaN,S,07/28/2015,08/3/2015,"$1,001 - $15,000",New,
+Lowenthal,20003535,SP,Teva Pharmaceutical Industries Limited,NaN,S,07/27/2015,07/31/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 08/5/2015"
+Lowenthal,20003469,SP,Biogen Inc. ,BIIB,S,07/23/2015,07/25/2015,"$1,001 - $15,000",New,
+Lowenthal,20003469,SP,Oracle Corporation ,ORCL,S,07/23/2015,07/25/2015,"$15,001 - $50,000",New,
+Lowenthal,20003469,SP,BorgWarner Inc. ,BWA,S,07/20/2015,07/25/2015,"$15,001 - $50,000",New,
+Lowenthal,20003469,SP,unitedHealth group Incorporated,NaN,P,07/16/2015,07/22/2015,"$1,001 - $15,000",New,
+Lowenthal,20003469,SP,Willis group Holdings Public Limited,NaN,S,07/14/2015,07/17/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 07/25/2015"
+Lowenthal,20003252,SP,eBay Inc. ,EBAY,P,06/4/2015,06/11/2015,"$15,001 - $50,000",New,
+Lowenthal,20003252,SP,International Business Machines,NaN,S,06/4/2015,06/11/2015,"$15,001 - $50,000",New,
+Lowenthal,20003252,SP,Lincoln National Corporation ,NaN,P,06/11/2015,06/13/2015,"$15,001 - $50,000",New,
+Lowenthal,20003252,SP,Teekay Corporation ,NaN,S,06/10/2015,06/13/2015,"$1,001 - $15,000",New,
+Lowenthal,20003252,SP,Teekay Offshore Partners L.P. Common,NaN,S,06/10/2015,06/13/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 06/13/2015"
+Lowenthal,20003252,SP,Adobe Systems Incorporated ,NaN,P,06/1/2015,06/5/2015,"$15,001 - $50,000",New,
+Lowenthal,20003252,SP,"Old dominion Freight Line, Inc. ",NaN,S,06/1/2015,06/5/2015,"$1,001 - $15,000",New,
+Lowenthal,20003171,SP,Kimberly,NaN,P,05/22/2015,05/23/2015,"$15,001 - $50,000",New,
+Lowenthal,20003171,SP,"STARWOOD PROPERTY TRuST, INC.",NaN,S,05/22/2015,05/23/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 05/23/2015"
+Lowenthal,20002986,SP,"Cooper Companies, Inc. ",COO,S,04/20/2015,05/2/2015,"$15,001 - $50,000",New,
+Lowenthal,20002986,SP,Costco Wholesale Corporation ,COST,P,04/20/2015,05/2/2015,"$15,001 - $50,000",New,
+Lowenthal,20002986,SP,Actavis plc Ordinary Shares ,NaN,P,04/15/2015,05/2/2015,"$1,001 - $15,000",New,
+Lowenthal,20002986,SP,Biogen Inc. ,BIIB,P,04/15/2015,05/2/2015,"$15,001 - $50,000",New,
+Lowenthal,20002986,SP,"Facebook, Inc.",NaN,P,04/15/2015,05/2/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 05/2/2015"
+Lowenthal,20002861,SP,"Old dominion Freight Line, Inc. ",NaN,P,03/30/2015,04/3/2015,"$1,001 - $15,000",New,
+Lowenthal,20002861,SP,unitedHealth group Incorporated,NaN,P,03/30/2015,04/3/2015,"$15,001 - $50,000",New,
+Lowenthal,20002861,SP,Willis group Holdings Public Limited,NaN,P,03/27/2015,04/2/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 04/12/2015"
+Lowenthal,20002861,SP,IHS Inc. IHS Inc. Class A ,NaN,S,03/24/2015,03/30/2015,"$15,001 - $50,000",New,
+Lowenthal,20002861,SP,"Starwood Hotels & Resorts Worldwide,",NaN,P,03/24/2015,03/30/2015,"$1,001 - $15,000",New,
+Lowenthal,20002861,SP,The Priceline group Inc. ,NaN,P,03/23/2015,03/27/2015,"$1,001 - $15,000",New,
+Lowenthal,20002752,SP,general Electric Company ,NaN,P,03/19/2015,03/22/2015,"$15,001 - $50,000",New,
+Lowenthal,20002752,SP,Time Warner Inc. New ,NaN,P,03/13/2015,03/19/2015,"$15,001 - $50,000",New,
+Lowenthal,20002861,SP,"NextEra Energy, Inc. ",NEE,S,03/12/2015,03/18/2015,"$15,001 - $50,000",New,
+Lowenthal,20002752,SP,American Tower Corporation ,AMT,S,03/12/2015,03/18/2015,"$15,001 - $50,000",New,
+Lowenthal,20002742,SP,ITC Holdings Corp. ,NaN,S,03/10/2015,03/14/2015,"$1,001 - $15,000",New,
+Lowenthal,20002742,SP,"Targa Resources, Inc. ",NaN,S,03/10/2015,03/14/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 03/16/2015"
+Lowenthal,20002636,SP,International Business Machines,NaN,P,02/24/2015,03/1/2015,"$15,001 - $50,000",New,
+Lowenthal,20002636,SP,The Priceline group Inc. ,NaN,P,02/19/2015,02/26/2015,"$15,001 - $50,000",New,
+Lowenthal,20002636,SP,Actavis plc Ordinary Shares ,NaN,P,02/18/2015,02/25/2015,"$1,001 - $15,000",New,
+Lowenthal,20002593,SP,CVS Health Corporation ,CVS,P,02/10/2015,02/14/2015,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 02/22/2015"
+Lowenthal,20002447,SP,JP Morgan Chase & Co. ,JPM,P,01/6/2015,01/12/2015,"$15,001 - $50,000",New,
+Lowenthal,20002538,SP,ITC Holdings Corp. ,NaN,S,01/29/2015,02/5/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 02/10/2015"
+Lowenthal,20002447,SP,Oracle Corporation ,ORCL,P,01/22/2015,01/25/2015,"$15,001 - $50,000",New,
+Lowenthal,20002447,SP,Seadrill Partners LLC Common units,NaN,S,01/22/2015,01/25/2015,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 01/25/2015"
+Lowenthal,20002447,SP,SanDisk Corporation ,NaN,S,01/13/2015,01/20/2015,"$15,001 - $50,000",New,
+Lowey,20002754,SP,Parkstone Capital Partners III LP,NaN,P,03/2/2015,03/2/2015,"$15,001 - $50,000",New,"Hon. Nita M. Lowey , 03/23/2015"
+MacArthur,20004178,JT,CLEAR CHANNEL CoMM INC 09.000%,NaN,S,11/9/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,CoNSTELLATIoN BRANDS INC,NaN,P,11/9/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,LENNAR CoRP CALL@MW+50BP,NaN,P,11/9/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,McDonald's Corporation ,MCD,P,11/9/2015,12/1/2015,"$100,001 - $250,000",New,
+MacArthur,20004178,DC,McDonald's Corporation ,MCD,P,11/9/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,McDonald's Corporation ,MCD,P,11/9/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,UNITED RENTALS NA INC 07.625%,NaN,P,11/9/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,CoNSTELLATIoN BRANDS INC,NaN,P,11/6/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,"oNEoK, Inc. ",NaN,P,11/6/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,JT,CoNSTELLATIoN BRANDS INC,NaN,P,11/5/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,gENERAL MoToRS FINL Co 03.250%,NaN,P,11/5/2015,12/1/2015,"$15,001 - $50,000",New,Corp bond
+MacArthur,20004178,JT,LENNAR CoRP CALL@MW+50BP,NaN,P,11/5/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,Western Digital Corporation ,WDC,P,11/4/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Western Digital Corporation ,WDC,P,11/4/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Western Digital Corporation ,WDC,P,11/4/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,WILLIAMS CoS INC B/E 05.750%,NaN,P,11/4/2015,12/1/2015,"$1,001 - $15,000",New,"Hon. Thomas MacArthur , 12/6/2015"
+MacArthur,20004178,JT,TESoRo LogISTICS NTS B/E 06.125%,NaN,P,11/3/2015,12/1/2015,"$15,001 - $50,000",New,Corp bond
+MacArthur,20004178,JT,Western Digital Corporation ,WDC,P,11/3/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Western Digital Corporation ,WDC,P,11/3/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Western Digital Corporation ,WDC,P,11/3/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,American Axle & Manufacturing,NaN,P,11/25/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,REYNoLDS gRoUP ISSUER 05.750%,NaN,S,11/25/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,Synergy Resources Corporation ,NaN,P,11/25/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,DISH DBS CoRP NTS B/E 07.875%,NaN,P,11/24/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,REYNoLDS gRoUP ISSUER 05.750%,NaN,S,11/24/2015,12/1/2015,"$15,001 - $50,000",New,Corp bond
+MacArthur,20004178,JT,SBA CoMM CoRP NTS B/E 04.875%,NaN,P,11/23/2015,12/1/2015,"$15,001 - $50,000",New,Corp bond
+MacArthur,20004178,JT,Accenture plc. Class A ordinary Shares,ACN,P,11/20/2015,12/1/2015,"$100,001 - $250,000",New,
+MacArthur,20004178,DC,Accenture plc. Class A ordinary Shares,ACN,P,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Accenture plc. Class A ordinary Shares,ACN,P,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,"Dominion Resources, Inc. ",D,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Illinois Tool Works Inc. ,ITW,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,Intel Corporation ,INTC,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Medtronic plc. ordinary Shares ,MDT,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,DC,Medtronic plc. ordinary Shares ,MDT,S,11/20/2015,12/1/2015,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+MacArthur,20004178,DC,Microsoft Corporation ,MSFT,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,Microsoft Corporation ,MSFT,S,11/20/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,JT,"NextEra Energy, Inc. ",NEE,S,11/20/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,DC,"NextEra Energy, Inc. ",NEE,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,PoST HLDgS INC NTS 07.375% 021522,NaN,S,11/20/2015,12/1/2015,"$15,001 - $50,000",New,Corp bond
+MacArthur,20004178,DC,"Rockwell Automation, Inc. ",NaN,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,Texas Instruments Incorporated ,TXN,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,V.F. Corporation ,NaN,S,11/20/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,Deltic Timber Corporation ,NaN,S,11/2/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,"Columbia Pipeline group, Inc. ",NaN,S,11/18/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,JT,CoNTINENTAL RESoURCES 05.000%,NaN,P,11/18/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,DC,DAVITA INC NTS B/E 05.750% 081522,NaN,P,11/18/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,"Plains group Holdings, L.P. Class A",NaN,P,11/18/2015,12/1/2015,"$50,001 - $100,000",New,
+MacArthur,20004178,JT,"Summit Midstream Partners, LP",NaN,S,11/18/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,JT,Teekay Corporation ,NaN,P,11/18/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,JT,Teekay offshore Partners L.P. Common,NaN,S,11/18/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,JT,CoNTINENTAL RESoURCES 05.000%,NaN,P,11/17/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,CLEAR CHANNEL CoMM INC 09.000%,NaN,S,11/16/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,CLEAR CHANNEL CoMM INC 09.000%,NaN,S,11/16/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,DC,SPRINT CAPITAL CoRP 06.900%,NaN,S,11/16/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,CBRE SERVICES INC B/E 05.000%,NaN,P,11/13/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,CBRE SERVICES INC B/E 05.000%,NaN,P,11/12/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004178,JT,American Equity Investment Life,NaN,P,11/10/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,Hanover Insurance group Inc ,NaN,S,11/10/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,Harsco Corporation ,NaN,S,11/10/2015,12/1/2015,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+MacArthur,20004178,JT,L.B. Foster Company ,NaN,S,11/10/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,"oNEoK, Inc. ",NaN,P,11/10/2015,12/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004178,JT,"Parsley Energy, Inc. Class A ",Pensions,P,11/10/2015,12/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004178,JT,TESoRo LogISTICS NTS B/E 06.125%,NaN,P,11/10/2015,12/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,DC,CHC HELICoPTER S A NTS 09.250%,NaN,S,10/9/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,Deltic Timber Corporation ,NaN,S,10/9/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,Deltic Timber Corporation ,NaN,S,10/8/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,"Yum! Brands, Inc. ",YUM,S,10/8/2015,11/1/2015,"$100,001 - $250,000",New,
+MacArthur,20004036,DC,"Yum! Brands, Inc. ",YUM,S,10/8/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,DC,"Yum! Brands, Inc. ",YUM,S,10/8/2015,11/1/2015,"$1,001 - $15,000",New,"Hon. Thomas MacArthur , 11/3/2015"
+MacArthur,20004036,DC,iShares iBoxx $ Investment grade,NaN,P,10/7/2015,11/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004036,JT,iShares iBoxx $ Investment grade,NaN,P,10/7/2015,11/1/2015,"$100,001 - $250,000",New,
+MacArthur,20004036,DC,iShares iBoxx $ Investment grade,NaN,P,10/7/2015,11/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004036,DC,iShares US Preferred Stock ETF ,NaN,P,10/7/2015,11/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004036,JT,iShares US Preferred Stock ETF ,NaN,P,10/7/2015,11/1/2015,"$100,001 - $250,000",New,
+MacArthur,20004036,DC,iShares US Preferred Stock ETF ,NaN,P,10/7/2015,11/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004036,JT,Western Asset High Income Fund II Inc.,NaN,P,10/7/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,DC,Western Asset High Income Fund II Inc.,NaN,P,10/7/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,WILLIAMS CoS INC B/E 05.750%,NaN,P,10/7/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,LEUCADIA NATL CoRP B/E 05.500%,NaN,P,10/6/2015,11/1/2015,"$15,001 - $50,000",New,Corp bond
+MacArthur,20004036,JT,SLM CoRP MED TERM NTS 05.500%,NaN,S,10/6/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,WILLIAMS CoS INC B/E 05.750%,NaN,P,10/6/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,Houghton Mifflin Harcourt Company,NaN,P,10/5/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,SLM CoRP MED TERM NTS 05.500%,NaN,S,10/5/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,Synovus Financial Corp. ,NaN,P,10/5/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,WILLIAMS CoS INC B/E 05.750%,NaN,P,10/5/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,gENERAL MoToRS FINL Co 03.250%,NaN,P,10/30/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,LENNAR CoRP CALL@MW+50BP,NaN,P,10/29/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,NRg ENERgY INC NTS B/E 06.625%,NaN,S,10/28/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,Comcast Corporation,NaN,S,10/22/2015,11/1/2015,"$15,001 - $50,000",New,
+MacArthur,20004036,DC,FERRELLgAS LP B/E 06.500% 050121,NaN,S,10/22/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,Mitel Networks Corporation,NaN,P,10/22/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,Deltic Timber Corporation ,NaN,S,10/20/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,Rexnord Corporation ,NaN,S,10/20/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,DC,Seagate Technology. ,STX,P,10/20/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,EVEREST ACQUISITIoN LLC 09.375%,NaN,S,10/2/2015,11/1/2015,"$15,001 - $50,000",New,Corp bond
+MacArthur,20004036,JT,"Sally Beauty Holdings, Inc. ",NaN,S,10/2/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,SLM Corporation ,NaN,P,10/2/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,Commercial Metals Company ,NaN,P,10/19/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,ABM Industries Incorporated ,NaN,P,10/16/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,Chemtura Corp. ,NaN,S,10/16/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,LEUCADIA NATL CoRP B/E 05.500%,NaN,P,10/15/2015,11/1/2015,"$1,001 - $15,000",NewiD owner asset transaction Date notification amount,Corp bond
+MacArthur,20004036,JT,occidental Petroleum Corporation ,NaN,P,10/15/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,DC,SILgAN HLDgS INC NTS B/E 05.500%,NaN,P,10/15/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,SINCLAIR TELEVISIoN 05.375%,NaN,S,10/15/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,SINCLAIR TELEVISIoN 05.375%,NaN,S,10/14/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,ALCoA INC 06.150% 081520,NaN,S,10/1/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,Crestwood Equity Partners LP ,NaN,E,10/1/2015,11/1/2015,"$15,001 - $50,000",New,"12,460 shares received in exchanged for 4,531 shares of CMLP"
+MacArthur,20004036,JT,Crestwood Midstream Partners LP,NaN,E,10/1/2015,11/1/2015,"$15,001 - $50,000",New,"4,531 shares exchanged for 12,460 shares of CEQP"
+MacArthur,20004036,JT,iShares Russell 1000 growth ETF ,NaN,P,10/1/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,iShares Russell 1000 Value ETF ,NaN,P,10/1/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,LINN ENERgY LLC NTS B/E 07.750%,NaN,S,10/1/2015,11/1/2015,"$1,001 - $15,000",New,Corp bond
+MacArthur,20004036,JT,Vanguard FTSE Developed Markets ETF,NaN,P,10/1/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20004036,JT,Vanguard Small,NaN,P,10/1/2015,11/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,DC,SINCLAIR TELEVISIoN 06.375%,NaN,P,08/7/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,CoNCHo RESoURCES INC B/E,NaN,P,08/6/2015,09/1/2015,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20003739,DC,PENSKE AUTo gRoUP INC 05.750%,NaN,P,08/5/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,DC,PoLYMER gRoUP INC 07.750%,NaN,S,08/4/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,DAVITA HEALTHCARE PARTNE,NaN,P,08/3/2015,09/1/2015,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20003739,JT,Federal,NaN,S,08/26/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,Koninklijke Philips N.V. NY Registry,NaN,S,08/26/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,NEW JERSEY ECoN DEV AUTH SR XX,NaN,P,08/26/2015,09/1/2015,"$100,001 - $250,000",New,Municipal bond
+MacArthur,20003739,JT,STEEL DYNAMICS INC NTS 05.250%,NaN,P,08/26/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,BERRY PLASTICS CoRP NTS 05.125%,NaN,P,08/25/2015,09/1/2015,"$1,001 - $15,000",New,corporate bondID Owner Asset Transaction Date Notification Amount
+MacArthur,20003739,JT,BERRY PLASTICS CoRP NTS 05.125%,NaN,P,08/25/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,DISH DBS CoRP NTS B/E 05.875%,NaN,P,08/25/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,LTD BRANDS INC NTS B/E 06.625%,NaN,P,08/25/2015,09/1/2015,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,corporate bond
+MacArthur,20003739,JT,Anadarko Petroleum Corporation ,NaN,P,08/24/2015,09/1/2015,"$15,001 - $50,000",New,
+MacArthur,20003739,DC,Anadarko Petroleum Corporation ,NaN,P,08/24/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,DC,Anadarko Petroleum Corporation ,NaN,P,08/24/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,BERRY PLASTICS CoRP NTS 05.125%,NaN,P,08/24/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,Federal,NaN,S,08/24/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,WYNN LAS VEgAS LLC B/E 05.375%,NaN,S,08/24/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,WYNN LAS VEgAS LLC B/E 05.375%,NaN,S,08/24/2015,09/1/2015,"$1,001 - $15,000",New,"Hon. Thomas MacArthur , 09/8/2015"
+MacArthur,20003739,JT,Federal,NaN,S,08/21/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,WYNN LAS VEgAS LLC B/E 05.375%,NaN,S,08/21/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,WYNN LAS VEgAS LLC B/E 05.375%,NaN,S,08/20/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,"BancorpSouth, Inc. ",NaN,P,08/19/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,"CBoE Holdings, Inc. ",NaN,S,08/19/2015,09/1/2015,"$15,001 - $50,000",New,
+MacArthur,20003739,JT,E.W. Scripps Company ,NaN,P,08/19/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,RANgE RESoURCES CoRP NTS,NaN,P,08/19/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,"South Jersey Industries, Inc. ",NaN,P,08/19/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,WYNN LAS VEgAS LLC B/E 05.375%,NaN,S,08/19/2015,09/1/2015,"$1,001 - $15,000",New,corporate bondID Owner Asset Transaction Date Notification Amount
+MacArthur,20003739,DC,"Home Depot, Inc. ",HD,P,08/18/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,"Home Depot, Inc. ",HD,P,08/18/2015,09/1/2015,"$100,001 - $250,000",New,
+MacArthur,20003739,DC,"Home Depot, Inc. ",HD,P,08/18/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,DC,Johnson & Johnson ,JNJ,S,08/18/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,DC,Johnson & Johnson ,JNJ,S,08/18/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,Johnson & Johnson ,JNJ,S,08/18/2015,09/1/2015,"$100,001 - $250,000",New,
+MacArthur,20003739,JT,SanDisk Corporation ,NaN,P,08/18/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,DC,SanDisk Corporation ,NaN,P,08/18/2015,09/1/2015,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+MacArthur,20003739,DC,SanDisk Corporation ,NaN,P,08/18/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,WYNN LAS VEgAS LLC B/E 05.375%,NaN,S,08/17/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,JT,CoNCHo RESoURCES INC B/E,NaN,P,08/11/2015,09/1/2015,"$15,001 - $50,000",New,corporate bond
+MacArthur,20003739,JT,CoNCHo RESoURCES INC B/E,NaN,P,08/10/2015,09/1/2015,"$1,001 - $15,000",New,corporate bond
+MacArthur,20003739,DC,QUALCoMM Incorporated ,NaN,S,08/10/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,QUALCoMM Incorporated ,NaN,S,08/10/2015,09/1/2015,"$100,001 - $250,000",New,
+MacArthur,20003739,DC,QUALCoMM Incorporated ,NaN,S,08/10/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,JT,Texas Instruments Incorporated ,TXN,P,08/10/2015,09/1/2015,"$100,001 - $250,000",New,
+MacArthur,20003739,DC,Texas Instruments Incorporated ,TXN,P,08/10/2015,09/1/2015,"$1,001 - $15,000",New,
+MacArthur,20003739,DC,Texas Instruments Incorporated ,TXN,P,08/10/2015,09/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,3M Company ,MMM,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,amgen Inc. ,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,amgen Inc. ,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,"C.R. Bard, Inc. ",NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,"C.R. Bard, Inc. ",NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Cerner Corporation ,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Cerner Corporation ,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,"Church & Dwight Company, Inc. ",CHD,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,"Church & Dwight Company, Inc. ",CHD,P,09/18/2015,10/1/2015,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+McKinley,20003833,JT,Danaher Corporation ,DHR,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Danaher Corporation ,DHR,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,"Dollar Tree, Inc. ",NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,"Dollar Tree, Inc. ",NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,Ecolab Inc. ,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,Ecolab Inc. ,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Express scripts Holding Company,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,"Fiserv, Inc. ",NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,"Home Depot, Inc. ",HD,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Hormel Foods Corporation ,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Kimberly,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Kimberly,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,"O'Reilly automotive, Inc. ",NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,starbucks Corporation ,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+McKinley,20003833,JT,The Hershey Company ,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,The Hershey Company ,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,Thermo Fisher scientific Inc ,TMO,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,unitedHealth group Incorporated,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,unitedHealth group Incorporated,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,"universal Health services, Inc. ",NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,V.F. Corporation ,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,
+McKinley,20003833,JT,Walt Disney Company ,NaN,P,09/18/2015,10/1/2015,"$15,001 - $50,000",New,
+McKinley,20003833,JT,Walt Disney Company ,NaN,P,09/18/2015,10/1/2015,"$1,001 - $15,000",New,"Hon. David B. McKinley , 10/5/2015"
+McKinley,20003192,JT,accenture plc. Class a Ordinary shares,NaN,s,05/1/2015,06/1/2015,"$15,001 - $50,000",New,
+McKinley,20003192,JT,apache Corporation ,NaN,s,05/1/2015,06/1/2015,"$1,001 - $15,000",New,
+McKinley,20003192,JT,unit Corporation ,NaN,s,05/1/2015,06/1/2015,"$15,001 - $50,000",New,"Hon. David B. McKinley , 06/1/2015"
+Neugebauer,20004108,JT,Conn ST for ISS DTD PR To 10/19/10,NaN,P,11/9/2015,11/11/2015,"$100,001 - $250,000",New,
+Neugebauer,20004108,JT,Chicago Illinois Brd of Edu Go 5%,NaN,S,11/4/2015,11/5/2015,"$100,001 - $250,000",New,
+Neugebauer,20004108,JT,Sunshine ST Governmental FING Rev,NaN,P,11/10/2015,11/12/2015,"$100,001 - $250,000",New,"Hon. Randy Neugebauer , 11/30/2015"
+Neugebauer,20003468,SPDR,Gold Trust ,NaN,P,07/20/2015,07/21/2015,"$1,001 - $15,000",New,"Hon. Randy Neugebauer , 07/25/2015"
+Neugebauer,20003441,JT,austin Texas,NaN,P,07/15/2015,07/17/2015,"$100,001 - $250,000",New,"Hon. Randy Neugebauer , 07/21/2015"
+Neugebauer,20003429,SPDR,Bofa Merrill Lynch Crossover,NaN,P,07/13/2015,07/14/2015,"$1,001 - $15,000",New,"Hon. Randy Neugebauer , 07/16/2015"
+Neugebauer,20003341,JT,PENNSYLVaNIa ST Go 5.0000%,NaN,P,06/16/2015,06/17/2015,"$50,001 - $100,000",New,"Hon. Randy Neugebauer , 07/8/2015"
+Norton,20003859,DC,Rev Issues Prior to 5/20/10 NPR,NaN,P,09/28/2015,09/29/2015,"$50,001 - $100,000",New,"Hon. Eleanor Holmes Norton , 09/30/2015"
+Peters,20003617,SP,american Express Company ,NaN,asset,transaction,Date,notification,New,
+Peters,20003617,SP,Boeing Company ,NaN,asset,transaction,Date,notification,New,
+Peters,20003617,SP,Omnicom group Inc. ,OMC,asset,transaction,Date,notification,New,
+Peters,20003617,SP,"unitedHealth group Incorporated P 07/10/2015 07/31/2015 $15,001",NaN,asset,transaction,Date,notification,New,
+Peters,20003741,SP,"amazon.com, Inc. ",NaN,Asset,Transaction,Date,Notification,New,
+Peters,20003741,SP,Bank of america Corporation ,NaN,Asset,Transaction,Date,Notification,New,
+Peters,20003741,SP,Medtronic plc. Ordinary Shares ,MDT,Asset,Transaction,Date,Notification,New,
+Peters,20003741,SP,"Williams Companies, Inc. ",WMB,Asset,Transaction,Date,Notification,New,
+Peters,20003431,SP,american Express Company ,NaN,Asset,Transaction,Date,Notification,New,
+Peters,20003431,SP,Danaher Corporation ,DHR,Asset,Transaction,Date,Notification,New,
+Peters,20003431,SP,"Fiserv, Inc. ",NaN,Asset,Transaction,Date,Notification,New,
+Peters,20003431,SP,Walt Disney Company ,DIS,Asset,Transaction,Date,Notification,New,
+Peters,20003741,SP,aetna Inc. ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,aetna Inc. ,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,allergan plc Ordinary Shares ,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,allergan plc Ordinary Shares ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,alliance Data Systems Corporation,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,alliance Data Systems Corporation,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"amazon.com, Inc. ",NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,american Express Company ,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,american Express Company ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,anadarko Petroleum Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,anadarko Petroleum Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,apple Inc. ,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,apple Inc. ,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,"automatic Data Processing, Inc. ",NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,"automatic Data Processing, Inc. ",NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,Bank of america Corporation ,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"BlackRock, Inc. ",NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"BlackRock, Inc. ",NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Boeing Company ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Boeing Company ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Capital One Financial Corporation,COF,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Capital One Financial Corporation,COF,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,"Cisco Systems, Inc. ",CSCO,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Cisco Systems, Inc. ",CSCO,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Citigroup, Inc. ",C,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Citigroup, Inc. ",C,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Citrix Systems, Inc. ",NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"Citrix Systems, Inc. ",NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Colgate,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003741,SP,Colgate,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Comcast Corporation,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Comcast Corporation,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,CVS Health Corporation ,CVS,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,CVS Health Corporation ,CVS,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Danaher Corporation ,DHR,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Danaher Corporation ,DHR,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,Dollar general Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Dollar general Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,EMC Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,EMC Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"EOg Resources, Inc. ",NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"EOg Resources, Inc. ",NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,EQT Corporation ,EQT,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,EQT Corporation ,EQT,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Express Scripts Holding Company,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,Express Scripts Holding Company,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Fidelity National Information Services,",NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"Fidelity National Information Services,",NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Fiserv, Inc. ",NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,"Fiserv, Inc. ",NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,general Electric Company ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,general Electric Company ,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003741,SP,google Inc.,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,google Inc.,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,"Home Depot, Inc. ",HD,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Home Depot, Inc. ",HD,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,Johnson & Johnson ,JNJ,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Johnson & Johnson ,JNJ,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,JP Morgan Chase & Co. ,JPM,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,JP Morgan Chase & Co. ,JPM,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,Macy's Inc ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Macy's Inc ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Medtronic plc. Ordinary Shares ,MDT,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,"Merck & Company, Inc. Common Stock",MRK,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Merck & Company, Inc. Common Stock",MRK,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Microsoft Corporation ,MSFT,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Microsoft Corporation ,MSFT,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,"NextEra Energy, Inc. ",NEE,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"NextEra Energy, Inc. ",NEE,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Omnicom group Inc. ,OMC,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Omnicom group Inc. ,OMC,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Oracle Corporation ,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,Oracle Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Pepsico, Inc. ",PEP,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Pepsico, Inc. ",PEP,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Praxair, Inc. ",NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Praxair, Inc. ",NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Prudential Financial, Inc. ",NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Prudential Financial, Inc. ",NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,QualCOMM Incorporated ,QCOM,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,QualCOMM Incorporated ,QCOM,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Stryker Corporation ,SYK,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Stryker Corporation ,SYK,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Thermo Fisher Scientific Inc ,TMO,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Thermo Fisher Scientific Inc ,TMO,S,09/2/2015,09/2/2015,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003741,SP,"TJX Companies, Inc. ",TJX,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"TJX Companies, Inc. ",TJX,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Tyco International plc ,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Tyco International plc ,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,u.S. Bancorp ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,u.S. Bancorp ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,union Pacific Corporation ,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,union Pacific Corporation ,NaN,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,united Technologies Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,united Technologies Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,unitedHealth group Incorporated,NaN,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,unitedHealth group Incorporated,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,V.F. Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,V.F. Corporation ,NaN,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Verizon Communications Inc. ,VZ,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Verizon Communications Inc. ,VZ,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Visa Inc. ,V,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Visa Inc. ,V,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,Walt Disney Company ,DIS,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Walt Disney Company ,DIS,S,09/2/2015,09/2/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Wells Fargo & Company ,WFC,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,
+Peters,20003741,SP,Wells Fargo & Company ,WFC,S,09/2/2015,09/2/2015,"$50,001 - $100,000",New,
+Peters,20003741,SP,"Williams Companies, Inc. ",WMB,S,09/2/2015,09/2/2015,"$100,001 - $250,000",New,"Hon. Scott H. Peters , 09/12/2015"
+Peters,20003741,SP,"automatic Data Processing, Inc. ",NaN,P,08/5/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"automatic Data Processing, Inc. ",NaN,P,08/5/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Express Scripts Holding Company,NaN,S,08/5/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Express Scripts Holding Company,NaN,S,08/5/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,anadarko Petroleum Corporation ,NaN,P,08/3/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,anadarko Petroleum Corporation ,NaN,P,08/3/2015,08/31/2015,"$1,001 - $15,000",New,
+Peters,20003741,SP,"EOg Resources, Inc. ",NaN,P,08/3/2015,08/31/2015,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003741,SP,"EOg Resources, Inc. ",NaN,P,08/3/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Marathon Oil Corporation ,NaN,S,08/3/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Marathon Oil Corporation ,NaN,S,08/3/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,allergan plc Ordinary Shares ,NaN,P,08/27/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"NextEra Energy, Inc. ",NEE,P,08/27/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"TJX Companies, Inc. ",TJX,S,08/27/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,unitedHealth group Incorporated,NaN,S,08/27/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"NextEra Energy, Inc. ",NEE,P,08/17/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,"NextEra Energy, Inc. ",NEE,P,08/17/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Walt Disney Company ,DIS,S,08/17/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003741,SP,Walt Disney Company ,DIS,S,08/17/2015,08/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Madison adams Investments, llC",NaN,P,07/31/2015,07/31/2015,"$1,001 - $15,000",New,
+Peters,20003617,SP,Bank of america Corporation ,NaN,S,07/17/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Bank of america Corporation ,NaN,S,07/17/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Thermo Fisher Scientific Inc ,TMO,P,07/17/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Thermo Fisher Scientific Inc ,TMO,P,07/17/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,aetna Inc. ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,aetna Inc. ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,allergan plc Ordinary Shares ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,allergan plc Ordinary Shares ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,alliance Data Systems Corporation,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,alliance Data Systems Corporation,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"amazon.com, Inc. ",NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"amazon.com, Inc. ",NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,american Express Company ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,anadarko Petroleum Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,anadarko Petroleum Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,apple Inc. ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,apple Inc. ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"automatic Data Processing, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"automatic Data Processing, Inc. ",NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Bank of america Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Bank of america Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"BlackRock, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"BlackRock, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Boeing Company ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Capital One Financial Corporation,COF,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Capital One Financial Corporation,COF,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"Cisco Systems, Inc. ",CSCO,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Cisco Systems, Inc. ",CSCO,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Citigroup, Inc. ",C,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Citigroup, Inc. ",C,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Citrix Systems, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Citrix Systems, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Colgate,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Colgate,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Comcast Corporation,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Comcast Corporation,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",NewiD owner asset transaction Date notification amount,
+Peters,20003617,SP,CVS Health Corporation ,CVS,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,CVS Health Corporation ,CVS,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Danaher Corporation ,DHR,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Danaher Corporation ,DHR,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Dollar general Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Dollar general Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,EMC Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,EMC Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"EOg Resources, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"EOg Resources, Inc. ",NaN,P,07/10/2015,07/31/2015,"$1,001 - $15,000",New,
+Peters,20003617,SP,EQT Corporation ,EQT,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,EQT Corporation ,EQT,P,07/10/2015,07/31/2015,"$1,001 - $15,000",New,
+Peters,20003617,SP,Express Scripts Holding Company,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Express Scripts Holding Company,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",NewiD owner asset transaction Date notification amount,
+Peters,20003617,SP,"Fidelity National Information Services,",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Fidelity National Information Services,",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Fiserv, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Fiserv, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,general Electric Company ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,general Electric Company ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,google Inc.,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,google Inc.,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"Home Depot, Inc. ",HD,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"Home Depot, Inc. ",HD,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Johnson & Johnson ,JNJ,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Johnson & Johnson ,JNJ,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,JP Morgan Chase & Co. ,JPM,P,07/10/2015,07/31/2015,"$50,001 - $100,000",NewiD owner asset transaction Date notification amount,
+Peters,20003617,SP,JP Morgan Chase & Co. ,JPM,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Macy's Inc ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Macy's Inc ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Marathon Oil Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Marathon Oil Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Medtronic plc. Ordinary Shares ,MDT,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Medtronic plc. Ordinary Shares ,MDT,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"Merck & Company, Inc. Common Stock",MRK,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Merck & Company, Inc. Common Stock",MRK,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Microsoft Corporation ,MSFT,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Microsoft Corporation ,MSFT,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Omnicom group Inc. ,OMC,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Oracle Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Oracle Corporation ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"Pepsico, Inc. ",PEP,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Pepsico, Inc. ",PEP,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Praxair, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Praxair, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Prudential Financial, Inc. ",NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,"Prudential Financial, Inc. ",NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,QualCOMM Incorporated ,QCOM,P,07/10/2015,07/31/2015,"$1,001 - $15,000",New,
+Peters,20003617,SP,QualCOMM Incorporated ,QCOM,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Stryker Corporation ,SYK,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Stryker Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"TJX Companies, Inc. ",TJX,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"TJX Companies, Inc. ",TJX,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Tyco International plc ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Tyco International plc ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,u.S. Bancorp ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,u.S. Bancorp ,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,union Pacific Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,union Pacific Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,united Technologies Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,united Technologies Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,unitedHealth group Incorporated,NaN,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,V.F. Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,V.F. Corporation ,NaN,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Verizon Communications Inc. ,VZ,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Verizon Communications Inc. ,VZ,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Visa Inc. ,V,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Visa Inc. ,V,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Walt Disney Company ,DIS,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Walt Disney Company ,DIS,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,Wells Fargo & Company ,WFC,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,
+Peters,20003617,SP,Wells Fargo & Company ,WFC,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Williams Companies, Inc. ",WMB,P,07/10/2015,07/31/2015,"$15,001 - $50,000",New,
+Peters,20003617,SP,"Williams Companies, Inc. ",WMB,P,07/10/2015,07/31/2015,"$50,001 - $100,000",New,"Hon. Scott H. Peters , 08/16/2015"
+Peters,20003431,SP,"EOg Resources, Inc. ",NaN,P,06/29/2015,06/30/2015,"$1,001 - $15,000",New,
+Peters,20003431,SP,aetna Inc. ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,allergan plc Ordinary Shares ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,alliance Data Systems Corporation,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"amazon.com, Inc. ",NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,anadarko Petroleum Corporation ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,apple Inc. ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"automatic Data Processing, Inc. ",NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,Bank of america Corporation ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"BlackRock, Inc. ",NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Boeing Company ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Capital One Financial Corporation,COF,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Cisco Systems, Inc. ",CSCO,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Citigroup, Inc. ",C,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Citrix Systems, Inc. ",NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Colgate,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Comcast Corporation,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,CVS Health Corporation ,CVS,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,Dollar general Corporation ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,EMC Corporation ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,EQT Corporation ,EQT,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Express Scripts Holding Company,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Fidelity National Information Services,",NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,general Electric Company ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,google Inc.,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Home Depot, Inc. ",HD,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,Johnson & Johnson ,JNJ,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,JP Morgan Chase & Co. ,JPM,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,Macy's Inc ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,Marathon Oil Corporation ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Medtronic plc. Ordinary Shares ,MDT,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Merck & Company, Inc. Common Stock",MRK,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Microsoft Corporation ,MSFT,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,Omnicom group Inc. ,OMC,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Oracle Corporation ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Pepsico, Inc. ",PEP,P,06/26/2015,06/30/2015,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003431,SP,"Praxair, Inc. ",NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Prudential Financial, Inc. ",NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,QualCOMM Incorporated ,QCOM,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Stryker Corporation ,SYK,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"TJX Companies, Inc. ",TJX,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Tyco International plc ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,u.S. Bancorp ,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,union Pacific Corporation ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,united Technologies Corporation ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,unitedHealth group Incorporated,NaN,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,V.F. Corporation ,NaN,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Verizon Communications Inc. ,VZ,P,06/26/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Wells Fargo & Company ,WFC,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Williams Companies, Inc. ",WMB,P,06/26/2015,06/30/2015,"$50,001 - $100,000",New,"Hon. Scott H. Peters , 07/28/2015"
+Peters,20003431,SP,aetna Inc. ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,allergan plc Ordinary Shares ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,alliance Data Systems Corporation,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"amazon.com, Inc. ",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,american Express Company ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,anadarko Petroleum Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,apple Inc. ,NaN,P,06/23/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"automatic Data Processing, Inc. ",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Bank of america Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"BlackRock, Inc. ",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Boeing Company ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Capital One Financial Corporation,COF,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Cisco Systems, Inc. ",CSCO,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Citigroup, Inc. ",C,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Citrix Systems, Inc. ",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Colgate,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Comcast Corporation,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,CVS Health Corporation ,CVS,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Danaher Corporation ,DHR,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Dollar general Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,EMC Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,EQT Corporation ,EQT,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Express Scripts Holding Company,NaN,P,06/23/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Fidelity National Information Services,",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Fiserv, Inc. ",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,general Electric Company ,NaN,P,06/23/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,google Inc.,NaN,P,06/23/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Home Depot, Inc. ",HD,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Johnson & Johnson ,JNJ,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,JP Morgan Chase & Co. ,JPM,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Macy's Inc ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003431,SP,Marathon Oil Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Medtronic plc. Ordinary Shares ,MDT,P,06/23/2015,06/30/2015,"$50,001 - $100,000",New,
+Peters,20003431,SP,"Merck & Company, Inc. Common Stock",MRK,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Microsoft Corporation ,MSFT,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Omnicom group Inc. ,OMC,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Oracle Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Pepsico, Inc. ",PEP,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Praxair, Inc. ",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Prudential Financial, Inc. ",NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,QualCOMM Incorporated ,QCOM,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Stryker Corporation ,SYK,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"TJX Companies, Inc. ",TJX,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Tyco International plc ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,u.S. Bancorp ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003431,SP,union Pacific Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,united Technologies Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,unitedHealth group Incorporated,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,V.F. Corporation ,NaN,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Verizon Communications Inc. ,VZ,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Visa Inc. ,V,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Walt Disney Company ,DIS,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,Wells Fargo & Company ,WFC,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003431,SP,"Williams Companies, Inc. ",WMB,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/8/2015,05/31/2015,"$1,001 - $15,000",New,
+Peters,20003204,SP,"PMFg, Inc.",NaN,S,05/8/2015,05/31/2015,Spouse/DC,New,"Hon. Scott H. Peters , 06/11/2015"
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/7/2015,05/31/2015,"$1,001 - $15,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/5/2015,05/31/2015,"$1,001 - $15,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/19/2015,05/31/2015,"$15,001 - $50,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/18/2015,05/31/2015,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/15/2015,05/31/2015,"$1,001 - $15,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/14/2015,05/31/2015,"$1,001 - $15,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/13/2015,05/31/2015,"$15,001 - $50,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/12/2015,05/31/2015,"$1,001 - $15,000",New,
+Peters,20003204,SP,"gSE Systems, Inc. ",NaN,S,05/11/2015,05/31/2015,"$15,001 - $50,000",New,
+Peters,20003204,SP,"PMFg, Inc.",NaN,S,05/11/2015,05/31/2015,Spouse/DC,New,
+Peters,20002836,SP,"Inrad Optics, Inc. ",NaN,S,03/3/2015,03/31/2015,"$100,001 - $250,000",New,"Hon. Scott H. Peters , 04/14/2015"
+Peters,20002520,SP,apco Oil and gas International Inc.,NaN,S,01/30/2015,01/31/2015,Spouse/DC,New,
+Peters,20002520,SP,"Ecology and Environment, Inc.",NaN,S,01/29/2015,01/31/2015,"$15,001 - $50,000",New,
+Peters,20002520,SP,"Ecology and Environment, Inc.",NaN,S,01/28/2015,01/31/2015,"$15,001 - $50,000",New,
+Peters,20002520,SP,"PMFg, Inc. ",NaN,S,01/28/2015,01/31/2015,"$15,001 - $50,000",New,"Hon. Scott H. Peters , 02/12/2015"
+Peters,20002520,SP,"Ecology and Environment, Inc.",NaN,S,01/27/2015,01/31/2015,"$15,001 - $50,000",New,
+Price,20003862,JT,lincoln National Corporation ,NaN,P,09/23/2015,09/28/2015,"$1,001 - $15,000",New,
+Price,20003862,JT,"Metlife, Inc. ",MET,P,09/23/2015,09/28/2015,"$1,001 - $15,000",New,"Hon. David E. Price , 09/30/2015"
+Price,20003862,JT,Magellan Midstream Partners l.P.,NaN,P,09/18/2015,09/25/2015,"$1,001 - $15,000",New,
+Price,20003611,JT,united Technologies Corporation ,NaN,P,08/3/2015,08/7/2015,"$1,001 - $15,000",New,
+Price,20003800,JT,Walt Disney Company ,NaN,P,08/28/2015,09/3/2015,"$1,001 - $15,000",New,"Hon. David E. Price , 09/17/2015"
+Price,20003800,JT,Costco Wholesale Corporation ,NaN,P,08/24/2015,08/31/2015,"$1,001 - $15,000",New,
+Price,20003800,JT,V.F. Corporation ,NaN,P,08/24/2015,08/31/2015,"$1,001 - $15,000",New,
+Price,20003611,JT,NC Health Care Facilities Bonds,NaN,P,07/24/2015,07/27/2015,"$1,001 - $15,000",New,Tax-Exempt Bond
+Price,20003611,JT,Walt Disney Company ,NaN,P,07/24/2015,07/27/2015,"$1,001 - $15,000",New,"Hon. David E. Price , 08/14/2015"
+Price,20002645,JT,Magellan Midstream Partners l.P.,NaN,P,01/29/2015,02/6/2015,"$1,001 - $15,000",New,"Hon. David E. Price , 03/3/2015"
+Price,20002497,JT,sPDR s&P Dividend ETF ,NaN,P,01/26/2015,02/2/2015,"$1,001 - $15,000",New,
+Price,20002497,JT,"Valeant Pharmaceuticals International,",NaN,s,01/26/2015,02/2/2015,"$1,001 - $15,000",New,"Hon. David E. Price , 02/4/2015"
+Rigell,20003986,SP,SPDR Gold Trust ,NaN,P,09/4/2015,09/30/2015,"$1,001 - $15,000",New,"Hon. E. Scott Rigell , 10/23/2015"
+Rigell,20003861,SP,SPDR Gold Trust ETF,NaN,P,08/14/2015,08/31/2015,"$1,001 - $15,000",New,"Hon. E. Scott Rigell , 09/30/2015"
+Rigell,20003625,SP,apple Inc. ,NaN,P,07/22/2015,07/27/2015,"$1,001 - $15,000",New,Purchased shares of apple Inc. stock
+Rigell,20003625,SP,"Gilead Sciences, Inc. ",NaN,P,07/22/2015,07/27/2015,"$1,001 - $15,000",New,"Hon. E. Scott Rigell , 08/18/2015"
+Rigell,20003447,SP,apple Inc. ,NaN,P,06/4/2015,07/1/2015,"$15,001 - $50,000",New,Purchased shares of apple Inc. (aaPL)
+Rigell,20003447,SP,First Trust Sabrient Forward Looking,NaN,P,06/22/2015,07/1/2015,"$15,001 - $50,000",New,"Hon. E. Scott Rigell , 07/20/2015"
+Rigell,20003447,SP,First Trust Cybersecurity Portfolio,NaN,P,06/11/2015,07/1/2015,"$15,001 - $50,000",New,Purchased shares in an Equity Trust portfolio. First Trust Cybersecurity Portfolio.
+Rigell,20003265,SP,Cummins Inc. ,CMI,P,05/28/2015,06/2/2015,"$15,001 - $50,000",New,"Bought shares of stock in Cummins, Inc. Symbol CMI."
+Rigell,20003265,SP,Exxon Mobil Corporation ,NaN,P,05/28/2015,06/2/2015,"$15,001 - $50,000",New,Bought shares of stock in Exxon Mobil Corp. Symbol XoM
+Rigell,20003265,SP,"Merck & Company, Inc. Common Stock",MRK,P,05/28/2015,06/2/2015,"$1,001 - $15,000",New,"Bought shares of stock in Merck & Co., Inc. New. Symbol MRK"
+Rigell,20003265,SP,Vanguard FTSEEuropean ETF ,NaN,P,05/28/2015,06/2/2015,"$15,001 - $50,000",New,"Hon. E. Scott Rigell , 06/16/2015"
+Sanchez,20003115,SP,root9b Techologies Inc. (RTNb) ,NaN,P,04/21/2015,04/21/2015,"$1,001 - $15,000",New,"Hon. Linda T. Sánchez , 05/17/2015"
+Schneider,20002402,SP,"Stratasys, ltd. ",NaN,S,12/3/2014,01/2/2014,"$50,001 - $100,000",New,
+Schneider,20002402,SP,google Inc.,NaN,S,12/18/2014,01/2/2015,"$50,001 - $100,000",New,
+Schneider,20002402,SP,google Inc.,NaN,S,12/18/2014,01/2/2015,"$50,001 - $100,000",New,
+Schneider,20002402,SP,"Home Depot, Inc. ",HD,P,12/18/2014,01/2/2015,"$100,001 - $250,000",New,
+Schneider,20002402,SP,"Telephone and Data Systems, Inc.",NaN,S,12/18/2014,01/2/2015,"$1,001 - $15,000",New,Sale
+Schneider,20002402,SP,Huntington Ingalls INDS INC 7.12500%,NaN,P,12/10/2014,01/12/2015,"$1,001 - $15,000",New,Purchase
+Schneider,20002402,SP,Zions Bancorp 6.3000% Sersg,NaN,P,12/10/2014,01/2/2015,"$1,001 - $15,000",New,"Hon. Bradley S. Schneider , 01/16/2015"
+Wasserman Schultz,20003704,SP,Stonegate Bank ,NaN,S,09/1/2015,09/2/2015,"$15,001 - $50,000",New,"Hon. Debbie Wasserman Schultz , 09/9/2015"
+Wasserman Schultz,20003667,SP,Stonegate Bank ,NaN,S,08/4/2015,08/24/2015,"$50,001 - $100,000",New,"Hon. Debbie Wasserman Schultz , 09/1/2015"
+Wasserman Schultz,20003667,SP,Stonegate Bank ,NaN,S,08/3/2015,08/24/2015,"$15,001 - $50,000",New,
+Wasserman Schultz,20003402,SP,Stonegate Bank ,NaN,S,06/23/2015,06/24/2015,"$100,001 - $250,000",New,"Hon. Debbie Wasserman Schultz , 07/15/2015"
+Whitfield,20004222,SP,Capital one Financial Corporation,NaN,P,11/9/2015,11/30/2015,"$1,001 - $15,000",New,
+Whitfield,20004222,SP,Wells Fargo & Company ,WFC,P,11/9/2015,11/30/2015,"$1,001 - $15,000",New,
+Whitfield,20004222,SP,Wells Fargo Advantage Short Term,NaN,S,11/9/2015,11/30/2015,"$50,001 - $100,000",Amended,"Hon. Ed Whitfield , 12/16/2015"
+Whitfield,20004222,SP,Philip Morris International Inc ,PM,S,11/24/2015,11/30/2015,"$15,001 - $50,000",New,
+Whitfield,20004222,SP,Philip Morris International Inc ,PM,S,11/24/2015,11/30/2015,"$15,001 - $50,000",New,
+Whitfield,20004222,SP,The Madison Square garden,NaN,P,11/24/2015,11/30/2015,"$1,001 - $15,000",New,
+Whitfield,20004222,SP,The Madison Square garden,NaN,S,11/24/2015,11/30/2015,"$1,001 - $15,000",New,
+Womack,20003972,JT,aDFa,NaN,S,10/5/2015,10/8/2015,"$15,001 - $50,000",New,"Hon. Steve Womack , 10/21/2015"
+Womack,20003453,JT,aDFa,NaN,S,07/8/2015,07/13/2015,"$15,001 - $50,000",New,"Hon. Steve Womack , 07/22/2015"
+Womack,20003062,SP,university of arkansas Bonds,NaN,P,05/2/2014,05/2/2014,"$25,000,001",New,"Hon. Steve Womack , 05/11/2015"
+Womack,20003066,JT,aDFa,NaN,S,04/2/2015,04/8/2015,"$1,001 - $15,000",New,"Hon. Steve Womack , 05/12/2015"

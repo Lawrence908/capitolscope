@@ -1,35 +1,1672 @@
 Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
-Aderholt,20022132,DC,"Tesla, Inc. ",TSLA,12/05/2022,12/05/2022,"$1,001",-,New,
-Allen,20020448,SP,Putnam ultra Short Duration,Not in S&P 500,01/25/2022,01/28/2022,"$50,001",-,New,
-Allen,20020448,SP,Starbucks Corporation ,Not in S&P 500,01/25/2022,01/28/2022,"$15,001",-,New,
-Allen,20020585,SP,"Activision blizzard, Inc ",Not in S&P 500,02/14/2022,"$1,001",-,"$15,000",New,
-Allen,20020448,SP,Walt Disney Company ,DIS,01/28/2022,"$1,001",-,"$15,000",New,
-Axne,20021951,SP,"PayPal Holdings, Inc. ",PYPL,11/09/2022,11/10/2022,"$1,001",-,New,
-Axne,20021951,SP,"PayPal Holdings, Inc. ",PYPL,11/09/2022,11/10/2022,"$1,001",-,New,
-Axne,20021951,SP,Lockheed Martin Corporation ,LMT,11/03/2022,11/04/2022,"$1,001",-,New,
-Axne,20021705,SP,Liberty Broadband Corporation,Not in S&P 500,09/08/2022,09/09/2022,"$1,001",-,New,
-Axne,20021705,SP,Liberty Broadband Corporation,Not in S&P 500,09/08/2022,09/09/2022,"$1,001",-,New,
-Axne,20021555,SP,Liberty Broadband Corporation,Not in S&P 500,08/12/2022,08/13/2022,"$1,001",-,New,
-Axne,20021236,SP,"BellRing Brands, Inc. ",Not in S&P 500,06/15/2022,06/16/2022,"$1,001",-,New,
-Axne,20021134,SP,KKR & Company Inc. 6% MCONV,Not in S&P 500,05/25/2022,05/26/2022,"$1,001",-,New,Preferred stock - Maturity date 09/15/2023
-Axne,20021134,SP,KKR & Company Inc. 6% MCONV,Not in S&P 500,05/25/2022,05/26/2022,"$1,001",-,New,Preferred stock - Maturity date 09/15/2023
-Axne,20021134,SP,JP Morgan Chase & Co. ,JPM,05/12/2022,05/13/2022,"$1,001",-,New,
-Axne,20021134,SP,JP Morgan Chase & Co. ,JPM,05/12/2022,05/13/2022,"$1,001",-,New,
-Axne,20021134,SP,Danaher Corporation ,DHR,05/10/2022,05/11/2022,"$1,001",-,New,
-Axne,20021134,SP,Danaher Corporation ,DHR,05/10/2022,05/11/2022,"$1,001",-,New,
-Axne,20021134,SP,Johnson & Johnson ,JNJ,05/04/2022,05/05/2022,"$1,001",-,New,
-Axne,20021134,SP,Johnson & Johnson ,JNJ,05/04/2022,05/05/2022,"$1,001",-,NewID Owner Asset Transaction Date Notification Amount Cap.,
-Axne,20020474,SP,KKR & Company Inc. 6% MCONV P,Not in S&P 500,02/16/2022,"$1,001",-,"$15,000",New,
-Axne,20020474,SP,KKR & Company Inc. 6% MCONV P,Not in S&P 500,02/16/2022,"$1,001",-,"$15,000",New,
-Axne,20020474,SP,Lockheed Martin Corporation S ,LMT,02/25/2022,"$1,001",-,"$15,000",New,
-Axne,20020474,SP,Lockheed Martin Corporation S ,LMT,02/11/2022,"$1,001",-,"$15,000",New,
-Axne,20020474,SP,"PayPal Holdings, Inc. ",PYPL,03/01/2022,"$1,001",-,"$15,000",New,
-Axne,20020474,SP,"PayPal Holdings, Inc. ",PYPL,03/01/2022,"$1,001",-,"$15,000",New,
-Axne,20020367,SP,Brown Forman Inc Class B ,BF.B,02/03/2022,"$1,001",-,"$15,000",New,
-Axne,20020367,SP,global Payments Inc. ,Not in S&P 500,02/03/2022,"$1,001",-,"$15,000",New,
-Axne,20020367,SP,Jefferies Financial group Inc. P,Not in S&P 500,02/03/2022,"$1,001",-,"$15,000",New,
-Axne,20020367,SP,Keysight Technologies Inc. ,KEYS,02/03/2022,"$1,001",-,"$15,000",New,
-Axne,20020367,SP,Liberty Broadband Corporation,Not in S&P 500,02/03/2022,"$1,001",-,"$15,000",New,
-Axne,20020367,SP,Starbucks Corporation ,SBUX,02/03/2022,"$1,001",-,"$15,000",New,
-Axne,20020367,SP,US Bancorp Dep SHS PFD F Non,Not in S&P 500,02/03/2022,"$1,001",-,"$15,000",New,US Bancorp DEP SHS PFD F Non-Cumulative Series F6.5% Debt Classification: Preferred Stock
-Axne,20020367,SP,US Bancorp Dep SHS PFD F Non,Not in S&P 500,02/03/2022,"$1,001",-,"$15,000",New,US Bancorp DEP SHS PFD F Non-Cumulative Series F6.5% Debt Classification: Preferred Stock
+Aderholt,20022132,DC,"Tesla, Inc. ",TSLA,S,12/05/2022,12/05/2022,"$1,001 - $15,000",New,
+Allen,20020448,SP,Putnam ultra Short Duration,NaN,S,01/25/2022,01/28/2022,"$50,001 - $100,000",New,
+Allen,20020448,SP,Starbucks Corporation ,NaN,S,01/25/2022,01/28/2022,"$15,001 - $50,000",New,
+Allen,20020585,SP,"Activision blizzard, Inc ",NaN,02/14/2022,"$1,001",-,"$15,001 - $50,000",New,
+Allen,20020448,SP,Walt Disney Company ,DIS,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20021951,SP,"PayPal Holdings, Inc. ",PYPL,S,11/09/2022,11/10/2022,"$1,001 - $15,000",New,
+Axne,20021951,SP,"PayPal Holdings, Inc. ",PYPL,S,11/09/2022,11/10/2022,"$1,001 - $15,000",New,
+Axne,20021951,SP,Lockheed Martin Corporation ,LMT,S,11/03/2022,11/04/2022,"$1,001 - $15,000",New,
+Axne,20021705,SP,Liberty Broadband Corporation,NaN,S,09/08/2022,09/09/2022,"$1,001 - $15,000",New,
+Axne,20021705,SP,Liberty Broadband Corporation,NaN,S,09/08/2022,09/09/2022,"$1,001 - $15,000",New,
+Axne,20021555,SP,Liberty Broadband Corporation,NaN,S (partial),08/12/2022,08/13/2022,"$1,001 - $15,000",New,
+Axne,20021236,SP,"BellRing Brands, Inc. ",NaN,S,06/15/2022,06/16/2022,"$1,001 - $15,000",New,
+Axne,20021134,SP,KKR & Company Inc. 6% MCONV,NaN,P,05/25/2022,05/26/2022,"$1,001 - $15,000",New,Preferred stock - Maturity date 09/15/2023
+Axne,20021134,SP,KKR & Company Inc. 6% MCONV,NaN,P,05/25/2022,05/26/2022,"$1,001 - $15,000",New,Preferred stock - Maturity date 09/15/2023
+Axne,20021134,SP,JP Morgan Chase & Co. ,JPM,S,05/12/2022,05/13/2022,"$1,001 - $15,000",New,
+Axne,20021134,SP,JP Morgan Chase & Co. ,JPM,S,05/12/2022,05/13/2022,"$1,001 - $15,000",New,
+Axne,20021134,SP,Danaher Corporation ,DHR,P,05/10/2022,05/11/2022,"$1,001 - $15,000",New,
+Axne,20021134,SP,Danaher Corporation ,DHR,P,05/10/2022,05/11/2022,"$1,001 - $15,000",New,
+Axne,20021134,SP,Johnson & Johnson ,JNJ,S,05/04/2022,05/05/2022,"$1,001 - $15,000",New,
+Axne,20021134,SP,Johnson & Johnson ,JNJ,S,05/04/2022,05/05/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Axne,20020474,SP,KKR & Company Inc. 6% MCONV P,NaN,02/16/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020474,SP,KKR & Company Inc. 6% MCONV P,NaN,02/16/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020474,SP,Lockheed Martin Corporation S ,LMT,02/25/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020474,SP,Lockheed Martin Corporation S ,LMT,02/11/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020474,SP,"PayPal Holdings, Inc. ",PYPL,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020474,SP,"PayPal Holdings, Inc. ",PYPL,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020367,SP,Brown Forman Inc Class B ,BF.B,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020367,SP,global Payments Inc. ,NaN,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020367,SP,Jefferies Financial group Inc. P,NaN,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020367,SP,Keysight Technologies Inc. ,KEYS,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020367,SP,Liberty Broadband Corporation,NaN,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020367,SP,Starbucks Corporation ,SBUX,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Axne,20020367,SP,US Bancorp Dep SHS PFD F Non,NaN,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,US Bancorp DEP SHS PFD F Non-Cumulative Series F6.5% Debt Classification: Preferred Stock
+Axne,20020367,SP,US Bancorp Dep SHS PFD F Non,NaN,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,US Bancorp DEP SHS PFD F Non-Cumulative Series F6.5% Debt Classification: Preferred Stock
+Beyer,20020354,JT,"guardant Health, Inc. ",NaN,Transaction,Date,Notification,Amount,New,sale of 50 units guardant Health Inc common
+Beyer,20020354,JT,"TJX Companies, Inc. ",TJX,Transaction,Date,Notification,Amount,New,sale 130 units TJX Cos Inc new common
+Beyer,20020047,JT,BLF FedFund TDDXX [CS],NaN,S,12/06/2021,12/16/2021,"$15,001 - $50,000",New,sweep sale Blackrock Liq FDS Fed
+Beyer,20020047,JT,Pittsburgh Pa Sch 3.00% 09/01/33,NaN,P,12/06/2021,12/16/2021,"$15,001 - $50,000",New,"30,000 units Pittsburgh PA School 3.00% 09/01/33"
+Beyer,20022048,JT,Clark Cnty Nev Limited,NaN,P,11/10/2022,11/29/2022,"$15,001 - $50,000",New,"30,000 units Clark County Nevada Limited 3.00% 06/01/37"
+Beyer,20022048,JT,Virginia St Pub 3.00% 10/01/38,Government Securities and Agency Debt,S,11/10/2022,11/29/2022,"$15,001 - $50,000",New,"redemption of 30,000 units of Virginia State Public 3.00% 10/01/38"
+Beyer,20021193,JT,Farmington NM Pollutn,NaN,S,06/02/2022,06/11/2022,"$15,001 - $50,000",New,Called security
+Beyer,20021091,JT,New York NY City Transitional,NaN,S,05/02/2022,05/22/2022,"$15,001 - $50,000",New,called Security
+Beyer,20020868,JT,California St GO BDS,NaN,S,04/11/2022,04/25/2022,"$15,001 - $50,000",New,called security
+Beyer,20020868,JT,Halifax County VA Indl Dev,NaN,S,04/07/2022,04/25/2022,"$15,001 - $50,000",New,Called Security
+Beyer,20020618,JT,Virginia College Bldg 3.00%,NaN,S,03/07/2022,03/13/2022,"$15,001 - $50,000",New,"sale of 35,000 units Virginia College Building 3.00% 02/01/37"
+Beyer,20020618,JT,VgP N.V. NPV common [PS],NaN,S,03/01/2022,03/13/2022,"$15,001 - $50,000",New,sale of 100 units VgP N.V. NPV common
+Beyer,20020354,JT,Accenture plc Class A Ordinary,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale 65 units Accenture PLC
+Beyer,20020354,JT,Alphabet Inc. ,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 16 units Alphabet Inc Class C
+Beyer,20020354,JT,"Amazon.com, Inc. ",AMZN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 9 units Amazon.com Inc
+Beyer,20020354,JT,Apple Inc. ,AAPL,S,02/28/2022,03/01/2022,"$50,001 - $100,000",New,sale of 400 units Apple Inc commonID Owner Asset Transaction Date Notification Amount Cap.
+Beyer,20020354,JT,ASML Holding N.V.,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 28 units ASML Holding NV
+Beyer,20020354,JT,Costco Wholesale Corporation,COST,S,02/28/2022,03/01/2022,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount Cap.,sale of 40 units Costco Wholesale Corp
+Beyer,20020354,JT,"Estee Lauder Companies, Inc. ",EL,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 115 units Estee Lauder Companies Class A
+Beyer,20020354,JT,"goldman Sachs group, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 75 units goldman Sachs group Inc common
+Beyer,20020354,JT,"Illumina, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 50 units Illumina Inc common
+Beyer,20020354,JT,"Impinj, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 255 units Impinj Inc common
+Beyer,20020354,JT,"Intellia Therapeutics, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 215 units Intellia Therapeutics Inc common
+Beyer,20020354,JT,"Intuitive Surgical, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 75 units Intuitive Surgical Inc.
+Beyer,20020354,JT,LVMH Moet Hennessy Louis,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 175 units LVMH Moet Hennessy ADR
+Beyer,20020354,JT,Microsoft Corporation ,MSFT,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 150 units Microsoft Corp
+Beyer,20020354,JT,MSCI Inc ,MSCI,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 51 units MSCI Inc common
+Beyer,20020354,JT,"Nasdaq, Inc. ",NDAQ,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 125 units NASDAQ Inc
+Beyer,20020354,JT,"Nike, Inc. ",NKE,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 175 units Nike Inc Class B common
+Beyer,20020354,JT,NVIDIA Corporation ,NVDA,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 200 units Nvidia Corp
+Beyer,20020354,JT,"Roper Technologies, Inc. ",ROP,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 40 units Roper Technologies Inc common
+Beyer,20020354,JT,Target Corporation ,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 115 units Target Corp
+Beyer,20020354,JT,Terreno Realty Corporation,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 225 units Terreno Realty Corp
+Beyer,20020354,JT,UnitedHealth group Incorporated,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 45 units UnitedHealth group Inc
+Beyer,20020354,JT,Fontana Calif Univ Sch 3.00%,NaN,P,02/08/2022,02/17/2022,"$15,001 - $50,000",New,"15,000 units Fontana Calif Univ Sch 3.00% 08/01/38"
+Beyer,20020354,JT,CarMax Inc ,KMX,S,02/01/2022,02/01/2022,"$15,001 - $50,000",New,sale of 290 units of Carmax Inc. Common
+Beyer,20020251,JT,Berkshire Hathaway Inc. New,BRK.B,S,01/20/2022,01/21/2022,"$15,001 - $50,000",New,sale of 50 shares of Berkshire Hathaway Class B
+Beyer,20020251,JT,BLF FedFund TDDXX [CS],NaN,P,01/20/2022,01/28/2022,"$15,001 - $50,000",New,sweep purchase Blackrock Liq FDS FedFund
+Beyer,20020251,JT,Columbia Tenn Wtrwks Rev 5.00%,NaN,S,01/20/2022,01/28/2022,"$15,001 - $50,000",New,Called Security Columbia Tenn Waterworks Revenue 5.00% 12/01/32
+Beyer,20020251,JT,BLF FedFund TDDXX [CS],NaN,S,01/14/2022,01/19/2022,"$15,001 - $50,000",New,sweep sale of Blackrock Liq FDS FediD owner asset transaction Date notification amount cap.
+Beyer,20020251,JT,Virginia St Pub 3.00% 10/01/38,NaN,P,01/14/2022,01/19/2022,"$15,001 - $50,000",New,"30,000 units Virginia State Pub 3.00% 10/01/38"
+Beyer,20020251,JT,BLF FedFund TDDXX [CS],NaN,P,01/11/2022,01/19/2022,"$15,001 - $50,000",New,sweep purchase of Blackrock Liq FDS Fed
+Beyer,20020251,JT,BLF FedFund TDDXX [CS],NaN,S,01/06/2022,01/19/2022,"$15,001 - $50,000",New,sweep sale of Blackrock Liq FDS Fed
+Beyer,20020618,JT,Daifuku Co Ltd Ordinary Shares S,NaN,03/13/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 65 units Daifuku Co Ltd
+Beyer,20020618,JT,Fanuc Limited Ordinary Shares S,NaN,03/13/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 40 units Fanuc Ltd
+Beyer,20020618,JT,"NextEra Energy, Inc. ",NEE,03/13/2022,"$1,001",-,"$15,001 - $50,000",New,"sale of 15,000 units NextEra Energy Cap Holdings"
+Beyer,20020354,JT,Accenture plc Class A Ordinary P,NaN,02/17/2022,"$1,001",-,"$15,001 - $50,000",New,5 units Accenture
+Beyer,20020354,JT,Berkshire Hathaway Inc. New S,BRK.B,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 36 units Berkshire Hathaway Inc Class B
+Beyer,20020354,JT,Berkshire Hathaway Inc. New P,BRK.B,02/17/2022,"$1,001",-,"$15,001 - $50,000",New,six units Berkshire Hathaway B
+Beyer,20020354,JT,"Block, Inc. Class A Common Stock, S",NaN,02/17/2022,"$1,001",-,"$15,001 - $50,000",New,"sale 30 units Block Inc Class A; $1,578 capital gain"
+Beyer,20020354,JT,"Cadence Design Systems, Inc. S",CDNS,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 80 units Cadence Design System Inc
+Beyer,20020354,JT,Cognex Corporation ,NaN,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 115 units Cognex Corp common
+Beyer,20020354,JT,"CryoPort, Inc. ",NaN,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 220 units Cryoport Inc common
+Beyer,20020354,JT,CVS Health Corporation ,CVS,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 90 units CVS Health Corp common
+Beyer,20020354,JT,Ecolab Inc. ,ECL,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale 60 units Ecolab Inc common
+Beyer,20020354,JT,Franco,NaN,03/02/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 35 units Franco-Nevada Corp
+Beyer,20020354,JT,iShares gold Trust Shares of the S,NaN,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 150 units iShares gold Trust
+Beyer,20020354,JT,JP Morgan Chase & Co. ,JPM,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale 105 units JP Morgan Chase & Co
+Beyer,20020354,JT,Kadant Inc ,NaN,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale 80 units Kadant Inc commonID Owner Asset Transaction Date Notification Amount Cap.
+Beyer,20020354,JT,Morgan Stanley FR Var S,NaN,02/17/2022,"$1,001",-,"$15,001 - $50,000",New,"redemption of 15,000 units Morgan Stanley FR Var 05/04/2027"
+Beyer,20020354,JT,MSCI Inc ,MSCI,02/17/2022,"$1,001",-,"$15,001 - $50,000",New,"sale of four units of MSCI Inc; $1,098 capital gain"
+Beyer,20020354,JT,Nestle SA Sponsored ADR S,NaN,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 100 units Nestle Nam Spon ADR
+Beyer,20020354,JT,Novartis Ag ,NaN,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 55 units Novartis Ag Spon ADR
+Beyer,20020354,JT,"Pepsico, Inc. ",PEP,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 45 units of Pepsico Inc common
+Beyer,20020354,JT,"Regeneron Pharmaceuticals, Inc. S",NaN,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 21 units Regeneron Pharmaceuticals
+Beyer,20020354,JT,Verizon Communications Inc. ,VZ,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 79 units Verizon Communications Inc
+Beyer,20020354,JT,Visa Inc. ,V,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 70 units Visa Inc Class A
+Beyer,20020354,JT,Walt Disney Company ,DIS,03/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 100 units Walt Disney Co
+Beyer,20020251,JT,Berkshire Hathaway Inc. New P,BRK.B,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,5 units Berkshire Hathaway Inc Class B
+Beyer,20020251,JT,BLF FedFund TDDXX [CS] S,NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,sweep sale Blackrock Liq FDS FedFund
+Beyer,20020251,JT,BLF FedFund TDDXX [CS] S,NaN,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,sweep sale of Blackrock Liq FDS Fed
+Beyer,20020251,JT,"Block, Inc. Class A Common Stock, S",NaN,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,"sale of 25 units Block Inc Class A; $1,859 capital gain."
+Beyer,20020251,JT,Costco Wholesale Corporation P,COST,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,5 units Costco Wholesale Corp
+Beyer,20020251,JT,"CryoPort, Inc. ",NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 35 units Cryoport Inc Common
+Beyer,20020251,JT,"CryoPort, Inc. ",NaN,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,"79 units Cryoport Inc; capital gains $1,483"
+Beyer,20020251,JT,"CryoPort, Inc. ",NaN,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,"sale of 66 units Cryoport Inc; $1,241 capital gain"
+Beyer,20020251,JT,CVS Health Corporation ,CVS,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,49 units CVS Health Corp
+Beyer,20020251,JT,"guardant Health, Inc. ",NaN,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 25 units guardant Health Inc common
+Beyer,20020251,JT,iShares MSCI ACWI ex US S,NaN,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,sale 35 units iShares S&P global Healthcare ETF
+Beyer,20020251,JT,iShares MSCI ACWI ex US S,NaN,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 80 units iShares Tr US Telecom ETF
+Beyer,20020251,JT,Novartis Ag ,NaN,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,33 units Novartis Ag Spon ADR
+Beyer,20020251,JT,"Pepsico, Inc. ",PEP,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,15 units Pepsico Inc common
+Beyer,20020251,JT,"Pepsico, Inc. ",PEP,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,25 units Pepsico Inc common
+Beyer,20020251,JT,"PNC Financial Services group, Inc. S",PNC,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,sale of 15 shares of PNC Financial Services group Inc
+Beyer,20020251,JT,Terreno Realty Corporation P,NaN,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,25 units Terreno Realty Corp
+Beyer,20020251,JT,Terreno Realty Corporation P,NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,20 units Terreno Realty Corp
+Beyer,20020251,JT,"TJX Companies, Inc. ",TJX,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,25 units TJX Companies Inc.
+Beyer,20020251,JT,VanEck Biotech ETF ,NaN,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,sale 17 units Vaneck ETF Trust Biotech
+Beyer,20020251,JT,Verizon Communications Inc. ,VZ,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,54 units Verizon Communications
+Beyer,20020047,JT,"AIA group, Ltd. Sponsored S",NaN,12/16/2021,"$1,001",-,"$15,001 - $50,000",New,sale 405 units AIA group Ltd
+Beyer,20020047,JT,BLF FedFund TDDXX [CS] P,NaN,12/16/2021,"$1,001",-,"$15,001 - $50,000",New,sweep purchase Blackrock Liq FDS Fed
+Beyer,20020047,JT,BLF FedFund TDDXX [CS] S,NaN,12/16/2021,"$1,001",-,"$15,001 - $50,000",New,sweep sale Blackrock Liq FDS Fed
+Beyer,20020047,JT,CVS Health Corporation ,CVS,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,purchase 36 units CVS Health Corp commonID Owner Asset Transaction Date Notification Amount Cap.
+Beyer,20020047,JT,Fiverr International Ltd. Ordinary S,NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,sale 30 units Fiverr Intl Ltd Ordinary
+Beyer,20020047,JT,"guardant Health, Inc. ",NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,sale 35 units guardant Health Inc common
+Beyer,20020047,JT,iShares global Healthcare ETF P,NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,purchase 35 shares iShares S&P global Healthcare
+Beyer,20020047,JT,iShares U.S. Telecommunications P,NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,purchase iShares US Telecommunications
+Beyer,20020047,JT,"Nasdaq, Inc. ",NDAQ,12/16/2021,"$1,001",-,"$15,001 - $50,000",New,five units NASDAQ Inc
+Beyer,20020047,JT,Novartis Ag ,NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,sale 40 units Novartis Ag Spon ADR
+Beyer,20020047,JT,VanEck Biotech ETF ,NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,purchase 17 shares Vaneck Trust BiotechID Owner Asset Transaction Date Notification Amount Cap.
+Beyer,20020047,JT,Verizon Communications Inc. ,VZ,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,sale 50 units Verizon Communications
+Blumenauer,20021808,SP,Newmont Corporation ,NEM,Transaction,Date,Notification,Amount,New,Part of my spouse's retirement portfolio.
+Blumenauer,20020168,SP,HP INC. 2.2%25 [CS],NaN,P,12/16/2021,01/05/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20022078,SP,US Treasur NT 2% 11/30/22,Government Securities and Agency Debt,S,11/30/2022,12/04/2022,"$50,001 - $100,000",New,Full Redemption. Part of my spouse's retirement portfolio.
+Blumenauer,20022078,SP,Northwest Natural Holding Company,NaN,P,11/15/2022,11/21/2022,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20021970,SP,Apple Inc. ,AAPL,P,10/28/2022,11/10/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021970,SP,Verizon Communications Inc.,VZ,P,10/10/2022,11/10/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021970,SP,AT&T Inc. ,T,S,10/05/2022,11/10/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021970,SP,Toyota Motor Credit 3%25 [CS],NaN,P,10/03/2022,11/10/2022,"$1,001 - $15,000",New,Bond interest. Part of my spouse's retirement portfolio.
+Blumenauer,20021808,SP,"Alaska Air Group, Inc. ",NaN,P,09/30/2022,10/05/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021808,SP,Amgen Inc. ,AMGN,P,09/26/2022,10/05/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021808,SP,Centene Corporation ,CNC,P,09/26/2022,10/05/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021808,SP,Emerson Electric Company ,EMR,P,09/26/2022,10/05/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021808,SP,JPMorgan Chase 3.25% Due,NaN,S,09/23/2022,10/05/2022,"$15,001 - $50,000",New,Full redemption. Part of my spouse's retirement portfolio.
+Blumenauer,20021808,SP,"Merck & Co., Inc. 2.4% Due",NaN,S,09/15/2022,10/05/2022,"$15,001 - $50,000",New,Full redemption. Part of my spouse's retirement portfolio.
+Blumenauer,20021651,SP,Northwest Natural Holding Company,NaN,P,08/15/2022,08/22/2022,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20021651,SP,Deere & Co 3.1%30 Due,NaN,P,08/11/2022,09/05/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021651,SP,The Allstate Cor 1.45%30,NaN,P,08/09/2022,09/05/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021651,SP,Carrier Global Corporation ,CARR,P,08/03/2022,09/05/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021651,SP,Intel Corporation ,INTC,S,08/03/2022,09/05/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021651,SP,US Treasur NT 2% 07/22,Government Securities and Agency Debt,S,08/01/2022,09/05/2022,"$15,001 - $50,000",New,"Hon. Earl Blumenauer , 09/05/2022"
+Blumenauer,20021504,SP,Koninklijke Philips N.V. NY Registry,NaN,P,07/27/2022,08/08/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021335,SP,Imax Corporation ,NaN,S,06/17/2022,07/06/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021335,SP,"Warner Bros. Discovery, Inc.",NaN,P,06/17/2022,07/06/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021335,SP,Imax Corporation ,NaN,S (partial),06/16/2022,07/06/2022,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021335,SP,Sanofi,NaN,P,05/27/2022,07/06/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20021169,SP,Northwest Natural Holding Company,NaN,P,05/13/2022,06/07/2022,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20020783,SP,Toyota Motor Credit 3%25,Corporate Securities (Bonds and Notes),P,03/22/2022,04/12/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020783,SP,"Air Products and Chemicals,",APD,P,03/10/2022,04/12/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020783,SP,Goldman Sachs Inter 3%24,Corporate Securities (Bonds and Notes),P,03/10/2022,04/12/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020783,SP,US Treasur NT 1.625%04/23,Government Securities and Agency Debt,P,03/09/2022,04/12/2022,"$50,001 - $100,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020783,SP,US Treasur NT 2.25%11/14,Government Securities and Agency Debt,P,03/09/2022,04/12/2022,"$50,001 - $100,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020783,SP,US Treasur NT 2.25%11/25,Government Securities and Agency Debt,P,03/09/2022,04/12/2022,"$50,001 - $100,000",New,"Hon. Earl Blumenauer , 04/13/2022"
+Blumenauer,20020574,SP,"Ventas, Inc. ",VTR,P,02/23/2022,03/07/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,Alphabet Inc.,NaN,P,02/11/2022,03/07/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,HP Inc. ,HPQ,S,02/09/2022,03/07/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020399,SP,Northwest Natural Holding S,NaN,S (partial),01/28/2022,02/04/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020670,SP,Northwest Natural Holding P,NaN,03/11/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,Allstate Corporation ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,Amgen Inc. ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,Brown Advisory Sustainable S,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,FirstEnergy Corp. ,FE,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,"Healthpeak Properties, Inc. S",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.ID Owner Asset Transaction Date Notification Amount Cap.
+Blumenauer,20020574,SP,Imax Corporation ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20020574,SP,Medtronic plc. Ordinary Shares P,MDT,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
+Brooks,20022197,JT,Arlington TX Higher Ed Fin [GS],NaN,P,12/08/2022,12/08/2022,"$1,001 - $15,000",New,
+Brooks,20022197,JT,U. S. Treasury Note,Government Securities and Agency Debt,P,11/29/2022,11/29/2022,"$50,001 - $100,000",New,
+Brooks,20022197,JT,Duke Energy Corp Fxd [CS],NaN,P,08/30/2022,08/30/2022,"$1,001 - $15,000",New,Corporate Bond
+Brooks,20021568,JT,Autoscope Technologies Corporation,NaN,P,07/22/2022,07/22/2022,"$1,001 - $15,000",New,
+Brooks,20021568,JT,Verizon Communications Inc. ,VZ,S,07/22/2022,07/22/2022,"$1,001 - $15,000",New,
+Brooks,20021403,JT,Nisource Inc. Fxd to 062023 [CS],NaN,P,07/13/2022,07/13/2022,"$1,001 - $15,000",New,Corporate Bond
+Brooks,20021403,JT,Duke Energy Corp Fxd to 09/20/24,NaN,P,06/22/2022,06/22/2022,"$1,001 - $15,000",New,Corporate Bond
+Brooks,20021197,JT,Duke Energy Corp Fxd to 092024,NaN,P,06/03/2022,06/03/2022,"$1,001 - $15,000",New,Corporate Bond
+Brooks,20020873,JT,Verizon Communications Inc. ,VZ,S (partial),04/11/2022,04/11/2022,"$1,001 - $15,000",New,
+Brooks,20020661,JT,Duke Energy Corp Fxd to P,NaN,03/18/2022,"$1,001",-,"$15,001 - $50,000",New,Corporate fixed income
+Burgess,20022051,SP,Stryker Corporation ,SYK,S (partial),11/28/2022,11/29/2022,"$1,001 - $15,000",New,"The terms of the call are a strike price of $240, and an expiration of 12/30/2022."
+Burgess,20022051,SP,Stryker Corporation ,SYK,S (partial),10/24/2022,10/25/2022,"$1,001 - $15,000",New,"The terms of the call are a strike price of $240, and an expiration of 11/25/2022."
+Burgess,20021716,SP,Stryker Corporation ,SYK,S (partial),08/31/2022,08/31/2022,"$1,001 - $15,000",New,
+Burgess,20021443,SP,Stryker Corporation ,SYK,S (partial),07/22/2022,07/22/2022,"$1,001 - $15,000",New,"The terms of the call are a strike price of $215, and an expiration of 08/26/2022."
+Burgess,20021279,SP,Stryker Corporation ,SYK,S (partial),06/21/2022,06/22/2022,"$1,001 - $15,000",New,"The terms of the call are a strike price of $210, and an expiration of 07/15/2022."
+Burgess,20021120,SP,Stryker Corporation ,SYK,S (partial),05/23/2022,05/23/2022,"$1,001 - $15,000",New,"The terms of the call are a strike price of $250, and an expiration of 06/17/2022."
+Burgess,20020895,SP,Stryker Corporation ,SYK,S (partial),04/18/2022,04/20/2022,"$1,001 - $15,000",New,"The terms of the call are a strike price of $270, and an expiration of 05/20/2022."
+Burgess,20020895,SP,Stryker Corporation ,SYK,S (partial),03/21/2022,03/22/2022,"$1,001 - $15,000",New,"The terms of the call are a strike price of $280, and an expiration of 04/14/2022."
+Burgess,20020315,SP,Stryker Corporation (SYK) [ST] S ,NaN,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,Partial sale of 100 shares
+Cawthorn,20021170,SPDR,S&P 500 ETF,Asset-Backed Securities,P,05/18/2022,05/23/2022,"$100,001 - $250,000",New,
+Clark,20020917,JT,United States Treasury Notes,Government Securities and Agency Debt,P,04/05/2022,05/02/2022,"$100,001 - $250,000",New,
+Clark,20020731,SP,United States Treasury Notes,Government Securities and Agency Debt,P,03/31/2022,04/04/2022,"$100,001 - $250,000",New,
+Clark,20020731,JT,United States Treasury Notes,Government Securities and Agency Debt,P,03/23/2022,04/04/2022,"$250,001 - $500,000",New,
+Connolly,20021626,JT,"Dominion Energy, Inc. ",D,S (partial),08/30/2022,08/31/2022,"$15,001 - $50,000",New,
+Connolly,20021626,JT,"Leidos Holdings, Inc. ",LDOS,S (partial),08/30/2022,08/31/2022,"$15,001 - $50,000",New,
+Connolly,20021626,JT,SCIENCE APPLICATIONS S,NaN,S (partial),08/30/2022,08/31/2022,"$1,001 - $15,000",New,
+Crenshaw,20020310,SPDR,S&P 500 (SPY) [ST] S ,NaN,01/26/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20021965,JT,COLUMBUS OHIO GO BDS 2018 A,NaN,P,10/28/2022,11/01/2022,"$1,001 - $15,000",New,"Columbus, OH"
+Curtis,20021965,JT,Abbott Laboratories ,ABT,S (partial),10/21/2022,11/01/2022,"$1,001 - $15,000",New,
+Curtis,20021965,JT,Adobe Inc. ,ADBE,P,10/21/2022,11/01/2022,"$1,001 - $15,000",New,
+Curtis,20021965,JT,"Chipotle Mexican Grill, Inc. ",CMG,P,10/21/2022,11/01/2022,"$1,001 - $15,000",New,
+Curtis,20021965,JT,T,NaN,S (partial),10/21/2022,11/01/2022,"$1,001 - $15,000",New,
+Curtis,20021965,JT,"Waste Management, Inc. ",WM,S (partial),10/21/2022,11/01/2022,"$1,001 - $15,000",New,
+Curtis,20021733,JT,MECKLENBERG CNTY N C PUB,NaN,P,09/14/2022,09/15/2022,"$1,001 - $15,000",New,"Mecklenberg County, NC"
+Curtis,20021554,JT,"AutoZone, Inc. ",AZO,P,08/12/2022,08/15/2022,"$1,001 - $15,000",New,
+Curtis,20021554,JT,Starbucks Corporation ,SBUX,P,08/12/2022,08/15/2022,"$1,001 - $15,000",New,
+Curtis,20021554,JT,Sysco Corporation ,SYY,P,08/12/2022,08/15/2022,"$1,001 - $15,000",New,
+Curtis,20021554,JT,"Ulta Beauty, Inc. ",ULTA,S,08/05/2022,08/15/2022,"$1,001 - $15,000",New,
+Curtis,20021554,JT,Schwab International Equity ETF,NaN,P,07/28/2022,08/15/2022,"$1,001 - $15,000",New,
+Curtis,20021486,JT,OSAGE CNTY KANS GO REF AND,NaN,P,06/30/2021,07/28/2022,"$1,001 - $15,000",New,"Osage County, KS"
+Curtis,20021342,JT,"AutoZone, Inc. ",AZO,P,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,"Constellation Brands, Inc. ",STZ,P,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,Deere & Company ,DE,S (partial),06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,"Goldman Sachs Group, Inc. ",GS,P,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,"Intuitive Surgical, Inc. ",ISRG,S,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,Johnson & Johnson ,JNJ,P,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,Morgan Stanley ,MS,S,06/28/2022,07/01/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Curtis,20021342,JT,"Salesforce, Inc. ",CRM,P,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,Target Corporation ,TGT,S,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,Valero Energy Corporation ,VLO,S (partial),06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20021342,JT,Zoetis Inc. Class A ,ZTS,P,06/28/2022,07/01/2022,"$1,001 - $15,000",New,
+Curtis,20020679,JT,American Express Company (AXP) S ,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,"Anthem, Inc. (ANTM) [ST] S ",NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Comcast Corporation,CMCSA,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,danaher Corporation ,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Hilton Worldwide Holdings Inc. S ,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Intercontinental Exchange Inc. P,ICE,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Johnson & Johnson ,JNJ,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Monster beverage Corporation S,MNST,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Morgan Stanley ,MS,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Progressive Corporation ,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,S&P global Inc. ,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,Target Corporation ,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,T,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020679,JT,union Pacific Corporation (uNP) S ,NaN,03/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020133,JT,"Anthem, Inc. ",NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020133,JT,"blackRock, Inc. (blK) [ST] S ",NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020133,JT,"Caterpillar, Inc. ",CAT,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020133,JT,"Citigroup, Inc. ",C,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Curtis,20020133,JT,Morgan Stanley ,MS,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+DelBene,20021864,JT,"Seattle WA MN LT PW 2.68% PWR P 10/13/2022 10/13/2022 $1,001",NaN,Transaction,Date,Notification,Amount,New,
+DelBene,20021931,JT,New York N Y Go BDS Ser.,NaN,S,10/24/2022,10/24/2022,"$500,001 - $1,000,000",New,
+DelBene,20021931,JT,New York N Y Go BDS Ser.,NaN,P,10/24/2022,10/24/2022,"$500,001 - $1,000,000",New,
+DelBene,20021931,JT,Maryland ST Go BDS Ser. 2017,NaN,P,10/20/2022,10/20/2022,"$50,001 - $100,000",New,
+DelBene,20021931,JT,Maryland ST Go BDS Ser. 2017 B,NaN,P,10/19/2022,10/19/2022,"$1,001 - $15,000",New,
+DelBene,20021864,JT,Round Rock Tex Indpt SCH Dist,NaN,P,10/17/2022,10/17/2022,"$15,001 - $50,000",New,
+DelBene,20021864,JT,Seattle WA MN LT PW 2.68% PWR,NaN,P,10/17/2022,10/17/2022,"$15,001 - $50,000",New,
+DelBene,20021864,JT,Connecticut ST Go BDS 2018 C,NaN,P,10/13/2022,10/13/2022,"$1,001 - $15,000",New,
+DelBene,20021864,JT,Maryland ST Go BDS Ser. 2017 B,NaN,P,10/13/2022,10/13/2022,"$500,001 - $1,000,000",New,
+DelBene,20021864,JT,Maryland ST Go ST Local Facs,NaN,S,10/13/2022,10/13/2022,"$500,001 - $1,000,000",New,
+DelBene,20021864,JT,Illinois ST Sales Tax Rev JR Oblig,NaN,P,10/12/2022,10/12/2022,"$15,001 - $50,000",New,
+DelBene,20021864,JT,New York N Y City Transitional Fin,NaN,P,10/07/2022,10/07/2022,"$1,001 - $15,000",New,
+DelBene,20021795,JT,US Treasury Bill23 U S T Bill,NaN,P,09/28/2022,09/28/2022,"$1,000,001 - $5,000,000",New,
+DelBene,20021795,JT,King CNTY Wash LTD Tax Go,NaN,P,09/26/2022,09/26/2022,"$500,001 - $1,000,000",New,
+DelBene,20021795,JT,Illinois ST Sales Tax Rev JR Oblig,NaN,P,09/22/2022,09/22/2022,"$1,001 - $15,000",New,
+DelBene,20021795,JT,New York ST Dorm Auth Sales Tax,NaN,P,09/22/2022,09/22/2022,"$15,001 - $50,000",New,
+DelBene,20021660,JT,ID ST BLDG Auth 5%23 5.00 % Due,NaN,S (partial),09/01/2022,09/01/2022,"$50,001 - $100,000",New,
+DelBene,20021660,JT,Wolcott CT 1.25%22 Go Utx,NaN,S,08/23/2022,08/23/2022,"$500,001 - $1,000,000",New,
+DelBene,20021406,JT,Berkeley Heights TWP N J BD,NaN,S,07/08/2022,07/08/2022,"$500,001 - $1,000,000",New,Redemption
+DelBene,20021227,JT,Connecticut ST Go BDS 2018 C,NaN,P,06/14/2022,06/14/2022,"$15,001 - $50,000",New,
+DelBene,20021227,JT,Honolulu HI City 4.00% Go Utx,NaN,P,06/13/2022,06/13/2022,"$15,001 - $50,000",New,
+DelBene,20021227,JT,New York ST Dorm Auth ST Pers,NaN,P,06/09/2022,06/09/2022,"$1,001 - $15,000",New,
+DelBene,20021227,JT,Prince Georges CNTY MD,NaN,P,06/07/2022,06/07/2022,"$100,001 - $250,000",New,
+DelBene,20021082,JT,CT ST HSG Fa HSG 2.75%,NaN,S,05/16/2022,05/16/2022,"$250,001 - $500,000",New,Redemption
+DelBene,20021082,JT,New York NY Go BDS Ser Fiscal,NaN,P,05/10/2022,05/10/2022,"$1,001 - $15,000",New,
+DelBene,20021082,JT,District Columbia Go BDS Ser,NaN,S,05/06/2022,05/06/2022,"$500,001 - $1,000,000",New,
+DelBene,20021082,JT,New York NY City Transitional,NaN,P,05/06/2022,05/06/2022,"$500,001 - $1,000,000",New,
+DelBene,20021082,JT,Illinois ST Sales Tax Rev JR,NaN,P,05/03/2022,05/03/2022,"$250,001 - $500,000",New,
+DelBene,20020815,JT,Maryland ST Go ST Local Facs LN,NaN,P,04/11/2022,04/11/2022,"$1,001 - $15,000",New,
+DelBene,20020642,JT,Colorado Health Fac 5.00% Hosp,NaN,S,03/15/2022,03/15/2022,"$500,001 - $1,000,000",New,
+DelBene,20020642,JT,WA ST HlTH Care Fa 5.00% Hosp,NaN,P,03/15/2022,03/15/2022,"$500,001 - $1,000,000",New,
+DelBene,20020572,SP,MSFT Common Stock [OT],NaN,S,02/28/2022,02/28/2022,"$500,001 - $1,000,000",New,Sale of vested Microsoft Common Stock. This sale is related to the vesting of RSUs and is part of the forward
+DelBene,20020572,SP,Forward Contract ,MSFT,P,02/09/2022,02/09/2022,"$5,000,001 - $25,000,000",New,Forward Contract provides for the sale of Microsoft Common stock following the vesting of RSUs every six
+DelBene,20020478,JT,Illinois HSg Dev Auth Rev BDS,NaN,P,02/08/2022,02/08/2022,"$15,001 - $50,000",New,
+DelBene,20020478,JT,New York ST Dorm Auth Sales Tax,NaN,P,02/08/2022,02/08/2022,"$15,001 - $50,000",New,
+DelBene,20020478,JT,New York ST Dorm Auth ST Pers,NaN,P,02/04/2022,02/04/2022,"$15,001 - $50,000",New,
+DelBene,20020358,JT,New York ST Dorm Auth Sales Tax,NaN,P,01/18/2022,01/18/2022,"$15,001 - $50,000",New,
+DelBene,20020243,JT,Maryland ST Dept TR 5% Comb,NaN,P,01/14/2022,01/14/2022,"$15,001 - $50,000",New,
+DelBene,20020243,JT,los Angeles CNTY Calif Tax And,NaN,S,01/11/2022,01/11/2022,"$500,001 - $1,000,000",New,
+DelBene,20020243,JT,Maryland ST Dept TR 5% Comb,NaN,P,01/10/2022,01/10/2022,"$15,001 - $50,000",New,
+DelBene,20020243,JT,Prince georges CNTY MD go,NaN,P,01/10/2022,01/10/2022,"$500,001 - $1,000,000",New,
+DelBene,20020243,JT,Maryland ST Dept TR 5% Comb,NaN,P,01/07/2022,01/07/2022,"$15,001 - $50,000",New,
+DelBene,20020243,JT,Round Rock Tex Indpt SCH Dist,NaN,P,01/07/2022,01/07/2022,"$15,001 - $50,000",New,
+DelBene,20020243,JT,Florida HSg Fin Corp Homeowner S,NaN,S (partial),01/03/2022,01/03/2022,"$15,001 - $50,000",New,
+DelBene,20020725,JT,District Columbia gO BDS Ser P,NaN,03/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+DelBene,20020725,JT,Florida HSg Fin Corp Homeowner S ,NaN,04/01/2022,"$1,001",-,"$15,001 - $50,000",New,Partial Redemption
+DelBene,20020642,JT,Prince georges CNTY MD go P,NaN,03/02/2022,"$1,001",-,"$15,001 - $50,000",New,
+DelBene,20020478,JT,New York ST Dorm Auth ST Pers P,NaN,02/15/2022,"$1,001",-,"$15,001 - $50,000",New,
+DelBene,20020134,JT,District Columbia go BDS Ser. P,NaN,12/23/2021,"$1,001",-,"$15,001 - $50,000",New,
+Estes,20021149,JT,Honeywell International Inc.,HON,S,05/31/2022,06/02/2022,"$15,001 - $50,000",New,Sale of stock
+Foxx,20022068,JT,Nucor Corporation ,NUE,Transaction,Date,Notification,Amount,New,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,Transaction,Date,Notification,Amount,New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,Transaction,Date,Notification,Amount,New,
+Foxx,20020914,JT,Rio Tinto Plc ,NaN,Transaction,Date,Notification,Amount,New,
+Foxx,20020153,JT,BP p.l.c. ,NaN,S,12/23/2021,12/23/2021,"$100,001 - $250,000",New,
+Foxx,20022068,JT,Mosaic Company ,MOS,S,12/21/2022,11/21/2022,"$15,001 - $50,000",New,
+Foxx,20020153,JT,"Sculptor Capital Management, Inc.",NaN,S,12/20/2021,12/20/2021,"$15,001 - $50,000",New,
+Foxx,20020153,JT,Schwab u.S. REIT ETF ,NaN,P,12/16/2021,12/16/2021,"$50,001 - $100,000",New,
+Foxx,20022068,JT,Marathon Oil Corporation ,NaN,P,11/28/2022,11/28/2022,"$1,001 - $15,000",New,
+Foxx,20022068,JT,Marathon Oil Corporation,NaN,P,11/21/2022,11/21/2022,"$15,001 - $50,000",New,
+Foxx,20022068,JT,Sisecam Resources LP Common Units,NaN,P,11/18/2022,11/18/2022,"$1,001 - $15,000",New,
+Foxx,20022068,JT,"Alliance Resource Partners, L.P.",NaN,P,11/15/2022,11/15/2022,"$1,001 - $15,000",New,
+Foxx,20022068,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,11/15/2022,11/15/2022,"$1,001 - $15,000",New,
+Foxx,20022068,JT,British American Tobacco,NaN,S,11/02/2022,11/02/2022,"$50,001 - $100,000",New,
+Foxx,20022068,JT,AT&T Inc. ,T,P,11/01/2022,11/01/2022,"$1,001 - $15,000",New,
+Foxx,20022068,JT,Takeda Pharmaceutical Company,NaN,P,11/01/2022,11/01/2022,"$1,001 - $15,000",New,
+Foxx,20021919,JT,Marathon Oil Corporation ,NaN,P,10/31/2022,10/31/2022,"$1,001 - $15,000",New,
+Foxx,20021919,JT,Capital Power Corp. Ordinary,NaN,S,10/21/2022,10/21/2022,"$50,001 - $100,000",New,
+Foxx,20021919,JT,"NextEra Energy, Inc. ",NEE,S,10/14/2022,10/14/2022,"$100,001 - $250,000",New,
+Foxx,20021919,JT,Procter & Gamble Company ,PG,S,10/07/2022,10/07/2022,"$50,001 - $100,000",New,
+Foxx,20021919,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,10/05/2022,10/05/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,"Ingles Markets, Incorporated",NaN,S,09/30/2022,09/30/2022,"$15,001 - $50,000",New,
+Foxx,20021790,JT,National Fuel Gas Company,NaN,S,09/30/2022,09/30/2022,"$15,001 - $50,000",New,
+Foxx,20021790,JT,Golden Ocean Group Limited,NaN,S,09/29/2022,09/29/2022,"$15,001 - $50,000",New,
+Foxx,20021790,JT,Green Plains Partners LP,NaN,P,09/29/2022,09/29/2020,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Alcoa Corporation ,NaN,S,09/28/2022,09/28/2022,"$15,001 - $50,000",New,
+Foxx,20021790,JT,Newtek Business Services,NaN,S,09/27/2022,09/27/2022,"$15,001 - $50,000",New,
+Foxx,20021790,JT,San Juan Basin Royalty Trust,NaN,S,09/26/2022,09/26/2020,"$15,001 - $50,000",New,
+Foxx,20021790,JT,"Apollo Asset Management, Inc.",NaN,P,09/23/2022,09/23/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Green Plains Partners LP,NaN,P,09/23/2022,09/23/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Newtek Business Services Corp.,NaN,P,09/20/2022,09/20/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Newtek Business Services Corp.,NaN,P,09/19/2202,09/19/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Duke Energy Corporation Depositary,NaN,P,09/19/2022,09/19/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,"Apollo Asset Management, Inc.",NaN,P,09/16/2022,09/16/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,"CF Industries Holdings, Inc. ",CF,P,09/16/2022,09/16/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,USD Partners LP Common Units,NaN,P,09/16/2022,09/16/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Golden Ocean Group Limited ,NaN,P,09/15/2022,09/15/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Nucor Corporation ,NUE,P,09/14/2022,09/14/2022,"$50,001 - $100,000",New,
+Foxx,20021790,JT,"CF Industries Holdings, Inc. ",CF,P,09/12/2022,09/12/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Foxx,20021790,JT,"CF Industries Holdings, Inc. ",CF,P,09/07/2022,09/07/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,National Fuel Gas Company ,NaN,P,09/07/2022,09/07/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Newtek Business Services Corp.,NaN,P,09/06/2022,09/06/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,Alcoa Corporation ,NaN,P,09/01/2022,09/01/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,"CF Industries Holdings, Inc.",CF,P,09/01/2022,09/01/2022,"$15,001 - $50,000",New,
+Foxx,20021790,JT,Green Plains Partners LP,NaN,P,09/01/2022,09/01/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,"National Health Investors, Inc.",NaN,S,09/01/2022,09/01/2022,"$50,001 - $100,000",New,
+Foxx,20021790,JT,Newtek Business Services Corp.,NaN,P,09/01/2022,09/01/2022,"$1,001 - $15,000",New,
+Foxx,20021790,JT,San Juan Basin Royalty Trust ,NaN,P,09/01/2022,09/01/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Alcoa Corporation ,NaN,P,08/31/2022,08/31/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,P,08/31/2022,08/31/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,P,08/31/2022,08/31/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Alcoa Corporation ,NaN,P,08/30/2022,08/30/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited,NaN,P,08/30/2022,08/30/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,"Ingles Markets, Incorporated",NaN,P,08/30/2022,08/30/2022,"$50,001 - $100,000",New,
+Foxx,20021630,JT,USD Partners LP Common Units,NaN,P,08/30/2022,08/30/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,P,08/30/2022,08/30/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Newtek Business Services Corp.,NaN,P,08/30/2021,08/30/2021,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited ,NaN,P,08/29/2022,08/29/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,P,08/29/2022,08/29/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,08/26/2022,08/26/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited ,NaN,P,08/26/2022,08/26/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Green Plains Partners LP,NaN,P,08/26/2022,08/26/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,P,08/26/2022,08/26/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,P,08/26/2022,08/26/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,P,08/25/2022,08/25/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited ,NaN,P,08/24/2022,08/24/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,P,08/24/2022,08/24/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Sisecam Resources LP Common Units,NaN,P,08/24/2022,08/24/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,P,08/24/2022,08/24/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,"British American Tobacco Industries,",NaN,P,08/23/2022,08/23/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,FLEX LNG Ltd. Ordinary Shares,NaN,P,08/23/2022,08/23/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,P,08/23/2022,08/23/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Alcoa Corporation ,NaN,P,08/22/2022,08/22/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited ,NaN,P,08/22/2022,08/22/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Kellogg Company ,K,P,08/22/2022,08/22/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Foxx,20021630,JT,Alcoa Corporation ,NaN,P,08/19/2022,08/19/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,"AT&T Inc. Depositary Shares, each ",NaN,P,08/19/2022,08/19/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited ,NaN,P,08/19/2022,08/19/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited ,NaN,P,08/18/2022,08/18/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Golden Ocean Group Limited ,NaN,P,08/17/2022,08/17/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,P,08/17/2022,08/17/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,GSK plc American Depositary Shares,NaN,P,08/16/2022,08/16/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,San Juan Basin Royalty Trust ,NaN,P,08/11/2022,08/11/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,GSK plc American Depositary,NaN,P,08/10/2022,08/10/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,Green Plains Partners LP,NaN,P,08/09/2022,08/09/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,GSK plc American Depositary Shares,NaN,P,08/09/2022,08/09/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,National Fuel Gas Company ,NaN,P,08/08/2022,08/08/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,GSK plc American Depositary,NaN,P,08/05/2022,08/05/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,Mosaic Company ,MOS,P,08/05/2022,08/05/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,P,08/05/2022,08/05/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,Alcoa Corporation ,NaN,P,08/04/2022,08/04/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,FLEX LNG Ltd. Ordinary,NaN,P,08/04/2022,08/04/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,Hess Corporation ,HES,P,08/04/2022,08/04/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Mosaic Company ,MOS,P,08/04/2022,08/04/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Vector Group Ltd. ,NaN,P,08/04/2022,08/04/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Hess Corporation ,HES,P,08/03/2022,08/03/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,National Fuel Gas Company ,NaN,P,08/03/2022,08/03/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,Alcoa Corporation ,NaN,P,08/02/2022,08/02/2022,"$1,001 - $15,000",New,
+Foxx,20021630,JT,KNOT Offshore Partners LP,NaN,S,08/02/2022,08/02/2022,"$50,001 - $100,000",New,
+Foxx,20021630,JT,National Fuel Gas Company,NaN,P,08/02/2022,08/02/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,FLEX LNG Ltd. Ordinary,NaN,P,08/01/2022,08/01/2022,"$15,001 - $50,000",New,
+Foxx,20021630,JT,"Kinder Morgan, Inc. ",KMI,S,08/01/2022,08/01/2022,"$50,001 - $100,000",New,
+Foxx,20021630,JT,Mosaic Company ,MOS,P,08/01/2022,08/01/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,"British American Tobacco Industries,",NaN,P,06/30/2022,06/30/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,"Altria Group, Inc. ",MO,S,06/29/2022,06/29/2022,"$100,001 - $250,000",New,
+Foxx,20021315,JT,"National Health Investors, Inc.",NaN,P,06/28/2022,06/28/2022,"$15,001 - $50,000",New,
+Foxx,20021315,JT,Enterprise Products Partners,NaN,S,06/23/2022,06/23/2022,"$100,001 - $250,000",New,
+Foxx,20021315,JT,Exxon Mobil Corporation ,XOM,S,06/23/2022,06/23/2022,"$100,001 - $250,000",New,
+Foxx,20021315,JT,"Plains All American Pipeline, L.P.",NaN,S,06/23/2022,06/23/2022,"$100,001 - $250,000",New,
+Foxx,20021315,JT,"Clearway Energy, Inc. Class A",NaN,S,06/22/2022,06/22/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,Manulife Financial,NaN,S,06/22/2022,06/22/2022,"$100,001 - $250,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Foxx,20021315,JT,SCHWAB S&P 500 INDEX,NaN,S,06/22/2022,06/22/2022,"$100,001 - $250,000",New,Mutual Fund
+Foxx,20021315,JT,UBS BANK USA 3.2%24CD,Other,P,06/22/2022,06/22/2022,"$50,001 - $100,000",New,CD maturity date 7/1/24
+Foxx,20021315,JT,Duke Energy Corporation Depositary,NaN,P,06/17/2022,06/17/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,Rio Tinto Plc ,NaN,S,06/17/2022,06/17/2022,"$50,001 - $100,000",New,
+Foxx,20021315,JT,"Clearway Energy, Inc. Class A",NaN,P,06/16/2022,06/16/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,"Clearway Energy, Inc. Class",NaN,S,06/15/2022,06/15/2022,"$50,001 - $100,000",New,
+Foxx,20021315,JT,Magellan Midstream Partners L.P.,NaN,P,06/15/2022,06/15/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,AT&T Inc. ,T,S,06/14/2022,06/14/2022,"$100,001 - $250,000",New,
+Foxx,20021315,JT,"Apollo Asset Management, Inc.",NaN,P,06/13/2022,06/13/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,"British American Tobacco Industries,",NaN,P,06/13/2022,06/13/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,Exxon Mobil Corporation ,XOM,P,06/13/2022,06/13/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,Green Plains Partners LP,NaN,S,06/13/2022,06/13/2022,"$15,001 - $50,000",New,
+Foxx,20021315,JT,KNOT Offshore Partners LP Common,NaN,P,06/10/2022,06/10/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,Sisecam Resources LP Common Units,NaN,P,06/10/2022,06/10/2022,"$1,001 - $15,000",New,
+Foxx,20021315,JT,CAPITAL ONE BANK ,NaN,P,06/03/2022,06/03/2022,"$50,001 - $100,000",New,CD Maturity date 6/9/25
+Foxx,20021315,JT,TotalEnergies SE ,NaN,S,06/03/2022,06/03/2022,"$50,001 - $100,000",New,
+Foxx,20021315,JT,USD Partners LP Common,NaN,P,06/03/2022,06/03/2022,"$15,001 - $50,000",New,
+Foxx,20021127,JT,Archer,ADM,S,05/19/2022,05/19/2022,"$100,001 - $250,000",New,
+Foxx,20021127,JT,"Hercules Capital, Inc. ",NaN,S,05/19/2022,05/19/2022,"$50,001 - $100,000",New,
+Foxx,20021127,DC,Sisecam Resources LP Common Units,NaN,P,05/19/2022,05/19/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,Oxbridge Re Holdings Limited,NaN,S,05/18/2022,05/18/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,"Kinder Morgan, Inc. ",KMI,P,05/17/2022,05/17/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,Sisecam Resources LP Common Units,NaN,P,05/17/2022,05/17/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,"Warner Bros. Discovery, Inc.",NaN,S,05/17/2022,05/17/2022,"$15,001 - $50,000",New,
+Foxx,20021127,JT,Green Plains Partners LP,NaN,P,05/16/2022,05/16/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,Magellan Midstream Partners L.P.,NaN,P,05/16/2022,05/16/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,"Plains All American Pipeline, L.P.",NaN,P,05/16/2022,05/16/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,Enterprise Products Partners L.P.,NaN,P,05/13/2022,05/13/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,KNOT Offshore Partners LP Common,NaN,P,05/13/2022,05/13/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,Old Republic,NaN,S,05/12/2022,05/12/2022,"$15,001 - $50,000",New,
+Foxx,20021127,JT,"Hercules Capital, Inc. ",NaN,P,05/09/2022,05/09/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,USD Partners LP Common Units,NaN,P,05/09/2022,05/09/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,AT&T INC 5% PFDPFD SER A [CS],NaN,P,05/06/2022,05/06/2022,"$1,001 - $15,000",New,AT&T INC 5% PFDPFD SER A
+Foxx,20021127,JT,Sisecam Resources LP Common Units,NaN,P,05/06/2022,05/06/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,AT&T Inc. ,T,P,05/03/2022,05/03/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,Sisecam Resources LP Common Units,NaN,P,05/03/2022,05/03/2022,"$1,001 - $15,000",New,
+Foxx,20021127,JT,"Altria Group, Inc. ",MO,P,05/02/2022,05/02/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,TotalEnergies SE ,NaN,P,04/29/2022,04/29/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Magellan Midstream Partners L.P.,NaN,P,04/28/2022,04/28/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,British American Tobacco,NaN,P,04/26/2022,04/26/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,USD Partners LP Common Units,NaN,P,04/26/2022,04/26/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,"NextEra Energy, Inc. 6.219%",NaN,P,04/25/2022,04/25/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Phillips 66 ,PSX,S,04/25/2022,04/25/2022,"$50,001 - $100,000",New,
+Foxx,20020914,JT,Sisecam Resources LP Common Units,NaN,P,04/25/2022,04/25/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,"Apollo Asset Management, Inc.",NaN,P,04/22/2022,04/22/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Green Plains Partners LP,NaN,P,04/22/2022,04/22/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,KNOT Offshore Partners LP Common,NaN,P,04/22/2022,04/22/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Magellan Midstream Partners,NaN,P,04/22/2022,04/22/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,"NextEra Energy, Inc. 6.219%",NaN,P,04/22/2022,04/22/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,USD Partners LP Common Units,NaN,P,04/22/2022,04/22/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Magellan Midstream Partners,NaN,P,04/21/2022,04/21/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,"NextEra Energy, Inc.",NaN,P,04/21/2022,04/21/2022,"$50,001 - $100,000",New,
+Foxx,20020914,JT,TotalEnergies SE ,NaN,P,04/21/2022,04/21/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Rio Tinto Plc ,NaN,P,04/20/2022,04/20/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,"Apollo Asset Management, Inc.",NaN,P,04/19/2022,04/19/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Schwab U.S. REIT ETF ,NaN,S,04/19/2022,04/19/2022,"$50,001 - $100,000",New,
+Foxx,20020914,JT,"NextEra Energy, Inc.",NaN,P,04/18/2022,04/18/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,AT&T INC 5% PFDPFD SER A ,NaN,P,04/11/2022,04/11/2022,"$1,001 - $15,000",New,AT&T INC 5% PFDPFD SER A
+Foxx,20020914,JT,Green Plains Partners LP,NaN,P,04/11/2022,04/11/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,KNOT Offshore Partners LP,NaN,P,04/11/2022,04/11/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,Rio Tinto Plc ,NaN,P,04/11/2022,04/11/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,AT&T INC 5% PFDPFD SER A,NaN,P,04/08/2022,04/08/2022,"$15,001 - $50,000",New,AT&T INC 5% PFDPFD SER A
+Foxx,20020914,JT,Broadcom Inc. ,AVGO,S,04/08/2022,04/08/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,GlaxoSmithKline PLC ,NaN,P,04/08/2022,04/08/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,"Ryder System, Inc. ",NaN,S,04/08/2022,04/08/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,Magellan Midstream Partners L.P.,NaN,P,04/07/2220,04/07/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Foxx,20020914,JT,"British American Tobacco Industries,",NaN,P,04/07/2022,04/07/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Sisecam Resources LP Common Units,NaN,P,04/07/2022,04/07/2022,"$1,001 - $15,000",New,
+Foxx,20020914,DC,TotalEnergies SE ,NaN,P,04/07/2022,04/07/2022,"$15,001 - $50,000",New,
+Foxx,20020914,JT,Arlington Asset Investment Corp,NaN,P,04/06/2022,04/06/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,AT&T INC 5% PFDPFD SER A,NaN,P,04/06/2022,04/06/2022,"$15,001 - $50,000",New,AT&T INC PFDPFD SER A
+Foxx,20020914,JT,Old Republic International,NaN,P,04/06/2022,04/06/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,Arlington Asset Investment Corp,NaN,P,04/01/2022,04/01/2022,"$1,001 - $15,000",New,
+Foxx,20020914,JT,"Clearway Energy, Inc. Class",NaN,P,04/01/2022,04/01/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Franklin Street Properties Corp.,NaN,S,01/31/2022,01/31/2022,"$50,001 - $100,000",New,
+Foxx,20020355,JT,"National Health Investors, Inc.",NaN,S,01/28/2022,01/28/2022,"$50,001 - $100,000",New,
+Foxx,20020355,JT,Industrial logistics Properties,NaN,S,01/27/2022,01/27/2022,"$50,001 - $100,000",New,
+Foxx,20020355,JT,AT&T Inc. ,T,P,01/26/2022,01/26/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"Motorola Solutions, Inc. ",MSI,S (partial),01/26/2022,01/26/2022,"$15,001 - $50,000",NewiD owner asset transaction Date notification amount cap.,
+Foxx,20020355,JT,Archer,ADM,P,01/25/2022,01/25/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Archer,ADM,P,01/24/2022,01/24/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"Blackstone Mortgage Trust, Inc.",NaN,S,01/24/2022,01/24/2022,"$50,001 - $100,000",New,
+Foxx,20020355,JT,"ConAgra Brands, Inc. ",NaN,P,01/24/2022,01/24/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Enterprise Products Partners l.P.,NaN,P,01/24/2022,01/24/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Phillips 66 Partners lP Common,NaN,P,01/24/2022,01/24/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Franklin Street Properties Corp.,NaN,P,01/21/2022,01/21/2022,"$50,001 - $100,000",New,
+Foxx,20020355,JT,National Fuel gas Company ,NaN,S,01/21/2022,01/21/2022,"$50,001 - $100,000",New,
+Foxx,20020355,JT,"Plains All American Pipeline, l.P.",NaN,P,01/21/2022,01/21/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"One liberty Properties, Inc. ",NaN,S,01/20/2022,01/20/2022,"$100,001 - $250,000",New,
+Foxx,20020355,JT,Microsoft Corporation ,MSFT,P,01/05/2022,01/05/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Broadcom Inc. ,NaN,P,01/03/2022,01/03/2022,"$15,001 - $50,000",NewiD owner asset transaction Date notification amount cap.,
+Foxx,20020355,JT,"ConAgra Brands, Inc. ",NaN,P,01/03/2022,01/03/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Fidelity MSCI Health Care Index,NaN,P,01/03/2022,01/03/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"Motorola Solutions, Inc. ",MSI,P,01/03/2022,01/03/2022,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"Altria group, Inc. ",MO,01/11/2022,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"Blackstone Mortgage Trust, Inc. P",NaN,01/18/2022,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020355,JT,glaxoSmithKline PlC ,NaN,01/14/2022,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"One liberty Properties, Inc. ",NaN,01/06/2022,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020355,JT,Philip Morris International Inc P,PM,01/11/2022,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020355,JT,PPl Corporation ,NaN,01/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020355,JT,"Via Renewables, Inc.",NaN,01/24/2022,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020153,JT,BP p.l.c. ,NaN,12/20/2021,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020153,JT,Exxon Mobil Corporation ,XOM,12/13/2021,"$1,001",-,"$15,001 - $50,000",New,
+Foxx,20020153,JT,"Sculptor Capital Management, Inc. S",NaN,12/25/2021,"$1,001",-,"$15,001 - $50,000",New,
+Franklin,20021836,SP,Fidelity Contrafund ,NaN,Transaction,Date,Notification,Amount,New,Bought 163.162 shares at $13.79
+Franklin,20021836,SP,Fidelity Nasdaq Composite Index ETF,NaN,P,09/13/2022,09/30/2022,"$1,001 - $15,000",New,
+Franklin,20021836,SP,iShares S&P 500 Growth ETF ,NaN,P,09/13/2022,09/30/2022,"$1,001 - $15,000",New,"Bought 12,703.252 shares at $9.84ID Owner Asset Transaction Date Notification Amount Cap."
+Franklin,20021836,SP,Fidelity Advisor Total Bond CL Z,NaN,S,09/09/2022,09/30/2022,"$1,001 - $15,000",New,Sold 925.633 shares at $9.61
+Franklin,20021836,SP,Lord Abbett Ultra Short Bond CL I,MDT,P,09/09/2022,09/30/2022,"$1,001 - $15,000",New,Purchased 660.569 shares at $9.84
+Garamendi,20020278,SP,"Meta Platforms, Inc.",NaN,S,01/14/2022,01/14/2022,"$15,001 - $50,000",New,
+Garamendi,20020278,SP,"Block, Inc. Class A Common Stock, S",NaN,01/14/2022,"$1,001",-,"$15,001 - $50,000",New,
+Garamendi,20020278,SP,Granite Construction Incorporated S,NaN,01/14/2022,"$1,001",-,"$15,001 - $50,000",New,
+Garamendi,20020278,SP,"Twitter, Inc. ",NaN,01/14/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20021676,JT,Coca,NaN,Transaction,Date,Notification,Amount,New,
+Gottheimer,20021174,JT,"Regeneron Pharmaceuticals, Inc. P 05/05/2022 06/08/2022 $1,001",REGN,Transaction,Date,Notification,Amount,New,
+Gottheimer,20020786,JT,Apple Inc. (AAPL) [ST] S ,NaN,Transaction,Date,Notification,Amount,New,
+Gottheimer,20020786,JT,Microsoft Corporation ,MSFT,Transaction,Date,Notification,Amount,New,
+Gottheimer,20020786,JT,SPX Corporation (SPXC) [ST] S ,NaN,Transaction,Date,Notification,Amount,New,
+Gottheimer,20020786,JT,Unilever PLC ,NaN,Transaction,Date,Notification,Amount,New,
+Gottheimer,20020573,JT,"PayPal Holdings, Inc. ",PYPL,Transaction,Date,Notification,Amount,New,
+Gottheimer,20020393,JT,"Tesla, Inc. (TSLA) [ST] S ",NaN,Transaction,Date,Notification,Amount,New,
+Gottheimer,20020154,JT,"Phreesia, Inc. ",NaN,transaction,Date,notification,amount,New,
+Gottheimer,20022098,JT,"Thoughtworks Holding, Inc. ",NaN,P,11/21/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,Marriott International,MAR,P,11/16/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20021518,JT,Independent Bank Corp. ,NaN,E,11/15/2021,08/10/2022,"$1,001 - $15,000",New,"Received shares of Independent Bank Corp. (INDB) in exchange for Meridian Bancorp, Inc. (EBSB)"
+Gottheimer,20022098,JT,Flywire Corporation,NaN,P,11/14/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,"AutoZone, Inc. ",AZO,S (partial),11/11/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,"Tesla, Inc. ",TSLA,S (partial),11/09/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,NVIDIA Corporation ,NVDA,S (partial),11/08/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,UnitedHealth Group Incorporated,NaN,P,11/08/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,"Estee Lauder Companies, Inc. ",EL,S (partial),11/07/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,Monster Beverage Corporation,MNST,P,11/07/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,Alphabet Inc.,GOOG,S (partial),11/04/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,Alphabet Inc.,GOOG,S (partial),11/02/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,International Business Machines,NaN,P,11/02/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20022098,JT,"Tesla, Inc. ",TSLA,S (partial),11/02/2022,12/07/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,Apple Inc. ,AAPL,S (partial),08/26/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S (partial),08/17/2022,09/06/2022,"$100,001 - $250,000",New,
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S,08/17/2022,09/06/2022,"$100,001 - $250,000",New,Call options; Strike price $150; Expires 06/16/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,P,08/17/2022,09/06/2022,"$100,001 - $250,000",New,
+Gottheimer,20021676,JT,Sherwin,NaN,S (partial),08/17/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,"Lowe's Companies, Inc. ",LOW,S (partial),08/16/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,Cerence Inc. ,NaN,S,08/15/2021,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,"Automatic Data Processing, Inc.",ADP,P,08/12/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,"BioCryst Pharmaceuticals, Inc.",NaN,P,08/11/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,Blackstone Inc. ,BX,S (partial),08/11/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,"ChemoCentryx, Inc. ",NaN,S (partial),08/11/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,P,08/11/2022,09/06/2022,"$250,001 - $500,000",New,Call options; Strike price $145; Expires 01/20/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,P,08/11/2022,09/06/2022,"$1,000,001 - $5,000,000",New,Call options; Strike price $150; Expires 01/20/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,P,08/11/2022,09/06/2022,"$1,000,001 - $5,000,000",New,Call options; Strike price $150; Expires 01/20/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,P,08/11/2022,09/06/2022,"$1,000,001 - $5,000,000",New,Call options; Strike price $150; Expires 01/20/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,P,08/11/2022,09/06/2022,"$250,001 - $500,000",New,Call options; Strike price $155; Expires 01/20/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,P,08/11/2022,09/06/2022,"$250,001 - $500,000",NewID Owner Asset Transaction Date Notification Amount Cap.,Call options; Strike price $160; Expires 01/20/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S,08/11/2022,09/06/2022,"$250,001 - $500,000",New,Call options; Strike price $160; Expires 03/17/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S,08/11/2022,09/06/2022,"$250,001 - $500,000",New,Call options; Strike price $160; Expires 03/17/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S,08/11/2022,09/06/2022,"$1,000,001 - $5,000,000",New,Call options; Strike price $150; Expires 06/16/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S,08/11/2022,09/06/2022,"$1,000,001 - $5,000,000",New,Call options; Strike price $150; Expires 06/16/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S,08/11/2022,09/06/2022,"$250,001 - $500,000",New,Call options; Strike price $155; Expires 06/16/23
+Gottheimer,20021676,JT,Microsoft Corporation ,MSFT,S,08/11/2022,09/06/2022,"$1,000,001 - $5,000,000",New,Call options; Strike price $155; Expires 06/16/23
+Gottheimer,20021676,JT,UnitedHealth Group Incorporated,NaN,P,08/11/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,"Rapid7, Inc. ",NaN,S (partial),08/10/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,"Halozyme Therapeutics, Inc. ",NaN,S (partial),08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,"Rockwell Automation, Inc. ",ROK,S (partial),08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,Trane Technologies plc ,TT,S (partial),08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021676,JT,SGS SA ADR ,NaN,S,08/02/2022,09/06/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,NVIDIA Corporation ,NVDA,P,05/27/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,International Business Machines,NaN,P,05/26/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Marriott International,MAR,P,05/26/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,"Stag Industrial, Inc. ",NaN,S (partial),05/26/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,"Tesla, Inc. ",TSLA,P,05/26/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,ConocoPhillips ,COP,P,05/23/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Deere & Company ,DE,S (partial),05/18/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Target Corporation ,TGT,S (partial),05/18/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Amgen Inc. ,AMGN,P,05/11/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Check Point Software Technologies,NaN,S,05/10/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Fomento Economico Mexicano S.A.B.,NaN,P,05/10/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Check Point Software Technologies S,NaN,S (partial),05/09/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,LHC Group,NaN,S (partial),05/09/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Adyen NV ADR ,NaN,P,05/06/2022,06/08/2022,"$1,001 - $15,000",New,ADR stock
+Gottheimer,20021174,JT,Check Point Software Technologies S,NaN,S (partial),05/06/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Infineon Technologies AG ,NaN,P,05/06/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Check Point Software Technologies S,NaN,S (partial),05/05/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Trane Technologies plc ,TT,S (partial),05/03/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20021174,JT,Blackstone Inc. ,BX,S (partial),05/02/2022,06/08/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Texas Instruments Incorporated,TXN,P,03/31/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Taiwan Semiconductor S,NaN,S (partial),03/30/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Unilever PLC ,NaN,S (partial),03/30/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Cognizant Technology Solutions,NaN,P,03/29/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Eli Lilly and Company ,LLY,P,03/29/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,AbbVie Inc. ,ABBV,P,03/17/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Biogen Inc. ,BIIB,S,03/17/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Netflix, Inc. ",NFLX,S,03/17/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Eli Lilly and Company ,LLY,P,03/16/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Moderna, Inc. ",MRNA,S,03/16/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Sherwin,NaN,S (partial),03/16/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Air Products and Chemicals, Inc. S",APD,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Castle Biosciences, Inc.",NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"ChemoCentryx, Inc. ",NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Covetrus, Inc. ",NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,CSPC Pharmaceuticals Group ADR S,NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,ADR stock
+Gottheimer,20020786,JT,Endava plc American Depositary S,NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,ENN Energy Holdings Ltd S,NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Haier Smart Home Co., Ltd ADR S",NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,ADR stock
+Gottheimer,20020786,JT,Intuit Inc. ,INTU,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"MongoDB, Inc.",NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Paycor HCM, Inc. ",NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Ping An Insurance ,NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Tencent Holdings Limited S,NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Terex Corporation ,NaN,S (partial),03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Thoughtworks Holding, Inc. ",NaN,P,03/15/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Alphabet Inc.,GOOG,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Apple Inc. ,AAPL,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Blackstone Inc. ,BX,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Fidelity National Information,NaN,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Glacier Bancorp, Inc. ",NaN,S (partial),03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Lowe's Companies, Inc. ",LOW,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,McKesson Corporation ,MCK,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Oracle Corporation ,ORCL,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"United Parcel Service, Inc. ",UPS,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Veritex Holdings, Inc. ",NaN,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Verizon Communications Inc. ,VZ,P,03/09/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,AbbVie Inc. ,ABBV,P,03/08/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Coca,NaN,P,03/08/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"HubSpot, Inc. ",NaN,S,03/08/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Carvana Co. Class A ,NaN,S,03/07/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Etsy, Inc. ",NaN,S,03/07/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Texas Instruments Incorporated S,TXN,S (partial),03/07/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Coca,NaN,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Cognizant Technology Solutions,NaN,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Endava plc American Depositary S,NaN,S (partial),03/04/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Haier Smart Home Co., Ltd ADR",NaN,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,ADR stock
+Gottheimer,20020786,JT,"Ollie's Bargain Outlet Holdings, Inc.",NaN,S,03/04/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Trane Technologies plc ,TT,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,Amgen Inc. ,AMGN,P,03/03/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020786,JT,"Haier Smart Home Co., Ltd ADR",NaN,P,03/03/2022,04/11/2022,"$1,001 - $15,000",New,ADR stock
+Gottheimer,20020786,JT,Morgan Stanley ,MS,S (partial),03/03/2022,04/11/2022,"$1,001 - $15,000",New,
+Gottheimer,20020573,JT,Intel Corporation ,INTC,S,02/28/2022,03/07/2022,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Microsoft Corporation ,MSFT,S,02/10/2022,03/07/2022,"$500,001 - $1,000,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Gottheimer,20020573,JT,Microsoft Corporation ,MSFT,S,02/10/2022,03/07/2022,"$250,001 - $500,000",New,
+Gottheimer,20020573,JT,Microsoft Corporation ,MSFT,S,02/10/2022,03/07/2022,"$1,000,001 - $5,000,000",New,
+Gottheimer,20020573,JT,Microsoft Corporation ,MSFT,S,02/10/2022,03/07/2022,"$250,001 - $500,000",New,
+Gottheimer,20020573,JT,Microsoft Corporation ,MSFT,P,02/10/2022,03/07/2022,"$500,001 - $1,000,000",New,
+Gottheimer,20020573,JT,Microsoft Corporation ,MSFT,P,02/10/2022,03/07/2022,"$1,000,001 - $5,000,000",New,
+Gottheimer,20020573,JT,Microsoft Corporation ,MSFT,P,02/10/2022,03/07/2022,"$500,001 - $1,000,000",New,
+Gottheimer,20020393,JT,Microsoft Corporation ,MSFT,P,01/25/2022,02/07/2022,"$50,001 - $100,000",New,
+Gottheimer,20020573,JT,AbbVie Inc. ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,AbbVie Inc. ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Affirm Holdings, Inc.",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Align Technology, Inc. (ALGN) S ",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"block, Inc. Class A Common Stock, S",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Coca,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Coca,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Enphase Energy, Inc. ",ENPH,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Etsy, Inc. (ETSY) [ST] S ",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Fidelity National Information P,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"ICU Medical, Inc. ",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Intuit Inc. ,INTU,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Lowe's Companies, Inc. ",LOW,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Meta Platforms, Inc.",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Monster beverage Corporation S ,MNST,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Rockwell Automation, Inc. (ROK) S ",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Seagen Inc. (SGEN) [ST] S ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Skyline Champion Corporation S ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Snap Inc. Class A ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,SVb Financial Group ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Terex Corporation ,NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Tesla, Inc. ",TSLA,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Texas Instruments Incorporated S ,TXN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"UFP Industries, Inc. (UFPI) [ST] S ",NaN,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"United Parcel Service, Inc. ",UPS,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"United Parcel Service, Inc. ",UPS,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,"Verisk Analytics, Inc. ",VRSK,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020573,JT,Verizon Communications Inc. ,VZ,03/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,AbbVie Inc. ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Advanced Micro devices, Inc. S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Advanced Micro devices, Inc. S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Align Technology, Inc. (ALGN) S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,ASML Holding N.V.,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,biogen Inc. ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"boot barn Holdings, Inc. (bOOT) S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Capital One Financial Corporation P,COF,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Coca,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Estee Lauder Companies, Inc. (EL) S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Fidelity National Information P,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Fidelity National Information P,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Franklin Resources, Inc. ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Franklin Resources, Inc. (bEN) S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Freeport,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"HealthEquity, Inc. ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Intuitive Surgical, Inc. (ISRG) [ST] S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Lam Research Corporation (LRCX) S ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Match Group, Inc. (MTCH) [ST] S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Netflix, Inc. (NFLX) [ST] S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Nitori Holdings CO LTd AdR P,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,NVIdIA Corporation (NVdA) [ST] S ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,NVIdIA Corporation (NVdA) [ST] S ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Ollie's bargain Outlet Holdings, P",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Oracle Corporation ,ORCL,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Patrick Industries, Inc. (PATK) S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"PayPal Holdings, Inc. (PYPL) [ST] S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Pharmaceutical GRP LTd ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Ping An Insurance ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Snap Inc. Class A (SNAP) [ST] S ,NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Syneos Health, Inc.",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,"Tesla, Inc. (TSLA) [ST] S ",NaN,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020393,JT,Verizon Communications Inc. ,VZ,02/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Affirm Holdings, Inc.",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Air Products and Chemicals, Inc. P",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Alibaba Group Holding Limited S,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Apple Inc. ,AAPL,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Azenta, Inc. (AZTA) [ST] S ",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Azenta, Inc. (AZTA) [ST] S ",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",NewiD owner asset transaction Date notification amount cap.,
+Gottheimer,20020154,JT,balchem Corporation (bCPC) [ST] S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,biogen Inc. (bIIb) [ST] S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Capital One Financial Corporation S ,COF,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"ChemoCentryx, Inc. ",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Crown Castle International Corp. P,CCI,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,ENN Energy Holdings Ltd P,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"HealthEquity, Inc. (HQY) [ST] S ",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Intra,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Itau Unibanco banco Holding SA S,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Match Group, Inc. (MTCH) [ST] S ",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Meta Platforms, Inc.",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Meta Platforms, Inc.",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Microsoft Corporation (MSFT) [ST] S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Minerals Technologies Inc. ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Nitori Holdings Co. Ltd AdR S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,"Ollie's bargain Outlet Holdings, S ",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Pharmaceutical GRP LTd (CSPCY) S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Ping An Insurance (PNGAY) [ST] S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Skyline Champion Corporation S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Snap Inc. Class A (SNAP) [ST] S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Tencent Holdings Limited S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,Verizon Communications Inc. (VZ) S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,XP Inc.,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20020154,JT,XP Inc.,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Greene,20021248,SP,Costco Wholesale,COST,P,06/10/2022,06/14/2022,"$15,001 - $50,000",New,
+Greene,20021248,SP,"Goldman Sachs Group, Inc. ",GS,P,06/10/2022,06/14/2022,"$1,001 - $15,000",New,
+Greene,20021248,SP,"Home Depot, Inc. ",HD,P,06/10/2022,06/14/2022,"$15,001 - $50,000",New,
+Greene,20021248,SP,Intel Corporation ,INTC,P,06/10/2022,06/14/2022,"$1,001 - $15,000",New,
+Greene,20021248,SP,"Invesco QQQ Trust, Series 1",NaN,P,06/10/2022,06/14/2022,"$15,001 - $50,000",New,
+Greene,20021248,SP,Nestle SA Sponsored,NaN,P,06/10/2022,06/14/2022,"$15,001 - $50,000",New,
+Greene,20021248,SP,Procter & Gamble Company ,PG,P,06/10/2022,06/14/2022,"$1,001 - $15,000",New,
+Greene,20021248,SP,"United Parcel Service, Inc. ",UPS,P,06/10/2022,06/14/2022,"$15,001 - $50,000",New,
+Greene,20021248,SP,Visa Inc. ,V,P,06/10/2022,06/14/2022,"$15,001 - $50,000",New,
+Greene,20020263,JT,"Activision Blizzard, Inc ",NaN,01/20/2022,"$1,001",-,"$15,001 - $50,000",New,
+Greene,20020263,JT,JP Morgan Chase & Co. ,JPM,01/20/2022,"$1,001",-,"$15,001 - $50,000",New,
+Greene,20020263,JT,Medtronic plc. Ordinary Shares P,MDT,01/20/2022,"$1,001",-,"$15,001 - $50,000",New,
+Greene,20020263,JT,Nestle SA Sponsored ADR P,NaN,01/20/2022,"$1,001",-,"$15,001 - $50,000",New,
+Guest,20021691,SP,MISSISSIPPI ST GO BDS 2021 A,NaN,P,08/23/2022,09/12/2022,"$50,001 - $100,000",New,
+Guest,20021172,SP,MISSISSIPPI ST UNIV EDL,NaN,P,05/11/2022,06/08/2022,"$50,001 - $100,000",New,MISSISSIPPI ST UNIV EDL BLDG CORP REV CAMPUS IMPTS PJ B/E OID @98.767 CPN 3.500% DUE
+Guest,20020792,SP,"Warner Bros. Discovery, Inc.",NaN,E,04/11/2022,04/13/2022,"$1,001 - $15,000",New,Shares of Warner Bros Discovery (WBD) received following spinoff from AT&T (T).
+Guest,20020792,SP,"Warner Bros. Discovery, Inc.",NaN,E,04/11/2022,04/13/2022,"$1,001 - $15,000",New,Shares of Warner Bros Discovery (WBD) received following spinoff from AT&T (T).
+Guest,20020644,DC,AT&T Inc. ,T,03/16/2022,"$1,001",-,"$15,001 - $50,000",New,
+Hern,20022102,JT,"ONEOK, Inc. ",OKE,Transaction,Date,Notification,Amount,New,Dividend Reinvestment
+Hern,20021828,JT,"iShares Core Dividend Growth ETF P 09/30/2022 10/01/2022 $1,001",NaN,Transaction,Date,Notification,Amount,New,Dividend Reinvestment
+Hern,20021223,JT,"ONEOK, Inc. ",OKE,Transaction,Date,Notification,Amount,New,Dividend Reinvestment
+Hern,20020202,JT,Devon Energy Corporation ,DVN,P,12/30/2021,12/31/2021,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,"Asensus Surgical, Inc. ",NaN,S,12/20/2021,12/21/2021,"$15,001 - $50,000",New,sell to close
+Hern,20020202,JT,Medtronic plc. Ordinary Shares,MDT,S,12/20/2021,12/21/2021,"$100,001 - $250,000",New,Sell to Close Position
+Hern,20020202,JT,Vuzix Corporation ,NaN,S,12/20/2021,12/21/2021,"$50,001 - $100,000",New,Sell to Close Position
+Hern,20022102,JT,"Ameriprise Financial, Inc. ",AMP,S,11/21/2022,11/22/2022,"$1,001 - $15,000",New,sell to close position
+Hern,20022102,JT,"Crane Holdings, Co. ",NaN,S,11/21/2022,11/22/2022,"$1,001 - $15,000",New,sell to close position
+Hern,20022102,JT,"Marsh & McLennan Companies, Inc.",MMC,S,11/21/2022,11/22/2022,"$1,001 - $15,000",New,sell to close position
+Hern,20022102,JT,Sherwin,NaN,S,11/21/2022,11/22/2022,"$1,001 - $15,000",New,sell to close position
+Hern,20022102,JT,V.F. Corporation ,NaN,S,11/21/2022,11/22/2022,"$1,001 - $15,000",New,sell to close position
+Hern,20022102,JT,Accenture plc Class A Ordinary Shares,ACN,P,11/15/2022,11/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20022102,JT,Texas Instruments Incorporated,TXN,P,11/15/2022,11/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20022102,JT,Magellan Midstream Partners L.P.,NaN,P,11/14/2022,11/15/2022,"$1,001 - $15,000",New,Reinvestment of ROC
+Hern,20021964,JT,JP Morgan Chase & Co. ,JPM,P,10/31/2022,11/01/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021964,JT,FS Energy & Power Fund Common,NaN,P,10/19/2022,10/20/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021964,JT,Inland Real Estate Income Trust [PS],NaN,P,10/07/2022,10/10/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021964,JT,JPMorgan Equity Premium Income,NaN,P,10/06/2022,10/07/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,Devon Energy Corporation ,DVN,P,09/30/2022,10/01/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,Devon Energy Corporation,DVN,P,09/30/2022,10/01/2022,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20021828,JT,iShares Core Dividend Growth ETF,NaN,P,09/30/2022,10/01/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,"Williams Companies, Inc. ",WMB,P,09/26/2022,09/27/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,UnitedHealth Group Incorporated,NaN,P,09/20/2022,09/21/2022,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20021828,JT,Pioneer Natural Resources,NaN,P,09/16/2022,09/17/2022,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20021828,JT,Pioneer Natural Resources Company,NaN,P,09/16/2022,09/17/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,"Home Depot, Inc. ",HD,P,09/15/2022,09/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,"NextEra Energy, Inc. ",NEE,P,09/15/2022,09/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,"Rockwell Automation, Inc. ",ROK,P,09/12/2022,09/13/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,Emerson Electric Company ,EMR,P,09/09/2022,09/10/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,Exxon Mobil Corporation ,XOM,P,09/09/2022,09/10/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021828,JT,JPMorgan Equity Premium Income,NaN,P,09/07/2022,09/08/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021704,JT,ASML Holding N.V.,NaN,P,08/25/2022,08/26/2022,"$50,001 - $100,000",New,
+Hern,20021704,JT,PTC Inc. ,PTC,P,08/25/2022,08/26/2022,"$15,001 - $50,000",New,
+Hern,20021704,JT,"Cadence Design Systems, Inc.",CDNS,P,08/18/2022,08/19/2022,"$15,001 - $50,000",New,
+Hern,20021704,JT,Coterra Energy Inc. ,CTRA,P,08/17/2022,08/18/2022,"$15,001 - $50,000",New,
+Hern,20021704,JT,Texas Instruments Incorporated,TXN,P,08/16/2022,08/17/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021704,JT,Accenture plc Class A Ordinary,NaN,P,08/15/2022,08/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021704,JT,"ONEOK, Inc. ",OKE,P,08/15/2022,08/16/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Hern,20021704,JT,Magellan Midstream Partners L.P.,NaN,P,08/12/2022,08/13/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021553,JT,JP Morgan Chase & Co. ,JPM,P,07/31/2022,07/31/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021553,JT,CITIGROUP GLOBAL MKTS,NaN,P,07/22/2022,07/22/2022,"$250,001 - $500,000",New,Buy Open CITI Medium Term Note
+Hern,20021553,JT,FS Energy & Power Fund Common,NaN,P,07/13/2022,07/14/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021553,JT,iShares TIPS Bond ETF ,NaN,P,07/08/2022,07/09/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Devon Energy Corporation ,DVN,P,06/30/2022,07/01/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Devon Energy Corporation,DVN,P,06/30/2022,07/01/2022,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20021388,JT,"Williams Companies, Inc. ",WMB,P,06/27/2022,06/28/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Lockheed Martin Corporation ,LMT,P,06/24/2022,06/25/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,AGCO Corporation ,NaN,P,06/21/2022,06/22/2022,"$1,001 - $15,000",New,Corporate Action - Cash Merger
+Hern,20021388,JT,"Home Depot, Inc. ",HD,P,06/16/2022,06/17/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Raytheon Technologies Corporation,RTX,P,06/16/2022,06/17/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,"NextEra Energy, Inc. ",NEE,P,06/15/2022,06/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Pioneer Natural Resources,NaN,P,06/14/2022,06/15/2022,"$15,001 - $50,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20021388,JT,Pioneer Natural Resources Company,NaN,P,06/14/2022,06/15/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Emerson Electric Company ,EMR,P,06/10/2022,06/11/2022,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20021388,JT,Exxon Mobil Corporation ,XOM,P,06/10/2022,06/11/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,"Rockwell Automation, Inc. ",ROK,P,06/10/2022,06/11/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Microsoft Corporation ,MSFT,P,06/09/2022,06/10/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Johnson & Johnson ,JNJ,P,06/07/2022,06/08/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021388,JT,Intel Corporation ,INTC,P,06/01/2022,06/02/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021223,JT,Texas Instruments Incorporated,TXN,P,05/17/2022,05/18/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021223,DC,"CareCloud, Inc. ",NaN,S,05/16/2022,05/17/2022,"$1,001 - $15,000",New,Sell to close
+Hern,20021223,DC,Exact Sciences Corporation ,NaN,S,05/16/2022,05/17/2022,"$1,001 - $15,000",New,Sell to close
+Hern,20021223,JT,Accenture plc Class A Ordinary Shares,ACN,P,05/13/2022,05/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021223,JT,Magellan Midstream Partners L.P.,NaN,P,05/13/2022,05/16/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20021223,JT,ABB Ltd ,NaN,P,05/11/2022,05/12/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020995,JT,JP Morgan Chase & Co. ,JPM,P,04/30/2022,05/02/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020995,DC,AdaptHealth Corp. ,NaN,S,04/22/2022,04/23/2022,"$1,001 - $15,000",New,sell close
+Hern,20020995,DC,"IQVIA Holdings, Inc. ",IQV,S,04/22/2022,04/23/2022,"$1,001 - $15,000",New,Sell Close
+Hern,20020995,JT,FS ENERGY & POWER FUND,NaN,P,04/14/2022,04/15/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020995,JT,BANK OF MONTREAL SER G,NaN,P,04/12/2022,04/13/2022,"$500,001 - $1,000,000",New,Buy Open
+Hern,20020995,JT,"Mondelez International, Inc.",MDLZ,S,04/12/2022,04/13/2022,"$15,001 - $50,000",New,Sell Close
+Hern,20020995,JT,Honeywell International Inc.,HON,S,04/08/2022,04/11/2022,"$250,001 - $500,000",New,Sell CloseID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20020995,JT,Inland Real Estate Income Tr,NaN,P,04/07/2022,04/08/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020995,JT,AdaptHealth Corp. ,NaN,S,04/01/2022,03/05/2022,"$50,001 - $100,000",New,Sell Close
+Hern,20020789,JT,Devon Energy Corporation,DVN,P,03/31/2022,04/01/2022,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020789,JT,Devon Energy Corporation ,DVN,P,03/31/2022,04/01/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,"Williams Companies, Inc. ",WMB,P,03/28/2022,03/29/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Lockheed Martin Corporation ,LMT,P,03/25/2022,03/26/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,"Home Depot, Inc. ",HD,P,03/24/2022,03/25/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Raytheon Technologies Corporation,RTX,P,03/24/2022,03/25/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,MORGAN STANLEY FIN LLC SER,A,S,03/23/2022,03/24/2022,"$250,001 - $500,000",New,Full call by the issuer
+Hern,20020789,JT,UnitedHealth Group Incorporated,NaN,P,03/22/2022,03/23/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,CITIGROUP GLOBAL MKTS,NaN,P,03/18/2022,03/19/2022,"$250,001 - $500,000",New,Buy open
+Hern,20020789,JT,"NextEra Energy, Inc. ",NEE,P,03/15/2022,03/16/2022,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20020789,JT,Pioneer Natural Resources Company,NaN,P,03/14/2022,03/15/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Pioneer Natural Resources Company,NaN,P,03/14/2022,03/15/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Pioneer Natural Resources Company,NaN,P,03/14/2022,03/15/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Honeywell International Inc. ,HON,P,03/11/2022,03/12/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Emerson Electric Company ,EMR,P,03/10/2022,03/11/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Exxon Mobil Corporation ,XOM,P,03/10/2022,03/11/2022,"$1,001 - $15,000",New,Dividend ReinvestmentID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20020789,JT,Microsoft Corporation ,MSFT,P,03/10/2022,03/11/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,"Rockwell Automation, Inc. ",ROK,P,03/10/2022,03/11/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Johnson & Johnson ,JNJ,P,03/08/2022,03/09/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020789,JT,Intel Corporation ,INTC,P,03/01/2022,03/02/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20020359,JT,BARCLAYS BANK PLC SER A,NaN,P,01/19/2022,01/20/2022,"$250,001 - $500,000",New,Buy open Qty 400
+Hern,20020571,JT,Accenture plc Class A Ordinary P,NaN,02/16/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020571,JT,Magellan Midstream Partners L.P. P,NaN,02/15/2022,"$1,001",-,"$15,001 - $50,000",New,Return Of Capital Reinvestment
+Hern,20020571,JT,"ONEOK, Inc. ",OKE,02/15/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020571,JT,Texas Instruments Incorporated P,TXN,02/08/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020359,JT,FS ENERgY & POWER FUND P,NaN,01/20/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020359,JT,Inland Real Estate Income Tr P,NaN,01/08/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020359,JT,JP Morgan Chase & Co. ,JPM,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020359,JT,Pioneer Natural Resources P,NaN,01/15/2022,"$1,001",-,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount Cap.,Dividend Reinvestment
+Hern,20020202,JT,Devon Energy Corporation ,DVN,01/01/2022,"$1,001",-,"$15,001 - $50,000",New,Dividend reinvestment
+Hern,20020202,JT,Emerson Electric Company ,EMR,12/11/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Exxon Mobil Corporation ,XOM,12/11/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend ReinvestmentiD owner asset transaction Date notification amount cap.
+Hern,20020202,JT,"Home Depot, Inc. ",HD,12/17/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Honeywell International Inc. P,HON,12/04/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Johnson & Johnson ,JNJ,12/08/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Lockheed Martin Corporation P,LMT,12/28/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Microsoft Corporation ,MSFT,12/10/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,"NextEra Energy, Inc. ",NEE,12/16/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Pioneer Natural Resources P,NaN,12/15/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Pioneer Natural Resources P,NaN,12/15/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,Raytheon Technologies P,NaN,12/17/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,"Rockwell Automation, Inc. ",ROK,12/11/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,UnitedHealth group Incorporated P,NaN,12/15/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Hern,20020202,JT,"Williams Companies, Inc. ",WMB,12/28/2021,"$1,001",-,"$15,001 - $50,000",New,Dividend Reinvestment
+Kustoff,20020875,JT,AT&T Inc.,T,[ST],E,04/11/2022,04/11/2022,New,"AT&T was the parent company of Warner Media until it was spun off and merged into Discovery, Inc. The"
+Kustoff,20020875,JT,"Warner Bros. Discovery, Inc.",NaN,Series,E,04/11/2022,04/11/2022,New,"AT&T was the parent company of Warner Media until it was spun off and merged into Discovery, Inc. The"
+Latta,20021968,SP,"Farmers & Merchants Bancorp, Inc.",NaN,P,10/20/2022,11/05/2022,"$1,001 - $15,000",New,Dividend Reinvestment
+Latta,20021415,SP,"Farmers & Merchants Bancorp, Inc.",NaN,P,07/12/2022,07/19/2022,"$1,001 - $15,000",New,dividend reinvestment
+Lee,20022081,JT,"Avantor, Inc. ",NaN,Transaction,Date,Notification,Amount,New,
+Lee,20022081,JT,Zebra Technologies Corporation,NaN,Transaction,Date,Notification,Amount,New,
+Lee,20022081,JT,"Acadia Healthcare Company, Inc.",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,AdaptHealth Corp. ,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Ally Financial Inc. ,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"American Water Works Company,",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"AMETEK, Inc. ",AME,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Aptiv PLC Ordinary Shares ,APTV,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Ball Corporation ,BALL,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Bath & Body Works, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Berry Global Group, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Bio,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Black Knight, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Booz Allen Hamilton,NaN,S,11/30/2022,12/05/2022,"$15,001 - $50,000",New,
+Lee,20022081,JT,Bright Horizons Family Solutions Inc.,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Broadridge Financial Solutions, Inc.",BR,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Brown & Brown, Inc. ",BRO,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Builders FirstSource, Inc. ",BLDR,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Caesars Entertainment, Inc. ",CZR,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Catalent, Inc. ",CTLT,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,CDW Corporation ,CDW,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,ChampionX Corporation ,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Churchill Downs,",NaN,S,11/30/2022,12/05/2022,"$15,001 - $50,000",New,
+Lee,20022081,JT,Clarivate Plc Ordinary Shares ,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Crown Holdings, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Cushman & Wakefield plc Ordinary,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Discover Financial Services ,DFS,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Diversey Holdings, Ltd.",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Elanco Animal Health Incorporated,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Element Solutions Inc. ,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Entegris, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,GFL Environmental Inc. Subordinate,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Global Payments Inc. ,GPN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"HCA Healthcare, Inc. ",HCA,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Hologic, Inc. ",HOLX,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Leslie's, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Live Nation Entertainment, Inc.",LYV,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,LKQ Corporation ,LKQ,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Marvell Technology, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Mattel, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Molson Coors Beverage Company,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Palo Alto Networks, Inc. ",PANW,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Performance Food Group Company,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Planet Fitness, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Qorvo, Inc. ",QRVO,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Republic Services, Inc. ",RSG,S,11/30/2022,12/05/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Lee,20022081,JT,"Resideo Technologies, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Scotts Miracle,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Service Corporation International,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Shift4 Payments, Inc. Class A ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"SS&C Technologies Holdings, Inc.",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Stanley Black & Decker, Inc. ",SWK,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Syneos Health, Inc.",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Teledyne Technologies Incorporated,TDY,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Teleflex Incorporated ,TFX,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,The AZEK Company Inc. Class A,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,The Goodyear Tire & Rubber,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,TransUnion ,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,US Foods Holding Corp. ,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Verisk Analytics, Inc. ",VRSK,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Vertiv Holdings, LLC Class A ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,VICI Properties Inc. ,VICI,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"WESCO International, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,Xylem Inc. Common Stock New ,XYL,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20021962,JT,KB Home ,NaN,S,10/27/2022,11/01/2022,"$1,001 - $15,000",New,
+Lee,20021962,JT,St. Joe Company ,NaN,S,10/27/2022,11/01/2022,"$1,001 - $15,000",New,
+Lee,20021550,JT,"Hologic, Inc. ",HOLX,P,09/30/2021,08/13/2022,"$1,001 - $15,000",New,
+Lee,20021550,JT,Synchrony Financial  ,NaN,S,09/30/2021,08/13/2022,"$1,001 - $15,000",Amended,
+Lee,20021550,JT,"Zimmer Biomet Holdings,",ZBH,S,09/30/2021,08/13/2022,"$15,001 - $50,000",New,
+Lee,20021252,DC,"Full House Resorts, Inc. ",NaN,P,05/12/2022,06/20/2022,"$1,001 - $15,000",New,
+Lee,20021052,JT,"Full House Resorts, Inc. ",NaN,P,05/12/2022,05/15/2022,"$1,001 - $15,000",New,
+Lee,20020369,SP,"Wynn Resorts, Limited ",WYNN,P,01/27/2022,02/01/2022,"$15,001 - $50,000",New,
+Lee,20020369,DC,"Wynn Resorts, Limited ",WYNN,P,01/27/2022,02/01/2022,"$15,001 - $50,000",New,
+Lee,20020369,JT,Bank of America Corporation S,BAC,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lofgren,20021967,SP,Credit Suisse USA Inc. [CS],NaN,S,10/06/2022,11/10/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20021838,SP,AEP Texas Inc. [CS],NaN,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20021838,SP,Anheuser,NaN,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,
+Lofgren,20021838,SP,Bank of America Corporation ,BAC,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,
+Lofgren,20021838,SP,"Becton, Dickinson and Company",BDX,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,
+Lofgren,20021838,SP,"Gilead Sciences, Inc. ",GILD,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,
+Lofgren,20021838,SP,"Quanta Services, Inc. ",PWR,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,"Hon. Zoe Lofgren , 10/11/2022"
+Lofgren,20021699,SP,"Applied Materials, Inc. ",AMAT,S,08/25/2022,09/13/2022,"$1,001 - $15,000",New,
+Lofgren,20021699,SP,Charles River Laboratories,NaN,S,08/25/2022,09/13/2022,"$1,001 - $15,000",New,
+Lofgren,20021699,SP,Walt Disney Company ,DIS,P,08/25/2022,09/13/2022,"$1,001 - $15,000",New,
+Lofgren,20021503,SP,KLA Corporation ,KLAC,S (partial),07/08/2022,08/08/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20021367,SP,Ally Financial Inc. ,NaN,S,06/15/2022,07/12/2022,"$1,001 - $15,000",New,
+Lofgren,20020989,SP,Synchrony Financial ,SYF,S,04/28/2022,05/10/2022,"$1,001 - $15,000",New,
+Lofgren,20020989,SP,KLA Corporation ,KLAC,P,04/04/2022,05/10/2022,"$1,001 - $15,000",New,
+Lofgren,20020989,SP,Union Pacific Corporation,UNP,P,04/04/2022,05/10/2022,"$15,001 - $50,000",New,
+Lofgren,20020775,SP,Tyson Foods Inc [CS],NaN,S,03/15/2022,04/11/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20020775,SP,"Amazon.com, Inc. ",AMZN,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20020775,SP,"Citigroup, Inc. ",C,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20020775,SP,Vodafone Group PLC [CS],NaN,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20020179,SP,general Motors Finl Co ,NaN,01/07/2022,"$1,001",-,"$15,001 - $50,000",New,Corporate bond
+Lowenthal,20021907,JT,"Crown Holdings, Inc.",NaN,[ST],S,10/21/2022,10/28/2022,New,
+Lowenthal,20022032,SP,United States Treas,NaN,[CS],P,11/08/2022,11/21/2022,New,"Maturity date is 05/04/2023, 4.569% interest rate"
+Lowenthal,20020271,SP,Service Corp Intl [CS],NaN,P,12/30/2021,01/06/2022,"$15,001 - $50,000",New,"Interest rate is 4.625%, maturity date is 12/15/2027."
+Lowenthal,20022161,SP,"Activision Blizzard, Inc ",NaN,P,12/14/2022,12/20/2022,"$1,001 - $15,000",New,
+Lowenthal,20022162,JT,"Activision Blizzard, Inc ",NaN,P,12/12/2022,12/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20022161,SP,"Activision Blizzard, Inc ",NaN,P,12/12/2022,12/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20022162,JT,"Chart Industries, Inc. ",NaN,P,12/09/2022,12/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20022161,SP,"Chart Industries, Inc. ",NaN,P,12/09/2022,12/19/2022,"$15,001 - $50,000",New,
+Lowenthal,20022162,JT,"Salesforce, Inc. ",CRM,S,12/08/2022,12/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20022161,SP,"Salesforce, Inc. ",CRM,S,12/08/2022,12/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20022034,JT,Blackstone Inc. ,BX,S (partial),11/14/2022,11/21/2022,"$1,001 - $15,000",New,
+Lowenthal,20022032,SP,Blackstone Inc. ,BX,S (partial),11/14/2022,11/21/2022,"$1,001 - $15,000",New,
+Lowenthal,20022034,JT,"TJX Companies, Inc. ",TJX,S,11/04/2022,11/21/2022,"$1,001 - $15,000",New,
+Lowenthal,20022033,JT,General Mtrs Co Note [CS],NaN,P,11/04/2022,11/21/2022,"$1,001 - $15,000",New,"Maturity date is 10/01/2025, interest rate is 6.125%"
+Lowenthal,20022033,JT,Sherwin Williams Co Note [CS],NaN,S,11/04/2022,11/21/2022,"$1,001 - $15,000",New,"Maturity date is 08/01/2025, interest rate is 3.45%"
+Lowenthal,20022032,SP,"TJX Companies, Inc. ",TJX,S,11/04/2022,11/21/2022,"$15,001 - $50,000",New,
+Lowenthal,20022032,SP,T,NaN,S (partial),11/04/2022,11/21/2022,"$1,001 - $15,000",New,
+Lowenthal,20021974,JT,Ecolab Inc. ,ECL,S,11/03/2022,11/10/2022,"$1,001 - $15,000",New,
+Lowenthal,20021974,JT,T,NaN,S (partial),11/03/2022,11/10/2022,"$1,001 - $15,000",New,
+Lowenthal,20021973,SP,Ecolab Inc. ,ECL,S,11/03/2022,11/10/2022,"$1,001 - $15,000",New,
+Lowenthal,20021973,SP,T,NaN,S (partial),11/03/2022,11/10/2022,"$1,001 - $15,000",New,
+Lowenthal,20021946,SP,Boston Scientific Corporation ,BSX,S,10/24/2022,10/31/2022,"$1,001 - $15,000",New,
+Lowenthal,20021907,JT,Boston Scientific Corporation ,BSX,S (partial),10/21/2022,10/28/2022,"$1,001 - $15,000",New,
+Lowenthal,20021906,SP,Boston Scientific Corporation ,BSX,S (partial),10/21/2022,10/28/2022,"$1,001 - $15,000",New,
+Lowenthal,20021906,SP,"Crown Holdings, Inc. ",NaN,S,10/21/2022,10/28/2022,"$15,001 - $50,000",New,
+Lowenthal,20021854,SP,Service Corporation International,NaN,P,09/27/2022,10/04/2022,"$1,001 - $15,000",New,
+Lowenthal,20021786,SP,Service Corporation International,NaN,P,09/26/2022,10/01/2022,"$1,001 - $15,000",New,
+Lowenthal,20021825,SP,Service Corporation International,NaN,P,09/23/2022,10/01/2022,"$1,001 - $15,000",New,
+Lowenthal,20021787,JT,Service Corporation International,NaN,P,09/23/2022,10/01/2022,"$1,001 - $15,000",New,
+Lowenthal,20021787,JT,"Salesforce, Inc. ",CRM,P,09/22/2022,10/01/2022,"$1,001 - $15,000",New,
+Lowenthal,20021787,JT,Service Corporation International,NaN,P,09/22/2022,10/01/2022,"$1,001 - $15,000",New,
+Lowenthal,20021641,SP,Zoetis Inc. Class A ,ZTS,P,08/26/2022,09/02/2022,"$15,001 - $50,000",New,
+Lowenthal,20021251,SP,General Motors Company ,GM,S,08/23/2021,06/21/2022,"$15,001 - $50,000",New,
+Lowenthal,20021641,SP,"Crown Holdings, Inc. ",NaN,P,08/10/2022,08/24/2022,"$1,001 - $15,000",New,
+Lowenthal,20021824,JT,Citigroup Inc [CS],NaN,S,08/01/2022,10/01/2022,"$1,001 - $15,000",New,"Redeemed Interest rate was 4.050%, maturity date was 7/30/2022."
+Lowenthal,20021498,SP,Medtronic plc. Ordinary Shares S,MDT,S (partial),07/29/2022,08/04/2022,"$1,001 - $15,000",New,
+Lowenthal,20021483,SP,Medtronic plc. Ordinary Shares S,MDT,S (partial),07/28/2022,08/03/2022,"$1,001 - $15,000",New,
+Lowenthal,20021431,SP,Ecolab Inc. ,ECL,P,07/20/2022,07/25/2022,"$1,001 - $15,000",New,
+Lowenthal,20021432,JT,S&P Global Inc. ,SPGI,P,07/19/2022,07/25/2022,"$1,001 - $15,000",New,
+Lowenthal,20021431,SP,Ecolab Inc. ,ECL,P,07/19/2022,07/25/2022,"$1,001 - $15,000",New,
+Lowenthal,20021325,SP,"Uber Technologies, Inc. ",UBER,S,06/29/2022,06/29/2022,"$1,001 - $15,000",Deleted,"Interest rate is 1.40%, maturity date is 08/15/2026"
+Lowenthal,20021299,SP,Nextera Energy Cap Hldgs,Corporate Securities (Bonds and Notes),P,06/21/2022,06/30/2022,"$15,001 - $50,000",New,"Interest rate is 4.20%, maturity date is 06/20/2024."
+Lowenthal,20021298,JT,Nextera Energy Cap Hldgs [CS],NaN,P,06/21/2022,06/30/2022,"$1,001 - $15,000",New,"Interest is 4.20%, maturity date is 06/20/2024"
+Lowenthal,20021246,SP,"Verisk Analytics, Inc. ",VRSK,P,06/17/2022,06/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20021246,SP,iShares Russell 2000 Value ETF,NaN,S (partial),06/16/2022,06/19/2022,"$15,001 - $50,000",New,
+Lowenthal,20021246,SP,"Verisk Analytics, Inc. ",VRSK,P,06/16/2022,06/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20021246,SP,Boeing Company ,BA,P,06/15/2022,06/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20021245,SP,Expedia Inc [CS],NaN,S,06/13/2022,06/19/2022,"$1,001 - $15,000",New,"Interest rate is 4.5%, maturity date is 8/15/24."
+Lowenthal,20021240,JT,Expedia Inc [CS],NaN,S,06/13/2022,06/19/2022,"$1,001 - $15,000",New,"Interest rate is 4.5%, maturity date is 8/15/24"
+Lowenthal,20021246,SP,"Amazon.com, Inc. ",AMZN,P,06/07/2022,06/19/2022,"$1,001 - $15,000",New,
+Lowenthal,20021251,SP,Equinix Inc. Note 5.375%;,NaN,S,06/02/2021,06/21/2022,"$15,001 - $50,000",New,Corporate Bond
+Lowenthal,20021135,SP,HCA Inc [CS],NaN,P,05/25/2022,06/02/2022,"$15,001 - $50,000",New,"Interest rate is 5.3750%, maturity date is 02/01/2025"
+Lowenthal,20021240,JT,San Francisco Calif City [CS],NaN,P,05/18/2022,06/19/2022,"$1,001 - $15,000",New,"Interest rate is 5.0%, maturity date is 6/15/23."
+Lowenthal,20021093,SP,JP Morgan Chase & Co. ,JPM,P,05/17/2022,05/21/2022,"$1,001 - $15,000",New,
+Lowenthal,20021093,SP,T,NaN,P,05/17/2022,05/21/2022,"$1,001 - $15,000",New,
+Lowenthal,20021245,SP,HCA Inc [CS],NaN,S,05/07/2022,06/19/2022,"$1,001 - $15,000",New,"Interest rate is 5.875%, maturity date is 5/1/23."
+Lowenthal,20021240,JT,HCA inc [CS],NaN,S,05/07/2022,06/19/2022,"$1,001 - $15,000",New,"Interest rate is 5.875%, maturity date is 5/1/23"
+Lowenthal,20021090,SP,Intercontinental Exchange Inc.,ICE,S,05/06/2022,05/21/2022,"$15,001 - $50,000",New,
+Lowenthal,20021090,SP,Intercontinental Exchange Inc. ,ICE,S (partial),05/05/2022,05/21/2022,"$1,001 - $15,000",New,
+Lowenthal,20021090,SP,Constellation Brands Inc,Corporate Securities (Bonds and Notes),P,05/02/2022,05/21/2022,"$15,001 - $50,000",New,"Interest rate is 3.60%, maturity date is 05/09/2024."
+Lowenthal,20020920,JT,San Francisco Calif City & City Bonds,NaN,P,04/27/2022,05/02/2022,"$1,001 - $15,000",New,"Interest rate is 5.00%, maturity date is 06/15/2023"
+Lowenthal,20020892,SP,Bk of America Corp Note [CS],NaN,P,04/21/2022,04/27/2022,"$1,001 - $15,000",New,Maturity date is 4/27/2025
+Lowenthal,20020811,SP,"International Flavors & Fragrances,",NaN,S,04/07/2022,04/14/2022,"$1,001 - $15,000",New,
+Lowenthal,20020782,SP,"International Flavors & Fragrances,",NaN,S (partial),04/06/2022,04/11/2022,"$15,001 - $50,000",New,
+Lowenthal,20020782,SP,NVIDIA Corporation ,NVDA,S (partial),04/06/2022,04/11/2022,"$1,001 - $15,000",New,
+Lowenthal,20020782,SP,"TJX Companies, Inc. ",TJX,S (partial),04/06/2022,04/11/2022,"$1,001 - $15,000",New,
+Lowenthal,20020781,JT,"International Flavors & Fragrances, S",NaN,S (partial),04/06/2022,04/11/2022,"$1,001 - $15,000",New,
+Lowenthal,20020782,SP,"International Flavors & Fragrances, S",NaN,S (partial),04/05/2022,04/11/2022,"$1,001 - $15,000",New,
+Lowenthal,20020770,SP,"International Flavors & Fragrances, S",NaN,S (partial),04/04/2022,04/09/2022,"$1,001 - $15,000",New,
+Lowenthal,20020769,JT,Netflix Inc [CS],NaN,P,03/29/2022,04/09/2022,"$1,001 - $15,000",New,"Maturity date is 03/01/2024, interest rate is 5.750%."
+Lowenthal,20020770,SP,"Janus International Group, Inc. ",NaN,S,03/25/2022,04/09/2022,"$1,001 - $15,000",New,
+Lowenthal,20020770,SP,"Janus International Group, Inc. ",NaN,S (partial),03/24/2022,04/09/2022,"$1,001 - $15,000",New,
+Lowenthal,20020770,SP,Netflix Inc,Corporate Securities (Bonds and Notes),P,03/24/2022,04/09/2022,"$15,001 - $50,000",New,"Maturity date is 03/01/2024, interest rate is 5.750%."
+Lowenthal,20020676,SP,Deckers Outdoor Corporation,DECK,S,03/07/2022,03/20/2022,"$15,001 - $50,000",New,
+Lowenthal,20020274,SP,"Individually Owned, 100% Interest S",NaN,S (partial),03/02/2021,03/09/2021,"$50,001 - $100,000",New,Individually owned stocks of Spouse
+Lowenthal,20020565,SP,CIT group [CS],NaN,S,02/24/2022,03/04/2022,"$15,001 - $50,000",New,"Redeemed, interest rate is 5.0%, maturity date is 08/01/23."
+Lowenthal,20020564,SP,ProShares Short QQQ ,NaN,S,02/24/2022,03/04/2022,"$15,001 - $50,000",New,
+Lowenthal,20020565,SP,Netflix [CS],NaN,S,02/15/2022,03/04/2022,"$15,001 - $50,000",New,"Redeemed, interest rate is 5.5%, maturity date is 02/15/22."
+Lowenthal,20021251,SP,"International Flavors & Fragrances,",NaN,E,02/04/2021,06/21/2022,"$1,001 - $15,000",New,"Received shares of International Flavors & Fragrances, Inc. (IFF) in exchange for DuPont (DD) as result of"
+Lowenthal,20021251,JT,"International Flavors & Fragrances,",NaN,E,02/04/2021,06/21/2022,"$1,001 - $15,000",New,Received shares of International Flavors & Fragrances (IFF) in exchange for DuPont (DD) as result of spinoff.
+Lowenthal,20020427,SP,Wells Fargo & Co [CS],NaN,S,01/26/2022,02/02/2022,"$15,001 - $50,000",New,"Maturity date is 02/13/2023, interest rate is 3.45%"
+Lowenthal,20020331,SP,"Home Depot, Inc. ",HD,S,01/21/2022,01/29/2022,"$15,001 - $50,000",New,
+Lowenthal,20020321,SP,Alphabet Inc. ,NaN,S (partial),01/14/2022,01/21/2022,"$15,001 - $50,000",New,
+Lowenthal,20020321,SP,ProShares Short QQQ ,NaN,P,01/14/2022,01/21/2022,"$15,001 - $50,000",New,
+Lowenthal,20020690,SP,"Janus International group, Inc. S ",NaN,03/23/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020678,SP,HCA Inc [CS] P,NaN,03/20/2022,"$1,001",-,"$15,001 - $50,000",New,"Maturity date is 05/01/2023, interest rate is 5.8750%"
+Lowenthal,20020677,JT,HCA Inc [CS] P,NaN,03/20/2022,"$1,001",-,"$15,001 - $50,000",New,"Maturity date is 05/01/2023, interest rate is 5.8750%"
+Lowenthal,20020676,SP,"Crown Holdings, Inc. ",NaN,03/20/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020676,SP,"Crown Holdings, Inc. ",NaN,03/20/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020565,SP,American Tower Corporation S ,AMT,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020564,SP,"Autodesk, Inc. (ADSK) [ST] S ",NaN,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020564,SP,"Autodesk, Inc. ",ADSK,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020563,SP,CIT group [CS] S,NaN,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,"Redeemed, interest rate is 5.0%, maturity date is 08/15/22."
+Lowenthal,20020563,SP,Hyatt Hotels [CS] P,NaN,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,"Interest is 1.3%, maturity date is 10/01/23."
+Lowenthal,20020563,SP,Netflix [CS] S,NaN,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,"Redeemed, interest rate is 5.50%, maturity date is 02/15/22."
+Lowenthal,20020563,SP,ProShares Short QQQ ,NaN,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020562,JT,Netflix [CS] S,NaN,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,"Redeemed, interest rate 5.5%, maturity date 02/15/22."
+Lowenthal,20020562,JT,ProShares Short QQQ ,NaN,03/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020486,SP,S&P global Inc. ,NaN,02/16/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020334,SP,"Home Depot, Inc. ",HD,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020333,JT,"Home Depot, Inc. ",HD,01/28/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020323,SP,ProShares Short QQQ ,NaN,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020322,JT,Alphabet Inc. ,NaN,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020322,JT,ProShares Short QQQ ,NaN,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020322,JT,Sunrun Inc. ,NaN,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020271,SP,"Janus International group, Inc. P",NaN,01/14/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020271,SP,"uber Technologies, Inc. ",NaN,01/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020270,JT,T,NaN,01/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Lowenthal,20020167,SP,"Janus International group, Inc. P",NaN,12/27/2021,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20021938,SP,Intel Corporation ,INTC,Transaction,Date,Notification,Amount,New,
+Manning,20021938,SP,Welltower Inc. ,WELL,Transaction,Date,Notification,Amount,New,
+Manning,20021695,JT,"Ameriprise Financial, Inc. ",AMP,Transaction,Date,Notification,Amount,New,
+Manning,20021695,SP,Exxon Mobil Corporation ,XOM,Transaction,Date,Notification,Amount,New,
+Manning,20021695,SP,"Pfizer, Inc. ",PFE,Transaction,Date,Notification,Amount,New,
+Manning,20021470,SP,"Amazon.com, Inc. ",AMZN,Transaction,Date,Notification,Amount,New,
+Manning,20021470,SP,"Caterpillar, Inc. ",CAT,Transaction,Date,Notification,Amount,New,
+Manning,20021470,SP,"Nike, Inc. ",NKE,Transaction,Date,Notification,Amount,New,
+Manning,20021470,SP,S&P Global Inc. ,SPGI,Transaction,Date,Notification,Amount,New,
+Manning,20021470,SP,Thermo Fisher Scientific Inc ,TMO,Transaction,Date,Notification,Amount,New,
+Manning,20020481,JT,NVIdIA Corporation ,NaN,Transaction,Date,Notification,Amount,New,
+Manning,20020423,JT,"Netflix, Inc. ",NFLX,transaction,Date,notification,amount,New,
+Manning,20020423,JT,IHS Markit Ltd. Common Shares,NaN,S,12/31/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation ,NVDA,S (partial),11/12/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020423,JT,"PayPal Holdings, Inc. ",PYPL,P,11/12/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20021938,SP,"Echo Street GoodCo Select, LP",Hedge Funds & Private Equity Funds (non-EIF),P,11/01/2022,11/01/2022,"$100,001 - $250,000",New,Hedge Fund. Fund manager letter on file with the Committee on Ethics.
+Manning,20020423,SP,"Guerilla RF, Inc. [PS]",NaN,P,10/22/2021,10/22/2021,"$50,001 - $100,000",New,Chip design company
+Manning,20021938,SP,3M Company ,MMM,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Accenture plc Class A Ordinary Shares,ACN,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Adobe Inc. ,ADBE,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Alphabet Inc.,NaN,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Amazon.com, Inc. ",AMZN,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Ameren Corporation ,AEE,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"American Electric Power Company,",NaN,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,American Tower Corporation ,AMT,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Amgen Inc. ,AMGN,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Apple Inc. ,AAPL,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Applied Materials, Inc. ",AMAT,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,AT&T Inc. ,T,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Bank of America Corporation ,BAC,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Berkshire Hathaway Inc. New S,BRK.B,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"BlackRock, Inc. ",BLK,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Broadcom Corporation,NaN,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Cisco Systems, Inc. ",CSCO,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Coca,NaN,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Comcast Corporation,CMCSA,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Costco Wholesale Corporation ,COST,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Equinix, Inc. ",EQIX,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Estee Lauder Companies, Inc. ",EL,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,FedEx Corporation ,FDX,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Home Depot, Inc. ",HD,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Intuit Inc. ,INTU,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Intuitive Surgical, Inc. ",ISRG,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Invitation Homes Inc. ,INVH,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Johnson & Johnson ,JNJ,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Kimberly,NaN,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Lam Research Corporation ,LRCX,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Mastercard Incorporated ,MA,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,McDonald's Corporation ,MCD,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Medtronic plc. Ordinary Shares,MDT,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Meta Platforms, Inc.",NaN,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Microsoft Corporation ,MSFT,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Nike, Inc. ",NKE,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,NVIDIA Corporation ,NVDA,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Oracle Corporation ,ORCL,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Pfizer, Inc. ",PFE,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,PPL Corporation ,PPL,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Procter & Gamble Company ,PG,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,QUALCOMM Incorporated ,QCOM,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Raytheon Company ,NaN,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,S&P Global Inc. ,SPGI,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Salesforce, Inc. ",CRM,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"Tesla, Inc. ",TSLA,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Texas Instruments Incorporated,TXN,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Thermo Fisher Scientific Inc ,TMO,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,"United Parcel Service, Inc. ",UPS,S,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,UnitedHealth Group Incorporated S,NaN,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Verizon Communications Inc. ,VZ,P,10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021938,SP,Visa Inc. ,V,S (partial),10/12/2022,11/04/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Alphabet Inc.,NaN,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Alphabet Inc.,GOOG,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,"Amazon.com, Inc. ",AMZN,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Apple Inc. ,AAPL,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,AT&T Inc. ,T,S,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Bank of America Corporation ,BAC,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Berkshire Hathaway Inc. New,BRK.B,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Broadcom Inc. ,AVGO,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Chevron Corporation ,CVX,P,08/05/2022,09/06/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Manning,20021695,SP,Costco Wholesale Corporation ,COST,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,"Home Depot, Inc. ",HD,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Johnson & Johnson ,JNJ,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,"Merck & Company, Inc. Common S ",MRK,S (partial),08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,"Meta Platforms, Inc.",NaN,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Microsoft Corporation ,MSFT,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,NVIDIA Corporation ,NVDA,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,"Pepsico, Inc. ",PEP,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,Procter & Gamble Company ,PG,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,"Tesla, Inc. ",TSLA,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,SP,UnitedHealth Group Incorporated,NaN,P,08/05/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Altria Group, Inc. ",MO,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Amcor plc Ordinary Shares ,AMCR,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"American International Group, Inc.",NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Amgen Inc. ,AMGN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,APA Corporation ,APA,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,AT&T Inc. ,T,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"AutoZone, Inc. ",AZO,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Bank of America Corporation ,BAC,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Best Buy Co., Inc. ",BBY,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Biogen Inc. ,BIIB,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Boston Properties, Inc. ",BXP,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Builders FirstSource, Inc. ",BLDR,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Capital One Financial Corporation,COF,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Cardinal Health, Inc. ",CAH,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Celanese Corporation Celanese,NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Charter Communications, Inc.",NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Citigroup, Inc. ",C,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Comerica Incorporated ,NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Crown Holdings, Inc. ",NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Darden Restaurants, Inc. ",DRI,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Devon Energy Corporation ,DVN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Discover Financial Services ,DFS,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Domino's Pizza Inc ,DPZ,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Eastman Chemical Company ,EMN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Fair Isaac Corproation ,FICO,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Gartner, Inc. ",IT,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"HCA Healthcare, Inc. ",HCA,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Host Hotels ,HST,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,HP Inc. ,HPQ,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,International Paper Company ,IP,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,KeyCorp ,KEY,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Kinder Morgan, Inc. ",KMI,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"L3Harris Technologies, Inc. ",LHX,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Liberty Global plc,NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Loews Corporation ,L,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Lowe's Companies, Inc. ",LOW,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Lumen Technologies, Inc. ",NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Marathon Oil Corporation ,NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Marathon Petroleum Corporation,MPC,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Masco Corporation ,MAS,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,McKesson Corporation ,MCK,S,08/03/2022,09/06/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Manning,20021695,JT,"MetLife, Inc. ",MET,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Northrop Grumman Corporation,NOC,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"NVR, Inc. ",NVR,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Oracle Corporation ,ORCL,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Prudential Financial, Inc. ",PRU,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"PulteGroup, Inc. ",PHM,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Quest Diagnostics Incorporated,DGX,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Regency Centers Corporation ,REG,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,"Simon Property Group, Inc. ",SPG,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Synchrony Financial ,SYF,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,The Bank of New York Mellon,NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Union Pacific Corporation ,UNP,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Wells Fargo & Company ,WFC,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Weyerhaeuser Company ,WY,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021695,JT,Whirlpool Corporation ,NaN,S,08/03/2022,09/06/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Abbott Laboratories ,ABT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Abbott Laboratories ,ABT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,AbbVie Inc. ,ABBV,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,AbbVie Inc. ,ABBV,S (partial),07/27/2022,08/03/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Accenture plc Class A Ordinary Shares,ACN,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Accenture plc Class A Ordinary Shares,ACN,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Air Products and Chemicals, Inc.",APD,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Air Products and Chemicals, Inc.",APD,P,07/27/2022,08/02/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Manning,20021470,SP,Alphabet Inc.,NaN,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Alphabet Inc.,NaN,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Alphabet Inc.,GOOG,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Amgen Inc. ,AMGN,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Amgen Inc. ,AMGN,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Aon plc Class A Ordinary Shares,AON,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Apple Inc. ,AAPL,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Apple Inc. ,AAPL,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Centene Corporation ,CNC,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Centene Corporation ,CNC,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Chubb Limited ,CB,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Citizens Financial Group, Inc. ",CFG,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Citizens Financial Group, Inc. ",CFG,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,CME Group Inc.,NaN,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Estee Lauder Companies, Inc. ",EL,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Estee Lauder Companies, Inc. ",EL,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Expeditors International of,NaN,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"General Mills, Inc. ",GIS,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"General Mills, Inc. ",GIS,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Home Depot, Inc. ",HD,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Intuit Inc. ,INTU,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Intuit Inc. ,INTU,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Johnson & Johnson ,JNJ,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,JP Morgan Chase & Co. ,JPM,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,JP Morgan Chase & Co. ,JPM,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Lam Research Corporation ,LRCX,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Lam Research Corporation ,LRCX,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Lockheed Martin Corporation ,LMT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Medtronic plc. Ordinary Shares,MDT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Medtronic plc. Ordinary Shares,MDT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Micron Technology, Inc. ",MU,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Microsoft Corporation ,MSFT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Microsoft Corporation ,MSFT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Microsoft Corporation ,MSFT,P,07/27/2022,08/02/2022,"$15,001 - $50,000",New,
+Manning,20021470,SP,"Nike, Inc. ",NKE,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Nike, Inc. ",NKE,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,NVIDIA Corporation ,NVDA,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,NVIDIA Corporation ,NVDA,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Packaging Corporation of America,PKG,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"PayPal Holdings, Inc. ",PYPL,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"PayPal Holdings, Inc. ",PYPL,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Pfizer, Inc. ",PFE,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Procter & Gamble Company ,PG,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,QUALCOMM Incorporated ,QCOM,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Starbucks Corporation ,SBUX,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Starbucks Corporation ,SBUX,S (partial),07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Sysco Corporation ,SYY,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"TJX Companies, Inc. ",TJX,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"TJX Companies, Inc. ",TJX,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Visa Inc. ,V,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Walmart Inc. ,WMT,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Walt Disney Company ,DIS,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Walt Disney Company ,DIS,P,07/27/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021437,SP,"Echo Street GoodCo Select, LP",Hedge Funds & Private Equity Funds (non-EIF),P,07/25/2022,07/25/2022,"$250,001 - $500,000",New,Hedge Fund. Fund manager letter on file with the Committee on Ethics.
+Manning,20021470,JT,Ally Financial Inc. ,NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Altria Group, Inc. ",MO,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Amcor plc Ordinary Shares ,AMCR,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"American International Group, Inc.",NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Ameriprise Financial, Inc. ",AMP,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Amgen Inc. ,AMGN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,APA Corporation ,APA,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,AT&T Inc. ,T,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"AutoZone, Inc. ",AZO,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Bank of America Corporation ,BAC,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Best Buy Co., Inc. ",BBY,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Biogen Inc. ,BIIB,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Builders FirstSource, Inc. ",BLDR,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Capital One Financial Corporation,COF,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Cardinal Health, Inc. ",CAH,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Celanese Corporation Celanese,NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Charter Communications, Inc.",NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Citigroup, Inc. ",C,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Comerica Incorporated ,NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Crown Holdings, Inc. ",NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Devon Energy Corporation ,DVN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Discover Financial Services ,DFS,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Domino's Pizza Inc ,DPZ,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Eastman Chemical Company ,EMN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Fair Isaac Corproation ,FICO,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Gartner, Inc. ",IT,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"HCA Healthcare, Inc. ",HCA,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Host Hotels ,HST,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,HP Inc. ,HPQ,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,International Paper Company ,IP,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,KeyCorp ,KEY,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Kinder Morgan, Inc. ",KMI,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"L3Harris Technologies, Inc. ",LHX,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Liberty Global plc,NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Loews Corporation ,L,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Lowe's Companies, Inc. ",LOW,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Lumen Technologies, Inc. ",NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Marathon Oil Corporation ,NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Marathon Petroleum Corporation,MPC,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Masco Corporation ,MAS,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,McKesson Corporation ,MDT,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"MetLife, Inc. ",MET,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Northrop Grumman Corporation,NOC,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"NVR, Inc. ",NVR,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Oracle Corporation ,ORCL,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"Prudential Financial, Inc. ",PRU,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,"PulteGroup, Inc. ",PHM,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Quest Diagnostics Incorporated,DGX,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Synchrony Financial ,SYF,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,The Bank of New York Mellon,NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Union Pacific Corporation ,UNP,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Wells Fargo & Company ,WFC,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,JT,Whirlpool Corporation ,NaN,P,07/20/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Abbott Laboratories ,ABT,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,AbbVie Inc. ,ABBV,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Accenture plc Class A Ordinary Shares,ACN,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Adobe Inc. ,ADBE,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Alphabet Inc.,NaN,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Alphabet Inc.,GOOG,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Apple Inc. ,AAPL,P,07/15/2022,08/02/2022,"$15,001 - $50,000",New,
+Manning,20021470,SP,AT&T Inc. ,T,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Bank of America Corporation ,BAC,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Berkshire Hathaway Inc. New,BRK.B,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Bristol,BMY,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Broadcom Inc. ,AVGO,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Chevron Corporation ,CVX,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Cisco Systems, Inc. ",CSCO,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Coca,NaN,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Comcast Corporation,CMCSA,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Costco Wholesale Corporation ,COST,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,CVS Health Corporation ,CVS,P,07/15/2022,08/03/2022,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Manning,20021470,SP,Danaher Corporation ,DHR,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Eli Lilly and Company ,LLY,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Exxon Mobil Corporation ,XOM,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Home Depot, Inc. ",HD,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Intel Corporation ,INTC,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Johnson & Johnson ,JNJ,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,JP Morgan Chase & Co. ,JPM,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Linde plc Ordinary Share ,LIN,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Lowe's Companies, Inc. ",LOW,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Mastercard Incorporated ,MA,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,McDonald's Corporation ,MCD,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Merck & Company, Inc. Common ",MRK,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Meta Platforms, Inc.",NaN,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Microsoft Corporation ,MSFT,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"NextEra Energy, Inc. ",NEE,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,NVIDIA Corporation ,NVDA,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Pepsico, Inc. ",PEP,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Pfizer, Inc. ",PFE,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Philip Morris International Inc ,PM,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Procter & Gamble Company ,PG,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,QUALCOMM Incorporated ,QCOM,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Raytheon Company ,NaN,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Salesforce, Inc. ",CRM,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Tesla, Inc. ",TSLA,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,UnitedHealth Group Incorporated,NaN,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Verizon Communications Inc. ,VZ,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Visa Inc. ,V,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Walmart Inc. ,WMT,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Walt Disney Company ,DIS,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,Wells Fargo & Company ,WFC,P,07/15/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021470,SP,"Amazon.com, Inc. ",AMZN,P,07/14/2022,08/02/2022,"$1,001 - $15,000",New,
+Manning,20021437,SP,Abdiel Qualified Onshore,NaN,S,07/01/2022,07/25/2022,"$500,001 - $1,000,000",New,Hedge Fund. Fund manager letter on file with the Committee on Ethics.
+Manning,20021226,JT,"Align Technology, Inc. ",ALGN,S,06/15/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,American Tower Corporation,AMT,S,06/15/2022,07/05/2022,"$50,001 - $100,000",New,
+Manning,20021226,JT,Blackstone Inc. ,BX,S,06/15/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,"Chipotle Mexican Grill, Inc.",CMG,S,06/15/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,"ServiceNow, Inc. ",NOW,S,06/15/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,Visa Inc. ,V,S,06/15/2022,07/05/2022,"$50,001 - $100,000",New,
+Manning,20020423,SP,Triad Business Bank ,NaN,P,06/15/2021,06/15/2021,"$50,001 - $100,000",New,Small public community bank.
+Manning,20021226,SP,"Wonder Media Network, LLC",Stock (Not Publicly Traded),P,06/14/2022,06/14/2022,"$250,001 - $500,000",New,Class Preferred Units
+Manning,20021226,JT,Adobe Inc. ,ADBE,S (partial),06/10/2022,07/05/2022,"$1,001 - $15,000",New,
+Manning,20021226,JT,ASML Holding N.V.,NaN,S,06/10/2022,07/05/2022,"$50,001 - $100,000",New,
+Manning,20021226,JT,"Chipotle Mexican Grill, Inc. ",CMG,S (partial),06/10/2022,07/05/2022,"$1,001 - $15,000",New,
+Manning,20021226,JT,CME Group Inc.,NaN,S (partial),06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,"Equinix, Inc. ",EQIX,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,"Illumina, Inc. ",NaN,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,"Intuitive Surgical, Inc. ",ISRG,S (partial),06/10/2022,07/05/2022,"$1,001 - $15,000",New,
+Manning,20021226,JT,"Match Group, Inc. ",MTCH,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,"Netflix, Inc. ",NFLX,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,NVIDIA Corporation ,NVDA,S (partial),06/10/2022,07/05/2022,"$1,001 - $15,000",New,
+Manning,20021226,JT,"ServiceNow, Inc. ",NOW,S (partial),06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,Snap Inc. Class A ,NaN,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021045,JT,"Amazon.com, Inc. ",AMZN,P,05/27/2022,06/06/2022,"$1,001 - $15,000",New,
+Manning,20021045,JT,American Tower Corporation ,AMT,S (partial),05/27/2022,06/06/2022,"$15,001 - $50,000",New,
+Manning,20021045,JT,ASML Holding N.V.,NaN,P,05/27/2022,06/06/2022,"$1,001 - $15,000",New,
+Manning,20021045,JT,CME Group Inc.,NaN,S (partial),05/27/2022,06/06/2022,"$1,001 - $15,000",New,
+Manning,20021045,JT,"Estee Lauder Companies, Inc. ",EL,P,05/27/2022,06/06/2022,"$1,001 - $15,000",New,
+Manning,20021045,JT,"ServiceNow, Inc. ",NOW,P,05/27/2022,06/06/2022,"$15,001 - $50,000",New,
+Manning,20021045,JT,Visa Inc. ,V,S (partial),05/27/2022,06/06/2022,"$1,001 - $15,000",New,
+Manning,20020925,JT,ASML Holding N.V.,NaN,P,04/29/2022,05/03/2022,"$1,001 - $15,000",New,
+Manning,20020925,JT,Visa Inc. ,V,S (partial),04/29/2022,05/03/2022,"$1,001 - $15,000",New,
+Manning,20020925,JT,"ServiceNow, Inc. ",NOW,P,04/27/2022,05/03/2022,"$1,001 - $15,000",New,
+Manning,20020925,JT,Visa Inc. ,V,S (partial),04/27/2022,05/03/2022,"$1,001 - $15,000",New,
+Manning,20020925,SP,"Citigroup, Inc. ",C,S,04/19/2022,05/03/2022,"$1,001 - $15,000",New,
+Manning,20020925,SP,"Citigroup, Inc. ",C,S,04/19/2022,05/03/2022,"$1,001 - $15,000",New,
+Manning,20020423,JT,"Estee Lauder Companies, Inc. ",EL,S (partial),03/25/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020742,JT,ASML Holding N.V.,NaN,P,03/03/2022,04/04/2022,"$15,001 - $50,000",New,
+Manning,20020742,JT,"PayPal Holdings, Inc. ",PYPL,S,03/03/2022,04/04/2022,"$50,001 - $100,000",New,
+Manning,20020423,JT,"Match Group, Inc. ",MTCH,P,02/24/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020423,JT,Snap Inc. Class A ,NaN,S (partial),02/24/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020481,JT,"Meta Platforms, Inc.",NaN,S,02/18/2022,03/03/2022,"$50,001 - $100,000",New,
+Manning,20020481,JT,"ServiceNow, Inc. ",NOW,P,02/18/2022,03/03/2022,"$15,001 - $50,000",New,
+Manning,20020481,SP,"Next Century Spirits, LLC [OL]",NaN,P,02/15/2022,02/15/2022,"$100,001 - $250,000",New,
+Manning,20020481,SP,Seven Bridges Private Equity,NaN,P,02/15/2022,02/15/2022,"$15,001 - $50,000",New,
+Manning,20020423,JT,IHS Markit Ltd. Common Shares S,NaN,S (partial),02/02/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020423,JT,Visa Inc. ,V,P,02/02/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020423,JT,"PayPal Holdings, Inc. ",PYPL,S (partial),01/22/2021,02/09/2022,"$15,001 - $50,000",New,
+Manning,20020423,SP,"Brown Robin Partners I, LLC",NaN,P,01/12/2022,01/12/2022,"$15,001 - $50,000",New,
+Manning,20020742,JT,CME group Inc.,NaN,04/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020742,JT,"Equinix, Inc. (EQIX) [ST] S ",NaN,04/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020742,JT,"ServiceNow, Inc. ",NOW,04/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020481,JT,Adobe Inc. ,NaN,03/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020481,JT,"Intuitive Surgical, Inc. ",ISRG,03/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020481,JT,"Netflix, Inc. ",NFLX,03/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020481,JT,Snap Inc. Class A ,NaN,03/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Adobe Inc. ,ADBE,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Amazon.com, Inc. (AMZN) [ST] S ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,SP,Biogen Inc. ,BIIB,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,SP,"Brown Robin Partners LTH I, LLC P",NaN,01/12/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Chipotle Mexican Grill, Inc. ",CMG,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,CME Group Inc.,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,CME Group Inc.,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,IHS Markit Ltd. Common Shares S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,IHS Markit Ltd. Common Shares S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,IHS Markit Ltd. Common Shares S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,IHS Markit Ltd. Common Shares S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Illumina, Inc. (ILMN) [ST] S ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Illumina, Inc. ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Illumina, Inc. ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Illumina, Inc. ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Intuit Inc. (INTU) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Intuit Inc. (INTU) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Intuitive Surgical, Inc. (ISRG) [ST] S ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Intuitive Surgical, Inc. (ISRG) [ST] S ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Match Group, Inc. ",MTCH,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Match Group, Inc. ",MTCH,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Match Group, Inc. ",MTCH,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Match Group, Inc. ",MTCH,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Match Group, Inc. ",MTCH,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Match Group, Inc. ",MTCH,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Meta Platforms, Inc.",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,"f/k/a Facebook, Inc. CL A"
+Manning,20020423,JT,Microsoft Corporation (MSFT) S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Netflix, Inc. ",NFLX,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Netflix, Inc. ",NFLX,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation ,NVDA,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"PayPal Holdings, Inc. ",PYPL,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Snap Inc. Class A ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Snap Inc. Class A (SNAP) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Snap Inc. Class A ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Snap Inc. Class A ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Snap Inc. Class A ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Snap Inc. Class A ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,SP,Southwest Airlines Company S,LUV,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,Visa Inc. ,V,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Matsui,20021148,SP,"Intrinsic Exchange Group,",NaN,P,06/03/2022,06/03/2022,Spouse/DC,New,"Loan to Intrinsic Exchange Group, Inc. evidenced by a Promissory Note."
+McKinley,20020158,JT,"Anthem, Inc. ",NaN,S,12/27/2021,12/31/2021,"$50,001 - $100,000",New,
+McKinley,20020158,JT,Sysco Corporation ,SYY,S,12/27/2021,12/31/2021,"$50,001 - $100,000",New,
+McKinley,20020158,JT,"Activision Blizzard, Inc ",NaN,S,12/06/2021,12/31/2021,"$15,001 - $50,000",New,
+McKinley,20020158,JT,linde plc Ordinary Share ,NaN,P,12/06/2021,12/31/2021,"$15,001 - $50,000",New,
+Meuser,20020458,SP,NVIDIA Corporation ,NVDA,S (partial),01/21/2022,02/01/2022,"$100,001 - $250,000",New,
+Meuser,20020458,DC,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Meuser,20020458,DC,NVIDIA Corporation (NVDA) [ST] S ,NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Miller,20021633,SP,Bristol,BMY,S (partial),11/10/2021,12/01/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,"Gilead Sciences, Inc. ",GILD,S (partial),11/10/2021,12/01/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,"L3Harris Technologies, Inc. ",LHX,S (partial),11/10/2021,12/01/2021,"$15,001 - $50,000",New,
+Miller,20021636,SP,Emerson Electric Company,EMR,S,08/08/2022,09/01/2022,"$15,001 - $50,000",New,
+Miller,20021636,SP,Target Corporation ,TGT,P,08/08/2022,09/01/2022,"$15,001 - $50,000",New,
+Miller,20021636,SP,"United Parcel Service, Inc. ",UPS,P,08/08/2022,09/01/2022,"$15,001 - $50,000",New,
+Miller,20021633,SP,"BlackRock, Inc. ",BLK,P,07/28/2021,08/02/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,"Dominion Energy, Inc. ",D,S (partial),07/28/2021,08/02/2021,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Miller,20021633,SP,General Dynamics Corporation,GD,P,07/28/2021,08/02/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,Hormel Foods Corporation ,HRL,S (partial),07/28/2021,08/02/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,"Merck & Company, Inc. Common ",MRK,S (partial),07/28/2021,08/02/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,Quest Diagnostics,DGX,P,07/28/2021,08/02/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,Texas Instruments,TXN,P,07/28/2021,08/02/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,ViacomCBS Inc.,Stocks (including ADRs),P,07/28/2021,08/02/2021,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Miller,20021633,SP,Abbott Laboratories ,ABT,P,03/04/2021,04/01/2021,"$1,001 - $15,000",New,
+Miller,20021633,SP,Amgen Inc. ,AMGN,P,03/04/2021,04/01/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,"Cisco Systems, Inc. ",CSCO,P,03/04/2021,04/01/2021,"$1,001 - $15,000",New,
+Miller,20021633,SP,Clorox Company ,CLX,P,03/04/2021,04/01/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,"Dominion Energy, Inc. ",D,P,03/04/2021,04/01/2021,"$1,001 - $15,000",New,
+Miller,20021633,SP,Iron Mountain Incorporated ,IRM,P,03/04/2021,04/01/2021,"$1,001 - $15,000",New,
+Miller,20021633,SP,Johnson & Johnson ,JNJ,P,03/04/2021,04/01/2021,"$15,001 - $50,000",New,
+Miller,20021633,SP,Procter & Gamble Company ,PG,P,03/04/2021,04/01/2021,"$1,001 - $15,000",New,
+Miller,20021633,SP,Viatris Inc. ,VTRS,S,03/04/2021,04/01/2021,"$1,001 - $15,000",New,
+Miller,20021633,SP,"Waste Management, Inc. ",WM,P,03/04/2021,04/01/2021,"$1,001 - $15,000",New,
+Newman,20020370,SP,Apple Inc. ,AAPL,S,12/31/2021,02/03/2022,"$15,001 - $50,000",New,
+Newman,20020145,SP,"best buy Co., Inc. ",NaN,P,12/29/2021,01/04/2022,"$15,001 - $50,000",New,
+Newman,20022173,JT,"Coinbase Global, Inc.",NaN,S,11/21/2022,11/24/2022,"$1,001 - $15,000",New,
+Newman,20020370,SP,"Zoom Video Communications, Inc.",NaN,S,01/11/2022,02/03/2022,"$15,001 - $50,000",New,
+Newman,20020560,SP,"Activision blizzard, Inc ",NaN,03/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Newman,20020560,SP,"Activision blizzard, Inc ",NaN,03/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Newman,20020560,SP,"Coinbase global, Inc.",NaN,03/03/2022,"$1,001",-,"$15,001 - $50,000",New,call
+Newman,20020370,JT,"Coinbase global, Inc.",NaN,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,
+Newman,20020370,JT,grayscale bitcoin TR bTC: gbTC P,NaN,02/03/2022,"$1,001",-,"$15,001 - $50,000",New,Stock
+Newman,20020145,SP,"Coinbase global, Inc.",NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,call
+O'Halleran,20022160,SP,U.S. Treasury Bond [GS],NaN,P,10/28/2022,10/28/2022,"$1,001 - $15,000",New,
+Pelosi,20021837,SP,Walt Disney Company,DIS,[OP],S,09/16/2022,09/16/2022,New,50 call options purchased 12/17/21 with a strike price of $130 and an expiration date of 9/16/22 expired with
+Pelosi,20020208,SP,Apple Inc. ,NaN,S (partial),12/30/2021,12/30/2021,"$500,001 - $1,000,000",New,"Contribution of 3,000 shares held personally to the Paul F. Pelosi Endowed Fund at georgetown university."
+Pelosi,20020208,SP,Apple Inc. ,NaN,S (partial),12/30/2021,12/30/2021,"$500,001 - $1,000,000",New,"Contribution of 3,000 shares held personally to Trinity College."
+Pelosi,20022063,SP,Visa Inc. ,V,S (partial),11/08/2022,11/08/2022,"$1,000,001 - $5,000,000",New,"Sold 20,000 shares."
+Pelosi,20021837,SP,Alphabet Inc.,GOOG,P,09/16/2022,09/16/2022,"$1,000,001 - $5,000,000",New,"Exercised 200 call options purchased 12/17/21 (20,000 shares) at a strike price of $100 with an expiration"
+Pelosi,20021837,SP,"Micron Technology, Inc. ",MU,S,09/16/2022,09/16/2022,"$15,001 - $50,000",New,Sold 100 call options purchased 12/21/21 with a strike price of $50 and an expiration date of 9/16/22.
+Pelosi,20021837,SP,NVIDIA Corporation ,NVDA,S,09/16/2022,09/16/2022,"$100,001 - $250,000",New,Sold 50 call options purchased 7/23/21 with a strike price of $100 and an expiration date of 9/16/22.
+Pelosi,20021675,SP,"REOF XX, LLC",Asset-Backed Securities,P,08/24/2022,08/24/2022,"$15,001 - $50,000",New,"Additional investment in LLC which acquired five Courtyard by Marriott hotels located in Fairfax, VA (one),"
+Pelosi,20021438,SP,NVIDIA Corporation ,NVDA,S,07/26/2022,07/26/2022,"$1,000,001 - $5,000,000",New,"Sold 25,000 shares."
+Pelosi,20021374,SP,Visa Inc. ,V,S (partial),06/21/2022,06/21/2022,"$1,000,001 - $5,000,000",New,"Sold 10,000 shares."
+Pelosi,20021374,SP,Apple Inc. ,AAPL,S (partial),06/17/2022,06/17/2022,"$100,001 - $250,000",New,Sold 50 call options with a strike price of $100 and an expiration date of 6/17/22.
+Pelosi,20021374,SP,NVIDIA Corporation ,NVDA,P,06/17/2022,06/17/2022,"$1,000,001 - $5,000,000",New,"Exercised 200 call options (20,000 shares) expiring 6/17/22 at a strike price of $100."
+Pelosi,20021142,SP,Apple Inc. ,AAPL,P,05/24/2022,05/24/2022,"$250,001 - $500,000",New,Purchased 50 call options with a strike price of $80 and an expiration date of 6/16/23.
+Pelosi,20021142,SP,Microsoft Corporation ,MSFT,P,05/24/2022,05/24/2022,"$50,001 - $100,000",New,Purchased 10 call options with a strike price of $180 and an expiration date of 6/16/23.
+Pelosi,20021142,SP,Microsoft Corporation ,MSFT,P,05/24/2022,05/24/2022,"$250,001 - $500,000",New,Purchased 40 call options with a strike price of $180 and an expiration date of 6/16/23.
+Pelosi,20021142,SP,Apple Inc. ,AAPL,P,05/13/2022,05/13/2022,"$500,001 - $1,000,000",New,Purchased 100 call options with a strike price of $80 and an expiration date of 3/17/23.
+Pelosi,20020916,SP,"Warner Bros. Discovery, Inc.",NaN,E,04/11/2022,04/11/2022,"$50,001 - $100,000",New,2419 shares received as the result of a spinoff of AT&T (T) shares held.
+Pelosi,20020662,SP,"Tesla, Inc. ",NaN,P,03/17/2022,03/17/2022,"$1,000,001 - $5,000,000",New,"Exercised 25 call options (2,500 shares) expiring 3/18/22 at a strike price of $500."
+Pelosi,20020515,SP,AllianceBernstein Holding l.P.,NaN,P,01/27/2022,01/27/2022,"$250,001 - $500,000",New,"Purchased 10,000 units in a global asset management firm providing investment management and research"
+Pelosi,20020515,SP,American Express Company ,AXP,P,01/21/2022,01/21/2022,"$250,001 - $500,000",New,"Exercised 50 call options (5,000 shares) expiring 1/21/22 at a strike price of $80."
+Pelosi,20020515,SP,Apple Inc. ,NaN,P,01/21/2022,01/21/2022,"$1,000,001 - $5,000,000",New,"Exercised 100 call options (10,000 shares) expiring 1/21/22 at a strike price of $100."
+Pelosi,20020515,SP,"PayPal Holdings, Inc. ",NaN,P,01/21/2022,01/21/2022,"$500,001 - $1,000,000",New,"Exercised 50 call options (5,000 shares) expiring 1/21/22 at a strike price of $100."
+Pelosi,20020515,SP,Walt Disney Company ,DIS,P,01/21/2022,01/21/2022,"$1,000,001 - $5,000,000",New,"Exercised 100 call options (10,000 shares) expiring 1/21/22 at a strike price of $100."
+Perlmutter,20022158,SP,"Amazon.com, Inc. ",AMZN,P,11/10/2022,12/16/2022,"$1,001 - $15,000",New,
+Perlmutter,20022158,SP,Apple Inc. ,AAPL,P,11/10/2022,12/16/2022,"$1,001 - $15,000",New,
+Perlmutter,20022158,SP,"ChargePoint Holdings, Inc. ",NaN,P,11/10/2022,12/16/2022,"$1,001 - $15,000",New,
+Perlmutter,20022158,SP,Costco Wholesale Corporation ,COST,P,11/10/2022,12/16/2022,"$1,001 - $15,000",New,
+Perlmutter,20022158,SP,"ChargePoint Holdings, Inc. ",NaN,S,11/01/2022,12/16/2022,"$1,001 - $15,000",New,
+Perlmutter,20021752,SP,"ChargePoint Holdings, Inc. ",NaN,P,09/02/2022,09/23/2022,"$1,001 - $15,000",New,
+Perlmutter,20021752,SP,Kroger Company ,KR,P,07/19/2022,09/26/2022,"$1,001 - $15,000",New,
+Perlmutter,20021232,SP,Apple Inc. ,AAPL,S,05/20/2022,06/08/2022,"$1,001 - $15,000",New,
+Perlmutter,20021232,SP,Ford Motor Company ,F,S,05/20/2022,06/08/2022,"$1,001 - $15,000",New,
+Perlmutter,20021232,SP,"Amazon.com, Inc. ",AMZN,S,05/13/2022,06/08/2022,"$1,001 - $15,000",New,
+Perlmutter,20021232,SP,Apple Inc. ,AAPL,S (partial),05/13/2022,06/08/2022,"$1,001 - $15,000",New,
+Perlmutter,20021232,SP,Ford Motor Company ,F,S (partial),05/13/2022,06/08/2022,"$1,001 - $15,000",New,
+Perlmutter,20021232,SP,Microsoft Corporation ,MSFT,S (partial),05/13/2022,06/08/2022,"$1,001 - $15,000",New,
+Perlmutter,20021232,SP,Verizon Communications Inc. ,VZ,S (partial),05/13/2022,06/08/2022,"$1,001 - $15,000",New,
+Perlmutter,20020987,SP,Costco Wholesale Corporation S,COST,S (partial),04/22/2022,05/09/2022,"$1,001 - $15,000",New,
+Perlmutter,20020300,SP,Berkshire Hathaway Inc. New S,BRK.B,01/12/2022,"$1,001",-,"$15,001 - $50,000",New,
+Perlmutter,20020300,SP,"Coinbase global, Inc.",NaN,01/12/2022,"$1,001",-,"$15,001 - $50,000",New,
+Peters,20021674,SP,Folsom Cordova CA Impt Sch,Government Securities and Agency Debt,P,08/12/2022,08/31/2022,"$250,001 - $500,000",New,
+Peters,20021674,SP,Los Angeles County Excise Tax,Government Securities and Agency Debt,P,08/12/2022,08/31/2022,"$250,001 - $500,000",New,
+Peters,20021674,SP,Ohlone Community College,NaN,S,08/01/2022,08/31/2022,"$250,001 - $500,000",New,
+Peters,20021674,SP,Rowland CA USD,Government Securities and Agency Debt,S,08/01/2022,08/31/2022,"$250,001 - $500,000",New,
+Peters,20021506,SP,San Francisco CA Sewer Util,Government Securities and Agency Debt,P,07/06/2022,07/31/2022,"$100,001 - $250,000",New,
+Peters,20021506,SP,San Francisco CA Sewer Util,Government Securities and Agency Debt,P,07/06/2022,07/31/2022,"$500,001 - $1,000,000",New,
+Peters,20021323,SP,East Bay MUD Sys CA,Government Securities and Agency Debt,P,06/21/2022,06/30/2022,"$250,001 - $500,000",New,
+Peters,20021323,SP,Lodi CA USD GO UTX,Government Securities and Agency Debt,P,06/02/2022,06/30/2022,"$100,001 - $250,000",New,
+Peters,20021202,SP,San Francisco CA BART,Government Securities and Agency Debt,P,05/26/2022,05/31/2022,"$250,001 - $500,000",New,
+Peters,20021202,SP,San Francisco CA IMP SCH,Government Securities and Agency Debt,P,05/26/2022,05/31/2022,"$100,001 - $250,000",NewID Owner Asset Transaction Date Notification Amount Cap.,
+Peters,20021202,SP,San Francisco CA IMPT SCH,Government Securities and Agency Debt,P,05/26/2022,05/31/2022,"$250,001 - $500,000",New,
+Peters,20021202,SP,Mammoth CA USD IMPT SCH,Government Securities and Agency Debt,P,05/24/2022,05/31/2022,"$100,001 - $250,000",New,
+Peters,20021202,SP,Cerritos CA CCD COLL EDUC,Government Securities and Agency Debt,P,05/20/2022,05/31/2022,"$100,001 - $250,000",New,CUSIP: 156792GD9
+Peters,20021202,SP,San Mateo CA UHSD IMPT SCH,Government Securities and Agency Debt,P,05/19/2022,05/31/2022,"$100,001 - $250,000",New,
+Peters,20021202,SP,CA ST DEPT WTR UTIL,Government Securities and Agency Debt,P,05/18/2022,05/31/2022,"$250,001 - $500,000",New,
+Peters,20021202,SP,Orange CTY CA REV UTX,Government Securities and Agency Debt,P,05/18/2022,05/31/2022,"$100,001 - $250,000",New,
+Peters,20021202,SP,East Bay MUD SYS CA,Government Securities and Agency Debt,P,05/16/2022,05/31/2022,"$500,001 - $1,000,000",New,
+Peters,20021049,SP,Multi,Ownership Interest (Engaged in a Trade or Business),P,04/19/2022,04/30/2022,Spouse/DC,New,Packaging Company
+Peters,20020436,SP,"gV Pines Apartments, LLC [OL]",NaN,P,01/31/2022,01/31/2022,"$100,001 - $250,000",New,Real Estate
+Pfluger,20021108,SP,"Warner Bros. Discovery, Inc.",NaN,E,04/11/2022,05/25/2022,"$1,001 - $15,000",New,Shares of Warner Bros Discovery Inc. received in exchange for shares of Discovery Inc following corporate
+Raskin,20020973,SP,i,NaN,E,02/09/2022,03/11/2022,"$250,001 - $500,000",New,"IX Investments LLC merged with i(X) NetZero exchange ratio of 160,000 Class P shares in IX investments"
+Ross,20020182,SP,Apple Inc. ,AAPL,P,12/30/2021,12/30/2021,"$15,001 - $50,000",New,AAPL 20JAN23 180 Call Not part of Compensation or ESOP
+Ross,20020182,SP,"Meta Platforms, Inc.",NaN,P,12/30/2021,12/30/2021,"$15,001 - $50,000",New,FB 20JAN23 340 Calls Not part of compensation or ESOPID Owner Asset Transaction Date Notification Amount Cap.
+Ross,20020182,SP,"Neogenomics, Inc. ",NaN,P,12/30/2021,12/30/2021,"$15,001 - $50,000",New,
+Ross,20020182,SP,Albemarle Corporation ,ALB,P,12/28/2021,12/28/2021,"$15,001 - $50,000",New,
+Ross,20020182,SP,Walt Disney Company ,DIS,P,12/28/2021,12/28/2021,"$15,001 - $50,000",New,
+Ross,20020492,JT,Microsoft Corporation (MSFT) S ,NaN,01/22/2022,"$1,001",-,"$15,001 - $50,000",New,
+Ross,20020492,JT,Microsoft Corporation (MSFT) S ,NaN,01/27/2022,"$1,001",-,"$15,001 - $50,000",New,
+Ross,20020182,SP,general Motors Company ,NaN,12/30/2021,"$1,001",-,"$15,001 - $50,000",New,gM 20JAN23 50 Calls Not part of Compensation or ESOP
+Ross,20020182,SP,ironSource Ltd. Class A Ordinary P,NaN,01/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Ross,20020182,JT,Microsoft Corporation (MSFT) S ,NaN,12/10/2021,"$1,001",-,"$15,001 - $50,000",New,
+Ross,20020182,JT,Microsoft Corporation (MSFT) S ,NaN,01/04/2022,"$1,001",-,"$15,001 - $50,000",New,
+Salazar,20021096,SPAC,"transaction, a public acquisition company purchased all equity of Cano Health",NaN,The,transaction,resulted,in,,
+Scanlon,20009266,SP,"Corteva, Inc. ",CTVA,S,02/12/2021,03/01/2021,"$1,001 - $15,000",New,
+Scanlon,20009266,SP,Dow Inc. ,DOW,S,02/12/2021,03/01/2021,"$1,001 - $15,000",New,
+Scanlon,20009266,SP,"International Flavors & Fragrances,",NaN,S,02/12/2021,03/01/2021,"$1,001 - $15,000",New,
+Scanlon,20009266,SP,Oracle Corporation ,ORCL,S,02/12/2021,03/01/2021,"$15,001 - $50,000",New,
+Scanlon,20021589,JT,Exelon Corporation ,EXC,E,02/04/2022,08/24/2022,"$15,001 - $50,000",New,Exelon Corporation (EXC) exchanged for Constellation Energy Corporation (CEG) following spin-off.
+Scanlon,20009266,SP,"DuPont de Nemours, Inc. ",DD,E,02/01/2021,03/01/2021,"$1,001 - $15,000",New,"DuPont de Nemours, Inc. (DD) exchanged for International Flavors & Fragrances, Inc. (IFF) following"
+Schneider,20020104,JT,"Trupanion, Inc. ",NaN,S (partial),12/10/2021,12/10/2021,"$50,001 - $100,000",New,
+Schneider,20020104,JT,"Trupanion, Inc. ",NaN,E,12/10/2021,12/10/2021,"$50,001 - $100,000",New,Donated shares to charity
+Schneider,20021496,SP,"Trupanion, Inc. ",NaN,S,12/07/2021,08/08/2022,"$15,001 - $50,000",New,
+Schneider,20021833,SP,"MZ Capital Mundelein, LLC [OI]",NaN,P,09/20/2022,10/09/2022,"$1,001 - $15,000",New,Multifamily Development
+Schneider,20021496,SP,"Trupanion, Inc. ",NaN,S (partial),02/08/2021,08/08/2022,"$50,001 - $100,000",New,
+Schrier,20020712,JT,Apple Inc. ,AAPL,S,03/22/2022,03/22/2022,"$250,001 - $500,000",New,
+Schrier,20020712,JT,Apple Inc. ,AAPL,S,03/22/2022,03/22/2022,"$500,001 - $1,000,000",New,Background Information: The holdings of Gowing Family Trust Secondary account were consolidated into the
+Schrier,20020712,JT,"Tesla, Inc. ",TSLA,S,03/22/2022,03/22/2022,"$250,001 - $500,000",New,Background Information: The holdings of Gowing Family Trust Secondary account were consolidated into the
+Schrier,20020712,SP,"Tesla, Inc. ",TSLA,S,03/22/2022,03/22/2022,"$250,001 - $500,000",New,
+Sessions,20021424,SP,Verizon Communications Inc. ,VZ,P,09/27/2022,09/30/2022,"$1,001 - $15,000",New,9 shares
+Sessions,20021424,SP,McDonald's Corporation ,MCD,P,09/21/2022,09/26/2022,"$1,001 - $15,000",New,15 shares
+Sessions,20021355,SP,"DigitalBridge Group, Inc. ",NaN,P,07/08/2022,07/12/2022,"$1,001 - $15,000",New,50 shares
+Sessions,20021355,SP,NVIDIA Corporation ,NVDA,P,07/08/2022,07/09/2022,"$1,001 - $15,000",New,15 shares
+Sessions,20020813,SP,Microsoft Corporation ,MSFT,P,04/15/2022,04/17/2022,"$1,001 - $15,000",New,20 shares CS
+Sessions,20020672,SP,NVIDIA Corporation ,NVDA,P,03/22/2022,03/22/2022,"$1,001 - $15,000",New,2 NVDA shares
+Sessions,20020443,SPDR,Select Sector Fund,NaN,S,01/18/2022,02/11/2022,"$15,001 - $50,000",New,494 shares
+Sessions,20020617,SP,"Medical Properties Trust, Inc. P",NaN,03/22/2022,"$1,001",-,"$15,001 - $50,000",New,50 shares
+Sessions,20020443,SP,"Invesco QQQ Trust, Series 1 ",OTIS,02/11/2022,"$1,001",-,"$15,001 - $50,000",New,100 shares
+Sherrill,20021099,JT,UBS Group AG Registered,NaN,S,05/23/2022,05/23/2022,"$100,001 - $250,000",New,
+Sherrill,20020589,JT,uBS group Ag Registered S,NaN,S (partial),03/09/2022,03/09/2022,"$100,001 - $250,000",New,
+Spanberger,20021643,SP,"L3Harris Technologies, Inc. ",LHX,P,09/01/2022,09/03/2022,"$1,001 - $15,000",New,"Spouse was granted a Restricted Unit Award of L3Harris Technologies, Inc common stock as part of his"
+Spartz,20020414,DC,"Simon Property group, Inc. ",NaN,02/08/2022,"$1,001",-,"$15,001 - $50,000",New,Transaction was made by Ingrid Spartz's minor Roth IRA.
+Spartz,20020413,DC,"Simon Property group, Inc. ",NaN,02/08/2022,"$1,001",-,"$15,001 - $50,000",New,This transaction was made by Lilianna Spartz's minor Roth IRA.
+Steube,20021743,SP,Synovus Financial Corp. ,NaN,S,08/25/2022,09/01/2022,"$1,001 - $15,000",New,
+Steube,20020396,SP,Synovus Financial Corp. ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,Company Distribution
+Steube,20020396,SP,Synovus Financial Corp. ,NaN,02/08/2022,"$1,001",-,"$15,001 - $50,000",New,Company Distribution
+Steube,20020396,SP,Synovus Financial Corp. ,NaN,02/23/2022,"$1,001",-,"$15,001 - $50,000",New,Company Distribution
+Steube,20020396,SP,Synovus Financial Corp. (SNV) S ,NaN,03/10/2021,"$1,001",-,"$15,001 - $50,000",New,
+Trahan,20020161,SP,general Electric Company ,NaN,12/28/2021,"$1,001",-,"$15,001 - $50,000",New,
+Wasserman Schultz,20021902,DC,"Adams Resources & Energy, Inc. ",NaN,S,10/27/2022,10/28/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20021741,DC,Lions Gate Entertainment,NaN,P,09/14/2022,09/15/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20021741,DC,Lions Gate Entertainment,NaN,P,09/14/2022,09/15/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20021585,DC,SPDR Select Sector Fund,NaN,S,08/19/2022,08/20/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20021585,SPDR,Select Sector Fund,NaN,S,08/19/2022,08/20/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20021585,DC,SPDR Select Sector Fund,NaN,S,08/19/2022,08/20/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20021585,DC,"Hill International, Inc. ",NaN,S,08/17/2022,08/17/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20021585,DC,"Hill International, Inc. ",NaN,S,08/17/2022,08/17/2022,"$1,001 - $15,000",New,
+Wasserman Schultz,20020290,DC,Patterson,NaN,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+Wasserman Schultz,20020290,DC,Patterson,NaN,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+Wasserman Schultz,20020290,DC,Patterson,NaN,01/21/2022,"$1,001",-,"$15,001 - $50,000",New,
+Wittman,20021807,SPDR,S&P 500 ETF Trust [OT],NaN,P,09/15/2022,09/19/2022,"$1,001 - $15,000",New,Mutual Fund
+Wittman,20021679,SPDR,Blackstone Senior Loan [OT],NaN,S,08/10/2022,08/12/2022,"$1,001 - $15,000",New,Mutual Fund
+Wittman,20021344,SPDR,S&P 500 ,NaN,S (partial),06/16/2022,06/21/2022,"$1,001 - $15,000",New,
+Wittman,20021150,JT,Duke Realty Corporation ,NaN,S (partial),05/10/2022,05/12/2022,"$1,001 - $15,000",New,
+Wittman,20021150,SPDR,Blackstone Senior Loan [AB],NaN,P,05/10/2022,05/12/2022,"$1,001 - $15,000",New,
+Wittman,20021015,SPDR,S&P 500 ETF Trust [AB],NaN,P,04/19/2022,04/21/2022,"$1,001 - $15,000",New,
+Wittman,20020748,SPDR,S&P 500 ,NaN,S (partial),03/15/2022,03/17/2022,"$1,001 - $15,000",New,Corporarte bond index fund
+Wittman,20020446,SPdR,S&P 500 ,NaN,01/19/2022,"$1,001",-,"$15,001 - $50,000",New,
+Wittman,20020446,SPdR,S&P 500 (SPY) [ST] S ,NaN,01/07/2022,"$1,001",-,"$15,001 - $50,000",New,
+Wittman,20020446,SPdR,Select Sector Fund,NaN,02/01/2022,"$1,001",-,"$15,001 - $50,000",New,
+Womack,20022049,SP,Bentonville Ark School District,Government Securities and Agency Debt,P,11/17/2022,11/17/2022,"$15,001 - $50,000",New,

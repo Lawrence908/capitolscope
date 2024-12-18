@@ -1,0 +1,205 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Barletta,20006832,JT,Vanguard Intermediate,Not in S&P 500,03/1/2017,03/1/2017,"$1,001",-,New,"Hon. Lou Barletta , 03/1/2017"
+Blum,20007916,JT,"Tintri, Inc. ",Not in S&P 500,08/4/2017,08/7/2017,"$50,001",-,New,"Hon. Rodney Leland Blum , 08/31/2017"
+Brooks,20008596,JT,Tenn Valley auth,Not in S&P 500,11/27/2017,11/27/2017,"$15,001",-,New,"Hon. Mo Brooks , 12/21/2017"
+Brooks,20008596,JT,"alpha Pro Tech, ltd. ",Not in S&P 500,11/20/2017,11/20/2017,"$1,001",-,New,
+Brooks,20008301,JT,"alpha Pro Tech, ltd. ",Not in S&P 500,10/13/2017,10/13/2017,"$1,001",-,New,"Hon. Mo Brooks , 10/30/2017"
+Brooks,20008301,JT,"alpha Pro Tech, ltd. ",Not in S&P 500,08/24/2017,08/27/2017,"$1,001",-,New,
+Brooks,20007835,JT,"alpha Pro Tech, ltd. ",Not in S&P 500,07/20/2017,07/20/2017,"$1,001",-,New,"Hon. Mo Brooks , 08/17/2017"
+Brooks,20007636,JT,"alpha Pro Tech, ltd. ",Not in S&P 500,06/29/2017,06/29/2017,"$1,001",-,New,"Hon. Mo Brooks , 07/16/2017"
+Brooks,20007640,SP,"onspira Therapeutics, Inc.",Not in S&P 500,06/15/2017,06/15/2017,"$15,001",-,New,"Hon. Susan W. Brooks , 07/17/2017"
+Brooks,20007410,JT,"alpha Pro Tech, ltd. ",Not in S&P 500,06/1/2017,06/1/2017,"$1,001",-,New,"Hon. Mo Brooks , 06/5/2017"
+Brooks,20007279,JT,"alpha Pro Tech, ltd. ",Not in S&P 500,05/12/2017,05/12/2017,"$1,001",-,New,
+Brooks,20007279,JT,Twenty,Not in S&P 500,05/12/2017,05/12/2017,"$1,001",-,New,"Hon. Mo Brooks , 05/13/2017"
+Brooks,20007073,SP,"Velicept Therapeutics, Inc.",Not in S&P 500,04/8/2017,04/4/2017,"$1,001",-,New,"Hon. Susan W. Brooks , 05/3/2017"
+Brooks,20006992,JT,"Becton, Dickinson and Company ",BDX,03/21/2017,03/21/2017,"$1,001",-,New,
+Brooks,20006992,JT,Exxon Mobil Corporation ,Not in S&P 500,03/21/2017,03/21/2017,"$1,001",-,New,
+Brooks,20006992,JT,Procter & gamble Company ,Not in S&P 500,03/21/2017,03/21/2017,"$1,001",-,New,
+Brooks,20006992,JT,union Pacific Corporation ,Not in S&P 500,03/21/2017,03/21/2017,"$1,001",-,New,
+Brooks,20006992,JT,Wells Fargo & Company ,WFC,03/21/2017,03/21/2017,"$1,001",-,New,"Hon. Mo Brooks , 04/3/2017"
+Brooks,20006992,JT,oracle Corporation ,Not in S&P 500,03/15/2017,03/15/2017,"$1,001",-,New,
+Brooks,20006768,JT,Forney TX indpt sch Dist Ref OY 6.40,Not in S&P 500,02/9/2017,02/9/2017,"$1,001",-,New,
+Brooks,20006768,JT,Tucows Inc. ,Not in S&P 500,02/15/2017,02/15/2017,"$15,001",-,New,"Hon. Mo Brooks , 02/16/2017"
+Brooks,20006641,JT,"lee Enterprises, Incorporated ",Not in S&P 500,01/27/2017,01/27/2017,"$1,001",-,New,
+Brooks,20006641,JT,Verizon Communications Inc. ,VZ,01/27/2017,01/27/2017,"$1,001",-,New,"Hon. Mo Brooks , 01/31/2017"
+Castor,20007742,JT,Walt Disney Company ,Not in S&P 500,08/4/2017,08/4/2017,"$1,001",-,New,"Hon. Kathy Castor , 08/4/2017"
+Castor,20006946,JT,apple Inc. ,Not in S&P 500,03/15/2017,03/15/2017,"$1,001",-,New,"Hon. Kathy Castor , 03/20/2017"
+Castor,20006751,JT,Boeing Company ,Not in S&P 500,02/14/2017,02/14/2017,"$15,001",-,New,
+Castor,20006751,JT,Intel Corporation ,INTC,02/14/2017,02/14/2017,"$1,001",-,New,
+Castor,20006751,JT,Intel Corporation ,INTC,02/14/2017,02/14/2017,"$1,001",-,New,
+Castor,20006751,JT,"Merck & Company, Inc. Common stock",MRK,02/14/2017,02/14/2017,"$1,001",-,New,
+Castor,20006751,JT,"Pfizer, Inc. ",PFE,02/14/2017,02/14/2017,"$1,001",-,New,"Hon. Kathy Castor , 02/15/2017"
+Chu,20008543,SPDR,gLD NoV 17 122.5 PUT,Not in S&P 500,11/2/2017,11/2/2017,"$1,001",-,New,PUT
+Chu,20008543,SPDR,gLD NoV 3 123 PUT,Not in S&P 500,11/2/2017,11/2/2017,"$1,001",-,New,"Hon. Judy Chu , 12/17/2017"
+Chu,20007444,SPDR,goLD SHS gLD MaY 12 117.5,Not in S&P 500,05/9/2017,05/9/2017,"$1,001",-,New,PUT
+Chu,20007444,SPDR,goLD SHS gLD MaY 26 117 PUT,Not in S&P 500,05/9/2017,05/9/2017,"$1,001",-,New,"Hon. Judy Chu , 06/16/2017"
+Chu,20007035,SPDR,goLD SHS MaR 10 117 PUT,Not in S&P 500,03/3/2017,03/3/2017,"$1,001",-,New,PUT
+Chu,20007035,SPDR,goLD TR SHS MaR 24 118 CaLL,Not in S&P 500,03/21/2017,03/21/2017,"$1,001",-,New,"Hon. Judy Chu , 04/14/2017"
+Clark,20008419,SP,Amgen Inc. ,Not in S&P 500,10/5/2017,11/17/2017,"$1,001",-,New,
+Clark,20008419,SP,Amgen Inc. ,Not in S&P 500,10/5/2017,11/17/2017,"$1,001",-,New,
+Clark,20008419,SP,Southern Copper Corporation ,Not in S&P 500,10/5/2017,11/17/2017,"$1,001",-,New,
+Clark,20008419,SP,Southern Copper Corporation ,Not in S&P 500,10/5/2017,11/17/2017,"$1,001",-,New,"Hon. Katherine M. Clark , 11/18/2017"
+Clark,20007829,SP,Centene Corporation ,CNC,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,Centene Corporation ,CNC,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,discover Financial Services ,Not in S&P 500,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,discover Financial Services ,Not in S&P 500,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,Invesco ltd ,IVZ,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,Invesco ltd ,IVZ,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,"Nike, Inc. ",NKE,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,"Nike, Inc. ",NKE,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,Schlumberger N.V. ,Not in S&P 500,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,Sony Corporation ,Not in S&P 500,07/3/2017,08/14/2017,"$1,001",-,New,
+Clark,20007829,SP,Starbucks Corporation ,Not in S&P 500,07/3/2017,08/14/2017,"$1,001",-,New,"Hon. Katherine M. Clark , 08/15/2017"
+Clark,20007336,SP,"blackRock, Inc. ",Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,"blackRock, Inc. ",Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Clorox Company ,Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Clorox Company ,Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,discover Financial Services ,Not in S&P 500,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,"dominion Energy, Inc. ",Not in S&P 500,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,general Electric Company ,Not in S&P 500,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Honeywell International Inc. ,HON,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Honeywell International Inc. ,HON,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Novo Nordisk A/S ,Not in S&P 500,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Novo Nordisk A/S ,Not in S&P 500,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Ritchie bros. Auctioneers Incorporated,Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Ritchie bros. Auctioneers Incorporated,Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Schlumberger N.V. ,Not in S&P 500,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Schlumberger N.V. ,Not in S&P 500,01/5/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Sealed Air Corporation ,Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Sealed Air Corporation ,Not in S&P 500,04/4/2017,05/22/2017,"$1,001",-,New,
+Clark,20007336,SP,Amgen Inc. ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Amgen Inc. ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Apple Inc. ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Apple Inc. ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"blackRock, Inc. ",Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"blackRock, Inc. ",Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Check Point Software Technologies ltd.,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Check Point Software Technologies ltd.,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,China Mobile limited ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,China Mobile limited ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Coca,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Coca,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,d/b/A Chubb limited New ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,d/b/A Chubb limited New ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,discover Financial Services ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,discover Financial Services ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"dominion Energy, Inc. ",Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"dominion Energy, Inc. ",Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,general Electric Company ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,general Electric Company ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,glaxoSmithKline PlC ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,glaxoSmithKline PlC ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Home depot, Inc. ",Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Home depot, Inc. ",Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,JP Morgan Chase & Co. ,JPM,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,JP Morgan Chase & Co. ,JPM,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Nike, Inc. ",NKE,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Nike, Inc. ",NKE,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Novo Nordisk A/S ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Novo Nordisk A/S ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Oracle Corporation ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Oracle Corporation ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Pioneer Natural Resources Company,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Pioneer Natural Resources Company,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Starbucks Corporation ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Starbucks Corporation ,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,unitedHealth group Incorporated,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,unitedHealth group Incorporated,Not in S&P 500,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Visa Inc. ,V,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,Visa Inc. ,V,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Waste Management, Inc. ",WM,10/11/2016,04/26/2017,"$1,001",-,New,
+Clark,20007336,SP,"Waste Management, Inc. ",WM,10/11/2016,04/26/2017,"$1,001",-,New,"Hon. Katherine M. Clark , 05/25/2017"
+Conaway,20008162,SP,Visa Inc. ,V,Asset,Transaction,Date,Notification,New,
+Conaway,20007185,SP,"WELLS FARGO & COMPANY JR S 04/20/2017 04/25/2017 $15,001",Not in S&P 500,Asset,Transaction,Date,Notification,New,WELLS FARGO & COMPANY JR SUBORDNTD SER K GLB VAR% PERPETUAL CALLABLE
+Conaway,20006448,SP,R2000 CLIRN ISSUER CIbC CaP,Not in S&P 500,12/27/2016,12/30/2016,"$50,001",-,New,"R2000 CLIRN ISSUER CIbC CaP 18.18% SV 1,217.325 DUE 07/27/18 bUF 10%"
+Conaway,20006448,SP,SP500 bEaRaRN ISS baRC CaP 13.5%,Not in S&P 500,12/27/2016,12/30/2016,"$50,001",-,New,SP500 bEaRaRN ISS baRC CaP 13.5% SV 2090.10 DUE 07/28/17
+Conaway,20006448,SP,aRLINgToN TEX HIgHER ED FIN,Not in S&P 500,12/7/2016,12/12/2016,"$50,001",-,New,aRLINgToN TEX HIgHER ED FIN CoRP ED REV SER a RF JUL16 05.000%DEC01 2051
+Conaway,20006448,SP,TEXaS ST TRaNSN CoMMN,Not in S&P 500,12/7/2016,12/12/2016,"$50,001",-,New,"Hon. K. Michael Conaway , 01/4/2017"
+Conaway,20008162,SP,RIO gRANDE CITY TEX CONS ISD SER,Not in S&P 500,08/28/2017,08/31/2017,"$50,001",-,New,RIO gRANDE CITY TEX CONS ISD SER b RF PSF gTD OID OCT15 03.500%AUg15 2037
+Conaway,20008162,SP,SX5E CLIRN ISSUER CS CAP 25.65%,Not in S&P 500,08/24/2017,08/31/2017,"$50,001",-,New,"SX5E CLIRN ISSUER CS CAP 25.65% SV 3,444.73 DUE 08/30/19"
+Conaway,20008162,SP,SX5E CLIRN ISSUER CS CAP 25.65%,Not in S&P 500,08/24/2017,08/31/2017,"$50,001",-,New,"SX5E CLIRN ISSUER CS CAP 25.65% SV 3,444.73 DUE 08/30/19"
+Conaway,20008162,SP,SX5E STEPUP ISSUER HSbC STEP,Not in S&P 500,08/24/2017,08/31/2017,"$50,001",-,New,"SX5E STEPUP ISSUER HSbC STEP 40.00% SV 3,444.73 DUE 08/25/22"
+Conaway,20008162,SP,SX5E STEPUP ISSUER HSbC STEP,Not in S&P 500,08/24/2017,08/31/2017,"$50,001",-,New,"SX5E STEPUP ISSUER HSbC STEP 40.00% SV 3,444.73 DUE 08/25/22"
+Conaway,20008162,SP,Coca,Not in S&P 500,08/25/2017,08/30/2017,"$1,001",-,New,
+Conaway,20008162,SP,CVS Health Corporation ,CVS,08/25/2017,08/30/2017,"$1,001",-,New,
+Conaway,20008162,SP,Philip Morris International Inc ,PM,08/25/2017,08/30/2017,"$1,001",-,New,
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.04%,Not in S&P 500,08/25/2017,08/30/2017,"$100,001",-,New,"SP500 CLIRN ISSUER bAC CAP 14.04% SV 2,089.41 DUE 10/27/17"
+Conaway,20008162,SP,Coca,Not in S&P 500,08/24/2017,08/29/2017,"$1,001",-,New,
+Conaway,20008162,SP,CVS Health Corporation ,CVS,08/24/2017,08/29/2017,"$1,001",-,New,
+Conaway,20008162,SP,Philip Morris International Inc ,PM,08/24/2017,08/29/2017,"$1,001",-,New,
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.54%,Not in S&P 500,08/25/2017,08/25/2017,"$100,001",-,New,"SP500 CLIRN ISSUER bAC CAP 14.54% SV 1,987.66 DUE 08/25/17 Redemption"
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.54%,Not in S&P 500,08/25/2017,08/25/2017,"$15,001",-,NewID Owner Asset Transaction Date Notification Amount,"SP500 CLIRN ISSUER bAC CAP 14.54% SV 1,987.66 DUE 08/25/17 Redemption"
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.54%,Not in S&P 500,08/25/2017,08/25/2017,"$100,001",-,New,"SP500 CLIRN ISSUER bAC CAP 14.54% SV 1,987.66 DUE 08/25/17 Exchange"
+Conaway,20008162,SP,SX5E STEPUP ISSUER HSbC STEP,Not in S&P 500,08/25/2017,08/25/2017,"$15,001",-,New,"SX5E STEPUP ISSUER HSbC STEP 30.00% SV 3,280.78 DUE 08/31/18 Redemption"
+Conaway,20008162,SP,"brighthouse Financial, Inc. ",Not in S&P 500,08/9/2017,08/14/2017,"$1,001",-,New,
+Conaway,20008162,SP,Intel Corporation ,INTC,08/9/2017,08/14/2017,"$1,001",-,New,
+Conaway,20008162,SP,International business Machines,Not in S&P 500,08/9/2017,08/14/2017,"$1,001",-,New,
+Conaway,20008162,SP,"MetLife, Inc. ",MET,08/9/2017,08/14/2017,"$1,001",-,New,
+Conaway,20008162,SP,"brighthouse Financial, Inc. ",Not in S&P 500,08/8/2017,08/11/2017,"$1,001",-,New,
+Conaway,20008162,SP,JP Morgan Chase & Co. ,JPM,08/7/2017,08/11/2017,"$1,001",-,New,
+Conaway,20007393,SP,SX5E STEPUP ISSUER HSbC STEP,Not in S&P 500,05/3/2017,05/8/2017,"$15,001",-,New,
+Conaway,20007393,SP,R2000 aRN ISSUER SEK CaP 14.37%,Not in S&P 500,05/2/2017,05/5/2017,"$50,001",-,New,
+Conaway,20007393,SP,R2000 aRN ISSUER SEK CaP 14.37%,Not in S&P 500,05/2/2017,05/5/2017,"$1,001",-,New,
+Conaway,20007468,SP,"Clayton Williams Energy, Inc. ",Not in S&P 500,05/3/2017,05/23/2017,"$50,001",-,New,Exchange CWEI for NBL
+Conaway,20007468,JT,"Clayton Williams Energy, Inc. ",Not in S&P 500,05/3/2017,05/23/2017,"$50,001",-,New,Exchange to NBL
+Conaway,20007468,JT,Noble Energy Inc. ,Not in S&P 500,05/3/2017,05/23/2017,"$50,001",-,New,Exchange from CWEI
+Conaway,20007468,SP,Noble Energy Inc. ,Not in S&P 500,05/3/2017,05/23/2017,"$50,001",-,New,Exchange CWEI to NBL
+Conaway,20007393,SP,deere & Company ,Not in S&P 500,05/15/2017,05/18/2017,"$1,001",-,New,
+Conaway,20007393,SP,Trimble Inc. ,Not in S&P 500,05/15/2017,05/18/2017,"$1,001",-,New,
+Conaway,20007393,SP,R2000 CLIRNS ISSUER CIbC CaP,Not in S&P 500,05/12/2017,05/17/2017,"$15,001",-,New,
+Conaway,20007393,SP,R2000 CLIRN ISSUER CIbC CaP,Not in S&P 500,05/8/2017,05/11/2017,"$50,001",-,New,
+Conaway,20007185,SP,SX5E ARN ISSUER BOFA CAP 19.80%,Not in S&P 500,04/3/2017,04/6/2017,"$50,001",-,New,"SX5E ARN ISSUER BOFA CAP 19.80% SV 3,333.96 DUE 04/27/18"
+Conaway,20007185,SP,SP500 ARN ISSUER BAC CAP 15.42%,Not in S&P 500,04/28/2017,04/28/2017,"$15,001",-,New,"SP500 ARN ISSUER BAC CAP 15.42% SV 1,951.70 DUE 04/28/17 Redemption"
+Conaway,20007185,SP,SX5E STEPUP ISSUER HSBC STEP,Not in S&P 500,04/25/2017,04/28/2017,"$50,001",-,New,"SX5E STEPUP ISSUER HSBC STEP 30.00% SV 3,221.14 DUE 09/28/18"
+Conaway,20007185,SP,GOLDMAN SACHS CAPITAL II,Not in S&P 500,04/20/2017,04/25/2017,"$15,001",-,New,GOLDMAN SACHS CAPITAL II - VAR% PERPETUAL
+Conaway,20007185,SP,GOLDMAN SACHS CAPITAL II,Not in S&P 500,04/20/2017,04/25/2017,"$15,001",-,New,GOLDMAN SACHS CAPITAL II - VAR% PERPETUAL
+Conaway,20007185,SP,MSCI EM ARN ISSUER SEK CAP,Not in S&P 500,04/20/2017,04/25/2017,"$50,001",-,NewID Owner Asset Transaction Date Notification Amount,MSCI EM ARN ISSUER SEK CAP 17.65% SV 857.45 DUE 01/26/18
+Conaway,20007185,SP,R2000 ARN ISSUER SEK CAP 13.83%,Not in S&P 500,04/20/2017,04/25/2017,"$50,001",-,New,"R2000 ARN ISSUER SEK CAP 13.83% SV 1,237.751 DUE 11/22/17"
+Conaway,20007185,SP,WELLS FARGO & COMPANY JR,Not in S&P 500,04/20/2017,04/25/2017,"$15,001",-,New,WELLS FARGO & COMPANY JR SUBORDNTD SER K GLB VAR% PERPETUAL CALLABLE
+Conaway,20007185,SP,Abbott Laboratories ,ABT,04/19/2017,04/24/2017,"$15,001",-,New,
+Conaway,20007185,SP,International Business Machines,Not in S&P 500,04/19/2017,04/24/2017,"$1,001",-,New,
+Conaway,20007185,SP,International Business Machines,Not in S&P 500,04/19/2017,04/24/2017,"$1,001",-,New,
+Conaway,20007185,SP,UIT FIRST TRUST GLOBAL DIVID,Not in S&P 500,04/17/2017,04/19/2017,"$100,001",-,New,UIT FIRST TRUST GLOBAL DIVID PORT SER 42 MONTHLY REINVEST Redemption
+Conaway,20006839,SP,R2000 CLIRNS ISSUER CIBC CaP,Not in S&P 500,02/6/2017,02/9/2017,"$15,001",-,New,"R2000 CLIRNS ISSUER CIBC CaP 20.40% SV 1,075.699 DUE 03/28/18"
+Conaway,20006839,JT,INNaTE IMMUNoTHERaPEUTIC aUD,Not in S&P 500,02/3/2017,02/8/2017,"$1,001",-,New,INNaTE IMMUNoTHERaPEUTIC aUD PaR oRDINaRY
+Conaway,20006839,SP,R2000 CLIRNS ISSUER CIBC CaP,Not in S&P 500,02/17/2017,02/23/2017,"$50,001",-,New,"R2000 CLIRNS ISSUER CIBC CaP 20.40% SV 1,075.699 DUE 03/28/18"
+Conaway,20006694,SP,R2000 STEPUP ISSUER BARC STEP,Not in S&P 500,01/26/2017,02/2/2017,"$15,001",-,New,R2000 STEPUP ISSUER BARC STEP 35.00%
+Conaway,20006694,SP,SP500 STEPUP ISSUER HSBC STEP,Not in S&P 500,01/26/2017,02/2/2017,"$15,001",-,New,SP500 STEPUP ISSUER HSBC STEP 35.00%
+Conaway,20006694,SP,SP500 STEPUP ISSUER HSBC STEP,Not in S&P 500,01/26/2017,02/2/2017,"$50,001",-,New,SP500 STEPUP ISSUER HSBC STEP 35.00%
+Conaway,20006694,JT,INNATE IMMUNOTHERAPEUTIC AUD,Not in S&P 500,01/26/2017,01/31/2017,"$1,001",-,New,INNATE IMMUNOTHERAPEUTIC AUD PAR ORDINARY
+Conaway,20006694,SP,SPX/SX5E STEPUP ISS HSBC STEP,Not in S&P 500,01/19/2017,01/24/2017,"$50,001",-,New,SPX/SX5E STEPUP ISS HSBC STEP 22.80%
+Conaway,20006694,SP,US BANCORP JR SUBORDNTD,Not in S&P 500,01/19/2017,01/24/2017,"$15,001",-,New,US BANCORP JR SUBORDNTDID Owner Asset Transaction Date Notification Amount
+Conaway,20006694,SP,WELLS FARGO & COMPANY JR,Not in S&P 500,01/19/2017,01/24/2017,"$15,001",-,New,WELLS FARGO & COMPANY JR SUBORDNTD SER
+Conaway,20006694,SP,JP Morgan Chase & Co. ,JPM,01/18/2017,01/23/2017,"$1,001",-,New,
+Conaway,20006694,SP,Philip Morris International Inc ,PM,01/18/2017,01/23/2017,"$1,001",-,New,
+Conaway,20006694,SP,"Simon Property Group, Inc. ",SPG,01/18/2017,01/23/2017,"$1,001",-,New,
+Conaway,20006694,SP,"Simon Property Group, Inc. ",SPG,01/18/2017,01/23/2017,"$1,001",-,NewID Owner Asset Transaction Date Notification Amount,
+Conaway,20006694,SP,SP500 CLIRN ISSUER CS CAP 19.85%,Not in S&P 500,01/17/2017,01/20/2017,"$100,001",-,New,SP500 CLIRN ISSUER CS CAP 19.85%
+Conaway,20006694,SP,SP500 CLIRN ISSUER CS CAP 19.85%,Not in S&P 500,01/17/2017,01/20/2017,"$15,001",-,New,SP500 CLIRN ISSUER CS CAP 19.85%
+Conaway,20006694,SP,SP500 STEPUP ISSUER BNS STEP,Not in S&P 500,01/17/2017,01/20/2017,"$100,001",-,New,SP500 STEPUP ISSUER BNS STEP 16.30%
+Conaway,20008162,SP,,Not in S&P 500,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20008162,SP,,Not in S&P 500,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20008162,SP,,Not in S&P 500,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 10/4/2017"
+Conaway,20007468,JT,,Not in S&P 500,M39,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 06/14/2017"
+Conaway,20007393,SP,,Not in S&P 500,M37,(Merrill,Lynch),(owner:,,
+Conaway,20007393,SP,,Not in S&P 500,M40,(Merrill,Lynch),(owner:,,"Hon. K. Michael Conaway , 06/6/2017"
+Conaway,20007185,SP,,Not in S&P 500,M36,(Merrill,Lynch),(Owner:,,
+Conaway,20007185,SP,,Not in S&P 500,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20007185,SP,,Not in S&P 500,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20007185,SP,,Not in S&P 500,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 05/3/2017"
+Conaway,20006839,JT,,Not in S&P 500,M39,(Merrill,Lynch),(owner:,,
+Conaway,20006839,SP,,Not in S&P 500,M40,(Merrill,Lynch),(owner:,,"Hon. K. Michael Conaway , 03/2/2017"
+Conaway,20006694,JT,,Not in S&P 500,M39,(Merrill,Lynch),(Owner:,,
+Conaway,20006694,SP,,Not in S&P 500,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20006694,SP,,Not in S&P 500,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20006694,SP,,Not in S&P 500,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 02/6/2017"
+Conaway,20007393,SP,,Not in S&P 500,E62,(Edward,Jones),(owner:,,
+Conaway,20007185,SP,,Not in S&P 500,E62,(Edward,Jones),(Owner:,,

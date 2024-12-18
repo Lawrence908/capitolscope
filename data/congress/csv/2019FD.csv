@@ -1,0 +1,15 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Amash,20011679,DC,Nintendo Co Ltd ADR ,Not in S&P 500,05/01/2019,"$1,001",-,"$15,000",New,
+Amash,20011070,DC,"Amazon.com, Inc. ",AMZN,01/02/2019,"$1,001",-,"$15,000",New,
+Amash,20011070,DC,Apple Inc. ,AAPL,01/02/2019,"$1,001",-,"$15,000",New,
+Amash,20011070,DC,"Sonos, Inc. ",Not in S&P 500,01/02/2019,"$1,001",-,"$15,000",New,
+Amash,20011070,DC,Walt Disney Company ,DIS,01/02/2019,"$1,001",-,"$15,000",New,
+Amash,20011070,DC,Walt Disney Company ,DIS,01/02/2019,"$1,001",-,"$15,000",New,
+Beyer,20012722,JT,Don Beyer Motors Inc. [oI],Not in S&P 500,10/07/2019,10/07/2019,"$1,000,001",-,New,"Sale of my 38%% interest in Don Beyer Motors Inc, dba Don Beyer Volvo and Beyer Kia, to Beyer Holdings"
+Beyer,20012722,JT,Gum Springs LLC [oI],Not in S&P 500,10/07/2019,10/07/2019,"$1,000,001",-,New,"Sale of my 33% interest in Gum Springs LLC, dba Beyer Subaru, to Beyer Holdings, LLC, as part of an Equity"
+Beyer,20012722,JT,Pirate Motors LLC [oI],Not in S&P 500,10/07/2019,10/07/2019,"$50,001",-,New,"Sale of my wife's 1% interest in Pirate Motors LLC, which owned interests in The Great Experiment LLC,"
+Beyer,20012722,JT,Prospect Hill LLC [oI],Not in S&P 500,10/07/2019,10/07/2019,"$1,000,001",-,New,"Sale of my 33% interest in Prospect Hill, LLC, dba Don Beyer Volvo - Dulles, to Beyer Holdings, LLC, as part of"
+Beyer,20012722,JT,The Great Experiment LLC [oI],Not in S&P 500,10/07/2019,10/07/2019,"$5,000,001",-,New,"Sale of my 33% interest in The Great Experiment, LLC, dba Land Rover Alexandria, to Beyer Holdings LLC, as"
+Beyer,20012722,JT,Forbidden Fruit LLC [oI] S,Not in S&P 500,10/07/2019,"$1,001",-,"$15,000",New,"This LLC had a negative capital account. I made up my capital account difference to zero, and transferred all of"
+Beyer,20012722,JT,Rara Avis LLC [oI] S,Not in S&P 500,10/07/2019,"$1,001",-,"$15,000",New,"This LLC had a negative capital account, 50% of which was my responsibility. As part of a reorganization of"
+Beyer,20012722,JT,Smokey's Garage LLC [oI] S,Not in S&P 500,10/07/2019,"$1,001",-,"$15,000",New,"This LLC had a negative capital account. I made up my capital account difference to zero, and transferred all of"

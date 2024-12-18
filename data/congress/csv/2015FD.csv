@@ -1,0 +1,11 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Ashford,20003994,SP,3M Company ,MMM,10/13/2015,10/13/2015,"$15,001",-,New,
+Ashford,20003994,SP,Apache Corporation ,APA,10/13/2015,10/13/2015,"$15,001",-,New,"Hon. Brad Ashford , 10/27/2015"
+Ashford,20003185,SP,Union Pacific Corporation ,UNP,05/5/2015,05/5/2015,"$15,001",-,New,"Hon. Brad Ashford , 05/29/2015"
+Ashford,20002964,JT,Apache Corporation ,APA,04/14/2015,04/14/2015,"$1,001",-,New,"Hon. Brad Ashford , 04/30/2015"
+Ashford,20002963,SP,"Lennox International, Inc. ",Not in S&P 500,04/13/2015,04/13/2015,"$15,001",-,New,"Hon. Brad Ashford , 04/30/2015"
+Ashford,20002949,SP,Apache Corporation ,APA,04/12/2015,04/12/2015,"$15,001",-,New,"Hon. Brad Ashford , 04/30/2015"
+Ashford,20002776,SP,Union Pacific Corporation ,UNP,03/12/2015,03/12/2015,"$15,001",-,New,"Brad Ashford , 03/24/2015"
+Ashford,20002776,DC,Berkshire hathaway Inc. New,BRK.B,P,02/27/2015,02/27/2015,"$25,000,001",New,250 BRK B shares at $148 per share.
+Barletta,20002827,JT,"Kinder Morgan, Inc. ",KMI,10/29/2015,10/29/2015,"$1,001",-,New,The rationale for this transaction was to take tax losses
+Barletta,20002827,JT,"Kinder Morgan, Inc. ",KMI,10/29/2015,10/29/2015,"$1,001",-,New,"Hon. Lou Barletta , 11/6/2015"

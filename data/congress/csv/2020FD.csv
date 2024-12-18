@@ -1,0 +1,9 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Allen,20017164,SP,Starbucks Corporation ,Not in S&P 500,07/06/2020,"$1,001",-,"$15,000",New,
+Amash,20016417,DC,Walt Disney Company ,DIS,03/18/2020,03/18/2020,"$15,001",-,New,
+Amash,20016417,DC,Walt Disney Company ,DIS,03/18/2020,"$1,001",-,"$15,000",New,
+Amash,20016417,DC,Walt Disney Company ,DIS,03/18/2020,"$1,001",-,"$15,000",New,
+Banks,20016981,JT,Starbucks Corporation ,Not in S&P 500,07/01/2020,"$1,001",-,"$15,000",New,
+Banks,20016981,JT,Starbucks Corporation ,Not in S&P 500,07/01/2020,"$1,001",-,"$15,000",New,
+Banks,20016981,JT,Starbucks Corporation ,Not in S&P 500,07/01/2020,"$1,001",-,"$15,000",New,
+Banks,20016981,JT,Starbucks Corporation ,Not in S&P 500,07/01/2020,"$1,001",-,"$15,000",New,

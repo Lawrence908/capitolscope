@@ -1,0 +1,11 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Ashford,20004420,JT,"Mondelez International, Inc.",MDLZ,12/28/2015,12/28/2015,"$1,001",-,New,"Hon. Brad Ashford , 01/15/2016"
+Ashford,20006391,JT,Apache Corporation ,APA,11/28/2016,12/13/2016,"$1,001",-,New,"Hon. Brad Ashford , 12/20/2016"
+Ashford,20006308,SP,Medtronic plc. Ordinary Shares ,MDT,11/28/2016,11/28/2016,"$1,001",-,New,"Sold 100 shares of Medtronic at $74.445 per share for a total of $7,434.34."
+Ashford,20006308,SP,"Pfizer, Inc. ",PFE,11/28/2016,11/28/2016,"$1,001",-,New,"Hon. Brad Ashford , 12/5/2016"
+Ashford,20005414,JT,Bank Of Ireland The governor & Co of,Not in S&P 500,05/27/2016,05/27/2016,"$1,001",-,New,"Hon. Brad Ashford , 06/27/2016"
+Ashford,20004894,SP,3M Company ,MMM,03/29/2016,03/29/2016,"$15,001",-,New,
+Ashford,20004894,SP,Apache Corporation ,APA,03/29/2016,03/29/2016,"$15,001",-,New,
+Ashford,20004894,JT,Apache Corporation ,APA,03/28/2016,03/28/2016,"$1,001",-,New,"Hon. Brad Ashford , 04/12/2016"
+Ashford,20004485,SP,Apache Corporation ,APA,01/15/2016,01/15/2016,"$1,001",-,New,
+Ashford,20004485,SP,Berkshire Hathaway Inc. New ,BRK.B,01/15/2016,01/15/2016,"$15,001",-,New,"Hon. Brad Ashford , 02/1/2016"

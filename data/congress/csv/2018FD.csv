@@ -1,0 +1,24 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Amash,20010646,DC,"Amazon.com, Inc. ",AMZN,11/01/2018,11/01/2018,"$15,001",-,New,
+Amash,20010646,DC,"Amazon.com, Inc. ",AMZN,11/01/2018,11/01/2018,"$15,001",-,New,
+Amash,20010646,DC,"Amazon.com, Inc. ",AMZN,11/01/2018,11/01/2018,"$15,001",-,New,
+Amash,20010021,DC,Walt Disney Company ,DIS,08/01/2018,08/01/2018,"$15,001",-,New,
+Amash,20010021,DC,Walt Disney Company ,DIS,08/01/2018,08/01/2018,"$15,001",-,New,
+Amash,20010021,DC,Walt Disney Company ,DIS,08/01/2018,08/01/2018,"$15,001",-,New,
+Amash,20010646,DC,"Sonos, Inc. ",Not in S&P 500,11/01/2018,"$1,001",-,"$15,000",New,
+Amash,20010021,DC,Apple Inc. ,AAPL,08/01/2018,"$1,001",-,"$15,000",New,
+Amash,20010021,DC,Nintendo Co Ltd ADR ,Not in S&P 500,08/01/2018,"$1,001",-,"$15,000",New,
+Blum,20010478,JT,Enbridge Inc ,Not in S&P 500,09/18/2018,09/18/2018,"$100,001",-,New,
+Blum,20010478,JT,Ford Motor Company ,F,09/18/2018,09/18/2018,"$50,001",-,New,
+Blum,20008963,JT,"Tintri, Inc. ",Not in S&P 500,02/2/2018,02/2/2018,"$50,001",-,New,"Hon. Rodney Leland Blum , 02/13/2018"
+Blumenauer,20009879,SP,Caterpillar Inc 3.9%21 Due,Not in S&P 500,06/26/2018,07/12/2018,"$15,001",-,New,Purchase of Caterpillar
+Blumenauer,20009879,SP,Dun & Bradstreet Corporation S,Not in S&P 500,07/12/2018,"$1,001",-,"$15,000",New,
+Blumenauer,20009879,SP,general Electric Company ,Not in S&P 500,07/12/2018,"$1,001",-,"$15,000",New,
+Blumenauer,20009879,SP,Molson Coors Brewing Company P,Not in S&P 500,07/12/2018,"$1,001",-,"$15,000",New,
+Blumenauer,20009879,SP,Time Warner Inc. New ,Not in S&P 500,06/26/2018,"$1,001",-,"$15,000",New,Cash/Stock Merger with AT & T Inc. effective 6/15/2018 to reflect purchase of Time Warner by AT & T Inc.
+Brooks,20009433,JT,Duke Energy Corporation ,Not in S&P 500,04/16/2018,04/16/2018,"$15,001",-,New,
+Brooks,20009061,JT,Decatur ala City Brd Ed spl Tax sch,Not in S&P 500,02/12/2018,02/12/2018,"$15,001",-,New,
+Brooks,20009061,JT,Duke Energy Corporation ,Not in S&P 500,02/12/2018,02/12/2018,"$15,001",-,New,"Hon. Mo Brooks , 03/2/2018"
+Brooks,20008873,JT,Etowah Cnty ala Brd Ed Cap Outlay,Not in S&P 500,01/23/2018,01/23/2018,"$1,001",-,New,
+Brooks,20008873,JT,Mobile Cnty ala Brd sch Commrs,Not in S&P 500,01/23/2018,01/23/2018,"$1,001",-,New,
+Brooks,20008873,JT,Phenix City al sch Wts genl Oblig,Not in S&P 500,01/23/2018,01/23/2018,"$15,001",-,New,"Hon. Mo Brooks , 02/3/2018"

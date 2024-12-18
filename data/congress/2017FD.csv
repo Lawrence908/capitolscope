@@ -1,0 +1,1030 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Barletta,20006832,JT,Vanguard Intermediate,NaN,s,03/1/2017,03/1/2017,"$1,001 - $15,000",New,"Hon. Lou Barletta , 03/1/2017"
+Blum,20007916,JT,"Tintri, Inc. ",NaN,P,08/4/2017,08/7/2017,"$50,001 - $100,000",New,"Hon. Rodney Leland Blum , 08/31/2017"
+Brooks,20008596,JT,Tenn Valley auth,NaN,s,11/27/2017,11/27/2017,"$15,001 - $50,000",New,"Hon. Mo Brooks , 12/21/2017"
+Brooks,20008596,JT,"alpha Pro Tech, ltd. ",NaN,P,11/20/2017,11/20/2017,"$1,001 - $15,000",New,
+Brooks,20008301,JT,"alpha Pro Tech, ltd. ",NaN,P,10/13/2017,10/13/2017,"$1,001 - $15,000",New,"Hon. Mo Brooks , 10/30/2017"
+Brooks,20008301,JT,"alpha Pro Tech, ltd. ",NaN,P,08/24/2017,08/27/2017,"$1,001 - $15,000",New,
+Brooks,20007835,JT,"alpha Pro Tech, ltd. ",NaN,P,07/20/2017,07/20/2017,"$1,001 - $15,000",New,"Hon. Mo Brooks , 08/17/2017"
+Brooks,20007636,JT,"alpha Pro Tech, ltd. ",NaN,P,06/29/2017,06/29/2017,"$1,001 - $15,000",New,"Hon. Mo Brooks , 07/16/2017"
+Brooks,20007640,SP,"onspira Therapeutics, Inc.",NaN,P,06/15/2017,06/15/2017,"$15,001 - $50,000",New,"Hon. Susan W. Brooks , 07/17/2017"
+Brooks,20007410,JT,"alpha Pro Tech, ltd. ",NaN,P,06/1/2017,06/1/2017,"$1,001 - $15,000",New,"Hon. Mo Brooks , 06/5/2017"
+Brooks,20007279,JT,"alpha Pro Tech, ltd. ",NaN,P,05/12/2017,05/12/2017,"$1,001 - $15,000",New,
+Brooks,20007279,JT,Twenty,NaN,s,05/12/2017,05/12/2017,"$1,001 - $15,000",New,"Hon. Mo Brooks , 05/13/2017"
+Brooks,20007073,SP,"Velicept Therapeutics, Inc.",NaN,P,04/8/2017,04/4/2017,"$1,001 - $15,000",New,"Hon. Susan W. Brooks , 05/3/2017"
+Brooks,20006992,JT,"Becton, Dickinson and Company ",BDX,s,03/21/2017,03/21/2017,"$1,001 - $15,000",New,
+Brooks,20006992,JT,Exxon Mobil Corporation ,NaN,s,03/21/2017,03/21/2017,"$1,001 - $15,000",New,
+Brooks,20006992,JT,Procter & gamble Company ,NaN,s,03/21/2017,03/21/2017,"$1,001 - $15,000",New,
+Brooks,20006992,JT,union Pacific Corporation ,NaN,s,03/21/2017,03/21/2017,"$1,001 - $15,000",New,
+Brooks,20006992,JT,Wells Fargo & Company ,WFC,s,03/21/2017,03/21/2017,"$1,001 - $15,000",New,"Hon. Mo Brooks , 04/3/2017"
+Brooks,20006992,JT,oracle Corporation ,NaN,s,03/15/2017,03/15/2017,"$1,001 - $15,000",New,
+Brooks,20006768,JT,Forney TX indpt sch Dist Ref OY 6.40,NaN,P,02/9/2017,02/9/2017,"$1,001 - $15,000",New,
+Brooks,20006768,JT,Tucows Inc. ,NaN,s,02/15/2017,02/15/2017,"$15,001 - $50,000",New,"Hon. Mo Brooks , 02/16/2017"
+Brooks,20006641,JT,"lee Enterprises, Incorporated ",NaN,P,01/27/2017,01/27/2017,"$1,001 - $15,000",New,
+Brooks,20006641,JT,Verizon Communications Inc. ,VZ,s,01/27/2017,01/27/2017,"$1,001 - $15,000",New,"Hon. Mo Brooks , 01/31/2017"
+Castor,20007742,JT,Walt Disney Company ,NaN,s,08/4/2017,08/4/2017,"$1,001 - $15,000",New,"Hon. Kathy Castor , 08/4/2017"
+Castor,20006946,JT,apple Inc. ,NaN,s,03/15/2017,03/15/2017,"$1,001 - $15,000",New,"Hon. Kathy Castor , 03/20/2017"
+Castor,20006751,JT,Boeing Company ,NaN,s,02/14/2017,02/14/2017,"$15,001 - $50,000",New,
+Castor,20006751,JT,Intel Corporation ,INTC,P,02/14/2017,02/14/2017,"$1,001 - $15,000",New,
+Castor,20006751,JT,Intel Corporation ,INTC,s,02/14/2017,02/14/2017,"$1,001 - $15,000",New,
+Castor,20006751,JT,"Merck & Company, Inc. Common stock",MRK,s,02/14/2017,02/14/2017,"$1,001 - $15,000",New,
+Castor,20006751,JT,"Pfizer, Inc. ",PFE,s,02/14/2017,02/14/2017,"$1,001 - $15,000",New,"Hon. Kathy Castor , 02/15/2017"
+Chu,20008543,SPDR,gLD NoV 17 122.5 PUT,NaN,S,11/2/2017,11/2/2017,"$1,001 - $15,000",New,PUT
+Chu,20008543,SPDR,gLD NoV 3 123 PUT,NaN,P,11/2/2017,11/2/2017,"$1,001 - $15,000",New,"Hon. Judy Chu , 12/17/2017"
+Chu,20007444,SPDR,goLD SHS gLD MaY 12 117.5,NaN,P,05/9/2017,05/9/2017,"$1,001 - $15,000",New,PUT
+Chu,20007444,SPDR,goLD SHS gLD MaY 26 117 PUT,NaN,S,05/9/2017,05/9/2017,"$1,001 - $15,000",New,"Hon. Judy Chu , 06/16/2017"
+Chu,20007035,SPDR,goLD SHS MaR 10 117 PUT,NaN,P,03/3/2017,03/3/2017,"$1,001 - $15,000",New,PUT
+Chu,20007035,SPDR,goLD TR SHS MaR 24 118 CaLL,NaN,P,03/21/2017,03/21/2017,"$1,001 - $15,000",New,"Hon. Judy Chu , 04/14/2017"
+Clark,20008419,SP,Amgen Inc. ,NaN,S,10/5/2017,11/17/2017,"$1,001 - $15,000",New,
+Clark,20008419,SP,Amgen Inc. ,NaN,S,10/5/2017,11/17/2017,"$1,001 - $15,000",New,
+Clark,20008419,SP,Southern Copper Corporation ,NaN,P,10/5/2017,11/17/2017,"$1,001 - $15,000",New,
+Clark,20008419,SP,Southern Copper Corporation ,NaN,P,10/5/2017,11/17/2017,"$1,001 - $15,000",New,"Hon. Katherine M. Clark , 11/18/2017"
+Clark,20007336,SP,Amgen Inc. ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Amgen Inc. ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Apple Inc. ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Apple Inc. ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"blackRock, Inc. ",NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"blackRock, Inc. ",NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Check Point Software Technologies ltd.,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Check Point Software Technologies ltd.,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,China Mobile limited ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,China Mobile limited ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Coca,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Coca,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,d/b/A Chubb limited New ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,d/b/A Chubb limited New ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,discover Financial Services ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,discover Financial Services ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"dominion Energy, Inc. ",NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"dominion Energy, Inc. ",NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,general Electric Company ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,general Electric Company ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,glaxoSmithKline PlC ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,glaxoSmithKline PlC ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Home depot, Inc. ",NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Home depot, Inc. ",NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,JP Morgan Chase & Co. ,JPM,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,JP Morgan Chase & Co. ,JPM,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Nike, Inc. ",NKE,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Nike, Inc. ",NKE,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Novo Nordisk A/S ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Novo Nordisk A/S ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Oracle Corporation ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Oracle Corporation ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Pioneer Natural Resources Company,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Pioneer Natural Resources Company,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Starbucks Corporation ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Starbucks Corporation ,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,unitedHealth group Incorporated,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,unitedHealth group Incorporated,NaN,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Visa Inc. ,V,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Visa Inc. ,V,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Waste Management, Inc. ",WM,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Waste Management, Inc. ",WM,P,10/11/2016,04/26/2017,"$1,001 - $15,000",New,"Hon. Katherine M. Clark , 05/25/2017"
+Clark,20007829,SP,Centene Corporation ,CNC,P,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,Centene Corporation ,CNC,P,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,discover Financial Services ,NaN,S,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,discover Financial Services ,NaN,S,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,Invesco ltd ,IVZ,P,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,Invesco ltd ,IVZ,P,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,"Nike, Inc. ",NKE,S,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,"Nike, Inc. ",NKE,S,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,Schlumberger N.V. ,NaN,S,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,Sony Corporation ,NaN,P,07/3/2017,08/14/2017,"$1,001 - $15,000",New,
+Clark,20007829,SP,Starbucks Corporation ,NaN,S,07/3/2017,08/14/2017,"$1,001 - $15,000",New,"Hon. Katherine M. Clark , 08/15/2017"
+Clark,20007336,SP,"blackRock, Inc. ",NaN,S,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"blackRock, Inc. ",NaN,S,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Clorox Company ,NaN,P,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Clorox Company ,NaN,P,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,S,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"Metlife, Inc. ",MET,S,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,S,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Microsoft Corporation ,MSFT,S,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Ritchie bros. Auctioneers Incorporated,NaN,P,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Ritchie bros. Auctioneers Incorporated,NaN,P,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Sealed Air Corporation ,NaN,P,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Sealed Air Corporation ,NaN,P,04/4/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,discover Financial Services ,NaN,S,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,"dominion Energy, Inc. ",NaN,S,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,general Electric Company ,NaN,S,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Honeywell International Inc. ,HON,P,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Honeywell International Inc. ,HON,P,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Novo Nordisk A/S ,NaN,S,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Novo Nordisk A/S ,NaN,S,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Schlumberger N.V. ,NaN,P,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Clark,20007336,SP,Schlumberger N.V. ,NaN,P,01/5/2017,05/22/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,"R2000 ARN ISSUER SEK CAP 13.83% S 11/22/2017 11/22/2017 $50,001",NaN,Asset,Transaction,Date,Notification,New,R2000 ARN ISSUER SEK CAP 13.83% Redemption
+Conaway,20008162,SP,Visa Inc. ,V,Asset,Transaction,Date,Notification,New,
+Conaway,20007185,SP,"WELLS FARGO & COMPANY JR S 04/20/2017 04/25/2017 $15,001",NaN,Asset,Transaction,Date,Notification,New,WELLS FARGO & COMPANY JR SUBORDNTD SER K GLB VAR% PERPETUAL CALLABLE
+Conaway,20006448,SP,aRLINgToN TEX HIgHER ED FIN,NaN,P,12/7/2016,12/12/2016,"$50,001 - $100,000",New,aRLINgToN TEX HIgHER ED FIN CoRP ED REV SER a RF JUL16 05.000%DEC01 2051
+Conaway,20006448,SP,TEXaS ST TRaNSN CoMMN,NaN,S,12/7/2016,12/12/2016,"$50,001 - $100,000",New,"Hon. K. Michael Conaway , 01/4/2017"
+Conaway,20006448,SP,R2000 CLIRN ISSUER CIbC CaP,NaN,P,12/27/2016,12/30/2016,"$50,001 - $100,000",New,"R2000 CLIRN ISSUER CIbC CaP 18.18% SV 1,217.325 DUE 07/27/18 bUF 10%"
+Conaway,20006448,SP,SP500 bEaRaRN ISS baRC CaP 13.5%,NaN,S,12/27/2016,12/30/2016,"$50,001 - $100,000",New,SP500 bEaRaRN ISS baRC CaP 13.5% SV 2090.10 DUE 07/28/17
+Conaway,20008516,SP,AT&T Inc. ,T,P,11/30/2017,12/4/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,Trimble Inc. ,NaN,S,11/30/2017,12/4/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,Raytheon Company ,NaN,P,11/3/2017,11/7/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,The Kraft Heinz Company ,KHC,S,11/3/2017,11/7/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,SP500 CLIRN ISSUER bAC CAP 16.60%,NaN,S,11/28/2017,11/30/2017,"$50,001 - $100,000",New,"SP500 CLIRN ISSUER bAC CAP 16.60% SV 2,036.71 DUE 03/28/18"
+Conaway,20008516,SP,SX5E CLIRN ISSUER bOFA CAP,NaN,P,11/28/2017,11/30/2017,"$50,001 - $100,000",New,"SX5E CLIRN ISSUER bOFA CAP 25.90% SV 3,333.96 DUE 02/22/19"
+Conaway,20008516,SP,R2000 ARN ISSUER SEK CAP 13.83%,NaN,S,11/22/2017,11/22/2017,"$50,001 - $100,000",New,R2000 ARN ISSUER SEK CAP 13.83% Redemption
+Conaway,20008516,SP,R2000 ARN ISSUER HSbC CAP 12.75%,NaN,P,11/21/2017,11/29/2017,"$50,001 - $100,000",New,"R2000 ARN ISSUER HSbC CAP 12.75% SV 1,518.89 DUE 01/24/19"
+Conaway,20008516,SP,SPDR DOW JONES INDUST AV ETF,NaN,S,11/21/2017,11/24/2017,"$1,001 - $15,000",New,SPDR DOW JONES INDUST AV ETF TRUST
+Conaway,20008516,SP,SX5E ARN ISSUER bOFA CAP 19.23%,NaN,P,11/21/2017,11/29/2017,"$50,001 - $100,000",New,"SX5E ARN ISSUER bOFA CAP 19.23% SV 3,579.32 DUE 01/25/19"
+Conaway,20008516,SP,"Cisco Systems, Inc. ",CSCO,S,11/20/2017,11/22/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,"Endologix, Inc. ",NaN,S,11/20/2017,11/22/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,SX5E LIRN ISSUER HSbC PART,NaN,S,11/20/2017,11/22/2017,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,"SX5E LIRN ISSUER HSbC PART 118.00% SV 3,669.79 DUE 03/27/20"
+Conaway,20008516,SP,general Electric Company ,NaN,S,11/15/2017,11/17/2017,"$1,001 - $15,000",New,
+Conaway,20008516,SP,Northrop grumman Corporation ,NOC,P,11/15/2017,11/17/2017,"$1,001 - $15,000",New,
+Conaway,20008329,SP,"PNC Financial Services group, Inc.",PNC,P,10/4/2017,10/6/2017,"$15,001 - $50,000",New,
+Conaway,20008329,SP,Walt Disney Company ,DIS,S,10/4/2017,10/6/2017,"$1,001 - $15,000",New,
+Conaway,20008329,SP,SP500 CLIRN ISSuER bAC CAP 14.04%,NaN,S,10/27/2017,10/31/2017,"$100,001 - $250,000",NewiD owner asset transaction Date notification amount,"SP500 CLIRN ISSuER bAC CAP 14.04% SV 2,089.41 DuE 10/27/17 Redemption"
+Conaway,20008329,SP,SP500 ARN ISSuER bOFA CAP 10.00%,NaN,P,10/26/2017,11/2/2017,"$50,001 - $100,000",New,"SP500 ARN ISSuER bOFA CAP 10.00% SV 2,560.40 DuE 12/21/18"
+Conaway,20008329,SP,SX5E ARN ISSuER bOFA CAP 17.70%,NaN,P,10/26/2017,11/2/2017,"$15,001 - $50,000",New,"SX5E ARN ISSuER bOFA CAP 17.70% SV 3,637.20 DuE 12/21/18"
+Conaway,20008329,SP,u.S. bancorp ,NaN,S,10/2/2017,10/4/2017,"$1,001 - $15,000",New,
+Conaway,20008329,JT,POWERSHARES QQQ TRuST SE 1,NaN,P,10/19/2017,10/23/2017,"$1,001 - $15,000",New,POWERSHARES QQQ TRuST SE 1
+Conaway,20008329,JT,SPDR DOW JONES INDuST AV ETF,NaN,P,10/19/2017,10/23/2017,"$15,001 - $50,000",New,SPDR DOW JONES INDuST AV ETF TRuST
+Conaway,20008329,JT,VANguARD 500 INDEX FuND SHS,NaN,P,10/19/2017,10/23/2017,"$15,001 - $50,000",New,VANguARD 500 INDEX FuND SHS ETF
+Conaway,20008329,JT,VANguARD FTSE DEVELOPED,NaN,P,10/19/2017,10/23/2017,"$15,001 - $50,000",New,VANguARD FTSE DEVELOPED MARKETS ETF
+Conaway,20008329,SP,American Express Company ,AXP,S,10/17/2017,10/19/2017,"$1,001 - $15,000",New,
+Conaway,20008329,SP,JP Morgan Chase & Co. ,JPM,S,10/17/2017,10/19/2017,"$1,001 - $15,000",New,
+Conaway,20008329,SP,unitedHealth group Incorporated,NaN,S,10/17/2017,10/19/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,"brighthouse Financial, Inc. ",NaN,S,08/9/2017,08/14/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,Intel Corporation ,INTC,S,08/9/2017,08/14/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,International business Machines,NaN,S,08/9/2017,08/14/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,"MetLife, Inc. ",MET,S,08/9/2017,08/14/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,"brighthouse Financial, Inc. ",NaN,S,08/8/2017,08/11/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,JP Morgan Chase & Co. ,JPM,S,08/7/2017,08/11/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,RIO gRANDE CITY TEX CONS ISD SER,NaN,P,08/28/2017,08/31/2017,"$50,001 - $100,000",New,RIO gRANDE CITY TEX CONS ISD SER b RF PSF gTD OID OCT15 03.500%AUg15 2037
+Conaway,20008162,SP,Coca,NaN,P,08/25/2017,08/30/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,CVS Health Corporation ,CVS,S,08/25/2017,08/30/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,Philip Morris International Inc ,PM,P,08/25/2017,08/30/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.04%,NaN,S,08/25/2017,08/30/2017,"$100,001 - $250,000",New,"SP500 CLIRN ISSUER bAC CAP 14.04% SV 2,089.41 DUE 10/27/17"
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.54%,NaN,S,08/25/2017,08/25/2017,"$100,001 - $250,000",New,"SP500 CLIRN ISSUER bAC CAP 14.54% SV 1,987.66 DUE 08/25/17 Redemption"
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.54%,NaN,S,08/25/2017,08/25/2017,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,"SP500 CLIRN ISSUER bAC CAP 14.54% SV 1,987.66 DUE 08/25/17 Redemption"
+Conaway,20008162,SP,SP500 CLIRN ISSUER bAC CAP 14.54%,NaN,S,08/25/2017,08/25/2017,"$100,001 - $250,000",New,"SP500 CLIRN ISSUER bAC CAP 14.54% SV 1,987.66 DUE 08/25/17 Exchange"
+Conaway,20008162,SP,SX5E STEPUP ISSUER HSbC STEP,NaN,S,08/25/2017,08/25/2017,"$15,001 - $50,000",New,"SX5E STEPUP ISSUER HSbC STEP 30.00% SV 3,280.78 DUE 08/31/18 Redemption"
+Conaway,20008162,SP,Coca,NaN,P,08/24/2017,08/29/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,CVS Health Corporation ,CVS,S,08/24/2017,08/29/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,Philip Morris International Inc ,PM,P,08/24/2017,08/29/2017,"$1,001 - $15,000",New,
+Conaway,20008162,SP,SX5E CLIRN ISSUER CS CAP 25.65%,NaN,P,08/24/2017,08/31/2017,"$50,001 - $100,000",New,"SX5E CLIRN ISSUER CS CAP 25.65% SV 3,444.73 DUE 08/30/19"
+Conaway,20008162,SP,SX5E CLIRN ISSUER CS CAP 25.65%,NaN,P,08/24/2017,08/31/2017,"$50,001 - $100,000",New,"SX5E CLIRN ISSUER CS CAP 25.65% SV 3,444.73 DUE 08/30/19"
+Conaway,20008162,SP,SX5E STEPUP ISSUER HSbC STEP,NaN,P,08/24/2017,08/31/2017,"$50,001 - $100,000",New,"SX5E STEPUP ISSUER HSbC STEP 40.00% SV 3,444.73 DUE 08/25/22"
+Conaway,20008162,SP,SX5E STEPUP ISSUER HSbC STEP,NaN,P,08/24/2017,08/31/2017,"$50,001 - $100,000",New,"SX5E STEPUP ISSUER HSbC STEP 40.00% SV 3,444.73 DUE 08/25/22"
+Conaway,20007393,SP,R2000 CLIRN ISSUER CIbC CaP,NaN,S,05/8/2017,05/11/2017,"$50,001 - $100,000",New,
+Conaway,20007468,SP,"Clayton Williams Energy, Inc. ",NaN,E,05/3/2017,05/23/2017,"$50,001 - $100,000",New,Exchange CWEI for NBL
+Conaway,20007468,JT,"Clayton Williams Energy, Inc. ",NaN,E,05/3/2017,05/23/2017,"$50,001 - $100,000",New,Exchange to NBL
+Conaway,20007468,JT,Noble Energy Inc. ,NaN,E,05/3/2017,05/23/2017,"$50,001 - $100,000",New,Exchange from CWEI
+Conaway,20007468,SP,Noble Energy Inc. ,NaN,E,05/3/2017,05/23/2017,"$50,001 - $100,000",New,Exchange CWEI to NBL
+Conaway,20007393,SP,SX5E STEPUP ISSUER HSbC STEP,NaN,P,05/3/2017,05/8/2017,"$15,001 - $50,000",New,
+Conaway,20007393,SP,R2000 aRN ISSUER SEK CaP 14.37%,NaN,S,05/2/2017,05/5/2017,"$50,001 - $100,000",New,
+Conaway,20007393,SP,R2000 aRN ISSUER SEK CaP 14.37%,NaN,S,05/2/2017,05/5/2017,"$1,001 - $15,000",New,
+Conaway,20007393,SP,deere & Company ,NaN,S,05/15/2017,05/18/2017,"$1,001 - $15,000",New,
+Conaway,20007393,SP,Trimble Inc. ,NaN,S,05/15/2017,05/18/2017,"$1,001 - $15,000",New,
+Conaway,20007393,SP,R2000 CLIRNS ISSUER CIbC CaP,NaN,S,05/12/2017,05/17/2017,"$15,001 - $50,000",New,
+Conaway,20007185,SP,SX5E ARN ISSUER BOFA CAP 19.80%,NaN,P,04/3/2017,04/6/2017,"$50,001 - $100,000",New,"SX5E ARN ISSUER BOFA CAP 19.80% SV 3,333.96 DUE 04/27/18"
+Conaway,20007185,SP,SP500 ARN ISSUER BAC CAP 15.42%,NaN,S,04/28/2017,04/28/2017,"$15,001 - $50,000",New,"SP500 ARN ISSUER BAC CAP 15.42% SV 1,951.70 DUE 04/28/17 Redemption"
+Conaway,20007185,SP,SX5E STEPUP ISSUER HSBC STEP,NaN,P,04/25/2017,04/28/2017,"$50,001 - $100,000",New,"SX5E STEPUP ISSUER HSBC STEP 30.00% SV 3,221.14 DUE 09/28/18"
+Conaway,20007185,SP,GOLDMAN SACHS CAPITAL II,NaN,S,04/20/2017,04/25/2017,"$15,001 - $50,000",New,GOLDMAN SACHS CAPITAL II - VAR% PERPETUAL
+Conaway,20007185,SP,GOLDMAN SACHS CAPITAL II,NaN,S,04/20/2017,04/25/2017,"$15,001 - $50,000",New,GOLDMAN SACHS CAPITAL II - VAR% PERPETUAL
+Conaway,20007185,SP,MSCI EM ARN ISSUER SEK CAP,NaN,P,04/20/2017,04/25/2017,"$50,001 - $100,000",NewID Owner Asset Transaction Date Notification Amount,MSCI EM ARN ISSUER SEK CAP 17.65% SV 857.45 DUE 01/26/18
+Conaway,20007185,SP,R2000 ARN ISSUER SEK CAP 13.83%,NaN,P,04/20/2017,04/25/2017,"$50,001 - $100,000",New,"R2000 ARN ISSUER SEK CAP 13.83% SV 1,237.751 DUE 11/22/17"
+Conaway,20007185,SP,WELLS FARGO & COMPANY JR,NaN,S,04/20/2017,04/25/2017,"$15,001 - $50,000",New,WELLS FARGO & COMPANY JR SUBORDNTD SER K GLB VAR% PERPETUAL CALLABLE
+Conaway,20007185,SP,Abbott Laboratories ,ABT,S,04/19/2017,04/24/2017,"$15,001 - $50,000",New,
+Conaway,20007185,SP,International Business Machines,NaN,P,04/19/2017,04/24/2017,"$1,001 - $15,000",New,
+Conaway,20007185,SP,International Business Machines,NaN,P,04/19/2017,04/24/2017,"$1,001 - $15,000",New,
+Conaway,20007185,SP,UIT FIRST TRUST GLOBAL DIVID,NaN,S,04/17/2017,04/19/2017,"$100,001 - $250,000",New,UIT FIRST TRUST GLOBAL DIVID PORT SER 42 MONTHLY REINVEST Redemption
+Conaway,20006839,SP,R2000 CLIRNS ISSUER CIBC CaP,NaN,P,02/6/2017,02/9/2017,"$15,001 - $50,000",New,"R2000 CLIRNS ISSUER CIBC CaP 20.40% SV 1,075.699 DUE 03/28/18"
+Conaway,20006839,JT,INNaTE IMMUNoTHERaPEUTIC aUD,NaN,P,02/3/2017,02/8/2017,"$1,001 - $15,000",New,INNaTE IMMUNoTHERaPEUTIC aUD PaR oRDINaRY
+Conaway,20006839,SP,R2000 CLIRNS ISSUER CIBC CaP,NaN,P,02/17/2017,02/23/2017,"$50,001 - $100,000",New,"R2000 CLIRNS ISSUER CIBC CaP 20.40% SV 1,075.699 DUE 03/28/18"
+Conaway,20006694,JT,INNATE IMMUNOTHERAPEUTIC AUD,NaN,P,01/26/2017,01/31/2017,"$1,001 - $15,000",New,INNATE IMMUNOTHERAPEUTIC AUD PAR ORDINARY
+Conaway,20006694,SP,R2000 STEPUP ISSUER BARC STEP,NaN,P,01/26/2017,02/2/2017,"$15,001 - $50,000",New,R2000 STEPUP ISSUER BARC STEP 35.00%
+Conaway,20006694,SP,SP500 STEPUP ISSUER HSBC STEP,NaN,P,01/26/2017,02/2/2017,"$15,001 - $50,000",New,SP500 STEPUP ISSUER HSBC STEP 35.00%
+Conaway,20006694,SP,SP500 STEPUP ISSUER HSBC STEP,NaN,P,01/26/2017,02/2/2017,"$50,001 - $100,000",New,SP500 STEPUP ISSUER HSBC STEP 35.00%
+Conaway,20006694,SP,SPX/SX5E STEPUP ISS HSBC STEP,NaN,P,01/19/2017,01/24/2017,"$50,001 - $100,000",New,SPX/SX5E STEPUP ISS HSBC STEP 22.80%
+Conaway,20006694,SP,US BANCORP JR SUBORDNTD,NaN,S,01/19/2017,01/24/2017,"$15,001 - $50,000",New,US BANCORP JR SUBORDNTDID Owner Asset Transaction Date Notification Amount
+Conaway,20006694,SP,WELLS FARGO & COMPANY JR,NaN,S,01/19/2017,01/24/2017,"$15,001 - $50,000",New,WELLS FARGO & COMPANY JR SUBORDNTD SER
+Conaway,20006694,SP,JP Morgan Chase & Co. ,JPM,S,01/18/2017,01/23/2017,"$1,001 - $15,000",New,
+Conaway,20006694,SP,Philip Morris International Inc ,PM,P,01/18/2017,01/23/2017,"$1,001 - $15,000",New,
+Conaway,20006694,SP,"Simon Property Group, Inc. ",SPG,P,01/18/2017,01/23/2017,"$1,001 - $15,000",New,
+Conaway,20006694,SP,"Simon Property Group, Inc. ",SPG,P,01/18/2017,01/23/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Conaway,20006694,SP,SP500 CLIRN ISSUER CS CAP 19.85%,NaN,S,01/17/2017,01/20/2017,"$100,001 - $250,000",New,SP500 CLIRN ISSUER CS CAP 19.85%
+Conaway,20006694,SP,SP500 CLIRN ISSUER CS CAP 19.85%,NaN,S,01/17/2017,01/20/2017,"$15,001 - $50,000",New,SP500 CLIRN ISSUER CS CAP 19.85%
+Conaway,20006694,SP,SP500 STEPUP ISSUER BNS STEP,NaN,S,01/17/2017,01/20/2017,"$100,001 - $250,000",New,SP500 STEPUP ISSUER BNS STEP 16.30%
+Conaway,20008516,SP,,NaN,M36,(Merrill,Lynch),(Owner:,,
+Conaway,20008516,SP,,NaN,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20008516,SP,,NaN,M81,(Merrill,Lynch),(Owner:,,Managed Account – Not self-directed
+Conaway,20008516,SP,,NaN,M92,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 12/6/2017"
+Conaway,20008329,SP,,NaN,M81,(Merrill,Lynch),(Owner:,,Managed Account – Not self-directed
+Conaway,20008329,SP,,NaN,M92,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 11/4/2017"
+Conaway,20008162,SP,,NaN,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20008162,SP,,NaN,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20008162,SP,,NaN,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 10/4/2017"
+Conaway,20007468,JT,,NaN,M39,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 06/14/2017"
+Conaway,20007393,SP,,NaN,M37,(Merrill,Lynch),(owner:,,
+Conaway,20007393,SP,,NaN,M40,(Merrill,Lynch),(owner:,,"Hon. K. Michael Conaway , 06/6/2017"
+Conaway,20007185,SP,,NaN,M36,(Merrill,Lynch),(Owner:,,
+Conaway,20007185,SP,,NaN,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20007185,SP,,NaN,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20007185,SP,,NaN,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 05/3/2017"
+Conaway,20006839,JT,,NaN,M39,(Merrill,Lynch),(owner:,,
+Conaway,20006839,SP,,NaN,M40,(Merrill,Lynch),(owner:,,"Hon. K. Michael Conaway , 03/2/2017"
+Conaway,20006694,JT,,NaN,M39,(Merrill,Lynch),(Owner:,,
+Conaway,20006694,SP,,NaN,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20006694,SP,,NaN,M40,(Merrill,Lynch),(Owner:,,
+Conaway,20006694,SP,,NaN,M81,(Merrill,Lynch),(Owner:,,"Hon. K. Michael Conaway , 02/6/2017"
+Conaway,20008516,SP,,NaN,E62,(Edward,Jones),(Owner:,,
+Conaway,20007393,SP,,NaN,E62,(Edward,Jones),(owner:,,
+Conaway,20007185,SP,,NaN,E62,(Edward,Jones),(Owner:,,
+Connolly,20006554,JT,"Dominion Resources, Inc. ",D,P,12/21/2016,01/11/2017,"$1,001 - $15,000",New,"Hon. Gerald E. Connolly , 01/13/2017"
+Connolly,20008349,JT,"Dominion Energy, Inc. ",D,P,09/20/2017,10/3/2017,"$1,001 - $15,000",New,"Hon. Gerald E. Connolly , 11/7/2017"
+Connolly,20007572,JT,"Dominion Energy, Inc. ",D,P,06/21/2017,07/5/2017,"$1,001 - $15,000",New,"Hon. Gerald E. Connolly , 07/6/2017"
+Connolly,20007081,JT,"Dominion Resources, Inc. ",D,P,03/22/2017,04/4/2017,"$1,001 - $15,000",New,"Hon. Gerald E. Connolly , 04/19/2017"
+Curbelo,20007620,SP,"T. Rowe Price group, Inc. ",NaN,Asset,Transaction,Date,Notification,New,"Hon. Carlos Curbelo , 07/13/2017"
+Curbelo,20008330,SP,accenture plc Class a ordinary Shares,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,adobe Systems Incorporated ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,american Tower Corporation ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,"ameriprise Financial, Inc. ",NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,"BlackRock, Inc. ",BLK,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Colgate,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Comcast Corporation,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,CSX Corporation ,CSX,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,CVS Health Corporation ,CVS,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,danaher Corporation ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Ecolab Inc. ,ECL,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,"Home depot, Inc. ",NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Honeywell International Inc. ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Intercontinental Exchange Inc. ,ICE,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Invesco Ltd ,IVZ,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,iShares Core S&P Mid,NaN,P,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,iShares Core S&P Small,NaN,P,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,iShares Russell 1000 growth ETF ,NaN,P,10/10/2017,10/10/2017,"$15,001 - $50,000",New,
+Curbelo,20008330,SP,"Lowe's Companies, Inc. ",NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Medtronic plc. ordinary Shares ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,"o'Reilly automotive, Inc. ",NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,"Red Hat, Inc. ",NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,"Rockwell automation, Inc. ",NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,"Rockwell Collins, Inc. ",NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,SPdR dow Jones Industrial average,NaN,P,10/10/2017,10/10/2017,"$15,001 - $50,000",New,
+Curbelo,20008330,SP,Thermo Fisher Scientific Inc ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Tix Corporation ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,United Technologies Corporation ,NaN,S,10/10/2017,10/10/2017,"$1,001 - $15,000",New,
+Curbelo,20008330,SP,Visa Inc. ,V,P,10/10/2017,10/10/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Curbelo,20008330,SP,Walt disney Company ,NaN,P,10/10/2017,10/10/2017,"$1,001 - $15,000",New,"Hon. Carlos Curbelo , 11/3/2017"
+Curbelo,20007872,SP,amerisourceBergen Corporation ,NaN,S,08/3/2017,08/21/2017,"$1,001 - $15,000",New,
+Curbelo,20007872,SP,Mylan N.V. ,NaN,S,08/3/2017,08/21/2017,"$1,001 - $15,000",New,
+Curbelo,20007872,SP,"Energy Transfer Partners, L.P. Common",NaN,S,07/10/2017,08/21/2017,"$1,001 - $15,000",New,
+Curbelo,20007872,SP,"Facebook, Inc.",NaN,P,07/10/2017,08/21/2017,"$1,001 - $15,000",New,
+Curbelo,20007872,SP,iShares U.S. Real Estate ETF ,NaN,P,07/10/2017,08/21/2017,"$1,001 - $15,000",New,
+Curbelo,20007872,SP,"Kinder Morgan, Inc. ",KMI,S,07/10/2017,08/21/2017,"$1,001 - $15,000",New,
+Curbelo,20007872,SP,"o'Reilly automotive, Inc. ",NaN,P,07/10/2017,08/21/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Curbelo,20007872,SP,RoBo global Robotics and automation,NaN,P,07/10/2017,08/21/2017,"$1,001 - $15,000",New,
+Curbelo,20007872,SP,"T. Rowe Price group, Inc. ",NaN,S,07/10/2017,08/21/2017,"$1,001 - $15,000",New,"Hon. Carlos Curbelo , 08/21/2017"
+Curbelo,20007620,SP,"Energy Transfer Partners, L.P. Common",NaN,S,07/10/2017,07/10/2017,"$1,001 - $15,000",New,
+Curbelo,20007620,SP,"Facebook, Inc.",NaN,P,07/10/2017,07/10/2017,"$1,001 - $15,000",New,
+Curbelo,20007620,SP,iShares U.S. Real Estate ETF ,NaN,P,07/10/2017,07/10/2017,"$1,001 - $15,000",New,
+Curbelo,20007620,SP,"Kinder Morgan, Inc. ",KMI,S,07/10/2017,07/10/2017,"$1,001 - $15,000",New,
+Curbelo,20007620,SP,"o'Reilly automotive, Inc. ",NaN,P,07/10/2017,07/10/2017,"$1,001 - $15,000",New,
+Curbelo,20007620,SP,RoBo global Robotics and automation,NaN,P,07/10/2017,07/10/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,"Mondelez International, Inc.",NaN,P,05/16/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,Time Warner Inc. New ,NaN,S,05/16/2017,05/16/2017,"$1,001 - $15,000",New,"Hon. Carlos Curbelo , 06/1/2017"
+Curbelo,20007382,SP,adobe Systems Incorporated ,NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,american Tower Corporation ,NaN,P,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,"ameriprise Financial, Inc. ",NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,"Becton, dickinson and Company ",NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,CSX Corporation ,CSX,P,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,"Facebook, Inc.",NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,iShares CMBS Bond ETF ,NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,PaREXEL International Corporation,NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,PowerShares Emerging Markets,NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,"Red Hat, Inc. ",NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,"Rockwell automation, Inc. ",NaN,S,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Curbelo,20007382,SP,"T. Rowe Price group, Inc. ",NaN,P,04/5/2017,05/16/2017,"$1,001 - $15,000",New,
+Davis,20008319,SP,Charles Schwab Corporation ,SCHW,S,10/20/2017,10/24/2017,"$1,001 - $15,000",New,
+Davis,20008319,SP,"HCP, Inc. ",NaN,P,10/20/2017,10/24/2017,"$15,001 - $50,000",New,
+Davis,20008319,SP,Kroger Company ,KR,S,10/20/2017,10/24/2017,"$1,001 - $15,000",New,
+Davis,20008319,SP,"Versum Materials, Inc. ",NaN,P,10/20/2017,10/24/2017,"$15,001 - $50,000",New,"Hon. Susan A. Davis , 11/16/2017"
+Davis,20008065,SP,"Alaska Air group, Inc. ",NaN,P,08/25/2017,08/30/2017,"$15,001 - $50,000",New,
+Davis,20008065,SP,Kroger Company ,KR,P,08/25/2017,08/30/2017,"$1,001 - $15,000",New,"Hon. Susan A. Davis , 09/26/2017"
+Davis,20007684,SP,AEgON N.V. ,NaN,S,06/29/2017,07/5/2017,"$1,001 - $15,000",New,
+Davis,20007684,SP,"Allete, Inc. ",NaN,P,06/29/2017,07/5/2017,"$1,001 - $15,000",New,
+Davis,20007684,SP,"Fortinet, Inc. ",FTNT,P,06/29/2017,07/5/2017,"$15,001 - $50,000",New,
+Davis,20007684,SP,QuAlCOMM Incorporated ,QCOM,S,06/29/2017,07/5/2017,"$15,001 - $50,000",New,"Hon. Susan A. Davis , 07/31/2017"
+DelBene,20006479,SP,Microsoft Corporation ,MSFT,P,12/30/2016,12/30/2016,"$1,001 - $15,000",New,"Hon. Suzan K. DelBene , 01/10/2017"
+DelBene,20008149,SP,Microsoft Corporation ,MSFT,S,09/5/2017,09/5/2017,"$250,001 - $500,000",New,
+DelBene,20008149,SP,Microsoft Corporation ,MSFT,P,09/29/2017,09/29/2017,"$1,001 - $15,000",New,"Hon. Suzan K. DelBene , 11/3/2017"
+DelBene,20007729,JT,american Tower Corp Note 4.5%,NaN,S,07/31/2017,07/31/2017,"$100,001 - $250,000",New,Redeemed. Full call payout.
+DelBene,20007729,JT,Connecticut St Spl Tax Oblig 5.00%,NaN,P,07/26/2017,07/26/2017,"$250,001 - $500,000",New,
+DelBene,20007729,JT,lower Colo Riv auth Tex 5.00%,NaN,S,07/26/2017,07/26/2017,"$250,001 - $500,000",New,"Hon. Suzan K. DelBene , 08/16/2017"
+DelBene,20007397,JT,Nasdaq Inc Note,NaN,S,05/26/2017,05/26/2017,"$100,001 - $250,000",New,"Hon. Suzan K. DelBene , 06/8/2017"
+DelBene,20007161,JT,university ID 5.25% Due 04/01/2041,NaN,S,04/3/2017,04/3/2017,"$1,001 - $15,000",New,"Hon. Suzan K. DelBene , 05/10/2017"
+DelBene,20007161,JT,Central Tex Regl Mobility 5.0% due,NaN,P,04/17/2017,04/17/2017,"$15,001 - $50,000",New,
+DelBene,20006996,SP,Microsoft Corporation ,MSFT,S,03/1/2017,03/1/2017,"$50,001 - $100,000",New,"Hon. Suzan K. DelBene , 04/5/2017"
+Dingell,20008511,SP,"Walgreens Boots alliance, Inc. ",NaN,S,11/28/2017,12/4/2017,"$15,001 - $50,000",New,"Hon. Debbie Dingell , 12/7/2017"
+Dingell,20008274,SP,general Electric Company ,NaN,S,10/18/2017,10/23/2017,"$15,001 - $50,000",New,
+Dingell,20008274,SP,Newell Brands Inc. ,NaN,P,10/18/2017,10/23/2017,"$15,001 - $50,000",New,"Hon. Debbie Dingell , 10/26/2017"
+Dingell,20007996,SP,DowDuPont Inc. ,NaN,S,09/19/2017,09/25/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 09/28/2017"
+Dingell,20007942,SP,DowDuPont Inc. ,NaN,E,09/1/2017,09/5/2017,"$1,001 - $15,000",New,Shares received in exchange for E. I. du Pont de Nemours and Company (DD) shares as a result of merger.
+Dingell,20007942,JT,DowDuPont Inc. ,NaN,E,09/1/2017,09/5/2017,"$15,001 - $50,000",New,Shares received in exchange for Dow Chemical Company (DOW) shares as a result of merger.
+Dingell,20007942,SP,Medtronic plc. Ordinary Shares ,MDLZ,P,08/28/2017,09/5/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 09/12/2017"
+Dingell,20007784,SP,QUALCOMM Incorporated ,QCOM,P,08/14/2017,08/21/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 08/23/2017"
+Dingell,20007647,SP,aircastle Limited ,NaN,P,07/10/2017,07/17/2017,"$1,001 - $15,000",New,
+Dingell,20007647,SP,"Facebook, Inc.",NaN,P,07/10/2017,07/17/2017,"$15,001 - $50,000",New,"Hon. Debbie Dingell , 07/20/2017"
+Dingell,20007474,SP,Johnson & Johnson ,JNJ,S,06/7/2017,06/13/2017,"$15,001 - $50,000",New,
+Dingell,20007474,SP,Microsoft Corporation ,MSFT,S,06/7/2017,06/13/2017,"$15,001 - $50,000",New,
+Dingell,20007474,SP,Nestle Sa Sponsored aDR representing,NaN,S,06/7/2017,06/13/2017,"$15,001 - $50,000",New,"Hon. Debbie Dingell , 06/14/2017"
+Dingell,20007308,SP,aircastle Limited ,NaN,P,05/17/2017,05/22/2017,"$1,001 - $15,000",New,
+Dingell,20007308,SP,Hess Corporation ,HES,S,05/17/2017,05/22/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 06/1/2017"
+Dingell,20007052,SP,"Walgreens Boots alliance, Inc. ",NaN,P,04/5/2017,04/10/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 04/11/2017"
+Dingell,20007189,JT,DE WITT MICH PUB SCHS,NaN,P,04/27/2017,05/1/2017,"$15,001 - $50,000",New,"Hon. Debbie Dingell , 05/4/2017"
+Dingell,20007001,SP,Johnson Controls International plc,MDLZ,P,03/28/2017,04/4/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 04/5/2017"
+Dingell,20006957,SP,QUALCOMM Incorporated ,QCOM,P,03/16/2017,03/20/2017,"$1,001 - $15,000",New,
+Dingell,20006909,JT,UNIT AAM HIgH 50 DIVIDEND,NaN,P,03/10/2017,03/13/2017,"$1,001 - $15,000",New,Unit Investment Trust - Equity Trusts
+Dingell,20006909,JT,UNIT AAM HIgH 50 DIVIDEND,NaN,P,03/10/2017,03/13/2017,"$15,001 - $50,000",New,"Hon. Debbie Dingell , 03/15/2017"
+Dingell,20006698,SP,Macy's Inc ,NaN,S,02/1/2017,02/6/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 02/7/2017"
+Dingell,20006517,SP,"Facebook, Inc.",NaN,P,01/6/2017,01/9/2017,"$1,001 - $15,000",New,"Hon. Debbie Dingell , 01/11/2017"
+Duckworth,20006639,JT,Potash Corporation of Saskatchewan,NaN,S,12/9/2016,12/9/2016,"$1,001 - $15,000",New,"Hon. Tammy Duckworth , 02/1/2017"
+Duckworth,20006639,JT,Corning Incorporated ,NaN,S,12/8/2016,12/8/2016,"$1,001 - $15,000",New,
+Dunn,20007420,SP,Southern Company ,SO,P,05/30/2017,06/6/2017,"$15,001 - $50,000",New,"Hon. Neal P. Dunn , 06/7/2017"
+Foxx,20006456,JT,schwab u.s. large,NaN,P,12/9/2016,12/9/2016,"$15,001 - $50,000",New,
+Foxx,20006456,JT,"suburban Propane Partners, l.P. ",NaN,s,12/9/2016,12/9/2016,"$1,001 - $15,000",New,
+Foxx,20006456,JT,Vanguard Mid,NaN,s,12/9/2016,12/9/2016,"$50,001 - $100,000",New,"Hon. Virginia Foxx , 01/5/2017"
+Foxx,20006456,JT,stoneMor Partners l.P. Common unit,NaN,s,12/5/2016,12/5/2016,"$15,001 - $50,000",New,
+Foxx,20006456,JT,"alliance Resource Partners, l.P.",NaN,P,12/21/2016,12/21/2016,"$1,001 - $15,000",New,
+Foxx,20006456,JT,Marlin Business services Corp. ,NaN,P,12/19/2016,12/19/2016,"$15,001 - $50,000",New,
+Foxx,20006456,JT,BP p.l.c. ,NaN,P,12/16/2016,12/16/2016,"$1,001 - $15,000",New,
+Foxx,20006456,JT,IDT Corporation Class B ,NaN,P,12/15/2016,12/15/2016,"$1,001 - $15,000",New,
+Foxx,20006456,JT,Nucor Corporation ,NaN,P,12/15/2016,12/15/2016,"$15,001 - $50,000",New,
+Foxx,20006456,JT,Hanesbrands Inc. ,NaN,s,12/13/2016,12/13/2016,"$1,001 - $15,000",New,
+Foxx,20006456,JT,IDT Corporation Class B ,NaN,P,12/13/2016,12/13/2016,"$15,001 - $50,000",New,
+Foxx,20008487,JT,Enterprise Products Partners l.P. ,NaN,P,11/8/2017,11/15/2017,"$1,001 - $15,000",New,
+Foxx,20008487,JT,Buckeye Partners l.P. ,NaN,P,11/21/2017,11/21/2017,"$1,001 - $15,000",New,
+Foxx,20008487,JT,"Merck & Company, Inc. Common stock",MRK,s,11/21/2017,11/21/2017,"$15,001 - $50,000",New,
+Foxx,20008487,JT,CVR Energy Inc. ,NaN,P,11/20/2017,11/20/2017,"$1,001 - $15,000",New,
+Foxx,20008487,JT,Marlin Business services Corp. ,NaN,s,11/16/2017,11/16/2017,"$15,001 - $50,000",New,
+Foxx,20008487,JT,IDT Corporation Class B ,NaN,s,11/15/2017,11/15/2017,"$15,001 - $50,000",New,
+Foxx,20008487,JT,Nucor Corporation ,NaN,s,11/15/2017,11/15/2017,"$15,001 - $50,000",New,
+Foxx,20008487,JT,"Preferred apartment Communities, Inc.",NaN,P,11/15/2017,11/15/2017,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 12/12/2017"
+Foxx,20008487,JT,Pattern Energy group Inc.,NaN,P,11/1/2017,11/15/2017,"$1,001 - $15,000",New,
+Foxx,20008487,JT,Pembina Pipeline Corp. ordinary shares,NaN,E,11/1/2017,11/15/2017,"$15,001 - $50,000",New,Exchange of Veresen Inc. stock for Pembina Pipeline stock due to merger.
+Foxx,20008350,JT,"NRg Yield, Inc. Class a ",NaN,P,10/9/2017,10/9/2017,"$1,001 - $15,000",New,
+Foxx,20008350,JT,glaxosmithKline PlC ,NaN,P,10/25/2017,10/25/2017,"$1,001 - $15,000",New,
+Foxx,20008350,JT,glaxosmithKline PlC ,NaN,P,10/24/2017,10/24/2017,"$1,001 - $15,000",New,
+Foxx,20008350,JT,Pembina Pipeline Corp. Ordinary shares,NaN,P,10/20/2017,10/20/2017,"$1,001 - $15,000",New,"Hon. Virginia Foxx , 11/8/2017"
+Foxx,20008350,JT,"NRg Yield, Inc. Class a ",NaN,P,10/19/2017,10/19/2017,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+Foxx,20008350,JT,"NRg Yield, Inc. Class a ",NaN,P,10/17/2017,10/17/2017,"$1,001 - $15,000",New,
+Foxx,20008350,JT,Buckeye Partners l.P. ,NaN,P,10/16/2017,10/16/2017,"$15,001 - $50,000",New,
+Foxx,20008350,JT,Enterprise Products Partners l.P. ,NaN,P,10/13/2017,10/13/2017,"$15,001 - $50,000",New,
+Foxx,20008350,JT,aT&T Inc. ,T,P,10/12/2017,10/12/2017,"$15,001 - $50,000",New,
+Foxx,20008350,JT,"Merck & Company, Inc. Common stock",MRK,P,10/11/2017,10/11/2017,"$1,001 - $15,000",New,
+Foxx,20008135,JT,BP p.l.c. ,NaN,P,09/22/2017,09/22/2017,"$1,001 - $15,000",New,
+Foxx,20008135,JT,Pattern Energy group Inc.,NaN,P,09/22/2017,09/22/2017,"$1,001 - $15,000",New,
+Foxx,20008135,JT,"altria group, Inc. ",MO,s,09/20/2017,09/20/2017,"$15,001 - $50,000",New,
+Foxx,20008135,JT,Pembina Pipeline Corp. Ordinary shares,NaN,P,09/20/2017,09/20/2017,"$15,001 - $50,000",New,
+Foxx,20008135,JT,The Hershey Company ,NaN,s,09/20/2017,09/20/2017,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 10/12/2017"
+Foxx,20007923,JT,ashford Hospitality Trust Inc ,NaN,P,08/9/2017,08/9/2017,"$1,001 - $15,000",New,
+Foxx,20007923,JT,Pattern Energy group Inc.,NaN,P,08/8/2017,08/8/2017,"$15,001 - $50,000",New,
+Foxx,20007923,JT,glaxosmithKline PlC ,NaN,P,08/4/2017,08/4/2017,"$15,001 - $50,000",New,
+Foxx,20007923,JT,Western Digital Corporation ,WDC,P,08/4/2017,08/4/2017,"$1,001 - $15,000",Newinitial Public offeringS,"Hon. Virginia Foxx , 09/1/2017"
+Foxx,20007923,JT,aT&T Inc. ,T,P,08/31/2017,08/31/2017,"$1,001 - $15,000",New,
+Foxx,20007923,JT,International Paper Company ,IP,P,08/10/2017,08/10/2017,"$15,001 - $50,000",New,
+Foxx,20007923,JT,"Energy Transfer Partners, l.P. Common",NaN,s,08/1/2017,08/1/2017,"$15,001 - $50,000",New,
+Foxx,20007923,JT,"Pfizer, Inc. ",PFE,P,08/1/2017,08/1/2017,"$15,001 - $50,000",New,
+Foxx,20007734,JT,RaIT Financial Trust New Common,NaN,s,07/31/2017,07/31/2017,"$1,001 - $15,000",New,"Hon. Virginia Foxx , 08/9/2017"
+Foxx,20007734,JT,Enterprise Products Partners l.P. ,NaN,P,07/24/2017,07/24/2017,"$1,001 - $15,000",New,
+Foxx,20007734,JT,Frontier Communications Corporation,NaN,s,07/18/2017,07/18/2017,"$1,001 - $15,000",New,
+Foxx,20007569,JT,BP p.l.c. ,NaN,P,06/23/2017,06/23/2017,"$1,001 - $15,000",New,
+Foxx,20007569,JT,CVR Energy Inc. ,NaN,P,06/14/2017,06/14/2017,"$15,001 - $50,000",New,
+Foxx,20007569,JT,universal Corporation ,NaN,s,06/14/2017,06/14/2017,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 07/11/2017"
+Foxx,20007220,JT,International Paper Company ,IP,P,04/12/2017,04/12/2017,"$15,001 - $50,000",New,"Hon. Virginia Foxx , 05/9/2017"
+Foxx,20007000,JT,"alliance Resource Partners, l.P.",NaN,s,03/9/2017,03/9/2017,"$15,001 - $50,000",New,
+Foxx,20007000,DC,RaIT Financial Trust New Common,NaN,P,03/6/2017,03/6/2017,"$1,001 - $15,000",New,
+Foxx,20007000,JT,"altria group, Inc. ",MO,P,03/31/2017,03/31/2017,"$1,001 - $15,000",New,
+Foxx,20007000,JT,BP p.l.c. ,NaN,P,03/31/2017,03/31/2017,"$1,001 - $15,000",New,
+Foxx,20007000,JT,"altria group, Inc. ",MO,P,03/30/2017,03/30/2017,"$15,001 - $50,000",New,
+Foxx,20007000,JT,Erie Indemnity Company,ERIE,s,03/28/2017,03/28/2017,"$50,001 - $100,000",New,
+Foxx,20007000,JT,alPs sector Dividend Dogs ETF,NaN,P,03/21/2017,03/21/2017,"$15,001 - $50,000",New,
+Foxx,20007000,JT,The Hershey Company ,NaN,P,03/21/2017,03/21/2017,"$1,001 - $15,000",New,
+Foxx,20007000,JT,Western Digital Corporation ,WDC,P,03/21/2017,03/21/2017,"$1,001 - $15,000",New,"Hon. Virginia Foxx , 04/11/2017"
+Foxx,20007000,DC,The Hershey Company ,NaN,P,03/20/2017,03/20/2017,"$15,001 - $50,000",New,
+Foxx,20007000,JT,Western Digital Corporation ,WDC,P,03/20/2017,03/20/2017,"$15,001 - $50,000",New,
+Foxx,20007000,JT,universal Corporation ,NaN,P,03/2/2017,03/2/2017,"$15,001 - $50,000",New,
+Foxx,20007000,JT,Vector group ltd. ,NaN,s,03/2/2017,03/2/2017,"$1,001 - $15,000",New,
+Foxx,20007000,JT,"Merck & Company, Inc. Common stock",MRK,P,03/17/2017,03/17/2017,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount,
+Foxx,20007000,JT,"B&g Foods, Inc. B&g Foods, Inc. ",NaN,s,03/16/2017,03/16/2017,"$15,001 - $50,000",New,
+Foxx,20007000,JT,Pattern Energy group Inc.,NaN,P,03/1/2017,03/1/2017,"$15,001 - $50,000",New,
+Foxx,20006862,JT,universal Corporation ,NaN,s,02/9/2017,02/9/2017,"$50,001 - $100,000",New,
+Foxx,20006862,JT,"Veresen, Inc. Ordinary shares ",NaN,P,02/7/2017,02/7/2017,"$15,001 - $50,000",New,
+Foxx,20006862,JT,Frontier Communications Corporation,NaN,P,02/28/2017,02/28/2017,"$1,001 - $15,000",New,
+Foxx,20006862,JT,Pattern Energy group Inc.,NaN,P,02/28/2017,02/28/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Foxx,20006862,JT,Enterprise Products Partners l.P. ,NaN,P,02/27/2017,02/27/2017,"$1,001 - $15,000",New,
+Foxx,20006862,JT,"Veresen, Inc. Ordinary shares ",NaN,P,02/27/2017,02/27/2017,"$1,001 - $15,000",New,"Hon. Virginia Foxx , 03/7/2017"
+Foxx,20006862,JT,Enterprise Products Partners l.P. ,NaN,P,02/23/2017,02/23/2017,"$1,001 - $15,000",New,
+Foxx,20006862,JT,Enterprise Products Partners l.P. ,NaN,P,02/22/2017,02/22/2017,"$15,001 - $50,000",New,
+Foxx,20006862,JT,"Energy Transfer Partners, l.P. ENERgY",NaN,P,02/16/2017,02/16/2017,"$15,001 - $50,000",New,
+Foxx,20006862,JT,"Energy Transfer Partners, l.P. ENERgY",NaN,P,02/15/2017,02/15/2017,"$15,001 - $50,000",New,
+Foxx,20006862,JT,"B&g Foods, Inc. B&g Foods, Inc. ",NaN,P,02/14/2017,02/14/2017,"$15,001 - $50,000",New,
+Foxx,20006666,JT,Nucor Corporation ,NaN,P,01/31/2017,01/31/2017,"$1,001 - $15,000",New,"Hon. Virginia Foxx , 02/3/2017"
+Foxx,20006666,JT,Nucor Corporation ,NaN,P,01/25/2017,01/25/2017,"$1,001 - $15,000",New,
+Foxx,20006666,JT,Marlin Business services Corp. ,NaN,P,01/12/2017,01/12/2017,"$1,001 - $15,000",New,
+Garamendi,20007652,JT,Health Fusion,NaN,s,05/15/2017,05/15/2017,"$15,001 - $50,000",New,"Hon. John Garamendi , 07/23/2017"
+Garamendi,20004633,JT,"solazyme, Inc. ",NaN,P,01/8/2016,01/11/2016,"$1,001 - $15,000",New,"Hon. John Garamendi , 07/18/2017"
+Garamendi,20004633,JT,HealthFusion,NaN,s,01/5/2016,01/11/2016,"$250,001 - $500,000",New,sale of stock options. These were created in the process of the sale of the company. I was unaware that these
+Garamendi,20004633,JT,HealthFusion,NaN,s,01/21/2016,01/22/2016,"$15,001 - $50,000",New,sale of stock
+Gianforte,20008132,JT,"Rush Enterprises, Inc.",NaN,Asset,Transaction,Date,Notification,New,
+Gianforte,20007736,JT,"Patterson Companies, Inc. ",NaN,Asset,Transaction,Date,Notification,New,
+Gianforte,20008379,JT,GoDaddy Inc. Class A ,GDDY,P,11/8/2017,11/13/2017,"$100,001 - $250,000",New,
+Gianforte,20008379,JT,TEGNA Inc ,NaN,P,11/8/2017,11/13/2017,"$15,001 - $50,000",New,
+Gianforte,20008379,JT,TEGNA Inc ,NaN,P,11/8/2017,11/13/2017,"$15,001 - $50,000",New,"Hon. Greg Gianforte , 11/28/2017"
+Gianforte,20008379,JT,"Comal ,Texas Inde. School District",NaN,P,11/6/2017,11/13/2017,"$100,001 - $250,000",New,
+Gianforte,20008379,JT,ChannelAdvisor Corporation ,NaN,S,11/21/2017,11/27/2017,"$15,001 - $50,000",New,
+Gianforte,20008379,JT,Grupo Televisa S.A. ,NaN,S,11/17/2017,11/20/2017,"$50,001 - $100,000",New,
+Gianforte,20008379,JT,Infineon Technologies AG ,NaN,P,11/17/2017,11/20/2017,"$50,001 - $100,000",New,
+Gianforte,20008132,JT,WPP plc,NaN,S,10/5/2017,10/9/2017,"$50,001 - $100,000",New,"Hon. Greg Gianforte , 10/9/2017"
+Gianforte,20008132,JT,Ft Bend Cty TX Tollroad Revenue Senior,NaN,P,10/4/2017,10/9/2017,"$250,001 - $500,000",New,
+Gianforte,20008316,JT,Cognex Corporation ,NaN,S,10/27/2017,10/30/2017,"$15,001 - $50,000",New,
+Gianforte,20008316,JT,"CoStar Group, Inc. ",CSGP,S,10/27/2017,10/30/2017,"$100,001 - $250,000",New,
+Gianforte,20008316,JT,Snap,NaN,P,10/27/2017,10/30/2017,"$15,001 - $50,000",New,
+Gianforte,20008316,JT,"WageWorks, Inc. ",NaN,P,10/16/2017,10/25/2017,"$50,001 - $100,000",New,"Hon. Greg Gianforte , 11/2/2017"
+Gianforte,20008132,JT,L'air Liquide Ord american depositary,NaN,P,09/27/2017,10/2/2017,"$100,001 - $250,000",New,
+Gianforte,20008132,JT,Linde ag Sponsored adR ,NaN,S,09/26/2017,10/2/2017,"$100,001 - $250,000",New,
+Gianforte,20008132,JT,Weibo Corporation,NaN,P,09/26/2017,10/2/2017,"$100,001 - $250,000",New,
+Gianforte,20008132,JT,Linde ag Sponsored adR ,NaN,S,09/19/2017,09/25/2017,"$50,001 - $100,000",New,
+Gianforte,20008132,JT,"Rush Enterprises, Inc.",NaN,S,09/18/2017,09/25/2017,"$15,001 - $50,000",New,
+Gianforte,20008132,JT,"Rush Enterprises, Inc.",NaN,S,09/18/2017,09/25/2017,"$1,001 - $15,000",New,
+Gianforte,20008132,JT,"Rush Enterprises, Inc.",NaN,S,09/18/2017,09/25/2017,"$1,001 - $15,000",New,
+Gianforte,20008076,JT,"Rush Enterprises, Inc.",NaN,S,09/12/2017,09/18/2017,"$15,001 - $50,000",New,
+Gianforte,20008076,JT,"Rush Enterprises, Inc.",NaN,S,09/12/2017,09/18/2017,"$15,001 - $50,000",New,
+Gianforte,20008076,JT,"Rush Enterprises, Inc.",NaN,S,09/12/2017,09/18/2017,"$15,001 - $50,000",New,
+Gianforte,20008076,JT,"Rush Enterprises, Inc.",NaN,S,09/12/2017,09/18/2017,"$15,001 - $50,000",New,
+Gianforte,20008076,JT,"Rush Enterprises, Inc.",NaN,S,09/12/2017,09/18/2017,"$15,001 - $50,000",New,
+Gianforte,20008076,JT,"Rush Enterprises, Inc.",NaN,S,09/12/2017,09/18/2017,"$15,001 - $50,000",New,"Hon. Greg Gianforte , 09/26/2017"
+Gianforte,20007968,JT,L'Oreal Co. American Depositary Shares,NaN,S,08/28/2017,09/5/2017,"$50,001 - $100,000",New,
+Gianforte,20007968,JT,Gentex Corporation ,NaN,P,08/23/2017,08/28/2017,"$50,001 - $100,000",New,
+Gianforte,20007968,JT,National Instruments Corporation,NaN,S,08/23/2017,08/28/2017,"$100,001 - $250,000",New,
+Gianforte,20007968,JT,"PROS Holdings, Inc. ",NaN,P,08/23/2017,08/28/2017,"$15,001 - $50,000",New,"Hon. Greg Gianforte , 09/12/2017"
+Gianforte,20007968,JT,"baidu, Inc.",NaN,S,08/22/2017,08/28/2017,"$50,001 - $100,000",New,
+Gianforte,20007866,JT,Montana Facilities Finance authority,NaN,P,08/10/2017,08/14/2017,"$100,001 - $250,000",New,
+Gianforte,20007866,JT,Montana Facilities Finance authority,NaN,P,08/10/2017,08/14/2017,"$250,001 - $500,000",New,"Hon. Greg Gianforte , 08/22/2017"
+Gianforte,20007736,JT,Novadaq Technologies Inc,NaN,S,07/31/2017,08/7/2017,"$50,001 - $100,000",New,
+Gianforte,20007736,JT,Roche Holdings AG Basel American,NaN,S,07/31/2017,08/7/2017,"$50,001 - $100,000",New,
+Gianforte,20007736,JT,Shire plc Ordinary Shares ,NaN,P,07/31/2017,08/7/2017,"$50,001 - $100,000",New,
+Gianforte,20007736,JT,"MSC Industrial direct Company, Inc.",NaN,P,07/25/2017,07/31/2017,"$15,001 - $50,000",New,
+Gianforte,20007736,JT,"MSC Industrial direct Company, Inc.",NaN,P,07/25/2017,07/31/2017,"$15,001 - $50,000",New,
+Gianforte,20007736,JT,Chemed Corp ,NaN,S,07/17/2017,07/24/2017,"$50,001 - $100,000",New,
+Gianforte,20007736,JT,Florida St Bd Ed PU Cap Outlay,NaN,P,07/17/2017,07/24/2017,"$250,001 - $500,000",New,
+Gianforte,20007736,JT,Globant S.A. Common Shares ,NaN,P,07/17/2017,07/24/2017,"$100,001 - $250,000",New,
+Gianforte,20007736,JT,"Stratasys, Ltd. ",NaN,S,07/17/2017,07/24/2017,"$15,001 - $50,000",New,
+Gianforte,20007736,JT,"Tyler Technologies, Inc. ",TYL,P,07/17/2017,07/24/2017,"$100,001 - $250,000",New,
+Gianforte,20007736,JT,"Watsco, Inc. ",NaN,P,07/17/2017,07/24/2017,"$100,001 - $250,000",New,"Hon. Greg Gianforte , 08/7/2017"
+Gianforte,20007571,JT,Veeva Systems Inc. Class A ,NaN,S,07/10/2017,07/17/2017,"$1,001 - $15,000",New,"Hon. Greg Gianforte , 07/19/2017"
+Gianforte,20007571,JT,"dassault Systemes, S.A. American",NaN,S,06/30/2017,07/3/2017,"$100,001 - $250,000",New,
+Gianforte,20007571,JT,HdFC bank Limited ,NaN,P,06/30/2017,07/3/2017,"$100,001 - $250,000",New,
+Himes,20006570,JT,"Cisco Systems, Inc. ",NaN,S,11/29/2016,12/2/2016,"$50,001 - $100,000",JT),"Hon. James A. Himes , 01/17/2017"
+Himes,20007922,JT,Intel Corporation ,INTC,S,08/22/2017,08/22/2017,"$50,001 - $100,000",JT),"Hon. James A. Himes , 09/1/2017"
+Hinojosa,20006629,SP,3M Company ,MMM,P,12/27/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,boeing Company ,NaN,P,12/27/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,Chevron Corporation ,CVX,P,12/27/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,DC,Chevron Corporation ,CVX,P,12/27/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,DC,JP Morgan Chase & Co. ,JPM,P,12/27/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,JP Morgan Chase & Co. ,JPM,P,12/27/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,DC,Ohio Legacy Corporation ,NaN,S,12/14/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,DC,Ohio Legacy Corporation ,NaN,S,12/14/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,Ohio Legacy Corporation ,NaN,S,12/14/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,alphabet Inc.,NaN,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,alphabet Inc.,NaN,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,DC,Deluxe Corporation ,NaN,S,11/2/2016,01/29/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Hinojosa,20006629,SP,Eli Lilly and Company ,LLY,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,Eli Lilly and Company ,LLY,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,general Electric Company ,NaN,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,general Electric Company ,NaN,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,"Pepsico, Inc. ",PEP,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,Starbucks Corporation ,NaN,S,11/2/2016,01/29/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+Hinojosa,20006629,SP,Starbucks Corporation ,NaN,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,Walt Disney Company ,DIS,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,
+Hinojosa,20006629,SP,Walt Disney Company ,DIS,S,11/2/2016,01/29/2017,"$1,001 - $15,000",New,"Hon. Rubén Hinojosa , 01/29/2017"
+LoBiondo,20008344,SP,Accenture plc Class A Ordinary Shares,ACN,P,11/2/2017,11/6/2017,"$1,001 - $15,000",New,"Hon. Frank A. LoBiondo , 11/6/2017"
+LoBiondo,20008235,SP,J.M. Smucker Company ,SJM,S,10/9/2017,10/17/2017,"$1,001 - $15,000",New,
+LoBiondo,20008235,SP,Kellogg Company ,K,S,10/9/2017,10/17/2017,"$1,001 - $15,000",New,"Hon. Frank A. LoBiondo , 10/17/2017"
+LoBiondo,20008320,SP,JP Morgan Chase & Co. ,JPM,P,10/27/2017,11/2/2017,"$1,001 - $15,000",New,"Hon. Frank A. LoBiondo , 11/2/2017"
+LoBiondo,20008062,SP,"Cisco Systems, Inc. ",CSCO,P,09/8/2017,09/19/2017,"$1,001 - $15,000",New,
+LoBiondo,20008062,SP,Southern Company ,SO,S,09/8/2017,09/19/2017,"$1,001 - $15,000",New,"Hon. Frank A. LoBiondo , 09/19/2017"
+LoBiondo,20008062,SP,SCANA Corporation ,NaN,S,09/7/2017,09/19/2017,"$1,001 - $15,000",New,
+LoBiondo,20006867,SP,u.S. Bancorp ,NaN,P,02/3/2017,03/6/2017,"$1,001 - $15,000",New,"Hon. Frank A. LoBiondo , 03/7/2017"
+LoBiondo,20006731,SP,u.S. Bancorp ,NaN,P,02/3/2017,02/9/2017,"$1,001 - $15,000",New,"Hon. Frank A. LoBiondo , 02/9/2017"
+Lofgren,20008345,SP,Pacific gas & Electric Co. ,NaN,S,10/31/2017,11/14/2017,"$1,001 - $15,000",New,"Hon. Zoe Lofgren , 11/14/2017"
+Lofgren,20008345,SP,CMS Energy Corporation ,CMS,P,10/27/2017,11/14/2017,"$1,001 - $15,000",New,
+Lofgren,20008345,SP,"NextEra Energy, Inc. ",NEE,P,10/27/2017,11/14/2017,"$1,001 - $15,000",New,
+Lofgren,20008345,JT,California State Public Works board,NaN,P,10/12/2017,10/20/2017,"$1,001 - $15,000",New,
+Lofgren,20008232,SP,"Equifax, Inc. ",EFX,S,09/21/2017,10/16/2017,"$1,001 - $15,000",New,"Hon. Zoe Lofgren , 10/18/2017"
+Lofgren,20008012,JT,Lynwood unified School District gO,NaN,P,08/10/2017,08/17/2017,"$100,001 - $250,000",New,"Hon. Zoe Lofgren , 09/13/2017"
+Lofgren,20007070,JT,California state general Obligation,NaN,E,03/21/2017,03/21/2017,"$1,001 - $15,000",New,"Hon. Zoe Lofgren , 04/14/2017"
+Lowenthal,20008195,SP,WEX Inc. common stock ,NaN,Asset,Transaction,Date,Notification,New,
+Lowenthal,20007121,SP,"Zayo group Holdings, Inc. ",NaN,Asset,Transaction,Date,Notification,New,
+Lowenthal,20007371,SP,"Zayo group Holdings,",NaN,(ZAYO),P,05/11/2017,05/18/2017,New,"Hon. Alan S. Lowenthal , 05/26/2017"
+Lowenthal,20008567,SP,Aptiv PLC Ordinary Shares ,APTV,P,12/8/2017,12/14/2017,"$1,001 - $15,000",New,
+Lowenthal,20008567,SP,Siemens Ag American Depositary,NaN,S,12/6/2017,12/14/2017,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 12/14/2017"
+Lowenthal,20008567,SP,"Analog Devices, Inc. ",ADI,P,12/4/2017,12/11/2017,"$1,001 - $15,000",New,
+Lowenthal,20008567,SP,Delphi Technologies PLC Ordinary,NaN,P,12/4/2017,12/11/2017,"$15,001 - $50,000",New,
+Lowenthal,20006502,SP,general Dynamics Corporation ,NaN,P,12/19/2016,12/27/2016,"$1,001 - $15,000",New,
+Lowenthal,20006502,SP,IHS Inc. IHS Inc. Class A ,NaN,P,12/19/2016,12/27/2016,"$1,001 - $15,000",New,
+Lowenthal,20008628,SP,Boston Scientific Corporation ,BSX,P,12/14/2017,12/20/2017,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 12/28/2017"
+Lowenthal,20008431,SP,"Expedia, Inc. ",EXPE,S,11/9/2017,11/15/2017,"$1,001 - $15,000",New,
+Lowenthal,20008431,SP,Kansas City Southern ,NaN,S,11/9/2017,11/15/2017,"$1,001 - $15,000",New,
+Lowenthal,20008431,SP,Starbucks Corporation ,NaN,S,11/9/2017,11/15/2017,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 11/22/2017"
+Lowenthal,20008431,SP,"Merck & Company, Inc. Common Stock",MRK,S,11/8/2017,11/14/2017,"$15,001 - $50,000",New,
+Lowenthal,20008567,SP,"Autodesk, Inc. ",ADSK,P,11/30/2017,12/7/2017,"$1,001 - $15,000",New,
+Lowenthal,20008346,SP,Celgene Corporation ,NaN,S,11/2/2017,11/6/2017,"$1,001 - $15,000",New,
+Lowenthal,20008431,SP,"Martin Marietta Materials, Inc. ",MLM,P,11/15/2017,11/21/2017,"$1,001 - $15,000",New,
+Lowenthal,20008431,SP,"Martin Marietta Materials, Inc. ",MLM,P,11/14/2017,11/21/2017,"$1,001 - $15,000",New,
+Lowenthal,20008431,SP,"Expedia, Inc. ",EXPE,S,11/10/2017,11/16/2017,"$1,001 - $15,000",New,
+Lowenthal,20008195,SP,Zoetis Inc. Class A ,ZTS,S,10/5/2017,10/10/2017,"$1,001 - $15,000",New,
+Lowenthal,20008195,SP,Siemens Ag American depositary Shares,NaN,P,10/4/2017,10/10/2017,"$15,001 - $50,000",New,
+Lowenthal,20008195,SP,Zoetis Inc. Class A ,ZTS,S,10/4/2017,10/10/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 10/10/2017"
+Lowenthal,20008346,SP,"Charter Communications, Inc.",CHTR,P,10/26/2017,11/1/2017,"$1,001 - $15,000",New,
+Lowenthal,20008346,SP,Starbucks Corporation ,NaN,S,10/25/2017,11/1/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 11/6/2017"
+Lowenthal,20008259,SP,DowDuPont Inc. ,NaN,P,10/19/2017,10/22/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 10/22/2017"
+Lowenthal,20008259,SP,DowDuPont Inc. ,NaN,P,10/18/2017,10/22/2017,"$15,001 - $50,000",New,
+Lowenthal,20008259,SP,Comcast Corporation,NaN,S,10/13/2017,10/19/2017,"$15,001 - $50,000",New,
+Lowenthal,20008195,SP,"Charter Communications, Inc.",CHTR,P,09/26/2017,09/30/2017,"$1,001 - $15,000",New,
+Lowenthal,20008195,SP,T,NaN,S,09/26/2017,09/30/2017,"$1,001 - $15,000",New,
+Lowenthal,20008195,SP,Bristol,NaN,S,09/25/2017,09/29/2017,"$15,001 - $50,000",New,
+Lowenthal,20008195,SP,SLM CORP,NaN,S,09/25/2017,09/29/2017,"$1,001 - $15,000",New,
+Lowenthal,20008195,SP,T,NaN,S,09/25/2017,09/29/2017,"$1,001 - $15,000",New,
+Lowenthal,20007811,SP,"Activision Blizzard, Inc ",NaN,P,08/7/2017,08/12/2017,"$1,001 - $15,000",New,
+Lowenthal,20008077,SP,Fidelity National,NaN,P,08/29/2017,09/6/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 09/24/2017"
+Lowenthal,20007929,SP,AT&T,NaN,P,08/29/2017,09/2/2017,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 09/2/2017"
+Lowenthal,20007121,SP,Neuberger Berman,NaN,E,08/2/2016,08/9/2016,"$1,001 - $15,000",New,
+Lowenthal,20007370,SP,"Leidos Holdings, Inc. ",LDOS,E,08/16/2016,08/25/2016,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 05/26/2017"
+Lowenthal,20007878,SP,"Charter Communications, Inc.",CHTR,S,08/15/2017,08/21/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 08/22/2017"
+Lowenthal,20007592,SP,CIT group Inc,NaN,P,07/6/2017,07/9/2017,"$15,001 - $50,000",New,5.0% interest maturity date 8/1/23
+Lowenthal,20007811,SP,Bristol,NaN,P,07/27/2017,08/3/2017,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 08/13/2017"
+Lowenthal,20007697,SP,"Activision Blizzard, Inc ",NaN,P,07/24/2017,07/27/2017,"$1,001 - $15,000",New,
+Lowenthal,20007697,SP,"Air Products and Chemicals, Inc. ",APD,P,07/20/2017,07/27/2017,"$15,001 - $50,000",New,
+Lowenthal,20007697,SP,Starbucks Corporation ,NaN,P,07/17/2017,07/21/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 07/27/2017"
+Lowenthal,20007370,SP,IHS Markit Ltd.,NaN,E,07/15/2016,07/22/2016,"$15,001 - $50,000",New,Markit Ltd bought on 7/15/2016. Later that day it was exchanged for IHS Markit Ltd.
+Lowenthal,20007697,SP,Iron Mountain,NaN,P,07/13/2017,07/19/2017,"$15,001 - $50,000",New,"6.0% interest, matures on 8/1/2023"
+Lowenthal,20007592,SP,"Facebook, Inc.",NaN,S,06/30/2017,07/7/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 07/9/2017"
+Lowenthal,20007547,SP,Adobe Systems Incorporated ,ADBE,S,06/28/2017,06/29/2017,"$15,001 - $50,000",New,
+Lowenthal,20007547,SP,Apple Inc. ,AAPL,S,06/28/2017,06/29/2017,"$1,001 - $15,000",New,
+Lowenthal,20007547,SP,Microsoft Corporation ,MSFT,S,06/28/2017,06/29/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 06/29/2017"
+Lowenthal,20007547,SP,"Autodesk, Inc. ",ADSK,P,06/20/2017,06/27/2017,"$1,001 - $15,000",New,
+Lowenthal,20007547,SP,Costco Wholesale Corporation ,COST,S,06/16/2017,06/23/2017,"$15,001 - $50,000",New,
+Lowenthal,20007121,SP,JP Morgan Chase,NaN,E,06/10/2016,06/17/2016,"$1,001 - $15,000",New,
+Lowenthal,20007284,SP,"Autodesk, Inc. ",ADSK,P,05/4/2017,05/10/2017,"$1,001 - $15,000",New,
+Lowenthal,20007284,SP,Verizon Communications,NaN,P,05/4/2017,05/10/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 05/15/2017"
+Lowenthal,20007226,SP,"Autodesk, Inc. ",ADSK,P,05/3/2017,05/8/2017,"$1,001 - $15,000",New,
+Lowenthal,20007226,SP,"Autodesk, Inc. ",ADSK,S,05/3/2017,05/8/2017,"$1,001 - $15,000",New,
+Lowenthal,20007399,SP,IHS Markit Ltd.,NaN,S,05/25/2017,05/31/2017,"$1,001 - $15,000",New,
+Lowenthal,20007399,SP,Oracle Corporation ,ORCL,P,05/25/2017,05/31/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 06/5/2017"
+Lowenthal,20007399,SP,"Charter Communications, Inc.",CHTR,P,05/24/2017,05/30/2017,"$1,001 - $15,000",New,
+Lowenthal,20007399,SP,Oracle Corporation ,ORCL,P,05/24/2017,05/30/2017,"$15,001 - $50,000",New,
+Lowenthal,20007226,SP,Adobe Systems Incorporated ,ADBE,S,05/2/2017,05/8/2017,"$1,001 - $15,000",New,
+Lowenthal,20007226,SP,Alphabet Inc.,NaN,S,05/2/2017,05/8/2017,"$1,001 - $15,000",New,
+Lowenthal,20007226,SP,Mastercard Incorporated ,MA,S,05/2/2017,05/8/2017,"$1,001 - $15,000",New,
+Lowenthal,20007371,SP,T,NaN,S,05/17/2017,05/24/2017,"$1,001 - $15,000",New,
+Lowenthal,20007371,SP,general Electric Company ,NaN,S,05/15/2017,05/22/2017,"$1,001 - $15,000",New,
+Lowenthal,20007371,SP,Costco Wholesale Corporation ,COST,S,05/10/2017,05/17/2017,"$1,001 - $15,000",New,
+Lowenthal,20007371,SP,general Dynamics Corporation ,NaN,S,05/10/2017,05/17/2017,"$15,001 - $50,000",New,
+Lowenthal,20007371,SP,IHS Markit Ltd.,NaN,S,05/10/2017,05/17/2017,"$15,001 - $50,000",New,
+Lowenthal,20007371,SP,"Zayo group Holdings, Inc. ",NaN,P,05/10/2017,05/17/2017,"$1,001 - $15,000",New,
+Lowenthal,20007113,SP,Kansas City Southern ,NaN,P,04/5/2017,04/12/2017,"$1,001 - $15,000",New,
+Lowenthal,20007113,SP,Kansas City Southern ,NaN,P,04/4/2017,04/11/2017,"$1,001 - $15,000",New,
+Lowenthal,20007121,SP,"Zayo group Holdings, Inc. ",NaN,P,04/27/2017,05/4/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 05/6/2017"
+Lowenthal,20007121,SP,American Tower Corporation ,AMT,S,04/25/2017,05/2/2017,"$1,001 - $15,000",New,
+Lowenthal,20007121,SP,T,NaN,S,04/25/2017,05/2/2017,"$1,001 - $15,000",New,
+Lowenthal,20007121,SP,"Zayo group Holdings, Inc. ",NaN,P,04/25/2017,05/2/2017,"$1,001 - $15,000",New,
+Lowenthal,20007121,SP,Vornado Realty,NaN,P,04/21/2017,04/28/2017,"$1,001 - $15,000",New,
+Lowenthal,20007226,SP,Wells Fargo Co MTN,NaN,P,04/18/2017,04/25/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 05/8/2017"
+Lowenthal,20007113,SP,Zimmer Holdings,NaN,S,04/1/2017,04/10/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 04/24/2017"
+Lowenthal,20006956,SP,Sealed Air Corporation ,NaN,S,03/8/2017,03/15/2017,"$1,001 - $15,000",New,
+Lowenthal,20006956,SP,SPDR S&P 500 ,NaN,P,03/8/2017,03/15/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 03/21/2017"
+Lowenthal,20006956,SP,Sealed Air Corporation ,NaN,S,03/7/2017,03/14/2017,"$1,001 - $15,000",New,
+Lowenthal,20006956,SP,"Expedia, Inc. ",EXPE,P,03/15/2017,03/17/2017,"$15,001 - $50,000",New,
+Lowenthal,20006739,SP,Kansas City Southern ,NaN,P,02/8/2017,02/11/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 02/11/2017"
+Lowenthal,20006866,SP,Qiagen N.V.,NaN,P,02/28/2017,03/7/2017,"$1,001 - $15,000",New,
+Lowenthal,20006866,SP,Procter & gamble Company ,NaN,S,02/27/2017,03/7/2017,"$15,001 - $50,000",New,
+Lowenthal,20006866,SP,Alphabet Inc.,NaN,S,02/17/2017,02/24/2017,"$1,001 - $15,000",New,
+Lowenthal,20006866,SP,unitedHealth group Incorporated,NaN,S,02/17/2017,02/24/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 03/7/2017"
+Lowenthal,20006866,SP,"goldman Sachs group, Inc. ",NaN,S,02/15/2017,02/22/2017,"$1,001 - $15,000",New,
+Lowenthal,20006866,SP,T,NaN,S,02/15/2017,02/22/2017,"$1,001 - $15,000",New,
+Lowenthal,20006502,SP,"Leidos Holdings, Inc. ",LDOS,S,01/6/2017,01/7/2017,"$15,001 - $50,000",New,"Hon. Alan S. Lowenthal , 01/7/2017"
+Lowenthal,20006739,SP,American Tower Corporation ,AMT,S,01/25/2017,02/1/2017,"$1,001 - $15,000",New,
+Lowenthal,20006614,SP,DENTSPLY SIRONA Inc. ,NaN,S,01/20/2017,01/25/2017,"$1,001 - $15,000",New,
+Lowenthal,20006614,SP,Johnson & Johnson ,JNJ,P,01/18/2017,01/25/2017,"$15,001 - $50,000",New,
+Lowenthal,20006614,SP,"Verisk Analytics, Inc. ",VRSK,S,01/18/2017,01/25/2017,"$1,001 - $15,000",New,"Hon. Alan S. Lowenthal , 01/25/2017"
+MacArthur,20008177,JT,"Seiko Epson Corp Suwa Unsponsored S 09/22/2017 10/1/2017 $1,001",NaN,Asset,Transaction,Date,Notification,New,
+MacArthur,20007208,JT,"PRECISIoN DRILLINg CoRP 05.250% P 04/6/2017 05/1/2017 $1,001",NaN,Asset,Transaction,Date,Notification,New,Corp bond
+MacArthur,20007033,JT,"RANgE RESoURCES CoRP NTS P 03/8/2017 04/1/2017 $1,001",NaN,Asset,Transaction,Date,Notification,New,Corp bond
+MacArthur,20008177,JT,AES CoRP B/E 05.500% 041525,NaN,P,09/7/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,TENET HEALTHCARE CoRP 04.750%,NaN,S,09/6/2017,10/1/2017,"$15,001 - $50,000",New,Corp bond
+MacArthur,20008177,JT,KINDRED HEALTHCARE INC 08.750%,NaN,S,09/5/2017,10/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20008177,JT,BAE SYSTEMS plc Sponsored ADR,NaN,P,09/29/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,DIAMoND oFFSHoRE DRILL 07.875%,NaN,P,09/29/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,iShares Russell 1000 growth ETF ,NaN,P,09/29/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,iShares Russell 1000 Value ETF ,NaN,P,09/29/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,AES CoRP B/E 05.500% 041525,NaN,P,09/28/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,DIAMoND oFFSHoRE DRILL 07.875%,NaN,P,09/28/2017,10/1/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,Corp bond
+MacArthur,20008177,JT,DIAMoND oFFSHoRE DRILL 07.875%,NaN,P,09/26/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,RADIAN gRoUP INC NTS B/E,NaN,S,09/26/2017,10/1/2017,"$1,001 - $15,000",New,Tendered - Corp bond
+MacArthur,20008177,JT,Seiko Epson Corp Suwa Unsponsored,NaN,S,09/26/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Seiko Epson Corp Suwa Unsponsored,NaN,S,09/25/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,SoWSTN EY STEP UP CALL 05.800%,NaN,S,09/25/2017,10/1/2017,"$15,001 - $50,000",New,Tendered - Corp bond
+MacArthur,20008177,JT,SPDR Select Sector Fund,NaN,P,09/25/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Vanguard FTSE Developed Markets ETF,NaN,P,09/25/2017,10/1/2017,"$1,001 - $15,000",New,"Hon. Thomas MacArthur , 10/8/2017"
+MacArthur,20008177,JT,KINDRED HEALTHCARE INC 08.750%,NaN,P,09/21/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,AES CoRP B/E 05.500% 041525,NaN,P,09/20/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,Seiko Epson Corp Suwa Unsponsored,NaN,S,09/20/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,DIAMoND oFFSHoRE DRILL 07.875%,NaN,P,09/19/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,Seiko Epson Corp Suwa Unsponsored,NaN,S,09/19/2017,10/1/2017,"$15,001 - $50,000",New,
+MacArthur,20008177,JT,"Home Depot, Inc. ",HD,P,09/14/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Microsoft Corporation ,MSFT,P,09/14/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,UNITED RENTALS NoRTH AM,NaN,P,09/14/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,AES CoRP B/E 05.500% 041525,NaN,P,09/13/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,JT,AMERIgAS PARTNER B/E 05.875%,NaN,P,09/13/2017,10/1/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,Corp bond
+MacArthur,20008177,JT,AES CoRP B/E 05.500% 041525,NaN,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20008177,DC,Chevron Corporation ,CVX,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,DC,Chevron Corporation ,CVX,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Chevron Corporation ,CVX,P,09/12/2017,10/1/2017,"$15,001 - $50,000",New,
+MacArthur,20008177,JT,Intel Corporation ,INTC,P,09/12/2017,10/1/2017,"$15,001 - $50,000",New,
+MacArthur,20008177,DC,Intel Corporation ,INTC,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,DC,Intel Corporation ,INTC,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Johnson & Johnson ,JNJ,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,"Nordstrom, Inc. ",NaN,S,09/12/2017,10/1/2017,"$50,001 - $100,000",New,
+MacArthur,20008177,DC,"Nordstrom, Inc. ",NaN,S,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,DC,"Nordstrom, Inc. ",NaN,S,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Panasonic Corporation ,NaN,P,09/12/2017,10/1/2017,"$15,001 - $50,000",New,
+MacArthur,20008177,JT,Suncor Energy Inc. ,NaN,P,09/12/2017,10/1/2017,"$15,001 - $50,000",New,
+MacArthur,20008177,DC,Suncor Energy Inc. ,NaN,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,DC,Suncor Energy Inc. ,NaN,P,09/12/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Chevron Corporation ,CVX,P,09/11/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,DC,guggenheim S&P 500 Equal Weight,NaN,S,09/1/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20008177,JT,Intel Corporation ,INTC,P,09/1/2017,10/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,JT,AMC NETWoRKS INC NTS B/E,NaN,P,08/9/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,AMC NETWoRKS INC NTS B/E,NaN,P,08/8/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,Carrefour S A ,NaN,P,08/7/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,JT,Seven & I Holdings Co Ltd Unsponsored,NaN,P,08/4/2017,09/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007966,JT,KINDRED HEALTHCARE INC 08.750%,NaN,S,08/30/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,KINDRED HEALTHCARE INC 08.750%,NaN,S,08/29/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bondID Owner Asset Transaction Date Notification Amount
+MacArthur,20007966,JT,AES CoRP NTS B/E 08.000% 060120,NaN,S,08/28/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond tendered
+MacArthur,20007966,DC,guggenheim S&P 500 Equal Weight ETF,NaN,S,08/25/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,JT,KINDRED HEALTHCARE INC 08.750%,NaN,S,08/25/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,KINDRED HEALTHCARE INC 08.750%,NaN,S,08/24/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,TENET HEALTHCARE CoRP 04.750%,NaN,S,08/21/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,Seven & I Holdings Co Ltd Unsponsored,NaN,P,08/2/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,DC,UnitedHealth group Incorporated,NaN,S,08/2/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,DC,UnitedHealth group Incorporated,NaN,S,08/2/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,JT,iShares Core MSCI Emerging Markets,NaN,P,08/17/2017,09/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007966,JT,iShares Russell 1000 growth ETF ,NaN,P,08/17/2017,09/1/2017,"$100,001 - $250,000",New,
+MacArthur,20007966,JT,iShares Russell 1000 Value ETF ,NaN,P,08/17/2017,09/1/2017,"$100,001 - $250,000",New,
+MacArthur,20007966,JT,Vanguard FTSE Developed Markets ETF,NaN,P,08/17/2017,09/1/2017,"$100,001 - $250,000",New,
+MacArthur,20007966,JT,Vanguard Mid,NaN,P,08/17/2017,09/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007966,JT,Vanguard Mid,NaN,P,08/17/2017,09/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007966,JT,Vanguard Small,NaN,P,08/17/2017,09/1/2017,"$15,001 - $50,000",New,"Hon. Thomas MacArthur , 09/7/2017"
+MacArthur,20007966,JT,Tata Motors Ltd Tata Motors Limited,NaN,P,08/16/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,JT,Texas Instruments Incorporated ,TXN,P,08/14/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007966,JT,CALPINE CoRP NTS B/E 05.750%,NaN,S,08/1/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,CALPINE CoRP NTS B/E 05.750%,NaN,S,08/1/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bondID Owner Asset Transaction Date Notification Amount
+MacArthur,20007966,JT,DIAMoNDBACK ENERgY INC 05.375%,NaN,P,08/1/2017,09/1/2017,"$1,001 - $15,000",New,Corporate bond
+MacArthur,20007966,JT,oCEAN CNTY NJ BE/R/ 4 DUE 080117,NaN,S,08/1/2017,09/1/2017,"$100,001 - $250,000",New,Muni bond called
+MacArthur,20007966,JT,Seven & I Holdings Co Ltd Unsponsored,NaN,P,08/1/2017,09/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,SLM CoRP MED TERM NTS 07.250%,NaN,P,07/7/2017,08/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007732,JT,SALLY HLDgS LLC NTS B/E 05.750%,NaN,S,07/6/2017,08/1/2017,"$15,001 - $50,000",New,Corp bond was called
+MacArthur,20007732,JT,SLM CoRP MED TERM NTS 07.250%,NaN,P,07/6/2017,08/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007732,JT,DIAMoNDBACK ENERgY INC 05.375%,NaN,P,07/31/2017,08/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007732,DC,"BlackRock, Inc. ",BLK,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,"BlackRock, Inc. ",BLK,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Chevron Corporation ,CVX,P,07/28/2017,08/1/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+MacArthur,20007732,JT,Chevron Corporation ,CVX,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Colgate,NaN,S,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,DC,Colgate,NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Colgate,NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Crane Company ,NaN,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Crane Company ,NaN,P,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,JT,CVS Health Corporation ,CVS,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,CVS Health Corporation ,CVS,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Intel Corporation ,INTC,P,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,DC,Intel Corporation ,INTC,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Intel Corporation ,INTC,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Invesco Ltd ,IVZ,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Invesco Ltd ,IVZ,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Johnson & Johnson ,JNJ,P,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,DC,Johnson & Johnson ,JNJ,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Johnson & Johnson ,JNJ,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Lockheed Martin Corporation ,LMT,P,07/28/2017,08/1/2017,"$100,001 - $250,000",New,
+MacArthur,20007732,DC,Lockheed Martin Corporation ,LMT,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,"Marsh & McLennan Companies, Inc.",MMC,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,McDonald's Corporation ,MCD,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,McDonald's Corporation ,MCD,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,McDonald's Corporation ,MCD,S,07/28/2017,08/1/2017,"$100,001 - $250,000",New,
+MacArthur,20007732,JT,Medtronic plc. ordinary Shares ,MDT,P,07/28/2017,08/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007732,DC,Medtronic plc. ordinary Shares ,MDT,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Medtronic plc. ordinary Shares ,MDT,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Microsoft Corporation ,MSFT,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Microsoft Corporation ,MSFT,P,07/28/2017,08/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007732,JT,"NextEra Energy, Inc. ",NEE,S,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,DC,"NextEra Energy, Inc. ",NEE,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,"Nordstrom, Inc. ",NaN,S,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,DC,"Nordstrom, Inc. ",NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,"Nordstrom, Inc. ",NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Novartis Ag ,NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Novartis Ag ,NaN,S,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,JT,"Pepsico, Inc. ",PEP,S,07/28/2017,08/1/2017,"$50,001 - $100,000",NewID Owner Asset Transaction Date Notification Amount,
+MacArthur,20007732,DC,"Pepsico, Inc. ",PEP,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,"Rockwell Automation, Inc. ",NaN,S,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,JT,SPDR Select Sector Fund,NaN,P,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,JT,Suncor Energy Inc. ,NaN,S,07/28/2017,08/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007732,DC,Suncor Energy Inc. ,NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Suncor Energy Inc. ,NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Texas Instruments Incorporated ,TXN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,Texas Instruments Incorporated ,TXN,S,07/28/2017,08/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007732,DC,Union Pacific Corporation ,UNP,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,Union Pacific Corporation ,UNP,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,United Technologies Corporation ,NaN,P,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,United Technologies Corporation ,NaN,P,07/28/2017,08/1/2017,"$100,001 - $250,000",New,
+MacArthur,20007732,JT,V.F. Corporation ,NaN,S,07/28/2017,08/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007732,DC,V.F. Corporation ,NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,V.F. Corporation ,NaN,S,07/28/2017,08/1/2017,"$1,001 - $15,000",New,"Hon. Thomas MacArthur , 08/3/2017"
+MacArthur,20007732,DC,BLACKRoCK HIgH YIELD BoND I,NaN,S,07/26/2017,08/1/2017,"$1,001 - $15,000",New,Mutual fund
+MacArthur,20007732,DC,guggenheim S&P 500 Equal Weight ETF,NaN,S,07/26/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,DC,SEMPER MBS ToTAL RETURN FUND,NaN,S,07/26/2017,08/1/2017,"$1,001 - $15,000",New,Mutual fund
+MacArthur,20007732,JT,Liberty Media Corporation,NaN,S,07/19/2017,08/1/2017,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,
+MacArthur,20007732,JT,Liberty Media Corporation,NaN,S,07/19/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,STARWooD PPTY TR INC NTS,NaN,P,07/19/2017,08/1/2017,"$15,001 - $50,000",New,Corp bondID Owner Asset Transaction Date Notification Amount
+MacArthur,20007732,JT,ALBERTSoNS INC MW+30BP 08.000%,NaN,S,07/18/2017,08/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007732,JT,ALBERTSoNS INC MW+30BP 08.000%,NaN,S,07/13/2017,08/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007732,JT,iShares Russell 1000 growth ETF ,NaN,P,07/12/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,iShares Russell 1000 Value ETF ,NaN,P,07/12/2017,08/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007732,JT,NJ ECo DV UTH SCH FACS SR EE,NaN,P,07/12/2017,08/1/2017,"$50,001 - $100,000",New,Municipal bond
+MacArthur,20007208,JT,ALLY FINANCIAL INC b/E 05.125%,NaN,S,04/6/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,NRg YIELD oPERATINg LLC 05.375%,NaN,P,04/5/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,ALLY FINANCIAL INC b/E 05.125%,NaN,S,04/3/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,CDW LLC / CDW FIN CoRP 06.000%,NaN,S,04/3/2017,05/1/2017,"$15,001 - $50,000",New,Called corp bond
+MacArthur,20007208,JT,TRANSoCEAN INC MW@ +40bP,NaN,P,04/3/2017,05/1/2017,"$15,001 - $50,000",New,"Hon. Thomas MacArthur , 05/5/2017"
+MacArthur,20007208,JT,"baidu, Inc.",NaN,P,04/28/2017,05/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007208,JT,T,NaN,P,04/28/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,T,NaN,S,04/28/2017,05/1/2017,"$15,001 - $50,000",New,Called corp bond
+MacArthur,20007208,JT,ANTERo RESoURCES CoRP 05.625%,NaN,P,04/27/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,ANTERo RESoURCES FIN 05.375%,NaN,S,04/27/2017,05/1/2017,"$15,001 - $50,000",New,Corp bond
+MacArthur,20007208,JT,MURPHY oIL CoRP NTS b/E 06.875%,NaN,P,04/21/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,Novartis Ag ,NaN,P,04/21/2017,05/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007208,JT,MURPHY oIL CoRP NTS b/E 06.875%,NaN,P,04/20/2017,05/1/2017,"$15,001 - $50,000",New,Corp bond
+MacArthur,20007208,JT,HCA INC b/E 05.875% 050123,NaN,P,04/18/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,NRg YIELD oPERATINg LLC 05.375%,NaN,P,04/18/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007208,JT,CDW LLC / CDW FIN CoRP 05.500%,NaN,P,04/11/2017,05/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,DC,BLACKRoCK HIgH YIELD BoND I,NaN,S,03/9/2017,04/1/2017,"$15,001 - $50,000",New,Mutual fund
+MacArthur,20007033,DC,BLACKRoCK HIgH YIELD BoND I,NaN,S,03/9/2017,04/1/2017,"$15,001 - $50,000",New,Mutual fund
+MacArthur,20007033,DC,DoUBLE LINE ToTAL RETURN FUND,NaN,S,03/9/2017,04/1/2017,"$15,001 - $50,000",New,Mutual fundID Owner Asset Transaction Date Notification Amount
+MacArthur,20007033,DC,DoUBLE LINE ToTAL RETURN FUND,NaN,S,03/9/2017,04/1/2017,"$1,001 - $15,000",New,Mutual Fund
+MacArthur,20007033,DC,iShares 7,NaN,P,03/9/2017,04/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007033,DC,iShares 7,NaN,P,03/9/2017,04/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007033,JT,Microsoft Corporation ,MSFT,P,03/9/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,DC,SEMPER MBS ToTAL RETURN FUND,NaN,P,03/9/2017,04/1/2017,"$15,001 - $50,000",New,Mutual fund
+MacArthur,20007033,DC,SEMPER MBS ToTAL RETURN FUND,NaN,P,03/9/2017,04/1/2017,"$1,001 - $15,000",New,Mutual fund
+MacArthur,20007033,JT,AECoM TECHNoLogY C NTS 05.875%,NaN,P,03/8/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,CBRE SERVICES INC B/E 05.000%,NaN,S,03/8/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,ACCESS MIDSTREAM 04.875% 051523,NaN,S,03/7/2017,04/1/2017,"$15,001 - $50,000",New,Corp bond
+MacArthur,20007033,JT,AECoM TECHNoLogY C NTS 05.875%,NaN,P,03/7/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,CBRE SERVICES INC B/E 05.000%,NaN,S,03/7/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,"Pepsico, Inc. ",PEP,P,03/31/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,PRECISIoN DRILLINg CoRP 05.250%,NaN,P,03/31/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,TRANSoCEAN INC MW@ +40BP,NaN,P,03/31/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,ALLY FINANCIAL INC B/E 05.125%,NaN,S,03/30/2017,04/1/2017,"$15,001 - $50,000",New,Corp bond
+MacArthur,20007033,JT,"EQT gP Holdings, LP Common Units",NaN,P,03/30/2017,04/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007033,JT,iShares Russell 1000 growth ETF ,NaN,P,03/30/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,iShares Russell 1000 Value ETF ,NaN,P,03/30/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,NEW JERSEY ST TPK AUTH SR A RV,NaN,P,03/30/2017,04/1/2017,"$100,001 - $250,000",New,Municipal bond
+MacArthur,20007033,JT,"Spectra Energy Partners, LP Common",NaN,S,03/30/2017,04/1/2017,"$50,001 - $100,000",New,
+MacArthur,20007033,JT,"Targa Resources, Inc. ",NaN,P,03/30/2017,04/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007033,JT,Vanguard FTSE Developed Markets ETF,NaN,P,03/30/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,Aercap Holdings N.V. ordinary Shares,NaN,P,03/3/2017,04/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007033,JT,INTL LEASE FIN CoRP NTS 08.250%,NaN,S,03/3/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,SESI L L C NTS B/E 07.125% 121521,NaN,P,03/3/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,TENET HEALTHCARE CoRP 08.125%,NaN,P,03/3/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,AES CoRP NTS B/E 08.000% 060120,NaN,S,03/28/2017,04/1/2017,"$1,001 - $15,000",New,Tendered corp bond
+MacArthur,20007033,JT,AUToNATIoN INC NTS B/E 05.500%,NaN,S,03/28/2017,04/1/2017,"$15,001 - $50,000",New,Corp bond
+MacArthur,20007033,JT,UNITED RENTALS NoRTH AM,NaN,S,03/28/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,SPDR Select Sector Fund,NaN,P,03/27/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,Canadian Natural Resources Limited,NaN,P,03/24/2017,04/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007033,JT,"Home Depot, Inc. ",HD,P,03/23/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,PRECISIoN DRILLINg CoRP 05.250%,NaN,P,03/22/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,DC,"Twitter, Inc. ",NaN,P,03/22/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,"Twitter, Inc. ",NaN,P,03/22/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,HCA INC B/E 05.875% 050123,NaN,P,03/21/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,RANgE RESoURCES CoRP NTS,NaN,P,03/21/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,UNITED RENTALS NoRTH AM,NaN,S,03/21/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,INTL LEASE FIN CoRP NTS 08.250%,NaN,S,03/20/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,PRECISIoN DRILLINg CoRP 05.250%,NaN,P,03/20/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,V.F. Corporation ,NaN,P,03/20/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,KENNEDY,NaN,P,03/2/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,TENET HEALTHCARE CoRP 08.125%,NaN,P,03/2/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,HCA INC B/E 05.875% 050123,NaN,P,03/17/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,INTL LEASE FIN CoRP NTS 08.250%,NaN,S,03/17/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,RANgE RESoURCES CoRP NTS,NaN,P,03/17/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,HCA INC B/E 05.875% 050123,NaN,P,03/16/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,McDonald's Corporation ,MCD,P,03/15/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,"NextEra Energy, Inc. ",NEE,P,03/15/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,"Nordstrom, Inc. ",NaN,P,03/15/2017,04/1/2017,"$1,001 - $15,000",New,
+MacArthur,20007033,JT,RANgE RESoURCES CoRP NTS,NaN,P,03/15/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,UNITED RENTALS NoRTH AM,NaN,S,03/15/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,WEYERHAEUSER REAL EST Co,NaN,P,03/15/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,WEYERHAEUSER REAL EST Co,NaN,P,03/14/2017,04/1/2017,"$1,001 - $15,000",New,"Hon. Thomas MacArthur , 04/9/2017"
+MacArthur,20007033,JT,WEYERHAEUSER REAL EST Co,NaN,P,03/13/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+MacArthur,20007033,JT,Tata Motors Ltd Tata Motors Limited,NaN,P,03/10/2017,04/1/2017,"$15,001 - $50,000",New,
+MacArthur,20007033,JT,TENET HEALTHCARE CoRP 08.125%,NaN,P,03/1/2017,04/1/2017,"$1,001 - $15,000",New,Corp bond
+McKinley,20006434,JT,3M Company ,MMM,P,12/21/2016,01/3/2017,"$15,001 - $50,000",New,
+McKinley,20006434,JT,Amgen Inc. ,NaN,S,12/21/2016,01/3/2017,"$15,001 - $50,000",New,
+McKinley,20006434,JT,"Aptargroup, Inc. ",NaN,S,12/21/2016,01/3/2017,"$15,001 - $50,000",New,
+McKinley,20006434,JT,"Becton, Dickinson and Company ",BDX,P,12/21/2016,01/3/2017,"$15,001 - $50,000",New,
+McKinley,20006434,JT,Campbell Soup Company ,CPB,S,12/21/2016,01/3/2017,"$1,001 - $15,000",New,
+McKinley,20006434,JT,Cerner Corporation ,NaN,S,12/21/2016,01/3/2017,"$15,001 - $50,000",New,
+McKinley,20006434,JT,Clorox Company ,NaN,P,12/21/2016,01/3/2017,"$15,001 - $50,000",New,
+McKinley,20006434,JT,Express Scripts Holding Company,NaN,S,12/21/2016,01/3/2017,"$15,001 - $50,000",New,
+McKinley,20006434,JT,J.M. Smucker Company ,SJM,S,12/21/2016,01/3/2017,"$1,001 - $15,000",New,
+McKinley,20006434,JT,"universal Health Services, Inc. ",NaN,S,12/21/2016,01/3/2017,"$1,001 - $15,000",New,"Hon. David B. McKinley , 01/10/2017"
+McKinley,20008305,JT,Fastenal Company ,FAST,S,10/16/2017,11/1/2017,"$1,001 - $15,000",New,
+McKinley,20008305,JT,"Walgreens Boots Alliance, Inc. ",WBA,S,10/16/2017,11/1/2017,"$1,001 - $15,000",New,"Hon. David B. McKinley , 11/9/2017"
+Mulvaney,20006523,JT,VanEck Vectors Rare Earth strategic,NaN,s,12/30/2016,01/3/2017,"$1,001 - $15,000",New,"Hon. Mick Mulvaney , 01/11/2017"
+Pelosi,20006683,JT,1600 Atlas Peak Road,NaN,S,12/30/2016,12/30/2016,"$500,001 - $1,000,000",New,Sale of Investment Property
+Pelosi,20006683,JT,723 Mule Ears Court,NaN,S,12/27/2016,12/27/2016,"$1,000,001 - $5,000,000",New,"Hon. Nancy Pelosi , 02/6/2017"
+Peters,20006475,SP,u.S. Treasury,NaN,P,12/29/2016,12/31/2016,Spouse/DC,New,
+Peters,20006475,SP,u.S. Treasury,NaN,S,12/29/2016,12/31/2016,Spouse/DC,New,"Hon. Scott H. Peters , 01/4/2017"
+Peters,20006475,SP,u.S. Treasury,NaN,P,12/2/2016,12/31/2016,Spouse/DC,New,
+Peters,20008187,SP,Manufacturers Drive LLC,NaN,P,09/15/2017,09/15/2017,"$250,001 - $500,000",New,"Hon. Scott H. Peters , 10/11/2017"
+Peters,20007467,SP,"Los Angeles, CA, W Util Pwr",NaN,P,05/3/2017,05/31/2017,"$500,001 - $1,000,000",New,
+Peters,20007467,SP,"Sacramento,",NaN,P,05/3/2017,05/31/2017,Spouse/DC,New,"Hon. Scott H. Peters , 06/17/2017"
+Peters,20007467,SP,Eastern CA MU,NaN,S,05/25/2017,05/31/2017,"$500,001 - $1,000,000",New,
+Peters,20007467,SP,"Orange, CA Wtr Co.",NaN,P,05/11/2017,05/31/2017,"$250,001 - $500,000",New,
+Peters,20007288,SP,u.S. Treasury,NaN,S,04/5/2017,04/30/2017,Spouse/DC,New,
+Peters,20007288,SP,"San Diego, Ca, TRa",NaN,P,04/27/2017,04/30/2017,"$100,001 - $250,000",New,
+Peters,20007288,SP,"San Diego, Ca, TRa",NaN,P,04/26/2017,04/30/2017,"$500,001 - $1,000,000",New,
+Peters,20007288,SP,"los angeles Ca, W util",NaN,P,04/24/2017,04/30/2017,Spouse/DC,New,
+Peters,20007288,SP,"los angeles, Ca, W util",NaN,P,04/24/2017,04/30/2017,Spouse/DC,New,
+Peters,20007288,SP,"Met. Water District, Ca.",NaN,P,04/24/2017,04/30/2017,"$500,001 - $1,000,000",NewID Owner Asset Transaction Date Notification Amount,
+Peters,20007288,SP,Calleguas ETC Ca,NaN,P,04/21/2017,04/30/2017,"$500,001 - $1,000,000",New,
+Peters,20007288,SP,Eastern Ca,NaN,P,04/21/2017,04/30/2017,Spouse/DC,New,
+Peters,20007288,SP,Ca State School,NaN,P,04/20/2017,04/30/2017,Spouse/DC,New,
+Peters,20007288,SP,Santa Clara Valley,NaN,P,04/20/2017,04/30/2017,Spouse/DC,New,
+Peters,20007288,SP,u.S. Treasury,NaN,S,04/20/2017,04/30/2017,Spouse/DC,New,"Hon. Scott H. Peters , 05/15/2017"
+Peters,20007058,SP,u.S. Treasury,NaN,P,03/23/2017,03/31/2017,Spouse/DC,New,
+Peters,20007058,SP,u.S. Treasury,NaN,S,03/23/2017,03/31/2017,Spouse/DC,New,"Hon. Scott H. Peters , 04/24/2017"
+Peters,20006926,SP,u.S. Treasury,NaN,P,02/23/2017,02/28/2017,Spouse/DC,New,
+Peters,20006926,SP,u.S. Treasury,NaN,S,02/23/2017,02/28/2017,Spouse/DC,New,"Hon. Scott H. Peters , 03/20/2017"
+Peters,20006732,SP,u.S. Treasury,NaN,P,01/26/2017,01/31/2017,Spouse/DC,New,
+Peters,20006732,SP,u.S. Treasury,NaN,S,01/26/2017,01/31/2017,Spouse/DC,New,"Hon. Scott H. Peters , 02/22/2017"
+Rigell,20006613,SPDR,Select Sector Fund,NaN,P,12/13/2016,12/31/2016,"$15,001 - $50,000",New,Bought 2000 shares of XlF
+Rigell,20006613,SPDR,Select Sector Fund,NaN,P,12/12/2016,12/31/2016,"$15,001 - $50,000",New,"Hon. E. Scott Rigell , 01/25/2017"
+Rosen,20007094,SP,"LogMein, Inc. ",NaN,E,02/1/2017,02/10/2017,"$1,001 - $15,000",New,"Hon. Jacky Rosen , 04/19/2017"
+Rothfus,20007262,SP,Talen Energy Corporation ,NaN,S,12/6/2016,12/31/2016,"$1,001 - $15,000",New,"Hon. Keith J. Rothfus , 05/15/2017"
+Sanchez,20008477,DC,Microsoft Corporation ,MSFT,S,08/4/2017,08/4/2017,"$1,001 - $15,000",New,
+Sanchez,20008477,DC,"Pfizer, Inc. ",PFE,S,08/4/2017,08/4/2017,"$1,001 - $15,000",New,
+Sanchez,20008477,DC,Walt Disney Company ,DIS,S,08/4/2017,08/4/2017,"$1,001 - $15,000",New,"Hon. Linda T. Sánchez , 12/1/2017"
+Sanchez,20007424,SP,Ford Motor Company ,F,P,05/17/2017,05/22/2017,"$1,001 - $15,000",New,"Hon. Linda T. Sánchez , 06/7/2017"
+Schneider,20008644,SP,"Applied Materials, Inc. ",AMAT,P,12/7/2017,12/31/2017,"$100,001 - $250,000",New,
+Schneider,20008644,SP,Intel Corporation ,INTC,S,12/7/2017,12/31/2017,"$100,001 - $250,000",New,
+Schneider,20008644,JT,United States Steel Corporation ,NaN,S,12/29/2017,12/29/2017,"$1,001 - $15,000",New,"Hon. Bradley S. Schneider , 12/31/2017"
+Schneider,20008644,SP,"Delta Air Lines, Inc. ",DAL,P,12/12/2017,12/31/2017,"$100,001 - $250,000",New,
+Schneider,20008438,SP,Delphi Automotive plc Ordinary Shares,NaN,S,11/9/2017,11/23/2017,"$100,001 - $250,000",New,
+Schneider,20008438,SP,Delphi Automotive plc Ordinary Shares,NaN,S,11/9/2017,11/23/2017,"$50,001 - $100,000",New,
+Schneider,20008438,SP,Suncor Energy Inc. ,NaN,P,11/9/2017,11/23/2017,"$100,001 - $250,000",New,"Hon. Bradley S. Schneider , 11/23/2017"
+Schneider,20008438,SP,laboratory Corporation of America,NaN,S,11/21/2017,11/23/2017,"$100,001 - $250,000",New,
+Schneider,20008438,SP,lennar Corporation Class A ,NaN,P,11/21/2017,11/23/2017,"$100,001 - $250,000",New,
+Schneider,20008438,SP,Alibaba Group Holding limited,NaN,P,11/16/2017,11/23/2017,"$100,001 - $250,000",New,
+Schneider,20008438,SP,Suncor Energy Inc. ,NaN,S,11/16/2017,11/23/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,Carnival Corporation ,CCL,S,10/3/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,"Praxair, Inc. ",NaN,P,10/3/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,Intel Corporation ,INTC,P,10/27/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,Lennar Corporation Class a ,LEN,S,10/27/2017,10/28/2017,"$100,001 - $250,000",New,"Passive Investment in holding company of Smart Choice MRI, independent MRI centers."
+Schneider,20008293,SP,Celgene Corporation ,NaN,S,10/23/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,Celgene Corporation ,NaN,S,10/23/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,JP Morgan Chase & Co. ,JPM,P,10/23/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,JP Morgan Chase & Co. ,JPM,P,10/23/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,Lennar Corporation Class a ,LEN,P,10/11/2017,10/28/2017,"$100,001 - $250,000",New,
+Schneider,20008293,SP,Vulcan Materials Company ,VMC,S,10/11/2017,10/28/2017,"$100,001 - $250,000",New,"Hon. Bradley S. Schneider , 10/29/2017"
+Schneider,20008078,SP,Delphi Automotive plc Ordinary Shares,NaN,P,09/22/2017,09/24/2017,"$15,001 - $50,000",New,
+Schneider,20008078,SP,Texas Instruments Incorporated ,TXN,P,09/22/2017,09/24/2017,"$100,001 - $250,000",New,
+Schneider,20008078,SP,Texas Instruments Incorporated ,TXN,P,09/22/2017,09/24/2017,"$50,001 - $100,000",New,
+Schneider,20008078,SP,United Continental Holdings ,NaN,S,09/22/2017,09/24/2017,"$100,001 - $250,000",New,
+Schneider,20008078,SP,United Continental Holdings ,NaN,S,09/22/2017,09/24/2017,"$100,001 - $250,000",New,"Hon. Bradley S. Schneider , 09/24/2017"
+Schneider,20007634,SP,"alliant Insurance Services, Inc.",NaN,P,07/28/2017,07/28/2017,"$15,001 - $50,000",New,"Hon. Bradley S. Schneider , 08/20/2017"
+Schneider,20007870,SP,Carnival Corporation ,NaN,P,07/17/2017,08/20/2017,"$100,001 - $250,000",New,
+Schneider,20007870,SP,MB Financial Inc. ,NaN,S,07/17/2017,08/20/2017,"$100,001 - $250,000",New,"Hon. Bradley S. Schneider , 08/21/2017"
+Schneider,20006968,SP,Delphi automotive plc Ordinary Shares,NaN,P,03/23/2017,03/25/2017,"$50,001 - $100,000",New,
+Schneider,20006968,SP,alibaba group Holding limited,NaN,S,03/10/2017,03/25/2017,"$100,001 - $250,000",New,
+Schneider,20006968,SP,laboratory Corporation of america,NaN,P,03/10/2017,03/25/2017,"$100,001 - $250,000",New,"Hon. Bradley S. Schneider , 03/25/2017"
+Schneider,20006784,SP,Charles Schwab Corporation ,SCHW,S,02/8/2017,02/20/2017,"$100,001 - $250,000",New,
+Schneider,20006784,SP,SaP SE aDS ,NaN,P,02/8/2017,02/20/2017,"$100,001 - $250,000",New,"Hon. Bradley S. Schneider , 02/20/2017"
+Schneider,20006784,SP,"Citigroup, Inc. ",C,S,02/1/2017,02/20/2017,"$100,001 - $250,000",New,
+Schneider,20006784,SP,SaP SE aDS ,NaN,P,02/1/2017,02/20/2017,"$100,001 - $250,000",New,
+Schneider,20006784,SP,american Tower Corporation ,NaN,S,01/9/2017,02/20/2017,"$250,001 - $500,000",New,
+Schneider,20006784,SP,Celgene Corporation ,NaN,P,01/9/2017,02/20/2017,"$100,001 - $250,000",New,
+Schneider,20006784,SP,"Citigroup, Inc. ",C,P,01/9/2017,02/20/2017,"$100,001 - $250,000",New,
+Sessions,20008544,SP,Check Point Software Technologies ltd.,NaN,S,12/7/2017,12/7/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 12/9/2017"
+Sessions,20006447,SP,Deere & Company ,DE,S,12/30/2016,12/30/2016,"$15,001 - $50,000",New,"Hon. Pete Sessions , 01/2/2017"
+Sessions,20008639,SP,NVIDIa Corporation ,NaN,P,12/29/2017,12/30/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 12/30/2017"
+Sessions,20007172,SP,glaxoSmithKline PlC ,NaN,P,12/1/2016,12/1/2016,"$1,001 - $15,000",New,KM/PS notified on 5.1.17
+Sessions,20008449,SP,Microsoft Corporation ,MSFT,S,11/27/2017,11/27/2017,"$1,001 - $15,000",New,
+Sessions,20008449,SP,DowDuPont Inc. ,NaN,S,11/22/2017,11/22/2017,"$15,001 - $50,000",New,
+Sessions,20008449,SP,iShares Russell 2000 Value ETF ,NaN,S,11/22/2017,11/22/2017,"$15,001 - $50,000",New,
+Sessions,20008449,SP,"TJX Companies, Inc. ",TJX,P,11/22/2017,11/22/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 11/28/2017"
+Sessions,20008405,SP,Verizon Communications Inc. ,VZ,P,11/16/2017,11/16/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 11/16/2017"
+Sessions,20008185,SP,american Tower Corporation ,NaN,P,10/6/2017,10/6/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 10/8/2017"
+Sessions,20007172,SP,Costco Wholesale Corporation ,NaN,P,10/4/2016,10/4/2016,"$1,001 - $15,000",New,"Two PTRs already filed, third purchase wasn't sent to KM/PS. Flagged on 5.1.17."
+Sessions,20007172,SP,Coca,NaN,P,10/27/2016,10/27/2016,"$1,001 - $15,000",New,"Karen sent 1 share purchase, but not larger purchase. larger purchase flagged for KM/PS on 5.1.17"
+Sessions,20008272,SP,glaxoSmithKline PlC ,NaN,P,10/25/2017,10/25/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 10/25/2017"
+Sessions,20007172,SP,Verizon Communications Inc. ,VZ,P,10/20/2016,10/20/2016,"$1,001 - $15,000",NewID Owner Asset Transaction Date Notification Amount,"Hon. Pete Sessions , 05/1/2017"
+Sessions,20008110,SP,alphabet Inc.,NaN,S,09/29/2017,09/29/2017,"$1,001 - $15,000",New,
+Sessions,20008110,SP,Starbucks Corporation ,NaN,P,09/22/2017,09/29/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 09/29/2017"
+Sessions,20008061,SP,Costco Wholesale Corporation ,COST,S,09/18/2017,09/18/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 09/19/2017"
+Sessions,20008048,SP,Verizon Communications Inc. ,VZ,S,09/15/2017,09/15/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 09/18/2017"
+Sessions,20008048,SP,"Digital Realty Trust, Inc. ",NaN,P,09/14/2017,09/14/2017,"$1,001 - $15,000",New,
+Sessions,20007919,SP,glaxoSmithKline PlC ,NaN,S,08/31/2017,08/31/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 08/31/2017"
+Sessions,20007899,SP,"Chipotle Mexican grill, Inc. ",NaN,S,08/23/2017,08/23/2017,"$1,001 - $15,000",New,
+Sessions,20007899,SP,Mastercard Incorporated ,NaN,P,08/18/2017,08/18/2017,"$1,001 - $15,000",New,
+Sessions,20007899,SP,Visa Inc. ,V,P,08/18/2017,08/18/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 08/28/2017"
+Sessions,20007561,SP,"The Michaels Companies, Inc. ",NaN,S,07/3/2017,07/3/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 07/4/2017"
+Sessions,20007702,SP,Coca,NaN,P,07/26/2017,07/26/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 07/27/2017"
+Sessions,20007661,SP,Sonoco Products Company ,NaN,S,07/19/2017,07/19/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 07/20/2017"
+Sessions,20007440,SP,Microsoft Corporation ,MSFT,P,06/8/2017,06/8/2017,"$1,001 - $15,000",New,
+Sessions,20007423,SP,general Electric Company ,NaN,P,06/7/2017,06/7/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 06/7/2017"
+Sessions,20007440,SP,"The Michaels Companies, Inc. ",NaN,P,06/6/2017,06/6/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 06/12/2017"
+Sessions,20007536,SP,Verizon Communications Inc. ,VZ,P,06/30/2017,06/28/2017,"$1,001 - $15,000",New,
+Sessions,20007553,SP,Costco Wholesale Corporation ,COST,P,06/29/2017,06/29/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 06/30/2017"
+Sessions,20007536,SP,Verizon Communications Inc. ,VZ,P,06/27/2017,06/28/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 06/28/2017"
+Sessions,20007498,SP,Costco Wholesale Corporation ,COST,P,06/19/2017,06/20/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 06/20/2017"
+Sessions,20007442,SP,"The Michaels Companies, Inc. ",NaN,S,06/12/2017,06/12/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 06/12/2017"
+Sessions,20007324,SP,Microsoft Corporation ,MSFT,P,05/22/2017,05/22/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 05/18/2017"
+Sessions,20007311,SP,T,NaN,P,05/22/2017,05/22/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 05/17/2017"
+Sessions,20007334,SP,Microsoft Corporation ,MSFT,P,05/18/2017,05/18/2017,"$1,001 - $15,000",New,
+Sessions,20007334,SP,"Paychex, Inc. ",NaN,P,05/15/2017,05/15/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 05/22/2017"
+Sessions,20007172,SP,Invesco ltd ,IVZ,S,05/11/2016,05/11/2016,"$1,001 - $15,000",New,375 shares at $29.34 each
+Sessions,20007188,SP,american Express Company ,NaN,P,05/1/2017,05/3/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 05/3/2017"
+Sessions,20007182,SP,Verizon Communications Inc. ,VZ,P,05/1/2017,05/1/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 05/2/2017"
+Sessions,20007159,SP,american Express Company ,NaN,P,05/1/2017,05/1/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 05/1/2017"
+Sessions,20007006,SP,"Rockwell Collins, Inc. ",NaN,P,04/4/2017,04/5/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 04/5/2017"
+Sessions,20007172,SP,FNMa Pl au3746 3.5%,NaN,P,04/4/2016,04/4/2016,"$50,001 - $100,000",New,FNMa Pl au3746 3.5%30 Due 06/01/30
+Sessions,20007496,SP,"PNC Financial Services group, Inc.",PNC,P,04/27/2017,04/27/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 06/19/2017"
+Sessions,20007141,SP,Mastercard Incorporated ,NaN,P,04/25/2017,04/25/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 04/27/2017"
+Sessions,20007172,SP,31418BR65 – FNMa Pl Ma2308,NaN,P,04/18/2016,04/18/2016,"$50,001 - $100,000",New,FNMa Pl Ma2308 2.5%30 Due 60/01/30
+Sessions,20007067,SP,"amTrust Financial Services, Inc. ",NaN,S,04/11/2017,04/11/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 04/13/2017"
+Sessions,20007037,SP,Sonoco Products Company ,NaN,P,04/11/2017,04/11/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 04/7/2017"
+Sessions,20007016,SP,CSX Corporation ,CSX,P,04/10/2017,04/10/2017,"$1,001 - $15,000",New,
+Sessions,20007016,SP,"Plains all american Pipeline, l.P. ",NaN,S,04/10/2017,04/10/2017,"$1,001 - $15,000",New,
+Sessions,20007016,SP,SBa Communications Corporation,NaN,P,04/10/2017,04/10/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 04/6/2017"
+Sessions,20006974,SP,Security Description: VENDEE MTG TR,NaN,S,03/24/2017,03/28/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 03/28/2017"
+Sessions,20006972,SP,"air Products and Chemicals, Inc. ",NaN,S,03/24/2017,03/24/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 03/27/2017"
+Sessions,20006965,SP,"amazon.com, Inc. ",NaN,P,03/22/2017,03/22/2017,"$1,001 - $15,000",New,
+Sessions,20006965,SP,"SunTrust Banks, Inc. ",NaN,P,03/22/2017,03/22/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 03/23/2017"
+Sessions,20006963,SP,"amazon.com, Inc. ",NaN,P,03/22/2017,03/22/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 03/22/2017"
+Sessions,20006828,SP,american Express Company ,NaN,P,02/28/2017,02/28/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 03/1/2017"
+Sessions,20006825,SP,american Express Company ,NaN,P,02/28/2017,02/28/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 02/28/2017"
+Sessions,20006785,SP,NVIDIa Corporation ,NaN,P,02/17/2017,02/17/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 02/21/2017"
+Sessions,20006658,SP,Illinois Tool Works Inc. ,ITW,P,02/1/2017,02/1/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 02/1/2017"
+Sessions,20006505,SP,Occidental Petroleum Corporation,OXY,P,01/6/2017,01/6/2017,"$15,001 - $50,000",New,
+Sessions,20006505,SP,Schlumberger N.V. ,NaN,P,01/6/2017,01/6/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 01/9/2017"
+Sessions,20006633,SP,Wal,NaN,P,01/27/2017,01/30/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 01/30/2017"
+Sessions,20006622,SP,"The Michaels Companies, Inc. ",NaN,P,01/25/2017,01/25/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 01/27/2017"
+Sessions,20006566,SP,general Electric Company ,NaN,P,01/13/2017,01/13/2017,"$15,001 - $50,000",New,"Hon. Pete Sessions , 01/17/2017"
+Sessions,20006547,SP,"Versum Materials, Inc. ",NaN,S,01/11/2017,01/11/2017,"$1,001 - $15,000",New,"Hon. Pete Sessions , 01/12/2017"
+Trott,20007379,SPARTA,MICH AREA SCHS Go 4%,NaN,P,05/9/2017,05/10/2017,"$100,001 - $250,000",New,"Hon. David A. Trott , 06/6/2017"
+Turner,20007546,SP,Virginia College Bldg auth Edl Facs Rev,NaN,P,06/7/2017,06/29/2017,"$1,001 - $15,000",New,"Hon. Michael R. Turner , 07/5/2017"
+Turner,20007546,SP,ohio St. Cap Facs Lease appropriations,NaN,S,06/2/2017,06/29/2017,"$1,001 - $15,000",New,
+Turner,20006903,SP,"Cheniere Energy, Inc. ",NaN,S,03/9/2017,03/13/2017,"$500,001 - $1,000,000",New,
+Turner,20006903,SP,CaLIFoRNIa ST VaRIoUS PURP LT,NaN,P,03/8/2017,03/15/2017,"$1,001 - $15,000",New,
+Turner,20006903,SP,oHIo STaTE CoMMoN SCHS LT SER,NaN,S,03/3/2017,03/15/2017,"$1,001 - $15,000",New,"Hon. Michael R. Turner , 03/16/2017"
+Turner,20006851,SP,"Cheniere Energy, Inc. ",NaN,S,03/3/2017,03/3/2017,"$500,001 - $1,000,000",New,"Hon. Michael R. Turner , 03/8/2017"
+Veasey,20007741,SP,banco bilbao Vizcaya Argentaria S.A.,NaN,S,11/7/2016,11/7/2016,"$1,001 - $15,000",SP),"Hon. Marc A. Veasey , 08/11/2017"
+Wasserman Schultz,20006521,DC,New gold Inc. ,NaN,P,12/7/2016,12/12/2016,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 01/11/2017"
+Wasserman Schultz,20007716,DC,apple Inc. ,NaN,S,12/23/2016,12/29/2016,"$1,001 - $15,000",New,
+Wasserman Schultz,20007716,DC,"Keryx Biopharmaceuticals, Inc. ",NaN,P,12/12/2016,12/15/2016,"$1,001 - $15,000",New,
+Wasserman Schultz,20008457,DC,"Aspen Aerogels, Inc. ",NaN,S,11/22/2017,11/23/2017,"$1,001 - $15,000",New,Dependent Child B
+Wasserman Schultz,20008457,DC,"Richardson Electronics, ltd. ",NaN,S,11/22/2017,11/23/2017,"$1,001 - $15,000",New,Dependent Child B
+Wasserman Schultz,20008457,DC,"Westell Technologies, Inc.",NaN,S,11/22/2017,11/23/2017,"$1,001 - $15,000",New,Dependent Child C
+Wasserman Schultz,20008457,DC,"Westell Technologies, Inc.",NaN,S,11/22/2017,11/23/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 11/29/2017"
+Wasserman Schultz,20007716,DC,Stonegate Bank ,NaN,S,11/17/2016,11/17/2016,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 08/4/2017"
+Wasserman Schultz,20008273,DC,l.S. Starrett Company ,NaN,P,10/9/2017,10/10/2017,"$1,001 - $15,000",New,Dependent Child C
+Wasserman Schultz,20008273,DC,l.S. Starrett Company ,NaN,P,10/9/2017,10/10/2017,"$1,001 - $15,000",New,Dependent Child B
+Wasserman Schultz,20008273,DC,l.S. Starrett Company ,NaN,P,10/9/2017,10/10/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 10/25/2017"
+Wasserman Schultz,20008277,JT,Stonegate Bank ,NaN,E,09/26/2017,10/12/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 10/27/2017"
+Wasserman Schultz,20007584,DC,"Communications Systems, Inc. ",NaN,P,06/30/2017,07/1/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20007584,DC,"Communications Systems, Inc. ",NaN,P,06/30/2017,07/1/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20007584,DC,"Communications Systems, Inc. ",NaN,P,06/30/2017,07/1/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 07/11/2017"
+Wasserman Schultz,20007425,DC,Quantum Corporation ,NaN,P,06/1/2017,06/2/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20007425,DC,Quantum Corporation ,NaN,P,06/1/2017,06/2/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20007425,DC,Quantum Corporation ,NaN,P,06/1/2017,06/2/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 06/8/2017"
+Wasserman Schultz,20006999,DC,Stonegate Bank ,NaN,S,03/30/2017,03/30/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 06/7/2017"
+Wasserman Schultz,20006986,DC,Stonegate Bank ,NaN,S,03/30/2017,03/31/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006986,DC,Stonegate Bank ,NaN,S,03/30/2017,03/31/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 03/31/2017"
+Wasserman Schultz,20006999,DC,Comtech Telecommunications Corp.,NaN,S,03/29/2017,03/29/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006999,DC,Comtech Telecommunications Corp.,NaN,S,03/29/2017,03/29/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006986,DC,Comtech Telecommunications Corp.,NaN,S,03/29/2017,03/30/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006950,DC,Comtech Telecommunications Corp.,NaN,P,02/10/2017,02/10/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006950,DC,Comtech Telecommunications Corp.,NaN,P,02/10/2017,02/10/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006950,DC,"Richardson Electronics, ltd. ",NaN,P,02/10/2017,02/10/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 03/20/2017"
+Wasserman Schultz,20006753,DC,Comtech Telecommunications Corp.,NaN,P,02/10/2017,02/11/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006753,DC,"Keryx Biopharmaceuticals, Inc. ",NaN,P,02/10/2017,02/11/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 02/15/2017"
+Wasserman Schultz,20006593,DC,"Calamos asset Management, Inc.",NaN,S,01/6/2017,01/10/2017,"$1,001 - $15,000",New,
+Wasserman Schultz,20006593,DC,New gold Inc. ,NaN,P,01/17/2017,01/18/2017,"$1,001 - $15,000",New,"Hon. Debbie Wasserman Schultz , 01/23/2017"

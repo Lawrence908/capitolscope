@@ -40,7 +40,6 @@ Beyer,20020047,JT,Pittsburgh Pa Sch 3.00% 09/01/33,NaN,P,12/06/2021,12/16/2021,"
 Beyer,20022048,JT,Clark Cnty Nev Limited,NaN,P,11/10/2022,11/29/2022,"$15,001 - $50,000",New,"30,000 units Clark County Nevada Limited 3.00% 06/01/37"
 Beyer,20022048,JT,Virginia St Pub 3.00% 10/01/38,Government Securities and Agency Debt,S,11/10/2022,11/29/2022,"$15,001 - $50,000",New,"redemption of 30,000 units of Virginia State Public 3.00% 10/01/38"
 Beyer,20021193,JT,Farmington NM Pollutn,NaN,S,06/02/2022,06/11/2022,"$15,001 - $50,000",New,Called security
-Beyer,20021091,JT,New York NY City Transitional,NaN,S,05/02/2022,05/22/2022,"$15,001 - $50,000",New,called Security
 Beyer,20020868,JT,California St GO BDS,NaN,S,04/11/2022,04/25/2022,"$15,001 - $50,000",New,called security
 Beyer,20020868,JT,Halifax County VA Indl Dev,NaN,S,04/07/2022,04/25/2022,"$15,001 - $50,000",New,Called Security
 Beyer,20020618,JT,Virginia College Bldg 3.00%,NaN,S,03/07/2022,03/13/2022,"$15,001 - $50,000",New,"sale of 35,000 units Virginia College Building 3.00% 02/01/37"
@@ -53,7 +52,7 @@ Beyer,20020354,JT,ASML Holding N.V.,NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,0
 Beyer,20020354,JT,Costco Wholesale Corporation,COST,S,02/28/2022,03/01/2022,"$15,001 - $50,000",NewID Owner Asset Transaction Date Notification Amount Cap.,sale of 40 units Costco Wholesale Corp
 Beyer,20020354,JT,"Estee Lauder Companies, Inc. ",EL,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 115 units Estee Lauder Companies Class A
 Beyer,20020354,JT,"goldman Sachs group, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 75 units goldman Sachs group Inc common
-Beyer,20020354,JT,"Illumina, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 50 units Illumina Inc common
+Beyer,20020354,JT,"Illumina, Inc. ",ILMN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 50 units Illumina Inc common
 Beyer,20020354,JT,"Impinj, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 255 units Impinj Inc common
 Beyer,20020354,JT,"Intellia Therapeutics, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 215 units Intellia Therapeutics Inc common
 Beyer,20020354,JT,"Intuitive Surgical, Inc. ",NaN,S,02/28/2022,03/01/2022,"$15,001 - $50,000",New,sale of 75 units Intuitive Surgical Inc.
@@ -135,7 +134,6 @@ Beyer,20020047,JT,Novartis Ag ,NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New
 Beyer,20020047,JT,VanEck Biotech ETF ,NaN,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,purchase 17 shares Vaneck Trust BiotechID Owner Asset Transaction Date Notification Amount Cap.
 Beyer,20020047,JT,Verizon Communications Inc. ,VZ,12/26/2021,"$1,001",-,"$15,001 - $50,000",New,sale 50 units Verizon Communications
 Blumenauer,20021808,SP,Newmont Corporation ,NEM,Transaction,Date,Notification,Amount,New,Part of my spouse's retirement portfolio.
-Blumenauer,20020168,SP,HP INC. 2.2%25 [CS],NaN,P,12/16/2021,01/05/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20022078,SP,US Treasur NT 2% 11/30/22,Government Securities and Agency Debt,S,11/30/2022,12/04/2022,"$50,001 - $100,000",New,Full Redemption. Part of my spouse's retirement portfolio.
 Blumenauer,20022078,SP,Northwest Natural Holding Company,NaN,P,11/15/2022,11/21/2022,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
 Blumenauer,20021970,SP,Apple Inc. ,AAPL,P,10/28/2022,11/10/2022,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
@@ -924,7 +922,7 @@ Lee,20022081,JT,"Hologic, Inc. ",HOLX,S,11/30/2022,12/05/2022,"$1,001 - $15,000"
 Lee,20022081,JT,"Leslie's, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
 Lee,20022081,JT,"Live Nation Entertainment, Inc.",LYV,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
 Lee,20022081,JT,LKQ Corporation ,LKQ,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
-Lee,20022081,JT,"Marvell Technology, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
+Lee,20022081,JT,"Marvell Technology, Inc. ",MRVL,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
 Lee,20022081,JT,"Mattel, Inc. ",NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
 Lee,20022081,JT,Molson Coors Beverage Company,NaN,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
 Lee,20022081,JT,"Palo Alto Networks, Inc. ",PANW,S,11/30/2022,12/05/2022,"$1,001 - $15,000",New,
@@ -1412,7 +1410,7 @@ Manning,20021226,JT,ASML Holding N.V.,NaN,S,06/10/2022,07/05/2022,"$50,001 - $10
 Manning,20021226,JT,"Chipotle Mexican Grill, Inc. ",CMG,S (partial),06/10/2022,07/05/2022,"$1,001 - $15,000",New,
 Manning,20021226,JT,CME Group Inc.,NaN,S (partial),06/10/2022,07/05/2022,"$15,001 - $50,000",New,
 Manning,20021226,JT,"Equinix, Inc. ",EQIX,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
-Manning,20021226,JT,"Illumina, Inc. ",NaN,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
+Manning,20021226,JT,"Illumina, Inc. ",ILMN,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
 Manning,20021226,JT,"Intuitive Surgical, Inc. ",ISRG,S (partial),06/10/2022,07/05/2022,"$1,001 - $15,000",New,
 Manning,20021226,JT,"Match Group, Inc. ",MTCH,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
 Manning,20021226,JT,"Netflix, Inc. ",NFLX,S,06/10/2022,07/05/2022,"$15,001 - $50,000",New,
@@ -1464,9 +1462,9 @@ Manning,20020423,JT,IHS Markit Ltd. Common Shares S ,NaN,02/09/2022,"$1,001",-,"
 Manning,20020423,JT,IHS Markit Ltd. Common Shares S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
 Manning,20020423,JT,IHS Markit Ltd. Common Shares S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
 Manning,20020423,JT,"Illumina, Inc. (ILMN) [ST] S ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
-Manning,20020423,JT,"Illumina, Inc. ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
-Manning,20020423,JT,"Illumina, Inc. ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
-Manning,20020423,JT,"Illumina, Inc. ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Illumina, Inc. ",ILMN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Illumina, Inc. ",ILMN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
+Manning,20020423,JT,"Illumina, Inc. ",ILMN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
 Manning,20020423,JT,Intuit Inc. (INTU) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
 Manning,20020423,JT,Intuit Inc. (INTU) [ST] S ,NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,
 Manning,20020423,JT,"Intuitive Surgical, Inc. (ISRG) [ST] S ",NaN,02/09/2022,"$1,001",-,"$15,001 - $50,000",New,

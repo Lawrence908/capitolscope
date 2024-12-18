@@ -1,6 +1,7 @@
 # Interaction
 click
 asyncio
+nest_asyncio
 aiohttp
 datetime
 jupyter

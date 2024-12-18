@@ -382,7 +382,7 @@ Gottheimer,20024097,JT,"Salesforce, Inc. ",CRM,S,11/22/2023,12/05/2023,"$1,001 -
 Gottheimer,20024097,JT,"ServiceNow, Inc. ",NOW,P,11/22/2023,12/05/2023,"$1,001 - $15,000",New,
 Gottheimer,20024097,JT,"Celsius Holdings, Inc. ",NaN,P,11/20/2023,12/05/2023,"$1,001 - $15,000",New,
 Gottheimer,20024097,JT,Monster Beverage Corporation S,MNST,S (partial),11/20/2023,12/05/2023,"$1,001 - $15,000",New,
-Gottheimer,20024097,JT,"DoorDash, Inc. ",NaN,P,11/16/2023,12/05/2023,"$1,001 - $15,000",New,
+Gottheimer,20024097,JT,"DoorDash, Inc. ",DASH,P,11/16/2023,12/05/2023,"$1,001 - $15,000",New,
 Gottheimer,20024097,JT,Eli Lilly and Company ,LLY,P,11/16/2023,12/05/2023,"$1,001 - $15,000",New,
 Gottheimer,20024097,JT,"Intapp, Inc. ",NaN,P,11/15/2023,12/05/2023,"$1,001 - $15,000",New,
 Gottheimer,20024097,JT,Microsoft Corporation ,MSFT,P,11/14/2023,12/05/2023,"$1,000,001 - $5,000,000",New,Call options; Strike price $170; Expires 06/21/2024
@@ -843,7 +843,7 @@ Jackson,20023262,JT,"Estee Lauder Companies, Inc.",EL,S,06/07/2023,07/07/2023,"$
 Jackson,20023262,JT,Marriott International,MAR,P,06/06/2023,07/07/2023,"$15,001 - $50,000",New,
 Jackson,20023077,JT,ASML Holding N.V.,NaN,P,05/26/2023,06/05/2023,"$15,001 - $50,000",New,
 Jackson,20023077,JT,"NextEra Energy, Inc. ",NEE,S (partial),05/26/2023,06/05/2023,"$15,001 - $50,000",New,"Hon. Jonathan Jackson , 06/06/2023"
-Jackson,20023077,JT,"MercadoLibre, Inc. ",NaN,P,05/23/2023,06/05/2023,"$15,001 - $50,000",New,
+Jackson,20023077,JT,"MercadoLibre, Inc. ",MELI,P,05/23/2023,06/05/2023,"$15,001 - $50,000",New,
 Jackson,20023077,JT,BP p.l.c. ,NaN,P,05/12/2023,06/05/2023,"$15,001 - $50,000",New,
 Jackson,20023077,JT,"Estee Lauder Companies, Inc.",EL,P,05/02/2023,06/05/2023,"$15,001 - $50,000",New,
 Jackson,20023077,JT,Honeywell International Inc.,HON,P,05/01/2023,06/05/2023,"$50,001 - $100,000",New,

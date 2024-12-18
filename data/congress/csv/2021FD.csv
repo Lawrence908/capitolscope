@@ -93,7 +93,7 @@ Beyer,20019506,JT,Cognex Corporation ,NaN,09/19/2021,"$1,001",-,"$15,001 - $50,0
 Beyer,20019506,JT,Costco Wholesale Corporation P,COST,09/19/2021,"$1,001",-,"$15,001 - $50,000",New,purchase 5 units Costco Wholesale CorpID Owner Asset Transaction Date Notification Amount Cap.
 Beyer,20019506,JT,"CryoPort, Inc. ",NaN,10/01/2021,"$1,001",-,"$15,001 - $50,000",New,sale of 25 units Cryoport Inc common; $159 capital gain
 Beyer,20019506,JT,Fanuc Limited Ordinary Shares S,NaN,10/01/2021,"$1,001",-,"$15,001 - $50,000",New,sale of 15 units Fanuc Ltd; no capital gains
-Beyer,20019506,JT,"Illumina, Inc. ",NaN,09/19/2021,"$1,001",-,"$15,001 - $50,000",New,sale 5 units Illumina Inc; cap gain of $700
+Beyer,20019506,JT,"Illumina, Inc. ",ILMN,09/19/2021,"$1,001",-,"$15,001 - $50,000",New,sale 5 units Illumina Inc; cap gain of $700
 Beyer,20019506,JT,"Intellia Therapeutics, Inc. ",NaN,10/01/2021,"$1,001",-,"$15,001 - $50,000",New,"sale of 10 units Intellia Therapeutics Inc; capital gains of $1,346"
 Beyer,20019506,JT,Novartis Ag ,NaN,09/19/2021,"$1,001",-,"$15,001 - $50,000",New,sale 35 units of Novartis Ag
 Beyer,20019506,JT,"Regeneron Pharmaceuticals, Inc. P",NaN,09/19/2021,"$1,001",-,"$15,001 - $50,000",New,5 units Regeneron Pharmaceuticals
@@ -146,7 +146,7 @@ Beyer,20018752,JT,BLF FedFund TDDXX [CS] S,NaN,06/07/2021,"$1,001",-,"$15,001 - 
 Beyer,20018752,JT,BLF FedFund TDDXX [CS] P,NaN,06/07/2021,"$1,001",-,"$15,001 - $50,000",New,sweep purchase of Blackrock Liq FDS Fed
 Beyer,20018752,JT,FIVERR Intl Ltd Ord [PS] S,NaN,05/16/2021,"$1,001",-,"$15,001 - $50,000",New,sale of 10 units FIVERR Intl Ord
 Beyer,20018752,JT,Franco,NaN,05/16/2021,"$1,001",-,"$15,001 - $50,000",New,30 units Franco-Nevada Corp
-Beyer,20018752,JT,"Illumina, Inc. ",NaN,05/16/2021,"$1,001",-,"$15,001 - $50,000",New,sale of 5 units Illumina Inc
+Beyer,20018752,JT,"Illumina, Inc. ",ILMN,05/16/2021,"$1,001",-,"$15,001 - $50,000",New,sale of 5 units Illumina Inc
 Beyer,20018752,JT,London Stock Exchange Group plc S,NaN,06/07/2021,"$1,001",-,"$15,001 - $50,000",New,sale of 80 units London Stock Exchange Ordinary
 Beyer,20018752,JT,"Nasdaq, Inc. ",NDAQ,05/16/2021,"$1,001",-,"$15,001 - $50,000",New,15 units NASDAQ Inc
 Beyer,20018752,JT,"Teladoc Health, Inc. ",NaN,05/16/2021,"$1,001",-,"$15,001 - $50,000",New,sale of 30 units Teladoc Health Inc common
@@ -518,7 +518,7 @@ Franklin,20018466,JT,"BRP group, Inc.",NaN,E,02/11/2021,02/11/2021,"$1,000,001 -
 Garcia,20018671,SPDR,Gold Trust ,NaN,P,04/12/2021,04/12/2021,"$15,001 - $50,000",New,
 Gottheimer,20019961,JT,"PayPal Holdings, Inc. (PYPL) [ST] S ",NaN,transaction,Date,notification,amount,New,
 Gottheimer,20019761,JT,"bHP Group Limited American P 10/18/2021 11/04/2021 $1,001",NaN,Transaction,Date,Notification,Amount,New,
-Gottheimer,20019761,JT,"MercadoLibre, Inc. ",NaN,Transaction,Date,Notification,Amount,New,
+Gottheimer,20019761,JT,"MercadoLibre, Inc. ",MELI,Transaction,Date,Notification,Amount,New,
 Gottheimer,20018854,JT,Microsoft Corporation ,MSFT,transaction,Date,notification,amount,New,
 Gottheimer,20018699,JT,Open Lending Corporation,NaN,Transaction,Date,Notification,Amount,New,
 Gottheimer,20018534,JT,deere & Company ,NaN,Transaction,Date,Notification,Amount,New,
@@ -650,7 +650,7 @@ Gottheimer,20019593,JT,FedEx Corporation (FdX) [ST] S ,NaN,10/07/2021,"$1,001",-
 Gottheimer,20019593,JT,Intuit Inc. ,INTU,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20019593,JT,L'Oreal Co. American depositary P,NaN,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20019593,JT,McKesson Corporation (MCK) [ST] S ,NaN,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
-Gottheimer,20019593,JT,"MercadoLibre, Inc. ",NaN,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20019593,JT,"MercadoLibre, Inc. ",MELI,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20019593,JT,"Mongodb, Inc.",NaN,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20019593,JT,Nitori Holdings Co. Ltd AdR P,NaN,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20019593,JT,Norfolk Southern Corporation S ,NSC,10/07/2021,"$1,001",-,"$15,001 - $50,000",New,
@@ -757,7 +757,7 @@ Gottheimer,20018699,JT,"Lithia Motors, Inc. (LAd) [ST] S ",NaN,05/06/2021,"$1,00
 Gottheimer,20018699,JT,Lonza Group Ag Zuerich S ,NaN,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018699,JT,lululemon athletica inc. ,LULU,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018699,JT,"Match Group, Inc. (MTCH) [ST] S ",NaN,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
-Gottheimer,20018699,JT,"MercadoLibre, Inc. ",NaN,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20018699,JT,"MercadoLibre, Inc. ",MELI,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018699,JT,"Ollie's bargain Outlet Holdings, P",NaN,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018699,JT,"PayPal Holdings, Inc. (PYPL) [ST] S ",NaN,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018699,JT,Pharmaceutical GRP LTd ,NaN,05/06/2021,"$1,001",-,"$15,001 - $50,000",New,
@@ -857,7 +857,7 @@ Gottheimer,20018333,JT,"Intuitive Surgical, Inc. (ISRG) [ST] S ",NaN,03/05/2021,
 Gottheimer,20018333,JT,Linde plc Ordinary Share (LIN) S ,NaN,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018333,JT,Lukoil Co Sponsored AdR P,NaN,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018333,JT,lululemon athletica inc. (LULU) S ,NaN,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
-Gottheimer,20018333,JT,"MercadoLibre, Inc. ",NaN,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
+Gottheimer,20018333,JT,"MercadoLibre, Inc. ",MELI,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018333,JT,Microsoft Corporation (MSFT) S ,NaN,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018333,JT,Microsoft Corporation ,MSFT,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
 Gottheimer,20018333,JT,"Mongodb, Inc.",NaN,03/05/2021,"$1,001",-,"$15,001 - $50,000",New,
@@ -1224,7 +1224,7 @@ Lee,20018701,JT,St. Joe Company (JOE) [ST] S ,NaN,Transaction,Date,Notification,
 Lee,20018168,JT,"Fortinet, Inc. ",FTNT,transaction,Date,notification,amount,New,
 Lee,20017980,JT,"gartner, Inc. ",IT,Transaction,Date,Notification,Amount,New,
 Lee,20017980,JT,"Republic Services, Inc. (RSg) [ST] S ",NaN,Transaction,Date,Notification,Amount,New,
-Lee,20018701,JT,"Marvell Technology, Inc.",NaN,E,04/21/2021,05/01/2021,$1.00,New,Shares held in Marvell Technology group Ltd. were exchanged for an equivalent number of shares in Marvell
+Lee,20018701,JT,"Marvell Technology, Inc.",MRVL,E,04/21/2021,05/01/2021,$1.00,New,Shares held in Marvell Technology group Ltd. were exchanged for an equivalent number of shares in Marvell
 Lee,20019743,JT,"Rackspace Technology, Inc. ",NaN,11/01/2021,"$1,001",-,"$15,001 - $50,000",New,
 Lee,20019647,JT,"CommScope Holding Company, S",NaN,10/18/2021,"$1,001",-,"$15,001 - $50,000",New,
 Lee,20019647,JT,Howard Hughes Corporation S,NaN,10/18/2021,"$1,001",-,"$15,001 - $50,000",New,
@@ -1429,7 +1429,7 @@ Lee,20018329,JT,Lear Corporation ,NaN,03/01/2021,"$1,001",-,"$15,001 - $50,000",
 Lee,20018329,JT,Lear Corporation ,NaN,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,
 Lee,20018329,JT,"Leslie's, Inc. ",NaN,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,
 Lee,20018329,JT,"Leslie's, Inc. ",NaN,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,
-Lee,20018329,JT,Marvell Technology group Ltd. S ,NaN,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,
+Lee,20018329,JT,Marvell Technology group Ltd. S ,MRVL,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,
 Lee,20018329,JT,Pool Corporation ,POOL,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,
 Lee,20018329,JT,"Rackspace Technology, Inc. ",NaN,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,
 Lee,20018329,JT,Realty Income Corporation (O) S ,NaN,03/01/2021,"$1,001",-,"$15,001 - $50,000",New,

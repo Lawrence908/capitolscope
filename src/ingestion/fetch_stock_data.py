@@ -63,7 +63,7 @@ load_dotenv()
 ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 BASE_URL = os.getenv("ALPHA_VANTAGE_BASE_URL")
 
-def get_tickers(SNP500: bool = True, NASDAQ: bool = True, DowJones: bool = True) -> list:
+def get_tickers(SP500: bool = True, NASDAQ: bool = True, DowJones: bool = True) -> list:
     
     # Get S&P 500 tickers
     url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
@@ -95,15 +95,15 @@ def get_tickers(SNP500: bool = True, NASDAQ: bool = True, DowJones: bool = True)
         ticker = row.find_all('td')[2].text.strip()
         tickers30.append(ticker)
         
-    if SNP500 and NASDAQ and DowJones:
+    if SP500 and NASDAQ and DowJones:
         tickers = list(set(tickers500 + tickers100 + tickers30))
-    elif SNP500 and NASDAQ:
+    elif SP500 and NASDAQ:
         tickers = list(set(tickers500 + tickers100))
-    elif SNP500 and DowJones:
+    elif SP500 and DowJones:
         tickers = list(set(tickers500 + tickers30))
     elif NASDAQ and DowJones:
         tickers = list(set(tickers100 + tickers30))
-    elif SNP500:
+    elif SP500:
         tickers = tickers500
     elif NASDAQ:
         tickers = tickers100

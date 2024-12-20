@@ -109,7 +109,7 @@ class CongressTrades:
         # Save the DataFrame to a CSV file
         trades_by_member_df.to_csv(self.data_path + current_fd + '.csv', index=False)
         trades_by_member_df.to_excel(self.data_path + current_fd + '.xlsx', index=False)
-        trades_by_member_df.to_sql(name=current_fd, con=disk_engine, if_exists='replace', index=False)
+        trades_by_member_df.to_sql(name=current_fd, con=disk_engine, if_exists='replace')
         
         print("Saved: ", current_fd + '.csv')   ##### DEBUGGING #####
         print("Saved: ", current_fd + '.xlsx')   ##### DEBUGGING #####
@@ -234,12 +234,11 @@ class CongressTrades:
         xml_df = pd.DataFrame(xml_data)
         # Save the DataFrame to a CSV file
         xml_df.to_csv(self.data_path + current_fd + '_docIDlist.csv', index=False)
-        # xml_df.to_excel(self.data_path + current_fd + '_docIDlist.xlsx', index=False)
-        # xml_df.to_sql(name=current_fd + '_docIDlist', con=disk_engine, if_exists='replace', index=False)
-        
+        xml_df.to_excel(self.data_path + current_fd + '_docIDlist.xlsx', index=False)
+        xml_df.to_sql(name=current_fd + '_docIDlist', con=disk_engine, if_exists='replace')
         print ("Saved: ", current_fd + '_docIDlist.csv')   ##### DEBUGGING #####
-        # print ("Saved: ", current_fd + '_docIDlist.xlsx')   ##### DEBUGGING #####
-        # print ("Saved: ", current_fd + '_docIDlist.db')  ##### DEBUGGING #####
+        print ("Saved: ", current_fd + '_docIDlist.xlsx')   ##### DEBUGGING #####
+        print ("Saved: ", current_fd + '_docIDlist.db')  ##### DEBUGGING #####
 
         return xml_df
     
@@ -330,11 +329,18 @@ class CongressTrades:
                 owner_types = ["SP", "DC", "JT"]
                 current_trade = {key: "" for key in trade_dict}  # Initialize a trade record
                 
+                FLAG = False
                 i = 0
                 while i < len(lines):
                     line = lines[i].strip()
                     # Check if this is a new trade line starting with known owner types
                     if any(line.startswith(owner_type) for owner_type in owner_types):
+                        while FLAG == False:
+                            print("Line: ", line)   ##### DEBUGGING #####
+                            print("Line #: ", i)   ##### DEBUGGING #####
+                            print("Line 2", lines[i+1])  ##### DEBUGGING #####
+                            print("Line #", i+2)  ##### DEBUGGING #####
+                            FLAG = True
                         if current_trade["Owner"]:  # If current_trade is not empty, save it
                             for key in trade_dict:
                                 trade_dict[key].append(current_trade[key])
@@ -342,7 +348,7 @@ class CongressTrades:
 
                         columns = line.split()
                         
-                        if doc_id == "20019685":
+                        if doc_id == "20019790":
                             # print a line for debugging with column values
                             print("Columns: ", columns)   ##### DEBUGGING #####
                         
@@ -359,12 +365,6 @@ class CongressTrades:
                             current_trade["Ticker"] = current_trade["Ticker"].split(")")[0]
                             
                         current_trade["Transaction Type"] = columns[-5]
-                        if "transaction" in current_trade["Transaction Type"]:
-                            i+=2
-                            break
-                        if "Transaction" in current_trade["Transaction Type"]:
-                            i+=2
-                            break
                         current_trade["Transaction Date"] = columns[-4]
                         current_trade["Notification Date"] = columns[-3]
                         current_trade["Amount"] = columns[-2]
@@ -420,12 +420,8 @@ class CongressTrades:
                             current_trade["Transaction Type"] = columns[-8]
                             current_trade["Amount"] = columns[-3]
                             
-                        # Set amount based on current case
                         if current_trade["Amount"] == "-":
-                            current_trade["Amount"] = columns[-4] + " " + columns[-3] + " " + columns[-2]
-                            
-                        if current_trade["Amount"].startswith("Spouse/DC"):
-                            current_trade["Amount"] = "$1,000,001 - $5,000,000"                           
+                            current_trade["Amount"] = columns[-3]
                         
                         # Set amount based on current case
                         if current_trade["Amount"] == "$0":
@@ -461,10 +457,6 @@ class CongressTrades:
                             next_line = lines[j].strip()
                             if next_line.startswith("* For the"):
                                 break
-                            if next_line.startswith("Initial"):
-                                break
-                            if next_line.startswith("Asset"):
-                                break
                             elif next_line.startswith("("):  # Ticker continuation
                                 current_trade["Ticker"] = re.search(r'\((.*?)\)', next_line).group(1)
                             elif next_line.startswith("Stock"):
@@ -480,8 +472,6 @@ class CongressTrades:
                                 current_trade["Description"] = next_line.split(":", 1)[1].strip()
                                 if current_trade["Description"].startswith("Hon."):
                                     current_trade["Description"] = ""
-                                if current_trade["Description"].endswith("ID Owner Asset Transaction Date Notification Amount"):
-                                    current_trade["Description"].split("ID Owner Asset Transaction Date Notification Amount")[0]
 
                                 
 
@@ -497,8 +487,6 @@ class CongressTrades:
                         
                         # Check if the ticker is is a variation of BRK.B
                         if current_trade["Ticker"].startswith("BRK"):
-                            current_trade["Ticker"] = "BRK.B"
-                        if current_trade["Ticker"].startswith("bRK"):
                             current_trade["Ticker"] = "BRK.B"
                         
                         if current_trade["Ticker"] not in self.tickers:
@@ -525,13 +513,6 @@ class CongressTrades:
                             current_trade["Amount"] = "$1,001 - $15,000"
                             current_trade["Filing Status"] = "New"
                             current_trade["Description"] = ""  
-                        
-                        transaction_types = ["P", "S", "S (partial)"]
-                        if current_trade["Transaction Type"] not in transaction_types:
-                            # Skip this current trade and move to the next line
-                            i += 1
-                            continue
-                        
                              
                         # Append to trade dictionary
                         for key in trade_dict:

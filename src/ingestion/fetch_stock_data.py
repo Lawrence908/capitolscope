@@ -15,10 +15,12 @@
 # Folder Structure:
 # - src/
 #   - ingestion/
+#     - fetch_congress_data.py (fetches Congress trading data)
 #     - fetch_stock_data.py (this script)
 #   - .env (stores API key and base URL)
 # - data/
-#   - raw/ (to store fetched data temporarily)
+#   - congress/ (stores Congress trading data)
+#   - stock/ (stores stock data)
 # - notebooks/
 #   - For testing and debugging fetched data.
 
@@ -53,10 +55,15 @@
 
 
 import os
+import asyncio
+import aiohttp
 import requests
+import datetime
 from bs4 import BeautifulSoup
 import pandas as pd
 from dotenv import load_dotenv
+
+import yfinance as yf
 
 # Load environment variables
 load_dotenv()
@@ -209,6 +216,54 @@ def fetch_time_series(symbol: str, interval: str = "daily", output_size: str = "
     df.sort_values('date', inplace=True)
 
     return df
+
+def fetch_time_series_yf(symbol: str, interval: str = "1d", start: str = "2014-01-01", end: str = str(datetime.date.today())) -> pd.DataFrame:
+    """
+    Fetch time-series data for a given stock symbol from Yahoo Finance.
+
+    Args:
+        symbol (str): Stock ticker symbol (e.g., "AAPL").
+        interval (str): Time interval ("1d", "1wk", "1mo").
+        start (str): Start date for fetching data.
+        end (str): End date for fetching data.
+
+    Returns:
+        pd.DataFrame: Time-series data with columns ['date', 'open', 'high', 'low', 'close', 'volume'].
+    """
+    df = yf.download(symbol, interval=interval, start=start, end=end)
+    df['symbol'] = symbol
+    return df
+
+def fetch_all_stock_data(interval: str = "daily", output_size: str = "compact") -> pd.DataFrame:
+    tickers = get_tickers()
+    data = []
+    for ticker in tickers:
+        try:
+            df = fetch_time_series(ticker, interval=interval, output_size=output_size)
+            df['symbol'] = ticker
+            data.append(df)
+        except Exception as e:
+            print(f"Error fetching data for {ticker}: {e}")
+    return pd.concat(data)
+
+async def fetch_all_stock_data_yf(interval: str = "1d", start: str = "2014-01-01", end: str = str(datetime.date.today())) -> pd.DataFrame:
+    tickers = get_tickers()
+    data = []
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch_stock_data_yf(session, ticker, interval, start, end) for ticker in tickers]
+        data = await asyncio.gather(*tasks)
+    return pd.concat(data)
+
+async def fetch_stock_data_yf(session: aiohttp.ClientSession, symbol: str, interval: str, start: str, end: str) -> pd.DataFrame:
+    start_timestamp = int(datetime.datetime.strptime(start, "%Y-%m-%d").timestamp())
+    end_timestamp = int(datetime.datetime.strptime(end, "%Y-%m-%d").timestamp())
+    url = f"https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={start_timestamp}&period2={end_timestamp}&interval={interval}&events=history"
+    async with session.get(url) as response:
+        data = await response.text()
+        import io
+        df = pd.read_csv(io.StringIO(data))
+        df['symbol'] = symbol
+        return df
 
 
 

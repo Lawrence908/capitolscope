@@ -16,7 +16,7 @@ Axne,20019824,SP,Markel Corporation ,NaN,S,11/11/2021,11/12/2021,"$1,001 - $15,0
 Axne,20019824,SP,Markel Corporation ,NaN,S,11/11/2021,11/12/2021,"$1,001 - $15,000",New,Subholding of: Cindy Axne IRA
 Axne,20019685,SP,Mastercard,MA,P,10/22/2021,10/25/2021,"$1,001 - $15,000",New,Subholding of: Cindy Axne IRA
 Axne,20019685,SP,Visa Inc.,V,P,10/22/2021,10/25/2021,"$1,001 - $15,000",New,Subholding of: Creation Agents LLC 401K
-Axne,20019685,SP,berkshire Hathaway Inc. New S ,NaN,10/21/2021 10/25/2021,10/21/2021,10/25/2021,-,New,Subholding of: Creation Agents LLC 401K
+Axne,20019685,SP,berkshire Hathaway Inc. New S ,BRK.B,S,10/21/2021,10/25/2021,"$1,001 - $15,000",New,Subholding of: Creation Agents LLC 401K
 Banks,20020002,JT,Roblox Corporation Class A P,NaN,P,11/19/2021,11/23/2021,"$1,001 - $15,000",New,Subholding of: Schwab IRA
 Banks,20020002,JT,"Peloton Interactive, Inc. ",NaN,P,11/12/2021,11/18/2021,"$1,001 - $15,000",New,Subholding of: Schwab IRA
 Banks,20020002,JT,Roblox Corporation Class A S,NaN,S,11/09/2021,11/12/2021,"$1,001 - $15,000",New,
@@ -25,33 +25,14 @@ Banks,20019642,JT,Roblox Corporation Class A S,NaN,S,09/09/2021,09/13/2021,"$1,0
 Banks,20019642,JT,Kroger,KR,S,09/02/2021,09/07/2021,"$1,001 - $15,000",New,
 Banks,20019642,JT,Starbucks,SBUX,S,09/02/2021,09/07/2021,"$1,001 - $15,000",New,
 Banks,20019099,JT,Roblox Corporation Class A P,NaN,P,06/25/2021,07/12/2021,"$1,001 - $15,000",New,
-Banks,20019099,JT,Kroger,KR,06/22/2021 07/12/2021,06/22/2021,07/12/2021,-,New,Subholding of: Schwab IRA
+Banks,20019099,JT,Kroger,KR,S,06/22/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Schwab IRA
 Banks,20018903,JT,Kroger,KR,P,05/20/2021,05/24/2021,"$1,001 - $15,000",New,
 Banks,20018763,JT,Kroger,KR,P,04/05/2021,04/09/2021,"$1,001 - $15,000",New,
-Beyer,20019339,JT,Cadence Design Systems,CDNS,transaction,Date,notification,amount,New,15 units Cadence Design Systems Inc
-Beyer,20019110,JT,NextEra Energy,NEE,Transaction,Date,Notification,Amount,New,sale of 300 units NextEra Energy Inc
-Beyer,20018752,JT,"BLF FedFund TDDXX [CS] S 05/04/2021 05/16/2021 $1,001",NaN,Transaction,Date,Notification,Amount,New,sweep sale of Blackrock Liq FDS Fed
-Beyer,20017909,JT,"BLF FedFund TDDXX [CS] S 12/15/2020 12/23/2020 $1,001",NaN,Transaction,Date,Notification,Amount,New,Sweep sale Blackrock Liq FDS FedFund
-Beyer,20017909,JT,Kadant Inc ,NaN,Transaction,Date,Notification,Amount,New,45 units Kadant Inc. Common
 Beyer,20017909,JT,BLF FedFund TDDXX [CS] P,NaN,P,12/23/2020,01/01/2021,"$1,001 - $15,000",New,Sweep purchase Blackrock Liq FDS Fed Fund
-Beyer,20017909,JT,Microsoft,MSFT,S,12/23/2020,01/01/2021,"$1,001 - $15,000",New,sale of 10 units of Microsoft Corp
 Beyer,20017909,JT,Apple Inc.,AAPL,S,12/16/2020,12/23/2020,"$1,001 - $15,000",New,sale of 10 units Apple Inc. common
 Beyer,20017909,JT,BLF FedFund TDDXX [CS] P,NaN,P,12/16/2020,12/23/2020,"$1,001 - $15,000",New,Sweep purchase Blackrock Liq FDS FedFund
-Beyer,20017909,JT,Roper Technologies,ROP,S,12/16/2020,12/23/2020,"$1,001 - $15,000",New,sale of 5 units Roper Technologies Inc. common
-Beyer,20017909,JT,"goldman Sachs group, Inc. ",NaN,P,12/15/2020,12/23/2020,"$1,001 - $15,000",New,5 units goldman Sachs group Inc.
 Beyer,20017909,JT,BLF FedFund TDDXX [CS],NaN,S,12/14/2020,12/23/2020,"$15,001 - $50,000",New,Sweep sale Blackrock Liq FDS FedFund
-Beyer,20017909,JT,Virginia College Bldg 3.00%,NaN,P,12/14/2020,12/23/2020,"$15,001 - $50,000",New,"35,000 units Virginia College Building 3.00% 02/01/37"
 Beyer,20017909,JT,BLF FedFund TDDXX [CS] S,NaN,S,12/07/2020,12/23/2020,"$1,001 - $15,000",New,Sweep sale Blackrock Liq FDS FedFund
-Beyer,20017909,JT,Walt Disney Company (The),DIS,P,12/07/2020,12/23/2020,"$1,001 - $15,000",New,10 units The Walt Disney CoID Owner Asset Transaction Date Notification Amount Cap.
-Beyer,20017909,JT,BLF FedFund TDDXX [CS] S,NaN,S,12/04/2020,12/23/2020,"$1,001 - $15,000",New,Sweep sale Blackrock Liq FDS FedFund
-Beyer,20017909,JT,VgP N.V. NPV Common [OT] P,NaN,P,12/04/2020,12/23/2020,"$1,001 - $15,000",New,15 units VgP N.V. NPV Common
-Beyer,20017909,JT,BLF FedFund TDDXX [CS] S,NaN,S,12/03/2020,12/23/2020,"$1,001 - $15,000",New,Sweep sale Blackrock Liq FDS FedFund
-Beyer,20017909,JT,Cognex Corporation ,NaN,P,12/03/2020,12/23/2020,"$1,001 - $15,000",New,15 units Cognex Corp
-Beyer,20017909,JT,MSCI,MSCI,P,12/03/2020,12/23/2020,"$1,001 - $15,000",New,5 units MSCI Inc Class A
-Beyer,20017909,JT,BLF FedFund TDDXX [CS] S,NaN,S,12/02/2020,12/23/2020,"$1,001 - $15,000",New,Sweep sale Blackrock Liq FDS FedFund
-Beyer,20017909,JT,Ecolab,ECL,P,12/02/2020,12/23/2020,"$1,001 - $15,000",New,5 units Ecolab Inc.
-Beyer,20017909,JT,LVMH Moet Hennessy Louis P,NaN,P,12/02/2020,12/24/2020,"$1,001 - $15,000",New,10 units LVMH Moet Hennessy ADR
-Beyer,20017909,JT,BLF FedFund TDDXX [CS] P,NaN,P,12/01/2020,12/23/2020,"$1,001 - $15,000",New,Sweep purchase Blackrock Liq FDS FedFund
 Beyer,20019895,JT,BLF FedFund TDDXX [CS] P,NaN,P,11/26/2021,11/28/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS FedFund
 Beyer,20019895,JT,NVIDIA Corporation ,NVDA,S,11/26/2021,11/28/2021,"$1,001 - $15,000",New,"sale 20 units NVIDIA Corp; capital gain $5,226"
 Beyer,20019895,JT,"Square, Inc. Class A ",NaN,S,11/26/2021,11/28/2021,"$1,001 - $15,000",New,"sale 15 units Square Inc Class A; capital gain $2,055"
@@ -98,21 +79,13 @@ Beyer,20019506,JT,BLF FedFund TDDXX [CS] S,NaN,S,09/03/2021,09/19/2021,"$1,001 -
 Beyer,20019506,JT,BLF FedFund TDDXX [CS] S,NaN,S,09/02/2021,09/19/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Liq FDS Fed
 Beyer,20019506,JT,Fanuc Limited Ordinary Shares S,NaN,S,08/28/2021,10/01/2021,"$1,001 - $15,000",New,sale of 15 units Fanuc Ltd; no capital gains
 Beyer,20019339,JT,BLF FedFund TDDXX [CS] P,NaN,P,08/18/2021,08/25/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fed Fund
-Beyer,20019339,JT,Cadence Design Systems,CDNS,P,08/18/2021,08/25/2021,"$1,001 - $15,000",New,15 units Cadence Design System Inc
-Beyer,20019339,JT,"Teladoc Health, Inc. ",NaN,S,08/18/2021,08/25/2021,"$1,001 - $15,000",New,sale of 25 units Teladoc Health Inc common
 Beyer,20019339,JT,BLF FedFund TDDXX [CS] P,NaN,P,08/06/2021,08/14/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fed
-Beyer,20019339,JT,Daifuku Co Ltd Ordinary Shares S,NaN,S,08/06/2021,08/14/2021,"$1,001 - $15,000",New,sale 20 units Daifuku Co Ltd; capital gains $682
 Beyer,20019339,JT,BLF FedFund TDDXX [CS] P,NaN,P,08/05/2021,08/14/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fed
-Beyer,20019339,JT,iShares gold Trust Shares of the S,NaN,S,08/05/2021,08/14/2021,"$1,001 - $15,000",New,"sale of 77 units IShares gold Trust, capital gain $339"
-Beyer,20019339,JT,TJX Companies,TJX,S,08/05/2021,08/14/2021,"$1,001 - $15,000",New,sale 25 units TJX Companies; capital gains $232
 Beyer,20019339,JT,BLF FedFund TDDXX [CS] S,NaN,S,08/03/2021,08/14/2021,"$1,001 - $15,000",New,sweep sale Blackrock Liq FDS Fed
 Beyer,20019339,JT,BLF FedFund TDDXX [CS] P,NaN,P,08/02/2021,08/14/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fed
 Beyer,20019110,JT,BLF FedFund TDDXX [CS] S,NaN,S,07/21/2021,07/25/2021,"$1,001 - $15,000",New,Sweep sale Blackrock Liq FDS Fed
 Beyer,20019110,JT,"Intellia Therapeutics, Inc. ",NaN,S,07/21/2021,07/25/2021,"$1,001 - $15,000",New,sale 65 units Intellia Therapeutics
-Beyer,20019110,JT,Regeneron Pharmaceuticals,REGN,P,07/21/2021,07/25/2021,"$1,001 - $15,000",New,4 units Regeneron Pharmaceuticals
-Beyer,20019110,JT,Roanoke Cnty VA Economic 3.25%,NaN,P,07/21/2021,07/25/2021,"$15,001 - $50,000",New,"40,000 units Roanoke County VA Economic 3.25% 10/15/31"
 Beyer,20019110,JT,BLF FedFund TDDXX [CS] S,NaN,S,07/15/2021,07/18/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Lig FDS Fed
-Beyer,20019110,JT,VGP N.V. NPV common [PS] P,NaN,P,07/15/2021,07/18/2021,"$1,001 - $15,000",New,15 units VGP N.V. NPV common
 Beyer,20019110,JT,BLF FedFund TDDXX [CS] S,NaN,S,07/07/2021,07/18/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Lig FDS Fed
 Beyer,20019110,JT,BLF FedFund TDDXX [CS] S,NaN,S,07/02/2021,07/18/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Lig FDS Fed
 Beyer,20019022,JT,Alphabet Inc. (Class A),GOOGL,P,06/24/2021,06/30/2021,"$1,001 - $15,000",New,one unit Alphabet Inc Class C
@@ -136,30 +109,35 @@ Beyer,20019022,JT,Berkshire Hathaway,BRK.B,P,06/07/2021,06/30/2021,"$1,001 - $15
 Beyer,20019022,JT,BLF FedFund TDDXX [CS],NaN,S,06/03/2021,06/30/2021,"$15,001 - $50,000",New,sweep sale Blackrock Liq FDS Fedfund
 Beyer,20019022,JT,BLF FedFund TDDXX [CS] S,NaN,S,06/02/2021,06/30/2021,"$1,001 - $15,000",New,sweep sale Blackrock Liq FDS Fedfund
 Beyer,20019022,JT,BLF FedFund TDDXX [CS] P,NaN,P,06/01/2021,06/30/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fedfund
-Beyer,20018752,JT,BLF FedFund TDDXX [CS] S,NaN,S,05/25/2021,06/07/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Liq FDS Fed
-Beyer,20018752,JT,VGP N.V. NPV Common [PS] P,NaN,P,05/25/2021,06/07/2021,"$1,001 - $15,000",New,10 units VGP N.V. NPV common
-Beyer,20018752,JT,BLF FedFund TDDXX [CS] P,NaN,P,05/17/2021,06/07/2021,"$1,001 - $15,000",New,sweep purchase of Blackrock Liq FDS Fed
-Beyer,20018752,JT,London Stock Exchange Group plc S,NaN,S,05/17/2021,06/07/2021,"$1,001 - $15,000",New,sale of 80 units London Stock Exchange Ordinary
 Beyer,20018752,JT,BLF FedFund TDDXX [CS],NaN,S,05/13/2021,05/16/2021,"$15,001 - $50,000",New,sweep sale of Blackrock Liq FDS Fed
-Beyer,20018752,JT,Morgan Stanley,MS,P,05/13/2021,05/16/2021,"$15,001 - $50,000",New,"15,000 units Morgan Stanley Fr Var 05/04/2027ID Owner Asset Transaction Date Notification Amount Cap."
 Beyer,20018752,JT,BLF FedFund TDDXX [CS] P,NaN,P,05/11/2021,05/16/2021,"$1,001 - $15,000",New,sweep purchase of Blackrock Liq FDS Fed
-Beyer,20018752,JT,FIVERR Intl Ltd Ord [PS] S,NaN,S,05/11/2021,05/16/2021,"$1,001 - $15,000",New,sale of 10 units FIVERR Intl Ord
 Beyer,20018752,JT,BLF FedFund TDDXX [CS] P,NaN,P,05/07/2021,05/16/2021,"$1,001 - $15,000",New,sweep purchase of Blackrock Liq FDS Fed
-Beyer,20018752,JT,"Teladoc Health, Inc. ",NaN,S,05/07/2021,05/16/2021,"$1,001 - $15,000",New,sale of 30 units Teladoc Health Inc common
 Beyer,20018752,JT,BLF FedFund TDDXX [CS] S,NaN,S,05/06/2021,05/16/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Liq FDS Fed
-Beyer,20018752,JT,Franco,NaN,P,05/06/2021,05/16/2021,"$1,001 - $15,000",New,30 units Franco-Nevada Corp
-Beyer,20018752,JT,"Illumina, Inc.",ILMN,S,05/06/2021,05/16/2021,"$1,001 - $15,000",New,sale of 5 units Illumina Inc
-Beyer,20018752,JT,"Nasdaq, Inc.",NDAQ,P,05/06/2021,05/16/2021,"$1,001 - $15,000",New,15 units NASDAQ Inc
 Beyer,20018752,JT,BLF FedFund TDDXX [CS] S,NaN,S,05/04/2021,05/16/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Liq FDS Fed
+Beyer,20018597,JT,BLF FedFund TDDXX [CS] P,NaN,P,04/29/2021,05/01/2021,"$1,001 - $15,000",New,sweep purchase Backrock Liw FDE Fedfund
+Beyer,20018597,JT,BLF FedFund TDDXX [CS] P,NaN,P,04/14/2021,04/17/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fed
+Beyer,20018597,JT,BLF FedFund TDDXX [CS],NaN,S,04/13/2021,04/17/2021,"$15,001 - $50,000",New,sweep sale of Blackrock Liq FDS Fed
+Beyer,20018597,JT,BLF FedFund TDDXX [CS] S,NaN,S,04/05/2021,04/17/2021,"$1,001 - $15,000",New,sale of Blackrock Liq FDS Fed
+Beyer,20018597,JT,BLF FedFund TDDXX [CS] P,NaN,P,04/01/2021,04/17/2021,"$1,001 - $15,000",New,purchase of Blackrock Liq FDS Fed
+Beyer,20018431,JT,"Amazon.com, Inc. ",AMZN,S,03/18/2021,03/20/2021,"$1,001 - $15,000",New,"sale one unit Amazon.Com Inc; capital gain $1,354"
+Beyer,20018431,JT,BLF FedFund TDDXX [CS] P,NaN,P,03/18/2021,03/20/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fed
+Beyer,20018431,JT,BLF FedFund TDDXX [CS] P,NaN,P,03/15/2021,03/20/2021,"$1,001 - $15,000",New,sweep purchase Blackrock Liq FDS Fed
+Beyer,20018431,JT,BLF FedFund TDDXX [CS] S,NaN,S,03/03/2021,03/20/2021,"$1,001 - $15,000",New,sweep sale Blackrock Liq FDS Fed
+Beyer,20018431,JT,BLF FedFund TDDXX [CS],NaN,P,03/01/2021,03/20/2021,"$15,001 - $50,000",New,sweep purchase Blackrock Liq FDS Fed
+Beyer,20018292,JT,BLF FedFund TDDXX [CS] P,NaN,P,02/26/2021,02/27/2021,"$1,001 - $15,000",New,sweep purchase of Blackrock Liq FDS Fedfund
+Beyer,20018292,JT,BLF FedFund TDDXX [CS] P,NaN,P,02/19/2021,02/27/2021,"$1,001 - $15,000",New,sweep purchase of Blackrock Liq FDS Fedfund
+Beyer,20018292,JT,"AIA group, Ltd. Ordinary Shares P",NaN,P,02/08/2021,02/27/2021,"$1,001 - $15,000",New,350 units AIA group Ltd
+Beyer,20018292,JT,BLF FedFund TDDXX [CS] S,NaN,S,02/08/2021,02/27/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Liq FDS Fedfund
+Beyer,20018292,JT,BLF FedFund TDDXX [CS] S,NaN,S,02/03/2021,02/27/2021,"$1,001 - $15,000",New,sweep sale of Blackrock Liq FDS Fedfund
 Bice,20019292,JT,Wells Fargo,WFC,S,08/06/2021,08/06/2021,"$1,001 - $15,000",New,Subholding of: ET - Investment
 Blumenauer,20017979,SP,Truist Financial,TFC,P,12/29/2020,01/06/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20017979,SP,uS Treasury Bill 20 Due 12/3/20,NaN,S,12/03/2020,01/06/2021,"$15,001 - $50,000",New,Full Redemption. Part of my spouse's retirement portfolio.
 Blumenauer,20017979,SP,uS Treasury NT 2%11/15/21 [gS],NaN,P,11/30/2020,01/06/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20019979,SP,uS Treasur NT 2%Due11/15/21,NaN,S,11/15/2021,12/07/2021,"$15,001 - $50,000",New,Full Redemption. Part of my spouse's retirement portfolio.
 Blumenauer,20019869,SP,Northwest Natural Holding P,NaN,P,11/15/2021,11/19/2021,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
-Blumenauer,20019771,SP,American Electric Power,AEP,10/25/2021 11/07/2021,10/25/2021,11/07/2021,-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20019771,SP,American Electric Power,AEP,S,10/25/2021,11/07/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20019771,SP,Danone Sponsored ADR ,NaN,S,10/15/2021,11/07/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
-Blumenauer,20019771,SP,Dutch Bros Inc. Class A (BROS) S ,NaN,10/15/2021 11/07/2021,10/15/2021,11/07/2021,-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20019771,SP,Dutch Bros Inc. Class A (BROS) S ,NaN,S,10/15/2021,11/07/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20019619,SP,CVS Health,CVS,P,09/27/2021,10/05/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20019619,SP,unitedHealth gro 3.75%25 [CS],NaN,P,09/27/2021,10/05/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20019580,SP,CVS Health,CVS,P,09/27/2021,10/05/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
@@ -178,7 +156,7 @@ Blumenauer,20019221,SP,Oracle Corporation,ORCL,S,07/08/2021,08/02/2021,"$15,001 
 Blumenauer,20019026,SP,"Extended Stay America, Inc.",NaN,S,06/15/2021,07/05/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018890,SP,"AutoZone, Inc. ",AZO,P,05/28/2021,06/09/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018890,SP,"leggett & Platt, Incorporated S",NaN,S,05/28/2021,06/09/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
-Blumenauer,20018890,SP,QuAlCOMM Incorporated S ,QCOM,05/28/2021 06/09/2021,05/28/2021,06/09/2021,-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20018890,SP,QuAlCOMM Incorporated S ,QCOM,S,05/28/2021,06/09/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018890,SP,Caterpillar Inc.,CAT,S,05/27/2021,06/09/2021,"$15,001 - $50,000",New,Full redemption. Part of my spouse's retirement portfolio.
 Blumenauer,20018890,SP,uS Treasu NT 2.125%07/24 [gS],NaN,P,05/26/2021,06/09/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.ID Owner Asset Transaction Date Notification Amount Cap.
 Blumenauer,20018812,SP,Northwest Natural Holding P,NaN,P,05/14/2021,05/25/2021,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse's retirement portfolio.
@@ -187,8 +165,8 @@ Blumenauer,20018890,SP,"Pfizer, Inc. ",PFE,P,05/07/2021,06/09/2021,"$1,001 - $15
 Blumenauer,20018685,SP,uS Treasury NT 2.25%04/21 [gS],NaN,S,04/30/2021,05/04/2021,"$50,001 - $100,000",New,Full Redemption. Part of my spouse's retirement portfolio.
 Blumenauer,20018685,SP,Realty Income,O,P,04/15/2021,05/04/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018685,SP,Howard Hughes Corporation S,NaN,S,04/13/2021,05/04/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
-Blumenauer,20018685,SP,Howard Hughes Corporation S ,NaN,04/12/2021 05/04/2021,04/12/2021,05/04/2021,-,New,Part of my spouse's retirement portfolio.
-Blumenauer,20018685,SP,Howard Hughes Corporation S ,NaN,04/09/2021 05/04/2021,04/09/2021,05/04/2021,-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20018685,SP,Howard Hughes Corporation S ,NaN,S,04/12/2021,05/04/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20018685,SP,Howard Hughes Corporation S ,NaN,S,04/09/2021,05/04/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018506,SP,uS Treasury Nt 2% 11/22 [gS],NaN,P,03/09/2021,04/02/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018321,SP,uS Treasury Bill Due 02/25/21,NaN,S,02/25/2021,03/03/2021,"$15,001 - $50,000",New,Full Redemption. Part of my spouse's retirement portfolio.
 Blumenauer,20018321,SP,Embraer S.A. ,NaN,P,02/17/2021,03/03/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
@@ -197,13 +175,13 @@ Blumenauer,20018338,SP,Northwest Natural Holding P,NaN,P,02/12/2021,03/05/2021,"
 Blumenauer,20018321,SP,uS Treasury Note Due 07/15/23,NaN,P,02/03/2021,03/03/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018321,SP,uS Treasury Note Due 11/30/22,NaN,P,02/03/2021,03/03/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018142,SP,Alphabet Inc. (Class A),GOOGL,P,01/27/2021,02/03/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
-Blumenauer,20018142,SP,Kroger,KR,01/27/2021 02/03/2021,01/27/2021,02/03/2021,-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20018142,SP,Kroger,KR,S,01/27/2021,02/03/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018142,SP,ViacomCBS Inc.,NaN,S,01/27/2021,02/03/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018142,SP,"Coherent, Inc. ",NaN,S,01/19/2021,02/03/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Blumenauer,20018142,SP,uS Treasury Bill Due 1/14/21 [gS],NaN,S,01/14/2021,02/03/2021,"$15,001 - $50,000",New,Full Redemption. Part of my spouse's retirement portfolio.ID Owner Asset Transaction Date Notification Amount Cap.
 Blumenauer,20018142,SP,uS Treasury Nt 2% Due 07/31/22,NaN,P,01/14/2021,02/03/2021,"$15,001 - $50,000",New,Part of my spouse's retirement portfolio.
-Blumenauer,20018142,SP,Flex ltd.,NaN,01/06/2021 02/03/2021,01/06/2021,02/03/2021,-,New,Part of my spouse's retirement portfolio.
-Blumenauer,20018142,SP,Flex ltd.,NaN,01/05/2021 02/03/2021,01/05/2021,02/03/2021,-,New,Part of my spouse's retirement portfolio.
+Blumenauer,20018142,SP,Flex ltd.,NaN,S,01/06/2021,02/03/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
+Blumenauer,20018142,SP,Flex ltd.,NaN,S,01/05/2021,02/03/2021,"$1,001 - $15,000",New,Part of my spouse's retirement portfolio.
 Brooks,20019626,JT,AT&T,T,P,10/12/2021,10/21/2021,"$1,001 - $15,000",New,
 Brooks,20019626,JT,Dominion Energy,D,P,09/29/2021,09/29/2021,"$15,001 - $50,000",New,
 Brooks,20019626,JT,"Pfizer, Inc. ",PFE,S,08/16/2021,08/16/2021,"$15,001 - $50,000",New,
@@ -212,11 +190,11 @@ Brooks,20018822,JT,general Electric Co Fxd TO [CS] P,NaN,P,05/14/2021,05/14/2021
 Brooks,20018605,JT,Berkshire Hathaway,BRK.B,P,03/24/2021,03/24/2021,"$1,001 - $15,000",New,
 Brooks,20018204,JT,Pike Road Al OID [gS] S,NaN,S,02/01/2021,02/01/2021,"$1,001 - $15,000",New,
 Brooks,20019066,JT,Berkshire Hathaway,BRK.B,P,01/15/2020,01/15/2020,"$15,001 - $50,000",New,
-Burgess,20019995,SP,Stryker Corporation,SYK,12/21/2021 12/22/2021,12/21/2021,12/22/2021,-,New,purchased an additional 33 shares
-Burgess,20019844,SP,Stryker Corporation,SYK,10/19/2021 10/19/2021,10/19/2021,10/19/2021,-,New,the terms of the call are a strike price of $280 and an expiration date 12/17/21.
-Castor,20019168,JT,berkshire Hathaway Inc. New P,NaN,P,07/16/2020,07/16/2020,"$1,001 - $15,000",New,Subholding of: Vanguard Joint Retirement
-Castor,20019168,JT,berkshire Hathaway Inc. New P,NaN,P,06/25/2020,06/25/2020,"$1,001 - $15,000",New,Subholding of: Vanguard Joint Retirement
-Castor,20019168,JT,berkshire Hathaway Inc. New P,NaN,P,06/18/2020,06/18/2020,"$1,001 - $15,000",New,Subholding of: Vanguard Joint Retirement
+Burgess,20019995,SP,Stryker Corporation,SYK,S,12/21/2021,12/22/2021,"$1,001 - $15,000",New,purchased an additional 33 shares
+Burgess,20019844,SP,Stryker Corporation,SYK,S,10/19/2021,10/19/2021,"$1,001 - $15,000",New,the terms of the call are a strike price of $280 and an expiration date 12/17/21.
+Castor,20019168,JT,berkshire Hathaway Inc. New P,BRK.B,P,07/16/2020,07/16/2020,"$1,001 - $15,000",New,Subholding of: Vanguard Joint Retirement
+Castor,20019168,JT,berkshire Hathaway Inc. New P,BRK.B,P,06/25/2020,06/25/2020,"$1,001 - $15,000",New,Subholding of: Vanguard Joint Retirement
+Castor,20019168,JT,berkshire Hathaway Inc. New P,BRK.B,P,06/18/2020,06/18/2020,"$1,001 - $15,000",New,Subholding of: Vanguard Joint Retirement
 Castor,20018921,JT,Berkshire Hathaway,BRK.B,P,06/14/2021,06/14/2021,"$1,001 - $15,000",New,Subholding of: E*Trade Brokerage Account
 Castor,20018921,JT,Berkshire Hathaway,BRK.B,P,05/21/2021,05/21/2021,"$1,001 - $15,000",New,Subholding of: E*Trade Brokerage Account
 Castor,20018576,JT,Berkshire Hathaway,BRK.B,P,04/14/2021,04/14/2021,"$1,001 - $15,000",New,Subholding of: E*Trade Brokerage Account
@@ -239,34 +217,34 @@ Clark,20018307,SP,Simon Property Group,SPG,P,02/08/2021,03/01/2021,"$1,001 - $15
 Clark,20018307,SP,State Street Corporation,STT,S,02/08/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
 Clark,20018307,SP,Taiwan Semiconductor S,NaN,S,02/08/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
 Clark,20018307,SP,Taiwan Semiconductor S,NaN,S,02/08/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
-Connolly,20020089,JT,Dominion Energy,D,12/09/2021 12/10/2021,12/09/2021,12/10/2021,-,New,Subholding of: TIAA Joint
-Connolly,20020089,JT,"leidos Holdings, Inc. (lDOS) [ST] S ",NaN,12/09/2021 12/10/2021,12/09/2021,12/10/2021,-,New,Subholding of: TIAA Joint
-Connolly,20019428,JT,Dominion Energy,D,08/25/2021 08/25/2021,08/25/2021,08/25/2021,-,New,Subholding of: TIAA Joint
+Connolly,20020089,JT,Dominion Energy,D,S,12/09/2021,12/10/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20020089,JT,"leidos Holdings, Inc. (lDOS) [ST] S ",NaN,S,12/09/2021,12/10/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20019428,JT,Dominion Energy,D,S,08/25/2021,08/25/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
 Connolly,20019428,JT,"leidos Holdings, Inc. ",NaN,S (partial),08/25/2021,08/25/2021,"$15,001 - $50,000",New,Subholding of: TIAA Joint
-Connolly,20019428,JT,SCIENCE APPlICATIONS S ,NaN,08/25/2021 08/25/2021,08/25/2021,08/25/2021,-,New,Subholding of: TIAA Joint
-Connolly,20018689,JT,Dominion Energy,D,04/22/2021 04/26/2021,04/22/2021,04/26/2021,-,New,Subholding of: TIAA Joint
-Connolly,20018689,JT,"leidos Holdings, Inc. (lDOS) [ST] S ",NaN,04/22/2021 04/26/2021,04/22/2021,04/26/2021,-,New,Subholding of: TIAA Joint
-Connolly,20018084,JT,Dominion Energy,D,01/21/2021 01/21/2021,01/21/2021,01/21/2021,-,New,Subholding of: TIAA Joint
-Connolly,20018084,JT,"leidos Holdings, Inc. (lDOS) [ST] S ",NaN,01/21/2021 01/21/2021,01/21/2021,01/21/2021,-,New,Subholding of: TIAA Joint
-Connolly,20018084,JT,SCIENCE APPlICATIONS S ,NaN,01/21/2021 01/21/2021,01/21/2021,01/21/2021,-,New,Subholding of: TIAA Joint
+Connolly,20019428,JT,SCIENCE APPlICATIONS S ,NaN,S,08/25/2021,08/25/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20018689,JT,Dominion Energy,D,S,04/22/2021,04/26/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20018689,JT,"leidos Holdings, Inc. (lDOS) [ST] S ",NaN,S,04/22/2021,04/26/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20018084,JT,Dominion Energy,D,S,01/21/2021,01/21/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20018084,JT,"leidos Holdings, Inc. (lDOS) [ST] S ",NaN,S,01/21/2021,01/21/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20018084,JT,SCIENCE APPlICATIONS S ,NaN,S,01/21/2021,01/21/2021,"$1,001 - $15,000",New,Subholding of: TIAA Joint
 Crenshaw,20019942,SPDR,S&P Global,SPGI,P,12/02/2021,12/02/2021,"$1,001 - $15,000",New,
 Crenshaw,20018373,SPX,Corporation ,NaN,P,03/25/2020,03/25/2020,"$1,001 - $15,000",New,
 Crenshaw,20018373,SPX,Corporation ,NaN,S,03/05/2021,03/05/2021,"$15,001 - $50,000",New,
 Curtis,20019828,JT,"Activision blizzard, Inc ",NaN,S,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019828,JT,"Caterpillar, Inc. ",CAT,P,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019828,JT,global Payments Inc. ,NaN,S,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
-Curtis,20019828,JT,Honeywell,HON,11/08/2021 11/15/2021,11/08/2021,11/15/2021,-,New,Subholding of: Northwestern Mutual - Joint
+Curtis,20019828,JT,Honeywell,HON,S,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019828,JT,KlA Corporation ,NaN,P,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019828,JT,lockheed Martin Corporation S,NaN,S,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - JointID Owner Asset Transaction Date Notification Amount Cap.
 Curtis,20019828,JT,"ulta beauty, Inc. ",NaN,P,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019828,JT,Visa Inc.,V,P,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019228,JT,Advanced Micro Devices,AMD,P,07/19/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
-Curtis,20019228,JT,Apple Inc.,AAPL,07/19/2021 08/02/2021,07/19/2021,08/02/2021,-,New,Subholding of: Northwestern Mutual - Joint
+Curtis,20019228,JT,Apple Inc.,AAPL,S,07/19/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019228,JT,"Fiserv, Inc. ",NaN,P,07/19/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019228,JT,Hilton Worldwide,HLT,P,07/19/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
-Curtis,20019228,JT,Merck & Co.,MRK,07/19/2021 08/02/2021,07/19/2021,08/02/2021,-,New,Subholding of: Northwestern Mutual - Joint
+Curtis,20019228,JT,Merck & Co.,MRK,S,07/19/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019228,JT,Starbucks,SBUX,P,07/19/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
-Curtis,20019228,JT,unitedHealth group Incorporated S ,NaN,07/19/2021 08/02/2021,07/19/2021,08/02/2021,-,New,Subholding of: Northwestern Mutual - Joint
+Curtis,20019228,JT,unitedHealth group Incorporated S ,NaN,S,07/19/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019228,JT,gEORgIA ST gO bdS 2021 A P,NaN,P,07/16/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019228,JT,INdIANA ST FIN AuTH P,NaN,P,07/16/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
 Curtis,20019228,JT,ROMEOVIllE Ill gO bdS 2019 P,NaN,P,07/07/2021,08/02/2021,"$1,001 - $15,000",New,Subholding of: Northwestern Mutual - Joint
@@ -297,8 +275,6 @@ DelBene,20018303,JT,New York ST Dorm Auth ST Pers,NaN,P,02/10/2021,02/10/2021,"$
 Diaz-Balart,20018764,SP,"MDLIVE,INC. [PS]",NaN,S,04/22/2021,04/24/2021,"$50,001 - $100,000",New,Provider of on demand digital healthcare services
 Dingell,20017983,SP,ViacomCBS Inc.,NaN,S,12/31/2020,01/04/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
 Evans,20020081,SPDR,blackstone Senior loan ETF P,NaN,P,11/02/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: PROEQUITIES
-Foxx,20019717,JT,"Via Renewables, Inc.",NaN,Transaction,Date,Notification,Amount,New,
-Foxx,20018306,JT,"Industrial logistics Properties P 02/19/2021 02/19/2021 $1,001",NaN,Transaction,Date,Notification,Amount,New,
 Foxx,20017967,JT,Altria,MO,P,12/29/2020,12/29/2020,"$1,001 - $15,000",New,
 Foxx,20017967,JT,"One liberty Properties, Inc. ",NaN,P,12/22/2020,12/22/2020,"$15,001 - $50,000",New,
 Foxx,20017967,JT,BP p.l.c. ,NaN,P,12/21/2020,12/21/2020,"$1,001 - $15,000",New,
@@ -342,15 +318,10 @@ Foxx,20018670,JT,PPl Corporation ,NaN,P,04/05/2021,04/05/2021,"$1,001 - $15,000"
 Foxx,20018512,JT,BP p.l.c. ,NaN,P,03/29/2021,03/29/2021,"$1,001 - $15,000",New,
 Foxx,20018512,JT,Walmart,WMT,S,03/26/2021,03/26/2021,"$15,001 - $50,000",New,
 Foxx,20018512,JT,"Clearway Energy, Inc. Class A P",NaN,P,03/16/2021,03/16/2021,"$1,001 - $15,000",New,
-Foxx,20018306,JT,Philip Morris International,PM,P,02/26/2021,02/26/2021,"$15,001 - $50,000",New,
-Foxx,20018306,JT,"Plains All American Pipeline, l.P.",NaN,P,02/23/2021,02/23/2021,"$15,001 - $50,000",New,
-Foxx,20018306,JT,Philip Morris International,PM,P,02/19/2021,02/19/2021,"$15,001 - $50,000",New,
 Foxx,20018306,JT,Antero Midstream Corporation,NaN,P,02/18/2021,02/18/2021,"$15,001 - $50,000",New,
 Foxx,20018306,JT,Industrial logistics Properties,NaN,P,02/18/2021,02/18/2021,"$15,001 - $50,000",New,
-Foxx,20018306,JT,Tribune Publishing Company,NaN,P,02/18/2021,02/18/2021,"$15,001 - $50,000",New,
 Foxx,20018306,JT,Enterprise Products Partners l.P. P,NaN,P,02/12/2021,02/12/2021,"$1,001 - $15,000",New,
 Foxx,20018306,JT,Enterprise Products Partners l.P. P,NaN,P,02/10/2021,02/10/2021,"$1,001 - $15,000",New,
-Foxx,20018306,JT,"Plains All American Pipeline, l.P.",NaN,P,02/10/2021,02/10/2021,"$15,001 - $50,000",New,
 Foxx,20018306,JT,AT&T,T,P,02/08/2021,02/28/2021,"$1,001 - $15,000",New,
 Foxx,20018306,JT,AT&T,T,P,02/02/2021,02/02/2021,"$1,001 - $15,000",New,
 Foxx,20018306,JT,Altria,MO,P,02/01/2021,02/01/2021,"$1,001 - $15,000",New,
@@ -358,14 +329,7 @@ Foxx,20018115,JT,glaxoSmithKline PlC ,NaN,P,01/15/2021,01/15/2021,"$1,001 - $15,
 Foxx,20018115,JT,Altria,MO,P,01/12/2021,01/12/2021,"$1,001 - $15,000",New,
 Foxx,20018115,JT,"One liberty Properties, Inc. ",NaN,P,01/08/2021,01/08/2021,"$1,001 - $15,000",New,
 Foxx,20018115,JT,PPl Corporation ,NaN,P,01/05/2021,01/05/2021,"$1,001 - $15,000",New,
-Franklin,20018466,JT,"BRP group, Inc.",NaN,E,02/11/2021,02/11/2021,"$1,000,001 - $5,000,000",New,"78,058 shares of of previously disclosed BRP Class A stock released from lockup provisions."
 Garcia,20018671,SPDR,Gold Trust ,NaN,P,04/12/2021,04/12/2021,"$15,001 - $50,000",New,
-Gottheimer,20019961,JT,PayPal,PYPL,transaction,Date,notification,amount,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,deere & Company ,NaN,Transaction,Date,Notification,Amount,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,MarketAxess,MKTX,Transaction,Date,Notification,Amount,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Elastic N.V. Ordinary Shares P 02/25/2021 03/05/2021 $1,001",NaN,transaction,Date,notification,amount,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Synchrony Financial,SYF,transaction,Date,notification,amount,New,Subholding of: Morgan Stanley - Portfolio Management
-Gottheimer,20019961,JT,Uber,UBER,S,11/30/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,Haier Smart Home Co Ltd AdR P,NaN,P,11/24/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,"Equifax, Inc. ",EFX,P,11/19/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,Haier Smart Home Co Ltd AdR P,NaN,P,11/19/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1iD owner asset transaction Date notification amount cap.
@@ -377,23 +341,23 @@ Gottheimer,20019961,JT,Microsoft,MSFT,S,11/15/2021,12/06/2021,"$500,001 - $1,000
 Gottheimer,20019961,JT,Microsoft,MSFT,S,11/15/2021,12/06/2021,"$5,000,001 - $25,000,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
 Gottheimer,20019961,JT,Microsoft,MSFT,S,11/15/2021,12/06/2021,"$1,000,001 - $5,000,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
 Gottheimer,20019961,JT,MarketAxess,MKTX,S,11/12/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,PayPal,PYPL,11/12/2021 12/06/2021,11/12/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019961,JT,PayPal,PYPL,S,11/12/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,"AutoZone, Inc. ",AZO,P,11/10/2021,12/06/2021,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,Lam Research,LRCX,11/08/2021 12/06/2021,11/08/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,PayPal,PYPL,11/08/2021 12/06/2021,11/08/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019961,JT,Lam Research,LRCX,S,11/08/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019961,JT,PayPal,PYPL,S,11/08/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,"Emergent biosolutions, Inc. ",NaN,S,11/05/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,"SS&C Technologies Holdings, Inc. S",NaN,S,11/05/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,"Heartland Express, Inc. (HTLd) S ",NaN,11/04/2021 12/06/2021,11/04/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019961,JT,"Heartland Express, Inc. (HTLd) S ",NaN,S,11/04/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,LHC Group,NaN,P,11/04/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,Terex Corporation ,NaN,P,11/04/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,Alphabet Inc. (Class A),GOOGL,P,11/03/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,"Helios Technologies, Inc. (HLIO) S ",NaN,11/03/2021 12/06/2021,11/03/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019961,JT,"Helios Technologies, Inc. (HLIO) S ",NaN,S,11/03/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019961,JT,Mastercard,MA,S,11/02/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,Norfolk Southern Railway,NSC,11/02/2021 12/06/2021,11/02/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,PayPal,PYPL,11/02/2021 12/06/2021,11/02/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,Rockwell Automation,ROK,11/02/2021 12/06/2021,11/02/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019961,JT,"Tapestry, Inc.",TPR,11/02/2021 12/06/2021,11/02/2021,12/06/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,berkshire Hathaway Inc. New S ,NaN,06/24/2021 07/12/2021,06/24/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019961,JT,Norfolk Southern Railway,NSC,S,11/02/2021,12/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019761,JT,Apple Inc.,AAPL,P,10/29/2021,11/04/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019761,JT,Alibaba Group Holding Limited P,NaN,P,10/18/2021,11/04/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019761,JT,Allianz SE AdR ,NaN,P,10/18/2021,11/04/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019761,JT,"Affirm Holdings, Inc.",NaN,P,10/12/2021,11/04/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019761,JT,Advanced Micro Devices,AMD,P,10/05/2021,11/04/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,berkshire Hathaway Inc. New S ,BRK.B,S,06/24/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,Coca-Cola Company (The),KO,S,06/24/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,devon Energy Corporation ,NaN,S,06/24/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,Matador Resources Company P,NaN,P,06/24/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
@@ -402,139 +366,64 @@ Gottheimer,20019076,JT,"SiteOne Landscape Supply, Inc. S",NaN,S,06/24/2021,07/12
 Gottheimer,20019076,JT,Microsoft,MSFT,P,06/22/2021,07/12/2021,"$50,001 - $100,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets AccountiD owner asset transaction Date notification amount cap.
 Gottheimer,20019076,JT,Microsoft,MSFT,S,06/22/2021,07/12/2021,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
 Gottheimer,20019076,JT,Microsoft,MSFT,S,06/22/2021,07/12/2021,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20019076,JT,Cognizant,CTSH,06/15/2021 07/12/2021,06/15/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,Cognizant,CTSH,S,06/15/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,"discovery, Inc.",NaN,S,06/15/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,"Etsy, Inc. (ETSY) [ST] S ",NaN,06/15/2021 07/12/2021,06/15/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,Ping An Insurance (PNGAY) [ST] S ,NaN,06/15/2021 07/12/2021,06/15/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,"Etsy, Inc. (ETSY) [ST] S ",NaN,S,06/15/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,Ping An Insurance (PNGAY) [ST] S ,NaN,S,06/15/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,Allianz SE AdR ,NaN,P,06/10/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,Alphabet Inc. (Class A),GOOGL,P,06/09/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,Lam Research,LRCX,P,06/09/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,"AtriCure, Inc. (ATRC) [ST] S ",NaN,06/08/2021 07/12/2021,06/08/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,"AtriCure, Inc. (ATRC) [ST] S ",NaN,S,06/08/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20019076,JT,biogen Inc. ,NaN,P,06/08/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,"boot barn Holdings, Inc. (bOOT) S ",NaN,06/08/2021 07/12/2021,06/08/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,Snap Inc. Class A (SNAP) [ST] S ,NaN,06/08/2021 07/12/2021,06/08/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,Stifel Financial Corporation (SF) S ,NaN,06/08/2021 07/12/2021,06/08/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,"Tesla, Inc.",TSLA,06/04/2021 07/12/2021,06/04/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20019076,JT,Exact Sciences Corporation S ,NaN,06/03/2021 07/12/2021,06/03/2021,07/12/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,"boot barn Holdings, Inc. (bOOT) S ",NaN,S,06/08/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,Snap Inc. Class A (SNAP) [ST] S ,NaN,S,06/08/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,Stifel Financial Corporation (SF) S ,NaN,S,06/08/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,"Tesla, Inc.",TSLA,S,06/04/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20019076,JT,Exact Sciences Corporation S ,NaN,S,06/03/2021,07/12/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,ENN Energy Holdings Ltd P,NaN,P,04/23/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,ENN Energy Holdings Ltd P,NaN,P,04/21/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,Alphabet Inc. (Class A),GOOGL,P,04/16/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,"Facebook, Inc.",NaN,P,04/16/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,"MercadoLibre, Inc. ",MELI,P,04/16/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,Alphabet Inc. (Class A),GOOGL,P,04/15/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,lululemon athletica inc. ,LULU,S,04/15/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,"dassault Systemes, S.A. American S ",NaN,S,04/13/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,diageo plc (dEO) [ST] S ,NaN,S,04/13/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1ID Owner Asset Transaction Date Notification Amount Cap.
+Gottheimer,20018699,JT,Lonza Group Ag Zuerich S ,NaN,S,04/13/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,Alphabet Inc. (Class A),GOOGL,P,04/09/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,"Lithia Motors, Inc. (LAd) [ST] S ",NaN,S,04/09/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,"Ollie's bargain Outlet Holdings, P",NaN,P,04/09/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,Central Garden & Pet Company S ,NaN,S,04/08/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018699,JT,Match Group,MTCH,S,04/07/2021,05/06/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,"CACI International, Inc. Class A S",NaN,S,03/31/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"discovery, Inc.",NaN,P,03/31/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Lam Research,LRCX,03/31/2021 04/07/2021,03/31/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Magnolia Oil & Gas Corporation P,NaN,P,03/31/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,MarketAxess,MKTX,03/31/2021 04/07/2021,03/31/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Snap Inc. Class A (SNAP) [ST] S ,NaN,03/31/2021 04/07/2021,03/31/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Estee Lauder Companies, Inc. ",EL,P,03/23/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,McKesson Corporation,MCK,P,03/23/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Norfolk Southern Railway,NSC,P,03/23/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Apple Inc.,AAPL,03/22/2021 04/07/2021,03/22/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1ID Owner Asset Transaction Date Notification Amount Cap.
-Gottheimer,20018534,JT,ASML Holding,ASML,03/22/2021 04/07/2021,03/22/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Enphase Energy,ENPH,P,03/22/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,FedEx,FDX,P,03/22/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1ID Owner Asset Transaction Date Notification Amount Cap.
-Gottheimer,20018534,JT,"SS&C Technologies Holdings, Inc. P",NaN,P,03/22/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Tesla, Inc.",TSLA,03/22/2021 04/07/2021,03/22/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,The blackstone Group Inc. Class A P,NaN,P,03/22/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018534,JT,Apple Inc.,AAPL,S,03/22/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1ID Owner Asset Transaction Date Notification Amount Cap.
+Gottheimer,20018534,JT,ASML Holding,ASML,S,03/22/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,Charles River Laboratories,CRL,P,03/17/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,MarketAxess,MKTX,03/17/2021 04/07/2021,03/17/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Morgan Stanley,MS,P,03/17/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,NVIdIA Corporation (NVdA) [ST] S ,NaN,03/17/2021 04/07/2021,03/17/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"ServiceNow, Inc. ",NOW,S,03/17/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Tapestry, Inc.",TPR,P,03/17/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,"Airbnb, Inc.",NaN,S,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,Alphabet Inc. (Class A),GOOGL,P,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,deere & Company ,NaN,P,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,HCA Healthcare,HCA,P,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"MercadoLibre, Inc. (MELI) [ST] S ",NaN,03/16/2021 04/07/2021,03/16/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Mongodb, Inc.",NaN,S,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Shopify Inc. Class A Subordinate S,NaN,S,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Twilio Inc. Class A ,NaN,S,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Twitter, Inc. ",NaN,P,03/16/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,Align Technology,ALGN,P,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Apple Inc.,AAPL,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,ASML Holding,ASML,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Elastic N.V. Ordinary Shares S,NaN,S,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Enphase Energy,ENPH,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Etsy, Inc. ",NaN,P,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Freeport,NaN,P,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,lululemon athletica inc. (LULU) S ,NaN,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Moderna, Inc. (MRNA) [ST] S ",NaN,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,NVIdIA Corporation (NVdA) [ST] S ,NaN,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,QUALCOMM Incorporated S ,QCOM,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1ID Owner Asset Transaction Date Notification Amount Cap.
-Gottheimer,20018534,JT,"Roku, Inc.",NaN,P,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Square, Inc. Class A (SQ) [ST] S ",NaN,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,SVb Financial Group ,NaN,P,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Synopsys, Inc. (SNPS) [ST] S ",NaN,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Tesla, Inc.",TSLA,03/15/2021 04/07/2021,03/15/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018534,JT,Apple Inc.,AAPL,S,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018534,JT,ASML Holding,ASML,S,03/15/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,Carvana Co. Class A ,NaN,P,03/12/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Wayfair Inc. Class A ,NaN,P,03/12/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Zillow Group, Inc. ",NaN,03/12/2021 04/07/2021,03/12/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,S&P Global,SPGI,S,03/11/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"Tesla, Inc.",TSLA,03/10/2021 04/07/2021,03/10/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Rogers Corporation ,NaN,S,03/09/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Allegiant Travel Company (ALGT) S ,NaN,03/08/2021 04/07/2021,03/08/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018534,JT,Allegiant Travel Company (ALGT) S ,NaN,S,03/08/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,bHP Group Limited American P,NaN,P,03/08/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,"dominion Energy, Inc. ",NaN,P,03/08/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,adidas AG Sponsored AdR S,NaN,S,03/05/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018534,JT,bHP Group Limited American P,NaN,P,03/05/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,devon Energy Corporation (dVN) S ,NaN,03/04/2021 04/07/2021,03/04/2021,04/07/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Magnolia Oil & Gas Corporation P,NaN,P,03/04/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Veeva Systems Inc. Class A ,NaN,S,03/04/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018534,JT,Home Depot (The),HD,S,03/01/2021,04/07/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,OceanFirst Financial Corp. ,NaN,P,02/26/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1iD owner asset transaction Date notification amount cap.
-Gottheimer,20018333,JT,"Proofpoint, Inc. (PFPT) [ST] S ",NaN,02/26/2021 03/05/2021,02/26/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Silicon Laboratories, Inc. (SLAb) S ",NaN,02/26/2021 03/05/2021,02/26/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Alibaba Group Holding Limited S ,NaN,02/25/2021 03/05/2021,02/25/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1iD owner asset transaction Date notification amount cap.
-Gottheimer,20018333,JT,Microsoft,MSFT,02/25/2021 03/05/2021,02/25/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Mongodb, Inc.",NaN,P,02/25/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Netflix, Inc.",NFLX,02/25/2021 03/05/2021,02/25/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Ollie's bargain Outlet Holdings, S ",NaN,02/25/2021 03/05/2021,02/25/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"HubSpot, Inc. ",NaN,P,02/24/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Roper Technologies,ROP,S,02/24/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Twilio Inc. Class A ,NaN,P,02/24/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Alibaba Group Holding Limited S ,NaN,02/23/2021 03/05/2021,02/23/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018333,JT,Alibaba Group Holding Limited S ,NaN,S,02/25/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1iD owner asset transaction Date notification amount cap.
+Gottheimer,20018333,JT,Alibaba Group Holding Limited S ,NaN,S,02/23/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,"Cree, Inc. ",NaN,P,02/23/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Emergent biosolutions, Inc. (EbS) S ",NaN,02/23/2021 03/05/2021,02/23/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Equinix, Inc. ",EQIX,S,02/23/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Home Depot (The),HD,02/23/2021 03/05/2021,02/23/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Intuitive Surgical,ISRG,02/23/2021 03/05/2021,02/23/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Morgan Stanley,MS,P,02/23/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,The blackstone Group Inc. Class A P,NaN,P,02/23/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Zillow Group, Inc. ",NaN,P,02/23/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,booking Holdings Inc. ,NaN,P,02/22/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,WillScot Mobile Mini Holdings S,NaN,S,02/22/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,Alphabet Inc. (Class A),GOOGL,P,02/17/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Shopify Inc. Class A Subordinate P,NaN,P,02/17/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,"Airbnb, Inc.",NaN,P,02/16/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Alibaba Group Holding Limited S ,NaN,02/16/2021 03/05/2021,02/16/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018333,JT,Alibaba Group Holding Limited S ,NaN,S,02/16/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,"boston beer Company, Inc. ",NaN,P,02/16/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Freeport,NaN,P,02/16/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"MercadoLibre, Inc. ",MELI,P,02/16/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,"Tapestry, Inc.",TPR,P,02/16/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Uber,UBER,P,02/16/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,GrubHub Inc. ,NaN,S,02/12/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Microsoft,MSFT,P,02/12/2021,03/05/2021,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,S,02/12/2021,03/05/2021,"$1,000,001 - $5,000,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,S,02/12/2021,03/05/2021,"$250,001 - $500,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,S,02/12/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,S,02/12/2021,03/05/2021,"$1,000,001 - $5,000,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,P,02/12/2021,03/05/2021,"$1,000,001 - $5,000,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,P,02/12/2021,03/05/2021,"$1,000,001 - $5,000,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,P,02/12/2021,03/05/2021,"$250,001 - $500,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Microsoft,MSFT,S (partial),02/12/2021,03/05/2021,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Portfolio Management Active Assets Account
-Gottheimer,20018333,JT,Salesforce.com Inc ,CRM,S,02/12/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,Altria,MO,S,02/11/2021,03/05/2021,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Philip Morris International,PM,S,02/11/2021,03/05/2021,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,S&P Global,SPGI,02/10/2021 03/05/2021,02/10/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Air Products,APD,02/09/2021 03/05/2021,02/09/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
+Gottheimer,20018333,JT,Air Products,APD,S,02/09/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,Charles River Laboratories,CRL,P,02/09/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Home Depot (The),HD,02/09/2021 03/05/2021,02/09/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,lululemon athletica inc. (LULU) S ,NaN,02/09/2021 03/05/2021,02/09/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,WillScot Mobile Mini Holdings S ,NaN,02/08/2021 03/05/2021,02/08/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,Ally Financial Inc. ,NaN,P,02/05/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
 Gottheimer,20018333,JT,CoStar Group,CSGP,S,02/05/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Gottheimer,20018333,JT,"darden Restaurants, Inc. ",NaN,P,02/05/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
-Gottheimer,20018333,JT,Performance Food Group P,NaN,P,02/05/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
-Gottheimer,20018333,JT,Lukoil Co Sponsored AdR P,NaN,P,02/04/2021,03/05/2021,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMA Account # 1
-Gottheimer,20018333,JT,Linde plc,LIN,02/03/2021 03/05/2021,02/03/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1iD owner asset transaction Date notification amount cap.
-Gottheimer,20018333,JT,Taiwan Semiconductor S ,NaN,02/03/2021 03/05/2021,02/03/2021,03/05/2021,-,New,Subholding of: Morgan Stanley - Select UMA Account # 1
 Green,20018586,JT,DOGE Coin [OT] P,NaN,P,04/14/2021,04/14/2021,"$1,001 - $15,000",New,Crypto
 Green,20018586,JT,EOS [OT] P,NaN,P,04/13/2021,04/13/2021,"$1,001 - $15,000",New,Crypto
 Green,20018586,JT,Ethereum Classic [OT] P,NaN,P,04/13/2021,04/13/2021,"$1,001 - $15,000",New,Crypto
@@ -599,7 +488,6 @@ Grijalva,20019091,SP,SPDR Gold Trust ,NaN,S,08/25/2020,07/14/2021,"$1,001 - $15,
 Grijalva,20019091,SP,SPDR Gold Trust ,NaN,P,05/14/2020,07/14/2021,"$1,001 - $15,000",New,Purchase amount was $1630.59
 Guest,20019676,SP,bP p.l.c. ,NaN,S,01/22/2021,10/22/2021,"$1,001 - $15,000",New,Subholding of: KINV - CP
 Guest,20019676,SP,Exxon Mobil Corporation ,XOM,P,01/22/2021,10/22/2021,"$1,001 - $15,000",New,Subholding of: KINV - CP
-Hern,20019762,JT,"Pioneer Natural Resources P 10/20/2021 10/21/2021 $100,001",NaN,Transaction,Date,Notification,Amount,New,Subholding of: Hern Family Foundation
 Hern,20018029,JT,Williams Companies,WMB,P,12/28/2020,12/29/2020,"$1,001 - $15,000",New,Dividend Reinvestment
 Hern,20018029,JT,Home Depot (The),HD,P,12/17/2020,12/18/2020,"$1,001 - $15,000",New,Dividend Reinvestment
 Hern,20018029,JT,Exxon Mobil Corporation ,XOM,P,12/10/2020,12/11/2020,"$1,001 - $15,000",New,Dividend Reinvestment
@@ -611,9 +499,7 @@ Hern,20019762,JT,Fidelity National Information Services,FIS,P,10/20/2021,10/21/2
 Hern,20019762,JT,Illinois Tool Works,ITW,P,10/20/2021,10/21/2021,"$15,001 - $50,000",New,Subholding of: Hern Family Foundation
 Hern,20019762,JT,lockheed Martin Corporation,NaN,P,10/20/2021,10/21/2021,"$50,001 - $100,000",New,Subholding of: Hern Family Foundation
 Hern,20019762,JT,O'Reilly Automotive,ORLY,P,10/20/2021,10/21/2021,"$15,001 - $50,000",New,Subholding of: Hern Family Foundation
-Hern,20019762,JT,Visa Inc.,V,P,10/20/2021,10/21/2021,"$50,001 - $100,000",New,Subholding of: Hern Family Foundation
 Hern,20019762,JT,FS ENERgY & POWER FuND P,NaN,P,10/15/2021,10/16/2021,"$1,001 - $15,000",New,Dividend ReinvestID Owner Asset Transaction Date Notification Amount Cap.
-Hern,20019762,JT,Pioneer Natural Resources P,NaN,P,10/14/2021,10/15/2021,"$1,001 - $15,000",New,Dividend Reinvest
 Hern,20019762,JT,INlAND REAl ESTATE TR [PS] P,NaN,P,10/07/2021,10/08/2021,"$1,001 - $15,000",New,Dividend Reinvest
 Hern,20019762,JT,iShares TIPS bond ETF ,NaN,P,10/07/2021,10/08/2021,"$1,001 - $15,000",New,Dividend Reinvest
 Hern,20019762,JT,iShares TIPS bond ETF ,NaN,P,10/07/2021,10/08/2021,"$1,001 - $15,000",New,Dividend Reinvest
@@ -627,23 +513,20 @@ Hern,20018550,JT,Exxon Mobil Corporation ,XOM,P,03/10/2021,03/11/2021,"$1,001 - 
 Hern,20018232,JT,AllianzgI Artificial Intelligence & P,NaN,P,01/11/2021,01/12/2021,"$1,001 - $15,000",New,Dividend Reinvestment
 Hern,20018232,JT,FS KKR Capital Corp. II ,NaN,P,01/11/2021,01/12/2021,"$1,001 - $15,000",New,Dividend Reinvestment
 Hern,20018232,JT,FS Energy & Power Fund [PS] P,NaN,P,01/05/2021,01/06/2021,"$1,001 - $15,000",New,Dividend Reinvestment
-Hill,20018570,DC,1,NaN,Payne,Hill,Brokerage,(Owner:,,
 Hill,20018570,DC,"Tesla, Inc.",TSLA,P,04/08/2021,04/08/2021,"$1,001 - $15,000",New,6 SHARES TSLA
-Jeffries,20018555,JT,REgL [OT] S ,NaN,03/15/2021 03/17/2021,03/15/2021,03/17/2021,-,New,This asset is an ETF.
+Jeffries,20018555,JT,REgL [OT] S ,NaN,S,03/15/2021,03/17/2021,"$1,001 - $15,000",New,This asset is an ETF.
 Joyce,20019546,SPDR,MidCap Trust Series I P,NaN,P,09/14/2021,09/30/2021,"$1,001 - $15,000",New,Subholding of: DPJ & KAJ joint account
 Joyce,20018692,SPDR,S&P Global,SPGI,P,06/08/2020,05/05/2021,"$1,001 - $15,000",New,Subholding of: DPJ & KAJ joint account
 Joyce,20018692,SPDR,S&P Global,SPGI,P,06/08/2020,05/05/2021,"$1,001 - $15,000",New,Subholding of: David P. Joyce QSST Trust
 Joyce,20018692,SPDR,S&P Global,SPGI,P,03/11/2020,05/05/2021,"$1,001 - $15,000",New,Subholding of: DPJ & KAJ joint account
-Lee,20018701,JT,St. Joe Company (JOE) [ST] S ,NaN,Transaction,Date,Notification,Amount,New,Subholding of: DSL Living Trust > Fidelity Investments Brokerage Account
-Lee,20018168,JT,"Fortinet, Inc. ",FTNT,transaction,Date,notification,amount,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019743,JT,"Rackspace Technology, Inc. ",NaN,S,10/14/2021,11/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019647,JT,Howard Hughes Corporation S,NaN,S,10/13/2021,10/18/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019647,JT,"CommScope Holding Company, S",NaN,S,10/06/2021,10/18/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019513,JT,Avaya Holdings Corp. ,NaN,S,09/15/2021,09/22/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019513,JT,Realogy Holdings Corp. ,NaN,S,09/15/2021,09/22/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20019513,JT,Avaya Holdings Corp. (AVYA) [ST] S ,NaN,09/14/2021 09/22/2021,09/14/2021,09/22/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019513,JT,Avaya Holdings Corp. (AVYA) [ST] S ,NaN,S,09/14/2021,09/22/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019513,JT,goDaddy Inc. Class A ,NaN,S,09/14/2021,09/22/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20019513,JT,Realogy Holdings Corp. (RLgY) S ,NaN,09/14/2021 09/22/2021,09/14/2021,09/22/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019513,JT,Realogy Holdings Corp. (RLgY) S ,NaN,S,09/14/2021,09/22/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019426,JT,"Black Knight, Inc. ",NaN,P,08/20/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019426,JT,Booz Allen Hamilton Holding P,NaN,P,08/20/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019426,JT,Bright Horizons Family Solutions P,NaN,P,08/20/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
@@ -651,11 +534,11 @@ Lee,20019426,JT,"Churchill Downs, Incorporated P",NaN,P,08/20/2021,09/01/2021,"$
 Lee,20019426,JT,ON Semiconductor Corporation P,ON,P,08/20/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019426,JT,"Shift4 Payments, Inc. Class A P",NaN,P,08/20/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019426,JT,Victorias Secret & Co. ,NaN,S,08/20/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20019426,JT,Builders FirstSource,BLDR,08/17/2021 09/01/2021,08/17/2021,09/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20019426,JT,Carrier Global,CARR,08/17/2021 09/01/2021,08/17/2021,09/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019426,JT,Builders FirstSource,BLDR,S,08/17/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019426,JT,Carrier Global,CARR,S,08/17/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019426,JT,Dell Technologies,DELL,S,08/17/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20019426,JT,Realogy Holdings Corp. (RLgY) S ,NaN,08/17/2021 09/01/2021,08/17/2021,09/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20019426,JT,Live Nation Entertainment,LYV,08/06/2021 09/01/2021,08/06/2021,09/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019426,JT,Realogy Holdings Corp. (RLgY) S ,NaN,S,08/17/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019426,JT,Live Nation Entertainment,LYV,S,08/06/2021,09/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019238,JT,"XPO Logistics, Inc. ",NaN,S,07/27/2021,08/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019238,JT,NortonLifeLock Inc. ,NaN,S,07/14/2021,08/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019238,JT,Ball Corporation,BALL,P,07/13/2021,08/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
@@ -671,61 +554,74 @@ Lee,20019238,JT,"Churchill Downs, Incorporated P",NaN,P,07/07/2021,08/01/2021,"$
 Lee,20019238,JT,Constellation Brands,STZ,S,07/07/2021,08/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019238,JT,Crown Castle,CCI,P,07/07/2021,08/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20019238,JT,Live Nation Entertainment,LYV,P,07/07/2021,08/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Caesars Entertainment,CZR,P,06/28/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Carrier Global,CARR,P,06/28/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Baker Hughes,BKR,S,06/23/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Ball Corporation,BALL,P,06/23/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340ID Owner Asset Transaction Date Notification Amount Cap.
+Lee,20019023,JT,"Black Knight, Inc. ",NaN,P,06/23/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Caesars Entertainment,CZR,P,06/23/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Arthur J. Gallagher & Co.,AJG,P,06/21/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,"Ameresco, Inc. Class A ",NaN,S,06/17/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,"Black Knight, Inc. ",NaN,P,06/17/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Ally Financial Inc. ,NaN,P,06/15/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,AgCO Corporation ,NaN,S,06/10/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Ball Corporation,BALL,P,06/10/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,"Black Knight, Inc. ",NaN,P,06/10/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,"Camping World Holdings, Inc. S",NaN,S,06/10/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20019023,JT,Cadence Design Systems,CDNS,S,06/09/2021,07/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"CommScope Holding Company, P",NaN,P,05/27/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"Dine Brands global, Inc. ",NaN,S,05/27/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,AdaptHealth Corp.,NaN,P,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"Allegro MicroSystems, Inc. S",NaN,S,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Bally's Corporation ,NaN,S,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Bright Horizons Family Solutions P,NaN,P,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Caesars Entertainment,CZR,P,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Carrier Global,CARR,P,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"Chegg, Inc. ",NaN,S,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Clarivate Plc Ordinary Shares P,NaN,P,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"CommScope Holding Company, P",NaN,P,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"Dine Brands global, Inc. (DIN) S ",NaN,S,05/26/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Advanced Micro Devices,AMD,S,05/21/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"Brooks Automation, Inc. ",BRK.B,S,05/21/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Constellation Brands,STZ,S,05/18/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,AgCO Corporation ,NaN,P,05/14/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Bright Horizons Family Solutions P,NaN,P,05/14/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340ID Owner Asset Transaction Date Notification Amount Cap.
+Lee,20018866,JT,Builders FirstSource,BLDR,P,05/14/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Caesars Entertainment,CZR,P,05/14/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"Camping World Holdings, Inc. P",NaN,P,05/14/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,Carrier Global,CARR,P,05/14/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"Churchill Downs, Incorporated P",NaN,P,05/14/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018866,JT,"CDK global, Inc. ",NaN,S,05/11/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340ID Owner Asset Transaction Date Notification Amount Cap.
+Lee,20018866,JT,Centene Corporation,CNC,S,05/11/2021,06/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018701,JT,"L Brands, Inc. ",NaN,P,04/26/2021,05/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018701,JT,Molson Coors Beverage Company,TAP,P,04/26/2021,05/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018701,JT,SCIENCE APPLICATIONS S,NaN,S,04/26/2021,05/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018701,JT,Marvell Technology,MRVL,E,04/21/2021,05/01/2021,$1.00,New,Shares held in Marvell Technology group Ltd. were exchanged for an equivalent number of shares in Marvell
-Lee,20018701,JT,Service Corporation International S ,NaN,04/14/2021 05/01/2021,04/14/2021,05/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018701,JT,"Teradyne, Inc. ",TER,P,04/01/2021,05/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,CDW Corporation,CDW,01/28/2021 02/01/2021,01/28/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018701,JT,Service Corporation International S ,NaN,S,04/14/2021,05/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,CDW Corporation,CDW,S,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,CrowdStrike,CRWD,P,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Dell Technologies,DELL,01/28/2021 02/01/2021,01/28/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,Dell Technologies,DELL,S,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,Dollar General,DG,P,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,grocery Outlet Holding Corp. (gO) S ,NaN,01/28/2021 02/01/2021,01/28/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,MarketAxess,MKTX,P,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"Mattel, Inc. ",NaN,P,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,The AZEK Company Inc. Class A P,NaN,P,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"Zillow group, Inc. ",NaN,P,01/28/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,AdaptHealth Corp.,NaN,P,01/22/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,The AZEK Company Inc. Class A P,NaN,P,01/22/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Roper Technologies,ROP,S,01/15/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340iD owner asset transaction Date notification amount cap.
-Lee,20018168,JT,"Vertiv Holdings, LLC Class A P",NaN,P,01/15/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Vontier Corporation ,NaN,P,01/15/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,"CACI International, Inc. Class A S",NaN,S,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,ChampionX Corporation ,NaN,P,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,Digital Realty,DLR,S,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340iD owner asset transaction Date notification amount cap.
 Lee,20018168,JT,Duke Energy,DUK,S,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,"Fiserv, Inc. ",NaN,S,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,"FleetCor Technologies, Inc. ",NaN,P,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"Leslie's, Inc. ",NaN,P,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,The goodyear Tire & Rubber P,NaN,P,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"Vertiv Holdings, LLC Class A P",NaN,P,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Vontier Corporation ,NaN,P,01/13/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340iD owner asset transaction Date notification amount cap.
-Lee,20018168,JT,Ball Corporation,BALL,01/12/2021 02/01/2021,01/12/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"CACI International, Inc. Class A S ",NaN,01/12/2021 02/01/2021,01/12/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340iD owner asset transaction Date notification amount cap.
+Lee,20018168,JT,Ball Corporation,BALL,S,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,"CACI International, Inc. Class A S ",NaN,S,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340iD owner asset transaction Date notification amount cap.
 Lee,20018168,JT,ChampionX Corporation ,NaN,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Digital Realty,DLR,01/12/2021 02/01/2021,01/12/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,Digital Realty,DLR,S,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,Discover Financial,DFS,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Duke Energy,DUK,01/12/2021 02/01/2021,01/12/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"Fiserv, Inc. (FISV) [ST] S ",NaN,01/12/2021 02/01/2021,01/12/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"Leslie's, Inc. ",NaN,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Realogy Holdings Corp. ,NaN,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,The goodyear Tire & Rubber P,NaN,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"Wesco Aircraft Holdings, Inc. P",NaN,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Westrock Company ,NaN,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Williams ,NaN,P,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Williams ,NaN,P,01/11/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,IHS Markit Ltd. Common Shares S,NaN,S,01/08/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Service Properties Trust,NaN,P,01/08/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,Duke Energy,DUK,S,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,"Fiserv, Inc. (FISV) [ST] S ",NaN,S,01/12/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,ChampionX Corporation ,NaN,P,01/07/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Howard Hughes Corporation P,NaN,P,01/07/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,"WESCO International, Inc. ",NaN,P,01/07/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,Change Healthcare Inc. ,NaN,S,01/06/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,AdaptHealth Corp.,NaN,P,01/05/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Bio,NaN,01/05/2021 02/01/2021,01/05/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,Bio,NaN,S,01/05/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lee,20018168,JT,ChampionX Corporation ,NaN,P,01/05/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,Ecolab,ECL,01/05/2021 02/01/2021,01/05/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
-Lee,20018168,JT,T-Mobile US,TMUS,01/05/2021 02/01/2021,01/05/2021,02/01/2021,-,New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
+Lee,20018168,JT,Ecolab,ECL,S,01/05/2021,02/01/2021,"$1,001 - $15,000",New,Subholding of: DSL Living Trust > Bank of New York Brokerage Account 340
 Lofgren,20019744,SP,"Amazon.com, Inc. ",AMZN,S,10/15/2021,11/03/2021,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
 Lofgren,20019744,SP,Home Depot (The),HD,S,10/13/2021,11/03/2021,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
 Lofgren,20019744,JT,"Lucid group, Inc. ",NaN,P,10/13/2021,11/03/2021,"$1,001 - $15,000",New,Subholding of: Collins/Lofgren Family Trust
@@ -734,31 +630,31 @@ Lofgren,20019744,SP,Walmart,WMT,S,10/13/2021,11/03/2021,"$1,001 - $15,000",New,S
 Lofgren,20019744,SP,"Caterpillar, Inc. ",CAT,P,10/05/2021,11/03/2021,"$1,001 - $15,000",New,Corporate bond
 Lofgren,20019744,SP,Wells Fargo,WFC,P,10/05/2021,11/03/2021,"$1,001 - $15,000",New,Corporate Bond
 Lowenthal,20020099,SP,Booking Holdings,BKNG,S,12/15/2021,12/25/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
-Lowenthal,20020099,SP,iShares Russell 2000 Value ETF S ,NaN,12/15/2021 12/25/2021,12/15/2021,12/25/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20020099,SP,iShares Russell 2000 Value ETF S ,NaN,S,12/15/2021,12/25/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20020098,SP,Adobe Inc.,ADBE,S,12/15/2021,12/25/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20020098,SP,Booking Holdings,BKNG,S,12/15/2021,12/25/2021,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20020098,SP,iShares Russell 2000 Value ETF S,NaN,S (partial),12/15/2021,12/25/2021,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20020097,JT,Adobe Inc.,ADBE,S,12/15/2021,12/25/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
 Lowenthal,20020097,JT,Booking Holdings,BKNG,S,12/15/2021,12/25/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
-Lowenthal,20020097,JT,iShares Russell 2000 Value ETF S ,NaN,12/15/2021 12/25/2021,12/15/2021,12/25/2021,-,New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
+Lowenthal,20020097,JT,iShares Russell 2000 Value ETF S ,NaN,S,12/15/2021,12/25/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
 Lowenthal,20018667,SP,Fidelity National Information Services,FIS,S,12/03/2019,05/06/2021,"$15,001 - $50,000",New,Maturation Date: 08/15/21; Percentage Yield: 2.25%ID Owner Asset Transaction Date Notification Amount Cap.
 Lowenthal,20018667,SP,Lennar,LEN,S,11/24/2020,05/06/2021,"$15,001 - $50,000",New,Maturation Date: 04/01/21; Percentage Yield: 4.75%
 Lowenthal,20019896,SP,"LegalZoom.com, Inc. ",NaN,S,11/11/2021,11/18/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019852,SP,Service Corporation International S ,NaN,11/10/2021 11/17/2021,11/10/2021,11/17/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019852,SP,Service Corporation International S ,NaN,11/10/2021 11/17/2021,11/10/2021,11/17/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019852,SP,Service Corporation International S ,NaN,11/09/2021 11/16/2021,11/09/2021,11/16/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019852,SP,Service Corporation International S ,NaN,11/08/2021 11/15/2021,11/08/2021,11/15/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019852,SP,Service Corporation International S ,NaN,S,11/10/2021,11/17/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019852,SP,Service Corporation International S ,NaN,S,11/10/2021,11/17/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019852,SP,Service Corporation International S ,NaN,S,11/09/2021,11/16/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019852,SP,Service Corporation International S ,NaN,S,11/08/2021,11/15/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019829,SP,Deckers Brands,DECK,P,11/04/2021,11/12/2021,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019795,JT,Hyatt hotels Corp [CS] P,NaN,P,11/03/2021,11/10/2021,"$1,001 - $15,000",New,Maturity date is 10/01/2023 and interest rate is 1.30%.
 Lowenthal,20019776,JT,Booking Holdings,BKNG,S,10/29/2021,11/06/2021,"$1,001 - $15,000",New,"Interest is 2.75%, maturity date is 3/15/23."
 Lowenthal,20019777,SP,Blackstone Inc.,BX,S (partial),10/21/2021,11/06/2021,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019777,SP,Intercontinental Exchange,ICE,10/21/2021 11/06/2021,10/21/2021,11/06/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019777,SP,Intercontinental Exchange,ICE,S,10/21/2021,11/06/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019777,SP,Thermo Fisher Scientific,TMO,P,10/19/2021,11/06/2021,"$15,001 - $50,000",New,"Interest is 1.215%, maturity date is 10/18/24."
 Lowenthal,20019638,JT,Deckers Brands,DECK,P,10/06/2021,10/13/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
 Lowenthal,20018667,SP,Bank of America,BAC,S,10/01/2020,05/03/2021,"$1,001 - $15,000",New,Maturation Date: 10/01/21; Percentage Yield 2.328%
 Lowenthal,20019596,JT,Hyatt Hotels Corp Note [CS] P,NaN,P,09/28/2021,10/05/2021,"$1,001 - $15,000",New,"Maturity date is 10/01/2023, interest rate is 1.299%"
 Lowenthal,20019595,SP,Hyatt Hotels Corp Note [CS],NaN,P,09/27/2021,10/04/2021,"$15,001 - $50,000",New,"Maturity date is 10/01/2023, interest rate is 1.30%"
-Lowenthal,20019570,SP,"BlackRock, Inc. (BLK) [ST] S ",NaN,09/17/2021 09/24/2021,09/17/2021,09/24/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019570,SP,"BlackRock, Inc. (BLK) [ST] S ",NaN,S,09/17/2021,09/24/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019796,SP,VMWare Inc Note [CS],NaN,P,09/10/2021,11/08/2021,"$15,001 - $50,000",New,"Interest rate is 1.40%, maturity date is 08/15/2026"
 Lowenthal,20019483,SP,VMWare Inc [CS],NaN,P,09/08/2021,09/13/2021,"$15,001 - $50,000",New,"Maturity date is 08/15/2026, interest rate is 1.40%"
 Lowenthal,20019483,SP,T Mobile uSA [CS],NaN,P,08/24/2021,08/31/2021,"$15,001 - $50,000",New,"Maturity date is 02/15/2026, interest rate is 2.25%"
@@ -771,17 +667,17 @@ Lowenthal,20019481,JT,general Motors Company ,NaN,S,08/23/2021,08/30/2021,"$1,00
 Lowenthal,20019402,SP,"LegalZoom.com, Inc. ",NaN,P,08/16/2021,08/23/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019402,SP,"LegalZoom.com, Inc. ",NaN,P,08/13/2021,08/20/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019403,SP,Kraft Heinz,KHC,P,08/10/2021,08/17/2021,"$1,001 - $15,000",New,"Maturity date is 06/01/2026, interest rate is 3.00%"
-Lowenthal,20019309,SP,Boston Scientific,BSX,08/06/2021 08/11/2021,08/06/2021,08/11/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019309,SP,Boston Scientific,BSX,S,08/06/2021,08/11/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019309,SP,deckers Outdoor Corporation P,NaN,P,08/05/2021,08/11/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019309,SP,deckers Outdoor Corporation P,NaN,P,08/04/2021,08/11/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019309,SP,Boston Scientific,BSX,08/03/2021 08/10/2021,08/03/2021,08/10/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019309,SP,Boston Scientific,BSX,08/03/2021 08/10/2021,08/03/2021,08/10/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019309,SP,Boston Scientific,BSX,08/03/2021 08/03/2021,08/03/2021,08/03/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019309,SP,Boston Scientific,BSX,08/03/2021 08/10/2021,08/03/2021,08/10/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019309,SP,Boston Scientific,BSX,S,08/03/2021,08/10/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019309,SP,Boston Scientific,BSX,S,08/03/2021,08/10/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019309,SP,Boston Scientific,BSX,S,08/03/2021,08/03/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20019309,SP,Boston Scientific,BSX,S,08/03/2021,08/10/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019309,SP,deckers Outdoor Corporation P,NaN,P,08/02/2021,08/09/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20018667,SP,CBS OUTDOOR AMERS CAP LLC,NaN,S,07/31/2020,05/06/2021,"$15,001 - $50,000",New,"Maturity date is 2/15/2024, interest rate is 5.625%"
 Lowenthal,20019253,SP,Deckers Brands,DECK,P,07/30/2021,08/06/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20019100,JT,SPDR S&P Regional Banking ETF S ,NaN,07/08/2021 07/15/2021,07/08/2021,07/15/2021,-,New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
+Lowenthal,20019100,JT,SPDR S&P Regional Banking ETF S ,NaN,S,07/08/2021,07/15/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
 Lowenthal,20019098,SP,SPDR S&P Regional Banking ETF,NaN,S,07/08/2021,07/15/2021,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20019096,SP,SPDR S&P Regional Banking ETF S,NaN,S,07/08/2021,07/15/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
 Lowenthal,20019098,SP,"uber Technologies, Inc. ",NaN,P,07/07/2021,07/14/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
@@ -821,9 +717,9 @@ Lowenthal,20018185,SP,Boston Scientific,BSX,P,02/02/2021,02/09/2021,$330.51,New,
 Lowenthal,20018187,SP,Boston Scientific,BSX,P,02/01/2021,02/08/2021,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20018186,JT,Boston Scientific,BSX,P,02/01/2021,02/08/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
 Lowenthal,20018185,SP,Boston Scientific,BSX,P,02/01/2021,02/08/2021,$860.95,New,Subholding of: Neuberger Berman - Beneficiary IRA
-Lowenthal,20018447,SP,Zimmer Biomet,ZBH,01/27/2021 03/23/2021,01/27/2021,03/23/2021,-,New,"Redeemed, maturity date is 3/19/2021, interest rate was 0.988%"
+Lowenthal,20018447,SP,Zimmer Biomet,ZBH,S,01/27/2021,03/23/2021,"$1,001 - $15,000",New,"Redeemed, maturity date is 3/19/2021, interest rate was 0.988%"
 Lowenthal,20018153,SP,"Internationa Flavors & Fragrances,",NaN,P,01/27/2021,02/03/2021,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20018153,SP,"Virgin galactic Holdings, Inc. S ",NaN,01/27/2021 02/03/2021,01/27/2021,02/03/2021,-,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20018153,SP,"Virgin galactic Holdings, Inc. S ",NaN,S,01/27/2021,02/03/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20018667,SP,DraftKings Inc.,NaN,P,01/21/2020,05/03/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20018081,SP,Juniper Networks,JNPR,P,01/15/2021,01/26/2021,$36.00,New,Subholding of: Neuberger Berman - Beneficiary IRA
 Lowenthal,20018082,SP,Juniper Networks,JNPR,P,01/14/2021,01/26/2021,$598.63,New,Subholding of: Neuberger Berman - Traditional IRA
@@ -858,19 +754,17 @@ McEachin,20019878,JT,ON Semiconductor Corporation P,ON,P,11/24/2021,11/24/2021,"
 McEachin,20019873,JT,Dominion Energy,D,P,11/23/2021,11/23/2021,"$1,001 - $15,000",New,
 McKinley,20019559,JT,Broadcom,AVGO,P,09/16/2021,09/30/2021,"$15,001 - $50,000",New,Subholding of: IRA's > IRA- Spouse
 McKinley,20019559,JT,RPM International Inc. ,NaN,S,09/16/2021,09/30/2021,"$15,001 - $50,000",New,Subholding of: IRA's > IRA- Spouse
-Meuser,20019267,DC,Visa Inc.,V,Transaction,Date,Notification,Amount,New,Subholding of: Schwab DM Brokerage Account
 Meuser,20019267,DC,BP p.l.c. ,NaN,S,04/02/2020,04/02/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Brokerage Account
-Meuser,20019267,DC,Roche Holdings Ag Basel S ,NaN,04/02/2020 04/02/2020,04/02/2020,04/02/2020,-,New,Subholding of: Schwab DM Brokerage Account
+Meuser,20019267,DC,Roche Holdings Ag Basel S ,NaN,S,04/02/2020,04/02/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Brokerage Account
 Meuser,20019267,DC,The Kraft Heinz Company ,KHC,S,04/02/2020,04/02/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Brokerage Account
 Meuser,20019267,DC,BP p.l.c. ,NaN,S,03/31/2020,03/31/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
 Meuser,20019267,DC,Chubb Limited,CB,S,03/31/2020,03/31/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
 Meuser,20019267,DC,Exxon Mobil Corporation ,XOM,S,03/31/2020,03/31/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
-Meuser,20019267,DC,Microsoft,MSFT,03/31/2020 03/31/2020,03/31/2020,03/31/2020,-,New,Subholding of: Schwab JM Brokerage Account
-Meuser,20019267,DC,Norfolk Southern Railway,NSC,03/31/2020 03/31/2020,03/31/2020,03/31/2020,-,New,Subholding of: Schwab JM Brokerage Account
+Meuser,20019267,DC,Microsoft,MSFT,S,03/31/2020,03/31/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
+Meuser,20019267,DC,Norfolk Southern Railway,NSC,S,03/31/2020,03/31/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
 Meuser,20019267,DC,Nucor,NUE,S,03/31/2020,03/31/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
 Meuser,20019267,DC,Alphabet Inc. (Class A),GOOGL,P,03/30/2020,03/30/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Brokerage Account
 Meuser,20019267,DC,Microsoft,MSFT,P,03/30/2020,03/30/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Brokerage Account
-Meuser,20019267,DC,Walt Disney Company (The),DIS,P,03/30/2020,03/30/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Brokerage Account
 Meuser,20019267,DC,Alphabet Inc. (Class A),GOOGL,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Trust I
 Meuser,20019267,DC,Alphabet Inc. (Class A),GOOGL,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Trust II
 Meuser,20019267,DC,Alphabet Inc. (Class A),GOOGL,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
@@ -884,16 +778,6 @@ Meuser,20019267,DC,Microsoft,MSFT,P,03/26/2020,03/26/2020,"$15,001 - $50,000",Ne
 Meuser,20019267,DC,Microsoft,MSFT,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
 Meuser,20019267,DC,Microsoft,MSFT,P,03/26/2020,03/26/2020,"$15,001 - $50,000",New,Subholding of: Schwab DM Trust II
 Meuser,20019267,DC,Microsoft,MSFT,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Trust I
-Meuser,20019267,DC,Visa Inc.,V,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Trust I
-Meuser,20019267,DC,Visa Inc.,V,P,03/26/2020,03/26/2020,"$15,001 - $50,000",New,Subholding of: Schwab DM Trust II
-Meuser,20019267,DC,Visa Inc.,V,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Brokerage Account
-Meuser,20019267,SP,Visa Inc.,V,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab Brokerage Account
-Meuser,20019267,DC,Visa Inc.,V,P,03/26/2020,03/26/2020,"$15,001 - $50,000",New,Subholding of: Schwab JM Trust II
-Meuser,20019267,DC,Visa Inc.,V,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Trust I
-Meuser,20019267,DC,Walt Disney Company (The),DIS,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab JM Trust I
-Meuser,20019267,DC,Walt Disney Company (The),DIS,P,03/26/2020,03/26/2020,"$15,001 - $50,000",New,Subholding of: Schwab JM Trust II
-Meuser,20019267,DC,Walt Disney Company (The),DIS,P,03/26/2020,03/26/2020,"$15,001 - $50,000",New,Subholding of: Schwab DM Trust IIID Owner Asset Transaction Date Notification Amount Cap.
-Meuser,20019267,DC,Walt Disney Company (The),DIS,P,03/26/2020,03/26/2020,"$1,001 - $15,000",New,Subholding of: Schwab DM Trust I
 Moulton,20019142,SP,Spencer Stuart SSMC N.V. Class B,NaN,S,02/26/2021,02/26/2021,"$100,001 - $250,000",New,"Return of 2,056 shares of stock to former employer upon change of employment."
 Newman,20019971,SP,Apple Inc.,AAPL,S,11/26/2021,12/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
 Newman,20019971,SP,Salesforce.com Inc ,CRM,P,11/24/2021,12/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
@@ -953,10 +837,40 @@ Newman,20018891,SP,bowX Acquisition Corp.,NaN,S,05/20/2021,06/02/2021,"$1,001 - 
 Newman,20018891,SP,"Tesla, Inc.",TSLA,S,04/30/2021,06/02/2021,"$1,001 - $15,000",New,Call
 Newman,20018891,SP,"Tesla, Inc.",TSLA,P,04/30/2021,06/02/2021,"$50,001 - $100,000",New,Subholding of: Rollover IRA
 Newman,20018891,SP,"under Armour, Inc. Class C ",NaN,S,04/30/2021,06/02/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,Johnson & Johnson,JNJ,S,04/23/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,Coca-Cola Company (The),KO,P,04/19/2021,05/04/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,bowX Acquisition Corp.,NaN,P,04/16/2021,05/04/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,"Coinbase global, Inc.",NaN,P,04/16/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,"Coinbase global, Inc.",NaN,S,04/16/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRAID Owner Asset Transaction Date Notification Amount Cap.
+Newman,20018702,SP,"goPro, Inc.",NaN,P,04/16/2021,05/04/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,"Metlife, Inc. ",MET,S,04/16/2021,05/04/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,Johnson & Johnson,JNJ,P,04/13/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,FedEx,FDX,S,04/09/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,"goPro, Inc.",NaN,P,04/09/2021,05/04/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018702,JT,"Chewy, Inc. Class A ",NaN,P,04/05/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Charles Schwab JT TEN
+Newman,20018702,JT,"Chewy, Inc. Class A ",NaN,S,04/05/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Charles Schwab JT TEN
+Newman,20018702,SP,FedEx,FDX,P,04/05/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018702,SP,FedEx,FDX,S,04/01/2021,05/04/2021,"$15,001 - $50,000",New,Subholding of: Individual 401(K)
+Newman,20018702,JT,"lemonade, Inc. ",NaN,S,04/01/2021,05/04/2021,"$1,001 - $15,000",New,Subholding of: Charles Schwab JT TEN
+Newman,20018385,JT,Carnival,CCL,S,02/16/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Charles Schwab JT TEN
+Newman,20018385,SP,"Chewy, Inc. Class A ",NaN,S,02/12/2021,03/01/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,Apple Inc.,AAPL,P,02/08/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018385,JT,Carnival,CCL,P,02/08/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Charles Schwab JT TEN
+Newman,20018385,SP,"Chewy, Inc. Class A ",NaN,P,02/08/2021,03/01/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,Apple Inc.,AAPL,P,02/05/2021,03/02/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,Carnival,CCL,S,02/05/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Individual 401(K)
+Newman,20018385,SP,"Chewy, Inc. Class A ",NaN,S,02/05/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,"Chewy, Inc. Class A ",NaN,S,02/05/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,Apple Inc.,AAPL,S,02/04/2021,03/01/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,"Chewy, Inc. Class A ",NaN,P,02/01/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,Apple Inc.,AAPL,P,01/29/2021,03/01/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,boeing Company ,NaN,S,01/29/2021,03/01/2021,"$15,001 - $50,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,"Chewy, Inc. Class A ",NaN,S,01/29/2021,03/01/2021,"$1,001 - $15,000",New,Subholding of: Rollover IRA
+Newman,20018385,SP,Alibaba group Holding limited,NaN,S,01/22/2021,03/01/2021,"$15,001 - $50,000",New,Subholding of: Individual 401(K)
 Pallone,20019319,SP,Chevron Corporation,CVX,S,08/11/2021,08/12/2021,"$1,001 - $15,000",New,Subholding of: WELLS FARGO ADVISORS: GST TRUST 1
 Pallone,20019319,SP,"Citigroup, Inc. ",C,S,08/11/2021,08/12/2021,"$1,001 - $15,000",New,Subholding of: WELLS FARGO ADVISORS: GST TRUST 1
 Pallone,20019319,SP,Dominion Energy,D,S,08/11/2021,08/12/2021,"$1,001 - $15,000",New,Subholding of: WELLS FARGO ADVISORS: GST TRUST 1
-Pallone,20019319,SP,Philip Morris International,PM,08/11/2021 08/12/2021,08/11/2021,08/12/2021,-,New,Subholding of: WELLS FARGO ADVISORS: GST TRUST 1
+Pallone,20019319,SP,Philip Morris International,PM,S,08/11/2021,08/12/2021,"$1,001 - $15,000",New,Subholding of: WELLS FARGO ADVISORS: GST TRUST 1
 Pallone,20019319,SP,Philip Morris International,PM,S,08/11/2021,08/12/2021,"$1,001 - $15,000",New,Subholding of: WELLS FARGO ADVISORS: GST TRUST 1
 Pelosi,20020106,SP,"REOF XX, llC [AB]",NaN,P,12/22/2021,12/22/2021,"$50,001 - $100,000",New,"Additional investment in llC which acquired five Courtyard by Marriott hotels located in Fairfax, VA (one),"
 Pelosi,20018011,SP,AllianceBernstein Holding l.P.,NaN,P,12/22/2020,12/22/2020,"$500,001 - $1,000,000",New,"Purchased 20,000 shares."
@@ -982,19 +896,18 @@ Pelosi,20018539,SP,Microsoft,MSFT,P,03/19/2021,03/19/2021,"$1,000,001 - $5,000,0
 Pelosi,20018539,SP,Roblox Corporation [OT],NaN,P,03/10/2021,03/10/2021,"$500,001 - $1,000,000",New,"Purchased 10,000 shares."
 Pelosi,20018355,SP,AllianceBernstein Holding l.P.,NaN,P,02/23/2021,02/23/2021,"$500,001 - $1,000,000",New,"Purchased 25,000 shares."
 Pelosi,20018355,SP,AllianceBernstein Holding l.P.,NaN,P,02/18/2021,02/18/2021,"$500,001 - $1,000,000",New,"Purchased 15,000 shares."
-Perlmutter,20020086,SP,Costco,COST,11/26/2021 12/20/2021,11/26/2021,12/20/2021,-,New,
+Perlmutter,20020086,SP,Costco,COST,S,11/26/2021,12/20/2021,"$1,001 - $15,000",New,
 Perlmutter,20020086,SP,Ford Motor Company,F,P,11/26/2021,12/20/2021,"$1,001 - $15,000",New,
 Perlmutter,20019941,SP,Ford Motor Company,F,P,11/02/2021,12/02/2021,"$1,001 - $15,000",New,
 Perlmutter,20019693,SP,"Coinbase global, Inc.",NaN,P,09/23/2021,10/19/2021,"$1,001 - $15,000",New,
-Perlmutter,20019693,SP,Berkshire Hathaway,BRK.B,09/15/2021 10/16/2021,09/15/2021,10/16/2021,-,New,
+Perlmutter,20019693,SP,Berkshire Hathaway,BRK.B,S,09/15/2021,10/16/2021,"$1,001 - $15,000",New,
 Perlmutter,20019352,SP,Alibaba group Holding limited S,NaN,S,07/07/2021,08/16/2021,"$1,001 - $15,000",New,
 Perlmutter,20019352,SP,Alphabet Inc. (Class A),GOOGL,S,07/07/2021,08/16/2021,"$1,001 - $15,000",New,
 Perlmutter,20019352,SP,"united Airlines Holdings, Inc. P",NaN,P,07/07/2021,08/16/2021,"$1,001 - $15,000",New,
 Perlmutter,20019352,SP,Berkshire Hathaway,BRK.B,P,06/16/2021,07/19/2021,"$1,001 - $15,000",New,
-Perlmutter,20019352,SP,Alibaba group Holding limited S ,NaN,06/14/2021 07/19/2021,06/14/2021,07/19/2021,-,New,
+Perlmutter,20019352,SP,Alibaba group Holding limited S ,NaN,S,06/14/2021,07/19/2021,"$1,001 - $15,000",New,
 Perlmutter,20018974,SP,Alibaba group Holding limited P,NaN,P,05/11/2021,06/14/2021,"$1,001 - $15,000",New,
 Perlmutter,20018974,SP,Alphabet Inc. (Class A),GOOGL,P,05/11/2021,06/14/2021,"$1,001 - $15,000",New,
-Peters,20018346,SP,"Silicon Vy Cln Wtr util [gS] S 02/16/2021 02/28/2021 $100,001",NaN,Transaction,Date,Notification,Amount,New,
 Peters,20017994,SP,u.S. Treasury Bills [gS] S,NaN,S (partial),12/30/2020,12/31/2020,"$500,001 - $1,000,000",New,
 Peters,20017994,SP,u.S. Treasury Bills [gS],NaN,P,12/16/2020,12/31/2020,"$500,001 - $1,000,000",New,
 Peters,20017994,SP,u.S. Treasury Bills [gS],NaN,S,12/10/2020,12/31/2020,"$500,001 - $1,000,000",New,
@@ -1016,7 +929,6 @@ Peters,20018346,SP,San Diego CA Wtr util [gS],NaN,S,02/16/2021,02/28/2021,"$100,
 Peters,20018346,SP,"San Francisco, CA City/Cty Impt",NaN,S,02/16/2021,02/28/2021,"$100,001 - $250,000",New,
 Peters,20018346,SP,"San Francisco, CA FINl SCH [gS]",NaN,S,02/16/2021,02/28/2021,"$100,001 - $250,000",New,
 Peters,20018346,SP,Santa Clara CA uSD Impt Sch [gS],NaN,S,02/16/2021,02/28/2021,"$100,001 - $250,000",New,
-Peters,20018346,SP,univ CA Pub Ed [gS],NaN,S,02/16/2021,02/28/2021,"$100,001 - $250,000",New,
 Peters,20018346,SP,San Diego CA Wtr util [gS],NaN,P,02/11/2021,02/28/2021,"$100,001 - $250,000",New,
 Peters,20018346,SP,Anaheim CA Elec util [gS],NaN,S,02/10/2021,02/28/2021,"$100,001 - $250,000",New,
 Peters,20018346,SP,Bay Area Toll RV TOll Tran [gS] S,NaN,S (partial),02/10/2021,02/28/2021,"$100,001 - $250,000",New,
@@ -1035,12 +947,12 @@ Ross,20018659,SP,Cleveland,NaN,P,04/27/2021,04/27/2021,"$15,001 - $50,000",New,S
 Ross,20018659,SP,CrowdStrike,CRWD,P,04/27/2021,04/27/2021,"$15,001 - $50,000",New,Subholding of: Fidelity IRA 1
 Ross,20018659,SP,Freeport,NaN,P,04/27/2021,04/27/2021,"$15,001 - $50,000",New,Subholding of: Fidelity IRA 1
 Ross,20018659,SP,lam Research Corporation ,NaN,P,04/27/2021,04/27/2021,"$15,001 - $50,000",New,Subholding of: Fidelity IRA 1
-Ross,20018659,SP,berkshire Hathaway Inc. New,NaN,P,04/01/2021,04/01/2021,"$15,001 - $50,000",New,Subholding of: Fidelity IRA 2
+Ross,20018659,SP,berkshire Hathaway Inc. New,BRK.B,P,04/01/2021,04/01/2021,"$15,001 - $50,000",New,Subholding of: Fidelity IRA 2
 Schrier,20019965,JT,Apple Inc.,AAPL,S,11/15/2021,11/16/2021,"$250,001 - $500,000",New,Subholding of: Gowing Family Trust Secondary Account
 Schrier,20019808,JT,Apple Inc.,AAPL,P,07/27/2021,07/27/2021,"$500,001 - $1,000,000",New,Subholding of: Gowing Family Trust Secondary Account
 Scott,20019633,SP,Johnson & Johnson,JNJ,S,09/10/2021,09/10/2021,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
 Scott,20019633,SP,AT&T,T,S,09/08/2021,09/08/2021,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
-Scott,20019633,SP,berkshire Hathaway Inc. New,NaN,S,09/08/2021,09/08/2021,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
+Scott,20019633,SP,berkshire Hathaway Inc. New,BRK.B,S,09/08/2021,09/08/2021,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
 Scott,20019633,SP,Ford Motor Company,F,S,09/08/2021,09/08/2021,"$1,001 - $15,000",New,Subholding of: Vivien G Scott IRA
 Scott,20019328,SP,"Katapult Holdings, Inc. ",NaN,P,07/16/2020,07/16/2020,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
 Scott,20019328,SP,Nuvve Holding Corp. ,NaN,P,07/16/2020,07/16/2020,"$1,001 - $15,000",New,Subholding of: Vivien G Scott IRA

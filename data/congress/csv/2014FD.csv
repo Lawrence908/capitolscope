@@ -1,24 +1,20 @@
 Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
-Barletta,20001787,JT,Apple Inc. ,AAPL,S,10/1/2014,10/1/2014,"$15,001 - $50,000",New,"Mr. Lou Barletta , 10/3/2014"
+Barletta,20001787,JT,Apple Inc.,AAPL,S,10/1/2014,10/1/2014,"$15,001 - $50,000",New,"Mr. Lou Barletta , 10/3/2014"
 Barletta,20000998,JT,"Dunkin' Brands group, Inc. ",NaN,s,05/22/2014,05/22/2014,"$1,001 - $15,000",New,
-Barletta,20000998,JT,gigamon Inc. ,NaN,s,05/22/2014,05/22/2014,"$1,001 - $15,000",New,"Mr. Lou Barletta , 05/22/2014"
-Brooks,20002031,JT,seadrill Partners llC Common units,NaN,P,11/3/2014,11/3/2014,"$1,001 - $15,000",New,"Mr. Mo Brooks , 11/11/2014"
 Brooks,20001428,SP,"aLEXaR THERaPEUTICS, INC.",NaN,P,11/25/2013,07/19/2014,"$1,001 - $15,000",New,INVESTMENT PURCHaSE
 Brooks,20001977,JT,Digirad Corporation ,NaN,P,10/20/2014,10/20/2014,"$1,001 - $15,000",New,"Mr. Mo Brooks , 10/30/2014"
 Brooks,20001769,JT,Tenn Valley authority Bond,NaN,P,09/8/2014,09/8/2014,"$15,001 - $50,000",New,"Mr. Mo Brooks , 09/26/2014"
-Brooks,20001609,JT,Daphne al Ref Impt Wts,NaN,s,08/11/2014,08/11/2014,"$1,001 - $15,000",New,"Mr. Mo Brooks , 09/2/2014"
 Brooks,20000606,JT,Decatur ala City Brd Ed spl Tax sch Wts,NaN,P,07/3/2014,07/3/2014,"$15,001 - $50,000",New,
 Brooks,20001428,SP,"aLEXaR THERaPEUTICS, INC.",NaN,P,06/18/2014,07/19/2014,"$1,001 - $15,000",New,INVESTMENT PURCHaSE
 Brooks,20000606,JT,Pike Road al OID,NaN,P,06/18/2014,06/18/2014,"$1,001 - $15,000",New,"Mr. Mo Brooks , 07/9/2014"
-Brooks,20000606,JT,Morgan stanley Cap Tr V gtd Cap secs,NaN,s,05/5/2014,05/5/2014,"$1,001 - $15,000",New,
+Brooks,20000606,JT,Morgan Stanley,MS,s,05/5/2014,05/5/2014,"$1,001 - $15,000",New,
 Brooks,20000780,SP,aRLINgToN WaREhoUSE,NaN,S,04/17/2014,04/23/2014,"$1,001 - $15,000",New,"Mrs. Susan W. Brooks , 04/28/2014"
 Brooks,20000606,JT,Mobile County ala Brd sch Commrscap,NaN,P,04/16/2014,04/16/2014,"$1,001 - $15,000",New,
 Brooks,20000606,JT,Etowah Cnty ala Brd Ed Cap Outlay Wts,NaN,P,04/11/2014,04/11/2014,"$1,001 - $15,000",New,
 Brooks,20000606,JT,Phenix City al sch WTs gENl OBlIg,NaN,P,03/28/2014,03/28/2014,"$15,001 - $50,000",New,
-Cassidy,20002184,SP,Rio Tinto Plc ,NaN,S,09/11/2014,09/11/2014,"$1,001 - $15,000",New,
-Connolly,20001925,JT,"Dominion Resources, Inc. ",D,P,09/24/2014,09/24/2014,"$1,001 - $15,000",New,"Mr. Gerald E. Connolly , 10/20/2014"
-Connolly,20001352,JT,"Dominion Resources, Inc. ",D,P,06/25/2014,07/18/2014,"$1,001 - $15,000",New,"Mr. Gerald E. Connolly , 07/18/2014"
-Connolly,20000790,JT,"Dominion Resources, Inc. ",D,P,03/26/2014,04/2/2014,"$1,001 - $15,000",New,"Mr. Gerald E. Connolly , 04/29/2014"
+Connolly,20001925,JT,Dominion Energy,D,P,09/24/2014,09/24/2014,"$1,001 - $15,000",New,"Mr. Gerald E. Connolly , 10/20/2014"
+Connolly,20001352,JT,Dominion Energy,D,P,06/25/2014,07/18/2014,"$1,001 - $15,000",New,"Mr. Gerald E. Connolly , 07/18/2014"
+Connolly,20000790,JT,Dominion Energy,D,P,03/26/2014,04/2/2014,"$1,001 - $15,000",New,"Mr. Gerald E. Connolly , 04/29/2014"
 DelBene,20002136,JT,Monsanto Company 1.15% Due,NaN,S,12/5/2014,12/5/2014,"$100,001 - $250,000",New,
 DelBene,20002136,JT,aIg 5.85% Due 01/16/18,NaN,P,11/7/2014,11/7/2014,"$250,001 - $500,000",New,
 DelBene,20002136,JT,Monsanto Company 1.15% Due,NaN,P,11/7/2014,11/7/2014,"$100,001 - $250,000",New,
@@ -38,14 +34,14 @@ DelBene,20001988,JT,Dignity Health 2014a 3.812% Due 11,NaN,P,10/7/2014,10/7/2014
 DelBene,20001988,SP,global Partnerships Microfinance Fund,NaN,S,10/31/2014,10/31/2014,"$100,001 - $250,000",New,Promissory Note
 DelBene,20001988,JT,global Partnerships SIF 5.0 3%,NaN,P,10/31/2014,10/31/2014,"$250,001 - $500,000",New,Promissory Note
 DelBene,20001988,JT,Bear Stearns Co 5.55% Due 01/22/17,NaN,P,10/22/2014,10/22/2014,"$100,001 - $250,000",New,
-DelBene,20001988,JT,Morgan Stanley Sr Nt,NaN,P,10/22/2014,10/22/2014,"$250,001 - $500,000",New,
+DelBene,20001988,JT,Morgan Stanley,MS,P,10/22/2014,10/22/2014,"$250,001 - $500,000",New,
 DelBene,20001988,JT,NaSDaQ oMX grp 5.25% due 01/16/18,NaN,P,10/22/2014,10/22/2014,"$250,001 - $500,000",New,
 DelBene,20001988,JT,Va Pub Bldg auth 5% Due 08/01/15,NaN,S,10/22/2014,10/22/2014,"$100,001 - $250,000",New,
 DelBene,20001988,JT,Port of Seattle 4% Due 06/01/17,NaN,S,10/21/2014,10/21/2014,"$500,001 - $1,000,000",New,
 DelBene,20001988,JT,Zumtobel group ag ,NaN,S,10/21/2014,11/4/2014,"$1,001 - $15,000",New,"Ms. Suzan K. DelBene , 11/20/2014"
 DelBene,20001988,JT,Zumtobel group ag ,NaN,S,10/20/2014,11/4/2014,"$1,001 - $15,000",New,Foreign Exchange Position
 DelBene,20001988,JT,aBB ltd ,NaN,S,10/17/2014,11/4/2014,"$15,001 - $50,000",New,
-DelBene,20001988,JT,BorgWarner Inc. ,NaN,P,10/17/2014,11/4/2014,"$1,001 - $15,000",New,
+DelBene,20001988,JT,BorgWarner,BWA,P,10/17/2014,11/4/2014,"$1,001 - $15,000",New,
 DelBene,20001988,JT,Flowserve Corporation ,NaN,P,10/17/2014,11/4/2014,"$1,001 - $15,000",New,
 DelBene,20001988,JT,Mobileye N.V. ordinary Shares ,NaN,P,10/17/2014,11/4/2014,"$1,001 - $15,000",New,
 DelBene,20001988,JT,"SunEdison, Inc. ",NaN,P,10/17/2014,11/4/2014,"$1,001 - $15,000",New,
@@ -53,8 +49,8 @@ DelBene,20001988,JT,Syngenta ag ,NaN,S,10/17/2014,11/4/2014,"$15,001 - $50,000",
 DelBene,20001988,JT,Zumtobel group ag ,NaN,S,10/17/2014,11/4/2014,"$1,001 - $15,000",New,Foreign Exchange Position
 DelBene,20001988,JT,Bioamber Inc. ,NaN,P,10/10/2014,11/4/2014,"$1,001 - $15,000",New,
 DelBene,20001988,JT,"Nuverra Environmental Solutions, Inc.",NaN,S,10/10/2014,11/4/2014,"$15,001 - $50,000",New,
-DelBene,20001988,JT,Xylem Inc. Common Stock New ,NaN,P,10/10/2014,11/4/2014,"$15,001 - $50,000",New,
-DelBene,20001809,JT,BorgWarner Inc. ,NaN,P,09/26/2014,09/26/2014,"$15,001 - $50,000",New,
+DelBene,20001988,JT,Xylem Inc.,XYL,P,10/10/2014,11/4/2014,"$15,001 - $50,000",New,
+DelBene,20001809,JT,BorgWarner,BWA,P,09/26/2014,09/26/2014,"$15,001 - $50,000",New,
 DelBene,20001809,JT,HYFluX lTD ,NaN,S,09/22/2014,09/22/2014,"$1,001 - $15,000",New,Foreign Exchange Position
 DelBene,20001809,JT,ozner Water ,NaN,P,09/22/2014,09/22/2014,"$15,001 - $50,000",New,Foreign Exchange Position
 DelBene,20001809,JT,acuity Brands Inc ,NaN,P,09/19/2014,09/19/2014,"$1,001 - $15,000",New,
@@ -64,88 +60,64 @@ DelBene,20001809,JT,univ Texas System 5% Due 08/15/21,NaN,S,09/17/2014,09/17/201
 DelBene,20001809,JT,Connecticut HSg 2.75% Due 05/15/26,NaN,P,09/16/2014,09/16/2014,"$500,001 - $1,000,000",New,
 DelBene,20001619,JT,OSRaM lICHT ag NaMENS,NaN,P,08/11/2014,08/11/2014,"$15,001 - $50,000",New,Foreign Exchange Position. Ticker (OSRN DE)
 DelBene,20001619,JT,"Silver Spring Networks, Inc. ",NaN,S,08/11/2014,08/11/2014,"$1,001 - $15,000",New,"Ms. Suzan K. DelBene , 09/21/2014"
-Dingell,20002239,JT,Crown Castle International Corp. ,CCI,P,12/5/2014,12/8/2014,"$1,001 - $15,000",New,
-Dingell,20002239,JT,seadrill limited Ordinary shares,NaN,s,12/5/2014,12/8/2014,"$1,001 - $15,000",New,
-Duckworth,20000923,JT,Lockheed Martin Corporation ,LMT,S,11/13/2012,12/5/2012,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
-Duckworth,20001671,JT,abbVie Inc. ,NaN,S,09/5/2014,09/10/2014,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
-Duckworth,20000923,JT,Procter & gamble Company ,NaN,S,08/16/2012,09/5/2012,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
-Duckworth,20001671,JT,"Caterpillar, Inc. ",NaN,E,08/11/2014,08/31/2014,"$1,001 - $15,000",New,moved to new account
-Duckworth,20001671,JT,"Caterpillar, Inc. ",NaN,E,08/11/2014,08/31/2014,"$1,001 - $15,000",New,moved from old account
-Duckworth,20001671,JT,Corning Incorporated ,NaN,E,08/11/2014,08/31/2014,"$1,001 - $15,000",New,moved from old account
-Duckworth,20001671,JT,Corning Incorporated ,NaN,E,08/11/2014,08/31/2014,"$1,001 - $15,000",New,moved to new account
-Duckworth,20001671,JT,Potash Corporation of Saskatchewan,NaN,E,08/11/2014,08/31/2014,"$1,001 - $15,000",New,moved to new account
-Duckworth,20001671,JT,Potash Corporation of Saskatchewan,NaN,E,08/11/2014,08/31/2014,"$1,001 - $15,000",New,"Ms. Tammy Duckworth , 09/23/2014"
+Dingell,20002239,JT,Crown Castle,CCI,P,12/5/2014,12/8/2014,"$1,001 - $15,000",New,
+Duckworth,20000923,JT,Lockheed Martin,LMT,S,11/13/2012,12/5/2012,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
+Duckworth,20000923,JT,Procter & Gamble,PG,S,08/16/2012,09/5/2012,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
 Duckworth,20000923,JT,"Caterpillar, Inc. ",NaN,P,07/26/2012,10/5/2012,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
-Duckworth,20000923,JT,Procter & gamble Company ,NaN,S,07/24/2012,10/5/2012,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
-Duckworth,20000923,JT,"Cisco Systems, Inc. ",NaN,S,07/12/2013,08/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
+Duckworth,20000923,JT,Procter & Gamble,PG,S,07/24/2012,10/5/2012,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
+Duckworth,20000923,JT,Cisco,CSCO,S,07/12/2013,08/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
 Duckworth,20000923,JT,Potash Corporation of Saskatchewan,NaN,P,07/1/2013,10/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
 Duckworth,20000923,JT,NutriSystem Inc ,NaN,S,06/28/2013,07/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
 Duckworth,20000923,JT,archer,NaN,S,04/5/2013,05/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
-Duckworth,20000923,JT,"Cisco Systems, Inc. ",NaN,S,02/26/2013,04/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
-Duckworth,20000923,JT,"Cisco Systems, Inc. ",NaN,S,02/26/2013,04/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425ID Owner Asset Transaction Date Notification Amount
+Duckworth,20000923,JT,Cisco,CSCO,S,02/26/2013,04/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
+Duckworth,20000923,JT,Cisco,CSCO,S,02/26/2013,04/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425ID Owner Asset Transaction Date Notification Amount
 Duckworth,20000923,JT,Unisys Corporation New ,NaN,S,02/20/2013,04/5/2013,"$1,001 - $15,000",New,"Ms. Tammy Duckworth , 07/8/2014"
-Duckworth,20000923,JT,Carnival Corporation ,CCL,S,02/13/2013,04/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
+Duckworth,20000923,JT,Carnival,CCL,S,02/13/2013,04/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #2 USaa 8425
 Duckworth,20000923,JT,abbVie Inc. ,NaN,P,01/2/2013,02/5/2013,"$1,001 - $15,000",New,Subholding of: Brokerage #1 - EDJ 2718
-Foxx,20001995,JT,"Merck & Company, Inc. Common stock",MRK,s,10/13/2014,10/13/2014,"$50,001 - $100,000",New,
-Foxx,20001995,JT,schwab u.s. large,NaN,s,10/10/2014,10/10/2014,"$100,001 - $250,000",New,"Ms. Virginia Foxx , 11/6/2014"
-Foxx,20001995,JT,Old Republic International Corporation,NaN,s,10/1/2014,10/1/2014,"$15,001 - $50,000",New,
-Foxx,20001812,JT,ConocoPhillips ,COP,s,09/30/2014,09/30/2014,"$50,001 - $100,000",New,
-Foxx,20001812,JT,Frontier Communications Corporation,NaN,s,09/26/2014,09/26/2014,"$50,001 - $100,000",New,
-Foxx,20001812,JT,Memorial Production Partners lP,NaN,s,09/26/2014,09/26/2014,"$15,001 - $50,000",New,
-Foxx,20001812,JT,schwab u.s. small,NaN,s,09/25/2014,09/24/2014,"$15,001 - $50,000",New,"Ms. Virginia Foxx , 10/8/2014"
-Foxx,20001812,JT,PennantPark Investment Corporation,NaN,s,09/19/2014,09/19/2014,"$50,001 - $100,000",New,
-Foxx,20001812,JT,Pitney Bowes Inc. ,NaN,s,09/15/2014,09/15/2014,"$1,001 - $15,000",New,
+Foxx,20001995,JT,Merck & Co.,MRK,s,10/13/2014,10/13/2014,"$50,001 - $100,000",New,
+Foxx,20001995,JT,Old Dominion Freight Line,ODFL,s,10/1/2014,10/1/2014,"$15,001 - $50,000",New,
 Foxx,20001468,JT,"Caterpillar, Inc. ",NaN,P,07/30/2014,07/30/2014,"$1,001 - $15,000",New,
-Foxx,20001468,JT,FedEx Corporation ,FDX,P,07/25/2014,07/25/2014,"$15,001 - $50,000",New,
+Foxx,20001468,JT,FedEx,FDX,P,07/25/2014,07/25/2014,"$15,001 - $50,000",New,
 Foxx,20001468,JT,aT&T Inc. ,T,s,07/24/2014,07/24/2014,"$15,001 - $50,000",New,
 Foxx,20001468,JT,"Caterpillar, Inc. ",NaN,P,07/24/2014,07/24/2014,"$15,001 - $50,000",New,
 Foxx,20001468,JT,Powershares High Yield Corporate Bond,NaN,s,07/21/2014,07/21/2014,"$1,001 - $15,000",New,
 Foxx,20001468,JT,schwab Emerging Markets Equity ETF,NaN,P,07/21/2014,07/21/2014,"$15,001 - $50,000",New,
 Foxx,20001468,JT,schwab International Equity ETF,NaN,P,07/21/2014,07/21/2014,"$15,001 - $50,000",New,
 Foxx,20001468,JT,schwab us aggregate Bond ETF ,NaN,s,07/21/2014,07/21/2014,"$50,001 - $100,000",New,
-Foxx,20001468,JT,sPDR Barclays Intl Treasury Bd ,NaN,s,07/21/2014,07/21/2014,"$1,001 - $15,000",New,"Ms. Virginia Foxx , 08/7/2014"
 Foxx,20001468,JT,PennantPark Investment Corporation,NaN,P,07/2/2014,07/2/2014,"$1,001 - $15,000",New,
 Foxx,20001225,JT,Penn West Petroleum ltd ,NaN,s,06/24/2014,06/24/2014,"$15,001 - $50,000",New,
 Foxx,20001225,JT,"PIMCO strategic Income Fund, Inc.",NaN,s,06/24/2014,06/24/2014,"$50,001 - $100,000",New,
 Foxx,20001225,JT,"Roundy's, Inc. ",NaN,s,06/20/2014,06/20/2014,"$15,001 - $50,000",New,
-Foxx,20001225,JT,"Tal International group, Inc. ",NaN,s,06/2/2014,06/2/2014,"$15,001 - $50,000",New,"Ms. Virginia Foxx , 07/8/2014"
 Foxx,20001099,JT,Natural Resource Partners lP limited,NaN,s,05/30/2014,05/30/2014,"$15,001 - $50,000",New,
-Foxx,20001099,JT,Voya Prime Rate Trust shares of,NaN,s,05/28/2014,05/25/2014,"$15,001 - $50,000",New,"Ms. Virginia Foxx , 06/10/2014"
 Foxx,20000864,JT,PennantPark Investment Corporation,NaN,P,04/2/2014,04/2/2014,"$1,001 - $15,000",New,"Ms. Virginia Foxx , 05/7/2014"
-Gutierrez,20000612,JT,Comcast Corporation,NaN,s,03/31/2014,03/31/2014,"$15,001 - $50,000",New,"Mr. Luis V. Gutierrez , 04/10/2014"
-Hanna,20001510,SPdR,S&P 500 ,UNH,P,07/31/2014,08/9/2014,"$15,001 - $50,000",New,"Mr. Richard L. Hanna , 08/13/2014"
 Hinojosa,20000399,DC,priceline.com Incorporated ,NaN,Asset,Transaction,Date,Notification,New,
-Hinojosa,20000229,DC,"Cisco systems, Inc. ",NaN,Asset,Transaction,Date,Notification,New,
-Hinojosa,20000037,DC,Biogen Idec Inc. ,BIIB,s,12/31/2013,12/31/2013,"$1,001 - $15,000",New,
-Hinojosa,20000037,DC,Biogen Idec Inc. ,BIIB,s,12/20/2013,12/20/2013,"$1,001 - $15,000",New,
-Hinojosa,20000037,DC,Cummins Inc. ,CMI,s,12/20/2013,12/20/2013,"$1,001 - $15,000",New,
+Hinojosa,20000229,DC,Cisco,CSCO,Asset,Transaction,Date,Notification,New,
+Hinojosa,20000037,DC,Biogen,BIIB,s,12/31/2013,12/31/2013,"$1,001 - $15,000",New,
+Hinojosa,20000037,DC,Biogen,BIIB,s,12/20/2013,12/20/2013,"$1,001 - $15,000",New,
+Hinojosa,20000037,DC,Cummins,CMI,s,12/20/2013,12/20/2013,"$1,001 - $15,000",New,
 Hinojosa,20000037,DC,general Motors Company ,NaN,s,12/20/2013,12/20/2013,"$1,001 - $15,000",New,
 Hinojosa,20000037,DC,susser Petroleum Partners lP Common,NaN,s,12/20/2013,12/20/2013,"$1,001 - $15,000",New,
-Hinojosa,20000037,DC,susser Petroleum Partners lP Common,NaN,s,12/20/2013,12/20/2013,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 01/7/2014"
-Hinojosa,20000758,DC,3M Company ,MMM,s,09/20/2013,09/20/2013,"$1,001 - $15,000",New,
+Hinojosa,20000758,DC,3M,MMM,s,09/20/2013,09/20/2013,"$1,001 - $15,000",New,
 Hinojosa,20000758,DC,a.O. smith Corporation ,NaN,s,09/20/2013,09/20/2013,"$1,001 - $15,000",New,
-Hinojosa,20000758,DC,Boeing Company ,NaN,s,09/20/2013,09/20/2013,"$1,001 - $15,000",New,
-Hinojosa,20000758,DC,E.I. du Pont de Nemours and Company,DD,s,09/20/2013,09/20/2013,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 04/23/2014"
+Hinojosa,20000758,DC,Boeing,BA,s,09/20/2013,09/20/2013,"$1,001 - $15,000",New,
 Hinojosa,20000758,DC,a.O. smith Corporation ,NaN,s,09/16/2013,09/16/2013,"$1,001 - $15,000",New,
-Hinojosa,20000758,DC,Boeing Company ,NaN,s,09/16/2013,09/16/2013,"$1,001 - $15,000",New,
+Hinojosa,20000758,DC,Boeing,BA,s,09/16/2013,09/16/2013,"$1,001 - $15,000",New,
 Hinojosa,20001308,SP,"Roadrunner Transportation Systems, Inc",NaN,S,06/9/2014,06/9/2014,"$1,001 - $15,000",New,Subholding of: Marty SEP
 Hinojosa,20001308,SP,"Roadrunner Transportation Systems, Inc",NaN,S,06/9/2014,06/9/2014,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 07/12/2014"
 Hinojosa,20001308,SP,"Roadrunner Transportation Systems, Inc",NaN,S,06/16/2014,06/16/2014,"$1,001 - $15,000",New,Subholding of: Marty SEP
-Hinojosa,20000981,SP,Erie Indemnity Company,ERIE,S,05/5/2014,05/5/2014,"$1,001 - $15,000",New,Subholding of: Marty
+Hinojosa,20000981,SP,Erie Indemnity,ERIE,S,05/5/2014,05/5/2014,"$1,001 - $15,000",New,Subholding of: Marty
 Hinojosa,20000981,DC,general Motors Company ,NaN,S,05/12/2014,05/12/2014,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 06/13/2014"
 Hinojosa,20000611,DC,susser Petroleum Partners lP Common,NaN,s,03/5/2014,03/5/2014,"$1,001 - $15,000",New,
-Hinojosa,20000611,DC,susser Petroleum Partners lP Common,NaN,s,03/5/2014,03/5/2014,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 04/7/2014"
-Hinojosa,20000611,DC,"Prudential Financial, Inc. ",NaN,s,03/4/2014,03/4/2014,"$1,001 - $15,000",New,
-Hinojosa,20000611,DC,McDonald's Corporation ,MCD,s,03/11/2014,03/11/2014,"$15,001 - $50,000",New,
-Hinojosa,20000399,DC,Biogen Idec Inc. ,NaN,s,02/27/2014,02/27/2014,"$1,001 - $15,000",New,
+Hinojosa,20000611,DC,Prudential Financial,PRU,s,03/4/2014,03/4/2014,"$1,001 - $15,000",New,
+Hinojosa,20000611,DC,McDonald's,MCD,s,03/11/2014,03/11/2014,"$15,001 - $50,000",New,
+Hinojosa,20000399,DC,Biogen,BIIB,s,02/27/2014,02/27/2014,"$1,001 - $15,000",New,
 Hinojosa,20000399,DC,priceline.com Incorporated ,NaN,s,02/27/2014,02/27/2014,"$15,001 - $50,000",New,
-Hinojosa,20000399,DC,six Flags Entertainment Corporation,NaN,s,02/19/2014,02/19/2014,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 03/3/2014"
 Hinojosa,20000229,DC,"amazon.com, Inc. ",NaN,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
 Hinojosa,20000229,DC,"Baidu, Inc.",NaN,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
-Hinojosa,20000229,DC,Biogen Idec Inc. ,BIIB,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
-Hinojosa,20000229,DC,Biogen Idec Inc. ,BIIB,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
-Hinojosa,20000229,DC,Cummins Inc. ,CMI,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
-Hinojosa,20000229,DC,"Prudential Financial, Inc. ",NaN,P,01/16/2014,01/16/2014,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 02/4/2014"
+Hinojosa,20000229,DC,Biogen,BIIB,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
+Hinojosa,20000229,DC,Biogen,BIIB,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
+Hinojosa,20000229,DC,Cummins,CMI,P,01/24/2014,01/24/2014,"$1,001 - $15,000",New,
+Hinojosa,20000229,DC,Prudential Financial,PRU,P,01/16/2014,01/16/2014,"$1,001 - $15,000",New,"Mr. Rubén Hinojosa , 02/4/2014"
 Hinojosa,20000229,DC,priceline.com Incorporated ,NaN,P,01/10/2014,01/10/2014,"$1,001 - $15,000",New,
 Lowenthal,20002217,SP,"BlackRock, Inc. ",BLK,S,12/9/2014,12/12/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20002217,SP,IHS Inc. IHS Inc. Class A ,NaN,S,12/8/2014,12/12/2014,"$15,001 - $50,000",New,
@@ -157,23 +129,23 @@ Lowenthal,20002217,SP,"Amazon.com, Inc. ",AMZN,S,12/10/2014,12/12/2014,"$15,001 
 Lowenthal,20002217,SP,Delphi Automotive plc Ordinary Shares,NaN,S,12/10/2014,12/12/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20002133,SP,SanDisk Corporation ,NaN,P,11/18/2014,11/24/2014,"$15,001 - $50,000",New,
 Lowenthal,20000945,SP,Trustees of California State university,NaN,S,11/1/2012,11/1/2012,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 05/15/2014"
-Lowenthal,20001919,SP,Bank of America Corporation ,BAC,P,10/7/2014,10/14/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20001919,SP,Bank of America,BAC,P,10/7/2014,10/14/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20002020,SP,IAC/InterActiveCorp ,NaN,S,10/31/2014,11/7/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 11/10/2014"
-Lowenthal,20001832,SP,Intuit Inc. ,NaN,S,10/3/2014,10/7/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 10/7/2014"
-Lowenthal,20001963,SP,BorgWarner Inc. ,BWA,P,10/22/2014,10/27/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20001963,SP,Comcast Corporation,NaN,P,10/22/2014,10/27/2014,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20001963,SP,"Cooper Companies, Inc. ",COO,P,10/22/2014,10/27/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20001832,SP,Intuit,INTU,S,10/3/2014,10/7/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 10/7/2014"
+Lowenthal,20001963,SP,BorgWarner,BWA,P,10/22/2014,10/27/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20001963,SP,Comcast,CMCSA,P,10/22/2014,10/27/2014,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20001963,SP,Cooper Companies (The),COO,P,10/22/2014,10/27/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20001963,SP,Delphi Automotive plc Ordinary Shares,NaN,P,10/22/2014,10/27/2014,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20001963,SP,google Inc.,NaN,P,10/22/2014,10/27/2014,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
-Lowenthal,20001963,SP,"Verisk Analytics, Inc.",NaN,P,10/22/2014,10/27/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 10/27/2014"
+Lowenthal,20001963,SP,Verisk Analytics,VRSK,P,10/22/2014,10/27/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 10/27/2014"
 Lowenthal,20001919,SP,Kansas City Southern ,NaN,S,10/15/2014,10/19/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 10/19/2014"
-Lowenthal,20001525,SP,Boeing Company ,BA,S,07/30/2014,08/4/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 08/13/2014"
+Lowenthal,20001525,SP,Boeing,BA,S,07/30/2014,08/4/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 08/13/2014"
 Lowenthal,20001406,SP,Express Scripts Holding Company,NaN,S,07/18/2014,07/23/2014,"$1,001 - $15,000",New,"Mr. Alan S. Lowenthal , 07/26/2014"
 Lowenthal,20001406,SP,Express Scripts Holding Company,NaN,S,07/17/2014,07/22/2014,"$15,001 - $50,000",New,
 Lowenthal,20000945,SP,Kansas City Southern ,NaN,P,06/6/2012,06/6/2012,"$1,001 - $15,000",New,
-Lowenthal,20000922,SP,eBay Inc. ,EBAY,S,05/5/2014,05/10/2014,"$15,001 - $50,000",New,
+Lowenthal,20000922,SP,eBay,EBAY,S,05/5/2014,05/10/2014,"$15,001 - $50,000",New,
 Lowenthal,20000922,SP,JP Morgan Chase & Co. ,JPM,S,05/5/2014,05/10/2014,"$15,001 - $50,000",New,
-Lowenthal,20000922,SP,"Verisk Analytics, Inc.",NaN,P,05/2/2014,05/10/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 05/12/2014"
+Lowenthal,20000922,SP,Verisk Analytics,VRSK,P,05/2/2014,05/10/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 05/12/2014"
 Lowenthal,20001056,SP,"golub Capital BDC, Inc. ",NaN,S,05/16/2014,05/21/2014,"$15,001 - $50,000",New,
 Lowenthal,20001056,SP,New Mountain Finance Corporation,NaN,S,05/16/2014,05/21/2014,"$1,001 - $15,000",New,
 Lowenthal,20001056,SP,Starwood Waypoint Residential Trust,NaN,S,05/14/2014,05/19/2014,"$1,001 - $15,000",New,"Mr. Alan S. Lowenthal , 05/31/2014"
@@ -185,19 +157,18 @@ Lowenthal,20000945,SP,Delphi Automotive plc Ordinary Shares,NaN,P,04/24/2013,04/
 Lowenthal,20000742,SP,CIT group Inc,NaN,P,04/22/2014,04/25/2014,"$1,001 - $15,000",New,A bond.
 Lowenthal,20000742,SP,Bay Area Toll Auth Calif Toll,NaN,P,04/16/2014,04/25/2014,"$1,001 - $15,000",New,A state bond.
 Lowenthal,20000742,SP,united Rentals North Amer Inc,NaN,P,04/16/2014,04/25/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 04/26/2014"
-Lowenthal,20000742,SP,Crown Castle Intl Corp,NaN,P,04/15/2014,04/24/2014,"$15,001 - $50,000",Deleted,genesis Energy LP/ genesis Fin Sr NT a bond
-Lowenthal,20000742,SP,Regency Energy Partners LP,NaN,S,04/15/2014,04/24/2014,"$1,001 - $15,000",New,A bond
-Lowenthal,20000453,SP,Boeing Company ,BA,S,03/4/2014,03/8/2014,"$1,001 - $15,000",New,
+Lowenthal,20000742,SP,Crown Castle,CCI,P,04/15/2014,04/24/2014,"$15,001 - $50,000",Deleted,genesis Energy LP/ genesis Fin Sr NT a bond
+Lowenthal,20000742,SP,Regency Centers,REG,S,04/15/2014,04/24/2014,"$1,001 - $15,000",New,A bond
+Lowenthal,20000453,SP,Boeing,BA,S,03/4/2014,03/8/2014,"$1,001 - $15,000",New,
 Lowenthal,20000945,SP,El Paso Corporation Preferred Stock,NaN,S,03/20/2012,03/20/2012,"$1,001 - $15,000",New,
 Lowenthal,20000501,SP,Regal Cinemas Corp gTD SR,NaN,S,03/11/2014,03/17/2014,"$1,001 - $15,000",New,Bond was tendered.
 Lowenthal,20000501,SP,Starwood Waypoint Residential Trust,NaN,P,02/3/2014,02/21/2014,"$1,001 - $15,000",New,"Mr. Alan S. Lowenthal , 03/21/2014"
 Lowenthal,20000945,SP,El Paso Corporation Preferred Stock,NaN,S,02/27/2012,02/27/2012,"$1,001 - $15,000",New,
 Lowenthal,20000453,SP,Kansas City Southern ,NaN,S,02/18/2014,02/24/2014,"$1,001 - $15,000",New,"Mr. Alan S. Lowenthal , 03/8/2014"
-Lowenthal,20000085,SP,Intuit Inc. ,NaN,P,01/7/2014,01/10/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 01/14/2014"
+Lowenthal,20000085,SP,Intuit,INTU,P,01/7/2014,01/10/2014,"$15,001 - $50,000",New,"Mr. Alan S. Lowenthal , 01/14/2014"
 Lowenthal,20000945,SP,google Inc.,NaN,S,01/17/2013,01/17/2013,"$1,001 - $15,000",New,
 Lowenthal,20000168,SP,IHS Inc. IHS Inc. Class A ,NaN,P,01/15/2014,01/23/2014,"$1,001 - $15,000",New,"Mr. Alan S. Lowenthal , 01/26/2014"
 Lowey,20001673,SP,New Silk Route,NaN,P,09/2/2014,09/2/2014,"$15,001 - $50,000",New,"Mrs. Nita M. Lowey , 09/15/2014"
-Lowey,20000709,SP,New Silk Route,NaN,P,04/7/2014,04/7/2014,"$1,001 - $15,000",New,"Mrs. Nita M. Lowey , 04/16/2014"
 Lowey,20000162,SP,Parkstone Capital Partners III LP PEF,NaN,P,01/13/2014,01/13/2014,"$100,001 - $250,000",New,"Mrs. Nita M. Lowey , 01/23/2014"
 Mulvaney,20000567,JT,Alerian MlP ETF ,NaN,P,03/28/2014,03/28/2014,"$15,001 - $50,000",New,"Mr. Mick Mulvaney , 04/2/2014"
 Neugebauer,20002287,JT,"QR ENERGY, LP 9.25% 08/01/2020",NaN,S,12/22/2014,12/24/2014,"$50,001 - $100,000",New,
@@ -205,37 +176,30 @@ Neugebauer,20002287,JT,"QR ENERGY, LP 9.25% 08/01/2020",NaN,S,12/19/2014,12/22/2
 Neugebauer,20002237,JT,PoRT PoRTLaND INTL aRPT REV,NaN,P,12/12/2014,12/16/2014,"$100,001 - $250,000",New,
 Neugebauer,20002233,JT,anderson TWP ohio Ltd Tax,NaN,P,12/11/2014,12/16/2014,"$100,001 - $250,000",New,
 Neugebauer,20001811,SP,iShares Silver Trust ,NaN,P,09/30/2014,09/30/2014,"$1,001 - $15,000",New,"Mr. Randy Neugebauer , 10/7/2014"
-Neugebauer,20001568,JT,Mesa ariz Utility Sys Rev Fgic,NaN,P,08/15/2014,08/18/2014,"$100,001 - $250,000",New,"Mr. Randy Neugebauer , 09/10/2014"
 Neugebauer,20001537,JT,The City of New York Fiscal 2014 J and,NaN,P,08/11/2014,08/15/2014,"$100,001 - $250,000",New,"Mr. Randy Neugebauer , 08/20/2014"
 Neugebauer,20001101,JT,YaKIMa WaSH Go 5.0000% BoND,NaN,P,06/9/2014,06/9/2014,"$50,001 - $100,000",New,"Mr. Randy Neugebauer , 06/9/2014"
 Neugebauer,20001019,JT,"QR Energy, LP Common Units",NaN,S,05/28/2014,05/28/2014,"$50,001 - $100,000",New,Subholding of: (11) BRoKERaGE aCCoUNT - GoLDMaN SaCHS HoLDINGS
 Neugebauer,20001019,JT,"QR ENERGY, LP SER B SR LIEN",NaN,P,05/28/2014,05/28/2014,"$100,001 - $250,000",New,"Mr. Randy Neugebauer , 05/29/2014"
 Nunnelee,20001409,JT,Allied Funeral Holdings,NaN,s,07/18/2014,07/18/2014,"$15,001 - $50,000",New,Partial sale of stock
-Nunnelee,20001409,JT,Allied Funeral Insurance PA,NaN,s,07/18/2014,07/18/2014,"$15,001 - $50,000",New,"Mr. Alan Nunnelee , 07/27/2014"
-O'Rourke,20002063,SP,"Williams Companies, Inc. ",WMB,P,10/15/2014,11/10/2014,"$1,001 - $15,000",New,"Mr. Beto O'Rourke , 11/14/2014"
+O'Rourke,20002063,SP,Williams Companies,WMB,P,10/15/2014,11/10/2014,"$1,001 - $15,000",New,"Mr. Beto O'Rourke , 11/14/2014"
 O'Rourke,20002063,SP,Enterprise Products Partners L.P. ,NaN,P,10/14/2014,11/10/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
 O'Rourke,20001503,SP,Transocean Partners LLC Common,NaN,P,07/31/2014,08/6/2014,"$1,001 - $15,000",New,"Mr. Beto O'Rourke , 08/19/2014"
 O'Rourke,20001024,SP,iShares U.S. Financial Services ETF,NaN,P,03/5/2013,05/14/2014,"$15,001 - $50,000",New,Subholding of: CaMPR Partners Limited
 O'Rourke,20001024,SP,"Coach, Inc. ",NaN,S,03/4/2013,05/14/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
-O'Rourke,20001024,SP,Corning Incorporated ,NaN,S,03/4/2013,05/14/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
+O'Rourke,20001024,SP,Corning Inc.,GLW,S,03/4/2013,05/14/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
 O'Rourke,20001024,SP,SPdR dJ Euro STOXX 50 Etf ,NaN,P,03/4/2013,05/14/2014,"$15,001 - $50,000",New,Subholding of: CaMPR Partners Limited
 O'Rourke,20001024,SP,"St. Jude Medical, Inc. ",NaN,S,03/4/2013,05/14/2014,"$1,001 - $15,000",New,"Mr. Beto O'Rourke , 06/1/2014"
 O'Rourke,20001024,SP,"Plains all american Pipeline, L.P. ",NaN,S,03/28/2013,05/14/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
 O'Rourke,20000495,SP,"DCP Midstream Partners, LP DCP",NaN,P,02/28/2014,03/13/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
-O'Rourke,20000495,SP,"Kinder Morgan, Inc. ",KMI,S,02/24/2014,03/13/2014,"$1,001 - $15,000",New,"Mr. Beto O'Rourke , 03/24/2014"
-O'Rourke,20001024,SP,"Kinder Morgan, Inc. ",KMI,P,01/15/2013,05/14/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
-Peters,20002238,JT,UBS aG ordinary Shares ,NaN,E,11/26/2014,11/26/2014,"$15,001 - $50,000",New,
+O'Rourke,20000495,SP,Kinder Morgan,KMI,S,02/24/2014,03/13/2014,"$1,001 - $15,000",New,"Mr. Beto O'Rourke , 03/24/2014"
+O'Rourke,20001024,SP,Kinder Morgan,KMI,P,01/15/2013,05/14/2014,"$1,001 - $15,000",New,Subholding of: CaMPR Partners Limited
 Price,20001876,JT,sPDR s&P Dividend ETF ,NaN,P,10/6/2014,10/10/2014,"$1,001 - $15,000",New,
 Price,20001851,JT,"gilead sciences, Inc. ",NaN,P,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
-Price,20001851,JT,Honeywell International Inc. ,HON,P,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
+Price,20001851,JT,Honeywell,HON,P,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
 Price,20001851,JT,Magellan Midstream Partners l.P.,NaN,P,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
 Price,20001851,JT,"Metlife, Inc. ",MET,P,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
-Price,20001851,JT,"Motorola solutions, Inc. ",NaN,s,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
+Price,20001851,JT,Motorola Solutions,MSI,s,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
 Price,20001851,JT,"staples, Inc. ",NaN,P,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
-Price,20001851,JT,"Valeant Pharmaceuticals International,",NaN,s,08/12/2014,08/18/2014,"$1,001 - $15,000",New,
-Price,20001269,JT,"Jos. a. Bank Clothiers, Inc. ",NaN,s,06/19/2014,07/7/2014,"$1,001 - $15,000",New,
-Price,20001269,JT,Costco Wholesale Corporation ,NaN,P,06/18/2014,06/23/2014,"$1,001 - $15,000",New,
-Price,20001269,JT,"Prudential Financial, Inc. ",NaN,P,06/18/2014,06/23/2014,"$1,001 - $15,000",New,
 Schneider,20002222,SP,alibaba group Holding limited,NaN,P,11/7/2014,12/1/2014,"$50,001 - $100,000",New,
 Schneider,20002222,SP,Chicago Bridge & Iron Company N.V.,NaN,S,11/7/2014,12/1/2014,"$50,001 - $100,000",New,
 Schneider,20002222,SP,VIaCoM INC SR DEB 6.87500%,NaN,P,11/7/2014,12/1/2014,"$1,001 - $15,000",New,Corporate Bond
@@ -249,7 +213,7 @@ Schneider,20002222,SP,RBS CaP FNDg TRuST V 5.9%,NaN,P,11/18/2014,12/1/2014,"$1,0
 Schneider,20002222,SP,EQuITY CoMWlTH SER,NaN,E,11/17/2014,12/1/2014,"$1,001 - $15,000",New,Redeemed BondID Owner Asset Transaction Date Notification Amount
 Schneider,20002222,SP,"CIRCoR International, Inc. ",NaN,P,11/14/2014,12/1/2014,"$1,001 - $15,000",New,
 Schneider,20002222,SP,RoYal BK SCoTlaND SER Q 6.75%,NaN,S,11/14/2014,12/1/2014,"$1,001 - $15,000",New,Corporate Bond
-Schneider,20002222,SP,DTE ENERgY Co SER I :Baa1/BBB,NaN,S,11/12/2014,12/1/2014,"$1,001 - $15,000",New,Corporate Bond
+Schneider,20002222,SP,DTE Energy,DTE,S,11/12/2014,12/1/2014,"$1,001 - $15,000",New,Corporate Bond
 Scott,20001602,SP,"Plug Power, Inc. ",NaN,S,09/4/2013,09/4/2013,"$1,001 - $15,000",New,"Mr. Austin Scott , 08/29/2014"
-Scott,20001602,SP,Microsoft Corporation ,MSFT,P,09/15/2013,09/15/2013,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
-Scott,20001602,SP,Microsoft Corporation ,MSFT,P,07/19/2013,07/19/2013,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
+Scott,20001602,SP,Microsoft,MSFT,P,09/15/2013,09/15/2013,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA
+Scott,20001602,SP,Microsoft,MSFT,P,07/19/2013,07/19/2013,"$15,001 - $50,000",New,Subholding of: Vivien G Scott IRA

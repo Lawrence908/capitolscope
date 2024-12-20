@@ -19,6 +19,7 @@ pdfplumber
 
 # Database	
 ## PostgreSQL
+openpyxl
 SQLAlchemy
 psycopg2
 ## AWS RDS

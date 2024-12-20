@@ -114,6 +114,44 @@ def get_tickers(SP500: bool = True, NASDAQ: bool = True, DowJones: bool = True) 
     
     return tickers
 
+def get_tickers_company_dict() -> dict:
+    # Get S&P 500 tickers
+    url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    table = soup.find('table', {'id': 'constituents'})
+    tickers500 = {}
+    for row in table.find_all('tr')[1:]:
+        ticker = row.find('td').text.strip()
+        company = row.find_all('td')[1].text.strip()
+        tickers500[ticker] = company
+    
+    # Get NASDAQ tickers
+    url = 'https://en.wikipedia.org/wiki/NASDAQ-100'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    table = soup.find('table', {'id': 'constituents'})
+    tickers100 = {}
+    for row in table.find_all('tr')[1:]:
+        ticker = row.find_all('td')[1].text.strip()
+        company = row.find_all('td')[0].text.strip()
+        tickers100[ticker] = company
+        
+    # Get Dow Jones tickers
+    url = 'https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    table = soup.find('table', {'class': 'wikitable'})
+    tickers30 = {}
+    for row in table.find_all('tr')[1:]:
+        ticker = row.find_all('td')[2].text.strip()
+        company = row.find_all('td')[0].text.strip()
+        tickers30[ticker] = company
+    
+    tickers = {**tickers500, **tickers100, **tickers30}
+    
+    return tickers
+
 def fetch_time_series(symbol: str, interval: str = "daily", output_size: str = "compact") -> pd.DataFrame:
     """
     Fetch time-series data for a given stock symbol from AlphaVantage.

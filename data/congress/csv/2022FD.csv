@@ -566,6 +566,16 @@ Lee,20020369,SP,Wynn Resorts,WYNN,P,01/27/2022,02/01/2022,"$15,001 - $50,000",Ne
 Lee,20020369,DC,Wynn Resorts,WYNN,P,01/27/2022,02/01/2022,"$15,001 - $50,000",New,Subholding of: ARW Subtrust > Fidelity Investments ARW Subtrust Brokerage Account
 Lofgren,20020179,SP,general Motors Finl Co ,NaN,S,12/14/2021,01/07/2022,"$1,001 - $15,000",New,Corporate bond
 Lofgren,20021967,SP,Credit Suisse USA Inc. [CS],NaN,S,10/06/2022,11/10/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20021838,SP,AEP Texas Inc. [CS],NaN,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,Corporate bond
+Lofgren,20021838,SP,Anheuser,NaN,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20021838,SP,Bank of America,BAC,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20021838,SP,"Becton, Dickinson and Company",BDX,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20021838,SP,Gilead Sciences,GILD,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20021838,SP,Quanta Services,PWR,P,09/09/2022,10/11/2022,"$1,001 - $15,000",New,
+Lofgren,20021699,SP,Applied Materials,AMAT,S,08/25/2022,09/13/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20021699,SP,Charles River Laboratories,CRL,S,08/25/2022,09/13/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20021699,SP,Walt Disney Company (The),DIS,P,08/25/2022,09/13/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20021503,SP,KLA Corporation,KLAC,S (partial),07/08/2022,08/08/2022,"$1,001 - $15,000",New,Corporate bond
 Lofgren,20021367,SP,Ally Financial Inc. ,NaN,S,06/15/2022,07/12/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
 Lofgren,20020989,SP,Synchrony Financial,SYF,S,04/28/2022,05/10/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
 Lofgren,20020989,SP,KLA Corporation,KLAC,P,04/04/2022,05/10/2022,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
@@ -574,7 +584,10 @@ Lofgren,20020775,SP,Tyson Foods,TSN,S,03/15/2022,04/11/2022,"$1,001 - $15,000",N
 Lofgren,20020775,SP,"Amazon.com, Inc. ",AMZN,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,Corporate bond
 Lofgren,20020775,SP,"Citigroup, Inc. ",C,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,Corporate bond
 Lofgren,20020775,SP,Vodafone Group PLC [CS],NaN,P,03/04/2022,04/11/2022,"$1,001 - $15,000",New,Corporate bond
+Lowenthal,20020271,SP,Service Corp Intl [CS],NaN,P,12/30/2021,01/06/2022,"$15,001 - $50,000",New,"Interest rate is 4.625%, maturity date is 12/15/2027."
+Lowenthal,20020271,SP,"uber Technologies, Inc. ",NaN,P,12/27/2021,01/03/2022,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20020270,JT,T-Mobile US,TMUS,P,12/27/2021,01/03/2022,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
+Lowenthal,20020167,SP,"Janus International group, Inc. P",NaN,P,12/20/2021,12/27/2021,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20022161,SP,"Activision Blizzard, Inc ",NaN,P,12/14/2022,12/20/2022,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20022162,JT,"Activision Blizzard, Inc ",NaN,P,12/12/2022,12/19/2022,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust #2
 Lowenthal,20022161,SP,"Activision Blizzard, Inc ",NaN,P,12/12/2022,12/19/2022,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
@@ -676,6 +689,7 @@ Lowenthal,20020322,JT,ProShares Short QQQ ,NaN,P,01/14/2022,01/21/2022,"$1,001 -
 Lowenthal,20020322,JT,Sunrun Inc. ,NaN,P,01/14/2022,01/21/2022,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Malumed Lowenthal Rev Trust
 Lowenthal,20020321,SP,Alphabet Inc. (Class A),GOOGL,S (partial),01/14/2022,01/21/2022,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Lowenthal,20020321,SP,ProShares Short QQQ ,NaN,P,01/14/2022,01/21/2022,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20020271,SP,"Janus International group, Inc. P",NaN,P,01/07/2022,01/14/2022,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
 Manning,20020423,JT,IHS Markit Ltd. Common Shares,NaN,S,12/31/2021,02/09/2022,"$15,001 - $50,000",New,Subholding of: Charles Schwab - Edgewood Management LLC
 Manning,20020423,JT,Microsoft,MSFT,S,12/31/2021,02/09/2022,"$1,001 - $15,000",New,Subholding of: Charles Schwab - Edgewood Management LLC
 Manning,20020423,JT,"Netflix, Inc.",NFLX,P,12/31/2021,02/09/2022,"$1,001 - $15,000",New,Subholding of: Charles Schwab - Edgewood Management LLC
@@ -810,7 +824,7 @@ Manning,20020423,JT,IHS Markit Ltd. Common Shares S,NaN,S (partial),02/02/2021,0
 Manning,20020423,SP,Biogen,BIIB,S,01/14/2022,02/09/2022,"$1,001 - $15,000",New,Subholding of: ManKap Family LLC > MV Capital - Brokerage #3
 Manning,20020423,SP,Brown & Brown,BRO,P,01/12/2022,01/12/2022,"$15,001 - $50,000",New,Subholding of: ManKap Family LLC > Kathy Manning GST FBO Randall Kaplan
 Manning,20020423,SP,Brown & Brown,BRO,P,01/12/2022,01/12/2022,"$1,001 - $15,000",New,Subholding of: ManKap Family LLC > Kathy Manning GST FBO Randall Kaplan
-Matsui,20021148,SP,"Intrinsic Exchange Group,",NaN,P,06/03/2022,06/03/2022,Spouse/DC,New,"Loan to Intrinsic Exchange Group, Inc. evidenced by a Promissory Note."
+Matsui,20021148,SP,"Intrinsic Exchange Group,",NaN,P,06/03/2022,06/03/2022,"$1,000,001 - $5,000,000",New,"Loan to Intrinsic Exchange Group, Inc. evidenced by a Promissory Note."
 McKinley,20020158,JT,"Anthem, Inc. ",NaN,S,12/27/2021,12/31/2021,"$50,001 - $100,000",New,
 McKinley,20020158,JT,Sysco,SYY,S,12/27/2021,12/31/2021,"$50,001 - $100,000",New,
 McKinley,20020158,JT,"Activision Blizzard, Inc ",NaN,S,12/06/2021,12/31/2021,"$15,001 - $50,000",New,Subholding of: IRA's > IRA- Spouse
@@ -908,7 +922,7 @@ Peters,20021202,SP,San Mateo CA UHSD IMPT SCH,NaN,P,05/19/2022,05/31/2022,"$100,
 Peters,20021202,SP,CA ST DEPT WTR UTIL,NaN,P,05/18/2022,05/31/2022,"$250,001 - $500,000",New,
 Peters,20021202,SP,Orange CTY CA REV UTX,NaN,P,05/18/2022,05/31/2022,"$100,001 - $250,000",New,
 Peters,20021202,SP,East Bay MUD SYS CA,NaN,P,05/16/2022,05/31/2022,"$500,001 - $1,000,000",New,
-Peters,20021049,SP,Multi,NaN,P,04/19/2022,04/30/2022,Spouse/DC,New,Packaging Company
+Peters,20021049,SP,Multi,NaN,P,04/19/2022,04/30/2022,"$1,000,001 - $5,000,000",New,Packaging Company
 Peters,20020436,SP,"gV Pines Apartments, LLC [OL]",NaN,P,01/31/2022,01/31/2022,"$100,001 - $250,000",New,Real Estate
 Ross,20020492,JT,Microsoft,MSFT,S,01/27/2022,01/27/2022,"$1,001 - $15,000",New,Subholding of: Fidelity Brokerage Account
 Ross,20020492,JT,Microsoft,MSFT,S,01/21/2022,01/22/2022,"$1,001 - $15,000",New,Subholding of: Fidelity Brokerage Account

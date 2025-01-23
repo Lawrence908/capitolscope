@@ -1,8 +1,14 @@
 Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Ashford,20003994,SP,3M,MMM,S,10/13/2015,10/13/2015,"$15,001 - $50,000",New,Subholding of: Ann Ashford Stock Account
+Ashford,20003994,SP,Apache Corporation ,APA,S,10/13/2015,10/13/2015,"$15,001 - $50,000",New,
+Ashford,20003185,SP,Union Pacific Corporation,UNP,S,05/5/2015,05/5/2015,"$15,001 - $50,000",New,
+Ashford,20002964,JT,Apache Corporation ,APA,S,04/14/2015,04/14/2015,"$1,001 - $15,000",New,
 Ashford,20002963,SP,"Lennox International, Inc. ",NaN,S,04/13/2015,04/13/2015,"$15,001 - $50,000",New,
 Ashford,20002949,SP,Apache Corporation ,APA,S,04/12/2015,04/12/2015,"$15,001 - $50,000",New,
 Ashford,20002776,SP,Union Pacific Corporation,UNP,S,03/12/2015,03/12/2015,"$15,001 - $50,000",New,"Brad Ashford , 03/24/2015"
 Ashford,20002776,DC,Berkshire Hathaway,BRK.B,P,02/27/2015,02/27/2015,"$25,000,001",New,250 BRK B shares at $148 per share.
+Barletta,20002827,JT,Kinder Morgan,KMI,S,10/29/2015,10/29/2015,"$1,001 - $15,000",New,The rationale for this transaction was to take tax losses
+Barletta,20002827,JT,Kinder Morgan,KMI,S,10/29/2015,10/29/2015,"$1,001 - $15,000",New,
 Brooks,20004046,JT,North Carolina Cap Facs Fin agy Duke,NaN,P,11/2/2015,11/2/2015,"$1,001 - $15,000",New,
 Brooks,20004046,JT,Huntsville al genl Oblig Warrants,NaN,P,10/19/2015,10/19/2015,"$1,001 - $15,000",New,
 Brooks,20003908,JT,southern Company ,NaN,P,10/1/2015,10/1/2015,"$1,001 - $15,000",New,
@@ -10,7 +16,26 @@ Brooks,20002969,SP,"alexar Therapeutics, Inc.",NaN,P,04/15/2015,04/15/2015,"$1,0
 Brooks,20002831,JT,Decatur ala swr Rev Wts,NaN,P,03/31/2015,03/31/2015,"$1,001 - $15,000",New,
 Brooks,20002713,JT,Baldwin County al genl Oblig Wts,NaN,P,03/10/2015,03/10/2015,"$1,001 - $15,000",New,
 Brooks,20002327,JT,Digirad Corporation ,NaN,s,01/5/2015,01/5/2015,"$1,001 - $15,000",New,
+Brooks,20003084,SP,"ZooMI, INC.",NaN,P,01/27/2015,01/27/2015,"$15,001 - $50,000",New,
 Brooks,20002454,JT,"Avon Products, Inc. Bonds",NaN,P,01/22/2015,01/22/2015,"$1,001 - $15,000",New,
+Clark,20003526,SPECTRuM,bRaNDS INC SR NT,NaN,S,07/23/2015,08/3/2015,"$1,001 - $15,000",New,
+Conaway,20003907,SP,"SP500 C LIRN Issuer bac 14.54% P 09/23/2015 09/28/2015 $50,001",NaN,asset,transaction,Date,notification,New,SP500 C LIRN Issuer bac 14.54%
+Conaway,20003907,SP,Exxon Mobil Corporation ,XOM,P,09/25/2015,09/30/2015,"$1,001 - $15,000",New,Subholding of: SP M81 (Merrill Lynch)
+Conaway,20003907,SP,SP500 C LIRN Issuer barc Cap 12.1,NaN,P,09/23/2015,09/28/2015,"$15,001 - $50,000",New,SP500 C LIRN Issuer barc Cap 12.1
+Conaway,20003907,SP,SX5E LIRN ISSUER HSbC PART,NaN,S,09/23/2015,09/28/2015,"$15,001 - $50,000",New,SX5E LIRN ISSUER HSbC PART 118.00%
+Conaway,20003907,SP,SX5E LIRN ISSUER HSbC PART,NaN,S,09/23/2015,09/28/2015,"$50,001 - $100,000",New,SX5E LIRN ISSUER HSbC PART 118.00%
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,S,09/2/2015,09/8/2015,"$50,001 - $100,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 201
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,S,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 20
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,P,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 201
+Conaway,20003907,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,S,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5221 Sabrient bakers Dozen Port 201
+Conaway,20003907,SP,FT Unit 5221 Sabrient Sale Price,NaN,S,09/2/2015,09/8/2015,"$50,001 - $100,000",New,FT Unit 5221 Sabrient Sale Price
+Conaway,20003907,SP,Ft Unit 5601 Sabrient bakers Dozen,NaN,P,09/2/2015,09/8/2015,"$15,001 - $50,000",New,Ft Unit 5601 Sabrient bakers Dozen
+Conaway,20003907,SP,FT Unit 5601 Sabrient bakers Dozen,NaN,P,09/2/2015,09/8/2015,"$50,001 - $100,000",New,FT Unit 5601 Sabrient bakers Dozen
+Conaway,20003907,SP,FT Unit 5601 Sabrientbakers Dozen,NaN,P,09/2/2015,09/8/2015,"$50,001 - $100,000",New,FT Unit 5601 Sabrientbakers Dozen
+Conaway,20003907,SP,R2000 C LIRN Issuer CAP 14.10%,NaN,P,09/2/2015,09/8/2015,"$100,001 - $250,000",New,R2000 C LIRN Issuer CAP 14.10%
+Conaway,20003907,SP,SP500 ARN Issuer bac Cap 10.65%,NaN,S,09/2/2015,09/8/2015,"$50,001 - $100,000",New,SP500 ARN Issuer bac Cap 10.65%
+Conaway,20003907,SP,"Solera Holdings, Inc. Solera Holdings,",NaN,S,09/15/2015,09/18/2015,"$1,001 - $15,000",New,Subholding of: SP M81 (Merrill Lynch)
+Conaway,20003907,SP,Wal,NaN,P,09/1/2015,09/4/2015,"$1,001 - $15,000",New,Subholding of: SP M81 (Merrill Lynch)
 Conaway,20002945,SP,Dallas Co TX Util 5.000% 02/15/2024,NaN,S,08/15/2013,08/18/2013,"$50,001 - $100,000",New,Dallas Co TX Util 5.000% 02/15/2024
 Conaway,20002581,SP,Dallas Co TX Util 5.000% 02/15/2024,NaN,S,08/15/2013,08/17/2013,"$50,001 - $100,000",New,Subholding of: SP M40 (Merrill Lynch)
 Conaway,20002945,SP,bHP billiton plc Sponsored aDR ,NaN,P,07/26/2013,07/29/2013,"$1,001 - $15,000",New,Subholding of: SP E62 (Edward Jones)
@@ -21,9 +46,13 @@ Conaway,20002945,SP,Deere & Company,DE,P,07/1/2013,07/5/2013,"$15,001 - $50,000"
 Conaway,20002581,SP,Deere & Company,DE,P,07/1/2013,07/5/2013,"$15,001 - $50,000",New,Subholding of: SP E62 (Edward Jones)
 Conaway,20002628,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,P,01/14/2015,01/20/2015,"$100,001 - $250,000",New,Unit Investment Trust
 Conaway,20002628,SP,Ft Unit 5221 Sabrient bakers Dozen Port,NaN,P,01/14/2015,01/20/2015,"$50,001 - $100,000",New,Unit Investment Trust
+Conaway,20003907,SP,,NaN,M36,(Merrill,Lynch),(Owner:,,
+Conaway,20003907,SP,,NaN,M37,(Merrill,Lynch),(Owner:,,
+Conaway,20003907,SP,,NaN,M40,(Merrill,Lynch),(Owner:,,
 Conaway,20002945,SP,,NaN,E62,(Edward,Jones),(owner:,,
 Conaway,20002581,SP,,NaN,E62,(Edward,Jones),(owner:,,
 Connolly,20003316,JT,Dominion Energy,D,P,06/24/2015,06/30/2015,"$1,001 - $15,000",New,
+Connolly,20002942,JT,Dominion Energy,D,P,03/25/2015,03/28/2015,"$1,001 - $15,000",New,
 Curbelo,20004089,SP,"activision Blizzard, Inc ",NaN,S,10/23/2015,11/11/2015,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
 Curbelo,20004089,SP,alphabet Inc.,NaN,S,10/23/2015,11/11/2015,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
 Curbelo,20004089,SP,"Facebook, Inc.",NaN,S,10/23/2015,11/11/2015,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
@@ -543,7 +572,7 @@ Peters,20003431,SP,Walt Disney Company (The),DIS,P,06/23/2015,06/30/2015,"$15,00
 Peters,20003431,SP,Wells Fargo,WFC,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
 Peters,20003431,SP,Williams Companies,WMB,P,06/23/2015,06/30/2015,"$15,001 - $50,000",New,
 Peters,20002836,SP,"Inrad Optics, Inc. ",NaN,S,03/3/2015,03/31/2015,"$100,001 - $250,000",New,
-Peters,20002520,SP,apco Oil and gas International Inc.,NaN,S,01/30/2015,01/31/2015,Spouse/DC,New,
+Peters,20002520,SP,apco Oil and gas International Inc.,NaN,S,01/30/2015,01/31/2015,"$1,000,001 - $5,000,000",New,
 Peters,20002520,SP,"Ecology and Environment, Inc.",NaN,S,01/29/2015,01/31/2015,"$15,001 - $50,000",New,
 Peters,20002520,SP,"Ecology and Environment, Inc.",NaN,S,01/28/2015,01/31/2015,"$15,001 - $50,000",New,
 Peters,20002520,SP,"PMFg, Inc. ",NaN,S,01/28/2015,01/31/2015,"$15,001 - $50,000",New,

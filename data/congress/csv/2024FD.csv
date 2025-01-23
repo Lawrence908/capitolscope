@@ -84,28 +84,28 @@ Blumenauer,20024984,SP,Wells Fargo,WFC,P,04/04/2024,05/03/2024,"$15,001 - $50,00
 Blumenauer,20024671,SP,Northwest Natural Holding Company,NaN,P,02/15/2024,03/08/2024,"$1,001 - $15,000",New,Dividend reinvestment. Part of my spouse’s retirement portfolio.
 Burgess,20024265,SP,United Airlines Holdings,UAL,S,12/15/2023,12/18/2023,"$1,001 - $15,000",New,
 Burgess,20024265,SP,United Airlines Holdings,UAL,P,12/15/2023,12/18/2023,"$1,001 - $15,000",New,
-Burgess,20025791,SP,"Illumina, Inc.",ILMN,S,09/03/2024,09/05/2024,"$15,001 - $50,000",New,
+Burgess,20025791,SP,"Illumina, Inc.",NaN,S,09/03/2024,09/05/2024,"$15,001 - $50,000",New,
 Burgess,20025605,SP,Royal Caribbean Group,RCL,S,07/25/2024,07/28/2024,"$15,001 - $50,000",New,
 Burgess,20025548,SP,United Airlines Holdings,UAL,S,07/22/2024,07/25/2024,"$1,001 - $15,000",New,
 Burgess,20025548,SP,Royal Caribbean Group,RCL,S (partial),07/16/2024,07/18/2024,"$1,001 - $15,000",New,
 Burgess,20024838,SP,Exxon Mobil Corporation ,XOM,S,03/11/2024,03/12/2024,"$15,001 - $50,000",New,
-Burgess,20024838,SP,"Illumina, Inc.",ILMN,S (partial),03/11/2024,03/12/2024,"$1,001 - $15,000",New,
+Burgess,20024838,SP,"Illumina, Inc.",NaN,S (partial),03/11/2024,03/12/2024,"$1,001 - $15,000",New,
 Burgess,20024627,SP,Best Buy,BBY,S,02/26/2024,02/27/2024,"$15,001 - $50,000",New,
-Burgess,20024627,SP,"Illumina, Inc.",ILMN,S (partial),02/12/2024,02/13/2024,"$1,001 - $15,000",New,
+Burgess,20024627,SP,"Illumina, Inc.",NaN,S (partial),02/12/2024,02/13/2024,"$1,001 - $15,000",New,
 Burgess,20024330,SP,Royal Caribbean Group,RCL,P,01/10/2024,01/12/2024,"$1,001 - $15,000",New,
 Burgess,20024330,SP,Royal Caribbean Group,RCL,S,01/10/2024,01/12/2024,"$1,001 - $15,000",New,
 Burgess,20024330,SP,Advanced Micro Devices,AMD,S,01/02/2024,01/04/2024,"$1,001 - $15,000",New,
 Burgess,20024330,SP,Amgen,AMGN,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
 Burgess,20024330,SP,Blackstone Inc.,BX,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
 Burgess,20024330,SP,Exxon Mobil Corporation ,XOM,P,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
-Burgess,20024330,SP,"Illumina, Inc.",ILMN,P,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
-Burgess,20024330,SP,"Illumina, Inc.",ILMN,S (partial),01/02/2024,01/04/2024,"$1,001 - $15,000",New,
+Burgess,20024330,SP,"Illumina, Inc. ",NaN,P,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
+Burgess,20024330,SP,"Illumina, Inc. ",NaN,S (partial),01/02/2024,01/04/2024,"$1,001 - $15,000",New,
 Burgess,20024330,SP,Palo Alto Networks,PANW,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
 Burgess,20024330,SP,Valero Energy,VLO,S,01/02/2024,01/04/2024,"$15,001 - $50,000",New,
 Castor,20025475,JT,Berkshire Hathaway,BRK.B,S (partial),07/15/2024,07/15/2024,"$15,001 - $50,000",New,Subholding of: Vanguard Joint Retirement
 Castor,20024754,JT,Berkshire Hathaway,BRK.B,S (partial),03/28/2024,03/28/2024,"$15,001 - $50,000",New,Subholding of: Vanguard Joint Retirement
-Chu,20024347,SP,"Apollo Medical Holdings,",NaN,P,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
-Chu,20024347,SP,"Apollo Medical Holdings,",NaN,S,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
+Chu,20024347,SP,Apollo Global Management,APO,P,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
+Chu,20024347,SP,Apollo Global Management,APO,S,01/10/2024,01/10/2024,"$100,001 - $250,000",New,
 Clark,20024588,JT,United Airlines Holdings,UAL,P,02/16/2024,03/01/2024,"$100,001 - $250,000",New,Subholding of: Fidelity Brokerage Account
 Clark,20024588,SP,United Airlines Holdings,UAL,P,02/16/2024,03/01/2024,"$100,001 - $250,000",New,Subholding of: Fidelity Rollover IRA
 Connolly,20026009,JT,Leidos,LDOS,S (partial),10/10/2024,10/10/2024,"$1,001 - $15,000",New,Subholding of: TIAA Joint
@@ -203,6 +203,9 @@ Green,20025948,JT,NGL ENERGY PARTNERS LP,NaN,S,09/17/2024,10/02/2024,"$1,001 - $
 Green,20025797,JT,NGL ENERGY PARTNERS,NaN,S,08/28/2024,09/05/2024,"$50,001 - $100,000",New,Subholding of: Equitable Advisors Investment Account
 Green,20025614,JT,NGL ENERGY PARTNERS,NaN,S,08/05/2024,08/07/2024,"$50,001 - $100,000",New,Subholding of: Equitable Advisors Investment Account
 Green,20025614,JT,NGL ENERGY PARTNERS,NaN,S,07/24/2024,08/07/2024,"$15,001 - $50,000",New,Subholding of: Equitable Advisors Investment Account
+Guest,20026412,DC,"Amazon.com, Inc.",AMZN,P,11/08/2024,12/11/2024,"$1,001 - $15,000",New,Subholding of: TR - D1
+Guest,20026412,DC,monday.com Ltd.,NaN,P,11/08/2024,12/11/2024,"$1,001 - $15,000",New,Subholding of: TR - D1
+Guest,20026412,DC,"Tesla, Inc.",TSLA,P,11/08/2024,12/11/2024,"$1,001 - $15,000",New,Subholding of: TR - D1
 Guest,20024622,SP,NVIDIA Corporation ,NVDA,P,02/20/2024,03/05/2024,"$1,001 - $15,000",New,Subholding of: CP - INV
 Hern,20024305,JT,Devon Energy,DVN,P,12/29/2023,12/30/2023,"$15,001 - $50,000",New,Dividend Reinvestment
 Hern,20024305,JT,Devon Energy,DVN,P,12/29/2023,12/30/2023,"$1,001 - $15,000",New,Dividend Reinvestment
@@ -451,27 +454,23 @@ Lee,20025546,SP,Apple Inc.,AAPL,P,07/05/2024,07/30/2024,"$15,001 - $50,000",New,
 Lee,20025096,DC,RHEINMETALL AG UNSP/ADR,NaN,P,05/10/2024,05/16/2024,"$1,001 - $15,000",New,Subholding of: ARW Subtrust > Fidelity Investments ARW Subtrust Brokerage Account
 Lee,20025116,SP,"TuHURA Biosciences, Inc.",NaN,P,05/06/2024,05/20/2024,"$100,001 - $250,000",New,Convertible Promissory Note Loan
 Magaziner,20025372,SP,"Galileo, Inc.",NaN,P,05/31/2024,06/05/2024,"$15,001 - $50,000",New,Exercised stock option
-Manning,20024231,SP,Citizens Financial Group,CFG,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: MV Capital - GST Exempt Trust #2
-Manning,20024231,SP,Citizens Financial Group,CFG,S,12/12/2023,01/02/2024,"$15,001 - $50,000",New,Subholding of: Kathy Manning GST FBO Randall Kaplan > ManKap Family LLC > MV Capital - Brokerage #2
-Manning,20024231,SP,Citizens Financial Group,CFG,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: The 2011 Randall R. Kaplan Living Trust > MV Capital - Brokerage #2
-Manning,20024231,SP,"Estee Lauder Companies, Inc. ",EL,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: MV Capital - GST Exempt Trust #2
-Manning,20024231,SP,"Estee Lauder Companies, Inc. ",EL,S,12/12/2023,01/02/2024,"$15,001 - $50,000",New,Subholding of: Kathy Manning GST FBO Randall Kaplan > ManKap Family LLC > MV Capital - Brokerage #2
-Manning,20024231,SP,"Estee Lauder Companies, Inc. ",EL,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: The 2011 Randall R. Kaplan Living Trust > MV Capital - Brokerage #2ID Owner Asset Transaction Date Notification Amount Cap.
-Manning,20024231,SP,Medtronic,MDT,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: The 2011 Randall R. Kaplan Living Trust > MV Capital - Brokerage #2
-Manning,20024231,SP,Medtronic,MDT,S,12/12/2023,01/02/2024,"$15,001 - $50,000",New,Subholding of: Kathy Manning GST FBO Randall Kaplan > ManKap Family LLC > MV Capital - Brokerage #2
-Manning,20024231,SP,Medtronic,MDT,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: MV Capital - GST Exempt Trust #2
-Manning,20024231,SP,PayPal,PYPL,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: MV Capital - GST Exempt Trust #2
-Manning,20024231,SP,PayPal,PYPL,S,12/12/2023,01/02/2024,"$15,001 - $50,000",New,Subholding of: Kathy Manning GST FBO Randall Kaplan > ManKap Family LLC > MV Capital - Brokerage #2
-Manning,20024231,SP,PayPal,PYPL,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: The 2011 Randall R. Kaplan Living Trust > MV Capital - Brokerage #2
-Manning,20024231,SP,"Pfizer, Inc. ",PFE,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: The 2011 Randall R. Kaplan Living Trust > MV Capital - Brokerage #2
-Manning,20024231,SP,"Pfizer, Inc. ",PFE,S,12/12/2023,01/02/2024,"$15,001 - $50,000",New,Subholding of: Kathy Manning GST FBO Randall Kaplan > ManKap Family LLC > MV Capital - Brokerage #2
-Manning,20024231,SP,"Pfizer, Inc. ",PFE,S,12/12/2023,01/02/2024,"$1,001 - $15,000",New,Subholding of: MV Capital - GST Exempt Trust #2
 Manning,20025373,SP,Western Digital,WDC,S,06/13/2024,07/01/2024,"$1,001 - $15,000",New,Subholding of: MV Capital - RRK Roth IRA #3
-Manning,20024231,SP,"J. Goldman, L.P.",NaN,P,01/01/2024,01/02/2024,"$100,001 - $250,000",New,Hedge fund. Fund manager letter on file with the Committee on Ethics.
 Mast,20024743,DC,"Amazon.com, Inc.",AMZN,Stock,P,03/04/2024,03/04/2024,New,Subholding of: Maverick Mast Charles Schwab Brokerage Account
 Mast,20024743,DC,AT&T,T,[ST],P,03/04/2024,03/04/2024,New,Subholding of: Charles Schwab Magnum Mast Brokerage Acct
 Matsui,20025820,SP,U.S. Bancorp,USB,P,09/03/2024,09/04/2024,"$500,001 - $1,000,000",New,
+Matsui,20025152,SP,"Intrinsic Exchange Group, Inc.",NaN,P,05/29/2024,05/29/2024,"$1,000,001 - $5,000,000",New,The investment was made through a Simple Agreement for Future Equity (SAFE).
+Matsui,20025111,SP,U.S. Bancorp,USB,P,04/23/2024,04/23/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20025111,SP,U.S. Bancorp,USB,P,04/23/2024,04/23/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20025111,SP,U.S. Bancorp,USB,P,04/23/2024,04/23/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20025111,SP,U.S. Bancorp,USB,P,04/23/2024,04/23/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20025111,SP,U.S. Bancorp,USB,P,04/23/2024,04/23/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20025111,SP,U.S. Bancorp,USB,P,04/23/2024,04/23/2024,"$1,000,001 - $5,000,000",New,
 Matsui,20024369,SP,U.S. Bancorp,USB,P,01/16/2024,01/16/2024,"$500,001 - $1,000,000",New,
+Matsui,20024369,SP,U.S. Bancorp,USB,P,01/16/2024,01/16/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20024369,SP,U.S. Bancorp,USB,P,01/16/2024,01/16/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20024369,SP,U.S. Bancorp,USB,P,01/16/2024,01/16/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20024369,SP,U.S. Bancorp,USB,P,01/16/2024,01/16/2024,"$1,000,001 - $5,000,000",New,
+Matsui,20024369,SP,U.S. Bancorp,USB,P,01/16/2024,01/16/2024,"$1,000,001 - $5,000,000",New,
 McGarvey,20026207,SP,"Tesla, Inc.",TSLA,P,10/25/2024,11/12/2024,"$1,001 - $15,000",New,Subholding of: Chris IRA
 McGarvey,20025892,SP,Apple Inc.,AAPL,S,08/19/2024,09/24/2024,"$1,001 - $15,000",New,Subholding of: Chris IRA
 McGarvey,20025892,SP,Apple Inc.,AAPL,P,08/13/2024,09/24/2024,"$1,001 - $15,000",New,Subholding of: Chris IRA
@@ -577,8 +576,13 @@ Pelosi,20025368,SP,"Tesla, Inc.",TSLA,S,06/24/2024,06/24/2024,"$250,001 - $500,0
 Pelosi,20024625,SP,"Forge Investments, LLC",NaN,P,03/04/2024,03/04/2024,"$1,000,001 - $5,000,000",New,Investment in fund that owns Databricks stock. Databricks is a San Francisco engineering and analytic
 Pelosi,20024542,SP,Palo Alto Networks,PANW,P,02/21/2024,02/21/2024,"$100,001 - $250,000",New,Purchased 20 call options with a strike price of $200 and an expiration date of 1/17/25.
 Pelosi,20024542,SP,Palo Alto Networks,PANW,P,02/12/2024,02/12/2024,"$500,001 - $1,000,000",New,Purchased 50 call options with a strike price of $200 and an expiration date of 1/17/25.
+Peters,20024316,SP,U.S Treasury Bills,NaN,P,12/27/2023,12/31/2023,"$1,000,001 - $5,000,000",New,
+Peters,20024316,SP,U.S. Bancorp,USB,P,12/27/2023,12/31/2023,"$100,001 - $250,000",New,
+Peters,20024316,SP,U.S Treasury Notes,NaN,P,12/26/2023,12/31/2023,"$1,000,001 - $5,000,000",New,
+Peters,20024316,SP,U.S Treasury Bills [GS],NaN,S (partial),12/21/2023,12/31/2023,"$500,001 - $1,000,000",New,
 Peters,20024316,SP,Solano CA CCD Educ,NaN,P,12/19/2023,12/31/2023,"$250,001 - $500,000",New,
 Peters,20024316,SP,"Paris TX, GO LTX",NaN,P,12/14/2023,12/31/2023,"$250,001 - $500,000",New,
+Peters,20024316,SP,U.S Treasury Bills [GS],NaN,S (partial),12/14/2023,12/31/2023,"$500,001 - $1,000,000",New,
 Peters,20026393,SP,"Stepstone Tactical Growth Fund III,",NaN,P,11/18/2024,11/30/2024,"$1,001 - $15,000",New,Pooled Investment Fund
 Peters,20026393,SP,Visalia CA Uni IMPT SCH,NaN,P,11/07/2024,11/30/2024,"$500,001 - $1,000,000",New,
 Peters,20026188,SP,Orange CTY CA REV UTX,NaN,S,10/15/2024,10/31/2024,"$50,001 - $100,000",New,
@@ -607,7 +611,10 @@ Peters,20025576,SP,Santa Clara CN CA HLTH [GS],NaN,P,07/10/2024,07/31/2024,"$15,
 Peters,20025576,SP,Marin CA MIN WTR UTIL,NaN,S,07/01/2024,07/31/2024,"$50,001 - $100,000",New,
 Peters,20025576,SP,U.S Treasury Bills,NaN,P,07/01/2024,07/31/2024,"$500,001 - $1,000,000",New,
 Peters,20025424,SP,Torch Capital III LP [OT],NaN,P,06/27/2024,06/30/2024,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20025424,SP,UNIV CA PUB EDUC,NaN,P,06/21/2024,06/30/2024,"$50,001 - $100,000",New,
+Peters,20025424,SP,U.S Treasury Bills [GS],NaN,S (partial),06/20/2024,06/30/2024,"$1,000,001 - $5,000,000",New,
 Peters,20025424,SP,San Francisco CA IMPT SCH,NaN,S,06/17/2024,06/30/2024,"$50,001 - $100,000",New,
+Peters,20025424,SP,U.S Treasury Bills [GS],NaN,S (partial),06/11/2024,06/30/2024,"$250,001 - $500,000",New,
 Peters,20025424,SP,U.S Treasury Bills [GS],NaN,S (partial),06/07/2024,06/30/2024,"$250,001 - $500,000",New,
 Peters,20025424,SP,Alhambra CA USD SCH,NaN,P,06/03/2024,06/30/2024,"$250,001 - $500,000",New,
 Peters,20025285,SP,Oceanside CA IMPT SCH,NaN,P,05/22/2024,05/31/2024,"$500,001 - $1,000,000",New,
@@ -621,7 +628,11 @@ Peters,20024837,SP,U.S Treasury Notes,NaN,P,03/05/2024,03/31/2024,"$500,001 - $1
 Peters,20024662,SP,U.S Treasury Bills [GS],NaN,S (partial),02/29/2024,02/29/2024,"$500,001 - $1,000,000",New,
 Peters,20024662,SP,U.S Treasury Bills,NaN,P,02/14/2024,02/29/2024,"$500,001 - $1,000,000",New,
 Peters,20024662,SP,U.S Treasury Bills [GS],NaN,S (partial),02/08/2024,02/29/2024,"$500,001 - $1,000,000",New,
+Peters,20024477,SP,U.S Treasury Bills,NaN,P,01/31/2024,01/31/2024,"$250,001 - $500,000",New,
+Peters,20024477,SP,U.S Treasury Bills [GS],NaN,S (partial),01/18/2024,01/31/2024,"$250,001 - $500,000",New,
 Peters,20024477,SP,"Lynett Capital Partners III, LP",NaN,P,01/17/2024,01/31/2024,"$100,001 - $250,000",New,Pooled Investment Fund/Venture Capital
+Peters,20024477,SP,U.S Treasury Bills,NaN,P,01/02/2024,01/31/2024,"$1,000,001 - $5,000,000",New,
+Peters,20024477,SP,U.S Treasury Notes,NaN,P,01/02/2024,01/31/2024,"$1,000,001 - $5,000,000",New,
 Pocan,20024758,JT,US Treasury I Bond,NaN,P,03/30/2022,03/30/2022,"$15,001 - $50,000",New,
 Pocan,20024758,JT,US Treasury I Bond,NaN,P,01/21/2023,01/21/2023,"$15,001 - $50,000",New,
 Ross,20024986,JT,Microsoft,MSFT,S (partial),04/17/2024,04/17/2024,"$1,001 - $15,000",New,Subholding of: Fidelity Brokerage Account
@@ -648,6 +659,7 @@ Sessions,20024375,SP,Apple Inc.,AAPL,(AAPL),P,02/29/2024,02/29/2024,New,Subholdi
 Sessions,20024212,SP,Alibaba Group Holding Limited,NaN,S,12/28/2023,12/29/2023,"$1,001 - $15,000",New,45 shares loss ~$5500
 Sessions,20024212,SP,American Electric Power,AEP,S,12/28/2023,12/29/2023,"$1,001 - $15,000",New,sold loss 21.1125 shares
 Sessions,20024212,SP,Crown Castle,CCI,S,12/28/2023,12/29/2023,"$1,001 - $15,000",New,$5K 30 day T-Bill 5.1%
+Sessions,20026446,SP,Microsoft,MSFT,P,12/18/2024,12/19/2024,"$1,001 - $15,000",New,Subholding of: Trust One
 Sessions,20026126,SP,NVIDIA Corporation,NVDA,P,11/01/2024,11/01/2024,"$1,001 - $15,000",New,Subholding of: IRA One
 Sessions,20025867,SP,NVIDIA Corporation,NVDA,P,09/16/2024,09/16/2024,"$1,001 - $15,000",New,Subholding of: IRA One
 Sessions,20025848,SP,Altria,MO,S,09/10/2024,09/12/2024,"$1,001 - $15,000",New,Subholding of: Trust One

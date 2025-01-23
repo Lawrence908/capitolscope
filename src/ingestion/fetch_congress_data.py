@@ -34,8 +34,8 @@ class CongressTrades:
         if year == None:
             self.year = datetime.datetime.now().year
         else:
-            if year < 2006:
-                raise ValueError("The year must be 2006 or later.")
+            if year < 2014:
+                raise ValueError("The year must be 2014 or later.")
             if year > datetime.datetime.now().year:
                 raise ValueError("The year must be the current year or earlier.")
             if len(str(year)) != 4:
@@ -73,9 +73,8 @@ class CongressTrades:
         async with aiohttp.ClientSession() as session:
             try:
                 for _, row in congress_data.iterrows():
-                    print ("Processing: ", row['Last'])   ##### DEBUGGING #####
                     member = f"{row['Last']}".strip()
-                    # Check if the member is in the junk list
+                    print ("Processing: ", member)  ##### DEBUGGING #####
                     if member:
                         doc_id = row['DocID']
                         if doc_id == None:
@@ -169,6 +168,7 @@ class CongressTrades:
     
         return asset_type_dict
     
+    # NOTE Commented out because too many requests to the website caused an error, using a dictionary above instead
     # def get_asset_type_dict(self) -> dict:
     #     """
     #     Get the asset type codes from house.gov website.
@@ -578,3 +578,21 @@ class CongressTrades:
                 doc_id = trade['DocID']
             doc_ids.append(doc_id)
         return doc_ids
+    
+    
+def main():
+    # Create an instance of the CongressTrades class for the current year
+    congress_trades = CongressTrades()
+    
+    # Get the trades by member
+    trades_by_member = congress_trades.trades
+    
+    # Get the junk members
+    junk_members = congress_trades.junk_members
+    
+    print("Junk Members: ", junk_members)   ##### DEBUGGING #####
+    
+    print("Done")   ##### DEBUGGING #####
+    
+if __name__ == "__main__":
+    main()

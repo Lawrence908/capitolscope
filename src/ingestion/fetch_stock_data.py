@@ -230,7 +230,7 @@ def fetch_time_series_yf(symbol: str, interval: str = "1d", start: str = "2014-0
     Returns:
         pd.DataFrame: Time-series data with columns ['date', 'open', 'high', 'low', 'close', 'volume'].
     """
-    df = yf.download(symbol, interval=interval, start=start, end=end)
+    df = yf.download(symbol, interval=interval, start=start, end=end, progress=False)
     df['symbol'] = symbol
     return df
 
@@ -246,7 +246,18 @@ def fetch_all_stock_data(interval: str = "daily", output_size: str = "compact") 
             print(f"Error fetching data for {ticker}: {e}")
     return pd.concat(data)
 
-async def fetch_all_stock_data_yf(interval: str = "1d", start: str = "2014-01-01", end: str = str(datetime.date.today())) -> pd.DataFrame:
+def fetch_all_stock_data_yf(interval: str = "1d", start: str = "2014-01-01", end: str = str(datetime.date.today())) -> pd.DataFrame:
+    tickers = get_tickers()
+    data = []
+    for ticker in tickers:
+        try:
+            df = fetch_time_series_yf(ticker, interval=interval, start=start, end=end)
+            data.append(df)
+        except Exception as e:
+            print(f"Error fetching data for {ticker}: {e}")
+    return pd.concat(data)
+
+async def fetch_all_stock_data_yf_async(interval: str = "1d", start: str = "2014-01-01", end: str = str(datetime.date.today())) -> pd.DataFrame:
     tickers = get_tickers()
     data = []
     async with aiohttp.ClientSession() as session:
@@ -265,8 +276,83 @@ async def fetch_stock_data_yf(session: aiohttp.ClientSession, symbol: str, inter
         df['symbol'] = symbol
         return df
 
+# Define a class to fetch stock data
+class StockDataFetcher:
+    """
+    Class to fetch historical stock data using Yahoo Finance API.
+    
+    Args:
+        interval (str): Time interval ("1d", "1wk", "1mo").
+        start (str): Start date for fetching data.
+        end (str): End date for fetching data.
+        
+    Attributes:
+        interval (str): Time interval ("1d", "1wk", "1mo").
+        start (str): Start date for fetching data.
+        end (str): End date for fetching data.
+        
+    Methods:
+        fetch_stock_data: Fetch historical stock data for a given symbol.
+        fetch_stock_data_async: Fetch historical stock data for a given symbol asynchronously.
+        fetch_all_stock_data_async: Fetch historical stock data for all tickers asynchronously.
+    """
+    
+    def __init__(self, interval: str = "1d", start: str = "2014-01-01", end: str = str(datetime.date.today())):
+        self.interval = interval
+        self.start = start
+        self.end = end
 
+    def fetch_stock_data(self, symbol: str) -> pd.DataFrame:
+        """
+        Fetch historical stock data for a given symbol.
+        
+        Args:
+            symbol (str): Stock ticker symbol (e.g., "AAPL").
+            
+        Returns:
+            pd.DataFrame: Time-series data with columns ['date', 'Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume', 'symbol'].
+        """
+        
+        df = yf.download(symbol, interval=self.interval, start=self.start, end=self.end, progress=False)
+        df['symbol'] = symbol
+        return df
 
+    async def fetch_stock_data_async(self, session: aiohttp.ClientSession, symbol: str) -> pd.DataFrame:
+        """
+        Fetch historical stock data for a given symbol asynchronously.
+        
+        Args:
+            session (aiohttp.ClientSession): An aiohttp client session.
+            symbol (str): Stock ticker symbol (e.g., "AAPL").
+            
+            Returns:
+            pd.DataFrame: Time-series data with columns ['date', 'Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume', 'symbol'].
+        """
+            
+        start_timestamp = int(datetime.datetime.strptime(self.start, "%Y-%m-%d").timestamp())
+        end_timestamp = int(datetime.datetime.strptime(self.end, "%Y-%m-%d").timestamp())
+        url = f"https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={start_timestamp}&period2={end_timestamp}&interval={self.interval}&events=history"
+        async with session.get(url) as response:
+            data = await response.text()
+            import io
+            df = pd.read_csv(io.StringIO(data))
+            df['symbol'] = symbol
+            return df
+
+    async def fetch_all_stock_data_async(self) -> pd.DataFrame:
+        """
+        Fetch historical stock data for all tickers asynchronously.
+        
+        Returns:
+            pd.DataFrame: Time-series data with columns ['date', 'open', 'high', 'low', 'close', 'volume'].
+        """
+        
+        tickers = get_tickers()
+        data = []
+        async with aiohttp.ClientSession() as session:
+            tasks = [self.fetch_stock_data_async(session, ticker) for ticker in tickers]
+            data = await asyncio.gather(*tasks)
+        return pd.concat(data)
 
 def main():
     pass

@@ -189,14 +189,6 @@ class ImprovedPDFParser:
             if self._is_continuation_line(line):
                 self._parse_continuation_line(line, additional_data)
                 lines_consumed = i + 1
-            elif line and not line.startswith("*"):
-                # Handle free-form description lines (like original parser)
-                if 'description' not in additional_data or not additional_data['description']:
-                    additional_data['description'] = line
-                else:
-                    # Append to existing description
-                    additional_data['description'] += " " + line
-                lines_consumed = i + 1
                 
         # Merge main data with additional data
         merged_data = {**parsed_data, **additional_data}
@@ -375,7 +367,7 @@ class ImprovedPDFParser:
     
     def _is_continuation_line(self, line: str) -> bool:
         """Check if line is a continuation of the trade entry"""
-        continuation_starts = ['F:', 'S:', 'D:', '(', 'Stock']
+        continuation_starts = ['F:', 'S', 'D', '(', 'Stock']
         return any(line.startswith(start) for start in continuation_starts)
     
     def _parse_continuation_line(self, line: str, data: Dict[str, str]) -> None:
@@ -406,31 +398,22 @@ class ImprovedPDFParser:
                 else:
                     data['filing_status'] = filing_status
         
-        # Handle subholding information (starts with 'S') - like original parser
-        elif line.startswith("S") and ":" in line:
-            subholding_info = line.split(":", 1)[1].strip()
-            if subholding_info and not subholding_info.startswith("Hon."):
-                # Set description directly (like original parser)
-                data['description'] = "Subholding of: " + subholding_info
+        # Handle subholding information (starts with 'S') - exactly like original parser
+        elif line.startswith("S"):
+            if ":" in line:
+                subholding_info = line.split(":", 1)[1].strip()
+                if subholding_info and not subholding_info.startswith("Hon."):
+                    data['description'] = "Subholding of: " + subholding_info
         
-        # Handle description information (starts with 'D') - like original parser
-        elif line.startswith("D") and ":" in line:
-            description = line.split(":", 1)[1].strip()
-            if description and not description.startswith("Hon."):
-                # Clean up description if it contains unwanted text (like original parser)
-                if "ID Owner Asset Transaction Date Notification Amount" in description:
-                    description = description.split("ID Owner Asset Transaction Date Notification Amount")[0].strip()
-                # Set description directly (like original parser)
-                data['description'] = description
-        
-        # Handle other continuation information
-        elif line and not line.startswith("*") and not line.startswith("Initial") and not line.startswith("Asset"):
-            # This might be additional description text - append to existing description
-            if 'description' not in data or not data['description']:
-                data['description'] = line
-            elif data['description'] and not line.startswith(('P', 'S', 'E')):
-                # Append to existing description if it's not a transaction type
-                data['description'] += " " + line
+        # Handle description information (starts with 'D') - exactly like original parser
+        elif line.startswith("D"):
+            if ":" in line:
+                description = line.split(":", 1)[1].strip()
+                if description and not description.startswith("Hon."):
+                    # Clean up description if it contains unwanted text (like original parser)
+                    if "ID Owner Asset Transaction Date Notification Amount" in description:
+                        description = description.split("ID Owner Asset Transaction Date Notification Amount")[0].strip()
+                    data['description'] = description
     
     def _normalize_amount(self, amount: str) -> str:
         """Normalize amount to standard ranges"""

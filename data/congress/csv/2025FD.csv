@@ -102,6 +102,9 @@ Bresnahan,20024346,JT,WillScot Holdings Corporation,,01/13/2025,01/13/2025,"$1,0
 Bresnahan,20024346,JT,"Zscaler, Inc.",Zscaler,01/13/2025,01/13/2025,"$1,001",-,New,Subholding of: Joint Ownership LPL Account
 Connolly,20030388,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,05/13/2025,05/17/2025,"$1,001",-,New,Subholding of: TIAA Joint
 Connolly,20030388,JT,Science Applications International S,,05/13/2025,05/17/2025,"$1,001",-,New,Subholding of: TIAA Joint
+Connolly,20026724,JT,"Dominion Energy, Inc. Common S",D,02/05/2025,02/05/2025,"$1,001",-,New,Subholding of: TIAA Joint
+Connolly,20026724,JT,"Leidos Holdings, Inc. Common Stock S",LDOS,02/05/2025,02/05/2025,"$1,001",-,New,Subholding of: TIAA Joint
+Connolly,20026724,JT,Science Applications International S,,02/05/2025,02/05/2025,"$1,001",-,New,Subholding of: TIAA Joint
 DelBene,20030541,JT,"New York NY City Transitional Fin S  06/11/2025 06/11/2025 $15,001",partial,Transaction,Date,Notification,Amount,New,
 DelBene,20029070,JT,"New Jersey ST Transn TR FD Auth S  03/19/2025 03/19/2025 $250,001",partial,Transaction,Date,Notification,Amount,New,
 DelBene,20029070,JT,"Triborough Bridge & Tunl 4% SPL Tax S  03/19/2025 03/19/2025 $250,001",partial,Transaction,Date,Notification,Amount,New,
@@ -126,6 +129,8 @@ DelBene,20030541,JT,University Tex Univ Revs Fing,,P,06/04/2025,06/04/2025,"$250
 DelBene,20030444,JT,Pacific Co B1 Bond,,P,05/29/2025,05/29/2025,"$500,001 - $1,000,000",New,Real estate bond
 DelBene,20030444,JT,Illinois ST Sales Tax Rev JR Oblig,ITW,05/27/2025,05/27/2025,"$1,001",-,New,
 DelBene,20030444,JT,TX Trans Commn TPK 5%42 TPK,,05/22/2025,05/22/2025,"$1,001",-,New,
+DelBene,20030289,JT,UT ST Tran Auth 5%36 Excise,,S,04/16/2025,04/16/2025,"$250,001 - $500,000",New,
+DelBene,20030289,JT,Wisconsin ST Go BDS Ser. 2025,,P,04/16/2025,04/16/2025,"$250,001 - $500,000",New,
 DelBene,20029070,JT,Arizona Indl Dev Auth Rev BDS,,(partial),03/19/2025,03/19/2025,"$100,001 - $250,000",New,
 DelBene,20029070,JT,Colorado Health Fac 5% Hosp HLTH,,(partial),03/19/2025,03/19/2025,"$250,001 - $500,000",New,
 DelBene,20029070,JT,Florida Dev Fin Corp Healthcare Facs,,(partial),03/19/2025,03/19/2025,"$250,001 - $500,000",New,
@@ -153,6 +158,12 @@ DelBene,20026602,JT,TX Trans Commn TPK 5%42,,P,01/27/2025,01/27/2025,"$15,001 - 
 Delaney,20030265,DC,"CACI International, Inc. Class A S 04/02/2025 05/01/2025 $1,001",,Transaction,Date,Notification,Amount,New,
 Delaney,20030265,DC,"Toro Company   S  04/29/2025 05/01/2025 $1,001",TTC,Transaction,Date,Notification,Amount,New,
 Delaney,20027975,DC,CDW Corporation,CDW,Transaction,Date,Notification,Amount,New,
+Delaney,20030592,DC,Bio,TECH,05/26/2025,07/01/2025,"$1,001",-,New,
+Delaney,20030592,DC,"Clean Harbors, Inc. Common Stock S",CLH,06/20/2025,07/01/2025,"$1,001",-,New,
+Delaney,20030592,DC,Markel Group Inc. Common Stock,MKL,06/06/2025,07/01/2025,"$1,001",-,New,
+Delaney,20030592,DC,"Paychex, Inc.",PAYX,06/26/2025,07/01/2025,"$1,001",-,New,
+Delaney,20030592,DC,STERIS plc   S,STE,06/26/2025,07/01/2025,"$1,001",-,New,
+Delaney,20030592,DC,Tractor Supply Company,TSCO,06/06/2025,07/01/2025,"$1,001",-,New,
 Delaney,20030442,DC,"Dayforce, Inc. Common Stock  S",DAY,05/07/2025,06/01/2025,"$1,001",-,New,
 Delaney,20030442,DC,"Dayforce, Inc. Common Stock  S",DAY,05/27/2025,06/01/2025,"$1,001",-,New,
 Delaney,20030442,DC,Markel Group Inc. Common Stock,MKL,05/27/2025,06/01/2025,"$1,001",-,New,

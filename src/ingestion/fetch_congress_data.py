@@ -6,6 +6,14 @@
 #     sleep 60
 # done
 
+# Nightly run:
+# python src/ingestion/fetch_congress_data.py --delay 3.0 --concurrent 2 --retries 5
+# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5
+# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG
+# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG --log-file logs/congress_data.log
+# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG --log-file logs/congress_data.log --quiet
+
+
 
 
 import requests
@@ -21,9 +29,7 @@ import asyncio
 import aiohttp
 import nest_asyncio
 import logging
-from bs4 import BeautifulSoup
 from pathlib import Path
-import pdfplumber
 import xml.etree.ElementTree as ET
 from sqlalchemy import create_engine
 
@@ -118,6 +124,82 @@ def configure_rate_limiting(request_delay=2.0, max_concurrent=3, max_retries=3, 
 
 # Define the CongressTrades class
 class CongressTrades:
+    """
+    A class to process congressional trading data.
+    
+    This class is used to process congressional trading data.
+    It downloads and parses the PDF files for the given year.
+    It also compares the new parsing results with the old CSV file.
+    It also saves the new parsing results to a CSV file.
+    It also saves the new parsing results to a database.
+    
+    Attributes:
+    -----------
+    year : int
+        The year of congressional trading data to process.
+    data_path : str
+        The path to the data directory.
+    pdf_path : str
+        The path to the PDF directory.
+    data_path : str
+        The path to the data directory.
+    pdf_path : str
+        The path to the PDF directory.
+    tickers : list
+        A list of stock tickers.
+    tickers_company : dict
+        A dictionary of stock tickers and their corresponding company names.
+    asset_dict : dict
+        A dictionary of asset types and their corresponding descriptions.
+    members : list
+        A list of congress members.
+    junk_members : list
+        A list of junk members.
+    improved_parser : ImprovedPDFParser
+        An instance of the improved PDF parser.
+    trades : pd.DataFrame
+        A DataFrame of congressional trading data.
+    download_semaphore : asyncio.Semaphore
+        A semaphore to limit the number of concurrent downloads.
+    last_request_time : float
+        The time of the last request.
+    root_path : Path
+        The root path of the project.
+    disk_engine : sqlalchemy.engine.Engine
+        A SQLAlchemy engine for the database.
+        
+        
+    Methods:
+    --------
+    download_and_parse_pdf_with_retry(self, session, doc_id, member) -> pd.DataFrame:
+        Download and parse a PDF with retry logic for rate limiting.
+    download_and_parse_pdf(self, session, doc_id, member) -> pd.DataFrame:
+        Download and parse a PDF.
+    get_trades_by_member(self, member_list = None) -> pd.DataFrame:
+        Get the congressional trading data for the year.
+    rate_limit_delay(self) -> None:
+        Ensure minimum delay between requests.
+    get_asset_type_dict(self) -> dict:
+        Get a dictionary of asset types and their corresponding descriptions.
+    get_congress_trading_data(self) -> pd.DataFrame:
+        Get the congressional trading data for the year.
+    get_congress_members(self) -> list:
+        Get the list of congress members.
+    get_junk_members(self) -> list:
+        Get the list of junk members.
+    get_doc_ids(self, trade_list) -> str:
+        Get the document IDs from the trade list.
+    compare_record_counts(self, new_df: pd.DataFrame, old_csv_path: str = None) -> dict:
+        Compare the record counts of the new and old DataFrames.
+        
+    Usage:
+    ------
+    from fetch_congress_data import CongressTrades
+    ct = CongressTrades(year=2024)
+    ct.get_trades_by_member()
+    
+
+    """
     def __init__(self, year: int = None):
         # Check if the year is valid
         if year == None:

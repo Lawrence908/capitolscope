@@ -153,9 +153,9 @@ class ImprovedPDFParser:
     
     def _is_trade_line_start(self, line: str) -> bool:
         """Improved detection of trade line starts"""
-        # Check if line starts with owner type and has minimum expected fields
+        # Match original parser logic - just check if line starts with owner type
         parts = line.split()
-        if len(parts) < 6:  # Minimum expected fields
+        if len(parts) < 1:
             return False
             
         return parts[0] in ['SP', 'DC', 'JT']
@@ -223,7 +223,7 @@ class ImprovedPDFParser:
     def _parse_main_line(self, line: str) -> Optional[Dict[str, str]]:
         """Parse the main trade line using improved logic"""
         parts = line.split()
-        if len(parts) < 6:
+        if len(parts) < 2:  # Reduced from 6 to 2 - need at least owner and something else
             return None
             
         data = {}
@@ -241,7 +241,7 @@ class ImprovedPDFParser:
         for strategy in strategies:
             try:
                 result = strategy(parts)
-                if result and self._validate_parsing_result(result):
+                if result:  # Remove strict validation to match original parser's flexibility
                     return {**data, **result}
             except Exception as e:
                 continue
@@ -250,10 +250,17 @@ class ImprovedPDFParser:
     
     def _parse_strategy_standard(self, parts: List[str]) -> Dict[str, str]:
         """Standard parsing strategy assuming normal column layout"""
-        if len(parts) < 6:
+        if len(parts) < 2:
             return {}
         
-        asset = parts[1] if len(parts) > 1 else ""
+        # Extract asset (everything between owner and the last 6 fields, similar to original parser)
+        if len(parts) >= 7:  # owner + asset + 5 trailing fields minimum
+            asset = " ".join(parts[1:-6]).split("-", 1)[0].strip()
+        elif len(parts) >= 3:
+            asset = parts[1]  # Just take the second part if not enough fields
+        else:
+            asset = ""
+        
         ticker = self._extract_ticker(asset)
         
         # Clean asset name by removing ticker information
@@ -261,17 +268,33 @@ class ImprovedPDFParser:
             asset = re.sub(r'\([^)]*\)', '', asset).strip()
             asset = re.sub(r'\[[^\]]*\]', '', asset).strip()
         
-        return {
+        # Handle cases with different numbers of trailing fields (like original parser)
+        result = {
             'owner': parts[0],
             'asset': asset,
             'ticker': ticker,
-            'transaction_type': parts[-5] if len(parts) > 5 else "",
-            'transaction_date': parts[-4] if len(parts) > 4 else "",
-            'notification_date': parts[-3] if len(parts) > 3 else "",
-            'amount': parts[-2] if len(parts) > 2 else "",
             'filing_status': "New",
             'description': ""
         }
+        
+        # Extract trailing fields based on available parts
+        if len(parts) >= 6:
+            result['transaction_type'] = parts[-5]
+            result['transaction_date'] = parts[-4]
+            result['notification_date'] = parts[-3]
+            result['amount'] = parts[-2]
+        elif len(parts) >= 4:
+            result['transaction_type'] = parts[-3] if len(parts) > 3 else ""
+            result['transaction_date'] = parts[-2] if len(parts) > 2 else ""
+            result['notification_date'] = parts[-1] if len(parts) > 1 else ""
+            result['amount'] = ""
+        else:
+            result['transaction_type'] = ""
+            result['transaction_date'] = ""
+            result['notification_date'] = ""
+            result['amount'] = ""
+        
+        return result
     
     def _parse_strategy_shifted_amounts(self, parts: List[str]) -> Dict[str, str]:
         """Parsing strategy for when amounts are shifted due to missing fields"""
@@ -442,7 +465,7 @@ class ImprovedPDFParser:
         return max(0.0, min(1.0, score))
 
     def _extract_ticker(self, asset: str) -> str:
-        """Extract ticker symbol from asset name with case-insensitive matching"""
+        """Extract ticker symbol from asset name with case-insensitive matching and company name reverse lookup"""
         if not asset:
             return ""
         
@@ -481,6 +504,51 @@ class ImprovedPDFParser:
                     if known_ticker.upper() == ticker_upper:
                         return known_ticker
                 return ticker
+        
+        # Reverse lookup using company names in tickers_company mapping
+        if not ticker_match and not bracket_match:
+            asset_lower = asset.lower().strip()
+            
+            # Try exact match first
+            for ticker, company_name in self.tickers_company.items():
+                if company_name.lower() == asset_lower:
+                    return ticker
+            
+            # Try partial matching - check if asset starts with company name or vice versa
+            for ticker, company_name in self.tickers_company.items():
+                company_lower = company_name.lower()
+                
+                # Check if asset name starts with company name (e.g., "Apple Inc." matches "Apple Inc")
+                if asset_lower.startswith(company_lower) or company_lower.startswith(asset_lower):
+                    return ticker
+                
+                # Check if first word of asset matches first word of company name
+                asset_first_word = asset_lower.split()[0] if asset_lower.split() else ""
+                company_first_word = company_lower.split()[0] if company_lower.split() else ""
+                
+                if asset_first_word and company_first_word and asset_first_word == company_first_word:
+                    # Additional validation - check if it's a meaningful match (not just "the", "a", etc.)
+                    if len(asset_first_word) > 3:  # Avoid matching articles and short words
+                        return ticker
+            
+            # Try matching key words in the asset name
+            asset_words = asset_lower.replace(',', '').replace('.', '').split()
+            for ticker, company_name in self.tickers_company.items():
+                company_words = company_name.lower().replace(',', '').replace('.', '').split()
+                
+                # Check if we have at least 2 matching significant words
+                if len(asset_words) >= 2 and len(company_words) >= 2:
+                    # Remove common corporate suffixes for matching
+                    filtered_asset_words = [w for w in asset_words if w not in ['inc', 'corp', 'ltd', 'llc', 'co', 'company', 'corporation']]
+                    filtered_company_words = [w for w in company_words if w not in ['inc', 'corp', 'ltd', 'llc', 'co', 'company', 'corporation']]
+                    
+                    # Count matching words
+                    matches = sum(1 for word in filtered_asset_words if word in filtered_company_words)
+                    
+                    # If we have 2+ matching significant words and they represent majority of the shorter list
+                    min_words = min(len(filtered_asset_words), len(filtered_company_words))
+                    if matches >= 2 and matches >= min_words * 0.7:
+                        return ticker
         
         return ""
 

@@ -1,0 +1,408 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Allen,20026537,SP,"Rollins, Inc.",ROL,P,12/12/2024,01/08/2025,"$15,001 - $50,000",New,"Subholding of: R.W. Allen & Associates, Inc. > RWA&A - Securities"
+Allen,20026537,SP,US TREASU NOTE 4.375%,NaN,P,12/03/2024,01/08/2025,"$100,001 - $250,000",New,Subholding of: SCH1
+Allen,20030502,SP,"Netflix, Inc.",NaN,P,05/16/2025,06/09/2025,"$15,001 - $50,000",New,"Subholding of: R.W. Allen & Associates, Inc. > RWA&A - Securities"
+Allen,20030502,SP,Thermo Fisher Scientific,TMO,S,05/16/2025,06/09/2025,"$15,001 - $50,000",New,Subholding of: SCH1
+Allen,20030316,SP,US Treasury Bill,NaN,S,04/15/2025,05/07/2025,"$15,001 - $50,000",New,"Subholding of: R.W. Allen & Associates, Inc. > R.W. ALLEN, LLC > LIFE INSURANCE TRUST"
+Allen,20030316,SP,US Treasury Bill,NaN,S,04/15/2025,05/07/2025,"$50,001 - $100,000",New,"Subholding of: R.W. Allen & Associates, Inc. > R.W. ALLEN, LLC > LIFE INSURANCE TRUST"
+Allen,20030316,SP,US Treasury Bill,NaN,S,04/15/2025,05/07/2025,"$100,001 - $250,000",New,"Subholding of: R.W. Allen & Associates, Inc. > R.W. ALLEN, LLC > LIFE INSURANCE TRUST"
+Allen,20030316,SP,Thermo Fisher Scientific,TMO,S,04/11/2025,05/07/2025,"$15,001 - $50,000",New,"Subholding of: R.W. Allen & Associates, Inc."
+Allen,20027927,SP,US Treasury Bill,NaN,P,02/26/2025,03/05/2025,"$50,001 - $100,000",New,Subholding of: LIVTR
+Allen,20026727,SP,"AutoZone, Inc. Common Stock",NaN,P,01/17/2025,02/04/2025,"$15,001 - $50,000",New,Subholding of: SCH1
+Auchincloss,20030397,SP,State Street Corporation,STT,S (partial),05/16/2025,05/20/2025,"$15,001 - $50,000",New,RSU distribution
+Auchincloss,20027810,SP,State Street Corporation,STT,S,02/18/2025,02/19/2025,"$15,001 - $50,000",New,RSU distribution
+Beyer,20026517,JT,Duke Energy,DUK,S,12/23/2024,12/26/2024,"$5,000,001 - $25,000,000",New,"sale of 2712 Duke Street, Alexandria, Virginia"
+Beyer,20026517,JT,Oklahoma Cnty OK Indep 3.00%,NaN,P,12/04/2024,01/06/2025,"$1,001 - $15,000",New,"15,000 units Oklahoma County, OK, Indep 3.00% 07/01/25"
+Beyer,20026517,JT,Oklahoma Cnty OK Indep 3.00%,NaN,P,12/04/2024,01/06/2025,"$1,001 - $15,000",New,"5,000 units Oklahoma County, OK, Indep 3.00% 07/01/25"
+Beyer,20026517,JT,Dallas Tex Area Rapid 5.00%,NaN,E,12/02/2024,01/06/2025,"$1,001 - $15,000",New,Called Security
+Beyer,20030262,JT,University of Washington,NaN,P,04/08/2025,05/02/2025,"$15,001 - $50,000",New,"30,000 units University of Washington 4.00% maturing 12/01/33"
+Beyer,20027932,JT,Maryland St Health Var,NaN,P,02/12/2025,03/08/2025,"$50,001 - $100,000",New,"50,000 units Maryland State Healthy Var 07/01/45"
+Bresnahan,20024346,JT,"AAON, Inc.",NaN,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,"AAON, Inc.",NaN,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,Accenture,ACN,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,Adobe Inc.,ADBE,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,Advanced Micro Devices,AMD,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,Advanced Micro Devices,AMD,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: LPL Account I
+Bresnahan,20024346,JT,Alphabet Inc. (Class A),GOOGL,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,"ANSYS, Inc.",NaN,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,"AppFolio, Inc. ",NaN,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: Joint Ownership LPL Account
+Bresnahan,20024346,JT,Arista Networks,ANET,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: JP Morgan Brokerage Account #2
+Bresnahan,20024346,JT,Axon Enterprise,AXON,S,01/13/2025,01/13/2025,"$1,001 - $15,000",New,Subholding of: LPL Account I
+Bresnahan,20024346,JT,Berkshire Hathaway,BRK.B,P,01/13/2025,01/13/2025,"$1,001 - $15,000",New,CALL BERKSHIRE CL B NEW $300 EXP 01/17/25 CLASS B
+Connolly,20030388,JT,Leidos,LDOS,S (partial),05/13/2025,05/17/2025,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20030388,JT,Science Applications International S,NaN,S (partial),05/13/2025,05/17/2025,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20026724,JT,Dominion Energy,D,S (partial),02/05/2025,02/05/2025,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20026724,JT,Leidos,LDOS,S (partial),02/05/2025,02/05/2025,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+Connolly,20026724,JT,Science Applications International S,NaN,S (partial),02/05/2025,02/05/2025,"$1,001 - $15,000",New,Subholding of: TIAA Joint
+DelBene,20030444,JT,Pacific Co B1 Bond,NaN,P,05/29/2025,05/29/2025,"$500,001 - $1,000,000",New,Real estate bond
+DelBene,20030444,JT,Illinois Tool Works,ITW,P,05/27/2025,05/27/2025,"$1,001 - $15,000",New,
+DelBene,20030444,JT,TX Trans Commn TPK 5%42 TPK,NaN,P,05/22/2025,05/22/2025,"$1,001 - $15,000",New,
+DelBene,20027999,JT,Ohio ST Higher Ed Go BDS Ser. 2025,NaN,P,03/12/2025,03/12/2025,"$15,001 - $50,000",New,
+DelBene,20027807,JT,Austin Tex Indpt SCH Dist Unltd,NaN,S,02/12/2025,02/12/2025,"$500,001 - $1,000,000",New,
+DelBene,20027807,JT,Ohio ST Higher Ed Go BDS Ser.,NaN,P,02/12/2025,02/12/2025,"$500,001 - $1,000,000",New,
+DelBene,20026602,JT,TX Trans Commn TPK 5%42,NaN,P,01/27/2025,01/27/2025,"$15,001 - $50,000",New,
+Delaney,20030592,DC,"Paychex, Inc.",PAYX,P,06/26/2025,07/01/2025,"$1,001 - $15,000",New,
+Delaney,20030592,DC,STERIS plc ,STE,S (partial),06/26/2025,07/01/2025,"$1,001 - $15,000",New,
+Delaney,20030592,DC,"Clean Harbors, Inc. Common Stock S",NaN,S (partial),06/20/2025,07/01/2025,"$1,001 - $15,000",New,
+Delaney,20030592,DC,Markel Group Inc. Common Stock,NaN,P,06/06/2025,07/01/2025,"$1,001 - $15,000",New,
+Delaney,20030592,DC,Tractor Supply,TSCO,P,06/06/2025,07/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,"Fortune Brands Innovations, Inc.",NaN,S (partial),05/29/2025,06/01/2025,"$15,001 - $50,000",New,
+Delaney,20030442,DC,Toro Company ,NaN,S,05/28/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,"Dayforce, Inc. Common Stock ",DAY,S (partial),05/27/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,Markel Group Inc. Common Stock,NaN,P,05/27/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,Tractor Supply,TSCO,P,05/27/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030592,DC,Bio-Techne,TECH,S (partial),05/26/2025,07/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,Markel Group Inc. Common Stock,NaN,P,05/13/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,Tractor Supply,TSCO,P,05/13/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,"Dayforce, Inc. Common Stock ",DAY,S (partial),05/07/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,Markel Group Inc. Common Stock,NaN,P,05/07/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030442,DC,Tractor Supply,TSCO,P,05/05/2025,06/01/2025,"$1,001 - $15,000",New,
+Delaney,20030265,DC,Bio-Techne,TECH,P,04/29/2025,05/01/2025,"$1,001 - $15,000",New,
+Delaney,20030265,DC,A.O. Smith Corporation Common ,AOS,S,04/16/2025,05/01/2025,"$1,001 - $15,000",New,
+Delaney,20030265,DC,A.O. Smith Corporation Common S ,AOS,S (partial),04/10/2025,05/01/2025,"$1,001 - $15,000",New,
+Delaney,20030265,DC,Bio-Techne,TECH,P,04/09/2025,05/01/2025,"$1,001 - $15,000",New,
+Delaney,20030265,DC,"BJ's Wholesale Club Holdings, Inc.",NaN,P,04/09/2025,05/01/2025,"$1,001 - $15,000",New,
+Delaney,20030265,DC,"BJ's Wholesale Club Holdings, Inc.",NaN,P,04/04/2025,05/01/2025,"$1,001 - $15,000",New,
+Delaney,20030265,DC,"BJ's Wholesale Club Holdings, Inc.",NaN,P,04/01/2025,05/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Westinghouse Air Brake Technologies S,NaN,S (partial),03/25/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Toro Company ,NaN,S (partial),03/20/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,"Dayforce, Inc. Common Stock ",DAY,S (partial),03/18/2025,04/01/2025,"$15,001 - $50,000",New,
+Delaney,20029059,DC,"BJ's Wholesale Club Holdings, Inc.",NaN,P,03/17/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,"BJ's Wholesale Club Holdings, Inc.",NaN,P,03/14/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,"IDEXX Laboratories, Inc. ",IDXX,P,03/14/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Jones Lang LaSalle Incorporated,NaN,P,03/14/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,"Corpay, Inc. Common Stock ",CPAY,P,03/13/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Jones Lang LaSalle Incorporated,NaN,P,03/10/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Markel Group Inc. Common Stock,NaN,P,03/10/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Jones Lang LaSalle Incorporated,NaN,P,03/07/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Markel Group Inc. Common,NaN,P,03/07/2025,04/01/2025,"$15,001 - $50,000",New,
+Delaney,20029059,DC,A.O. Smith Corporation Common S ,AOS,S (partial),03/06/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Markel Group Inc. Common Stock,NaN,P,03/06/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,ITT Inc. Common Stock ,NaN,P,03/05/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Jones Lang LaSalle Incorporated,NaN,P,03/05/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20029059,DC,Viking Holdings Ltd Ordinary Shares,NaN,P,03/05/2025,04/01/2025,"$1,001 - $15,000",New,
+Delaney,20027975,DC,"CACI International, Inc. Class A",NaN,P,02/27/2025,03/01/2025,"$1,001 - $15,000",New,
+Delaney,20027975,DC,"CACI International, Inc. Class A S",NaN,S (partial),02/22/2025,03/01/2025,"$1,001 - $15,000",New,
+Delaney,20027975,DC,A.O. Smith Corporation Common ,AOS,S (partial),02/18/2025,03/01/2025,"$15,001 - $50,000",New,
+Delaney,20027975,DC,"CACI International, Inc. Class A S",NaN,S (partial),02/18/2025,03/01/2025,"$1,001 - $15,000",New,
+Delaney,20027975,DC,Brown & Brown,BRO,S (partial),02/10/2025,03/01/2025,"$1,001 - $15,000",New,
+Delaney,20027975,DC,Brown & Brown,BRO,S (partial),02/06/2025,03/01/2025,"$1,001 - $15,000",New,
+Delaney,20027975,DC,Brown & Brown,BRO,S (partial),02/05/2025,03/01/2025,"$1,001 - $15,000",New,
+Donalds,20029092,SP,Abbott Laboratories,ABT,P,03/20/2025,04/07/2025,"$1,001 - $15,000",New,Subholding of: Moran Wealth IRA
+Donalds,20029092,SP,"Amazon.com, Inc.",ANET,P,03/20/2025,04/07/2025,"$1,001 - $15,000",New,Subholding of: Moran Wealth IRA
+Donalds,20029092,SP,Arista Networks,ANET,P,03/20/2025,04/07/2025,"$1,001 - $15,000",New,Subholding of: Moran Wealth IRA
+Donalds,20029092,SP,"Autodesk, Inc.",ADSK,P,03/20/2025,04/07/2025,"$1,001 - $15,000",New,Subholding of: Moran Wealth IRA
+Donalds,20029092,SP,Broadcom,AVGO,P,03/20/2025,04/07/2025,"$1,001 - $15,000",New,Subholding of: Moran Wealth IRA
+Donalds,20029092,SP,Brown & Brown,BRO,P,03/20/2025,04/07/2025,"$1,001 - $15,000",New,Subholding of: Moran Wealth IRA
+Donalds,20029092,SP,Chemed Corp  ,CMG,S,03/06/2025,04/07/2025,"$1,001 - $15,000",New,Subholding of: Moran Wealth IRA
+Dunn,20027895,SP,MicroStrategy Incorporated,NaN,P,12/24/2024,03/05/2025,"$15,001 - $50,000",New,Subholding of: IRA #1
+Franklin,20030445,SP,Union Pacific Corporation,UNP,P,04/21/2025,05/03/2025,"$1,001 - $15,000",New,Subholding of: Fidelity Roth IRA
+Franklin,20030187,JT,"The Baldwin Insurance Group, Inc.",NaN,S (partial),04/10/2025,04/16/2025,"$500,001 - $1,000,000",New,Subholding of: Fidelity Joint TBE
+Franklin,20027834,JT,"The Baldwin Insurance Group, Inc.",NaN,S (partial),02/07/2025,02/10/2025,"$1,000,001 - $5,000,000",New,Subholding of: Fidelity Joint TBE
+Franklin,20027834,JT,"The Baldwin Insurance Group, Inc.",NaN,S (partial),02/06/2025,02/07/2025,"$15,001 - $50,000",New,Subholding of: Fidelity Joint TBE
+Green,20030331,JT,OUNZ Van Eck Gold Trust ETF,NaN,S,04/29/2025,05/12/2025,"$15,001 - $50,000",New,sale of OUNZ exchange traded fund
+Green,20029097,JT,OUNZ Van Eck Gold Trust ETF [OT],NaN,S,04/01/2025,04/07/2025,"$15,001 - $50,000",New,sold shares in OUNZ Van Eck gold trust ETF
+Green,20027900,JT,NGL ENERGY PARTNERS,NaN,S,02/28/2025,03/05/2025,"$15,001 - $50,000",New,Subholding of: Equitable Advisors Investment Account
+Green,20027845,JT,OUNZ Van Eck Gold Trust ETF,NaN,P,02/20/2025,02/25/2025,"$15,001 - $50,000",New,OUNZ Van Eck Gold Trust ETF
+Green,20027845,JT,NGL ENERGY PARTNERS,NaN,S,02/18/2025,02/25/2025,"$100,001 - $250,000",New,Subholding of: Equitable Advisors Investment Account
+Green,20027845,JT,OUNZ Van Eck Gold Trust ETF,NaN,P,02/18/2025,02/25/2025,"$100,001 - $250,000",New,"OUNZ Van Eck Gold Trust ETF,"
+Green,20026701,JT,NGL ENERGY PARTNERS,NaN,S,02/03/2025,02/06/2025,"$250,001 - $500,000",New,Subholding of: Equitable Advisors Investment Account
+Green,20026701,JT,OUNZ Van Eck Gold Trust ETF,NaN,P,02/03/2025,02/06/2025,"$250,001 - $500,000",New,Van Eck exchange traded fund gold trust
+Green,20026701,JT,NGL ENERGY PARTNERS,NaN,S,01/30/2025,02/03/2025,"$500,001 - $1,000,000",New,Subholding of: Equitable Advisors Investment Account
+Green,20026701,JT,OUNZ Van Eck Gold Trust ETF,NaN,P,01/30/2025,02/06/2025,"$500,001 - $1,000,000",New,Exchange traded ETF
+Green,20026701,JT,NGL ENERGY PARTNERS,NaN,S,01/28/2025,02/03/2025,"$50,001 - $100,000",New,Subholding of: Equitable Advisors Investment Account
+Green,20026538,JT,NGL ENERGY PARTNERS,NaN,S,01/02/2025,01/08/2025,"$15,001 - $50,000",New,Subholding of: Equitable Advisors Investment Account
+Hern,20026597,JT,AGCO Corporation Common,NaN,S,12/31/2024,01/02/2025,"$50,001 - $100,000",New,sell to close
+Hern,20026597,JT,Devon Energy,DVN,S (partial),12/31/2024,01/02/2025,"$250,001 - $500,000",New,Rebalance position toward original allocation
+Hern,20026597,JT,"DexCom, Inc.",DXCM,S,12/31/2024,01/02/2025,"$50,001 - $100,000",New,sell to close
+Hern,20026597,JT,"Estee Lauder Companies, Inc. ",EL,S,12/31/2024,01/02/2025,"$15,001 - $50,000",New,sell to closeID Owner Asset Transaction Date Notification Amount Cap.
+Hern,20026597,JT,Intel,INTC,S,12/31/2024,01/02/2025,"$50,001 - $100,000",New,sell to close
+Hern,20026597,JT,Johnson & Johnson,JNJ,S,12/31/2024,01/02/2025,"$100,001 - $250,000",New,sell to close
+Hern,20026597,JT,Home Depot (The),HD,P,12/12/2024,12/13/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20026597,JT,Exxon Mobil Corporation Common ,XOM,P,12/10/2024,12/11/2024,"$1,001 - $15,000",New,Dividend Reinvestment
+Hern,20026597,JT,Citigroup,C,S,12/03/2024,12/04/2024,"$500,001 - $1,000,000",New,Note Called by the issuer. position closed
+Hern,20030339,JT,Goldman Sachs,GS,P,04/24/2025,04/25/2025,"$250,001 - $500,000",New,Buy to open
+Hern,20030339,JT,BNP Paribas MTN 4/9/2030,NaN,P,04/04/2025,04/04/2025,"$250,001 - $500,000",New,Buy to open
+Hern,20030339,JT,BNP Paribas MTN 4/9/2030,NaN,P,04/04/2025,04/07/2025,"$1,000,001 - $5,000,000",New,Buy to open
+Hern,20030185,JT,MORGAN STANLEY FIN LLC,NaN,S,03/31/2025,04/01/2025,"$500,001 - $1,000,000",New,Matured - Redeemed by the issuer
+Jackson,20026545,JT,General Dynamics,GD,S,12/16/2024,01/09/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20026545,JT,"O'Reilly Automotive, Inc. ",ORLY,P,12/16/2024,01/09/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20026545,JT,Meta Platforms,META,P,12/09/2024,01/09/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20026545,JT,TIM S.A. American Depositary,NaN,S,12/09/2024,01/09/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030452,JT,Church & Dwight,CHD,S,05/14/2025,06/03/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030452,JT,International Flavors & Fragrances,IFF,P,05/14/2025,06/03/2025,"$50,001 - $100,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030452,JT,Linde plc,LIN,S,05/07/2025,06/03/2025,"$50,001 - $100,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030283,JT,Alphabet Inc. (Class A),GOOGL,S,04/21/2025,05/05/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030283,JT,Eli Lilly and Company Common,LLY,P,04/21/2025,05/05/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030283,JT,"Amazon.com, Inc.",AMZN,S,04/16/2025,05/05/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030283,JT,Meta Platforms,META,S,04/16/2025,05/05/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030283,JT,"Netflix, Inc.",NaN,P,04/16/2025,05/05/2025,"$50,001 - $100,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030283,JT,Aramark Common Stock,NaN,S,04/10/2025,05/05/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Jackson,20030283,JT,Microsoft,MSFT,S (partial),04/10/2025,05/05/2025,"$50,001 - $100,000",New,Subholding of: Morgan Stanley Trust AccountID Owner Asset Transaction Date Notification Amount Cap.
+Jackson,20029065,JT,ILLINOIS WESLEYAN UNIV  ,MSFT,P,03/28/2025,04/03/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley IRA
+Jackson,20029065,JT,"Salesforce, Inc. Common",CRM,S,03/11/2025,04/03/2025,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Trust Account
+Johnson,20029064,JT,Capital One,COF,P,03/21/2025,04/03/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20029064,JT,Accenture,ACN,S,03/19/2025,04/03/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20029064,JT,The Cigna Group Common Stock ,CI,P,03/19/2025,04/03/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20029064,JT,3M,MMM,P,03/15/2024,04/03/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20029064,JT,Accenture,ACN,S (partial),03/14/2025,04/03/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20029064,JT,3M,MMM,P,03/12/2025,04/03/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20029064,JT,Accenture,ACN,S (partial),03/12/2025,04/03/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20029064,JT,"Sonos, Inc.",NaN,S,03/11/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,Taiwan Semiconductor,NaN,S,03/11/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,Webster Financial Corporation,NaN,S,03/11/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,Accenture,ACN,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term GrowthID Owner Asset Transaction Date Notification Amount Cap.
+Johnson,20029064,JT,Agilent Technologies,A,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,Alcon Inc. Ordinary Shares ,NaN,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,Alphabet Inc. (Class A),GOOGL,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,PNC Financial Services,PNC,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,"Teradyne, Inc. ",TER,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,The Cigna Group Common Stock ,CI,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term GrowthID Owner Asset Transaction Date Notification Amount Cap.
+Johnson,20029064,JT,United Airlines Holdings,UAL,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20029064,JT,Zoetis,ZTS,S,03/03/2025,04/08/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20026762,JT,"Allete, Inc. ",NaN,S,01/28/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20026762,JT,Dell Technologies,DELL,S,01/28/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20026762,JT,Intuit,INTU,S,01/28/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20026762,JT,"Pepsico, Inc. ",PEP,S,01/28/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Long Term Growth
+Johnson,20026762,JT,PPG Industries,PPG,S,01/27/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20026762,JT,Chubb Limited,CB,S (partial),01/24/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20026762,JT,Goldman Sachs,GS,P,01/24/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20026762,JT,Morgan Stanley,MS,S (partial),01/24/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20026762,JT,Progressive Corporation,PGR,P,01/24/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20026762,JT,Merck & Co.,MRK,P,01/17/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20026762,JT,Walmart,WMT,S (partial),01/17/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Johnson,20026762,JT,American Electric Power,AEP,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Boeing,BA,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Bristol,NaN,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Broadcom,AVGO,S (partial),01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Charles River Laboratories,CRL,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient CoreID Owner Asset Transaction Date Notification Amount Cap.
+Johnson,20026762,JT,"ConAgra Brands, Inc. Common Stock S",CAG,S (partial),01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,ConocoPhillips,COP,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Constellation Brands,STZ,S (partial),01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,CoStar Group,CSGP,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,CVS Health,CVS,S (partial),01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Danaher Corporation,DHR,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Dollar General,DG,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient CoreID Owner Asset Transaction Date Notification Amount Cap.
+Johnson,20026762,JT,Dollar General,DG,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Dow Inc.,DOW,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Enphase Energy,ENPH,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Estee Lauder Companies, Inc. ",EL,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Eversource Energy,ES,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Hasbro, Inc.",NaN,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Juniper Networks, Inc. Common ",NaN,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Lamb Weston,LW,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,MarketAxess,MKTX,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Moderna, Inc.",MRNA,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Monster Beverage,MNST,S (partial),01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,MSCI Inc.,MSCI,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,NextEra Energy,NEE,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Nike, Inc.",NKE,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Palantir Technologies,PLTR,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Pepsico, Inc. ",PEP,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Pfizer, Inc. Common Stock ",PFE,S (partial),01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Qorvo, Inc.",NaN,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Regeneron Pharmaceuticals,REGN,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,SBA Communications,SBAC,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient CoreID Owner Asset Transaction Date Notification Amount Cap.
+Johnson,20026762,JT,Solventum,SOLV,S,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,"Super Micro Computer, Inc.",NaN,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,The Cigna Group Common Stock ,CI,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,The Hershey Company Common ,HSY,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Uber,UBER,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Verizon,VZ,S (partial),01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,Walgreens Boots Alliance,WBA,P,01/15/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch Tax Efficient Core
+Johnson,20026762,JT,PPG Industries,PPG,S (partial),01/13/2025,02/11/2025,"$1,001 - $15,000",New,Subholding of: Chase Brokerage Account (3935)
+Kelly,20026550,SP,Mississippi St Ref GO P/R 10/1/27,NaN,P,12/27/2024,01/09/2025,"$15,001 - $50,000",New,Subholding of: Victoria Kelly Trust ICA
+Kelly,20026550,SP,California St Go Call 12/1/27 4% due S,NaN,S (partial),12/02/2024,12/11/2024,"$1,001 - $15,000",New,Subholding of: Victoria Kelly Trust ICA
+Kelly,20026792,SP,New York City NY Muni Wtr Fina 2nd,NaN,S (partial),01/23/2025,02/13/2025,"$50,001 - $100,000",New,Subholding of: Victoria Kelly Trust ICA
+Kelly,20026792,SP,Fairfax Cnty VA Ser A Go 5%,NaN,P,01/22/2025,02/13/2025,"$100,001 - $250,000",New,Subholding of: Victoria Kelly Trust ICA
+Kelly,20026792,SP,Florida St Heg Fin Corp Rev due S,NaN,S (partial),01/02/2025,02/13/2025,"$1,001 - $15,000",New,Subholding of: Victoria Kelly Trust ICA
+Landsman,20026551,JT,"BlackRock, Inc. Common Stock ",BLK,P,12/19/2024,01/09/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20026551,JT,United Airlines Holdings,UAL,S,12/19/2024,01/09/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20030207,SP,Kroger,KR,S,05/09/2025,05/12/2025,"$250,001 - $500,000",New,Subholding of: Fidelity Brokerage
+Landsman,20030207,SP,Exxon Mobil Corporation Common ,XOM,E,05/06/2024,04/21/2025,"$1,001 - $15,000",New,Shares received in exchange for Pioneer Natural Resources Company (PXD) shares as a result of merger.
+Landsman,20029084,SP,Accenture,ACN,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Alphabet Inc. (Class A),GOOGL,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,"Amazon.com, Inc.",AMZN,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20029084,JT,Ameriprise Financial,AMP,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20029084,SP,Ameriprise Financial,AMP,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Apple Inc.,AAPL,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRAID Owner Asset Transaction Date Notification Amount Cap.
+Landsman,20029084,JT,Apple Inc.,AAPL,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (2)
+Landsman,20029084,SP,Arista Networks,ANET,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,"BlackRock, Inc. Common Stock ",BLK,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,Bristol,NaN,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (2)
+Landsman,20029084,SP,Cadence Design Systems,CDNS,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,"Cencora, Inc. Common Stock",NaN,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,Costco,COST,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20029084,SP,Costco,COST,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,Costco,COST,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (2)ID Owner Asset Transaction Date Notification Amount Cap.
+Landsman,20029084,JT,CrowdStrike,CRWD,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20029084,SP,Danaher Corporation,DHR,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Dollar General,DG,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,"Equinix, Inc.",NaN,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,Fifth Third Bancorp,FITB,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (2)
+Landsman,20029084,SP,Home Depot (The),HD,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Honeywell,HON,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,JP Morgan Chase & Co. ,JPM,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (2)
+Landsman,20029084,SP,L3Harris,LHX,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRAID Owner Asset Transaction Date Notification Amount Cap.
+Landsman,20029084,SP,Microsoft,MSFT,S,03/27/2025,04/04/2025,"$50,001 - $100,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,Microsoft,MSFT,S,03/27/2025,04/04/2025,"$50,001 - $100,000",New,Subholding of: Rockefeller Capital Management (2)
+Landsman,20029084,SP,NVIDIA Corporation,NVDA,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,NVIDIA Corporation,NVDA,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20029084,SP,"O'Reilly Automotive, Inc. ",ORLY,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Parker,NaN,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,Parker,NaN,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20029084,JT,Philip Morris International,PM,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (2)
+Landsman,20029084,JT,Procter & Gamble,PG,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (2)ID Owner Asset Transaction Date Notification Amount Cap.
+Landsman,20029084,SP,"Salesforce, Inc. Common Stock",NaN,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,JT,Simon Property Group,SPG,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (2)
+Landsman,20029084,SP,Thermo Fisher Scientific,TMO,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Uber,UBER,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,United Airlines Holdings,UAL,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,UnitedHealth Group,UNH,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Visa Inc.,V,S,03/27/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,Walt Disney Company (The),DIS,S,03/27/2025,04/04/2025,"$1,001 - $15,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20029084,SP,TE Connectivity,TEL,S,03/25/2025,04/04/2025,"$15,001 - $50,000",New,Subholding of: Sarah Landsman Traditional IRA
+Landsman,20027885,JT,"Amazon.com, Inc.",AMZN,S (partial),02/26/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,Ameriprise Financial,AMP,P,02/26/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,Costco,COST,S (partial),02/26/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)ID Owner Asset Transaction Date Notification Amount Cap.
+Landsman,20027885,JT,CrowdStrike,CRWD,P,02/26/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,NVIDIA Corporation,NVDA,S (partial),02/26/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,Parker,NaN,S (partial),02/26/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,"Amazon.com, Inc.",AMZN,P,02/20/2025,03/03/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,Arista Networks,ANET,S,02/20/2025,03/03/2025,"$15,001 - $50,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,"BlackRock, Inc. Common Stock ",BLK,S,02/18/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Landsman,20027885,JT,CrowdStrike,CRWD,P,02/18/2025,03/03/2025,"$1,001 - $15,000",New,Subholding of: Rockefeller Capital Management (1)
+Latta,20030480,SP,"Farmers & Merchants Bancorp,",NaN,P,06/05/2025,06/05/2025,"$15,001 - $50,000",New,Compensation
+Latta,20030234,SP,"Farmers & Merchants Bancorp, Inc.",NaN,P,04/20/2025,04/20/2025,"$1,001 - $15,000",New,Dividend reinvestment
+Lee,20026513,SP,Warner Bros. Discovery,WBD,S (partial),11/29/2024,01/05/2025,"$1,001 - $15,000",New,
+Lee,20026513,SP,"TuHURA Biosciences, Inc. ",NaN,P,11/25/2024,01/05/2025,"$1,001 - $15,000",New,
+Lee,20030458,SP,Novo Nordisk A/S Common Stock S,NaN,S (partial),05/08/2025,06/04/2025,"$1,001 - $15,000",New,"Five put contracts in Novo Nordisk (NVO) expiring June 20, 2025 at the $65 strike for $4 per share."
+McGuire,20030509,SP,"ServiceNow, Inc. Common Stock",NOW,P,05/16/2025,05/30/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch SEP IRA
+McGuire,20016861,SP,UnitedHealth Group,UNH,P,04/10/2025,05/15/2025,"$1,001 - $15,000",New,Subholding of: Merrill Lynch SEP IRA
+Moskowitz,20030455,DC,HCA Healthcare,HCA,P,05/15/2025,05/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20030455,DC,The Cigna Group Common Stock ,CI,P,05/15/2025,05/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20030455,DC,UnitedHealth Group,UNH,S,05/15/2025,05/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20030455,DC,UnitedHealth Group,UNH,S,05/15/2025,05/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20029079,DC,Broadcom,AVGO,S,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20029079,DC,Broadcom,AVGO,S,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20029079,DC,Elevance Health,ELV,S,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20029079,DC,Elevance Health,ELV,S,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20029079,DC,NVIDIA Corporation,NVDA,P,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20029079,DC,NVIDIA Corporation,NVDA,P,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20029079,DC,SPDR Long Dollar Gold Trust,NaN,P,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20029079,DC,SPDR Long Dollar Gold Trust,NaN,P,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (6)
+Moskowitz,20029079,SPDR,Long Dollar Gold Trust,NaN,P,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20029079,DC,TJX Companies,TJX,P,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20029079,DC,TJX Companies,TJX,P,03/10/2025,03/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20027896,DC,West Pharmaceutical Services,WST,S,02/13/2025,02/28/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (6)
+Moskowitz,20026731,DC,Abbott Laboratories,ABT,S,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20026731,DC,Abbott Laboratories,ABT,S,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (6)
+Moskowitz,20026731,DC,AbbVie,ABBV,P,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20026731,DC,Canadian National Railway Company,NaN,S,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)ID Owner Asset Transaction Date Notification Amount Cap.
+Moskowitz,20026731,DC,Canadian National Railway Company,NaN,S,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20026731,DC,Goldman Sachs,GS,P,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20026731,DC,Goldman Sachs,GS,P,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20026731,DC,McKesson Corporation,MCK,P,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20026731,DC,Merck & Co.,MRK,S,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20026731,DC,Merck & Co.,MRK,S,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (1)
+Moskowitz,20026731,DC,Stryker Corporation,SYK,P,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (5)
+Moskowitz,20026731,DC,Stryker Corporation,SYK,P,01/15/2025,01/31/2025,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Active Assets (6)
+Newhouse,20030292,SP,Accenture,ACN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Adobe Inc.,ADBE,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Alcan Inc Debs,NaN,P,04/11/2025,05/01/2025,"$15,001 - $50,000",New,12/15/2033 06.125%
+Newhouse,20030292,SP,Alphabet Inc. (Class A),GOOGL,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Amazon.com, Inc.",AMZN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Analog Devices,ADI,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Apple Inc.,AAPL,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,AT&T,T,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Bank of America,BAC,P,04/11/2025,05/01/2025,"$15,001 - $50,000",New,2/07/2042 05.875%
+Newhouse,20030292,SP,"BlackRock, Inc. Common Stock ",BLK,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Booking Holdings,BKNG,S,04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Broadcom,AVGO,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Danaher Corporation,DHR,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Deere & Company,DE,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Dollar General,DG,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Elevance Health,ELV,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Eli Lilly and Company Common Stock S,LLY,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Equity Residential,EQR,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Essential Utilities, Inc. Common Stock S",NaN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Estee Lauder Companies, Inc. ",EL,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Evergy, Inc. ",EVRG,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Fiserv, Inc. Common Stock ",FI,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Fortinet, Inc.",NaN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Honeywell,HON,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRAID Owner Asset Transaction Date Notification Amount Cap.
+Newhouse,20030292,SP,Intuit,INTU,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,JP Morgan Chase &Co,NaN,P,04/11/2025,05/01/2025,"$15,001 - $50,000",New,05/15/2038 06.400%
+Newhouse,20030292,SP,Linde plc,LIN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Lowe's,LOW,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Magna International, Inc. Common S ",NaN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Marathon Petroleum,MPC,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Microsoft,MSFT,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Mondelez International,MDLZ,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Moody's Corporation,MCO,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Netflix, Inc.",NaN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,NiSource,NI,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,NVIDIA Corporation,NVDA,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,PayPal,PYPL,S,04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Pepsico, Inc. ",PEP,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Prudential Financial,PRU,P,04/11/2025,05/01/2025,"$15,001 - $50,000",New,12/01/2037 06.625%
+Newhouse,20030292,SP,RTX Corporation,RTX,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Salesforce, Inc. Common Stock ",CRM,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"ServiceNow, Inc. Common Stock S",NOW,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Starbucks,SBUX,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,"Tesla, Inc.",TSLA,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,The Hershey Company Common S ,HSY,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Thermo Fisher Scientific,TMO,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Truist Financial,TFC,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Union Pacific Corporation,UNP,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,UnitedHealth Group,UNH,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,V.F. Corporation Common Stock S,NaN,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Verizon,VZ,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Visa Inc.,V,S (partial),04/11/2025,05/01/2025,"$1,001 - $15,000",New,Subholding of: Edward Jones IRA
+Newhouse,20030292,SP,Walmart,WMT,P,04/11/2025,05/01/2025,"$15,001 - $50,000",New,04/15/2041 05.625%
+Pelosi,20026590,SP,Apple Inc.,AAPL,S (partial),12/31/2024,12/31/2024,"$5,000,001 - $25,000,000",New,"Sold 31,600 shares."
+Pelosi,20026590,SP,NVIDIA Corporation ,NVDA,S (partial),12/31/2024,12/31/2024,"$1,000,001 - $5,000,000",New,"Sold 10,000 shares."
+Pelosi,20026590,SP,NVIDIA Corporation ,NVDA,P,12/20/2024,12/20/2024,"$500,001 - $1,000,000",New,"Exercised 500 call options purchased 11/22/23 (50,000 shares) at a strike price of $12 with an expiration date"
+Pelosi,20026590,SP,Palo Alto Networks,PANW,P,12/20/2024,12/20/2024,"$1,000,001 - $5,000,000",New,"Exercised 140 call options purchased 2/12/24 & 2/21/24 (14,000 shares) at a strike price of $100 with an"
+Pelosi,20026590,SP,Alphabet Inc. (Class A),GOOGL,P,01/14/2025,01/14/2025,"$250,001 - $500,000",New,Purchased 50 call options with a strike price of $150 and an expiration date of 1/16/26.
+Pelosi,20026590,SP,"Amazon.com, Inc.",AMZN,P,01/14/2025,01/14/2025,"$250,001 - $500,000",New,Purchased 50 call options with a strike price of $150 and an expiration date of 1/16/26.
+Pelosi,20026590,SP,NVIDIA Corporation ,NVDA,P,01/14/2025,01/14/2025,"$250,001 - $500,000",New,Purchased 50 call options with a strike price of $80 and an expiration date of 1/16/26.
+Pelosi,20026590,SP,"Tempus AI, Inc. ",NaN,P,01/14/2025,01/14/2025,"$50,001 - $100,000",New,Purchased 50 call options with a strike price of $20 and an expiration date of 1/16/26.
+Pelosi,20026590,SP,Vistra Corp.,VST,P,01/14/2025,01/14/2025,"$500,001 - $1,000,000",New,Purchased 50 call options with a strike price of $50 and an expiration date of 1/16/26.
+Peters,20026577,SP,U.S Treasury Bills,NaN,P,12/30/2024,12/31/2024,"$500,001 - $1,000,000",New,
+Peters,20026577,SP,U.S Treasury Bills [GS],NaN,S (partial),12/26/2024,12/31/2024,"$500,001 - $1,000,000",New,
+Peters,20026577,SP,Allocate Alpha Fund II LP [OT],NaN,P,12/23/2024,12/31/2024,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20026577,SP,Allocate Premier Access Fund [OT],NaN,P,12/23/2024,12/31/2024,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20026577,SP,U.S. Bancorp,USB,S (partial),12/19/2024,12/31/2024,"$50,001 - $100,000",New,
+Peters,20026577,SP,U.S Treasury Bills,NaN,P,12/16/2024,12/31/2024,"$250,001 - $500,000",New,
+Peters,20026577,SP,U.S Treasury Bills,NaN,P,12/16/2024,12/31/2024,"$250,001 - $500,000",New,
+Peters,20026577,SP,CA ST DEPT WTR UTIL,NaN,S,12/02/2024,12/31/2024,"$250,001 - $500,000",New,
+Peters,20030517,SP,Allocate Alpha Fund II LP,NaN,P,05/27/2025,05/31/2025,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20030517,SP,Allocate Premier Access Fund,NaN,P,05/23/2025,05/31/2025,"$15,001 - $50,000",New,Pooled Investment Fund
+Peters,20030517,SP,Lynett Capital Partners III,NaN,P,05/21/2025,05/31/2025,"$100,001 - $250,000",New,Pooled Investment Fund/Venture Capital
+Peters,20030340,SP,Kent Street Group LLC,NaN,P,04/14/2025,05/30/2025,"$15,001 - $50,000",New,Pooled Investment Fund/Venture Capital
+Peters,20030340,SP,U.S Treasury Bills [GS],NaN,S (partial),04/11/2025,04/30/2025,"$250,001 - $500,000",New,
+Peters,20029120,SP,U.S Treasury Bills,NaN,P,03/31/2025,03/31/2025,"$500,001 - $1,000,000",New,
+Peters,20029120,SP,U.S Treasury Bills [GS],NaN,S (partial),03/27/2025,03/31/2025,"$500,001 - $1,000,000",New,
+Peters,20027961,SP,U.S Treasury Bills,NaN,P,02/03/2025,02/28/2025,"$250,001 - $500,000",New,
+Peters,20026774,SP,U.S Treasury Bills [GS],NaN,S (partial),01/28/2025,01/31/2025,"$250,001 - $500,000",New,
+Peters,20026774,SP,Kent Street Group LLC,NaN,P,01/10/2025,01/31/2025,"$15,001 - $50,000",New,Pooled Investment Fund/Venture Capital
+Pfluger,20021220,SP,Warner Bros. Discovery,WBD,S,01/13/2025,02/07/2025,"$1,001 - $15,000",New,Subholding of: RBC Roth IRA
+Randall,20026756,SP,Alphabet Inc. (Class A),GOOGL,S (partial),01/07/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Abbott Laboratories,ABT,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Amgen,AMGN,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Exxon Mobil Corporation Common ,XOM,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Fortive,FTV,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Medtronic,MDT,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison LeaheyID Owner Asset Transaction Date Notification Amount Cap.
+Randall,20026756,SP,Mondelez International,MDLZ,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,"Pepsico, Inc. ",PEP,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Procter & Gamble,PG,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Verizon,VZ,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Randall,20026756,SP,Wells Fargo,WFC,S,01/06/2025,02/10/2025,"$1,001 - $15,000",New,Subholding of: Garret D. Leahey 2019 Irrevocable F/B/O Alison Leahey
+Schneider,20027911,SP,Alliant Energy,LNT,S (partial),01/24/2025,02/04/2025,"$500,001 - $1,000,000",New,Partial redemption of stock
+Sessions,20030544,SP,Danaher Corporation,DHR,S,06/12/2025,06/21/2025,"$50,001 - $100,000",New,Subholding of: Trust One
+Sessions,20030544,SP,Johnson & Johnson,JNJ,S,06/12/2025,06/21/2025,"$15,001 - $50,000",New,Subholding of: Trust One
+Spartz,20030233,SP,Simon Property Group,SPG,P,04/03/2025,04/20/2025,"$1,001 - $15,000",New,This Transaction was made by Jason Spartz (spouse) Roth IRA
+Spartz,20026754,SP,Simon Property Group,SPG,P,02/03/2025,02/07/2025,"$15,001 - $50,000",New,This Transaction was made by Jason Spartz (spouse) Roth IRA
+Steube,20024927,SP,Synovus Financial Corp. ,NaN,S,02/19/2025,03/19/2025,"$15,001 - $50,000",New,Company distribution
+Wasserman Schultz,20027912,DC,"Hurco Companies, Inc. ",NaN,S,02/06/2025,02/06/2025,"$1,001 - $15,000",New,

@@ -17,37 +17,10 @@ alpha_vantage
 BeautifulSoup4
 pdfplumber
 
-# Database	
-## PostgreSQL
-openpyxl
-SQLAlchemy
-psycopg2
-## AWS RDS
-boto3
 
 # Feature Engineering	
 pandas
 NumPy
-
-# ML Models (MVP)	
-Scikit-learn
-XGBoost
-
-# ML Models (Upgrade)	
-TensorFlow
-Keras
-
-# Visualization
-Matplotlib
-Seaborn
-Plotly
-Dash
-ridgeplot
-
-# Deployment	
-AWS
-S3
-Lambda
 
 # Web Interface	
 Flask

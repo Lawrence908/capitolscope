@@ -6,9 +6,10 @@ WORKDIR /build
 # Install uv package manager
 RUN pip install --no-cache-dir uv
 
-# Copy only what's needed for package installation
+# Copy project files in the structure expected by pyproject.toml
 COPY pyproject.toml .
-COPY app/src/ src/
+COPY README.md .
+COPY app/ app/
 
 # Install dependencies using uv
 RUN uv pip install --no-cache-dir --system .

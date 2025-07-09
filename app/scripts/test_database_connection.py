@@ -214,7 +214,7 @@ def check_environment_variables():
         "DATABASE_PASSWORD",
         "DATABASE_NAME",
         "SUPABASE_URL",
-        "SUPABASE_ANON_KEY",
+                    "SUPABASE_KEY",
         "SECRET_KEY",
     ]
     

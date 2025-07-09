@@ -46,7 +46,7 @@ docker-compose logs db
 
 ```bash
 # Install dependencies
-pip install -r requirements.txt
+pip install -e .
 
 # Initialize database tables and reference data
 python scripts/init_database.py

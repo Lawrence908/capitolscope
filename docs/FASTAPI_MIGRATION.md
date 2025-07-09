@@ -60,7 +60,7 @@ If you prefer manual setup:
 
 ```bash
 # 1. Install dependencies
-cd app && pip install -e . && cd ..
+pip install -e .
 
 # 2. Create .env file (see template below)
 cp .env.template .env

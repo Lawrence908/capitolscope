@@ -1,0 +1,123 @@
+# docker-compose -p capitolscope-dev up --build
+
+services:
+  # FastAPI Application
+  capitolscope:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+      target: builder
+    container_name: capitolscope-dev
+    volumes:
+      - ./app/logs:/app/logs
+      - ./app/src:/app/src
+      - ./data:/app/data
+      - ./alembic:/app/alembic
+      - ./alembic.ini:/app/alembic.ini
+    ports:
+      - "8001:8000"
+    depends_on:
+      - redis-dev
+    env_file:
+      - .env
+    networks:
+      - capitolscope-network
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+    command: python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/src
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Redis for Celery and Caching
+  redis-dev:
+    image: redis:7-alpine
+    container_name: capitolscope-redis-dev
+    restart: unless-stopped
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    expose:
+      - "6379"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-devpassword}
+    entrypoint: >
+      sh -c '
+        redis-server --requirepass "$$REDIS_PASSWORD" --maxmemory 512mb --maxmemory-policy allkeys-lru
+      '
+    volumes:
+      - redis-data:/data
+    networks:
+      - capitolscope-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-devpassword}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # Background Worker for Data Ingestion
+  worker:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+      target: builder
+    container_name: capitolscope-worker-dev
+    volumes:
+      - ./app/logs:/app/logs
+      - ./app/src:/app/src
+      - ./data:/app/data
+    depends_on:
+      - redis-dev
+      - capitolscope
+    env_file:
+      - .env
+    networks:
+      - capitolscope-network
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+    command: python -m celery -A background.celery_app worker --loglevel=info --concurrency=2
+    restart: unless-stopped
+
+  # Celery Beat Scheduler
+  scheduler:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+      target: builder
+    container_name: capitolscope-scheduler-dev
+    volumes:
+      - ./app/logs:/app/logs
+      - ./app/src:/app/src
+      - ./data:/app/data
+    depends_on:
+      - redis-dev
+      - capitolscope
+    env_file:
+      - .env
+    networks:
+      - capitolscope-network
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+    command: python -m celery -A background.celery_app beat --loglevel=info
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+    name: capitolscope-redis-data
+
+networks:
+  capitolscope-network:
+    name: capitolscope-dev
+    driver: bridge 

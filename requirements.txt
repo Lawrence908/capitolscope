@@ -9,6 +9,12 @@ ipython
 ipykernel
 python-dotenv
 
+# Database
+psycopg2-binary
+SQLAlchemy>=2.0.0
+alembic
+asyncpg
+
 # Data Ingestion
 pandas
 requests
@@ -17,7 +23,6 @@ alpha_vantage
 BeautifulSoup4
 pdfplumber
 
-
 # Feature Engineering	
 pandas
 NumPy
@@ -25,3 +30,17 @@ NumPy
 # Web Interface	
 Flask
 Django
+FastAPI
+uvicorn
+
+# Authentication & Security
+bcrypt
+PyJWT
+cryptography
+
+# Payment Processing
+stripe
+
+# Email Services
+sendgrid
+mailgun

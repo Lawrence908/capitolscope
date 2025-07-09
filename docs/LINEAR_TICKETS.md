@@ -2,7 +2,7 @@
 
 ## 🎯 **EPIC: Core Transaction Viewing System**
 
-### **TICKET-001: Transaction List Page**
+### **CAP-10: Transaction List Page**
 **Priority:** High  
 **Estimate:** 3 days  
 **Labels:** `frontend`, `core-feature`
@@ -26,7 +26,7 @@ Create a main transactions page that displays all congressional trading data in 
 
 ---
 
-### **TICKET-002: Individual Member Profile Page**
+### **CAP-11: Individual Member Profile Page**
 **Priority:** High  
 **Estimate:** 4 days  
 **Labels:** `frontend`, `member-profile`
@@ -52,7 +52,7 @@ Create detailed profile pages for each congress member showing their trading his
 
 ## 📈 **EPIC: Stock Database & Price Tracking Infrastructure**
 
-### **TICKET-003: Comprehensive Stock Database Setup**
+### **CAP-24: Comprehensive Stock Database Setup**
 **Priority:** High  
 **Estimate:** 5 days  
 **Labels:** `backend`, `database`, `stocks`, `foundation`
@@ -81,7 +81,7 @@ Build a comprehensive stock database covering all assets traded by congress memb
 
 ---
 
-### **TICKET-004: Daily Price Data Ingestion System**
+### **CAP-25: Daily Price Data Ingestion System**
 **Priority:** High  
 **Estimate:** 6 days  
 **Labels:** `backend`, `data-ingestion`, `automation`
@@ -111,7 +111,7 @@ Create an automated system to fetch and store daily price data for all tracked s
 
 ---
 
-### **TICKET-005: Portfolio Performance Engine**
+### **CAP-26: Portfolio Performance Engine**
 **Priority:** Medium  
 **Estimate:** 4 days  
 **Labels:** `backend`, `analytics`, `performance`
@@ -142,7 +142,7 @@ Build the core engine that calculates portfolio performance, gains/losses, and b
 
 ## 📊 **EPIC: Portfolio Visualization**
 
-### **TICKET-006: TradingView-Style Stock Charts**
+### **CAP-27: TradingView-Style Stock Charts**
 **Priority:** Medium  
 **Estimate:** 5 days  
 **Labels:** `frontend`, `charts`, `visualization`
@@ -172,7 +172,7 @@ Create interactive stock charts similar to TradingView that show congressional t
 
 ---
 
-### **TICKET-007: Member Portfolio Dashboard**
+### **CAP-12: Member Portfolio Dashboard**
 **Priority:** Medium  
 **Estimate:** 5 days  
 **Labels:** `frontend`, `charts`, `portfolio`
@@ -196,7 +196,7 @@ Create a portfolio dashboard that shows a congress member's holdings like a pers
 
 ---
 
-### **TICKET-008: Portfolio Comparison Tool**
+### **CAP-13: Portfolio Comparison Tool**
 **Priority:** Low  
 **Estimate:** 3 days  
 **Labels:** `frontend`, `comparison`
@@ -215,7 +215,7 @@ Allow users to compare portfolios between different congress members.
 
 ## 📧 **EPIC: Email Notification System**
 
-### **TICKET-009: Email Newsletter Infrastructure**
+### **CAP-14: Email Newsletter Infrastructure**
 **Priority:** Medium  
 **Estimate:** 4 days  
 **Labels:** `backend`, `email`, `notifications`
@@ -239,7 +239,7 @@ Build the email notification system for alerting users about significant congres
 
 ---
 
-### **TICKET-010: Trade Alert System**
+### **CAP-15: Trade Alert System**
 **Priority:** Medium  
 **Estimate:** 3 days  
 **Labels:** `backend`, `alerts`
@@ -264,7 +264,7 @@ Create automated alerts for significant trades (large amounts, specific stocks, 
 
 ## 💬 **EPIC: Community Features**
 
-### **TICKET-011: Message Board System**
+### **CAP-16: Message Board System**
 **Priority:** Low  
 **Estimate:** 6 days  
 **Labels:** `frontend`, `backend`, `community`
@@ -288,7 +288,7 @@ Create a community message board where users can discuss congressional trading a
 
 ---
 
-### **TICKET-012: Trade Discussion Threads**
+### **CAP-17: Trade Discussion Threads**
 **Priority:** Low  
 **Estimate:** 2 days  
 **Labels:** `frontend`, `integration`
@@ -306,7 +306,7 @@ Integrate discussion threads with individual trades and member profiles.
 
 ## 💎 **EPIC: Premium Features**
 
-### **TICKET-013: Pro Features Infrastructure**
+### **CAP-18: Pro Features Infrastructure**
 **Priority:** Medium  
 **Estimate:** 5 days  
 **Labels:** `backend`, `premium`, `billing`
@@ -329,7 +329,7 @@ Build the foundation for premium features and subscription management.
 
 ---
 
-### **TICKET-014: Advanced Analytics Dashboard**
+### **CAP-19: Advanced Analytics Dashboard**
 **Priority:** Low  
 **Estimate:** 7 days  
 **Labels:** `frontend`, `premium`, `analytics`
@@ -355,7 +355,7 @@ Create advanced analytics features for premium users.
 
 ## 🔧 **EPIC: Technical Infrastructure**
 
-### **TICKET-015: API Development**
+### **CAP-20: API Development**
 **Priority:** High  
 **Estimate:** 4 days  
 **Labels:** `backend`, `api`
@@ -379,7 +379,7 @@ Build RESTful API endpoints for all frontend features.
 
 ---
 
-### **TICKET-016: Database Schema Design**
+### **CAP-21: Database Schema Design**
 **Priority:** High  
 **Estimate:** 3 days  
 **Labels:** `backend`, `database`
@@ -405,7 +405,7 @@ Design and implement the complete database schema for all features.
 
 ## 🚀 **EPIC: Deployment & DevOps**
 
-### **TICKET-017: Production Deployment**
+### **CAP-22: Production Deployment**
 **Priority:** High  
 **Estimate:** 3 days  
 **Labels:** `devops`, `deployment`
@@ -429,7 +429,7 @@ Deploy the application to production with proper monitoring and scaling.
 
 ---
 
-### **TICKET-018: Performance Optimization**
+### **CAP-23: Performance Optimization**
 **Priority:** Medium  
 **Estimate:** 4 days  
 **Labels:** `performance`, `optimization`
@@ -450,36 +450,36 @@ Optimize application performance for large datasets and high traffic.
 ## 📋 **MILESTONE: Foundation (Stock DB + Basic Features)**
 **Target Date:** 6 weeks  
 **Total Estimate:** 25 days
-**Critical Path:** TICKET-003 → TICKET-004 → TICKET-001 → TICKET-002
+**Critical Path:** CAP-24 → CAP-25 → CAP-10 → CAP-11
 
 **Tickets:**
-- TICKET-003: Comprehensive Stock Database Setup (5 days)
-- TICKET-004: Daily Price Data Ingestion System (6 days)
-- TICKET-001: Transaction List Page (3 days)
-- TICKET-002: Individual Member Profile Page (4 days)
-- TICKET-015: API Development (4 days)
-- TICKET-016: Database Schema Design (3 days)
+- CAP-24: Comprehensive Stock Database Setup (5 days)
+- CAP-25: Daily Price Data Ingestion System (6 days)
+- CAP-10: Transaction List Page (3 days)
+- CAP-11: Individual Member Profile Page (4 days)
+- CAP-20: API Development (4 days)
+- CAP-21: Database Schema Design (3 days)
 
 ## 📋 **MILESTONE: Core Features (Charts + Performance)**
 **Target Date:** 10 weeks  
 **Total Estimate:** 18 days
 
 **Tickets:**
-- TICKET-005: Portfolio Performance Engine (4 days)
-- TICKET-006: TradingView-Style Stock Charts (5 days)
-- TICKET-007: Member Portfolio Dashboard (5 days)
-- TICKET-009: Email Newsletter Infrastructure (4 days)
+- CAP-26: Portfolio Performance Engine (4 days)
+- CAP-27: TradingView-Style Stock Charts (5 days)
+- CAP-12: Member Portfolio Dashboard (5 days)
+- CAP-14: Email Newsletter Infrastructure (4 days)
 
 ## 📋 **MILESTONE: Production Launch**
 **Target Date:** 12 weeks  
 **Total Estimate:** 10 days
 
 **Tickets:**
-- TICKET-017: Production Deployment (3 days)
-- TICKET-018: Performance Optimization (4 days)
-- TICKET-010: Trade Alert System (3 days)
+- CAP-22: Production Deployment (3 days)
+- CAP-23: Performance Optimization (4 days)
+- CAP-15: Trade Alert System (3 days)
 
-## 📋 **MILESTONE: Community & Premium (Tickets 011, 013, 014)**
+## 📋 **MILESTONE: Community & Premium (CAP-16, CAP-18, CAP-19)**
 **Target Date:** 16 weeks  
 **Total Estimate:** 18 days
 
@@ -488,27 +488,27 @@ Optimize application performance for large datasets and high traffic.
 ## 🎯 **Priority Matrix:**
 
 **Critical Foundation (Must Have First):**
-- TICKET-003: Comprehensive Stock Database Setup
-- TICKET-004: Daily Price Data Ingestion System
-- TICKET-015: API Development
-- TICKET-016: Database Schema Design
+- CAP-24: Comprehensive Stock Database Setup
+- CAP-25: Daily Price Data Ingestion System
+- CAP-20: API Development
+- CAP-21: Database Schema Design
 
 **High Priority (Launch Critical):**
-- TICKET-001: Transaction List Page
-- TICKET-002: Individual Member Profile Page
-- TICKET-017: Production Deployment
+- CAP-10: Transaction List Page
+- CAP-11: Individual Member Profile Page
+- CAP-22: Production Deployment
 
 **Medium Priority (Core Features):**
-- TICKET-005: Portfolio Performance Engine
-- TICKET-006: TradingView-Style Stock Charts
-- TICKET-007: Member Portfolio Dashboard
-- TICKET-009: Email Newsletter Infrastructure
-- TICKET-010: Trade Alert System
-- TICKET-013: Pro Features Infrastructure
-- TICKET-018: Performance Optimization
+- CAP-26: Portfolio Performance Engine
+- CAP-27: TradingView-Style Stock Charts
+- CAP-12: Member Portfolio Dashboard
+- CAP-14: Email Newsletter Infrastructure
+- CAP-15: Trade Alert System
+- CAP-18: Pro Features Infrastructure
+- CAP-23: Performance Optimization
 
 **Low Priority (Enhancement):**
-- TICKET-008: Portfolio Comparison Tool
-- TICKET-011: Message Board System
-- TICKET-012: Trade Discussion Threads
-- TICKET-014: Advanced Analytics Dashboard 
+- CAP-13: Portfolio Comparison Tool
+- CAP-16: Message Board System
+- CAP-17: Trade Discussion Threads
+- CAP-19: Advanced Analytics Dashboard 

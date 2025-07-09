@@ -1,0 +1,633 @@
+Member,DocID,Owner,Asset,Ticker,Transaction Type,Transaction Date,Notification Date,Amount,Filing Status,Description
+Amash,20010646,DC,"Amazon.com, Inc. ",AMZN,P,11/01/2018,11/01/2018,"$15,001 - $50,000",New,Subholding of: Charles Schwab Investment Account - DC1
+Amash,20010646,DC,"Amazon.com, Inc. ",AMZN,P,11/01/2018,11/01/2018,"$15,001 - $50,000",New,Subholding of: Charles Schwab Investment Account - DC2
+Amash,20010646,DC,"Amazon.com, Inc. ",AMZN,P,11/01/2018,11/01/2018,"$15,001 - $50,000",New,Subholding of: Charles Schwab Investment Account - DC3
+Amash,20010646,DC,"Sonos, Inc. ",NaN,P,11/01/2018,11/01/2018,"$1,001 - $15,000",New,Subholding of: Charles Schwab Investment Account - DC1
+Amash,20010021,DC,Apple Inc.,AAPL,P,08/01/2018,08/01/2018,"$1,001 - $15,000",New,Subholding of: Charles Schwab Investment Account - DC2
+Amash,20010021,DC,Nintendo Co Ltd ADR ,NaN,P,08/01/2018,08/01/2018,"$1,001 - $15,000",New,Subholding of: Charles Schwab Investment Account - DC3
+Amash,20010021,DC,Walt Disney Company (The),DIS,P,08/01/2018,08/01/2018,"$15,001 - $50,000",New,Subholding of: Charles Schwab Investment Account - DC3
+Amash,20010021,DC,Walt Disney Company (The),DIS,P,08/01/2018,08/01/2018,"$15,001 - $50,000",New,Subholding of: Charles Schwab Investment Account - DC1
+Amash,20010021,DC,Walt Disney Company (The),DIS,P,08/01/2018,08/01/2018,"$15,001 - $50,000",New,Subholding of: Charles Schwab Investment Account - DC2
+Blum,20010478,JT,Enbridge Inc ,NaN,P,09/18/2018,09/18/2018,"$100,001 - $250,000",New,
+Blum,20010478,JT,Ford Motor Company,F,P,09/18/2018,09/18/2018,"$50,001 - $100,000",New,
+Blum,20008963,JT,"Tintri, Inc. ",NaN,S,02/2/2018,02/2/2018,"$50,001 - $100,000",New,
+Blumenauer,20009879,SP,Molson Coors Beverage Company,TAP,P,07/09/2018,07/12/2018,"$1,001 - $15,000",New,
+Blumenauer,20009879,SP,Dun & Bradstreet Corporation S,NaN,S,07/06/2018,07/12/2018,"$1,001 - $15,000",New,
+Blumenauer,20009879,SP,general Electric Company ,NaN,S,07/05/2018,07/12/2018,"$1,001 - $15,000",New,
+Blumenauer,20009879,SP,Caterpillar Inc.,CAT,P,06/26/2018,07/12/2018,"$15,001 - $50,000",New,Purchase of Caterpillar
+Brooks,20010805,JT,Berkshire Hathaway,BRK.B,P,10/30/2018,10/30/2018,"$15,001 - $50,000",New,
+Brooks,20010541,JT,Berkshire Hathaway,BRK.B,P,10/24/2018,10/24/2018,"$15,001 - $50,000",New,
+Brooks,20010541,JT,Duke Energy,DUK,P,10/02/2018,10/02/2018,"$15,001 - $50,000",New,
+Brooks,20010366,JT,"alpha Pro Tech, ltd. (aPT) [sT] s ",NaN,s,09/24/2018,09/24/2018,"$1,001 - $15,000",New,
+Brooks,20010366,JT,Duke Energy,DUK,P,09/24/2018,09/24/2018,"$15,001 - $50,000",New,
+Brooks,20009918,SP,"Velicept Therapeutics, Inc. [PS] P",NaN,P,07/12/2018,07/12/2018,"$1,001 - $15,000",New,INVESTMENT PURCHaSE
+Brooks,20009848,JT,"lee Enterprises, Incorporated",NaN,P,06/26/2018,06/26/2018,"$15,001 - $50,000",New,
+Brooks,20009433,JT,Duke Energy,DUK,P,04/16/2018,04/16/2018,"$15,001 - $50,000",New,
+Brooks,20009475,SP,"MYoTa, INC. [PS]",NaN,P,04/12/2018,04/20/2018,"$15,001 - $50,000",New,INVESTMENT
+Brooks,20009061,JT,Decatur ala City Brd Ed spl Tax sch,NaN,s,02/12/2018,02/12/2018,"$15,001 - $50,000",New,
+Brooks,20009061,JT,Duke Energy,DUK,P,02/12/2018,02/12/2018,"$15,001 - $50,000",New,
+Brooks,20008849,SP,VELICEPT,NaN,P,01/9/2018,01/12/2018,"$1,001 - $15,000",New,
+Brooks,20008873,JT,Etowah Cnty ala Brd Ed Cap Outlay,NaN,s,01/23/2018,01/23/2018,"$1,001 - $15,000",New,
+Brooks,20008873,JT,Mobile Cnty ala Brd sch Commrs,NaN,s,01/23/2018,01/23/2018,"$1,001 - $15,000",New,
+Chu,20008738,SPX,DEC 29 2625 CaLL,NaN,P,12/28/2017,12/28/2017,"$1,001 - $15,000",New,CaLL
+Chu,20008738,SPX,JaN 31 2650 CaLL,NaN,S,12/28/2017,12/28/2017,"$1,001 - $15,000",New,CaLL
+Chu,20008738,SPX,DEC 15 2590 CaLL,NaN,P,12/12/2017,12/12/2017,"$15,001 - $50,000",New,CaLL
+Chu,20008738,SPX,JUN 29 2700 CaLL,NaN,S,12/12/2017,12/12/2017,"$1,001 - $15,000",New,
+Chu,20009294,SPX,MaR 12 2300 PUT [oT] P,NaN,P,03/02/2018,03/02/2018,"$1,001 - $15,000",New,CaLL
+Chu,20009119,SPX,MaR 16 2150 PUT,NaN,P,02/5/2018,02/5/2018,"$1,001 - $15,000",New,PUT
+Chu,20009119,SPX,MaR 16 2350 PUT,NaN,P,02/5/2018,02/5/2018,"$1,001 - $15,000",New,
+Chu,20008965,SPX,JaN 31 2725 CaLL,NaN,P,01/9/2018,01/9/2018,"$1,001 - $15,000",New,CaLL
+Chu,20008965,SPX,JaN 31 2750 CaLL,NaN,S,01/9/2018,01/9/2018,"$1,001 - $15,000",New,CaLLID Owner Asset Transaction Date Notification Amount
+Chu,20008965,SPX,JaN 31 2650 CaLL,NaN,P,01/4/2018,01/4/2018,"$1,001 - $15,000",New,CaLL
+Chu,20008965,SPX,JaN 31 2650 CaLL,NaN,P,01/4/2018,01/4/2018,"$1,001 - $15,000",New,CaLL
+Chu,20008965,SPX,JaN 31 2725 CaLL,NaN,S,01/4/2018,01/4/2018,"$1,001 - $15,000",New,CaLL
+Chu,20008965,SPX,JaN 31 2775 CaLL,NaN,P,01/16/2018,01/16/2018,"$1,001 - $15,000",New,CaLL
+Chu,20008965,SPX,JUN 29 2700 CaLL,NaN,P,01/16/2018,01/16/2018,"$15,001 - $50,000",New,
+Chu,20008965,SPX,JaN 31 2750 CaLL,NaN,P,01/12/2018,01/12/2018,"$1,001 - $15,000",New,CaLL
+Chu,20008965,SPX,JaN 31 2775 CaLL,NaN,S,01/12/2018,01/12/2018,"$1,001 - $15,000",New,CaLL
+Clark,20010697,SP,AMC Networks Inc.,NaN,P,10/01/2018,01/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010697,SP,AMC Networks Inc.,NaN,P,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Apple Inc.,AAPL,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Apple Inc.,AAPL,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010697,SP,Check Point Software Technologies S,NaN,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010697,SP,Check Point Software Technologies S,NaN,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Clorox,CLX,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Clorox,CLX,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010697,SP,"HSbC Holdings, plc. ",NaN,P,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010697,SP,"HSbC Holdings, plc. ",NaN,P,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Intel,INTC,P,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Intel,INTC,P,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010697,SP,Sealed Air Corporation ,NaN,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010697,SP,Sealed Air Corporation ,NaN,S,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Starbucks,SBUX,P,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010697,SP,Starbucks,SBUX,P,10/01/2018,11/18/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010411,SP,Anadarko Petroleum Corporation P,NaN,P,07/06/2018,10/03/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20010411,SP,Anadarko Petroleum Corporation P,NaN,P,07/06/2018,10/03/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010411,SP,Chubb Limited,CB,S,07/06/2018,10/03/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20010411,SP,Chubb Limited,CB,S,07/06/2018,10/03/2018,"$1,001 - $15,000",New,Redeemed Full Call Payout 4.6% 12/15/22
+Clark,20009482,SP,Starbucks,SBUX,S,07/03/2017,04/25/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20009485,SP,China Mobile limited ,NaN,S,04/09/2018,05/08/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20009485,SP,China Mobile limited ,NaN,S,04/09/2018,05/08/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20008967,SP,Abb ltd ,NaN,P,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,Abb ltd ,NaN,P,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20008967,SP,Clorox,CLX,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,Emerson Electric,EMR,P,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,Emerson Electric,EMR,P,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20008967,SP,glaxoSmithKline PlC ,NaN,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20008967,SP,glaxoSmithKline PlC ,NaN,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRAiD owner asset transaction Date notification amount
+Clark,20008967,SP,"Hasbro, Inc. ",HAS,P,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,"Hasbro, Inc. ",HAS,P,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20008967,SP,Pioneer Natural Resources Company,NaN,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20008967,SP,Pioneer Natural Resources Company,NaN,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,Sony Corporation ,NaN,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,Southern Company,SO,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,Waste Management,WM,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise SEP IRA
+Clark,20008967,SP,Waste Management,WM,S,01/3/2018,02/8/2018,"$1,001 - $15,000",New,
+Clark,20009482,SP,Dominion Energy,D,S,01/05/2017,04/25/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Clark,20009482,SP,general Electric Company ,NaN,S,01/05/2017,04/25/2018,"$1,001 - $15,000",New,Subholding of: Ameriprise Traditional IRA
+Curbelo,20009997,SP,"NKP Ventures, LLC [oT] P",NaN,P,07/25/2018,07/25/2018,"$1,001 - $15,000",New,minority investment in an LLC
+Curbelo,20009415,SP,"NKP Ventures, LLC [oT]",NaN,P,04/02/2018,04/02/2018,"$15,001 - $50,000",New,Minority investment in an LLC
+Curbelo,20009193,SP,"Facebook, Inc.",NaN,S,02/6/2018,03/7/2018,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,iShares Core S&P Small,NaN,S,02/6/2018,03/7/2018,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,iShares Russell 1000 growth ETF ,NaN,S,02/6/2018,03/7/2018,"$15,001 - $50,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,SPdR dow Jones Industrial average,NaN,S,02/5/2018,03/7/2018,"$15,001 - $50,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,"Facebook, Inc.",NaN,P,02/20/2018,03/7/2018,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,iShares Core S&P Small,NaN,P,02/20/2018,03/7/2018,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,iShares Russell 1000 growth ETF ,NaN,P,02/20/2018,03/7/2018,"$15,001 - $50,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,RoBo global Robotics and automation,NaN,P,02/20/2018,03/7/2018,"$1,001 - $15,000",New,Subholding of: UBS Brokerage account
+Curbelo,20009193,SP,SPdR dow Jones Industrial average,NaN,P,02/20/2018,03/7/2018,"$15,001 - $50,000",New,
+Curbelo,20009193,SP,RoBo global Robotics and automation,NaN,S,02/2/2018,03/7/2018,"$1,001 - $15,000",New,Subholding of: UBS Brokerage accountID Owner Asset Transaction Date Notification Amount
+Davis,20010664,SP,Electronic Arts,EA,P,10/24/2018,10/26/2018,"$15,001 - $50,000",New,
+Davis,20010664,SP,"Versum Materials, Inc. ",NaN,S,10/24/2018,10/26/2018,"$1,001 - $15,000",New,
+Davis,20009708,SP,"Alaska Air group, Inc. ",NaN,P,05/17/2018,05/21/2018,"$1,001 - $15,000",New,
+Davis,20009128,SP,"Allete, Inc. ",NaN,S,03/7/2018,03/9/2018,"$1,001 - $15,000",New,
+Davis,20009128,SP,Charles River Laboratories,CRL,S,03/7/2018,03/9/2018,"$1,001 - $15,000",New,
+Davis,20009128,SP,Exelon,EXC,P,03/7/2018,03/9/2018,"$1,001 - $15,000",New,
+Davis,20009128,SP,"HCP, Inc. ",NaN,S,03/7/2018,03/9/2018,"$15,001 - $50,000",New,
+DelBene,20008671,JT,NEW YORK NY gO BDS 5.00% DuE,NaN,P,12/7/2017,12/7/2017,"$250,001 - $500,000",New,
+DelBene,20008671,JT,uS TREaSuRY NT 1% DuE 06/30/2019,NaN,S,12/7/2017,12/7/2017,"$250,001 - $500,000",New,
+DelBene,20008671,JT,HaRRIS CNTY TEX REF BDS SER,NaN,P,12/6/2017,12/6/2017,"$250,001 - $500,000",New,
+DelBene,20008671,JT,uS TREaSuRY NT 1.00% DuE,NaN,S,12/6/2017,12/6/2017,"$15,001 - $50,000",New,
+DelBene,20008671,JT,uS TREaSuRY NT 1.375% DuE,NaN,S,12/6/2017,12/6/2017,"$250,001 - $500,000",New,
+DelBene,20008671,JT,Microsoft,MSFT,P,12/29/2017,12/29/2017,"$1,001 - $15,000",New,
+DelBene,20010399,SP,Microsoft,MSFT,P,09/28/2018,09/28/2018,"$1,001 - $15,000",New,
+DelBene,20010399,JT,Philadelphia Pa Sch Dist go BDS,NaN,P,09/24/2018,09/24/2018,"$15,001 - $50,000",New,
+DelBene,20010399,SP,Microsoft,MSFT,S (partial),09/04/2018,09/04/2018,"$5,000,001 - $25,000,000",New,
+DelBene,20009823,JT,arizona ST Transport 5% 19 Excise,NaN,P,06/28/2018,06/28/2018,"$250,001 - $500,000",New,
+DelBene,20009823,JT,us Treasury Nt 1.375% Due,NaN,S,06/28/2018,06/28/2018,"$250,001 - $500,000",New,
+DelBene,20009823,JT,Fairfax CNTY Va 4% gO Due,NaN,P,06/26/2018,06/26/2018,"$250,001 - $500,000",New,
+DelBene,20009823,JT,Dallas Tex gO Ref and impt BDS,NaN,S,06/15/2018,06/15/2018,"$250,001 - $500,000",New,
+DelBene,20009823,JT,Philadelphia Pa Sch Dist gO BDS,NaN,P,06/14/2018,06/14/2018,"$250,001 - $500,000",New,
+DelBene,20009823,JT,N East Isd TX 5% Due 08/01/2023,NaN,P,06/07/2018,06/07/2018,"$15,001 - $50,000",New,
+DelBene,20009428,JT,Portland Ore urban Renewal and,NaN,S,04/26/2018,04/26/2018,"$250,001 - $500,000",New,
+DelBene,20009428,JT,Portland Ore urban Renewal and,NaN,P,04/11/2018,04/11/2018,"$15,001 - $50,000",New,
+DelBene,20009428,JT,ID ST BlDg auth 5.00% Due S,NaN,S (partial),04/04/2018,04/04/2018,"$100,001 - $250,000",New,
+DelBene,20009428,JT,Colorado ST gen FD Rev gen,NaN,S,04/03/2018,04/03/2018,"$250,001 - $500,000",New,
+DelBene,20009428,JT,Portland Ore urban Renewal and S,NaN,S (partial),04/03/2018,04/03/2018,"$100,001 - $250,000",New,
+DelBene,20009226,SP,Microsoft,MSFT,P,03/29/2018,03/29/2018,"$1,001 - $15,000",New,
+DelBene,20009226,JT,"Cent TX Reg Mobil 5.00% Due Jan 1,",NaN,P,03/27/2018,03/27/2018,"$1,001 - $15,000",New,
+DelBene,20009226,SP,Microsoft,MSFT,S,03/1/2018,03/1/2018,"$100,001 - $250,000",New,
+DelBene,20008895,JT,american Intl gR 5.85% Due,NaN,S,01/16/2018,01/16/2018,"$100,001 - $250,000",New,
+Dingell,20008653,SP,Newell Brands Inc. ,NaN,S,12/28/2017,01/2/2018,"$15,001 - $50,000",New,
+Dingell,20010768,SP,united Technologies Corporation,NaN,P,11/27/2018,12/03/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20010662,SP,"WPX Energy, Inc. ",NaN,P,11/08/2018,11/13/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20010662,SP,"Resideo Technologies, Inc. ",NaN,S,11/01/2018,11/05/2018,"$1,001 - $15,000",New,"Received 75 shares of Resideo Technologies, Inc. (REZI) on 10/29/18 valued less than $1,000, as a result of"
+Dingell,20010662,SP,ALLY FINANCIAL INC. [OT],NaN,P,10/31/2018,11/05/2018,"$15,001 - $50,000",New,"Received 83 shares of Resideo Technologies, Inc. (REZI) on 10/29/18 valued less than $1,000, as a result of"
+Dingell,20010555,JT,3M,MMM,S,10/24/2018,10/29/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC Brokerage Account
+Dingell,20010555,SP,Starbucks,SBUX,S,10/24/2018,10/29/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20010555,SP,Walgreens Boots Alliance,WBA,S,10/24/2018,10/29/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney Brokerage Account
+Dingell,20010555,SP,Energy Transfer LP ,Exchange Traded Notes,E,10/19/2018,10/22/2018,"$15,001 - $50,000",New,Shares received in exchange for Energy Transfer Partners LP (ETP) shares as a result of a merger.
+Dingell,20010314,SP,MgM Resorts International [CS],NaN,P,09/11/2018,09/17/2018,"$15,001 - $50,000",New,Bond. Maturity date - 3/25/2023; Coupon rate - 6%.
+Dingell,20010206,SP,"NRg Yield, Inc. Class C ",NaN,S,08/21/2018,09/04/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20010137,SP,aircastle Limited ,NaN,P,08/14/2018,08/20/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Smith Barney Brokerage account
+Dingell,20010050,SP,CBS Corporation Class B ,NaN,P,07/30/2018,08/06/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney Brokerage Account
+Dingell,20010050,SP,Valero Energy,VLO,P,07/30/2018,08/06/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20009986,SP,Ally Financial Inc. ,NaN,P,07/26/2018,07/30/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20009986,SP,QuALCOMM Incorporated,QCOM,S,07/26/2018,07/30/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20009911,SP,Johnson & Johnson,JNJ,P,07/12/2018,07/16/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Smith Barney Brokerage account
+Dingell,20009722,SP,MgM RESORTS INTL [CS],NaN,P,06/04/2018,06/11/2018,"$15,001 - $50,000",New,Corporate Bond - Matures 3/15/2023 Coupon rate - 6%
+Dingell,20009722,SP,Valero Energy,VLO,P,06/04/2018,06/11/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20009650,JT,3M,MMM,P,05/23/2018,05/29/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC Brokerage account
+Dingell,20009650,JT,"Pepsico, Inc. ",PEP,P,05/23/2018,05/29/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC Brokerage account
+Dingell,20009412,SP,gMAC CAP TRuST I 8.125% TO,NaN,S,04/26/2018,04/30/2018,"$15,001 - $50,000",New,Corporate Bond
+Dingell,20009378,SP,Crown Castle,CCI,P,04/20/2018,04/23/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20009378,SP,QuALCOMM Incorporated S,QCOM,S (partial),04/20/2018,04/23/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley Smith Barney LLC IRA
+Dingell,20009160,SP,"Nike, Inc.",NKE,S,03/16/2018,03/19/2018,"$1,001 - $15,000",New,
+Dingell,20009091,JT,UNIT AAM HIgH 50 DIV 16,NaN,S,03/1/2018,03/5/2018,"$15,001 - $50,000",New,
+Dingell,20009051,SP,abbVie Inc. ,NaN,P,02/22/2018,02/28/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley Smith Barney LLC Brokerage account
+Dingell,20008859,SP,Cummins,CMI,S,01/26/2018,01/29/2018,"$15,001 - $50,000",New,
+Foxx,20009058,JT,Johnson & Johnson,JNJ,Asset,Transaction,Date,Notification,New,
+Foxx,20008647,JT,BP p.l.c. ,NaN,P,12/21/2017,12/21/2017,"$1,001 - $15,000",New,
+Foxx,20008647,JT,"NRg Yield, Inc. Class a ",NaN,P,12/18/2017,12/18/2017,"$1,001 - $15,000",New,
+Foxx,20010757,JT,"amerigas Partners, l.P. ",NaN,P,11/19/2018,11/19/2018,"$1,001 - $15,000",New,
+Foxx,20010757,JT,"alliance Resource Partners, l.P.",NaN,P,11/14/2018,11/14/2018,"$1,001 - $15,000",New,
+Foxx,20010757,JT,CVR Energy Inc. ,NaN,P,11/13/2018,11/13/2018,"$1,001 - $15,000",New,
+Foxx,20010757,JT,Enterprise Products Partners l.P. P,NaN,P,11/08/2018,11/08/2018,"$1,001 - $15,000",New,
+Foxx,20010605,JT,ashford Hospitality Trust Inc P,NaN,P,10/16/2018,10/16/2018,"$1,001 - $15,000",New,
+Foxx,20010605,JT,Brookfield Renewable Partners l.P. P,NaN,P,10/09/2018,10/09/2018,"$1,001 - $15,000",New,
+Foxx,20010605,JT,glaxosmithKline PlC ,NaN,P,10/09/2018,10/09/2018,"$1,001 - $15,000",New,
+Foxx,20010605,JT,"One liberty Properties, Inc. ",NaN,P,10/05/2018,10/05/2018,"$1,001 - $15,000",New,
+Foxx,20010605,JT,PPl Corporation ,NaN,P,10/02/2018,10/02/2018,"$1,001 - $15,000",New,
+Foxx,20010410,JT,southern Company ,NaN,P,09/25/2018,09/25/2018,"$1,001 - $15,000",New,
+Foxx,20010410,JT,BP p.l.c. ,NaN,P,09/21/2018,09/21/2018,"$1,001 - $15,000",New,
+Foxx,20010410,JT,"alliance Resource Partners, l.P.",NaN,P,09/19/2018,09/19/2018,"$1,001 - $15,000",New,
+Foxx,20010410,JT,CenterPoint Energy,CNP,s,09/19/2018,09/19/2018,"$50,001 - $100,000",New,
+Foxx,20010410,JT,Duke Energy,DUK,P,09/18/2018,09/18/2018,"$1,001 - $15,000",New,
+Foxx,20010410,JT,"Clearway Energy, Inc. Class a",NaN,E,09/17/2018,09/17/2018,"$50,001 - $100,000",New,Name change from NRg Yield Inc. to Clearway Energy as a result of merger.
+Foxx,20010410,JT,Pembina Pipeline Corp. Ordinary P,NaN,P,09/17/2018,09/17/2018,"$1,001 - $15,000",New,
+Foxx,20010410,JT,southern Company ,NaN,P,09/07/2018,09/07/2018,"$1,001 - $15,000",New,
+Foxx,20010410,JT,general Motors Company ,NaN,P,09/04/2018,09/04/2018,"$1,001 - $15,000",New,
+Foxx,20010210,JT,"amerigas Partners, l.P. ",NaN,P,08/24/2018,08/24/2018,"$1,001 - $15,000",New,
+Foxx,20010210,JT,"amerigas Partners, l.P. ",NaN,P,08/20/2018,08/20/2018,"$1,001 - $15,000",New,
+Foxx,20010210,JT,"alliance Resource Partners, l.P.",NaN,P,08/15/2018,08/15/2018,"$1,001 - $15,000",New,
+Foxx,20010210,JT,CVR Energy Inc. ,NaN,P,08/14/2018,08/14/2018,"$1,001 - $15,000",New,
+Foxx,20010210,JT,Enterprise Products Partners l.P. P,NaN,P,08/09/2018,08/09/2018,"$1,001 - $15,000",New,
+Foxx,20010210,JT,"amerigas Partners, l.P. ",NaN,P,08/06/2018,08/06/2018,"$1,001 - $15,000",New,
+Foxx,20010031,JT,aT&T Inc. ,T,s,07/25/2018,07/25/2018,"$50,001 - $100,000",New,
+Foxx,20010031,JT,ashford Hospitality Trust Inc P,NaN,P,07/16/2018,07/16/2018,"$1,001 - $15,000",New,
+Foxx,20010031,JT,Pattern Energy group Inc.,NaN,s,07/13/2018,07/13/2018,"$15,001 - $50,000",New,
+Foxx,20010031,JT,"One liberty Properties, Inc. ",NaN,P,07/09/2018,07/09/2018,"$1,001 - $15,000",New,
+Foxx,20010031,JT,PPl Corporation ,NaN,P,07/03/2018,07/03/2018,"$1,001 - $15,000",New,
+Foxx,20009853,JT,Buckeye Partners l.P. ,NaN,s,06/28/2018,06/28/2018,"$15,001 - $50,000",New,
+Foxx,20009853,JT,BP p.l.c. ,NaN,P,06/22/2018,06/22/2018,"$1,001 - $15,000",New,
+Foxx,20009853,JT,Brookfield Renewable Partners P,NaN,P,06/21/2018,06/21/2018,"$1,001 - $15,000",New,
+Foxx,20009853,JT,Brookfield Renewable Partners P,NaN,P,06/20/2018,06/20/2018,"$1,001 - $15,000",New,
+Foxx,20009853,JT,Duke Energy,DUK,P,06/19/2018,06/19/2018,"$1,001 - $15,000",New,
+Foxx,20009853,JT,"NRg Yield, Inc. Class C ",NaN,P,06/18/2018,06/18/2018,"$1,001 - $15,000",New,
+Foxx,20009853,JT,Brookfield Renewable Partners,NaN,P,06/12/2018,06/12/2018,"$15,001 - $50,000",New,
+Foxx,20009853,JT,southern Company ,NaN,P,06/07/2018,06/07/2018,"$1,001 - $15,000",New,
+Foxx,20009685,JT,Buckeye Partners l.P. ,NaN,P,05/22/2018,05/22/2018,"$1,001 - $15,000",New,
+Foxx,20009685,JT,"amerigas Partners, l.P. ",NaN,P,05/21/2018,05/21/2018,"$1,001 - $15,000",New,
+Foxx,20009685,JT,"alliance Resource Partners, l.P.",NaN,P,05/15/2018,05/15/2018,"$1,001 - $15,000",New,
+Foxx,20009685,JT,CVR Energy Inc. ,NaN,P,05/14/2018,05/14/2018,"$1,001 - $15,000",New,
+Foxx,20009685,JT,Enterprise Products Partners l.P. P,NaN,P,05/08/2018,05/08/2018,"$1,001 - $15,000",New,
+Foxx,20009685,JT,aT&T Inc. ,T,P,05/01/2018,05/01/2018,"$1,001 - $15,000",New,
+Foxx,20009685,JT,Domtar Corporation ,NaN,P,05/01/2018,05/01/2018,"$15,001 - $50,000",New,
+Foxx,20009685,JT,Pattern Energy group Inc.,NaN,P,05/01/2018,05/01/2018,"$1,001 - $15,000",New,
+Foxx,20009445,JT,Pattern Energy group Inc.,NaN,P,04/30/2018,04/30/2018,"$1,001 - $15,000",New,
+Foxx,20009445,JT,Domtar Corporation ,NaN,P,04/27/2018,04/27/2018,"$15,001 - $50,000",New,
+Foxx,20009445,JT,ashford Hospitality Trust Inc P,NaN,P,04/16/2018,04/16/2018,"$1,001 - $15,000",New,
+Foxx,20009445,JT,Duke Energy,DUK,P,04/12/2018,04/12/2018,"$15,001 - $50,000",New,
+Foxx,20009445,JT,glaxosmithKline PlC ,NaN,P,04/12/2018,04/12/2018,"$1,001 - $15,000",New,
+Foxx,20009445,JT,"One liberty Properties, Inc. ",NaN,P,04/06/2018,04/06/2018,"$1,001 - $15,000",New,
+Foxx,20009445,JT,PPl Corporation ,NaN,P,04/02/2018,04/02/2018,"$1,001 - $15,000",New,
+Foxx,20009224,JT,southern Company ,NaN,P,03/7/2018,03/7/2018,"$15,001 - $50,000",New,
+Foxx,20009224,JT,PPl Corporation ,NaN,P,03/5/2018,03/5/2018,"$50,001 - $100,000",New,
+Foxx,20009224,JT,BP p.l.c. ,NaN,P,03/29/2018,03/29/2018,"$1,001 - $15,000",New,
+Foxx,20009224,JT,general Motors Company ,NaN,P,03/19/2018,03/19/2018,"$50,001 - $100,000",New,
+Foxx,20009224,JT,Humana,HUM,P,03/19/2018,03/19/2018,"$15,001 - $50,000",New,
+Foxx,20009224,JT,"NRg Yield, Inc. Class a ",NaN,P,03/16/2018,03/16/2018,"$1,001 - $15,000",New,
+Foxx,20009224,JT,CVR Energy Inc. ,NaN,P,03/13/2018,03/13/2018,"$1,001 - $15,000",New,
+Foxx,20009224,JT,"alliance Resource Partners, l.P.",NaN,P,03/1/2018,03/1/2018,"$15,001 - $50,000",New,
+Foxx,20009058,JT,Procter & Gamble,PG,s,02/9/2018,02/9/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,alPs sector Dividend Dogs ETF,NaN,s,02/8/2018,02/8/2018,"$15,001 - $50,000",New,
+Foxx,20009058,JT,Enterprise Products Partners l.P. ,NaN,P,02/8/2018,02/8/2018,"$1,001 - $15,000",New,
+Foxx,20009058,JT,Fidelity National Information Services,FIS,s,02/8/2018,02/8/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,International Flavors & Fragrances,IFF,s,02/8/2018,02/8/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,ishares Russell 2000 ETF ,NaN,s,02/8/2018,02/8/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,Old Dominion Freight Line,ODFL,s,02/8/2018,02/8/2018,"$15,001 - $50,000",New,
+Foxx,20009058,JT,"Pepsico, Inc. ",PEP,s,02/8/2018,02/8/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,"Pfizer, Inc. ",PFE,s,02/8/2018,02/8/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,schwab u.s. large,NaN,s,02/8/2018,02/8/2018,"$15,001 - $50,000",New,
+Foxx,20009058,JT,schwab u.s. small,NaN,s,02/8/2018,02/8/2018,"$15,001 - $50,000",New,
+Foxx,20009058,JT,"amerigas Partners, l.P. ",NaN,P,02/28/2018,02/28/2018,"$15,001 - $50,000",New,
+Foxx,20009058,JT,Buckeye Partners l.P. ,NaN,P,02/28/2018,02/28/2018,"$1,001 - $15,000",New,
+Foxx,20009058,JT,"One liberty Properties, Inc. ",NaN,P,02/28/2018,02/28/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,"Preferred apartment Communities, Inc.",NaN,s,02/27/2018,02/27/2018,"$50,001 - $100,000",New,
+Foxx,20009058,JT,aT&T Inc. ,T,P,02/2/2018,02/2/2018,"$1,001 - $15,000",New,
+Foxx,20009058,JT,Pattern Energy group Inc.,NaN,P,02/1/2018,02/1/2018,"$1,001 - $15,000",New,
+Foxx,20008850,JT,Old Dominion Freight Line,ODFL,P,01/31/2018,01/31/2018,"$1,001 - $15,000",New,
+Foxx,20008850,JT,Pattern Energy group Inc.,NaN,P,01/31/2018,01/31/2018,"$1,001 - $15,000",New,
+Foxx,20008850,JT,ashford Hospitality Trust Inc ,NaN,P,01/17/2018,01/17/2018,"$1,001 - $15,000",New,
+Gianforte,20010795,JT,"athenahealth, Inc. ",NaN,S,11/14/2018,11/19/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20010795,JT,Missoula County MT B/E PTC [GS],NaN,P,11/13/2018,11/19/2018,"$50,001 - $100,000",New,CPN 5% Due 07-01-30 Cusip 605792SJ0
+Gianforte,20010795,JT,Montana St. BRD Regents High,NaN,P,11/13/2018,11/19/2018,"$500,001 - $1,000,000",New,"Montana St. BRD Regents High Ed. Rev. RFDG Facs, Cusip 61212LPY9"
+Gianforte,20010515,JT,Montana Fac. Finance auth. Rev,NaN,P,10/18/2018,10/22/2018,"$100,001 - $250,000",New,"Subholding of: Zieglar Brokerage, Municipal Bond Portfolio"
+Gianforte,20010515,JT,Montana Fac. Finance Rev. Sisters,NaN,P,10/18/2018,10/22/2018,"$50,001 - $100,000",New,"Subholding of: Zieglar Brokerage, Municipal Bond Portfolio"
+Gianforte,20010515,JT,Multi,NaN,P,10/10/2018,10/15/2018,"$15,001 - $50,000",New,Subholding of: TWP Parametric HIgh Income US Equity
+Gianforte,20010515,JT,Multi,NaN,P,10/09/2018,10/15/2018,"$15,001 - $50,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20010515,JT,Multi,NaN,P,10/08/2018,10/15/2018,"$50,001 - $100,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20010236,JT,Evoqua Water Technologies Corp.,NaN,P,08/28/2018,09/04/2018,"$15,001 - $50,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20010236,JT,Howard Hughes Corporation,NaN,P,08/28/2018,09/04/2018,"$50,001 - $100,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20009979,JT,Cognex Corporation ,NaN,P,07/27/2018,07/30/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009979,JT,"Internationa Flavors & Fragrances,",NaN,P,07/27/2018,07/30/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009979,JT,United Airlines Holdings,UAL,S,07/27/2018,07/30/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009784,JT,Evoqua Water Technologies Corp.,NaN,P,06/21/2018,06/25/2018,"$100,001 - $250,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20009723,JT,AMN Healthcare Services Inc AMN,NaN,P,06/07/2018,06/11/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,"dorman Products, Inc. ",NaN,S,06/07/2018,06/11/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,"Evolent Health, Inc Class A ",NaN,P,06/07/2018,06/11/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,"Five below, Inc. ",NaN,S (partial),06/07/2018,06/11/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,"Grand Canyon Education, Inc. S",NaN,S (partial),06/07/2018,06/11/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,"HealthStream, Inc. ",NaN,S,06/07/2018,06/11/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,"Lennox International, Inc. ",NaN,P,06/07/2018,06/11/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,Paycom,PAYC,P,06/07/2018,06/11/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,"The Ultimate Software Group, Inc. S",NaN,S (partial),06/07/2018,06/11/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20009723,JT,Temenos Group AG SPONSOREd,NaN,P,05/23/2018,05/29/2018,"$100,001 - $250,000",New,Subholding of: Harding Loevner International Equity
+Gianforte,20009447,JT,Turkiye Garanti bankasi a S,NaN,S,04/26/2018,04/30/2018,"$50,001 - $100,000",New,Subholding of: Harding Loevner International Equity
+Gianforte,20009049,JT,Naspers Limited N Shs Sponsored,NaN,S,02/23/2018,02/26/2018,"$50,001 - $100,000",New,
+Gianforte,20009049,JT,aspen Pharmacare Holdings plc,NaN,P,02/22/2018,02/26/2018,"$15,001 - $50,000",New,Subholding of: Harding Loevner International Equity
+Gianforte,20008926,JT,Acuity brands Inc ,NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20008926,JT,brookdale Senior Living Inc. ,NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20008926,JT,Cardtronics plc ,NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20008926,JT,"CoreCivic, Inc. ",NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Newsouth Small Cap Equities
+Gianforte,20008926,JT,"Evolent Health, Inc Class A ",NaN,P,01/29/2018,02/5/2018,"$15,001 - $50,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20008926,JT,"Financial Engines, Inc. ",NaN,P,01/29/2018,02/5/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20008926,JT,"Haynes International, Inc. ",NaN,P,01/29/2018,02/5/2018,"$50,001 - $100,000",New,Subholding of: Newsouth Small Cap EquitiesiD owner asset transaction Date notification amount
+Gianforte,20008926,JT,Henry Schein,HSIC,P,01/29/2018,02/5/2018,"$50,001 - $100,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20008926,JT,Infineon Technologies AG ,NaN,P,01/29/2018,02/5/2018,"$50,001 - $100,000",New,Subholding of: Harding Loevner International Equity
+Gianforte,20008926,JT,"Mednax, Inc. ",NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20008926,JT,Park 24 Co Ltd Sponsored AdR,NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Harding Loevner International Equity
+Gianforte,20008926,JT,"PRA Group, Inc. ",NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20008926,JT,Schlumberger,SLB,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Harding Loevner International Equity
+Gianforte,20008926,JT,Shire plc,NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Harding Loevner International Equity
+Gianforte,20008926,JT,"WageWorks, Inc. ",NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,Subholding of: Riverbridge Managed Account - Small Cap US Equities
+Gianforte,20008926,JT,WPP plc American depositary Shares,NaN,P,01/29/2018,02/5/2018,"$100,001 - $250,000",New,
+Gottheimer,20010633,JT,biogen Inc. ,NaN,S,10/29/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2iD owner asset transaction Date notification amount cap.
+Gottheimer,20010633,JT,lululemon athletica inc. ,LULU,P,10/29/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,"advanced Micro devices, Inc. S",NaN,S,10/26/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,Charles River Laboratories,CRL,S,10/26/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 1
+Gottheimer,20010633,JT,"Illumina, Inc.",ILMN,P,10/24/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,"alnylam Pharmaceuticals, Inc. S",NaN,S,10/18/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,adobe Inc. (adbE) [ST] S ,NaN,S,10/17/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,Home Depot (The),HD,S,10/17/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,alphabet Inc. ,NaN,S,10/12/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,Microsoft,MSFT,P,10/12/2018,10/12/2018,"$50,001 - $100,000",New,Subholding of: Morgan Stanley - Portfolio Management
+Gottheimer,20010633,JT,Microsoft,MSFT,S,10/12/2018,10/12/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio ManagementiD owner asset transaction Date notification amount cap.
+Gottheimer,20010633,JT,Microsoft,MSFT,S,10/12/2018,10/12/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
+Gottheimer,20010633,JT,Microsoft,MSFT,S,10/12/2018,10/12/2018,"$15,001 - $50,000",New,Subholding of: Morgan Stanley - Portfolio Management
+Gottheimer,20010633,JT,Microsoft,MSFT,S,10/12/2018,10/12/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
+Gottheimer,20010633,JT,Microsoft,MSFT,S,10/12/2018,10/12/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
+Gottheimer,20010633,JT,Microsoft,MSFT,S,10/12/2018,10/12/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
+Gottheimer,20010633,JT,Microsoft,MSFT,S,10/12/2018,10/12/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Portfolio Management
+Gottheimer,20010633,JT,Costco,COST,P,10/11/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,"advanced Micro devices, Inc. P",NaN,P,10/02/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley - Select UMa account # 2
+Gottheimer,20010633,JT,Intuitive Surgical,ISRG,S,10/01/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Morgan Stanley > UMa active assets account
+LoBiondo,20010847,SP,Apple Inc.,AAPL,P,12/10/2018,12/17/2018,"$1,001 - $15,000",New,Subholding of: Wells Fargo (IRA)
+LoBiondo,20010847,SP,QuALCOMM Incorporated S,QCOM,S,12/10/2018,12/17/2018,"$1,001 - $15,000",New,Subholding of: Wells Fargo-9761 (Spousal IRA)
+LoBiondo,20008725,SP,"W.W. grainger, Inc. ",NaN,S,01/8/2018,01/12/2018,"$1,001 - $15,000",New,
+Lofgren,20010843,SP,3M,MMM,S,11/02/2018,12/14/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010843,SP,Alibaba group Holding Limited P,NaN,P,11/02/2018,12/14/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010843,SP,Chubb Limited,CB,P,11/02/2018,12/14/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010843,SP,Comerica Incorporated ,NaN,P,11/02/2018,12/14/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010843,SP,Ecolab,ECL,S,11/02/2018,12/14/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010843,SP,Texas Instruments,TXN,S,11/02/2018,12/14/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRAID Owner Asset Transaction Date Notification Amount Cap.
+Lofgren,20010451,JT,"Tesla, Inc.",TSLA,S,09/21/2018,10/01/2018,"$15,001 - $50,000",New,Subholding of: Collins/Lofgren Family Trust
+Lofgren,20009473,SP,Dow Inc.,DOW,E,09/01/2017,04/25/2018,"$1,001 - $15,000",New,Exchange of Dow Chemical Co. stock for DowDupont Inc. following merger.
+Lofgren,20010292,SP,Celgene Corporation ,NaN,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,Eli Lilly and Company ,LLY,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,"general Mills, Inc. ",NaN,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,glaxoSmithKline PLC ,NaN,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,gramercy Property Trust ,NaN,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,"Lennox International, Inc. ",NaN,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRAID Owner Asset Transaction Date Notification Amount Cap.
+Lofgren,20010292,SP,PPL Corporation,PPL,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,u.S. bancorp ,NaN,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,Vulcan Materials Company,VMC,S,08/30/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20010292,SP,Starbucks,SBUX,S,08/07/2018,09/13/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20009473,SP,"LTC Properties, Inc. ",NaN,S,06/13/2018,07/05/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20009232,SP,bb&T Corporation ,NaN,P,03/16/2018,04/4/2018,"$1,001 - $15,000",New,Subholding of: John Marshall Collins Rollover IRA
+Lofgren,20009232,SP,Prudential Financial,PRU,P,03/16/2018,04/4/2018,"$1,001 - $15,000",New,
+Lowenthal,20009258,SP,Cisco,CSCO,(CSCO),S,03/29/2018,04/6/2018,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009258,SP,Cisco,CSCO,(CSCO),S,03/29/2018,04/6/2018,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20008880,SP,Boston Scientific,BSX,(BSX),P,01/22/2018,01/29/2018,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20008880,SP,gates Industrial,NaN,plc,P,01/30/2018,02/4/2018,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010913,SP,Sunrun Inc. ,NaN,P,12/21/2018,12/29/2018,$149.68,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010911,SP,Sunrun Inc. ,NaN,P,12/21/2018,12/29/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010913,SP,"Facebook, Inc.",NaN,S,12/20/2018,12/29/2018,$659.69,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010913,SP,"Zayo group Holdings, Inc.",NaN,S,12/20/2018,12/29/2018,$715.45,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010911,SP,"Zayo group Holdings, Inc. ",NaN,S,12/20/2018,12/29/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010912,SP,Cigna,CI,P,12/14/2018,12/20/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010802,SP,universal display,NaN,S,12/06/2018,12/09/2018,$195.09,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010801,SP,universal display Corporation S,NaN,S,12/06/2018,12/09/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010911,SP,Air Products,APD,P,12/04/2018,12/11/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010802,SP,Air Products,APD,P,12/04/2018,12/09/2018,$658.03,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010801,SP,Air Products,APD,P,12/04/2018,12/09/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010822,SP,iShares Core MSCI Emerging P,NaN,P,12/03/2018,12/07/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010802,SP,Air Products,APD,P,12/03/2018,12/09/2018,$826.80,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010802,SP,iShares Core MSCI Emerging P,NaN,P,12/03/2018,12/09/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010801,SP,Air Products,APD,P,12/03/2018,12/09/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010801,SP,iShares Core MSCI Emerging,NaN,P,12/03/2018,12/09/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010822,SP,Novartis Ag ,NaN,P,11/30/2018,12/06/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010802,SP,Novartis Ag ,NaN,P,11/30/2018,12/06/2018,$363.90,New,Subholding of: Neuberger Berman - Beneficiary IRAID Owner Asset Transaction Date Notification Amount Cap.
+Lowenthal,20010801,SP,Novartis Ag ,NaN,P,11/30/2018,12/06/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRAID Owner Asset Transaction Date Notification Amount Cap.
+Lowenthal,20010822,SP,Novartis Ag ,NaN,P,11/29/2018,12/05/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010822,SP,UnitedHealth Group,UNH,P,11/29/2018,12/05/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010802,SP,Novartis Ag ,NaN,P,11/29/2018,12/05/2018,$816.61,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010801,SP,Novartis Ag ,NaN,P,11/29/2018,12/05/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010822,SP,"Activision Blizzard, Inc ",NaN,S,11/27/2018,12/03/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010802,SP,"Equifax, Inc. ",EFX,S,11/20/2018,11/26/2018,$805.35,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010801,SP,"Equifax, Inc. ",EFX,S,11/20/2018,11/26/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010823,SP,"BlackRock, Inc. ",BLK,S,11/14/2018,11/20/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010823,SP,Brookfield Infrastructure Partners S,NaN,S,11/14/2018,11/20/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010823,SP,IHS Markit Ltd.,NaN,S,11/14/2018,11/20/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010702,SP,IHS Markit Ltd.,NaN,S,11/13/2018,11/19/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010702,SP,"Autodesk, Inc. (ADSK) [ST] S ",NaN,S,11/12/2018,11/19/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010702,SP,"Autodesk, Inc. ",ADSK,S,11/12/2018,11/19/2018,$652.28,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010702,SP,IHS Markit Ltd.,NaN,S,11/12/2018,11/19/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010700,SP,IHS Markit Ltd.,NaN,S,11/12/2018,11/19/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010700,SP,IHS Markit Ltd.,NaN,S,11/12/2018,11/19/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010692,SP,"BlackRock, Inc. ",BLK,P,11/07/2018,11/14/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010692,SP,universal Display Corporation P,NaN,P,11/02/2018,11/09/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010691,SP,universal Display,NaN,P,11/02/2018,11/09/2018,$201.76,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010692,SP,Aptiv,APTV,S,10/29/2018,11/05/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010691,SP,Aptiv,APTV,S,10/29/2018,11/05/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010602,SP,Sempra,SRE,P,10/25/2018,10/31/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010601,SP,Sempra,SRE,P,10/25/2018,10/31/2018,$230.01,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010602,SP,"Activision Blizzard, Inc ",NaN,P,10/24/2018,10/30/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010602,SP,Sempra,SRE,P,10/24/2018,10/30/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010601,SP,"Activision Blizzard, Inc ",NaN,P,10/24/2018,10/30/2018,$207.94,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010601,SP,Sempra,SRE,P,10/24/2018,10/30/2018,$348.79,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010600,SP,"Activision Blizzard, Inc ",NaN,P,10/24/2018,10/30/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010600,SP,Sempra,SRE,P,10/24/2018,10/30/2018,$581.31,New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010602,SP,DowDuPont Inc. ,NaN,S,10/23/2018,10/29/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010601,SP,DowDuPont Inc. ,NaN,S,10/23/2018,10/29/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010513,SP,"Equifax, Inc. ",EFX,S (partial),10/12/2018,10/18/2018,$241.50,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010513,SP,"Equifax, Inc. ",EFX,S (partial),10/12/2018,10/18/2018,$120.74,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010512,SP,"Equifax, Inc. (EFX) [ST] S ",NaN,S,10/12/2018,10/18/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010512,SP,"Equifax, Inc. (EFX) [ST] S ",NaN,S,10/12/2018,10/18/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010513,SP,"Equifax, Inc. ",EFX,S (partial),10/11/2018,10/17/2018,$120.44,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010513,SP,"Equifax, Inc. ",EFX,S (partial),10/11/2018,10/17/2018,$120.43,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010512,SP,"Equifax, Inc. (EFX) [ST] S ",NaN,S,10/11/2018,10/17/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010512,SP,"Equifax, Inc. (EFX) [ST] S ",NaN,S,10/11/2018,10/17/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010405,SP,DowDuPont Inc. ,NaN,S,09/27/2018,10/02/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010406,SP,Martin Marietta Materials,MLM,S,09/24/2018,10/01/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010404,SP,Interpublic Group of Companies (The),IPG,P,09/18/2018,09/25/2018,"$1,001 - $15,000",New,"Interest rate is 3.5%, maturity date is 10/01/2020."
+Lowenthal,20010254,SP,Dover Corporation,DOV,P,08/29/2018,09/05/2018,$346.92,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010254,SP,HCA Healthcare,HCA,P,08/29/2018,09/05/2018,"$1,001 - $15,000",New,"Interest rate is 6.5%, Maturity date is 2/15/2020."
+Lowenthal,20010254,SP,"Red Hat, Inc. ",NaN,P,08/29/2018,09/05/2018,$444.60,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010253,SP,Dover Corporation,DOV,P,08/29/2018,09/05/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010253,SP,"Red Hat, Inc. ",NaN,P,08/29/2018,09/05/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010196,SP,"Autodesk, Inc. ",ADSK,S (partial),08/27/2018,08/31/2018,$309.77,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010196,SP,"Autodesk, Inc. ",ADSK,S,08/27/2018,08/31/2018,$309.77,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010194,SP,"Autodesk, Inc. (ADSK) [ST] S ",NaN,S,08/27/2018,08/31/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010194,SP,"Autodesk, Inc. ",ADSK,S (partial),08/27/2018,08/31/2018,$774.44,New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010194,SP,"Autodesk, Inc. ",ADSK,S,08/27/2018,08/31/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010196,SP,Sunrun Inc. ,NaN,P,08/20/2018,08/24/2018,$405.84,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010195,SP,"Activision Blizzard, Inc ",NaN,P,08/20/2018,08/24/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Individual
+Lowenthal,20010194,SP,Sunrun Inc. ,NaN,P,08/20/2018,08/24/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010136,SP,Nielsen Fin LLC [CS] P,NaN,P,08/15/2018,08/20/2018,"$1,001 - $15,000",New,Maturity date is 10/01/2020. Interest rate is 4.5%
+Lowenthal,20010135,SP,Analog Devices,ADI,S,08/14/2018,08/20/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010134,SP,Analog Devices,ADI,S,08/14/2018,08/20/2018,$190.35,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010136,SP,Ares Cap Corp [CS] P,NaN,P,08/13/2018,08/17/2018,"$1,001 - $15,000",New,Maturity date is 1/15/2020. Interest rate is 3.875%
+Lowenthal,20010135,SP,Analog Devices,ADI,S,08/13/2018,08/17/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010134,SP,Analog Devices,ADI,S (partial),08/13/2018,08/17/2018,$285.74,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010110,SP,Analog Devices,ADI,S,08/10/2018,08/14/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010108,SP,Analog Devices,ADI,S (partial),08/10/2018,08/14/2018,$94.67,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010111,SP,AT&T,T,P,08/09/2018,08/14/2018,"$1,001 - $15,000",New,"Maturity date is 2/17/2021, interest rate is 2.8%."
+Lowenthal,20010111,SP,Ball Corporation,BALL,P,08/08/2018,08/14/2018,"$1,001 - $15,000",New,Maturity date is 12/15/2020. Interest rate is 4.375%
+Lowenthal,20010111,SP,Bank of America,BAC,P,08/08/2018,08/14/2018,"$1,001 - $15,000",New,"Maturity date is 6/17/19, interest rate is 5.125%."
+Lowenthal,20010111,SP,CBS outdoor Amers [CS] P,NaN,P,08/08/2018,08/14/2018,"$1,001 - $15,000",New,"Maturity date is 2/15/2022, interest rate is 5.25%."
+Lowenthal,20010110,SP,Ball Corporation,BALL,P,08/08/2018,08/14/2018,"$15,001 - $50,000",New,"Maturity date is 12/15/2020, interest rate is 4.375%"
+Lowenthal,20010093,SP,"Equifax, Inc. ",EFX,P,07/31/2018,08/07/2018,$126.40,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010091,SP,American Electric Power,AEP,P,07/31/2018,08/07/2018,"$15,001 - $50,000",New,"Maturity date is 8/3/2023, interest rate is 3.7%"
+Lowenthal,20010091,SP,"Equifax, Inc. ",EFX,P,07/31/2018,08/07/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010093,SP,"Equifax, Inc. ",EFX,P,07/30/2018,08/06/2018,$251.04,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010091,SP,"Equifax, Inc. ",EFX,P,07/30/2018,08/06/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010093,SP,"Facebook, Inc.",NaN,P,07/26/2018,08/02/2018,$524.78,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010093,SP,Kansas City Southern ,NaN,S (partial),07/25/2018,08/01/2018,$333.37,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010093,SP,Kansas City Southern ,NaN,S,07/24/2018,07/31/2018,$333.01,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010091,SP,Kansas City Southern ,NaN,S,07/24/2018,07/31/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009965,SP,Kansas City Southern ,NaN,S,07/24/2018,07/26/2018,$333.01,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009963,SP,Kansas City Southern ,NaN,S,07/24/2018,07/26/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010093,SP,WEX Inc. common stock,NaN,S,07/23/2018,07/30/2018,$589.10,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20010091,SP,Kansas City Southern (KSu) [ST] S ,NaN,S,07/23/2018,07/30/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20010091,SP,WEX Inc. common stock ,NaN,S,07/23/2018,07/30/2018,"$1,001 - $15,000",New,
+Lowenthal,20009965,SP,Kansas City Southern ,NaN,S (partial),07/23/2018,07/26/2018,$333.37,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009965,SP,WEX Inc. common stock,NaN,S,07/23/2018,07/26/2018,$589.10,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009963,SP,Kansas City Southern (KSu) [ST] S ,NaN,S,07/23/2018,07/26/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009963,SP,WEX Inc. common stock ,NaN,S,07/23/2018,07/26/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009965,SP,Air Products,APD,S,07/20/2018,07/26/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009965,SP,"Red Hat, Inc. ",NaN,P,07/20/2018,07/26/2018,$592.08,New,Subholding of: Neuberger Berman - Beneficiary IRAID Owner Asset Transaction Date Notification Amount Cap.
+Lowenthal,20009963,SP,Air Products,APD,S,07/20/2018,07/26/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009963,SP,"Red Hat, Inc. ",NaN,P,07/20/2018,07/26/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRAID Owner Asset Transaction Date Notification Amount Cap.
+Lowenthal,20009965,SP,Air Products,APD,S (partial),07/19/2018,07/26/2018,$464.74,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009963,SP,Air Products,APD,S,07/19/2018,07/26/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009965,SP,Keurig Dr Pepper,KDP,S,07/11/2018,07/17/2018,$240.15,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009963,SP,Keurig Dr Pepper,KDP,S,07/11/2018,07/17/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009808,SP,Lennar,LEN,P,06/26/2018,06/28/2018,"$15,001 - $50,000",New,"Interest rate is 4.75%, maturity date is 4/1/21"
+Lowenthal,20009807,SP,IHS Markit Ltd.,NaN,P,06/26/2018,06/28/2018,$616.20,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009712,SP,Analog Devices,ADI,P,06/05/2018,06/10/2018,$601.50,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009712,SP,WEX Inc. common stock,NaN,S,06/04/2018,06/10/2018,$554.93,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009711,SP,WEX Inc. common stock ,NaN,S,06/04/2018,06/10/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009712,SP,universal Display,NaN,P,05/30/2018,06/05/2018,$399.36,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009712,SP,BioMarin Pharmaceutical,NaN,P,05/29/2018,06/04/2018,$903.36,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009712,SP,"Facebook, Inc.",NaN,P,05/29/2018,06/04/2018,$371.70,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009620,SP,gates Industrial Corporation,NaN,S,05/15/2018,05/22/2018,$615.75,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009619,SP,gates Industrial Corporation plc S,NaN,S,05/15/2018,05/22/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009619,SP,universal Display Corporation P,NaN,P,05/15/2018,05/22/2018,"$1,001 - $15,000",New,I also purchased some of this stock on 5/14/18.
+Lowenthal,20009620,SP,Apergy Corporation ,NaN,S,05/14/2018,05/21/2018,$155.99,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009619,SP,Apergy Corporation ,NaN,S,05/14/2018,05/21/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009619,SP,universal Display Corporation P,NaN,P,05/14/2018,05/21/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009620,SP,Dover Corporation,DOV,P,05/08/2018,05/14/2018,$745.79,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009619,SP,Dover Corporation,DOV,P,05/08/2018,05/14/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009609,SP,general Dynamics Corporation,NaN,S,05/04/2018,05/10/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009608,SP,general Dynamics Corporation S,NaN,S,05/04/2018,05/10/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009609,SP,Verizon,VZ,P,05/03/2018,05/09/2018,"$15,001 - $50,000",New,"Maturity date is 11/1/2021, interest rate is 3.00%"
+Lowenthal,20009620,SP,Crown Castle,CCI,S,04/30/2018,05/07/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009620,SP,Sempra,SRE,P,04/30/2018,05/07/2018,$112.15,New,I also bought some on 4/27/18.
+Lowenthal,20009619,SP,Sempra,SRE,P,04/30/2018,05/07/2018,"$1,001 - $15,000",New,I bought some of this stock on 4/27/18.
+Lowenthal,20009441,SP,Sempra,SRE,P,04/27/2018,05/02/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009438,SP,BioMarin Pharmaceutical Inc. P,NaN,P,04/27/2018,05/03/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009438,SP,Sempra,SRE,P,04/27/2018,05/03/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009441,SP,"Equifax, Inc. ",EFX,P,04/26/2018,05/02/2018,$231.65,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009438,SP,BioMarin Pharmaceutical Inc. P,NaN,P,04/26/2018,05/02/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009438,SP,"Equifax, Inc. ",EFX,P,04/26/2018,05/02/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009441,SP,Charter Communications,CHTR,S (partial),04/25/2018,05/01/2018,$299.14,New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20009438,SP,Charter Communications,CHTR,S,04/25/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009618,SP,Citigroup,C,P,04/24/2018,05/01/2018,"$1,001 - $15,000",New,"Maturity date is 6/7/19, interest rate is 2.050%"
+Lowenthal,20009179,SP,"Equifax, Inc. ",EFX,P,03/9/2018,03/19/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009179,SP,Zimmer Biomet,ZBH,P,03/8/2018,03/15/2018,"$15,001 - $50,000",New,
+Lowenthal,20009179,SP,unitedHealth group Inc,NaN,P,03/7/2018,03/14/2018,"$15,001 - $50,000",New,"Maturity date is 7/15/2020, interest rate is 2.7%"
+Lowenthal,20009257,SP,Cisco,CSCO,S,03/29/2018,04/6/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009257,SP,Microsoft,MSFT,S,03/29/2018,04/6/2018,"$1,001 - $15,000",New,
+Lowenthal,20009196,SP,OuTFRONT Media Inc. ,NaN,S,03/20/2018,03/26/2018,"$1,001 - $15,000",New,
+Lowenthal,20009179,SP,Level 3 Fing,NaN,P,03/16/2018,03/20/2018,"$1,001 - $15,000",New,Maturity date is 1/15/2021
+Lowenthal,20009179,SP,Constellation Brands,STZ,P,03/14/2018,03/20/2018,"$15,001 - $50,000",New,"Maturity date is 1/17/2019, interest rate is 2.0%"
+Lowenthal,20009183,SP,Actavis Fdg,NaN,S,03/12/2018,03/20/2018,"$1,001 - $15,000",Amended,
+Lowenthal,20009179,SP,Oracle Corporation,ORCL,S,03/1/2018,03/8/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008991,SP,Celgene Corp,NaN,P,02/9/2018,02/16/2018,"$15,001 - $50,000",New,
+Lowenthal,20009195,SP,Constellation Brands,STZ,S,02/28/2018,03/7/2018,"$15,001 - $50,000",New,
+Lowenthal,20009179,SP,"Equifax, Inc. ",EFX,P,02/28/2018,03/7/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20009179,SP,"Equifax, Inc. ",EFX,P,02/27/2018,03/6/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008779,SP,"Autodesk, Inc. ",ADSK,S,01/9/2018,01/17/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008794,SP,"Fitbit, Inc. Class A ",NaN,S,01/5/2018,01/11/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20008879,SP,Oracle Corporation,ORCL,S,01/30/2018,02/4/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRAID Owner Asset Transaction Date Notification Amount
+Lowenthal,20008879,SP,Oracle Corporation,ORCL,S,01/30/2018,02/4/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008880,SP,"Dr Pepper Snapple group, Inc Dr",NaN,P,01/29/2018,02/4/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20008879,SP,"Dr Pepper Snapple group, Inc Dr",NaN,P,01/29/2018,02/4/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008879,SP,Citigroup,C,P,01/25/2018,01/31/2018,"$15,001 - $50,000",New,"Maturity date is 2/29/2019, interest rate is 2.5%"
+Lowenthal,20008879,SP,gates Industrial Corporation plc,NaN,P,01/25/2018,01/31/2018,"$15,001 - $50,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008880,SP,Kansas City Southern ,NaN,S,01/24/2018,01/30/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Beneficiary IRA
+Lowenthal,20008879,SP,Kansas City Southern ,NaN,S,01/24/2018,01/30/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008879,SP,Priceline group,NaN,P,01/24/2018,01/31/2018,"$1,001 - $15,000",New,
+Lowenthal,20008879,SP,Fidelity National Information Services,FIS,P,01/23/2018,01/30/2018,"$15,001 - $50,000",New,"Maturity date is 8/15/2021, interest rate is 2.25%"
+Lowenthal,20008780,SP,Level 3 Fing Inc,NaN,P,01/19/2018,01/21/2018,"$1,001 - $15,000",New,
+Lowenthal,20008779,SP,BioMarin Pharmaceutical Inc. ,NaN,P,01/18/2018,01/21/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008779,SP,BioMarin Pharmaceutical Inc. ,NaN,P,01/17/2018,01/21/2018,"$1,001 - $15,000",New,Subholding of: Neuberger Berman - Traditional IRA
+Lowenthal,20008779,SP,Constellation Brands,STZ,P,01/12/2018,01/21/2018,"$15,001 - $50,000",New,"Maturity date is 5/01/2022, interest rate is 3.038%."
+Lowenthal,20008779,SP,CVS Health,CVS,P,01/12/2018,01/21/2018,"$15,001 - $50,000",New,"Maturity date is 7/20/2020, interest rate is 2.8%."
+Lowenthal,20008779,SP,Ares Cap Corp Note,NaN,P,01/11/2018,01/19/2018,"$15,001 - $50,000",New,"Maturity date is 1/15/2020, % interest rate is 2.983%."
+MacArthur,20009495,JT,CCo HLDgS LLC/CAP CoRP P,NaN,P,04/30/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+MacArthur,20009495,DC,BLACKRoCK STRATEgIC,NaN,S,04/25/2018,05/01/2018,"$15,001 - $50,000",New,Mutual fund
+MacArthur,20009495,DC,BLACKRoCK STRATEgIC,NaN,S,04/25/2018,05/01/2018,"$15,001 - $50,000",New,Mutual fund
+MacArthur,20009495,DC,gUggENHEIM ToTAL RETURN,NaN,P,04/25/2018,05/01/2018,"$15,001 - $50,000",New,Mutual fund
+MacArthur,20009495,DC,gUggENHEIM ToTAL RETURN,NaN,P,04/25/2018,05/01/2018,"$50,001 - $100,000",New,Mutual fund
+MacArthur,20009495,DC,iShares J.P. Morgan USD Emerging S ,NaN,S,04/25/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: MacArthur Family 2008 Irr Tr FBo Isabella MacArthur
+MacArthur,20009495,DC,iShares J.P. Morgan USD Emerging S ,NaN,S,04/25/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: MacArthur Family 2008 Irr Tr FBo David MacArthur
+MacArthur,20009495,DC,iShares U.S. Preferred Stock ETF,NaN,P,04/25/2018,05/01/2018,"$15,001 - $50,000",New,Subholding of: MacArthur Family 2008 Irr Tr FBo David MacArthur
+MacArthur,20009495,DC,iShares U.S. Preferred Stock ETF,NaN,P,04/25/2018,05/01/2018,"$15,001 - $50,000",New,Subholding of: MacArthur Family 2008 Irr Tr FBo Isabella MacArthur
+MacArthur,20009495,JT,Novartis Ag ,NaN,P,04/25/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,NCR CoRP NTS B/E 05.000% P,NaN,P,04/24/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+MacArthur,20009495,JT,NETFLIX INC NTS B/E 05.500% P,NaN,P,04/24/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+MacArthur,20009495,JT,BHP Billiton plc Sponsored ADR S,NaN,S (partial),04/23/2018,05/01/2018,"$15,001 - $50,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,Fast Retailing Co Ltd Unsponsored S ,NaN,S,04/20/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,DC,PowerShares S&P 500 Equal S ,NaN,S,04/18/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: Isabella MacArthur
+MacArthur,20009495,JT,DIAMoNDBACK ENERgY INC P,NaN,P,04/17/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+MacArthur,20009495,DC,NextEra Energy,NEE,S,04/17/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: MacArthur Family 2008 Irr Tr FBo David MacArthur
+MacArthur,20009495,JT,CNH INDL CAPITAL L NTS S,NaN,S,04/16/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+MacArthur,20009495,JT,NCR CoRP NTS B/E 05.000% P,NaN,P,04/10/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+MacArthur,20009495,JT,NETFLIX INC NTS B/E 05.500% P,NaN,P,04/10/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+MacArthur,20009495,JT,NCR CoRP NTS B/E 05.000% P,NaN,P,04/09/2018,05/01/2018,"$1,001 - $15,000",New,Corp bondID Owner Asset Transaction Date Notification Amount Cap.
+MacArthur,20009495,JT,Deutsche Post Ag Sponsored ADR P,NaN,P,04/06/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,Deutsche Post Ag Sponsored ADR P,NaN,P,04/05/2018,05/01/2018,"$1,001 - $15,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,Deutsche Post Ag Sponsored ADR,NaN,P,04/04/2018,05/01/2018,"$15,001 - $50,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,MANoR TX ISD UT BE/R/ 5 DUE,NaN,P,04/04/2018,05/01/2018,"$100,001 - $250,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,"Energy Transfer Partners, L.P.",NaN,S,04/03/2018,05/01/2018,"$50,001 - $100,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,Enterprise Products Partners L.P.,NaN,P,04/03/2018,05/01/2018,"$15,001 - $50,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,"NRg Yield, Inc. Class C ",NaN,P,04/03/2018,05/01/2018,"$15,001 - $50,000",New,Subholding of: Thomas C MacArthur and Deborah A MacArthur
+MacArthur,20009495,JT,NCR CoRP NTS B/E 05.000% P,NaN,P,04/02/2018,05/01/2018,"$1,001 - $15,000",New,Corp bond
+Marshall,20010793,DC,"Tesla, Inc.",TSLA,P,11/05/2018,12/01/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010026,DC,"advanced Micro Devices, Inc. s",NaN,s,10/30/2017,08/01/2018,"$1,001 - $15,000",New,
+Marshall,20010026,DC,"advanced Micro Devices, Inc. P",NaN,P,10/27/2017,08/01/2018,"$1,001 - $15,000",New,
+Marshall,20010026,DC,atossa genetics Inc. ,NaN,P,10/25/2017,08/01/2018,"$1,001 - $15,000",New,
+Marshall,20010380,DC,alibaba group Holding limited P,NaN,P,08/27/2018,10/01/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010229,DC,Microsoft,MSFT,P,08/22/2018,09/01/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010074,DC,"Netflix, Inc.",NFLX,P,08/22/2017,08/09/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010074,DC,"Netflix, Inc.",NFLX,s,08/22/2017,09/14/2017,"$1,001 - $15,000",New,DC#2
+Marshall,20010229,DC,apple Inc. ,NaN,s,08/21/2018,09/01/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010026,DC,appliance Recycling Centers of P,NaN,P,08/21/2017,08/01/2018,"$1,001 - $15,000",New,
+Marshall,20010026,DC,appliance Recycling Centers of s,NaN,s,08/21/2017,08/01/2018,"$1,001 - $15,000",New,
+Marshall,20010229,DC,apple Inc. ,NaN,P,08/07/2018,09/01/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010229,DC,Microsoft,MSFT,P,08/07/2018,09/01/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010074,DC,"amazon.com, Inc. ",NaN,s,08/07/2018,08/09/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010074,DC,"amazon.com, Inc. ",NaN,P,08/03/2018,08/09/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010026,DC,aEterna Zentaris Inc. ,NaN,s,07/20/2017,08/01/2018,"$1,001 - $15,000",New,
+Marshall,20010026,DC,aEterna Zentaris Inc. ,NaN,P,07/19/2017,08/01/2018,"$1,001 - $15,000",New,
+Marshall,20010074,DC,"Netflix, Inc.",NFLX,s,02/10/2017,08/09/2018,"$1,001 - $15,000",New,DC#2
+Marshall,20010074,DC,"Netflix, Inc.",NFLX,P,02/06/2017,08/09/2018,"$1,001 - $15,000",New,DC#2
+Meadows,20010409,SP,aT&T Inc. ,T,P,09/17/2018,09/17/2018,"$1,001 - $15,000",New,Subholding of: Edward Jones Mary Kay 401K Plan
+Meadows,20010409,SP,aurora Mobile Limited,NaN,P,09/14/2018,09/14/2018,"$1,001 - $15,000",New,Subholding of: Edward Jones Mary Kay 401K Plan
+Meadows,20010409,JT,COCa COLa HELLENIC,NaN,P,09/14/2018,09/14/2018,"$15,001 - $50,000",New,Subholding of: Edward Jones Brokerage account
+Meadows,20010409,JT,"general Mills, Inc. ",NaN,P,09/14/2018,09/14/2018,"$1,001 - $15,000",New,Subholding of: Edward Jones Brokerage account
+Meadows,20010409,JT,Invesco,IVZ,P,09/14/2018,09/14/2018,"$1,001 - $15,000",New,Subholding of: Edward Jones Brokerage account
+Meadows,20010409,SP,LVMH Moet Hennessy Louis P,NaN,P,09/14/2018,09/14/2018,"$1,001 - $15,000",New,Subholding of: Edward Jones Mary Kay 401K Plan
+Meadows,20010409,JT,Western Digital,WDC,P,09/14/2018,09/14/2018,"$1,001 - $15,000",New,Subholding of: Edward Jones Brokerage account
+Norton,20010294,DC,go boND 4.0% JUN01 2036,NaN,P,09/12/2018,09/12/2018,"$50,001 - $100,000",New,Subholding of: MERRILL LYNCH #806
+Palmer,20010408,SP,Northern Trust,NTRS,P,09/24/2018,09/24/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Ann IRA
+Palmer,20010408,SP,AbbVie,ABBV,S,09/18/2018,09/18/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Ann IRA
+Palmer,20010408,SP,"Amazon.com, Inc. ",AMZN,S,09/18/2018,09/18/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Ann IRA
+Palmer,20010408,SP,"Integrated Device Technology, Inc. S",NTRS,S,09/18/2018,09/18/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Gary IRA
+Palmer,20010408,SP,Regeneron Pharmaceuticals,REGN,S,09/18/2018,09/18/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Ann IRA
+Palmer,20010408,SP,"CenturyLink, Inc. ",NaN,P,09/17/2018,09/17/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Ann IRA
+Palmer,20010408,SP,TJX Companies,TJX,P,09/10/2018,09/10/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Ann IRA
+Palmer,20010408,JT,TJX Companies,TJX,P,09/10/2018,09/10/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Gary IRA
+Palmer,20010408,SP,"Estee Lauder Companies, Inc. ",NaN,S,08/27/2018,08/27/2018,"$1,001 - $15,000",New,Subholding of: TD Ameritrade Gary IRA
+Pelosi,20009293,SP,"Dropbox, Inc.",NaN,P,03/27/2018,03/27/2018,"$250,001 - $500,000",New,
+Peters,20008920,SP,"East Bay Muni util Dist, Ca",NaN,P,12/28/2017,01/31/2018,"$500,001 - $1,000,000",New,
+Peters,20010440,SP,u.S. Treasury Bills [gS],NaN,P,09/17/2018,09/30/2018,"$500,001 - $1,000,000",New,
+Peters,20010440,SP,u.S. Treasury Bills [gS],NaN,S,09/13/2018,09/30/2018,"$500,001 - $1,000,000",New,
+Peters,20010048,SP,Rand Capital Corporation,NaN,S,07/27/2018,07/31/2018,"$1,001 - $15,000",New,
+Peters,20010048,SP,Monterey Peninsula WTR COPS S,NaN,S (partial),07/01/2018,07/31/2018,"$50,001 - $100,000",New,
+Peters,20009865,SP,u.S. Treasury Bills [gS],NaN,P,06/11/2018,06/30/2018,"$500,001 - $1,000,000",New,
+Peters,20009865,SP,u.S. Treasury Bills [gS],NaN,S,06/07/2018,06/30/2018,"$500,001 - $1,000,000",New,
+Peters,20008920,SP,"los angeles, Ca, W util",NaN,S,01/18/2018,01/31/2018,"$1,000,001 - $5,000,000",New,
+Price,20009601,JT,PayPal,PYPL,P,05/02/2018,05/09/2018,"$1,001 - $15,000",New,
+Roby,20005868,JT,Ford Motor Company,F,s,08/28/2018,08/28/2018,"$1,001 - $15,000",New,
+Roby,20005868,JT,general Electric Company ,NaN,s,08/28/2018,08/28/2018,"$1,001 - $15,000",New,
+Roby,20005868,JT,Home Depot (The),HD,s,08/28/2018,08/28/2018,"$1,001 - $15,000",New,
+Roby,20005868,JT,Mainstay Cornerstone growth s,NaN,s,08/28/2018,08/28/2018,"$1,001 - $15,000",New,sale of mutual fund shares (symbol: KlgaX)
+Roby,20005868,JT,Torchmark Corporation ,NaN,s,08/28/2018,08/28/2018,"$1,001 - $15,000",New,
+Roby,20005868,JT,ValE s.a. american,NaN,s,08/28/2018,08/28/2018,$115.32,New,
+Schneider,20010713,JT,"Trupanion, Inc. ",NaN,S (partial),10/30/2018,10/30/2018,"$50,001 - $100,000",New,Subholding of: 13 - Schwab Brokerage Account
+Schneider,20010713,SP,"Envestnet, Inc ",NaN,S,10/19/2018,11/20/2018,"$100,001 - $250,000",New,Subholding of: 16 - MSSB BROKERAGE ACCOUNT - IRA (CD/P)
+Schneider,20010713,JT,"Trupanion, Inc. ",NaN,S (partial),10/10/2018,10/10/2018,"$50,001 - $100,000",New,Subholding of: 13 - Schwab Brokerage Account
+Schneider,20009512,SP,JP Morgan Chase & Co. ,JPM,S,05/04/2018,05/11/2018,"$100,001 - $250,000",New,Subholding of: 16 - MSSB BROKERAGE ACCOUNT - IRA (CD/P)
+Schneider,20009512,SP,"Teladoc, Inc. ",NaN,P,05/04/2018,05/11/2018,"$100,001 - $250,000",New,Subholding of: 16 - MSSB BROKERAGE ACCOUNT - IRA (CD/P)
+Schneider,20009512,SP,JP Morgan Chase & Co. ,JPM,S,04/17/2018,05/11/2018,"$100,001 - $250,000",New,Subholding of: 18 - MSSB BROKERAGE ACCOUNT - IRA (AD/P)
+Schneider,20009512,SP,Progressive Corporation,PGR,P,04/17/2018,05/11/2018,"$100,001 - $250,000",New,Subholding of: 18 - MSSB BROKERAGE ACCOUNT - IRA (AD/P)
+Schneider,20009213,SP,ResMed,RMD,P,03/21/2018,03/31/2018,"$50,001 - $100,000",New,Subholding of: 16 - MSSB BROKERAGE ACCOUNT - IRA (CD/P)
+Schneider,20009213,SP,lennar Corporation Class A ,NaN,S,03/2/2018,03/31/2018,"$100,001 - $250,000",New,Subholding of: 16 - MSSB BROKERAGE ACCOUNT - IRA (CD/P)
+Schneider,20009213,SP,ResMed,RMD,P,03/2/2018,03/31/2018,"$100,001 - $250,000",New,Subholding of: 16 - MSSB BROKERAGE ACCOUNT - IRA (CD/P)
+Schneider,20009213,SP,Walmart,WMT,S,02/21/2018,03/31/2018,"$50,001 - $100,000",New,
+Schneider,20010046,SP,arizona Health FaCS auth Banner,NaN,P,02/06/2017,02/06/2017,"$15,001 - $50,000",New,Investment company with interest in company operating regional freestanding MRI centers
+Schneider,20008985,SP,Delta Air Lines,DAL,S,01/8/2018,02/15/2018,"$100,001 - $250,000",New,Subholding of: 16 - MSSB BROKERAGE ACCOUNT - IRA (CD/P)
+Schneider,20008985,SP,Walmart,WMT,P,01/8/2018,02/15/2018,"$100,001 - $250,000",New,
+Schneider,20008985,SP,laboratory Corporation of America,NaN,P,01/12/2018,02/15/2018,"$250,001 - $500,000",New,Subholding of: 18 - MSSB BROKERAGE ACCOUNT - IRA (AD/P)
+Schneider,20008985,SP,SAP SE ADS ,NaN,S,01/12/2018,02/15/2018,"$250,001 - $500,000",New,Subholding of: 18 - MSSB BROKERAGE ACCOUNT - IRA (AD/P)
+Schneider,20010046,SP,Pardise for Paws [oL] P,NaN,P,01/11/2017,01/11/2017,"$1,001 - $15,000",New,Business operating pet boarding facilities
+Sessions,20009507,SP,VENDEE MTg TR 2011,NaN,P,09/17/2015,09/17/2015,"$15,001 - $50,000",New,Vendee BoND
+Sessions,20009507,SP,amerisourceBergen Corporation,NaN,P,07/31/2015,07/31/2015,"$15,001 - $50,000",New,
+Sessions,20009507,SP,"air Products and Chemicals, Inc.",NaN,P,07/15/2015,07/15/2015,"$15,001 - $50,000",New,
+Sessions,20009670,SP,Honeywell,HON,P,06/01/2018,06/02/2018,"$1,001 - $15,000",New,
+Sessions,20009658,SP,"Paychex, Inc. ",NaN,S,05/31/2018,05/31/2018,"$15,001 - $50,000",New,
+Sessions,20009606,SP,alphabet Inc. ,NaN,P,05/18/2018,05/18/2018,"$1,001 - $15,000",New,
+Sessions,20009459,SP,abbott laboratories ,NaN,P,05/02/2018,05/04/2018,"$1,001 - $15,000",New,
+Sessions,20009231,SP,CVS Health,CVS,S,04/3/2018,04/4/2018,"$1,001 - $15,000",New,
+Sessions,20009365,SP,Fifth Third Bancorp,FITB,S,04/25/2018,04/26/2018,"$15,001 - $50,000",Amended,
+Sessions,20009066,SP,McDonald's,MCD,P,03/3/2018,03/3/2018,"$1,001 - $15,000",New,
+Sessions,20009186,SP,Medtronic,MDT,P,03/22/2018,03/23/2018,"$15,001 - $50,000",New,
+Sessions,20009182,SP,DowDuPont Inc. ,NaN,P,03/20/2018,03/21/2018,"$15,001 - $50,000",New,
+Sessions,20009034,SP,Wynn Resorts,WYNN,S,02/8/2018,02/8/2018,"$1,001 - $15,000",New,
+Sessions,20008948,SP,Bank of America,BAC,P,02/8/2018,02/8/2018,"$15,001 - $50,000",New,
+Sessions,20008883,SP,CF Industries,CF,S,02/5/2018,02/6/2018,"$15,001 - $50,000",New,
+Sessions,20008883,SP,Rockwell Automation,ROK,P,02/5/2018,02/6/2018,"$1,001 - $15,000",New,
+Sessions,20009024,SP,Bank of America,BAC,P,02/22/2018,02/22/2018,"$15,001 - $50,000",New,
+Sessions,20008958,SP,general Electric Company ,NaN,S,02/12/2018,02/12/2018,"$1,001 - $15,000",New,
+Sessions,20008717,SP,T-Mobile US,TMUS,S,01/9/2018,01/9/2018,"$1,001 - $15,000",New,
+Sessions,20008681,SP,Danaher Corporation,DHR,P,01/4/2018,01/5/2018,"$15,001 - $50,000",New,
+Sessions,20008883,SP,Honeywell,HON,P,01/31/2018,02/4/2018,"$15,001 - $50,000",New,
+Sessions,20009034,SP,"PowerShares QQQ Trust, Series 1 ",NaN,P,01/26/2018,01/26/2018,"$1,001 - $15,000",New,
+Sessions,20009034,SP,Walmart,WMT,P,01/26/2018,01/26/2018,"$1,001 - $15,000",New,
+Sessions,20009034,SP,Wynn Resorts,WYNN,P,01/26/2018,01/26/2018,"$1,001 - $15,000",New,
+Speier,20008623,SP,Schwab u.S. TIPs ETF ,NaN,P,03/13/2018,03/13/2018,"$100,001 - $250,000",New,
+Wasserman Schultz,20008805,DC,"astroNova, Inc. ",NaN,P,01/24/2018,01/25/2018,"$1,001 - $15,000",New,
+Womack,20009915,JT,Pulaski Technical College ark [gS] S ,NaN,S,06/28/2018,07/03/2018,"$1,001 - $15,000",New,

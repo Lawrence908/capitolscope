@@ -119,7 +119,7 @@ class PaginationParams(BaseModel):
 class SortParams(BaseModel):
     """Standard sorting parameters."""
     sort_by: str = Field("created_at", description="Field to sort by")
-    sort_order: str = Field("desc", regex=r"^(asc|desc)$", description="Sort order")
+    sort_order: str = Field("desc", pattern=r"^(asc|desc)$", description="Sort order")
 
 
 class PaginatedResponse(CapitolScopeBaseModel):

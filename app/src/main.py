@@ -19,7 +19,7 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from core.config import settings
 from core.database import init_database, close_database
 from core.logging import configure_logging
-from api import trades, members, auth, health
+from api import trades, members, auth, health, portfolios, market_data, notifications
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
@@ -74,7 +74,43 @@ app = FastAPI(
     redoc_url="/redoc" if settings.DEBUG else None,
     openapi_url="/openapi.json" if settings.DEBUG else None,
     lifespan=lifespan,
+    swagger_ui_parameters={
+        "persistAuthorization": True,  # Keep auth token across page refreshes
+        "displayRequestDuration": True,
+        "filter": True,
+        "tryItOutEnabled": True,
+    }
 )
+
+# Add JWT authentication to OpenAPI schema
+from fastapi.openapi.utils import get_openapi
+from fastapi.security import HTTPBearer
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    
+    openapi_schema = get_openapi(
+        title="CapitolScope API",
+        version="1.0.0",
+        description="Congressional trading transparency platform",
+        routes=app.routes,
+    )
+    
+    # Add JWT Bearer authentication
+    openapi_schema["components"]["securitySchemes"] = {
+        "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+            "description": "Enter JWT token obtained from login endpoint"
+        }
+    }
+    
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
 
 # Add security middleware
 app.add_middleware(
@@ -102,6 +138,11 @@ app.include_router(health.router, prefix="/health", tags=["Health"])
 app.include_router(auth.router, prefix=f"{settings.API_V1_PREFIX}/auth", tags=["Authentication"])
 app.include_router(trades.router, prefix=f"{settings.API_V1_PREFIX}/trades", tags=["Trades"])
 app.include_router(members.router, prefix=f"{settings.API_V1_PREFIX}/members", tags=["Members"])
+
+# New domain endpoints
+app.include_router(portfolios.router, prefix=f"{settings.API_V1_PREFIX}/portfolios", tags=["Portfolios"])
+app.include_router(market_data.router, prefix=f"{settings.API_V1_PREFIX}/market-data", tags=["Market Data"])
+app.include_router(notifications.router, prefix=f"{settings.API_V1_PREFIX}/notifications", tags=["Notifications"])
 
 
 @app.get("/")

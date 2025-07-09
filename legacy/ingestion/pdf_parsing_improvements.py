@@ -20,12 +20,47 @@ class TradeRecord:
     amount: str
     filing_status: str
     description: str
+    first_name: str = ""
+    last_name: str = ""
     confidence_score: float = 0.0
     parsing_notes: List[str] = None
     
     def __post_init__(self):
         if self.parsing_notes is None:
             self.parsing_notes = []
+        
+        # Extract first and last names from description if not already set
+        if not self.first_name and not self.last_name:
+            self._extract_names_from_description()
+    
+    def _extract_names_from_description(self):
+        """Extract first and last names from description field"""
+        if not self.description:
+            return
+            
+        # Look for patterns like "Mr. Lou Barletta", "Ms. Suzan K. DelBene", etc.
+        name_patterns = [
+            r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Z][a-z]+(?:\s+[A-Z]\.)?\s+[A-Z][a-z]+)',
+            r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
+        ]
+        
+        for pattern in name_patterns:
+            match = re.search(pattern, self.description)
+            if match:
+                full_name = match.group(2).strip()
+                # Split the full name into first and last
+                name_parts = full_name.split()
+                if len(name_parts) >= 2:
+                    # Handle middle initials
+                    if len(name_parts) == 3 and len(name_parts[1]) == 1:
+                        # Format: "Suzan K. DelBene" -> first: "Suzan", last: "DelBene"
+                        self.first_name = name_parts[0]
+                        self.last_name = name_parts[2]
+                    else:
+                        # Format: "Lou Barletta" -> first: "Lou", last: "Barletta"
+                        self.first_name = name_parts[0]
+                        self.last_name = name_parts[-1]
+                break
 
 class PDFParsingValidator:
     """Validation framework for PDF parsing results"""

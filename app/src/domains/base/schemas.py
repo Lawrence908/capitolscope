@@ -8,6 +8,7 @@ for all API request/response validation across domains.
 from datetime import datetime, date
 from typing import Optional, List, Dict, Any, Union
 from decimal import Decimal
+from enum import Enum
 import uuid
 
 from pydantic import BaseModel, Field, ConfigDict, field_validator
@@ -59,27 +60,27 @@ class UUIDMixin(BaseModel):
 # COMMON ENUMS AND TYPES
 # ============================================================================
 
-class PoliticalParty(str):
+class PoliticalParty(str, Enum):
     """Political party enumeration."""
     DEMOCRAT = "D"
     REPUBLICAN = "R" 
     INDEPENDENT = "I"
 
 
-class Chamber(str):
+class Chamber(str, Enum):
     """Congressional chamber enumeration."""
     HOUSE = "House"
     SENATE = "Senate"
 
 
-class TransactionType(str):
+class TransactionType(str, Enum):
     """Transaction type enumeration."""
     PURCHASE = "P"
     SALE = "S"
     EXCHANGE = "E"
 
 
-class SubscriptionTier(str):
+class SubscriptionTier(str, Enum):
     """User subscription tier enumeration."""
     FREE = "free"
     PRO = "pro"
@@ -87,7 +88,7 @@ class SubscriptionTier(str):
     ENTERPRISE = "enterprise"
 
 
-class SubscriptionStatus(str):
+class SubscriptionStatus(str, Enum):
     """Subscription status enumeration."""
     ACTIVE = "active"
     CANCELLED = "cancelled"
@@ -95,7 +96,7 @@ class SubscriptionStatus(str):
     PAST_DUE = "past_due"
 
 
-class SocialPlatform(str):
+class SocialPlatform(str, Enum):
     """Social media platform enumeration."""
     TWITTER = "twitter"
     LINKEDIN = "linkedin"

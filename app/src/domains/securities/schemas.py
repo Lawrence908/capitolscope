@@ -230,7 +230,7 @@ class SecuritySummary(CapitolScopeBaseSchema):
 class DailyPriceBase(CapitolScopeBaseSchema):
     """Base daily price schema."""
     security_id: int = Field(..., description="Security ID")
-    date: date = Field(..., description="Price date")
+    price_date: date = Field(..., description="Price date")
     open_price: int = Field(..., description="Opening price in cents", ge=0)
     high_price: int = Field(..., description="High price in cents", ge=0)
     low_price: int = Field(..., description="Low price in cents", ge=0)
@@ -246,33 +246,18 @@ class DailyPriceBase(CapitolScopeBaseSchema):
     
     @field_validator('high_price')
     @classmethod
-    def validate_high_price(cls, v, values):
-        """Ensure high price is >= other prices."""
-        low_price = values.get('low_price')
-        open_price = values.get('open_price')
-        close_price = values.get('close_price')
-        
-        if low_price and v < low_price:
-            raise ValueError('High price must be >= low price')
-        if open_price and v < open_price:
-            raise ValueError('High price must be >= open price')
-        if close_price and v < close_price:
-            raise ValueError('High price must be >= close price')
-        
+    def validate_high_price(cls, v):
+        """Ensure high price is >= 0."""
+        if v < 0:
+            raise ValueError('High price must be >= 0')
         return v
     
     @field_validator('low_price')
     @classmethod
-    def validate_low_price(cls, v, values):
-        """Ensure low price is <= other prices."""
-        open_price = values.get('open_price')
-        close_price = values.get('close_price')
-        
-        if open_price and v > open_price:
-            raise ValueError('Low price must be <= open price')
-        if close_price and v > close_price:
-            raise ValueError('Low price must be <= close price')
-        
+    def validate_low_price(cls, v):
+        """Ensure low price is >= 0."""
+        if v < 0:
+            raise ValueError('Low price must be >= 0')
         return v
 
 
@@ -389,11 +374,10 @@ class SecuritySearchParams(CapitolScopeBaseSchema):
     
     @field_validator('max_market_cap')
     @classmethod
-    def validate_market_cap_range(cls, v, values):
-        """Ensure max market cap is greater than min."""
-        min_cap = values.get('min_market_cap')
-        if min_cap and v and v < min_cap:
-            raise ValueError('Maximum market cap must be greater than minimum')
+    def validate_market_cap_range(cls, v):
+        """Ensure max market cap is valid."""
+        if v and v < 0:
+            raise ValueError('Maximum market cap must be greater than 0')
         return v
 
 
@@ -406,11 +390,10 @@ class PriceSearchParams(CapitolScopeBaseSchema):
     
     @field_validator('end_date')
     @classmethod
-    def validate_date_range(cls, v, values):
-        """Ensure end date is after start date."""
-        start_date = values.get('start_date')
-        if start_date and v and v < start_date:
-            raise ValueError('End date must be after start date')
+    def validate_date_range(cls, v):
+        """Ensure end date is valid."""
+        if v and v > date.today():
+            raise ValueError('End date cannot be in the future')
         return v
 
 

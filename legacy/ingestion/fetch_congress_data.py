@@ -1,17 +1,17 @@
 # # Process each year with conservative settings
 # for year in 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025; do
 #     echo "Processing year $year..."
-#     python src/ingestion/fetch_congress_data.py $year --delay 3.0 --concurrent 2 --retries 5
+#     python legacy/ingestion/fetch_congress_data.py $year --delay 3.0 --concurrent 2 --retries 5
 #     echo "Completed $year, waiting before next year..."
 #     sleep 60
 # done
 
 # Nightly run:
-# python src/ingestion/fetch_congress_data.py --delay 3.0 --concurrent 2 --retries 5
-# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5
-# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG
-# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG --log-file logs/congress_data.log
-# python src/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG --log-file logs/congress_data.log --quiet
+# python legacy/ingestion/fetch_congress_data.py --delay 3.0 --concurrent 2 --retries 5
+# python legacy/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5
+# python legacy/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG
+# python legacy/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG --log-file logs/congress_data.log
+# python legacy/ingestion/fetch_congress_data.py 2025 --delay 3.0 --concurrent 2 --retries 5 --log-level DEBUG --log-file logs/congress_data.log --quiet
 
 
 
@@ -32,6 +32,7 @@ import logging
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from sqlalchemy import create_engine
+from typing import Tuple
 
 # Configure logging
 def setup_logging(level=logging.INFO, log_file=None):
@@ -238,7 +239,11 @@ class CongressTrades:
         self.members = self.get_congress_members()
         self.junk_members = []
         
+        # Load accurate names from docIDlist
+        self.member_names = self.load_member_names_from_docidlist()
+        
         logger.info(f"Loaded {len(self.tickers)} stock tickers and {len(self.asset_dict)} asset types")
+        logger.info(f"Loaded {len(self.member_names)} member names from docIDlist")
 
         # Initialize the improved PDF parser
         logger.info("Initializing improved PDF parser...")
@@ -252,6 +257,57 @@ class CongressTrades:
         nest_asyncio.apply()
         logger.info("Starting trade data processing...")
         self.trades = asyncio.run(self.get_trades_by_member())
+    
+    def load_member_names_from_docidlist(self) -> dict:
+        """
+        Load accurate member names from the docIDlist CSV file.
+        
+        Returns:
+            Dict mapping DocID to (prefix, first_name, last_name, full_name)
+        """
+        current_fd = str(self.year) + "FD"
+        docidlist_path = self.data_path + current_fd + '_docIDlist.csv'
+        
+        member_names = {}
+        
+        try:
+            if Path(docidlist_path).exists():
+                df = pd.read_csv(docidlist_path)
+                logger.info(f"Loading member names from {docidlist_path}")
+                
+                for _, row in df.iterrows():
+                    doc_id = str(row['DocID']).strip()
+                    prefix = str(row['Prefix']).strip() if pd.notna(row['Prefix']) else ""
+                    last_name = str(row['Last']).strip()
+                    first_name = str(row['First']).strip()
+                    
+                    if doc_id and last_name and first_name:
+                        # Create full name with prefix
+                        if prefix:
+                            full_name = f"{prefix} {first_name} {last_name}".strip()
+                        else:
+                            full_name = f"{first_name} {last_name}".strip()
+                        
+                        # Store the accurate names
+                        member_names[doc_id] = {
+                            'prefix': prefix,
+                            'first_name': first_name,
+                            'last_name': last_name,
+                            'full_name': full_name,
+                            'member_key': last_name  # Use last name as member key
+                        }
+                        
+                        logger.debug(f"Loaded names for DocID {doc_id}: {full_name}")
+                
+                logger.info(f"Loaded {len(member_names)} member name mappings")
+            else:
+                logger.warning(f"DocIDlist file not found: {docidlist_path}")
+                
+        except Exception as e:
+            logger.error(f"Error loading member names from docIDlist: {e}")
+        
+        return member_names
+
         
     async def rate_limit_delay(self):
         """Ensure minimum delay between requests"""
@@ -297,14 +353,24 @@ class CongressTrades:
                             )
                             if existing_records:
                                 logger.debug(f"Parsed existing PDF {doc_id} with {len(existing_records)} records")
+                                
+                                # Get accurate names from docIDlist
+                                accurate_names = self.member_names.get(doc_id, {})
+                                prefix = accurate_names.get('prefix', '')
+                                first_name = accurate_names.get('first_name', '')
+                                last_name = accurate_names.get('last_name', member)  # Fallback to member if not found
+                                
                                 # Convert to DataFrame and add to results
                                 trade_dict = {
-                                    "Member": [], "DocID": [], "Owner": [], "Asset": [], "Ticker": [],
+                                    "Member": [], "Prefix": [], "FirstName": [], "LastName": [], "DocID": [], "Owner": [], "Asset": [], "Ticker": [],
                                     "Transaction Type": [], "Transaction Date": [], "Notification Date": [],
                                     "Amount": [], "Filing Status": [], "Description": []
                                 }
                                 for record in existing_records:
-                                    trade_dict["Member"].append(record.member)
+                                    trade_dict["Member"].append(member)  # Use member key for consistency
+                                    trade_dict["Prefix"].append(prefix)
+                                    trade_dict["FirstName"].append(first_name)  # Use accurate first name
+                                    trade_dict["LastName"].append(last_name)    # Use accurate last name
                                     trade_dict["DocID"].append(record.doc_id)
                                     trade_dict["Owner"].append(record.owner)
                                     trade_dict["Asset"].append(record.asset)
@@ -580,6 +646,157 @@ class CongressTrades:
         
         return junk_members
 
+    def _extract_names_from_member_and_description(self, member: str, description: str = "") -> Tuple[str, str]:
+        """
+        Extract first and last names from member field and description.
+        
+        Args:
+            member: Member field (usually just last name)
+            description: Description field (may contain full name)
+            
+        Returns:
+            Tuple of (first_name, last_name)
+        """
+        first_name = ""
+        last_name = member.strip()  # Default to member as last name
+        
+        # First try to extract from description
+        if description:
+            name_patterns = [
+                r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Z][a-z]+(?:\s+[A-Z]\.)?\s+[A-Z][a-z]+)',
+                r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
+            ]
+            
+            for pattern in name_patterns:
+                match = re.search(pattern, description)
+                if match:
+                    full_name = match.group(2).strip()
+                    name_parts = full_name.split()
+                    if len(name_parts) >= 2:
+                        # Handle middle initials
+                        if len(name_parts) == 3 and len(name_parts[1]) == 1:
+                            first_name = name_parts[0]
+                            last_name = name_parts[2]
+                        else:
+                            first_name = name_parts[0]
+                            last_name = name_parts[-1]
+                    break
+        
+        # If no names found in description, try to infer from member field
+        if not first_name and last_name:
+            # Some members might have full names in the member field
+            if ',' in last_name:
+                parts = last_name.split(',')
+                if len(parts) >= 2:
+                    last_name = parts[0].strip()
+                    first_name = parts[1].strip()
+        
+        return first_name, last_name
+
+    def _validate_and_clean_trade_record(self, record: 'TradeRecord', member: str, prefix: str, first_name: str, last_name: str) -> dict:
+        """
+        Validate and clean a trade record before adding to CSV.
+        Prefers blank fields over wrong data to avoid column shifting.
+        """
+        import re
+        
+        # Clean and validate transaction type - be very strict
+        transaction_type = record.transaction_type.strip().upper()
+        if transaction_type not in ['P', 'S', 'E']:
+            # Don't try to guess - leave blank if not valid
+            transaction_type = ""
+        
+        # Clean and validate dates - be very strict
+        def clean_date(date_str: str) -> str:
+            if not date_str or date_str.strip() == '':
+                return ""
+            
+            # Only accept proper date format MM/DD/YYYY
+            date_match = re.match(r'^(\d{1,2}/\d{1,2}/\d{4})$', date_str.strip())
+            if date_match:
+                return date_match.group(1)
+            return ""
+        
+        transaction_date = clean_date(record.transaction_date)
+        notification_date = clean_date(record.notification_date)
+        
+        # Clean and validate amount - be very strict
+        def clean_amount(amount_str: str) -> str:
+            if not amount_str or amount_str.strip() == '':
+                return ""
+            
+            # Only accept proper dollar amount format
+            amount_match = re.match(r'^\$[\d,]+$', amount_str.strip())
+            if amount_match:
+                return amount_match.group(0)
+            return ""
+        
+        amount = clean_amount(record.amount)
+        
+        # Clean asset name - remove any transaction data that got mixed in
+        asset = record.asset.strip()
+        if asset:
+            # Remove any transaction data that might be mixed in
+            asset = re.sub(r'\s+[PSE]\s+\d{1,2}/\d{1,2}/\d{4}', '', asset)
+            asset = re.sub(r'\s+\$\d+,?\d*', '', asset)
+            asset = re.sub(r'\s+Asset\s+Transaction\s+Date\s+Notification', '', asset)
+        
+        # Clean ticker - only accept valid ticker format
+        ticker = record.ticker.strip() if record.ticker else ""
+        if ticker:
+            # Only accept alphanumeric tickers
+            if not re.match(r'^[A-Z0-9]+$', ticker):
+                ticker = ""
+        
+        # Clean owner - only accept valid owner types
+        owner = record.owner.strip() if record.owner in ['SP', 'DC', 'JT'] else "JT"
+        
+        # Clean description
+        description = record.description.strip() if record.description else ""
+        
+        return {
+            "Member": member,
+            "Prefix": prefix,
+            "FirstName": first_name,
+            "LastName": last_name,
+            "DocID": record.doc_id,
+            "Owner": owner,
+            "Asset": asset,
+            "Ticker": ticker,
+            "Transaction Type": transaction_type,
+            "Transaction Date": transaction_date,
+            "Notification Date": notification_date,
+            "Amount": amount,
+            "Filing Status": "New",
+            "Description": description
+        }
+
+    def _is_malformed_row(self, record: 'TradeRecord') -> bool:
+        """
+        Detect if a trade record is malformed and should be skipped.
+        Returns True if the row should be skipped.
+        """
+        import re
+        
+        # Check if transaction type is a date (common malformation)
+        if record.transaction_type and re.match(r'^\d{1,2}/\d{1,2}/\d{4}$', record.transaction_type.strip()):
+            return True
+        
+        # Check if amount is in notification date field (common malformation)
+        if record.notification_date and re.match(r'^\$[\d,]+$', record.notification_date.strip()):
+            return True
+        
+        # Check if asset name contains transaction data (common malformation)
+        if record.asset and any(keyword in record.asset for keyword in ['Asset', 'Transaction', 'Date', 'Notification']):
+            return True
+        
+        # Check if ticker is clearly wrong (like dates or amounts)
+        if record.ticker and (re.match(r'^\d{1,2}/\d{1,2}/\d{4}$', record.ticker.strip()) or 
+                             re.match(r'^\$[\d,]+$', record.ticker.strip())):
+            return True
+        
+        return False
+
     async def download_and_parse_pdf_with_retry(self, session, doc_id, member) -> pd.DataFrame:
         """
         Download and parse PDF with retry logic for rate limiting
@@ -614,6 +831,9 @@ class CongressTrades:
         
         trade_dict = {
             "Member": [],
+            "Prefix": [],
+            "FirstName": [],
+            "LastName": [],
             "DocID": [],
             "Owner": [],
             "Asset": [],
@@ -630,6 +850,13 @@ class CongressTrades:
 
         # Define the URL of the zip file
         url = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/" + str(self.year) + '/' + pdf_file_name
+        
+        # Get accurate names from docIDlist
+        accurate_names = self.member_names.get(doc_id, {})
+        prefix = accurate_names.get('prefix', '')
+        first_name = accurate_names.get('first_name', '')
+        last_name = accurate_names.get('last_name', member)  # Fallback to member if not found
+        full_name = accurate_names.get('full_name', member)
         
         # Send a GET request to download the zip file
         try:
@@ -668,19 +895,21 @@ class CongressTrades:
                     if improved_records:
                         logger.info(f"Improved parser found {len(improved_records)} records for {doc_id}")
                         
-                        # Convert records to DataFrame format
+                        # Convert records to DataFrame format with validation and cleaning
                         for record in improved_records:
-                            trade_dict["Member"].append(record.member)
-                            trade_dict["DocID"].append(record.doc_id)
-                            trade_dict["Owner"].append(record.owner)
-                            trade_dict["Asset"].append(record.asset)
-                            trade_dict["Ticker"].append(record.ticker)
-                            trade_dict["Transaction Type"].append(record.transaction_type)
-                            trade_dict["Transaction Date"].append(record.transaction_date)
-                            trade_dict["Notification Date"].append(record.notification_date)
-                            trade_dict["Amount"].append(record.amount)
-                            trade_dict["Filing Status"].append(record.filing_status)
-                            trade_dict["Description"].append(record.description)
+                            # Skip malformed rows entirely
+                            if self._is_malformed_row(record):
+                                logger.debug(f"Skipping malformed record for {doc_id}: {record.asset}")
+                                continue
+                            
+                            # Validate and clean the record
+                            cleaned_record = self._validate_and_clean_trade_record(
+                                record, member, prefix, first_name, last_name
+                            )
+                            
+                            # Add to trade dictionary
+                            for key, value in cleaned_record.items():
+                                trade_dict[key].append(value)
                         
                         pdf_df = pd.DataFrame(trade_dict)
                         

@@ -10,10 +10,10 @@ from typing import Optional, List, Dict, Any, Union
 from decimal import Decimal
 from enum import Enum
 
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, validator, model_validator
 from pydantic.types import NonNegativeInt, PositiveInt
 
-from domains.base.schemas import CapitolScopeBaseSchema, PaginatedResponse, ResponseMetadata, TimestampMixin
+from domains.base.schemas import CapitolScopeBaseSchema, PaginatedResponse, TimestampMixin
 from domains.base.schemas import PoliticalParty, Chamber, TransactionType
 from core.logging import get_logger
 
@@ -64,6 +64,7 @@ class CongressMemberBase(CapitolScopeBaseSchema):
     first_name: str = Field(..., min_length=1, max_length=100)
     last_name: str = Field(..., min_length=1, max_length=100)
     full_name: str = Field(..., min_length=1, max_length=200)
+    prefix: Optional[str] = Field(None, max_length=10, description="Honorifics like 'Rep.', 'Sen.', 'Dr.', 'Mr.', 'Ms.'")
     party: Optional[PoliticalParty] = None
     chamber: Chamber
     state: str = Field(..., min_length=2, max_length=2, description="Two-letter state code")
@@ -112,8 +113,7 @@ class CongressMemberSummary(CongressMemberBase, TimestampMixin):
     total_trade_value: Optional[int] = Field(None, description="Total trade value in cents")
     portfolio_value: Optional[int] = Field(None, description="Current portfolio value in cents")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class CongressMemberDetail(CongressMemberSummary):
@@ -160,8 +160,7 @@ class CongressMemberPortfolioSummary(CapitolScopeBaseSchema):
     total_return_percent: Optional[float] = Field(None, description="Total return percentage")
     daily_return: Optional[Decimal] = Field(None, description="Daily return percentage")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 # ============================================================================
@@ -174,12 +173,12 @@ class CongressionalTradeBase(CapitolScopeBaseSchema):
     doc_id: str = Field(..., min_length=1, max_length=50)
     raw_asset_description: str = Field(..., min_length=1)
     transaction_type: TransactionType
-    transaction_date: date
-    notification_date: date
+    transaction_date: Optional[date] = None
+    notification_date: Optional[date] = None
     
     @validator('notification_date')
     def validate_notification_date(cls, v, values):
-        if 'transaction_date' in values and v < values['transaction_date']:
+        if v and 'transaction_date' in values and values['transaction_date'] and v < values['transaction_date']:
             raise ValueError('Notification date cannot be before transaction date')
         return v
 
@@ -199,11 +198,11 @@ class CongressionalTradeCreate(CongressionalTradeBase):
     comment: Optional[str] = None
     cap_gains_over_200: bool = False
     
-    @root_validator
-    def validate_amounts(cls, values):
-        amount_min = values.get('amount_min')
-        amount_max = values.get('amount_max')
-        amount_exact = values.get('amount_exact')
+    @model_validator(mode='after')
+    def validate_amounts(self):
+        amount_min = self.amount_min
+        amount_max = self.amount_max
+        amount_exact = self.amount_exact
         
         # Must have either exact amount or min/max range
         if not amount_exact and not (amount_min and amount_max):
@@ -212,7 +211,7 @@ class CongressionalTradeCreate(CongressionalTradeBase):
         if amount_min and amount_max and amount_min > amount_max:
             raise ValueError('Minimum amount cannot be greater than maximum amount')
         
-        return values
+        return self
 
 
 class CongressionalTradeUpdate(CapitolScopeBaseSchema):
@@ -245,8 +244,7 @@ class CongressionalTradeSummary(CongressionalTradeBase, TimestampMixin):
     member_chamber: Optional[Chamber] = None
     member_state: Optional[str] = None
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class CongressionalTradeDetail(CongressionalTradeSummary):
@@ -314,8 +312,7 @@ class MemberPortfolioSummary(MemberPortfolioBase, TimestampMixin):
     # Computed fields
     current_value: Optional[int] = Field(None, description="Current position value in cents")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class MemberPortfolioDetail(MemberPortfolioSummary):
@@ -347,8 +344,7 @@ class PortfolioPerformanceSummary(PortfolioPerformanceBase, TimestampMixin):
     # Computed fields
     total_return_percent: Optional[float] = Field(None, description="Total return percentage")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class PortfolioPerformanceDetail(PortfolioPerformanceSummary):
@@ -439,7 +435,6 @@ class CongressionalTradeListResponse(PaginatedResponse):
 class CongressionalTradeDetailResponse(CapitolScopeBaseSchema):
     """Response schema for congressional trade detail."""
     data: CongressionalTradeDetail
-    metadata: ResponseMetadata
 
 
 class CongressMemberListResponse(PaginatedResponse):
@@ -450,7 +445,6 @@ class CongressMemberListResponse(PaginatedResponse):
 class CongressMemberDetailResponse(CapitolScopeBaseSchema):
     """Response schema for congress member detail."""
     data: CongressMemberDetail
-    metadata: ResponseMetadata
 
 
 class MemberPortfolioListResponse(PaginatedResponse):

@@ -11,7 +11,7 @@ from typing import List, Optional, Dict, Any, Tuple
 from decimal import Decimal
 
 from domains.base.interfaces import (
-    BaseRepositoryInterface, BaseServiceInterface, BaseAnalyticsInterface
+    BaseRepository, BaseService, AnalyticsInterface
 )
 from domains.congressional.schemas import (
     CongressMemberCreate, CongressMemberUpdate, CongressMemberDetail, CongressMemberSummary,
@@ -29,7 +29,7 @@ logger = get_logger(__name__)
 # REPOSITORY INTERFACES
 # ============================================================================
 
-class CongressMemberRepositoryInterface(BaseRepositoryInterface, ABC):
+class CongressMemberRepositoryInterface(BaseRepository, ABC):
     """Abstract interface for congress member repository operations."""
     
     @abstractmethod
@@ -78,7 +78,7 @@ class CongressMemberRepositoryInterface(BaseRepositoryInterface, ABC):
         pass
 
 
-class CongressionalTradeRepositoryInterface(BaseRepositoryInterface, ABC):
+class CongressionalTradeRepositoryInterface(BaseRepository, ABC):
     """Abstract interface for congressional trade repository operations."""
     
     @abstractmethod
@@ -137,7 +137,7 @@ class CongressionalTradeRepositoryInterface(BaseRepositoryInterface, ABC):
         pass
 
 
-class MemberPortfolioRepositoryInterface(BaseRepositoryInterface, ABC):
+class MemberPortfolioRepositoryInterface(BaseRepository, ABC):
     """Abstract interface for member portfolio repository operations."""
     
     @abstractmethod
@@ -171,7 +171,7 @@ class MemberPortfolioRepositoryInterface(BaseRepositoryInterface, ABC):
         pass
 
 
-class PortfolioPerformanceRepositoryInterface(BaseRepositoryInterface, ABC):
+class PortfolioPerformanceRepositoryInterface(BaseRepository, ABC):
     """Abstract interface for portfolio performance repository operations."""
     
     @abstractmethod
@@ -204,7 +204,7 @@ class PortfolioPerformanceRepositoryInterface(BaseRepositoryInterface, ABC):
 # SERVICE INTERFACES
 # ============================================================================
 
-class CongressMemberServiceInterface(BaseServiceInterface, ABC):
+class CongressMemberServiceInterface(BaseService, ABC):
     """Abstract interface for congress member business logic."""
     
     @abstractmethod
@@ -243,7 +243,7 @@ class CongressMemberServiceInterface(BaseServiceInterface, ABC):
         pass
 
 
-class CongressionalTradeServiceInterface(BaseServiceInterface, ABC):
+class CongressionalTradeServiceInterface(BaseService, ABC):
     """Abstract interface for congressional trade business logic."""
     
     @abstractmethod
@@ -282,7 +282,7 @@ class CongressionalTradeServiceInterface(BaseServiceInterface, ABC):
         pass
 
 
-class PortfolioServiceInterface(BaseServiceInterface, ABC):
+class PortfolioServiceInterface(BaseService, ABC):
     """Abstract interface for portfolio management business logic."""
     
     @abstractmethod
@@ -320,7 +320,7 @@ class PortfolioServiceInterface(BaseServiceInterface, ABC):
 # ANALYTICS INTERFACES
 # ============================================================================
 
-class CongressionalAnalyticsInterface(BaseAnalyticsInterface, ABC):
+class CongressionalAnalyticsInterface(AnalyticsInterface, ABC):
     """Abstract interface for congressional trading analytics."""
     
     @abstractmethod

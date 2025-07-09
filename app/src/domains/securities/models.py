@@ -64,7 +64,7 @@ class Sector(CapitolScopeBaseModel, ActiveRecordMixin):
     
     # Relationships
     securities = relationship("Security", back_populates="sector")
-    parent_sector = relationship("Sector", remote_side=[id])
+    parent_sector = relationship("Sector", remote_side="Sector.id")
     
     def __repr__(self):
         return f"<Sector(name={self.name}, gics_code={self.gics_code})>"
@@ -179,7 +179,7 @@ class DailyPrice(CapitolScopeBaseModel):
     __tablename__ = 'daily_prices'
     
     security_id = Column(Integer, ForeignKey('securities.id'), nullable=False, index=True)
-    date = Column(Date, nullable=False, index=True)
+    price_date = Column(Date, nullable=False, index=True)
     
     # OHLCV data (all prices in cents)
     open_price = Column(Integer, nullable=False)
@@ -200,9 +200,9 @@ class DailyPrice(CapitolScopeBaseModel):
     
     # Indexes and constraints
     __table_args__ = (
-        UniqueConstraint('security_id', 'date', name='unique_security_date'),
-        Index('idx_daily_price_security_date', 'security_id', 'date'),
-        Index('idx_daily_price_date', 'date'),
+        UniqueConstraint('security_id', 'price_date', name='unique_security_date'),
+        Index('idx_daily_price_security_date', 'security_id', 'price_date'),
+        Index('idx_daily_price_date', 'price_date'),
         # Check constraints for price validity
         CheckConstraint('open_price >= 0', name='check_open_price_positive'),
         CheckConstraint('high_price >= 0', name='check_high_price_positive'),
@@ -213,7 +213,7 @@ class DailyPrice(CapitolScopeBaseModel):
     )
     
     def __repr__(self):
-        return f"<DailyPrice(security_id={self.security_id}, date={self.date}, close={self.close_price})>"
+        return f"<DailyPrice(security_id={self.security_id}, date={self.price_date}, close={self.close_price})>"
     
     @property
     def price_change(self) -> Optional[int]:

@@ -38,6 +38,7 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     first_name = Column(String(100), nullable=False, index=True)
     last_name = Column(String(100), nullable=False, index=True)
     full_name = Column(String(200), nullable=False, index=True)
+    prefix = Column(String(10), index=True)  # Honorifics like "Rep.", "Sen.", "Dr.", "Mr.", "Ms."
     party = Column(String(1), index=True)  # D, R, I
     chamber = Column(String(6), nullable=False, index=True)  # House, Senate
     

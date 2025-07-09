@@ -1,8 +1,8 @@
 """
-Base Pydantic schemas and common patterns for CapitolScope API.
+Base Pydantic schemas for CapitolScope.
 
 This module contains base models, common types, and shared configurations
-for all API request/response validation.
+for all API request/response validation across domains.
 """
 
 from datetime import datetime, date
@@ -10,12 +10,16 @@ from typing import Optional, List, Dict, Any, Union
 from decimal import Decimal
 import uuid
 
-from pydantic import BaseModel, Field, ConfigDict, validator, field_validator
-from pydantic.types import EmailStr, HttpUrl
+from pydantic import BaseModel, Field, ConfigDict, field_validator
+from pydantic import EmailStr, HttpUrl
+
+from core.logging import get_logger
+
+logger = get_logger(__name__)
 
 
-class CapitolScopeBaseModel(BaseModel):
-    """Base model with common configuration for all CapitolScope schemas."""
+class CapitolScopeBaseSchema(BaseModel):
+    """Base schema with common configuration for all CapitolScope schemas."""
     
     model_config = ConfigDict(
         # Enable ORM mode for SQLAlchemy integration
@@ -36,18 +40,18 @@ class CapitolScopeBaseModel(BaseModel):
 
 
 class TimestampMixin(BaseModel):
-    """Mixin for models with created_at and updated_at timestamps."""
+    """Mixin for schemas with created_at and updated_at timestamps."""
     created_at: datetime = Field(..., description="Creation timestamp")
     updated_at: Optional[datetime] = Field(None, description="Last update timestamp")
 
 
 class IDMixin(BaseModel):
-    """Mixin for models with integer ID primary key."""
+    """Mixin for schemas with integer ID primary key."""
     id: int = Field(..., description="Unique identifier", gt=0)
 
 
 class UUIDMixin(BaseModel):
-    """Mixin for models with UUID primary key."""
+    """Mixin for schemas with UUID primary key."""
     id: uuid.UUID = Field(..., description="Unique identifier")
 
 
@@ -122,7 +126,7 @@ class SortParams(BaseModel):
     sort_order: str = Field("desc", pattern=r"^(asc|desc)$", description="Sort order")
 
 
-class PaginatedResponse(CapitolScopeBaseModel):
+class PaginatedResponse(CapitolScopeBaseSchema):
     """Standard paginated response wrapper."""
     items: List[Any] = Field(..., description="List of items")
     total: int = Field(..., ge=0, description="Total number of items")
@@ -139,7 +143,7 @@ class PaginatedResponse(CapitolScopeBaseModel):
         return (total + size - 1) // size if total > 0 else 0
 
 
-class APIResponse(CapitolScopeBaseModel):
+class APIResponse(CapitolScopeBaseSchema):
     """Standard API response wrapper."""
     success: bool = Field(True, description="Whether the request was successful")
     message: Optional[str] = Field(None, description="Human-readable message")
@@ -147,11 +151,11 @@ class APIResponse(CapitolScopeBaseModel):
     errors: Optional[List[str]] = Field(None, description="List of error messages")
 
 
-class ErrorResponse(CapitolScopeBaseModel):
+class ErrorResponse(CapitolScopeBaseSchema):
     """Standard error response."""
     error: Dict[str, Any] = Field(..., description="Error details")
     
-    class ErrorDetail(CapitolScopeBaseModel):
+    class ErrorDetail(CapitolScopeBaseSchema):
         type: str = Field(..., description="Error type")
         code: int = Field(..., description="Error code")
         message: str = Field(..., description="Error message")
@@ -163,7 +167,7 @@ class ErrorResponse(CapitolScopeBaseModel):
 # FINANCIAL DATA TYPES
 # ============================================================================
 
-class AmountRange(CapitolScopeBaseModel):
+class AmountRange(CapitolScopeBaseSchema):
     """Financial amount range representation."""
     min_amount: Optional[int] = Field(None, description="Minimum amount in cents")
     max_amount: Optional[int] = Field(None, description="Maximum amount in cents")
@@ -179,7 +183,7 @@ class AmountRange(CapitolScopeBaseModel):
         return v
 
 
-class PerformanceMetrics(CapitolScopeBaseModel):
+class PerformanceMetrics(CapitolScopeBaseSchema):
     """Standard performance metrics."""
     total_return: Optional[float] = Field(None, description="Total return percentage")
     daily_return: Optional[float] = Field(None, description="Daily return percentage")
@@ -190,7 +194,7 @@ class PerformanceMetrics(CapitolScopeBaseModel):
     beta: Optional[float] = Field(None, description="Beta vs benchmark")
 
 
-class TechnicalIndicators(CapitolScopeBaseModel):
+class TechnicalIndicators(CapitolScopeBaseSchema):
     """Technical analysis indicators."""
     rsi_14: Optional[float] = Field(None, description="14-day RSI")
     macd: Optional[float] = Field(None, description="MACD value")
@@ -252,7 +256,7 @@ class SearchParams(BaseModel):
 # METADATA AND CONFIGURATION
 # ============================================================================
 
-class SocialMediaLinks(CapitolScopeBaseModel):
+class SocialMediaLinks(CapitolScopeBaseSchema):
     """Social media links collection."""
     twitter_handle: Optional[str] = Field(None, description="Twitter handle without @")
     linkedin_url: Optional[HttpUrl] = Field(None, description="LinkedIn profile URL")
@@ -262,7 +266,7 @@ class SocialMediaLinks(CapitolScopeBaseModel):
     website_url: Optional[HttpUrl] = Field(None, description="Personal/official website")
 
 
-class ResearchLinks(CapitolScopeBaseModel):
+class ResearchLinks(CapitolScopeBaseSchema):
     """Research and information links."""
     wikipedia_url: Optional[HttpUrl] = Field(None, description="Wikipedia page URL")
     ballotpedia_url: Optional[HttpUrl] = Field(None, description="Ballotpedia profile URL")
@@ -272,7 +276,7 @@ class ResearchLinks(CapitolScopeBaseModel):
     fec_id: Optional[str] = Field(None, description="FEC candidate ID")
 
 
-class NotificationPreferences(CapitolScopeBaseModel):
+class NotificationPreferences(CapitolScopeBaseSchema):
     """User notification preferences."""
     email_notifications: bool = Field(True, description="Enable email notifications")
     trade_alerts: bool = Field(False, description="Enable trade alerts")
@@ -294,7 +298,7 @@ class NotificationPreferences(CapitolScopeBaseModel):
 # HEALTH CHECK AND SYSTEM SCHEMAS
 # ============================================================================
 
-class HealthCheckResponse(CapitolScopeBaseModel):
+class HealthCheckResponse(CapitolScopeBaseSchema):
     """Health check response."""
     status: str = Field(..., description="Health status")
     timestamp: float = Field(..., description="Check timestamp")
@@ -347,4 +351,39 @@ def validate_transaction_type(v: str) -> str:
     """Validate transaction type."""
     if v and v not in ['P', 'S', 'E']:
         raise ValueError('Transaction type must be P (Purchase), S (Sale), or E (Exchange)')
-    return v 
+    return v
+
+
+# Export all base components
+__all__ = [
+    "CapitolScopeBaseSchema",
+    "TimestampMixin",
+    "IDMixin",
+    "UUIDMixin",
+    "PoliticalParty",
+    "Chamber",
+    "TransactionType",
+    "SubscriptionTier",
+    "SubscriptionStatus",
+    "SocialPlatform",
+    "PaginationParams",
+    "SortParams",
+    "PaginatedResponse",
+    "APIResponse",
+    "ErrorResponse",
+    "AmountRange",
+    "PerformanceMetrics",
+    "TechnicalIndicators",
+    "DateRangeFilter",
+    "AmountFilter",
+    "SearchParams",
+    "SocialMediaLinks",
+    "ResearchLinks",
+    "NotificationPreferences",
+    "HealthCheckResponse",
+    "DetailedHealthCheckResponse",
+    "validate_ticker_symbol",
+    "validate_political_party",
+    "validate_chamber",
+    "validate_transaction_type"
+] 

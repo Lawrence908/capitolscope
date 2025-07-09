@@ -12,7 +12,7 @@ version = "0.1.0"
 description = "Congressional trading transparency and analysis platform"
 authors = [{name = "CapitolScope Team"}]
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 requires-python = ">=3.11"
 keywords = ["congressional-trading", "stocks", "transparency", "finance"]
 classifiers = [
@@ -43,6 +43,7 @@ dependencies = [
     # Authentication & Security  
     "python-jose[cryptography]>=3.3.0",
     "python-multipart>=0.0.6",
+    "passlib[bcrypt]>=1.7.0",
     "bcrypt>=4.1.0",
     "PyJWT>=2.8.0",
     "cryptography>=41.0.0",

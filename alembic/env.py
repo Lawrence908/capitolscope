@@ -50,8 +50,8 @@ target_metadata = CapitolScopeBaseModel.metadata
 
 def get_database_url():
     """Get database URL from settings."""
-    # Use sync URL for Alembic migrations
-    return settings.database_url_sync
+    # Use async URL for Alembic migrations  
+    return settings.database_url
 
 
 def run_migrations_offline() -> None:
@@ -97,14 +97,14 @@ def do_run_migrations(connection: Connection) -> None:
 
 async def run_async_migrations() -> None:
     """Run migrations in async mode."""
-    # Use sync URL for migrations
-    configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = get_database_url()
+    from sqlalchemy.ext.asyncio import create_async_engine
     
-    # Create async engine
-    connectable = async_engine_from_config(
-        configuration,
-        prefix="sqlalchemy.",
+    # Get database URL and ensure it's async
+    db_url = get_database_url()
+    
+    # Create async engine directly
+    connectable = create_async_engine(
+        db_url,
         poolclass=pool.NullPool,
     )
 

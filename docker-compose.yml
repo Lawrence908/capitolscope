@@ -15,7 +15,7 @@ services:
       - ./alembic:/app/alembic
       - ./alembic.ini:/app/alembic.ini
     ports:
-      - "8000:8000"
+      - "8001:8000"
     depends_on:
       - redis-dev
     env_file:
@@ -81,7 +81,9 @@ services:
       - PYTHONPATH=/app/src
       - DEBUG=true
       - ENVIRONMENT=development
-    command: python -m celery worker -A background.celery_app --loglevel=info --concurrency=2
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+    command: python -m celery -A background.celery_app worker --loglevel=info --concurrency=2
     restart: unless-stopped
 
   # Celery Beat Scheduler
@@ -106,7 +108,9 @@ services:
       - PYTHONPATH=/app/src
       - DEBUG=true
       - ENVIRONMENT=development
-    command: python -m celery beat -A background.celery_app --loglevel=info
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+    command: python -m celery -A background.celery_app beat --loglevel=info
     restart: unless-stopped
 
 volumes:

@@ -2,10 +2,17 @@
 Async database connection and session management for Supabase PostgreSQL.
 
 This module provides database connection management using SQLAlchemy 2.0
-with async support and proper connection pooling for Supabase.
+with async support and Supabase's session pooler for optimal performance.
+
+Connection Details:
+- Uses Supabase Session Pooler (aws-0-ca-central-1.pooler.supabase.com:5432)
+- NullPool for async engine compatibility
+- Proper SSL configuration for production
+- Health check monitoring included
 """
 
 import logging
+import time
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Optional
 
@@ -17,7 +24,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncEngine,
 )
-from sqlalchemy.pool import QueuePool
+from sqlalchemy.pool import NullPool
 from sqlalchemy.exc import SQLAlchemyError
 
 from core.config import settings
@@ -42,12 +49,8 @@ class DatabaseManager:
             # Create async engine with connection pooling
             self.engine = create_async_engine(
                 settings.database_url,
-                poolclass=QueuePool,
-                pool_size=settings.DB_POOL_SIZE,
-                max_overflow=settings.DB_MAX_OVERFLOW,
-                pool_timeout=settings.DB_POOL_TIMEOUT,
-                pool_recycle=settings.DB_POOL_RECYCLE,
-                echo=settings.DB_ECHO,
+                poolclass=NullPool,  # NullPool is recommended for async engines
+                echo=settings.DATABASE_ECHO,
                 # Connection arguments for better PostgreSQL performance
                 connect_args={
                     "server_settings": {
@@ -74,8 +77,8 @@ class DatabaseManager:
             logger.info(
                 "Database connection initialized successfully",
                 database_url=settings.database_url.split("@")[1] if "@" in settings.database_url else "***",
-                pool_size=settings.DB_POOL_SIZE,
-                max_overflow=settings.DB_MAX_OVERFLOW,
+                pool_type="NullPool",
+                echo=settings.DATABASE_ECHO,
             )
             
         except Exception as e:
@@ -188,12 +191,10 @@ async def check_database_health() -> dict:
         await db_manager.test_connection()
         response_time = (time.time() - start_time) * 1000  # Convert to milliseconds
         
-        # Get connection pool status
-        pool = db_manager.engine.pool
+        # Get connection pool status (NullPool doesn't have these methods)
         pool_status = {
-            "size": pool.size(),
-            "checked_in": pool.checkedin(),
-            "checked_out": pool.checkedout(),
+            "type": "NullPool",
+            "note": "NullPool creates new connections for each request"
         }
         
         return {
@@ -208,6 +209,3 @@ async def check_database_health() -> dict:
             "status": "unhealthy",
             "error": str(e)
         }
-
-
-import time  # Import needed for health check function 

@@ -107,6 +107,37 @@ def custom_openapi():
         }
     }
     
+    # Apply security to authenticated endpoints
+    for route in app.routes:
+        if hasattr(route, 'path') and hasattr(route, 'methods'):
+            path = route.path
+            for method in route.methods:
+                method_lower = method.lower()
+                
+                # Skip options method
+                if method_lower == 'options':
+                    continue
+                    
+                # Check if this endpoint uses authentication
+                if hasattr(route, 'dependant') and route.dependant:
+                    dependencies = route.dependant.dependencies
+                    
+                    # Look for authentication dependencies
+                    auth_required = False
+                    for dep in dependencies:
+                        if hasattr(dep, 'call'):
+                            dep_name = getattr(dep.call, '__name__', '')
+                            if 'current_user' in dep_name or 'get_current' in dep_name:
+                                auth_required = True
+                                break
+                    
+                    # Apply security scheme to authenticated endpoints
+                    if auth_required and path in openapi_schema.get("paths", {}):
+                        path_item = openapi_schema["paths"][path]
+                        if method_lower in path_item:
+                            if "security" not in path_item[method_lower]:
+                                path_item[method_lower]["security"] = [{"bearerAuth": []}]
+    
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 

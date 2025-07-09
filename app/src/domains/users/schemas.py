@@ -6,8 +6,14 @@ from datetime import datetime, date
 from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, EmailStr, validator, Field
 from enum import Enum
+import re
 
 from domains.users.models import UserStatus, AuthProvider, NotificationChannel, NotificationType
+
+# Email validation pattern
+EMAIL_PATTERN = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+
+PASSWORD_MIN_LENGTH = 8
 
 
 # ============================================================================
@@ -17,8 +23,34 @@ from domains.users.models import UserStatus, AuthProvider, NotificationChannel, 
 class LoginRequest(BaseModel):
     """User login request."""
     email: EmailStr
-    password: str = Field(..., min_length=6)
+    password: str = Field(..., min_length=1)  # Just require non-empty for login
     remember_me: bool = False
+    
+    @validator('email')
+    @classmethod
+    def validate_email_format(cls, v):
+        """Validate email format using regex."""
+        if not re.match(EMAIL_PATTERN, v):
+            raise ValueError("Invalid email format")
+        return v
+    
+    @validator('remember_me')
+    @classmethod
+    def validate_remember_me(cls, v):
+        """Validate remember me option."""
+        if not isinstance(v, bool):
+            raise ValueError("Remember me must be a boolean value")
+        return v
+    
+    class Config:
+        """Pydantic config."""
+        json_schema_extra = {
+            "examples": [{
+                "email": "chrislawrencedev@gmail.com",
+                "password": "r!4$gs5syHWkuML",
+                "remember_me": True
+            }]
+        }  
 
 
 class RegisterRequest(BaseModel):
@@ -30,11 +62,45 @@ class RegisterRequest(BaseModel):
     username: Optional[str] = Field(None, max_length=50)
     terms_accepted: bool = True
     
-    @validator('password')
-    def validate_password(cls, v):
-        if len(v) < 6:
-            raise ValueError('Password must be at least 6 characters long')
+    @validator('email')
+    @classmethod
+    def validate_email_format(cls, v):
+        """Validate email format using regex."""
+        if not re.match(EMAIL_PATTERN, v):
+            raise ValueError("Invalid email format")
         return v
+
+    @validator('password')
+    @classmethod
+    def validate_password_strength(cls, v):
+        """Validate password strength using the same rules as AuthService."""
+        errors = []
+        if len(v) < PASSWORD_MIN_LENGTH:
+            errors.append(f"Password must be at least {PASSWORD_MIN_LENGTH} characters long")
+        if not re.search(r"[A-Z]", v):
+            errors.append("Password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", v):
+            errors.append("Password must contain at least one lowercase letter")
+        if not re.search(r"[0-9]", v):
+            errors.append("Password must contain at least one number")
+        if not re.search(r"[!@#$%^&*]", v):
+            errors.append("Password must contain at least one special character (!@#$%^&*)")
+        if errors:
+            raise ValueError(", ".join(errors))
+        return v
+    
+    class Config:
+        """Pydantic config."""
+        json_schema_extra = {
+            "examples": [{
+                "email": "chrislawrencedev@gmail.com",
+                "password": "r!4$gs5syHWkuML",
+                "first_name": "Chris",
+                "last_name": "Lawrence",
+                "username": "CapitolScopeAdmin",
+                "terms_accepted": True
+            }]
+        }  
 
 
 class TokenResponse(BaseModel):

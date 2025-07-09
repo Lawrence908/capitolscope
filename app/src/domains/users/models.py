@@ -46,6 +46,14 @@ class AuthProvider(PyEnum):
     TWITTER = "twitter"
 
 
+class UserRole(PyEnum):
+    """User role types."""
+    USER = "user"
+    MODERATOR = "moderator"
+    ADMIN = "admin"
+    SUPER_ADMIN = "super_admin"
+
+
 class NotificationChannel(PyEnum):
     """Notification delivery channels."""
     EMAIL = "email"
@@ -86,6 +94,7 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     
     # Account Status
     status = Column(Enum(UserStatus), nullable=False, default=UserStatus.PENDING_VERIFICATION)
+    role = Column(Enum(UserRole), nullable=False, default=UserRole.USER)
     is_verified = Column(Boolean, default=False, nullable=False)
     email_verified_at = Column(DateTime(timezone=True))
     last_login_at = Column(DateTime(timezone=True))
@@ -135,12 +144,17 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
             name='check_auth_provider'
         ),
         CheckConstraint(
+            role.in_([r.value for r in UserRole]),
+            name='check_user_role'
+        ),
+        CheckConstraint(
             subscription_tier.in_(['free', 'pro', 'premium', 'enterprise']),
             name='check_subscription_tier'
         ),
         Index('idx_user_email_provider', 'email', 'auth_provider'),
         Index('idx_user_subscription', 'subscription_tier', 'subscription_status'),
         Index('idx_user_status_verified', 'status', 'is_verified'),
+        Index('idx_user_role', 'role'),
     )
     
     def __repr__(self):
@@ -162,12 +176,63 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     def is_premium(self) -> bool:
         """Check if user has premium subscription."""
         return self.subscription_tier in ['pro', 'premium', 'enterprise']
-    
+
     @property
     def is_active(self) -> bool:
         """Check if user account is active."""
         return self.status == UserStatus.ACTIVE and not self.is_deleted
-    
+
+    @property
+    def is_admin(self) -> bool:
+        """Check if user has admin role."""
+        return self.role in [UserRole.ADMIN, UserRole.SUPER_ADMIN]
+
+    @property
+    def is_moderator(self) -> bool:
+        """Check if user has moderator role or higher."""
+        return self.role in [UserRole.MODERATOR, UserRole.ADMIN, UserRole.SUPER_ADMIN]
+
+    @property
+    def is_super_admin(self) -> bool:
+        """Check if user has super admin role."""
+        return self.role == UserRole.SUPER_ADMIN
+
+    def has_permission(self, permission: str) -> bool:
+        """Check if user has a specific permission based on role."""
+        role_permissions = {
+            UserRole.USER: [
+                'read:own_profile', 'update:own_profile', 
+                'read:trades', 'read:members', 'create:watchlist',
+                'read:market_data'
+            ],
+            UserRole.MODERATOR: [
+                'read:own_profile', 'update:own_profile', 
+                'read:trades', 'read:members', 'create:watchlist',
+                'read:market_data', 'moderate:discussions',
+                'delete:inappropriate_content'
+            ],
+            UserRole.ADMIN: [
+                'read:own_profile', 'update:own_profile', 
+                'read:trades', 'read:members', 'create:watchlist',
+                'read:market_data', 'moderate:discussions',
+                'delete:inappropriate_content', 'read:all_users',
+                'update:user_roles', 'read:system_metrics',
+                'manage:notifications'
+            ],
+            UserRole.SUPER_ADMIN: ['*']  # All permissions
+        }
+        
+        user_permissions = role_permissions.get(self.role, [])
+        return '*' in user_permissions or permission in user_permissions
+
+    def can_manage_users(self) -> bool:
+        """Check if user can manage other users."""
+        return self.has_permission('update:user_roles')
+
+    def can_access_admin_panel(self) -> bool:
+        """Check if user can access admin panel."""
+        return self.is_admin or self.is_super_admin
+
     def can_access_feature(self, feature: str) -> bool:
         """Check if user can access a specific feature based on subscription."""
         feature_tiers = {
@@ -200,7 +265,7 @@ class UserPreference(CapitolScopeBaseModel, TimestampMixin):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
     
     # Display Preferences
-    theme = Column(String(20), default='light')  # light, dark, auto
+    theme = Column(String(20), default='dark')  # light, dark, auto
     language = Column(String(5), default='en')
     timezone = Column(String(50), default='UTC')
     currency = Column(String(3), default='USD')
@@ -588,6 +653,7 @@ __all__ = [
     "UserApiKey",
     # Enums
     "UserStatus",
+    "UserRole",
     "AuthProvider", 
     "NotificationChannel",
     "NotificationType"

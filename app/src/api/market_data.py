@@ -8,10 +8,12 @@ Provides stock prices, market indices, and economic indicators.
 from typing import List, Dict, Any, Optional
 from datetime import date, datetime
 from fastapi import APIRouter, Depends, HTTPException, Query, Path
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db_session
 from core.logging import get_logger
+from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_user_optional, get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
 
@@ -29,7 +31,7 @@ async def get_daily_prices(
     skip: int = Query(0, ge=0, description="Number of records to skip"),
     limit: int = Query(100, ge=1, le=1000, description="Number of records to return"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get daily price data for securities.
     
@@ -45,7 +47,7 @@ async def get_daily_prices(
     premium_features = current_user and current_user.is_premium if current_user else False
     
     # TODO: Implement actual price data retrieval from database
-    return {
+    data = {
         "prices": [],
         "total": 0,
         "skip": skip,
@@ -63,9 +65,13 @@ async def get_daily_prices(
         },
         "enhanced_data": enhanced_data,
         "premium_features": premium_features,
-        "message": "Daily prices endpoint ready - price database needed",
         "user_tier": current_user.subscription_tier if current_user else "anonymous"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Daily prices endpoint ready - price database needed"}
+    )
 
 
 @router.get("/prices/intraday")
@@ -75,7 +81,7 @@ async def get_intraday_prices(
     date: Optional[date] = Query(None, description="Specific date (defaults to today)"),
     interval: str = Query("1min", description="Time interval (1min, 5min, 15min, 1hour)"),
     current_user: User = Depends(require_subscription(['pro', 'premium', 'enterprise'])),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get intraday price data for a security.
     
@@ -85,7 +91,7 @@ async def get_intraday_prices(
                interval=interval, user_id=current_user.id)
     
     # TODO: Implement intraday price retrieval
-    return {
+    data = {
         "symbol": symbol,
         "date": date or date.today(),
         "interval": interval,
@@ -97,8 +103,12 @@ async def get_intraday_prices(
             "timezone": "EST"
         },
         "subscription_tier": current_user.subscription_tier,
-        "message": "Intraday prices endpoint ready - real-time data feed needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Intraday prices endpoint ready - real-time data feed needed"}
+    )
 
 
 @router.get("/prices/{symbol}")
@@ -109,7 +119,7 @@ async def get_symbol_prices(
     date_to: Optional[date] = Query(None, description="End date"),
     include_technical: bool = Query(False, description="Include technical indicators"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get all price data for a specific symbol.
     
@@ -123,7 +133,7 @@ async def get_symbol_prices(
     premium_features = current_user and current_user.is_premium if current_user else False
     
     # TODO: Implement symbol price retrieval
-    return {
+    data = {
         "symbol": symbol,
         "prices": [],
         "date_range": {
@@ -134,8 +144,12 @@ async def get_symbol_prices(
         "statistics": {} if premium_features else None,
         "enhanced_data": enhanced_data,
         "premium_features": premium_features,
-        "message": "Symbol prices endpoint ready - price database needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Symbol prices endpoint ready - price database needed"}
+    )
 
 
 @router.get("/indices")
@@ -143,7 +157,7 @@ async def get_market_indices(
     session: AsyncSession = Depends(get_db_session),
     index_type: Optional[str] = Query(None, description="Filter by index type"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get market indices data (S&P 500, Dow Jones, NASDAQ, etc.).
     
@@ -155,7 +169,7 @@ async def get_market_indices(
     enhanced_data = current_user is not None
     
     # TODO: Implement market indices retrieval
-    return {
+    data = {
         "indices": [],
         "total": 0,
         "filter": {
@@ -166,8 +180,12 @@ async def get_market_indices(
             "constituents": enhanced_data
         },
         "enhanced_data": enhanced_data,
-        "message": "Market indices endpoint ready - index database needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Market indices endpoint ready - index database needed"}
+    )
 
 
 @router.get("/indices/{symbol}/history")
@@ -177,7 +195,7 @@ async def get_index_history(
     date_from: Optional[date] = Query(None, description="Start date"),
     date_to: Optional[date] = Query(None, description="End date"),
     current_user: User = Depends(get_current_active_user),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get historical data for a market index.
     
@@ -187,7 +205,7 @@ async def get_index_history(
                date_to=date_to, user_id=current_user.id)
     
     # TODO: Implement index history retrieval
-    return {
+    data = {
         "symbol": symbol,
         "history": [],
         "date_range": {
@@ -199,8 +217,12 @@ async def get_index_history(
             "volatility": 0.0,
             "max_drawdown": 0.0
         },
-        "message": "Index history endpoint ready - historical data needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Index history endpoint ready - historical data needed"}
+    )
 
 
 @router.get("/economic-indicators")
@@ -210,7 +232,7 @@ async def get_economic_indicators(
     date_from: Optional[date] = Query(None, description="Start date"),
     date_to: Optional[date] = Query(None, description="End date"),
     current_user: User = Depends(require_subscription(['premium', 'enterprise'])),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get economic indicators data.
     
@@ -220,7 +242,7 @@ async def get_economic_indicators(
                date_from=date_from, date_to=date_to, user_id=current_user.id)
     
     # TODO: Implement economic indicators retrieval
-    return {
+    data = {
         "indicators": [],
         "total": 0,
         "filters": {
@@ -230,8 +252,12 @@ async def get_economic_indicators(
         },
         "categories": ["economic", "monetary", "employment", "inflation"],
         "subscription_tier": current_user.subscription_tier,
-        "message": "Economic indicators endpoint ready - economic data feed needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Economic indicators endpoint ready - economic data feed needed"}
+    )
 
 
 @router.get("/treasury-rates")
@@ -240,7 +266,7 @@ async def get_treasury_rates(
     date_from: Optional[date] = Query(None, description="Start date"),
     date_to: Optional[date] = Query(None, description="End date"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get US Treasury rates and yield curve data.
     
@@ -252,7 +278,7 @@ async def get_treasury_rates(
     enhanced_data = current_user is not None
     
     # TODO: Implement treasury rates retrieval
-    return {
+    data = {
         "rates": [],
         "yield_curve": {} if enhanced_data else None,
         "spreads": {} if enhanced_data else None,
@@ -261,15 +287,19 @@ async def get_treasury_rates(
             "to": date_to
         },
         "enhanced_data": enhanced_data,
-        "message": "Treasury rates endpoint ready - treasury data feed needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Treasury rates endpoint ready - treasury data feed needed"}
+    )
 
 
 @router.get("/data-feeds/status")
 async def get_data_feed_status(
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(require_admin()),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get status of all data feeds and sources.
     
@@ -278,7 +308,7 @@ async def get_data_feed_status(
     logger.info("Getting data feed status", user_id=current_user.id)
     
     # TODO: Implement data feed status monitoring
-    return {
+    data = {
         "feeds": [],
         "total_feeds": 0,
         "healthy_feeds": 0,
@@ -286,8 +316,12 @@ async def get_data_feed_status(
         "last_update": datetime.utcnow().isoformat(),
         "overall_health": "healthy",
         "data_quality_score": 95.5,
-        "message": "Data feed status endpoint ready - monitoring system needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Data feed status endpoint ready - monitoring system needed"}
+    )
 
 
 @router.post("/data-feeds/{feed_id}/refresh")
@@ -296,7 +330,7 @@ async def refresh_data_feed(
     session: AsyncSession = Depends(get_db_session),
     force: bool = Query(False, description="Force refresh even if recently updated"),
     current_user: User = Depends(require_admin()),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Manually trigger a data feed refresh.
     
@@ -305,14 +339,18 @@ async def refresh_data_feed(
     logger.info("Refreshing data feed", feed_id=feed_id, force=force, user_id=current_user.id)
     
     # TODO: Implement data feed refresh
-    return {
+    data = {
         "feed_id": feed_id,
         "refresh_initiated": True,
         "force": force,
         "estimated_completion": "2024-01-01T00:05:00Z",
         "initiated_by": current_user.id,
-        "message": "Data feed refresh initiated successfully"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Data feed refresh initiated successfully"}
+    )
 
 
 @router.get("/market-holidays")
@@ -320,7 +358,7 @@ async def get_market_holidays(
     session: AsyncSession = Depends(get_db_session),
     year: Optional[int] = Query(None, description="Year (defaults to current year)"),
     market: str = Query("NYSE", description="Market (NYSE, NASDAQ, etc.)"),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Get market holidays and trading calendar.
     
@@ -329,15 +367,19 @@ async def get_market_holidays(
     logger.info("Getting market holidays", year=year, market=market)
     
     # TODO: Implement market holidays retrieval
-    return {
+    data = {
         "holidays": [],
         "year": year or datetime.now().year,
         "market": market,
         "total": 0,
         "next_holiday": None,
         "trading_days_remaining": 0,
-        "message": "Market holidays endpoint ready - trading calendar needed"
     }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Market holidays endpoint ready - trading calendar needed"}
+    )
 
 
 @router.get("/search")
@@ -347,7 +389,7 @@ async def search_securities(
     limit: int = Query(10, ge=1, le=50, description="Number of results"),
     asset_types: Optional[str] = Query(None, description="Comma-separated asset types"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Search for securities by symbol, name, or description.
     
@@ -359,7 +401,7 @@ async def search_securities(
     enhanced_data = current_user is not None
     
     # TODO: Implement security search
-    return {
+    data = {
         "query": query,
         "results": [],
         "total": 0,
@@ -372,5 +414,9 @@ async def search_securities(
             "fundamentals": enhanced_data
         },
         "enhanced_data": enhanced_data,
-        "message": "Security search endpoint ready - search index needed"
-    } 
+    }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Security search endpoint ready - search index needed"}
+    ) 

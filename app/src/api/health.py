@@ -6,33 +6,37 @@ from typing import Dict, Any
 import time
 
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 import structlog
 
 from core.database import check_database_health
 from core.config import settings
+from core.responses import success_response, error_response
 
 logger = structlog.get_logger(__name__)
 router = APIRouter()
 
 
 @router.get("/")
-async def health_check() -> Dict[str, Any]:
+async def health_check() -> JSONResponse:
     """
     Basic health check endpoint.
     
     Returns application status and basic system information.
     """
-    return {
+    data = {
         "status": "healthy",
         "timestamp": time.time(),
         "environment": settings.ENVIRONMENT,
         "version": "1.0.0",
         "service": "capitolscope-api"
     }
+    
+    return success_response(data=data)
 
 
 @router.get("/detailed")
-async def detailed_health_check() -> Dict[str, Any]:
+async def detailed_health_check() -> JSONResponse:
     """
     Detailed health check with database and external service status.
     
@@ -55,7 +59,7 @@ async def detailed_health_check() -> Dict[str, Any]:
     if database_health["status"] != "healthy":
         overall_status = "degraded"
     
-    return {
+    data = {
         "status": overall_status,
         "timestamp": time.time(),
         "response_time_ms": round(response_time, 2),
@@ -71,10 +75,20 @@ async def detailed_health_check() -> Dict[str, Any]:
             "environment": settings.ENVIRONMENT,
         }
     }
+    
+    # Return success or error based on overall status
+    if overall_status == "healthy":
+        return success_response(data=data)
+    else:
+        return error_response(
+            message="System degraded - check service health",
+            error_code="system_degraded",
+            status_code=503
+        )
 
 
 @router.get("/ready")
-async def readiness_check() -> Dict[str, Any]:
+async def readiness_check() -> JSONResponse:
     """
     Kubernetes-style readiness probe.
     
@@ -85,27 +99,36 @@ async def readiness_check() -> Dict[str, Any]:
     
     if database_health["status"] != "healthy":
         logger.warning("Readiness check failed", reason="database_unhealthy")
-        return {
-            "status": "not_ready",
-            "reason": "database_connection_failed",
-            "timestamp": time.time()
-        }
+        
+        return error_response(
+            message="Service not ready - database connection failed",
+            error_code="not_ready",
+            status_code=503,
+            details={
+                "reason": "database_connection_failed",
+                "timestamp": time.time()
+            }
+        )
     
-    return {
+    data = {
         "status": "ready",
         "timestamp": time.time()
     }
+    
+    return success_response(data=data)
 
 
 @router.get("/live")
-async def liveness_check() -> Dict[str, Any]:
+async def liveness_check() -> JSONResponse:
     """
     Kubernetes-style liveness probe.
     
     Returns 200 if the service is alive and should not be restarted.
     """
-    return {
+    data = {
         "status": "alive",
         "timestamp": time.time(),
         "service": "capitolscope-api"
-    } 
+    }
+    
+    return success_response(data=data) 

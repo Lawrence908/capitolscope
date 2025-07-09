@@ -4,12 +4,14 @@ Authentication API endpoints.
 
 from typing import Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from core.database import get_db_session
 from core.logging import get_logger
+from core.responses import success_response, error_response
 from core.auth import (
     authenticate_user, get_current_user, get_current_active_user,
     create_token_response, verify_token, get_password_hash,
@@ -25,11 +27,11 @@ logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login")
 async def login(
     request: LoginRequest,
     session: AsyncSession = Depends(get_db_session),
-) -> TokenResponse:
+) -> JSONResponse:
     """
     User login endpoint.
     
@@ -40,10 +42,10 @@ async def login(
     # Authenticate user
     user = await authenticate_user(request.email, request.password, session)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Bearer"},
+        return error_response(
+            message="Incorrect email or password",
+            error_code="invalid_credentials",
+            status_code=status.HTTP_401_UNAUTHORIZED
         )
     
     # Update last login
@@ -52,34 +54,103 @@ async def login(
     await session.commit()
     
     # Create token response
-    token_response = create_token_response(user)
+    token_data = create_token_response(user)
     
     logger.info("User login successful", user_id=user.id, email=user.email)
-    return token_response
+    return success_response(
+        data=token_data,
+        meta={"message": "Login successful"}
+    )
 
 
-@router.post("/logout")
+@router.get(
+    "/me",
+    summary="Get Current User Info",
+    description="Returns user profile for authenticated user.",
+    dependencies=[Depends(get_current_active_user)],
+    responses={
+        200: {"description": "Current user information"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Not enough permissions"}
+    }
+)
+async def get_current_user_info(
+    current_user: User = Depends(get_current_active_user)
+) -> JSONResponse:
+    """
+    Get current user information.
+    
+    Returns user profile for authenticated user.
+    """
+    logger.info("Getting current user info", user_id=current_user.id, email=current_user.email)
+    
+    try:
+        # User data with safe property access
+        user_data = {
+            "id": current_user.id,
+            "email": current_user.email,
+            "username": current_user.username,
+            "first_name": current_user.first_name,
+            "last_name": current_user.last_name,
+            "full_name": current_user.full_name,
+            "subscription_tier": current_user.subscription_tier,
+            "is_verified": current_user.is_verified,
+            # Role information
+            "role": current_user.role.value if current_user.role else "user",
+            "is_admin": current_user.is_admin,
+            "is_moderator": current_user.is_moderator,
+            "is_super_admin": current_user.is_super_admin,
+            # Additional properties
+            "is_premium": current_user.is_premium,
+            "is_active": current_user.is_active,
+        }
+        
+        return success_response(
+            data=user_data,
+            meta={"message": "Current user information retrieved successfully"}
+        )
+        
+    except Exception as e:
+        logger.error("Error getting current user info", error=str(e), user_id=getattr(current_user, 'id', 'unknown'))
+        return error_response(
+            message=f"Failed to retrieve user information: {str(e)}",
+            error_code="user_info_error",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@router.post(
+    "/logout",
+    summary="Logout User",
+    description="Logout current user. Clients should discard the token on logout.",
+    dependencies=[Depends(get_current_active_user)],
+    responses={
+        200: {"description": "Successfully logged out"},
+        401: {"description": "Not authenticated"}
+    }
+)
 async def logout(
-    current_user: User = Depends(get_current_user),
-    session: AsyncSession = Depends(get_db_session),
-) -> Dict[str, Any]:
+    current_user: User = Depends(get_current_active_user)
+) -> JSONResponse:
     """
-    User logout endpoint.
+    Logout current user.
     
-    Invalidates the current authentication token.
+    Note: Since we're using stateless JWT tokens, this is mainly for 
+    logging purposes. Clients should discard the token on logout.
     """
-    logger.info("User logout", user_id=current_user.id)
+    logger.info("User logout", user_id=current_user.id, email=current_user.email)
     
-    # In a production app, you'd want to blacklist the token
-    # For now, we'll just return a success message
-    return {"message": "Logout successful"}
+    return success_response(
+        data={"logged_out": True},
+        meta={"message": "Logged out successfully"}
+    )
 
 
-@router.post("/refresh", response_model=TokenResponse)
+@router.post("/refresh")
 async def refresh_token(
     request: RefreshTokenRequest,
     session: AsyncSession = Depends(get_db_session),
-) -> TokenResponse:
+) -> JSONResponse:
     """
     Refresh authentication token.
     
@@ -93,11 +164,19 @@ async def refresh_token(
         
         # Check if it's a refresh token
         if payload.get("type") != "refresh":
-            raise AuthenticationError("Invalid token type")
+            return error_response(
+                message="Invalid token type",
+                error_code="invalid_token_type",
+                status_code=status.HTTP_401_UNAUTHORIZED
+            )
         
         user_id = payload.get("sub")
         if not user_id:
-            raise AuthenticationError("Invalid token payload")
+            return error_response(
+                message="Invalid token payload",
+                error_code="invalid_token_payload",
+                status_code=status.HTTP_401_UNAUTHORIZED
+            )
         
         # Get user from database
         result = await session.execute(
@@ -106,42 +185,42 @@ async def refresh_token(
         user = result.scalar_one_or_none()
         
         if not user or not user.is_active:
-            raise AuthenticationError("User not found or inactive")
+            return error_response(
+                message="User not found or inactive",
+                error_code="user_not_found",
+                status_code=status.HTTP_401_UNAUTHORIZED
+            )
         
         # Create new token response
-        token_response = create_token_response(user)
+        token_data = create_token_response(user)
         
         logger.info("Token refresh successful", user_id=user.id)
-        return token_response
+        return success_response(
+            data=token_data,
+            meta={"message": "Token refreshed successfully"}
+        )
         
     except AuthenticationError as e:
         logger.warning("Token refresh failed", error=str(e))
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=str(e),
-            headers={"WWW-Authenticate": "Bearer"},
+        return error_response(
+            message=str(e),
+            error_code="authentication_failed",
+            status_code=status.HTTP_401_UNAUTHORIZED
+        )
+    except Exception as e:
+        logger.error("Token refresh error", error=str(e))
+        return error_response(
+            message="Token refresh failed",
+            error_code="internal_error",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
 
-@router.get("/me", response_model=UserResponse)
-async def get_current_user_info(
-    current_user: User = Depends(get_current_active_user),
-) -> UserResponse:
-    """
-    Get current user information.
-    
-    Returns user profile for authenticated user.
-    """
-    logger.info("Getting current user info", user_id=current_user.id)
-    
-    return UserResponse.from_orm(current_user)
-
-
-@router.post("/register", response_model=TokenResponse)
+@router.post("/register")
 async def register(
     request: RegisterRequest,
     session: AsyncSession = Depends(get_db_session),
-) -> TokenResponse:
+) -> JSONResponse:
     """
     User registration endpoint.
     
@@ -157,9 +236,10 @@ async def register(
         existing_user = result.scalar_one_or_none()
         
         if existing_user:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already registered"
+            return error_response(
+                message="Email already registered",
+                error_code="email_exists",
+                status_code=status.HTTP_400_BAD_REQUEST
             )
         
         # Create new user
@@ -189,28 +269,43 @@ async def register(
         await session.refresh(user)
         
         # Create token response
-        token_response = create_token_response(user)
+        token_data = create_token_response(user)
         
         logger.info("User registration successful", user_id=user.id, email=user.email)
-        return token_response
+        return success_response(
+            data=token_data,
+            meta={"message": "Registration successful"}
+        )
         
     except IntegrityError as e:
         await session.rollback()
         logger.error("Database integrity error during registration", error=str(e))
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Registration failed - user may already exist"
+        return error_response(
+            message="Registration failed - user may already exist",
+            error_code="integrity_error",
+            status_code=status.HTTP_400_BAD_REQUEST
         )
     except Exception as e:
         await session.rollback()
         logger.error("Registration error", error=str(e))
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Registration failed"
+        return error_response(
+            message="Registration failed",
+            error_code="internal_error",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
 
-@router.post("/change-password")
+@router.post(
+    "/change-password",
+    summary="Change Password",
+    description="Change user password. Requires current password verification.",
+    dependencies=[Depends(get_current_active_user)],
+    responses={
+        200: {"description": "Password changed successfully"},
+        400: {"description": "Current password is incorrect"},
+        401: {"description": "Not authenticated"}
+    }
+)
 async def change_password(
     request: ChangePasswordRequest,
     current_user: User = Depends(get_current_active_user),
@@ -266,58 +361,6 @@ async def reset_password(
     return {"message": "If an account with that email exists, a reset link has been sent"}
 
 
-# Create a demo admin user endpoint for testing
-@router.post("/create-admin", include_in_schema=False)
-async def create_admin_user(
-    session: AsyncSession = Depends(get_db_session),
-) -> Dict[str, Any]:
-    """
-    Create a demo admin user for testing.
-    This endpoint is hidden from the schema.
-    """
-    try:
-        # Check if admin already exists
-        result = await session.execute(
-            select(User).where(User.email == "admin@capitolscope.com")
-        )
-        existing_admin = result.scalar_one_or_none()
-        
-        if existing_admin:
-            return {"message": "Admin user already exists"}
-        
-        # Create admin user
-        admin = User(
-            email="admin@capitolscope.com",
-            username="admin",
-            first_name="Admin",
-            last_name="User",
-            full_name="Admin User",
-            password_hash=get_password_hash("password123"),
-            auth_provider=AuthProvider.EMAIL,
-            status=UserStatus.ACTIVE,
-            is_verified=True,
-            subscription_tier='enterprise',  # Admin gets enterprise tier
-            is_public_profile=False,
-            show_portfolio=False,
-            show_trading_activity=False,
-            beta_features_enabled=True,
-            marketing_emails_enabled=False,
-        )
-        
-        session.add(admin)
-        await session.commit()
-        
-        logger.info("Admin user created successfully", user_id=admin.id)
-        return {
-            "message": "Admin user created successfully",
-            "email": "admin@capitolscope.com",
-            "password": "password123"
-        }
-        
-    except Exception as e:
-        await session.rollback()
-        logger.error("Error creating admin user", error=str(e))
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to create admin user"
-        ) 
+
+
+ 

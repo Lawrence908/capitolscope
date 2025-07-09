@@ -24,8 +24,14 @@ logger = get_logger(__name__)
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Custom JWT Security scheme with proper naming for OpenAPI
+class CustomHTTPBearer(HTTPBearer):
+    def __init__(self, auto_error: bool = True):
+        super().__init__(auto_error=auto_error)
+        self.scheme_name = "bearerAuth"  # This matches our OpenAPI definition
+
 # JWT Security scheme
-security = HTTPBearer()
+security = CustomHTTPBearer()
 
 # JWT Configuration
 ALGORITHM = "HS256"
@@ -65,7 +71,7 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
         expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     
     to_encode.update({"exp": expire, "type": "access"})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.effective_secret_key, algorithm=ALGORITHM)
     return encoded_jwt
 
 
@@ -74,14 +80,14 @@ def create_refresh_token(data: Dict[str, Any]) -> str:
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode.update({"exp": expire, "type": "refresh"})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.effective_secret_key, algorithm=ALGORITHM)
     return encoded_jwt
 
 
 def verify_token(token: str) -> Dict[str, Any]:
     """Verify and decode JWT token."""
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.effective_secret_key, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
         raise AuthenticationError("Token has expired")
@@ -211,15 +217,62 @@ def require_subscription(required_tiers: list[str]):
     return decorator
 
 
+def require_role(required_roles: list[str]):
+    """Decorator to require specific user roles."""
+    def decorator(current_user: User = Depends(get_current_active_user)):
+        from domains.users.models import UserRole
+        
+        # Convert string roles to UserRole enums for comparison
+        required_role_enums = []
+        for role_str in required_roles:
+            try:
+                required_role_enums.append(UserRole(role_str))
+            except ValueError:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Invalid role specified: {role_str}"
+                )
+        
+        if current_user.role not in required_role_enums:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"This action requires one of these roles: {', '.join(required_roles)}"
+            )
+        return current_user
+    return decorator
+
+
+def require_permission(permission: str):
+    """Decorator to require specific permission."""
+    def decorator(current_user: User = Depends(get_current_active_user)):
+        if not current_user.has_permission(permission):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"This action requires permission: {permission}"
+            )
+        return current_user
+    return decorator
+
+
 def require_admin():
     """Decorator to require admin privileges."""
     def decorator(current_user: User = Depends(get_current_active_user)):
-        # Check if user is admin (you can implement this based on your needs)
-        # For now, let's check if they have enterprise tier as admin
-        if current_user.subscription_tier != 'enterprise':
+        if not current_user.is_admin:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Admin privileges required"
+            )
+        return current_user
+    return decorator
+
+
+def require_moderator():
+    """Decorator to require moderator privileges or higher."""
+    def decorator(current_user: User = Depends(get_current_active_user)):
+        if not current_user.is_moderator:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Moderator privileges or higher required"
             )
         return current_user
     return decorator
@@ -230,7 +283,7 @@ def require_admin():
 # ============================================================================
 
 async def get_current_user_optional(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer(auto_error=False)),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(CustomHTTPBearer(auto_error=False)),
     session: AsyncSession = Depends(get_db_session)
 ) -> Optional[User]:
     """Optional authentication - returns None if no valid token provided."""
@@ -261,6 +314,22 @@ def create_token_response(user: User) -> Dict[str, Any]:
     access_token = create_access_token(data={"sub": str(user.id)})
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
     
+    # Safely access attributes that might not be loaded to avoid lazy loading issues
+    try:
+        last_login_at = user.last_login_at
+    except:
+        last_login_at = None
+    
+    try:
+        updated_at = user.updated_at
+    except:
+        updated_at = None
+    
+    try:
+        created_at = user.created_at
+    except:
+        created_at = None
+    
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
@@ -270,9 +339,28 @@ def create_token_response(user: User) -> Dict[str, Any]:
             "id": user.id,
             "email": user.email,
             "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "full_name": user.full_name,
             "display_name": user.display_name,
-            "subscription_tier": user.subscription_tier,
+            "avatar_url": user.avatar_url,
+            "bio": user.bio,
+            "location": user.location,
+            "website_url": user.website_url,
+            # Status
+            "status": user.status,
             "is_verified": user.is_verified,
+            "is_active": user.is_active,
+            "last_login_at": last_login_at,
+            # Subscription
+            "subscription_tier": user.subscription_tier,
             "is_premium": user.is_premium,
+            # Privacy
+            "is_public_profile": user.is_public_profile,
+            "show_portfolio": user.show_portfolio,
+            "show_trading_activity": user.show_trading_activity,
+            # Timestamps
+            "created_at": created_at,
+            "updated_at": updated_at,
         }
     } 

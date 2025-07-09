@@ -1,68 +1,119 @@
-version: '3.8'
+# docker-compose -p capitolscope-dev up --build
 
 services:
-  # PostgreSQL Database
-  db:
-    image: postgres:15-alpine
-    container_name: capitolscope-db
-    environment:
-      POSTGRES_DB: capitolscope
-      POSTGRES_USER: capitolscope
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password_change_me}
+  # FastAPI Application
+  capitolscope:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+      target: builder
+    container_name: capitolscope-dev
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./schema/database_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U capitolscope -d capitolscope"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Data Ingestion Service
-  ingestion:
-    build: .
-    container_name: capitolscope-ingestion
-    volumes:
+      - ./app/logs:/app/logs
+      - ./app/src:/app/src
       - ./data:/app/data
-      - ./logs:/var/log
-    environment:
-      - PYTHONUNBUFFERED=1
-      - DATABASE_URL=postgresql://capitolscope:${POSTGRES_PASSWORD:-dev_password_change_me}@db:5432/capitolscope
-      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+      - ./alembic:/app/alembic
+      - ./alembic.ini:/app/alembic.ini
+    ports:
+      - "8000:8000"
     depends_on:
-      db:
-        condition: service_healthy
-    restart: unless-stopped
+      - redis-dev
+    env_file:
+      - .env
+    networks:
+      - capitolscope-network
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+    command: python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/src
     healthcheck:
-      test: ["CMD", "python", "-c", "import psycopg2; psycopg2.connect('host=db dbname=capitolscope user=capitolscope password=${POSTGRES_PASSWORD:-dev_password_change_me}')"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 10s
 
-  # Future services
-  # web:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - db
-  #     - ingestion
-  #   restart: unless-stopped
+  # Redis for Celery and Caching
+  redis-dev:
+    image: redis:7-alpine
+    container_name: capitolscope-redis-dev
+    restart: unless-stopped
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    expose:
+      - "6379"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-devpassword}
+    entrypoint: >
+      sh -c '
+        redis-server --requirepass "$$REDIS_PASSWORD" --maxmemory 512mb --maxmemory-policy allkeys-lru
+      '
+    volumes:
+      - redis-data:/data
+    networks:
+      - capitolscope-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-devpassword}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
-  # api:
-  #   build: ./api
-  #   ports:
-  #     - "8000:8000"
-  #   environment:
-  #     - DATABASE_URL=postgresql://capitolscope:${POSTGRES_PASSWORD:-dev_password_change_me}@db:5432/capitolscope
-  #   depends_on:
-  #     - db
-  #   restart: unless-stopped
+  # Background Worker for Data Ingestion
+  worker:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+      target: builder
+    container_name: capitolscope-worker-dev
+    volumes:
+      - ./app/logs:/app/logs
+      - ./app/src:/app/src
+      - ./data:/app/data
+    depends_on:
+      - redis-dev
+      - capitolscope
+    env_file:
+      - .env
+    networks:
+      - capitolscope-network
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+    command: python -m celery worker -A background.celery_app --loglevel=info --concurrency=2
+    restart: unless-stopped
+
+  # Celery Beat Scheduler
+  scheduler:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+      target: builder
+    container_name: capitolscope-scheduler-dev
+    volumes:
+      - ./app/logs:/app/logs
+      - ./app/src:/app/src
+      - ./data:/app/data
+    depends_on:
+      - redis-dev
+      - capitolscope
+    env_file:
+      - .env
+    networks:
+      - capitolscope-network
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+    command: python -m celery beat -A background.celery_app --loglevel=info
+    restart: unless-stopped
 
 volumes:
-  postgres_data:
-  data:
-  logs: 
+  redis-data:
+    name: capitolscope-redis-data
+
+networks:
+  capitolscope-network:
+    name: capitolscope-dev
+    driver: bridge 

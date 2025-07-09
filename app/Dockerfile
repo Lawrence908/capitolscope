@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir uv
 
 # Copy only what's needed for package installation
 COPY pyproject.toml .
-COPY src/ src/
+COPY app/src/ src/
 
 # Install dependencies using uv
 RUN uv pip install --no-cache-dir --system .
@@ -44,7 +44,7 @@ RUN apt-get update && \
 # Copy dependencies and application code from builder
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
-COPY src/ .
+COPY app/src/ .
 
 # Copy Alembic configuration to /app/
 COPY alembic.ini /app/alembic.ini

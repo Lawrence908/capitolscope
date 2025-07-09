@@ -86,10 +86,10 @@ app.add_middleware(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods=settings.ALLOWED_METHODS,
-    allow_headers=settings.ALLOWED_HEADERS,
+    allow_methods=settings.CORS_METHODS,
+    allow_headers=settings.CORS_HEADERS,
 )
 
 # Add custom middleware
@@ -99,9 +99,9 @@ app.add_middleware(RateLimitMiddleware)
 
 # Include API routers
 app.include_router(health.router, prefix="/health", tags=["Health"])
-app.include_router(auth.router, prefix=f"/api/{settings.API_VERSION}/auth", tags=["Authentication"])
-app.include_router(trades.router, prefix=f"/api/{settings.API_VERSION}/trades", tags=["Trades"])
-app.include_router(members.router, prefix=f"/api/{settings.API_VERSION}/members", tags=["Members"])
+app.include_router(auth.router, prefix=f"{settings.API_V1_PREFIX}/auth", tags=["Authentication"])
+app.include_router(trades.router, prefix=f"{settings.API_V1_PREFIX}/trades", tags=["Trades"])
+app.include_router(members.router, prefix=f"{settings.API_V1_PREFIX}/members", tags=["Members"])
 
 
 @app.get("/")

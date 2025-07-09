@@ -27,12 +27,12 @@ You now have **4 complete domains** with comprehensive business logic:
 Create a `.env` file in your project root:
 
 ```bash
-# Required Environment Variables
-SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-SUPABASE_PASSWORD=your-database-password
-SUPABASE_JWT_SECRET=your-super-secret-jwt-key-change-this
+SUPABASE_URL=https://bigsmydtkhfssokvrvyq.supabase.co
+SUPABASE_PROJECT_REF=bigsmydtkhfssokvrvyq
+SUPABASE_PASSWORD=F&QzD*xH4VG5?t&
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpZ3NteWR0a2hmc3Nva3ZydnlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMDI1ODcsImV4cCI6MjA2NzU3ODU4N30.d5MyyBkAdSsHgbGFDMnD4uxTvmRHGBRcZ-d741rggrg
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpZ3NteWR0a2hmc3Nva3ZydnlxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjAwMjU4NywiZXhwIjoyMDY3NTc4NTg3fQ.n1FDbuKL8Wc4g96UKsbku6USKu6ykIls9ptIfgmlI4Y
+SUPABASE_JWT_SECRET=LqcSlIJX2ojgw+0iO+Gb+SvAtZDPAIj8reACRQV4eeJG97nHhHnLK8y66Q8MnNP2X1+yUoE+gXyNCCGoV4dCpA==
 
 # Application Settings
 ENVIRONMENT=development

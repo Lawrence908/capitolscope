@@ -1,1 +1,0 @@
-# Functions for technical indicators (e.g., RSI, MACD)

@@ -183,7 +183,7 @@ async def _sync_congressional_members_async(action: str, **kwargs) -> Dict[str, 
         logger.info(f"Starting congressional members sync", action=action, kwargs=kwargs)
         
         # Initialize database first
-        from core.database import db_manager, get_sync_db_session
+        from core.database import db_manager
         
         # Ensure database is initialized
         if not db_manager._initialized:
@@ -191,9 +191,9 @@ async def _sync_congressional_members_async(action: str, **kwargs) -> Dict[str, 
             await db_manager.initialize()
             logger.debug("Database manager initialized successfully")
         
-        db_logger.debug("Creating sync database session")
-        with get_sync_db_session() as session:
-            # Initialize services with sync session
+        db_logger.debug("Creating async database session")
+        async with db_manager.session_factory() as session:
+            # Initialize services with async session
             logger.debug("Initializing repositories")
             member_repo = CongressMemberRepository(session)
             trade_repo = CongressionalTradeRepository(session)
@@ -233,6 +233,7 @@ async def _sync_congressional_members_async(action: str, **kwargs) -> Dict[str, 
                 raise ValueError(f"Invalid action: {action}")
             
             # Commit changes (handled by context manager)
+            await session.commit()
             logger.info(f"Congressional members sync completed", action=action, results=results)
             return {
                 "status": "success",
@@ -252,11 +253,11 @@ async def _enrich_existing_members(member_repo: CongressMemberRepository, api_se
     
     logger.debug("Starting enrichment of existing members")
     
-    # Get all members with bioguide IDs using sync repository
+    # Get all members with bioguide IDs using async repository
     query = MemberQuery(limit=1000)
     logger.debug("Fetching existing members for enrichment", limit=query.limit)
     
-    members, total_count = member_repo.list_members(query)
+    members, total_count = await member_repo.list_members(query)
     logger.info(f"Found {len(members)} members to enrich", total_count=total_count)
     
     enriched_count = 0

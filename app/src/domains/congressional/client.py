@@ -161,11 +161,18 @@ class CongressAPIClient(ExternalAPIInterface):
                 if not self.session:
                     raise ExternalAPIError("Session not initialized", api_name="congress.gov")
                 
+                # DEBUG: Log the exact request details
+                logger.debug(f"Making request: {method} {url} with params: {params}")
+                logger.debug(f"Session headers: {dict(self.session.headers)}")
+                
                 async with self.session.request(method, url, params=params) as response:
                     response_data = await response.json()
                     
                     if response.status == 200:
                         logger.debug(f"API request successful: {method} {url}")
+                        logger.debug(f"Response data keys: {list(response_data.keys())}")
+                        if 'members' in response_data:
+                            logger.debug(f"Members in response: {len(response_data.get('members', []))}")
                         return response_data
                     
                     elif response.status == 429:

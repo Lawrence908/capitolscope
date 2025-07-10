@@ -606,9 +606,9 @@ class CongressAPIService:
             current_congress = await self.api_client.get_current_congress_number()
             logger.info(f"Syncing members for Congress {current_congress}")
             
-            # Fetch all members from current congress
+            # Fetch all members from current congress  
             offset = 0
-            limit = 250
+            limit = 50  # Congress.gov API limit - reduced from 250
             
             while True:
                 logger.debug(f"Fetching members batch: offset={offset}, limit={limit}, congress={current_congress}")
@@ -827,7 +827,9 @@ class CongressAPIService:
                 "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
                 "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT",
                 "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
-                "District of Columbia": "DC", "Puerto Rico": "PR"
+                # Federal District and Territories
+                "District of Columbia": "DC", "Puerto Rico": "PR", "Virgin Islands": "VI", 
+                "Guam": "GU", "American Samoa": "AS", "Northern Mariana Islands": "MP"
             }
             member_info["state"] = state_mapping.get(state_full, state_full.upper()[:2] if len(state_full) <= 2 else state_full.upper())
         
@@ -855,6 +857,30 @@ class CongressAPIService:
                 # Extract congress number
                 if "congress" in latest_term:
                     member_info["congress_number"] = latest_term["congress"]
+        
+        # Extract image and media information
+        depiction = api_member_data.get("depiction", {})
+        if depiction:
+            member_info["image_url"] = depiction.get("imageUrl")
+            member_info["image_attribution"] = depiction.get("attribution")
+            logger.debug(f"Image available: {depiction.get('imageUrl')}")
+            logger.debug(f"Attribution: {depiction.get('attribution')}")
+        
+        # Extract update date
+        update_date = api_member_data.get("updateDate")
+        if update_date:
+            try:
+                # Parse ISO datetime string
+                member_info["last_api_update"] = datetime.fromisoformat(update_date.replace("Z", "+00:00"))
+                logger.debug(f"Last updated: {update_date}")
+            except (ValueError, TypeError):
+                logger.warning(f"Failed to parse update date: {update_date}")
+        
+        # Extract API URL
+        api_url = api_member_data.get("url")
+        if api_url:
+            member_info["congress_gov_url"] = api_url
+            logger.debug(f"API URL: {api_url}")
         
         # Note: congress_gov_id is set to bioguide_id above since they're the same value
         

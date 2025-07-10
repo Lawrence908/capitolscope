@@ -56,6 +56,12 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     bioguide_id = Column(String(10), unique=True, index=True)
     congress_gov_id = Column(String(20), unique=True, index=True)  # ID from Congress.gov API
     
+    # Congress.gov API Data
+    congress_gov_url = Column(String(500))  # Direct link to member's Congress.gov page
+    image_url = Column(String(500))  # Official member photo URL
+    image_attribution = Column(String(200))  # Photo credit/source
+    last_api_update = Column(DateTime(timezone=True))  # When Congress.gov last updated this member
+    
     # Term Information
     term_start = Column(Date)
     term_end = Column(Date)

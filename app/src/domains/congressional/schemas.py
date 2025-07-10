@@ -85,6 +85,13 @@ class CongressMemberCreate(CongressMemberBase):
     office_address: Optional[str] = None
     bioguide_id: Optional[str] = Field(None, max_length=10)
     congress_gov_id: Optional[str] = Field(None, max_length=20, description="ID from Congress.gov API")
+    
+    # Congress.gov API Data
+    congress_gov_url: Optional[str] = Field(None, max_length=500, description="Direct link to member's Congress.gov page")
+    image_url: Optional[str] = Field(None, max_length=500, description="Official member photo URL")
+    image_attribution: Optional[str] = Field(None, max_length=200, description="Photo credit/source")
+    last_api_update: Optional[datetime] = Field(None, description="When Congress.gov last updated this member")
+    
     term_start: Optional[date] = None
     term_end: Optional[date] = None
     congress_number: Optional[int] = Field(None, ge=1, le=200)
@@ -101,6 +108,13 @@ class CongressMemberUpdate(CapitolScopeBaseSchema):
     phone: Optional[str] = Field(None, max_length=20)
     office_address: Optional[str] = None
     congress_gov_id: Optional[str] = Field(None, max_length=20, description="ID from Congress.gov API")
+    
+    # Congress.gov API Data
+    congress_gov_url: Optional[str] = Field(None, max_length=500, description="Direct link to member's Congress.gov page")
+    image_url: Optional[str] = Field(None, max_length=500, description="Official member photo URL")
+    image_attribution: Optional[str] = Field(None, max_length=200, description="Photo credit/source")
+    last_api_update: Optional[datetime] = Field(None, description="When Congress.gov last updated this member")
+    
     term_start: Optional[date] = None
     term_end: Optional[date] = None
 
@@ -126,6 +140,13 @@ class CongressMemberDetail(CongressMemberSummary):
     office_address: Optional[str] = None
     bioguide_id: Optional[str] = None
     congress_gov_id: Optional[str] = None
+    
+    # Congress.gov API Data
+    congress_gov_url: Optional[str] = None
+    image_url: Optional[str] = None
+    image_attribution: Optional[str] = None
+    last_api_update: Optional[datetime] = None
+    
     term_start: Optional[date] = None
     term_end: Optional[date] = None
     congress_number: Optional[int] = None

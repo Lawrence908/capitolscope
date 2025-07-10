@@ -66,8 +66,8 @@ class CongressMemberBase(CapitolScopeBaseSchema):
     full_name: str = Field(..., min_length=1, max_length=200)
     prefix: Optional[str] = Field(None, max_length=10, description="Honorifics like 'Rep.', 'Sen.', 'Dr.', 'Mr.', 'Ms.'")
     party: Optional[PoliticalParty] = None
-    chamber: Chamber
-    state: str = Field(..., min_length=2, max_length=2, description="Two-letter state code")
+    chamber: Optional[Chamber] = None  # Made optional for import, will be populated via external APIs
+    state: Optional[str] = Field(None, min_length=2, max_length=2, description="Two-letter state code")
     district: Optional[str] = Field(None, max_length=10)
     
     @validator('state')
@@ -87,6 +87,7 @@ class CongressMemberCreate(CongressMemberBase):
     term_start: Optional[date] = None
     term_end: Optional[date] = None
     congress_number: Optional[int] = Field(None, ge=1, le=200)
+    is_active: bool = True  # Add is_active field
 
 
 class CongressMemberUpdate(CapitolScopeBaseSchema):

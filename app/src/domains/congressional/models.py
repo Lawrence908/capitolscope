@@ -41,10 +41,10 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     full_name = Column(String(200), nullable=False, index=True)
     prefix = Column(String(10), index=True)  # Honorifics like "Rep.", "Sen.", "Dr.", "Mr.", "Ms."
     party = Column(String(1), index=True)  # D, R, I
-    chamber = Column(String(6), nullable=False, index=True)  # House, Senate
+    chamber = Column(String(6), nullable=True, index=True)  # House, Senate - nullable for import, populated via APIs
     
     # Geographic Information
-    state = Column(String(2), nullable=False, index=True)  # Two-letter state code
+    state = Column(String(2), nullable=True, index=True)  # Two-letter state code - nullable for import
     district = Column(String(10))  # For House members (e.g., "01", "02", "AL" for at-large)
     
     # Contact and Bio Information

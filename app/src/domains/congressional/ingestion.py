@@ -44,18 +44,73 @@ class CongressionalDataIngester:
         self.security_crud = SecurityCRUD(session)
         self.asset_type_crud = AssetTypeCRUD(session)
         
+        # Validation system (optional)
+        self.validator = None
+        
         # Asset type mapping from the original script
         self.asset_type_mapping = {
-            "ST": "Stock",
+            "4K": "401K and Other Non-Federal Retirement Accounts",
+            "5C": "529 College Savings Plan",
+            "5F": "529 Portfolio",
+            "5P": "529 Prepaid Tuition Plan",
+            "AB": "Asset-Backed Securities",
+            "BA": "Bank Accounts, Money Market Accounts and CDs",
+            "BK": "Brokerage Accounts",
+            "CO": "Collectibles",
+            "CS": "Corporate Securities (Bonds and Notes)",
+            "CT": "Cryptocurrency",
+            "DB": "Defined Benefit Pension",
+            "DO": "Debts Owed to the Filer",
+            "DS": "Delaware Statutory Trust",
+            "EF": "Exchange Traded Funds (ETF)",
+            "EQ": "Excepted/Qualified Blind Trust",
+            "ET": "Exchange Traded Notes",
+            "FA": "Farms",
+            "FE": "Foreign Exchange Position (Currency)",
+            "FN": "Fixed Annuity",
+            "FU": "Futures",
+            "GS": "Government Securities and Agency Debt",
+            "HE": "Hedge Funds & Private Equity Funds (EIF)",
+            "HN": "Hedge Funds & Private Equity Funds (non-EIF)",
+            "IC": "Investment Club",
+            "IH": "IRA (Held in Cash)",
+            "IP": "Intellectual Property & Royalties",
+            "IR": "IRA",
+            "MA": "Managed Accounts (e.g., SMA and UMA)",
+            "MF": "Mutual Funds",
+            "MO": "Mineral/Oil/Solar Energy Rights",
+            "OI": "Ownership Interest (Holding Investments)",
+            "OL": "Ownership Interest (Engaged in a Trade or Business)",
+            "OP": "Options",
+            "OT": "Other",
+            "PE": "Pensions",
+            "PM": "Precious Metals",
+            "PS": "Stock (Not Publicly Traded)",
+            "RE": "Real Estate Invest. Trust (REIT)",
+            "RP": "Real Property",
+            "RS": "Restricted Stock Units (RSUs)",
+            "SA": "Stock Appreciation Right",
+            "ST": "Stocks (including ADRs)",
+            "TR": "Trust",
+            "VA": "Variable Annuity",
+            "VI": "Variable Insurance",
+            "WU": "Whole/Universal Insurance",
             "BND": "Bond", 
-            "OP": "Option",
-            "MF": "Mutual Fund",
             "ETF": "ETF",
             "FUT": "Future",
-            "REIT": "REIT",
             "CASH": "Cash",
             "OTHER": "Other"
         }
+    
+    def set_validator(self, validator):
+        """
+        Set the validator for data quality validation.
+        
+        Args:
+            validator: CongressionalDataValidator instance
+        """
+        self.validator = validator
+        logger.info("Data validator set for ingestion")
     
     async def import_congressional_data_from_csvs(self, data_directory: str) -> Dict[str, int]:
         """
@@ -311,6 +366,7 @@ class CongressionalDataIngester:
     def _extract_and_create_members_sync(self, df: pd.DataFrame) -> int:
         """
         Synchronous version of _extract_and_create_members for use with sync sessions.
+        Uses UPSERT pattern to preserve existing member data like party, chamber, state.
         
         Args:
             df: DataFrame containing congressional trade data
@@ -341,87 +397,88 @@ class CongressionalDataIngester:
         created_count = 0
         
         for member_name in unique_members:
-            if not member_name or member_name.strip() == '':
+            member_name = str(member_name).strip()
+            if not member_name or member_name == 'nan':
                 continue
-                
-            # Extract names based on available data
-            prefix = ""
-            first_name = ""
-            last_name = ""
-            full_name = member_name.strip()
             
-            if has_separate_names:
-                member_data = df[df['Member'] == member_name]
-                best_entry = None
-                jt_entries = member_data[member_data['Owner'] == 'JT']
-                jt_with_names = jt_entries[
-                    (jt_entries['FirstName'].notna()) & 
-                    (jt_entries['FirstName'] != '') & 
-                    (jt_entries['LastName'].notna()) & 
-                    (jt_entries['LastName'] != '')
-                ]
-                if not jt_with_names.empty:
-                    best_entry = jt_with_names.iloc[0]
-                else:
-                    entries_with_names = member_data[
-                        (member_data['FirstName'].notna()) & 
-                        (member_data['FirstName'] != '') & 
-                        (member_data['LastName'].notna()) & 
-                        (member_data['LastName'] != '')
-                    ]
-                    if not entries_with_names.empty:
-                        best_entry = entries_with_names.iloc[0]
-                if best_entry is not None:
-                    prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else ""
-                    first_name = str(best_entry['FirstName']).strip()
-                    last_name = str(best_entry['LastName']).strip()
-                    if prefix:
-                        full_name = f"{prefix} {first_name} {last_name}".strip()
+            try:
+                # Extract name components based on available columns
+                if has_separate_names:
+                    # Find the best row with complete data for this member
+                    member_rows = df[df['Member'] == member_name]
+                    
+                    best_entry = None
+                    for _, row in member_rows.iterrows():
+                        if pd.notna(row.get('FirstName')) and pd.notna(row.get('LastName')):
+                            best_entry = row
+                            break
+                    
+                    if best_entry is not None:
+                        prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else ""
+                        first_name = str(best_entry['FirstName']).strip()
+                        last_name = str(best_entry['LastName']).strip()
+                        if prefix:
+                            full_name = f"{prefix} {first_name} {last_name}".strip()
+                        else:
+                            full_name = f"{first_name} {last_name}".strip()
+                        member_names[member_name] = (prefix, first_name, last_name, full_name)
                     else:
+                        first_name, last_name = self._parse_name_from_member(member_name)
                         full_name = f"{first_name} {last_name}".strip()
-                    member_names[member_name] = (prefix, first_name, last_name, full_name)
+                        member_names[member_name] = ("", first_name, last_name, full_name)
                 else:
                     first_name, last_name = self._parse_name_from_member(member_name)
                     full_name = f"{first_name} {last_name}".strip()
-                    member_names[member_name] = (prefix, first_name, last_name, full_name)
-            else:
-                first_name, last_name = self._parse_name_from_member(member_name)
-                full_name = f"{first_name} {last_name}".strip()
-                member_names[member_name] = (prefix, first_name, last_name, full_name)
+                    member_names[member_name] = ("", first_name, last_name, full_name)
 
-            # Check if member already exists (by last and first name)
-            existing_member = self.member_crud.get_by_name(last_name, first_name)
-            if existing_member:
-                # Update member details if changed
-                from domains.congressional.schemas import CongressMemberUpdate
-                update_data = CongressMemberUpdate(
-                    first_name=first_name or None,
-                    last_name=last_name or None,
-                    full_name=full_name or None,
-                    prefix=prefix or None
+                prefix, first_name, last_name, full_name = member_names[member_name]
+
+                # Check if member already exists (by last and first name)
+                existing_member = self.member_crud.get_by_name(last_name, first_name)
+                if existing_member:
+                    # Update member details ONLY if the new data is better/more complete
+                    # and preserve existing party, chamber, state data
+                    from domains.congressional.schemas import CongressMemberUpdate
+                    update_data = CongressMemberUpdate()
+                    
+                    # Only update fields that are not already set or are improved
+                    if prefix and not existing_member.prefix:
+                        update_data.prefix = prefix
+                    if full_name and len(full_name) > len(existing_member.full_name or ""):
+                        update_data.full_name = full_name
+                    
+                    # Only update if we have actual changes to make
+                    update_dict = update_data.model_dump(exclude_unset=True, exclude_none=True)
+                    if update_dict:
+                        self.member_crud.update(existing_member.id, update_data)
+                        logger.info(f"Updated congress member: {existing_member.full_name} ({existing_member.id})")
+                        logger.debug(f"Updated member: {existing_member.full_name}")
+                    continue
+
+                # Create new member record with minimal required data
+                # Leave party, chamber, state empty for later enrichment via external APIs
+                member_data = CongressMemberCreate(
+                    first_name=first_name or "Unknown",
+                    last_name=last_name,
+                    full_name=full_name,
+                    prefix=prefix if prefix else None,
+                    # These fields are left empty for later enrichment from external APIs
+                    chamber=None,  
+                    party=None,   
+                    state=None,   
+                    district=None,
+                    is_active=True
                 )
-                self.member_crud.update(existing_member.id, update_data)
-                logger.debug(f"Updated member: {full_name}")
-                continue
-
-            # Create new member record
-            member_data = CongressMemberCreate(
-                first_name=first_name or "Unknown",
-                last_name=last_name,
-                full_name=full_name,
-                prefix=prefix,
-                chamber="House",  # Default to House, will be updated later
-                party="I",  # Default to Independent, will be updated later
-                state="DC",  # Default to DC, will be updated later
-                district=None,
-                is_active=True
-            )
-            try:
-                self.member_crud.create(member_data)
+                
+                member = self.member_crud.create(member_data)
                 created_count += 1
-                logger.debug(f"Created member: {full_name}")
+                
+                logger.info(f"Created congress member: {member.full_name} ({member.id})")
+                logger.debug(f"Created member: {member.full_name}")
+                
             except Exception as e:
-                logger.warning(f"Failed to create member {full_name}: {e}")
+                logger.error(f"Failed to create member {member_name}: {e}")
+                continue
         
         logger.info(f"Created {created_count} new members")
         return created_count
@@ -714,6 +771,18 @@ class CongressionalDataIngester:
         
         for idx, row in df.iterrows():
             try:
+                # Validate record if validator is available
+                if self.validator:
+                    validation_result = self.validator.validate_record(row.to_dict())
+                    if not validation_result.is_valid:
+                        logger.debug(f"Record validation failed at row {idx}: {validation_result.errors}")
+                        failed_count += 1
+                        continue
+                    
+                    # Use cleaned data if available
+                    if validation_result.cleaned_data:
+                        row = pd.Series(validation_result.cleaned_data)
+                
                 # Extract member information
                 member_key = str(row['Member']).strip()
                 if not member_key or member_key == 'nan':

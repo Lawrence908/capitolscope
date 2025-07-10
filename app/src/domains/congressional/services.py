@@ -583,6 +583,7 @@ class CongressAPIService:
         self.trade_repo = trade_repo
         self.portfolio_repo = portfolio_repo
         self.performance_repo = performance_repo
+        self.api_client = None
     
     async def sync_all_members(self) -> Dict[str, int]:
         """

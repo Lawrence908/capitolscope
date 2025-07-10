@@ -13,9 +13,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from background.celery_app import celery_app
 from core.config import get_settings
 from core.database import DatabaseManager, db_manager, get_sync_db_session
-from core.logging import get_logger
+from core.logging import get_background_task_logger, get_congress_api_logger, get_database_logger
 from domains.congressional.services import CongressAPIService
-from domains.congressional.crud import CongressMemberRepository
+from domains.congressional.crud import (
+    CongressMemberRepository, CongressionalTradeRepository,
+    MemberPortfolioRepository, MemberPortfolioPerformanceRepository
+)
 from domains.congressional.ingestion import CongressionalDataIngester
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
@@ -23,7 +26,7 @@ from domains.securities.ingestion import (
 )
 from domains.securities.data_fetcher import EnhancedStockDataService, StockDataRequest
 
-logger = get_logger(__name__)
+logger = get_background_task_logger(__name__)
 settings = get_settings()
 
 
@@ -32,9 +35,12 @@ class DatabaseTask(Task):
     
     def __call__(self, *args, **kwargs):
         try:
-            return super().__call__(*args, **kwargs)
+            logger.debug(f"Starting task {self.name} with args: {args}, kwargs: {kwargs}")
+            result = super().__call__(*args, **kwargs)
+            logger.debug(f"Task {self.name} completed successfully")
+            return result
         except Exception as exc:
-            logger.error(f"Task {self.name} failed: {exc}")
+            logger.error(f"Task {self.name} failed: {exc}", exc_info=True)
             raise
 
 
@@ -48,6 +54,8 @@ def run_async_task(coro):
     - Direct script execution
     """
     try:
+        logger.debug("Attempting to run async task")
+        
         # Try to get the current event loop
         loop = asyncio.get_event_loop()
         
@@ -56,6 +64,8 @@ def run_async_task(coro):
             # We're in an environment with a running loop (like FastAPI/uvloop)
             # Check if it's uvloop (which doesn't support nest_asyncio)
             loop_type = type(loop).__name__
+            
+            logger.debug(f"Running loop detected: {loop_type}")
             
             if 'uvloop' in loop_type.lower():
                 # In uvloop context (FastAPI), we can't use nest_asyncio
@@ -122,21 +132,29 @@ def run_async_task(coro):
 
 async def get_db_session_async():
     """Get async database session for background tasks."""
+    logger.debug("Initializing database session for background task")
+    
     db_manager = DatabaseManager()
     await db_manager.initialize()
     
     if not db_manager.session_factory:
         raise RuntimeError("Database session factory not initialized")
         
+    logger.debug("Database session factory initialized successfully")
+    
     async with db_manager.session_factory() as session:
         try:
+            logger.debug("Database session created, yielding to task")
             yield session
             await session.commit()
+            logger.debug("Database session committed successfully")
         except Exception:
             await session.rollback()
+            logger.error("Database session rolled back due to error")
             raise
         finally:
             await db_manager.close()
+            logger.debug("Database manager closed")
 
 
 # ============================================================================
@@ -152,41 +170,70 @@ def sync_congressional_members(self, action: str = "sync-all", **kwargs):
         action: Action to perform ('sync-all', 'sync-state', 'sync-member', 'enrich-existing')
         **kwargs: Additional parameters for specific actions
     """
+    logger.info(f"Received congressional members sync task", action=action, kwargs=kwargs)
     return run_async_task(_sync_congressional_members_async(action, **kwargs))
 
 
 async def _sync_congressional_members_async(action: str, **kwargs) -> Dict[str, Any]:
     """Async implementation of congressional members sync."""
+    congress_logger = get_congress_api_logger(__name__)
+    db_logger = get_database_logger(__name__)
+    
     try:
-        logger.info(f"Starting congressional members sync: {action}")
+        logger.info(f"Starting congressional members sync", action=action, kwargs=kwargs)
         
         # Initialize database first
         from core.database import db_manager, get_sync_db_session
         
         # Ensure database is initialized
         if not db_manager._initialized:
+            logger.debug("Database manager not initialized, initializing now")
             await db_manager.initialize()
+            logger.debug("Database manager initialized successfully")
         
+        db_logger.debug("Creating sync database session")
         with get_sync_db_session() as session:
             # Initialize services with sync session
+            logger.debug("Initializing repositories")
             member_repo = CongressMemberRepository(session)
-            api_service = CongressAPIService(member_repo)
+            trade_repo = CongressionalTradeRepository(session)
+            portfolio_repo = MemberPortfolioRepository(session)
+            performance_repo = MemberPortfolioPerformanceRepository(session)
+            
+            logger.debug("Initializing CongressAPIService")
+            api_service = CongressAPIService(
+                member_repo=member_repo,
+                trade_repo=trade_repo,
+                portfolio_repo=portfolio_repo,
+                performance_repo=performance_repo
+            )
             
             # Execute the appropriate sync action
+            logger.info(f"Executing sync action", action=action)
+            
             if action == "sync-all":
+                logger.debug("Starting sync-all action")
                 results = await api_service.sync_all_members()
+                logger.info("sync-all action completed", results=results)
             elif action == "sync-state" and "state" in kwargs:
+                logger.debug("Starting sync-state action", state=kwargs["state"])
                 results = await api_service.sync_members_by_state(kwargs["state"])
+                logger.info("sync-state action completed", results=results)
             elif action == "sync-member" and "bioguide_id" in kwargs:
+                logger.debug("Starting sync-member action", bioguide_id=kwargs["bioguide_id"])
                 result = await api_service.sync_member_by_bioguide_id(kwargs["bioguide_id"])
                 results = {"action": result, "bioguide_id": kwargs["bioguide_id"]}
+                logger.info("sync-member action completed", results=results)
             elif action == "enrich-existing":
+                logger.debug("Starting enrich-existing action")
                 results = await _enrich_existing_members(member_repo, api_service)
+                logger.info("enrich-existing action completed", results=results)
             else:
+                logger.error("Invalid action specified", action=action)
                 raise ValueError(f"Invalid action: {action}")
             
             # Commit changes (handled by context manager)
-            logger.info(f"Congressional members sync completed: {results}")
+            logger.info(f"Congressional members sync completed", action=action, results=results)
             return {
                 "status": "success",
                 "action": action,
@@ -195,7 +242,7 @@ async def _sync_congressional_members_async(action: str, **kwargs) -> Dict[str, 
             }
             
     except Exception as exc:
-        logger.error(f"Congressional members sync failed: {exc}")
+        logger.error(f"Congressional members sync failed", action=action, error=str(exc), exc_info=True)
         raise
 
 
@@ -203,30 +250,49 @@ async def _enrich_existing_members(member_repo: CongressMemberRepository, api_se
     """Enrich existing members with additional Congress.gov data."""
     from domains.congressional.schemas import MemberQuery
     
+    logger.debug("Starting enrichment of existing members")
+    
     # Get all members with bioguide IDs using sync repository
     query = MemberQuery(limit=1000)
-    members, _ = member_repo.list_members(query)
+    logger.debug("Fetching existing members for enrichment", limit=query.limit)
+    
+    members, total_count = member_repo.list_members(query)
+    logger.info(f"Found {len(members)} members to enrich", total_count=total_count)
     
     enriched_count = 0
     failed_count = 0
     
-    for member in members:
+    for i, member in enumerate(members):
         if member.bioguide_id:
+            logger.debug(f"Enriching member {i+1}/{len(members)}", 
+                        member_id=member.id, 
+                        bioguide_id=member.bioguide_id,
+                        name=member.full_name)
+            
             try:
                 result = await api_service.sync_member_by_bioguide_id(member.bioguide_id)
                 if result in ["updated", "created"]:
                     enriched_count += 1
-                    logger.info(f"Enriched member: {member.full_name}")
+                    logger.info(f"Enriched member", member_id=member.id, name=member.full_name, result=result)
+                else:
+                    logger.debug(f"No changes needed for member", member_id=member.id, name=member.full_name, result=result)
             except Exception as e:
-                logger.error(f"Failed to enrich member {member.full_name}: {e}")
+                logger.error(f"Failed to enrich member", 
+                           member_id=member.id, 
+                           name=member.full_name, 
+                           error=str(e))
                 failed_count += 1
                 continue
     
-    return {
+    results = {
         "enriched": enriched_count,
         "failed": failed_count,
-        "total_processed": enriched_count + failed_count
+        "total_processed": enriched_count + failed_count,
+        "total_members": len(members)
     }
+    
+    logger.info("Member enrichment completed", results=results)
+    return results
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
@@ -240,6 +306,7 @@ def comprehensive_data_ingestion(self):
     3. Trading data updates
     4. Portfolio recalculations
     """
+    logger.info("Received comprehensive data ingestion task")
     return run_async_task(_comprehensive_data_ingestion_async())
 
 
@@ -254,26 +321,33 @@ async def _comprehensive_data_ingestion_async() -> Dict[str, Any]:
         logger.info("Step 1: Syncing congressional members")
         member_sync_results = await _sync_congressional_members_async("sync-all")
         results["member_sync"] = member_sync_results
+        logger.info("Step 1 completed", results=member_sync_results)
         
         # Step 2: Enrich member data with legislation
         logger.info("Step 2: Enriching member data")
         enrich_results = await _sync_congressional_members_async("enrich-existing")
         results["enrichment"] = enrich_results
+        logger.info("Step 2 completed", results=enrich_results)
         
         # Step 3: Update stock prices (if we have trades)
         logger.info("Step 3: Updating stock prices")
         price_update_results = await _update_stock_prices_async()
         results["price_updates"] = price_update_results
+        logger.info("Step 3 completed", results=price_update_results)
         
         # Step 4: Recalculate portfolios and performance
         logger.info("Step 4: Recalculating portfolios")
         portfolio_results = await _recalculate_portfolios_async()
         results["portfolio_calculations"] = portfolio_results
+        logger.info("Step 4 completed", results=portfolio_results)
         
         end_time = datetime.utcnow()
         duration = end_time - start_time
         
-        logger.info(f"Comprehensive data ingestion completed in {duration}")
+        logger.info(f"Comprehensive data ingestion completed", 
+                   duration_seconds=duration.total_seconds(),
+                   start_time=start_time.isoformat(),
+                   end_time=end_time.isoformat())
         
         return {
             "status": "success",
@@ -284,7 +358,7 @@ async def _comprehensive_data_ingestion_async() -> Dict[str, Any]:
         }
         
     except Exception as exc:
-        logger.error(f"Comprehensive data ingestion failed: {exc}")
+        logger.error(f"Comprehensive data ingestion failed", error=str(exc), exc_info=True)
         raise
 
 
@@ -301,10 +375,11 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
         date_from: ISO date string to sync from (defaults to yesterday)
     """
     try:
-        logger.info("Starting congressional trades synchronization")
+        logger.info("Starting congressional trades synchronization", date_from=date_from)
         
         if not date_from:
             date_from = (datetime.utcnow() - timedelta(days=1)).isoformat()
+            logger.debug("No date_from specified, using yesterday", date_from=date_from)
         
         # TODO: Implement actual data synchronization logic
         # This would typically involve:
@@ -313,11 +388,11 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
         # 3. Normalizing and validating the data
         # 4. Storing in database with proper conflict resolution
         
-        logger.info(f"Congressional trades sync completed for date: {date_from}")
+        logger.info(f"Congressional trades sync completed", date_from=date_from, records_processed=0)
         return {"status": "success", "date_from": date_from, "records_processed": 0}
         
     except Exception as exc:
-        logger.error(f"Congressional trades sync failed: {exc}")
+        logger.error(f"Congressional trades sync failed", date_from=date_from, error=str(exc), exc_info=True)
         raise self.retry(exc=exc, countdown=300, max_retries=3)
 
 
@@ -329,13 +404,14 @@ def update_stock_prices(self, symbols: Optional[List[str]] = None):
     Args:
         symbols: List of stock symbols to update (defaults to all tracked)
     """
+    logger.info("Received stock price update task", symbols_count=len(symbols) if symbols else None)
     return run_async_task(_update_stock_prices_async(symbols))
 
 
 async def _update_stock_prices_async(symbols: Optional[List[str]] = None) -> Dict[str, Any]:
     """Async implementation of stock price updates."""
     try:
-        logger.info("Starting stock price updates")
+        logger.info("Starting stock price updates", symbols_count=len(symbols) if symbols else None)
         
         # TODO: Implement stock price update logic
         # This would typically involve:
@@ -347,14 +423,14 @@ async def _update_stock_prices_async(symbols: Optional[List[str]] = None) -> Dic
         processed_count = 0
         if symbols:
             processed_count = len(symbols)
-            logger.info(f"Updated prices for {processed_count} symbols")
+            logger.info(f"Updated prices for {processed_count} symbols", symbols=symbols)
         else:
             logger.info("Updated prices for all tracked securities")
         
         return {"status": "success", "symbols_updated": processed_count}
         
     except Exception as exc:
-        logger.error(f"Stock price update failed: {exc}")
+        logger.error(f"Stock price update failed", symbols=symbols, error=str(exc), exc_info=True)
         raise
 
 
@@ -376,7 +452,7 @@ async def _recalculate_portfolios_async() -> Dict[str, Any]:
         return {"status": "success", "portfolios_updated": portfolios_updated}
         
     except Exception as exc:
-        logger.error(f"Portfolio recalculation failed: {exc}")
+        logger.error(f"Portfolio recalculation failed", error=str(exc), exc_info=True)
         raise
 
 
@@ -396,6 +472,7 @@ def cleanup_old_data(self, days_to_keep: int = 90):
         logger.info(f"Starting cleanup of data older than {days_to_keep} days")
         
         cutoff_date = datetime.utcnow() - timedelta(days=days_to_keep)
+        logger.debug("Calculated cutoff date", cutoff_date=cutoff_date.isoformat())
         
         # TODO: Implement cleanup logic
         # This would typically involve:
@@ -405,12 +482,12 @@ def cleanup_old_data(self, days_to_keep: int = 90):
         # 4. Cleaning up expired user notifications
         
         cleaned_items = 0
-        logger.info(f"Cleanup completed: {cleaned_items} items removed")
+        logger.info(f"Cleanup completed", items_cleaned=cleaned_items, cutoff_date=cutoff_date.isoformat())
         
         return {"status": "success", "items_cleaned": cleaned_items, "cutoff_date": cutoff_date.isoformat()}
         
     except Exception as exc:
-        logger.error(f"Data cleanup failed: {exc}")
+        logger.error(f"Data cleanup failed", days_to_keep=days_to_keep, error=str(exc), exc_info=True)
         raise self.retry(exc=exc, countdown=600, max_retries=2)
 
 
@@ -423,7 +500,7 @@ def send_trade_alerts(self, user_id: Optional[int] = None):
         user_id: Specific user to send alerts to (defaults to all eligible users)
     """
     try:
-        logger.info("Starting trade alert processing")
+        logger.info("Starting trade alert processing", user_id=user_id)
         
         # TODO: Implement alert logic
         # This would typically involve:
@@ -433,12 +510,12 @@ def send_trade_alerts(self, user_id: Optional[int] = None):
         # 4. Updating notification history
         
         alerts_sent = 0
-        logger.info(f"Trade alerts completed: {alerts_sent} alerts sent")
+        logger.info(f"Trade alerts completed", alerts_sent=alerts_sent, user_id=user_id)
         
         return {"status": "success", "alerts_sent": alerts_sent}
         
     except Exception as exc:
-        logger.error(f"Trade alerts failed: {exc}")
+        logger.error(f"Trade alerts failed", user_id=user_id, error=str(exc), exc_info=True)
         raise self.retry(exc=exc, countdown=300, max_retries=3)
 
 
@@ -465,7 +542,7 @@ def generate_analytics_report(self, report_type: str = "daily"):
         return {"status": "success", "report_type": report_type}
         
     except Exception as exc:
-        logger.error(f"Analytics report generation failed: {exc}")
+        logger.error(f"Analytics report generation failed", report_type=report_type, error=str(exc), exc_info=True)
         raise self.retry(exc=exc, countdown=600, max_retries=2)
 
 
@@ -478,22 +555,26 @@ def health_check_congress_api(self):
     """
     Health check for Congress.gov API connectivity.
     """
+    logger.info("Received Congress API health check task")
     return run_async_task(_health_check_congress_api_async())
 
 
 async def _health_check_congress_api_async() -> Dict[str, Any]:
     """Async implementation of Congress API health check."""
+    congress_logger = get_congress_api_logger(__name__)
+    
     try:
         from domains.congressional.client import CongressAPIClient
         
-        logger.info("Running Congress.gov API health check")
+        congress_logger.info("Running Congress.gov API health check")
         
         async with CongressAPIClient() as client:
             # Try to fetch a small number of members
+            congress_logger.debug("Fetching test member list from Congress.gov API")
             response = await client.get_member_list(limit=1)
             
             if response.members:
-                logger.info("Congress.gov API health check passed")
+                congress_logger.info("Congress.gov API health check passed", member_count=len(response.members))
                 return {
                     "status": "healthy",
                     "api_name": "Congress.gov",
@@ -501,7 +582,7 @@ async def _health_check_congress_api_async() -> Dict[str, Any]:
                     "response_time_ms": None  # Could measure this
                 }
             else:
-                logger.warning("Congress.gov API health check failed - no data returned")
+                congress_logger.warning("Congress.gov API health check failed - no data returned")
                 return {
                     "status": "unhealthy",
                     "api_name": "Congress.gov",
@@ -510,7 +591,7 @@ async def _health_check_congress_api_async() -> Dict[str, Any]:
                 }
                 
     except Exception as exc:
-        logger.error(f"Congress.gov API health check failed: {exc}")
+        congress_logger.error(f"Congress.gov API health check failed", error=str(exc), exc_info=True)
         return {
             "status": "unhealthy",
             "api_name": "Congress.gov",
@@ -535,6 +616,8 @@ def schedule_daily_ingestion(self):
         # Queue the comprehensive ingestion task
         result = comprehensive_data_ingestion.delay()
         
+        logger.info("Daily ingestion task scheduled", task_id=result.id)
+        
         return {
             "status": "scheduled",
             "task_id": result.id,
@@ -542,7 +625,7 @@ def schedule_daily_ingestion(self):
         }
         
     except Exception as exc:
-        logger.error(f"Failed to schedule daily ingestion: {exc}")
+        logger.error(f"Failed to schedule daily ingestion", error=str(exc), exc_info=True)
         raise
 
 
@@ -558,6 +641,10 @@ def schedule_weekly_maintenance(self):
         cleanup_task = cleanup_old_data.delay(days_to_keep=90)
         analytics_task = generate_analytics_report.delay(report_type="weekly")
         
+        logger.info("Weekly maintenance tasks scheduled", 
+                   cleanup_task_id=cleanup_task.id,
+                   analytics_task_id=analytics_task.id)
+        
         return {
             "status": "scheduled",
             "cleanup_task_id": cleanup_task.id,
@@ -566,7 +653,7 @@ def schedule_weekly_maintenance(self):
         }
         
     except Exception as exc:
-        logger.error(f"Failed to schedule weekly maintenance: {exc}")
+        logger.error(f"Failed to schedule weekly maintenance", error=str(exc), exc_info=True)
         raise
 
 
@@ -583,13 +670,16 @@ def seed_securities_database(self, include_prices: bool = False, batch_size: int
         include_prices: Whether to also fetch historical price data
         batch_size: Batch size for price data processing
     """
+    logger.info("Received securities database seeding task", 
+               include_prices=include_prices, 
+               batch_size=batch_size)
     return run_async_task(_seed_securities_database_async(include_prices, batch_size))
 
 
 async def _seed_securities_database_async(include_prices: bool, batch_size: int) -> Dict[str, Any]:
     """Async implementation of securities database seeding."""
     try:
-        logger.info("Starting securities database seeding")
+        logger.info("Starting securities database seeding", include_prices=include_prices, batch_size=batch_size)
         
         db_manager = DatabaseManager()
         await db_manager.initialize()
@@ -601,18 +691,21 @@ async def _seed_securities_database_async(include_prices: bool, batch_size: int)
             logger.info("Populating securities from major market indices")
             securities_result = await populate_securities_from_major_indices(session)
             results["securities"] = securities_result
+            logger.info("Securities population completed", results=securities_result)
             
             # Step 2: Fetch price data (optional)
             if include_prices:
-                logger.info("Fetching historical price data for all securities")
+                logger.info("Fetching historical price data for all securities", batch_size=batch_size)
                 prices_result = await ingest_price_data_for_all_securities(
                     session, batch_size=batch_size
                 )
                 results["prices"] = prices_result
+                logger.info("Price data ingestion completed", results=prices_result)
             
             await session.commit()
+            logger.debug("Database session committed")
         
-        logger.info(f"Securities database seeding completed: {results}")
+        logger.info(f"Securities database seeding completed", results=results)
         return {
             "status": "success",
             "results": results,
@@ -620,10 +713,15 @@ async def _seed_securities_database_async(include_prices: bool, batch_size: int)
         }
         
     except Exception as exc:
-        logger.error(f"Securities database seeding failed: {exc}")
+        logger.error(f"Securities database seeding failed", 
+                   include_prices=include_prices, 
+                   batch_size=batch_size, 
+                   error=str(exc), 
+                   exc_info=True)
         raise
     finally:
         await db_manager.close()
+        logger.debug("Database manager closed")
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
@@ -646,6 +744,15 @@ def fetch_stock_data_enhanced(self, tickers: Optional[List[str]] = None,
         use_async: Whether to use async fetching
         batch_size: Batch size for async operations
     """
+    logger.info("Received enhanced stock data fetching task", 
+               tickers_count=len(tickers) if tickers else None,
+               interval=interval,
+               start_date=start_date,
+               end_date=end_date,
+               source=source,
+               use_async=use_async,
+               batch_size=batch_size)
+    
     return run_async_task(_fetch_stock_data_enhanced_async(
         tickers, interval, start_date, end_date, source, use_async, batch_size
     ))
@@ -660,9 +767,17 @@ async def _fetch_stock_data_enhanced_async(tickers: Optional[List[str]],
                                          batch_size: int) -> Dict[str, Any]:
     """Async implementation of enhanced stock data fetching."""
     try:
-        logger.info("Starting enhanced stock data fetching")
+        logger.info("Starting enhanced stock data fetching", 
+                   tickers_count=len(tickers) if tickers else None,
+                   interval=interval,
+                   start_date=start_date,
+                   end_date=end_date,
+                   source=source,
+                   use_async=use_async,
+                   batch_size=batch_size)
         
         # Initialize service
+        logger.debug("Initializing EnhancedStockDataService")
         service = EnhancedStockDataService()
         
         # Create request template
@@ -676,6 +791,7 @@ async def _fetch_stock_data_enhanced_async(tickers: Optional[List[str]],
         
         if tickers:
             # Fetch specific tickers
+            logger.debug("Fetching specific tickers", tickers=tickers)
             requests = []
             for ticker in tickers:
                 request = StockDataRequest(
@@ -688,14 +804,19 @@ async def _fetch_stock_data_enhanced_async(tickers: Optional[List[str]],
                 requests.append(request)
             
             if use_async:
+                logger.debug("Using async fetching for specific tickers")
                 responses = await service.fetch_multiple_stocks_async(requests, batch_size)
             else:
+                logger.debug("Using sync fetching for specific tickers")
                 responses = service.fetch_multiple_stocks(requests)
         else:
             # Fetch all major indices
+            logger.debug("Fetching all major indices")
             if use_async:
+                logger.debug("Using async fetching for major indices")
                 responses = await service.fetch_all_major_stocks_async(request_template, batch_size)
             else:
+                logger.debug("Using sync fetching for major indices")
                 responses = service.fetch_all_major_stocks(request_template)
         
         # Analyze results
@@ -712,7 +833,7 @@ async def _fetch_stock_data_enhanced_async(tickers: Optional[List[str]],
             "failed_symbols": [(r.symbol, r.error) for r in failed]
         }
         
-        logger.info(f"Enhanced stock data fetching completed: {results}")
+        logger.info(f"Enhanced stock data fetching completed", results=results)
         return {
             "status": "success",
             "results": results,
@@ -720,7 +841,12 @@ async def _fetch_stock_data_enhanced_async(tickers: Optional[List[str]],
         }
         
     except Exception as exc:
-        logger.error(f"Enhanced stock data fetching failed: {exc}")
+        logger.error(f"Enhanced stock data fetching failed", 
+                   tickers=tickers,
+                   interval=interval,
+                   source=source,
+                   error=str(exc), 
+                   exc_info=True)
         raise
 
 
@@ -733,13 +859,15 @@ def import_congressional_data_csvs(self, csv_directory: str):
         csv_directory: Path to directory containing CSV files
     """
     try:
-        logger.info(f"Starting congressional data import from CSVs: {csv_directory}")
+        logger.info(f"Starting congressional data import from CSVs", csv_directory=csv_directory)
         
         with get_sync_db_session() as session:
+            logger.debug("Creating CongressionalDataIngester")
             ingester = CongressionalDataIngester(session)
+            logger.debug("Starting CSV import")
             result = ingester.import_congressional_data_from_csvs_sync(csv_directory)
         
-        logger.info(f"Congressional CSV import completed: {result}")
+        logger.info(f"Congressional CSV import completed", results=result)
         return {
             "status": "success",
             "results": result,
@@ -747,7 +875,7 @@ def import_congressional_data_csvs(self, csv_directory: str):
         }
         
     except Exception as exc:
-        logger.error(f"Congressional CSV import failed: {exc}")
+        logger.error(f"Congressional CSV import failed", csv_directory=csv_directory, error=str(exc), exc_info=True)
         raise
 
 
@@ -760,10 +888,12 @@ def enrich_congressional_member_data(self):
         logger.info("Starting congressional member data enrichment")
         
         with get_sync_db_session() as session:
+            logger.debug("Creating CongressionalDataIngester for enrichment")
             ingester = CongressionalDataIngester(session)
+            logger.debug("Starting member data enrichment")
             result = ingester.enrich_member_data_sync()
         
-        logger.info(f"Congressional member enrichment completed: {result}")
+        logger.info(f"Congressional member enrichment completed", results=result)
         return {
             "status": "success",
             "results": result,
@@ -771,5 +901,5 @@ def enrich_congressional_member_data(self):
         }
         
     except Exception as exc:
-        logger.error(f"Congressional member enrichment failed: {exc}")
+        logger.error(f"Congressional member enrichment failed", error=str(exc), exc_info=True)
         raise

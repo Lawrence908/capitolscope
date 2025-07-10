@@ -313,6 +313,9 @@ class CongressionalDataIngester:
             logger.warning("No 'Member' column found in DataFrame")
             return 0
         
+        has_separate_names = 'FirstName' in df.columns and 'LastName' in df.columns
+        has_prefix = 'Prefix' in df.columns
+        
         # Get unique member names
         unique_members = df['Member'].dropna().unique()
         logger.info(f"Found {len(unique_members)} unique members in data")
@@ -322,27 +325,58 @@ class CongressionalDataIngester:
         for member_name in unique_members:
             if not member_name or pd.isna(member_name):
                 continue
-                
             try:
-                # Parse member name (assume format: "Last, First" or just "Last")
-                name_parts = member_name.strip().split(',')
-                if len(name_parts) >= 2:
-                    last_name = name_parts[0].strip()
-                    first_name = name_parts[1].strip()
+                prefix = None
+                first_name = ""
+                last_name = ""
+                full_name = member_name.strip()
+                if has_separate_names:
+                    member_rows = df[df['Member'] == member_name]
+                    best_entry = None
+                    for _, row in member_rows.iterrows():
+                        if pd.notna(row.get('FirstName')) and pd.notna(row.get('LastName')):
+                            best_entry = row
+                            break
+                    if best_entry is not None:
+                        prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else None
+                        first_name = str(best_entry['FirstName']).strip()
+                        last_name = str(best_entry['LastName']).strip()
+                        if prefix:
+                            full_name = f"{prefix} {first_name} {last_name}".strip()
+                        else:
+                            full_name = f"{first_name} {last_name}".strip()
                 else:
-                    last_name = member_name.strip()
-                    first_name = ""
+                    name_parts = member_name.strip().split(',')
+                    if len(name_parts) >= 2:
+                        last_name = name_parts[0].strip()
+                        first_name = name_parts[1].strip()
+                    else:
+                        last_name = member_name.strip()
+                        first_name = ""
                 
                 # Check if member already exists
                 existing = await self.member_crud.get_by_name(last_name, first_name)
                 if existing:
+                    from domains.congressional.schemas import CongressMemberUpdate
+                    update_data = CongressMemberUpdate()
+                    # Only update prefix if present and not already set
+                    if prefix and not existing.prefix:
+                        update_data.prefix = prefix
+                    # Only update full_name if new one is longer
+                    if full_name and len(full_name) > len(existing.full_name or ""):
+                        update_data.full_name = full_name
+                    update_dict = update_data.model_dump(exclude_unset=True, exclude_none=True)
+                    if update_dict:
+                        await self.member_crud.update(existing.id, update_data)
+                        logger.info(f"Updated congress member: {existing.full_name} ({existing.id})")
+                        logger.debug(f"Updated member: {existing.full_name}")
                     continue
-                
                 # Create new member record
                 member_data = CongressMemberCreate(
                     first_name=first_name or "Unknown",
                     last_name=last_name,
-                    full_name=member_name.strip(),
+                    full_name=full_name,
+                    prefix=prefix if prefix else None,
                     # These will be populated later from external APIs
                     chamber="House",  # Default to House, will be updated later
                     party="I",  # Default to Independent, will be updated later
@@ -350,16 +384,12 @@ class CongressionalDataIngester:
                     district=None,
                     is_active=True
                 )
-                
                 member = await self.member_crud.create(member_data)
                 created_count += 1
-                
                 logger.debug(f"Created member: {member_name}")
-                
             except Exception as e:
                 logger.error(f"Failed to create member {member_name}: {e}")
                 continue
-        
         logger.info(f"Created {created_count} new members")
         return created_count
     

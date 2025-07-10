@@ -19,6 +19,7 @@ from datetime import datetime, date
 
 from core.logging import get_logger
 from domains.securities.models import Security, AssetType, Exchange, Sector, DailyPrice
+from domains.base.schemas import validate_ticker_symbol
 
 logger = get_logger(__name__)
 
@@ -248,7 +249,144 @@ def fetch_sp500_tickers() -> List[Dict[str, str]]:
         
     except Exception as e:
         logger.error(f"Error fetching S&P 500 tickers: {e}")
-        return []
+        # Fallback to common major stocks
+        logger.info("Using fallback list of major stocks")
+        return [
+            {'ticker': 'AAPL', 'name': 'Apple Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'MSFT', 'name': 'Microsoft Corporation', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'GOOGL', 'name': 'Alphabet Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'AMZN', 'name': 'Amazon.com Inc.', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'TSLA', 'name': 'Tesla Inc.', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'NVDA', 'name': 'NVIDIA Corporation', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'META', 'name': 'Meta Platforms Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'BRK-B', 'name': 'Berkshire Hathaway Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'JNJ', 'name': 'Johnson & Johnson', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'JPM', 'name': 'JPMorgan Chase & Co.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'V', 'name': 'Visa Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'PG', 'name': 'Procter & Gamble Co.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'HD', 'name': 'Home Depot Inc.', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'MA', 'name': 'Mastercard Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'UNH', 'name': 'UnitedHealth Group Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'DIS', 'name': 'Walt Disney Co.', 'sector': 'Communication Services', 'index': 'S&P 500'},
+            {'ticker': 'PYPL', 'name': 'PayPal Holdings Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'BAC', 'name': 'Bank of America Corp.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'ADBE', 'name': 'Adobe Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'CRM', 'name': 'Salesforce Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'NFLX', 'name': 'Netflix Inc.', 'sector': 'Communication Services', 'index': 'S&P 500'},
+            {'ticker': 'INTC', 'name': 'Intel Corporation', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'PFE', 'name': 'Pfizer Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'ABT', 'name': 'Abbott Laboratories', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'KO', 'name': 'Coca-Cola Co.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'PEP', 'name': 'PepsiCo Inc.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'TMO', 'name': 'Thermo Fisher Scientific Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'AVGO', 'name': 'Broadcom Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'COST', 'name': 'Costco Wholesale Corporation', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'ABBV', 'name': 'AbbVie Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'WMT', 'name': 'Walmart Inc.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'MRK', 'name': 'Merck & Co. Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'LLY', 'name': 'Eli Lilly and Co.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'QCOM', 'name': 'Qualcomm Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'DHR', 'name': 'Danaher Corporation', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'ACN', 'name': 'Accenture plc', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'VZ', 'name': 'Verizon Communications Inc.', 'sector': 'Communication Services', 'index': 'S&P 500'},
+            {'ticker': 'TXN', 'name': 'Texas Instruments Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'CMCSA', 'name': 'Comcast Corporation', 'sector': 'Communication Services', 'index': 'S&P 500'},
+            {'ticker': 'HON', 'name': 'Honeywell International Inc.', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'NEE', 'name': 'NextEra Energy Inc.', 'sector': 'Utilities', 'index': 'S&P 500'},
+            {'ticker': 'PM', 'name': 'Philip Morris International Inc.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'RTX', 'name': 'Raytheon Technologies Corporation', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'LOW', 'name': 'Lowe\'s Companies Inc.', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'UPS', 'name': 'United Parcel Service Inc.', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'IBM', 'name': 'International Business Machines Corporation', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'AMD', 'name': 'Advanced Micro Devices Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'CAT', 'name': 'Caterpillar Inc.', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'GS', 'name': 'Goldman Sachs Group Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'MS', 'name': 'Morgan Stanley', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'SPGI', 'name': 'S&P Global Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'ISRG', 'name': 'Intuitive Surgical Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'GILD', 'name': 'Gilead Sciences Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'AMGN', 'name': 'Amgen Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'ADP', 'name': 'Automatic Data Processing Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'BKNG', 'name': 'Booking Holdings Inc.', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'MDLZ', 'name': 'Mondelez International Inc.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'ADI', 'name': 'Analog Devices Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'REGN', 'name': 'Regeneron Pharmaceuticals Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'BDX', 'name': 'Becton Dickinson and Co.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'KLAC', 'name': 'KLA Corporation', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'SBUX', 'name': 'Starbucks Corporation', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'TMUS', 'name': 'T-Mobile US Inc.', 'sector': 'Communication Services', 'index': 'S&P 500'},
+            {'ticker': 'CHTR', 'name': 'Charter Communications Inc.', 'sector': 'Communication Services', 'index': 'S&P 500'},
+            {'ticker': 'MU', 'name': 'Micron Technology Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'PANW', 'name': 'Palo Alto Networks Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'ORCL', 'name': 'Oracle Corporation', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'INTU', 'name': 'Intuit Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'CSCO', 'name': 'Cisco Systems Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'CME', 'name': 'CME Group Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'BLK', 'name': 'BlackRock Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'SYK', 'name': 'Stryker Corporation', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'AMAT', 'name': 'Applied Materials Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'VRTX', 'name': 'Vertex Pharmaceuticals Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'TGT', 'name': 'Target Corporation', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'SCHW', 'name': 'Charles Schwab Corporation', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'MO', 'name': 'Altria Group Inc.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'PLD', 'name': 'Prologis Inc.', 'sector': 'Real Estate', 'index': 'S&P 500'},
+            {'ticker': 'DUK', 'name': 'Duke Energy Corporation', 'sector': 'Utilities', 'index': 'S&P 500'},
+            {'ticker': 'SO', 'name': 'Southern Company', 'sector': 'Utilities', 'index': 'S&P 500'},
+            {'ticker': 'AON', 'name': 'Aon plc', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'ITW', 'name': 'Illinois Tool Works Inc.', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'MMC', 'name': 'Marsh & McLennan Companies Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'ETN', 'name': 'Eaton Corporation plc', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'TJX', 'name': 'TJX Companies Inc.', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'CI', 'name': 'Cigna Corporation', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'USB', 'name': 'U.S. Bancorp', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'PGR', 'name': 'Progressive Corporation', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'TRV', 'name': 'Travelers Companies Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'ZTS', 'name': 'Zoetis Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'AIG', 'name': 'American International Group Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'FISV', 'name': 'Fiserv Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'ICE', 'name': 'Intercontinental Exchange Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'EQIX', 'name': 'Equinix Inc.', 'sector': 'Real Estate', 'index': 'S&P 500'},
+            {'ticker': 'COF', 'name': 'Capital One Financial Corporation', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'APD', 'name': 'Air Products and Chemicals Inc.', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'NOC', 'name': 'Northrop Grumman Corporation', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'CTAS', 'name': 'Cintas Corporation', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'HUM', 'name': 'Humana Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'MCD', 'name': 'McDonald\'s Corporation', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'NSC', 'name': 'Norfolk Southern Corporation', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'WM', 'name': 'Waste Management Inc.', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'ANTM', 'name': 'Anthem Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'FDX', 'name': 'FedEx Corporation', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'LMT', 'name': 'Lockheed Martin Corporation', 'sector': 'Industrials', 'index': 'S&P 500'},
+            {'ticker': 'COP', 'name': 'ConocoPhillips', 'sector': 'Energy', 'index': 'S&P 500'},
+            {'ticker': 'EOG', 'name': 'EOG Resources Inc.', 'sector': 'Energy', 'index': 'S&P 500'},
+            {'ticker': 'SLB', 'name': 'Schlumberger Limited', 'sector': 'Energy', 'index': 'S&P 500'},
+            {'ticker': 'CVX', 'name': 'Chevron Corporation', 'sector': 'Energy', 'index': 'S&P 500'},
+            {'ticker': 'XOM', 'name': 'Exxon Mobil Corporation', 'sector': 'Energy', 'index': 'S&P 500'},
+            {'ticker': 'DOW', 'name': 'Dow Inc.', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'DD', 'name': 'DuPont de Nemours Inc.', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'LIN', 'name': 'Linde plc', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'NEM', 'name': 'Newmont Corporation', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'FCX', 'name': 'Freeport-McMoRan Inc.', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'BLL', 'name': 'Ball Corporation', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'ECL', 'name': 'Ecolab Inc.', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'APTV', 'name': 'Aptiv plc', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'ALB', 'name': 'Albemarle Corporation', 'sector': 'Materials', 'index': 'S&P 500'},
+            {'ticker': 'BEN', 'name': 'Franklin Resources Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'CHD', 'name': 'Church & Dwight Co. Inc.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+            {'ticker': 'DG', 'name': 'Dollar General Corporation', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'INTC', 'name': 'Intel Corporation', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'VZ', 'name': 'Verizon Communications Inc.', 'sector': 'Communication Services', 'index': 'S&P 500'},
+            {'ticker': 'ABBV', 'name': 'AbbVie Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'CSCO', 'name': 'Cisco Systems Inc.', 'sector': 'Technology', 'index': 'S&P 500'},
+            {'ticker': 'YUM', 'name': 'Yum! Brands Inc.', 'sector': 'Consumer Discretionary', 'index': 'S&P 500'},
+            {'ticker': 'MUR', 'name': 'Murphy Oil Corporation', 'sector': 'Energy', 'index': 'S&P 500'},
+            {'ticker': 'DBA', 'name': 'Invesco DB Agriculture Fund', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'ARCP', 'name': 'American Realty Capital Properties Inc.', 'sector': 'Real Estate', 'index': 'S&P 500'},
+            {'ticker': 'CG', 'name': 'Carlyle Group Inc.', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'PBYI', 'name': 'Puma Biotechnology Inc.', 'sector': 'Health Care', 'index': 'S&P 500'},
+            {'ticker': 'SLV', 'name': 'iShares Silver Trust', 'sector': 'Financials', 'index': 'S&P 500'},
+            {'ticker': 'HLF', 'name': 'Herbalife Nutrition Ltd.', 'sector': 'Consumer Staples', 'index': 'S&P 500'},
+        ]
 
 
 def fetch_nasdaq100_tickers() -> List[Dict[str, str]]:
@@ -277,6 +415,7 @@ def fetch_nasdaq100_tickers() -> List[Dict[str, str]]:
         
     except Exception as e:
         logger.error(f"Error fetching NASDAQ-100 tickers: {e}")
+        # Return empty list since S&P 500 fallback will cover most major stocks
         return []
 
 
@@ -306,7 +445,56 @@ def fetch_dow_jones_tickers() -> List[Dict[str, str]]:
         
     except Exception as e:
         logger.error(f"Error fetching Dow Jones tickers: {e}")
+        # Return empty list since S&P 500 fallback will cover most major stocks
         return []
+
+
+def fetch_tsx_tickers() -> List[Dict[str, str]]:
+    """Fetch TSX (Toronto Stock Exchange) ticker list from Wikipedia."""
+    try:
+        logger.info("Fetching TSX tickers from Wikipedia...")
+        url = "https://en.wikipedia.org/wiki/List_of_TSX_companies"
+        
+        tables = pd.read_html(url)
+        tsx_table = tables[0]  # First table contains the TSX list
+        
+        tickers = []
+        for _, row in tsx_table.iterrows():
+            ticker = str(row['Symbol']).replace('.', '-')  # Yahoo Finance format
+            name = str(row['Company'])
+            sector = str(row.get('Sector', 'Unknown'))
+            
+            tickers.append({
+                'ticker': ticker,
+                'name': name,
+                'sector': sector,
+                'index': 'TSX'
+            })
+        
+        logger.info(f"Fetched {len(tickers)} TSX tickers")
+        return tickers
+        
+    except Exception as e:
+        logger.error(f"Error fetching TSX tickers: {e}")
+        # Fallback to major Canadian stocks
+        logger.info("Using fallback list of major TSX stocks")
+        return [
+            {'ticker': 'RY.TO', 'name': 'Royal Bank of Canada', 'sector': 'Financials', 'index': 'TSX'},
+            {'ticker': 'TD.TO', 'name': 'Toronto-Dominion Bank', 'sector': 'Financials', 'index': 'TSX'},
+            {'ticker': 'SHOP.TO', 'name': 'Shopify Inc.', 'sector': 'Technology', 'index': 'TSX'},
+            {'ticker': 'CNR.TO', 'name': 'Canadian National Railway', 'sector': 'Industrials', 'index': 'TSX'},
+            {'ticker': 'CP.TO', 'name': 'Canadian Pacific Railway', 'sector': 'Industrials', 'index': 'TSX'},
+            {'ticker': 'BCE.TO', 'name': 'BCE Inc.', 'sector': 'Communication Services', 'index': 'TSX'},
+            {'ticker': 'TRI.TO', 'name': 'Thomson Reuters Corporation', 'sector': 'Technology', 'index': 'TSX'},
+            {'ticker': 'ENB.TO', 'name': 'Enbridge Inc.', 'sector': 'Energy', 'index': 'TSX'},
+            {'ticker': 'SU.TO', 'name': 'Suncor Energy Inc.', 'sector': 'Energy', 'index': 'TSX'},
+            {'ticker': 'ABX.TO', 'name': 'Barrick Gold Corporation', 'sector': 'Materials', 'index': 'TSX'},
+            {'ticker': 'GOLD.TO', 'name': 'Barrick Gold Corporation', 'sector': 'Materials', 'index': 'TSX'},
+            {'ticker': 'WCN.TO', 'name': 'Waste Connections Inc.', 'sector': 'Industrials', 'index': 'TSX'},
+            {'ticker': 'ATD.TO', 'name': 'Alimentation Couche-Tard Inc.', 'sector': 'Consumer Staples', 'index': 'TSX'},
+            {'ticker': 'L.TO', 'name': 'Loblaw Companies Limited', 'sector': 'Consumer Staples', 'index': 'TSX'},
+            {'ticker': 'MRU.TO', 'name': 'Metro Inc.', 'sector': 'Consumer Staples', 'index': 'TSX'},
+        ]
 
 
 # ============================================================================
@@ -319,33 +507,64 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
     
     # Create reference data
     stock_asset_type = await get_or_create_asset_type(session, "STK", "Common Stock")
+    bond_asset_type = await get_or_create_asset_type(session, "BND", "Bond")
+    etf_asset_type = await get_or_create_asset_type(session, "ETF", "Exchange Traded Fund")
+    preferred_asset_type = await get_or_create_asset_type(session, "PFD", "Preferred Stock")
+    mutual_fund_asset_type = await get_or_create_asset_type(session, "MF", "Mutual Fund")
+    
     nyse_exchange = await get_or_create_exchange(session, "NYSE", "New York Stock Exchange")
     nasdaq_exchange = await get_or_create_exchange(session, "NASDAQ", "NASDAQ Stock Market")
+    tsx_exchange = await get_or_create_exchange(session, "TSX", "Toronto Stock Exchange", "Canada")
     
     # Common sectors
     tech_sector = await get_or_create_sector(session, "Technology", "45")
     finance_sector = await get_or_create_sector(session, "Financials", "40")
     healthcare_sector = await get_or_create_sector(session, "Health Care", "35")
     
+    # Detailed sector mapping for major index sectors
+    consumer_discretionary_sector = await get_or_create_sector(session, "Consumer Discretionary", "25")
+    consumer_staples_sector = await get_or_create_sector(session, "Consumer Staples", "30")
+    communication_services_sector = await get_or_create_sector(session, "Communication Services", "50")
+    industrials_sector = await get_or_create_sector(session, "Industrials", "20")
+    energy_sector = await get_or_create_sector(session, "Energy", "10")
+    utilities_sector = await get_or_create_sector(session, "Utilities", "55")
+    real_estate_sector = await get_or_create_sector(session, "Real Estate", "60")
+    materials_sector = await get_or_create_sector(session, "Materials", "15")
+
     sector_map = {
         'Technology': tech_sector.id,
+        'Information Technology': tech_sector.id,
         'Financials': finance_sector.id,
+        'Financial Services': finance_sector.id,
         'Health Care': healthcare_sector.id,
-        'Consumer Discretionary': tech_sector.id,  # Simplified mapping
-        'Communication Services': tech_sector.id,
-        'Industrials': tech_sector.id,
-        'Consumer Staples': finance_sector.id,
-        'Energy': finance_sector.id,
-        'Utilities': finance_sector.id,
-        'Real Estate': finance_sector.id,
-        'Materials': finance_sector.id,
+        'Healthcare': healthcare_sector.id,
+        'Consumer Discretionary': consumer_discretionary_sector.id,
+        'Consumer Staples': consumer_staples_sector.id,
+        'Communication Services': communication_services_sector.id,
+        'Industrials': industrials_sector.id,
+        'Energy': energy_sector.id,
+        'Utilities': utilities_sector.id,
+        'Real Estate': real_estate_sector.id,
+        'Materials': materials_sector.id,
+        # Add more mappings as needed for completeness
     }
     
     # Fetch all ticker lists
     all_tickers = []
-    all_tickers.extend(fetch_sp500_tickers())
-    all_tickers.extend(fetch_nasdaq100_tickers())
-    all_tickers.extend(fetch_dow_jones_tickers())
+    sp500 = fetch_sp500_tickers()
+    nasdaq = fetch_nasdaq100_tickers()
+    dow = fetch_dow_jones_tickers()
+    tsx = fetch_tsx_tickers()
+    
+    # If all are empty, forcibly use the fallback from fetch_sp500_tickers
+    if not sp500 and not nasdaq and not dow and not tsx:
+        logger.info("All ticker fetches failed, using fallback S&P 500 list only.")
+        all_tickers = fetch_sp500_tickers()
+    else:
+        all_tickers.extend(sp500)
+        all_tickers.extend(nasdaq)
+        all_tickers.extend(dow)
+        all_tickers.extend(tsx)
     
     # Remove duplicates
     unique_tickers = {}
@@ -361,8 +580,13 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
     
     for ticker, info in unique_tickers.items():
         try:
-            # Determine exchange (simplified logic)
-            exchange_id = nasdaq_exchange.id if any(x in info['index'] for x in ['NASDAQ', 'Tech']) else nyse_exchange.id
+            # Determine exchange (enhanced logic)
+            if any(x in info['index'] for x in ['NASDAQ', 'Tech']):
+                exchange_id = nasdaq_exchange.id
+            elif any(x in info['index'] for x in ['TSX']):
+                exchange_id = tsx_exchange.id
+            else:
+                exchange_id = nyse_exchange.id
             
             # Get sector ID
             sector_id = sector_map.get(info.get('sector'), tech_sector.id)

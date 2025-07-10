@@ -242,7 +242,7 @@ async def sync_members_from_api(
     background_tasks: BackgroundTasks,
     action: str = Query("sync-all", description="Sync action (sync-all, sync-state, enrich-existing)"),
     state: Optional[str] = Query(None, description="State code for sync-state action"),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin()),
     session: AsyncSession = Depends(get_db_session),
 ) -> JSONResponse:
     """
@@ -284,7 +284,7 @@ async def sync_members_from_api(
 async def sync_specific_member(
     background_tasks: BackgroundTasks,
     bioguide_id: str = Path(..., description="Bioguide ID of member to sync"),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin()),
     session: AsyncSession = Depends(get_db_session),
 ) -> JSONResponse:
     """
@@ -325,7 +325,7 @@ async def sync_specific_member(
 @router.post("/comprehensive-ingestion")
 async def trigger_comprehensive_ingestion(
     background_tasks: BackgroundTasks,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin()),
 ) -> JSONResponse:
     """
     Trigger comprehensive data ingestion workflow.
@@ -375,7 +375,7 @@ async def trigger_comprehensive_ingestion(
 @router.post("/health-check")
 async def health_check_apis(
     background_tasks: BackgroundTasks,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin()),
 ) -> JSONResponse:
     """
     Run health checks on external APIs.

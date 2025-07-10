@@ -257,7 +257,7 @@ def require_permission(permission: str):
 def require_admin():
     """Decorator to require admin privileges."""
     def decorator(current_user: User = Depends(get_current_active_user)):
-        if not current_user.is_admin:
+        if not current_user.is_admin or not current_user.is_super_admin:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Admin privileges required"

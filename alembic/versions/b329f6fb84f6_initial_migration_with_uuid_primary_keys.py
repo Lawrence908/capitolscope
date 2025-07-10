@@ -1,8 +1,8 @@
-"""Initial migration - create all tables
+"""Initial migration with UUID primary keys
 
-Revision ID: d66bb0f18e50
+Revision ID: b329f6fb84f6
 Revises: 
-Create Date: 2025-07-08 22:04:27.457212
+Create Date: 2025-07-10 01:30:34.519203
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'd66bb0f18e50'
+revision = 'b329f6fb84f6'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('category', sa.String(length=50), nullable=True),
     sa.Column('risk_level', sa.Integer(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
@@ -37,9 +37,10 @@ def upgrade() -> None:
     sa.Column('first_name', sa.String(length=100), nullable=False),
     sa.Column('last_name', sa.String(length=100), nullable=False),
     sa.Column('full_name', sa.String(length=200), nullable=False),
+    sa.Column('prefix', sa.String(length=10), nullable=True),
     sa.Column('party', sa.String(length=1), nullable=True),
-    sa.Column('chamber', sa.String(length=6), nullable=False),
-    sa.Column('state', sa.String(length=2), nullable=False),
+    sa.Column('chamber', sa.String(length=6), nullable=True),
+    sa.Column('state', sa.String(length=2), nullable=True),
     sa.Column('district', sa.String(length=10), nullable=True),
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('phone', sa.String(length=20), nullable=True),
@@ -68,7 +69,7 @@ def upgrade() -> None:
     sa.Column('govtrack_id', sa.String(length=20), nullable=True),
     sa.Column('votesmart_id', sa.String(length=20), nullable=True),
     sa.Column('fec_id', sa.String(length=20), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
@@ -90,6 +91,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_congress_members_full_name'), ['full_name'], unique=False)
         batch_op.create_index(batch_op.f('ix_congress_members_last_name'), ['last_name'], unique=False)
         batch_op.create_index(batch_op.f('ix_congress_members_party'), ['party'], unique=False)
+        batch_op.create_index(batch_op.f('ix_congress_members_prefix'), ['prefix'], unique=False)
         batch_op.create_index(batch_op.f('ix_congress_members_state'), ['state'], unique=False)
 
     op.create_table('exchanges',
@@ -99,7 +101,7 @@ def upgrade() -> None:
     sa.Column('timezone', sa.String(length=50), nullable=False),
     sa.Column('trading_hours', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('market_cap_rank', sa.Integer(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
@@ -111,10 +113,10 @@ def upgrade() -> None:
     op.create_table('sectors',
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('gics_code', sa.String(length=10), nullable=True),
-    sa.Column('parent_sector_id', sa.Integer(), nullable=True),
+    sa.Column('parent_sector_id', sa.UUID(), nullable=True),
     sa.Column('market_sensitivity', sa.Numeric(precision=5, scale=4), nullable=True),
     sa.Column('volatility_score', sa.Numeric(precision=5, scale=4), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
@@ -132,9 +134,10 @@ def upgrade() -> None:
     sa.Column('last_name', sa.String(length=100), nullable=True),
     sa.Column('full_name', sa.String(length=200), nullable=True),
     sa.Column('password_hash', sa.String(length=255), nullable=True),
-    sa.Column('auth_provider', sa.String(length=20), nullable=False),
+    sa.Column('auth_provider', sa.Enum('email', 'google', 'github', 'twitter', name='authprovider'), nullable=False),
     sa.Column('provider_id', sa.String(length=255), nullable=True),
-    sa.Column('status', sa.String(length=30), nullable=False),
+    sa.Column('status', sa.Enum('active', 'inactive', 'suspended', 'pending_verification', name='userstatus'), nullable=False),
+    sa.Column('role', sa.Enum('user', 'moderator', 'admin', 'super_admin', name='userrole'), nullable=False),
     sa.Column('is_verified', sa.Boolean(), nullable=False),
     sa.Column('email_verified_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('last_login_at', sa.DateTime(timezone=True), nullable=True),
@@ -155,7 +158,7 @@ def upgrade() -> None:
     sa.Column('last_active_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('beta_features_enabled', sa.Boolean(), nullable=False),
     sa.Column('marketing_emails_enabled', sa.Boolean(), nullable=False),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('is_deleted', sa.Boolean(), nullable=False),
@@ -163,55 +166,58 @@ def upgrade() -> None:
     sa.Column('created_by', sa.String(length=255), nullable=True),
     sa.Column('updated_by', sa.String(length=255), nullable=True),
     sa.CheckConstraint("auth_provider IN ('email', 'google', 'github', 'twitter')", name='check_auth_provider'),
+    sa.CheckConstraint("role IN ('user', 'moderator', 'admin', 'super_admin')", name='check_user_role'),
     sa.CheckConstraint("status IN ('active', 'inactive', 'suspended', 'pending_verification')", name='check_user_status'),
     sa.CheckConstraint("subscription_tier IN ('free', 'pro', 'premium', 'enterprise')", name='check_subscription_tier'),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('users', schema=None) as batch_op:
         batch_op.create_index('idx_user_email_provider', ['email', 'auth_provider'], unique=False)
+        batch_op.create_index('idx_user_role', ['role'], unique=False)
         batch_op.create_index('idx_user_status_verified', ['status', 'is_verified'], unique=False)
         batch_op.create_index('idx_user_subscription', ['subscription_tier', 'subscription_status'], unique=False)
         batch_op.create_index(batch_op.f('ix_users_email'), ['email'], unique=True)
         batch_op.create_index(batch_op.f('ix_users_stripe_customer_id'), ['stripe_customer_id'], unique=True)
         batch_op.create_index(batch_op.f('ix_users_username'), ['username'], unique=True)
 
-    op.create_table('portfolio_performance',
-    sa.Column('member_id', sa.Integer(), nullable=False),
+    op.create_table('member_portfolio_performance',
+    sa.Column('member_id', sa.UUID(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('total_value', sa.BigInteger(), nullable=False),
-    sa.Column('total_cost_basis', sa.BigInteger(), nullable=False),
-    sa.Column('unrealized_gain_loss', sa.BigInteger(), nullable=False),
-    sa.Column('realized_gain_loss', sa.BigInteger(), nullable=False),
-    sa.Column('daily_return', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('daily_gain_loss', sa.BigInteger(), nullable=True),
-    sa.Column('benchmark_return', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('alpha', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('beta', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('volatility', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('sharpe_ratio', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('max_drawdown', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('position_count', sa.Integer(), nullable=True),
-    sa.Column('sector_allocation', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
-    sa.Column('top_holdings', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('total_gain_loss', sa.BigInteger(), nullable=True),
+    sa.Column('total_gain_loss_percent', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('daily_return', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('weekly_return', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('monthly_return', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('ytd_return', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('volatility', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('beta', sa.Numeric(precision=6, scale=3), nullable=True),
+    sa.Column('sharpe_ratio', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('max_drawdown', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('sp500_return', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('alpha', sa.Numeric(precision=8, scale=4), nullable=True),
+    sa.Column('number_of_positions', sa.Integer(), nullable=True),
+    sa.Column('largest_position_percent', sa.Numeric(precision=5, scale=2), nullable=True),
+    sa.Column('sector_concentration', sa.Numeric(precision=5, scale=2), nullable=True),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['member_id'], ['congress_members.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('member_id', 'date', name='unique_member_date')
+    sa.UniqueConstraint('member_id', 'date', name='unique_member_performance_date')
     )
-    with op.batch_alter_table('portfolio_performance', schema=None) as batch_op:
-        batch_op.create_index('idx_portfolio_performance_date', ['date'], unique=False)
-        batch_op.create_index('idx_portfolio_performance_member_date', ['member_id', 'date'], unique=False)
-        batch_op.create_index(batch_op.f('ix_portfolio_performance_date'), ['date'], unique=False)
-        batch_op.create_index(batch_op.f('ix_portfolio_performance_member_id'), ['member_id'], unique=False)
+    with op.batch_alter_table('member_portfolio_performance', schema=None) as batch_op:
+        batch_op.create_index('idx_member_portfolio_performance_date', ['date'], unique=False)
+        batch_op.create_index('idx_member_portfolio_performance_member_date', ['member_id', 'date'], unique=False)
+        batch_op.create_index(batch_op.f('ix_member_portfolio_performance_date'), ['date'], unique=False)
+        batch_op.create_index(batch_op.f('ix_member_portfolio_performance_member_id'), ['member_id'], unique=False)
 
     op.create_table('securities',
     sa.Column('ticker', sa.String(length=20), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=False),
-    sa.Column('asset_type_id', sa.Integer(), nullable=True),
-    sa.Column('sector_id', sa.Integer(), nullable=True),
-    sa.Column('exchange_id', sa.Integer(), nullable=True),
+    sa.Column('asset_type_id', sa.UUID(), nullable=True),
+    sa.Column('sector_id', sa.UUID(), nullable=True),
+    sa.Column('exchange_id', sa.UUID(), nullable=True),
     sa.Column('currency', sa.String(length=3), nullable=True),
     sa.Column('market_cap', sa.BigInteger(), nullable=True),
     sa.Column('shares_outstanding', sa.BigInteger(), nullable=True),
@@ -225,11 +231,11 @@ def upgrade() -> None:
     sa.Column('volume_avg_30d', sa.BigInteger(), nullable=True),
     sa.Column('esg_score', sa.Numeric(precision=5, scale=2), nullable=True),
     sa.Column('controversy_score', sa.Numeric(precision=5, scale=2), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('extra_data', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['asset_type_id'], ['asset_types.id'], ),
     sa.ForeignKeyConstraint(['exchange_id'], ['exchanges.id'], ),
     sa.ForeignKeyConstraint(['sector_id'], ['sectors.id'], ),
@@ -249,7 +255,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_securities_ticker'), ['ticker'], unique=False)
 
     op.create_table('user_alerts',
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('alert_type', sa.String(length=30), nullable=False),
@@ -264,7 +270,7 @@ def upgrade() -> None:
     sa.Column('frequency_limit', sa.String(length=20), nullable=True),
     sa.Column('last_triggered', sa.DateTime(timezone=True), nullable=True),
     sa.Column('trigger_count', sa.Integer(), nullable=False),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.CheckConstraint("alert_type IN ('new_trade', 'large_trade', 'price_movement', 'volume_spike', 'portfolio_change', 'member_activity', 'market_event')", name='check_alert_type'),
@@ -279,7 +285,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_user_alerts_user_id'), ['user_id'], unique=False)
 
     op.create_table('user_api_keys',
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('key_id', sa.UUID(), nullable=False),
     sa.Column('key_hash', sa.String(length=255), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
@@ -291,7 +297,7 @@ def upgrade() -> None:
     sa.Column('last_used_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('usage_count', sa.BigInteger(), nullable=False),
     sa.Column('expires_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -304,11 +310,11 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_user_api_keys_user_id'), ['user_id'], unique=False)
 
     op.create_table('user_notifications',
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('title', sa.String(length=200), nullable=False),
     sa.Column('message', sa.Text(), nullable=False),
-    sa.Column('notification_type', sa.String(length=30), nullable=False),
-    sa.Column('channel', sa.String(length=10), nullable=False),
+    sa.Column('notification_type', sa.Enum('trade_alert', 'portfolio_update', 'news_digest', 'system_announcement', 'subscription_update', name='notificationtype'), nullable=False),
+    sa.Column('channel', sa.Enum('email', 'sms', 'push', 'in_app', name='notificationchannel'), nullable=False),
     sa.Column('priority', sa.String(length=10), nullable=True),
     sa.Column('is_read', sa.Boolean(), nullable=False),
     sa.Column('read_at', sa.DateTime(timezone=True), nullable=True),
@@ -318,7 +324,7 @@ def upgrade() -> None:
     sa.Column('related_entity_id', sa.Integer(), nullable=True),
     sa.Column('extra_data', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('expires_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.CheckConstraint("channel IN ('email', 'sms', 'push', 'in_app')", name='check_notification_channel'),
@@ -335,7 +341,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_user_notifications_user_id'), ['user_id'], unique=False)
 
     op.create_table('user_preferences',
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('theme', sa.String(length=20), nullable=True),
     sa.Column('language', sa.String(length=5), nullable=True),
     sa.Column('timezone', sa.String(length=50), nullable=True),
@@ -351,7 +357,7 @@ def upgrade() -> None:
     sa.Column('public_watchlists', sa.Boolean(), nullable=True),
     sa.Column('share_analytics', sa.Boolean(), nullable=True),
     sa.Column('custom_settings', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -363,7 +369,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_user_preferences_user_id'), ['user_id'], unique=False)
 
     op.create_table('user_sessions',
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('session_id', sa.String(length=255), nullable=False),
     sa.Column('ip_address', sa.String(length=45), nullable=True),
     sa.Column('user_agent', sa.Text(), nullable=True),
@@ -377,7 +383,7 @@ def upgrade() -> None:
     sa.Column('expires_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('login_method', sa.String(length=20), nullable=True),
     sa.Column('is_suspicious', sa.Boolean(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.CheckConstraint("device_type IN ('desktop', 'mobile', 'tablet', 'api', 'unknown')", name='check_device_type'),
@@ -393,7 +399,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_user_sessions_user_id'), ['user_id'], unique=False)
 
     op.create_table('user_watchlists',
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('watchlist_type', sa.String(length=20), nullable=False),
@@ -404,7 +410,7 @@ def upgrade() -> None:
     sa.Column('watched_members', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('item_count', sa.Integer(), nullable=True),
     sa.Column('last_updated', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.CheckConstraint("watchlist_type IN ('securities', 'members', 'mixed')", name='check_watchlist_type'),
@@ -417,8 +423,8 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_user_watchlists_user_id'), ['user_id'], unique=False)
 
     op.create_table('congressional_trades',
-    sa.Column('member_id', sa.Integer(), nullable=False),
-    sa.Column('security_id', sa.Integer(), nullable=True),
+    sa.Column('member_id', sa.UUID(), nullable=False),
+    sa.Column('security_id', sa.UUID(), nullable=True),
     sa.Column('doc_id', sa.String(length=50), nullable=False),
     sa.Column('document_url', sa.String(length=500), nullable=True),
     sa.Column('owner', sa.String(length=10), nullable=True),
@@ -445,7 +451,7 @@ def upgrade() -> None:
     sa.Column('price_change_1d', sa.Numeric(precision=8, scale=6), nullable=True),
     sa.Column('price_change_7d', sa.Numeric(precision=8, scale=6), nullable=True),
     sa.Column('price_change_30d', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('created_by', sa.String(length=255), nullable=True),
@@ -471,7 +477,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_congressional_trades_transaction_type'), ['transaction_type'], unique=False)
 
     op.create_table('corporate_actions',
-    sa.Column('security_id', sa.Integer(), nullable=False),
+    sa.Column('security_id', sa.UUID(), nullable=False),
     sa.Column('action_type', sa.String(length=20), nullable=False),
     sa.Column('ex_date', sa.Date(), nullable=False),
     sa.Column('record_date', sa.Date(), nullable=True),
@@ -481,7 +487,7 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('price_impact_1d', sa.Numeric(precision=8, scale=6), nullable=True),
     sa.Column('volume_impact_1d', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.CheckConstraint("action_type IN ('split', 'dividend', 'spinoff', 'merger', 'rights_offering')", name='check_action_type'),
@@ -500,8 +506,8 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_corporate_actions_security_id'), ['security_id'], unique=False)
 
     op.create_table('daily_prices',
-    sa.Column('security_id', sa.Integer(), nullable=False),
-    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('security_id', sa.UUID(), nullable=False),
+    sa.Column('price_date', sa.Date(), nullable=False),
     sa.Column('open_price', sa.Integer(), nullable=False),
     sa.Column('high_price', sa.Integer(), nullable=False),
     sa.Column('low_price', sa.Integer(), nullable=False),
@@ -512,7 +518,7 @@ def upgrade() -> None:
     sa.Column('macd', sa.Numeric(precision=10, scale=6), nullable=True),
     sa.Column('bollinger_upper', sa.Integer(), nullable=True),
     sa.Column('bollinger_lower', sa.Integer(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.CheckConstraint('close_price >= 0', name='check_close_price_positive'),
@@ -523,17 +529,17 @@ def upgrade() -> None:
     sa.CheckConstraint('volume >= 0', name='check_volume_positive'),
     sa.ForeignKeyConstraint(['security_id'], ['securities.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('security_id', 'date', name='unique_security_date')
+    sa.UniqueConstraint('security_id', 'price_date', name='unique_security_date')
     )
     with op.batch_alter_table('daily_prices', schema=None) as batch_op:
-        batch_op.create_index('idx_daily_price_date', ['date'], unique=False)
-        batch_op.create_index('idx_daily_price_security_date', ['security_id', 'date'], unique=False)
-        batch_op.create_index(batch_op.f('ix_daily_prices_date'), ['date'], unique=False)
+        batch_op.create_index('idx_daily_price_date', ['price_date'], unique=False)
+        batch_op.create_index('idx_daily_price_security_date', ['security_id', 'price_date'], unique=False)
+        batch_op.create_index(batch_op.f('ix_daily_prices_price_date'), ['price_date'], unique=False)
         batch_op.create_index(batch_op.f('ix_daily_prices_security_id'), ['security_id'], unique=False)
 
     op.create_table('member_portfolios',
-    sa.Column('member_id', sa.Integer(), nullable=False),
-    sa.Column('security_id', sa.Integer(), nullable=False),
+    sa.Column('member_id', sa.UUID(), nullable=False),
+    sa.Column('security_id', sa.UUID(), nullable=False),
     sa.Column('shares', sa.Numeric(precision=15, scale=6), nullable=False),
     sa.Column('cost_basis', sa.BigInteger(), nullable=False),
     sa.Column('avg_cost_per_share', sa.BigInteger(), nullable=True),
@@ -545,7 +551,7 @@ def upgrade() -> None:
     sa.Column('realized_gain_loss', sa.BigInteger(), nullable=True),
     sa.Column('position_size_percent', sa.Numeric(precision=5, scale=2), nullable=True),
     sa.Column('holding_period_days', sa.Integer(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['member_id'], ['congress_members.id'], ),
@@ -563,7 +569,7 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_member_portfolios_security_id'), ['security_id'], unique=False)
 
     op.create_table('price_history_aggregates',
-    sa.Column('security_id', sa.Integer(), nullable=False),
+    sa.Column('security_id', sa.UUID(), nullable=False),
     sa.Column('period_type', sa.String(length=10), nullable=False),
     sa.Column('period_start', sa.Date(), nullable=False),
     sa.Column('period_end', sa.Date(), nullable=False),
@@ -574,7 +580,7 @@ def upgrade() -> None:
     sa.Column('volume', sa.BigInteger(), nullable=False),
     sa.Column('total_return', sa.Numeric(precision=10, scale=6), nullable=True),
     sa.Column('volatility', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.CheckConstraint("period_type IN ('weekly', 'monthly', 'quarterly', 'yearly')", name='check_period_type'),
@@ -587,12 +593,12 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_price_history_aggregates_security_id'), ['security_id'], unique=False)
 
     op.create_table('security_watchlists',
-    sa.Column('user_id', sa.String(length=36), nullable=False),
-    sa.Column('security_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
+    sa.Column('security_id', sa.UUID(), nullable=False),
     sa.Column('notes', sa.Text(), nullable=True),
     sa.Column('alert_price_target', sa.Integer(), nullable=True),
     sa.Column('alert_enabled', sa.Boolean(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['security_id'], ['securities.id'], ),
@@ -605,11 +611,11 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f('ix_security_watchlists_user_id'), ['user_id'], unique=False)
 
     op.create_table('trade_discussions',
-    sa.Column('trade_id', sa.Integer(), nullable=False),
+    sa.Column('trade_id', sa.UUID(), nullable=False),
     sa.Column('topic_id', sa.Integer(), nullable=False),
     sa.Column('post_count', sa.Integer(), nullable=True),
     sa.Column('last_post_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['trade_id'], ['congressional_trades.id'], ),
@@ -655,7 +661,7 @@ def downgrade() -> None:
     op.drop_table('member_portfolios')
     with op.batch_alter_table('daily_prices', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_daily_prices_security_id'))
-        batch_op.drop_index(batch_op.f('ix_daily_prices_date'))
+        batch_op.drop_index(batch_op.f('ix_daily_prices_price_date'))
         batch_op.drop_index('idx_daily_price_security_date')
         batch_op.drop_index('idx_daily_price_date')
 
@@ -735,19 +741,20 @@ def downgrade() -> None:
         batch_op.drop_index('idx_security_active')
 
     op.drop_table('securities')
-    with op.batch_alter_table('portfolio_performance', schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f('ix_portfolio_performance_member_id'))
-        batch_op.drop_index(batch_op.f('ix_portfolio_performance_date'))
-        batch_op.drop_index('idx_portfolio_performance_member_date')
-        batch_op.drop_index('idx_portfolio_performance_date')
+    with op.batch_alter_table('member_portfolio_performance', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_member_portfolio_performance_member_id'))
+        batch_op.drop_index(batch_op.f('ix_member_portfolio_performance_date'))
+        batch_op.drop_index('idx_member_portfolio_performance_member_date')
+        batch_op.drop_index('idx_member_portfolio_performance_date')
 
-    op.drop_table('portfolio_performance')
+    op.drop_table('member_portfolio_performance')
     with op.batch_alter_table('users', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_users_username'))
         batch_op.drop_index(batch_op.f('ix_users_stripe_customer_id'))
         batch_op.drop_index(batch_op.f('ix_users_email'))
         batch_op.drop_index('idx_user_subscription')
         batch_op.drop_index('idx_user_status_verified')
+        batch_op.drop_index('idx_user_role')
         batch_op.drop_index('idx_user_email_provider')
 
     op.drop_table('users')
@@ -762,6 +769,7 @@ def downgrade() -> None:
     op.drop_table('exchanges')
     with op.batch_alter_table('congress_members', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_congress_members_state'))
+        batch_op.drop_index(batch_op.f('ix_congress_members_prefix'))
         batch_op.drop_index(batch_op.f('ix_congress_members_party'))
         batch_op.drop_index(batch_op.f('ix_congress_members_last_name'))
         batch_op.drop_index(batch_op.f('ix_congress_members_full_name'))

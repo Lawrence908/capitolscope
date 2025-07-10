@@ -264,6 +264,9 @@ class ImprovedPDFParser:
         # Apply field validation and correction
         record = self._validate_and_fix_field_alignment(record)
         
+        # Apply enhanced amount parsing fixes
+        record = self._fix_amount_parsing_issues(record)
+        
         # Calculate confidence score
         record.confidence_score = self._calculate_confidence_score(record)
         
@@ -1166,123 +1169,252 @@ class ImprovedPDFParser:
         
         return "", -1
 
-class PDFParsingTestSuite:
-    """Comprehensive testing suite for PDF parsing validation"""
-    
-    def __init__(self, parser: ImprovedPDFParser):
-        self.parser = parser
-        self.test_results = []
+    def _extract_and_validate_dates(self, line: str, parts: List[str]) -> Tuple[str, str]:
+        """Extract and validate transaction and notification dates from line"""
+        # Find all date patterns in the line
+        date_patterns = [
+            r'\b(\d{1,2}/\d{1,2}/\d{4})\b',  # MM/DD/YYYY or M/D/YYYY
+            r'\b(\d{2}/\d{2}/\d{4})\b',      # MM/DD/YYYY strict
+            r'\b(\d{1,2}/\d{1}/\d{4})\b',    # MM/D/YYYY or M/D/YYYY
+            r'\b(\d{1}/\d{1,2}/\d{4})\b',    # M/MM/YYYY or M/M/YYYY
+        ]
         
-    def run_validation_tests(self, pdf_files: List[str]) -> Dict[str, any]:
-        """Run comprehensive validation tests on PDF files"""
-        results = {
-            'total_files': len(pdf_files),
-            'successful_parses': 0,
-            'failed_parses': 0,
-            'records_extracted': 0,
-            'low_confidence_records': 0,
-            'validation_errors': 0,
-            'common_errors': {},
-            'confidence_distribution': [],
-            'ticker_accuracy': 0,
-            'date_accuracy': 0,
-            'amount_accuracy': 0
-        }
-        
-        all_records = []
-        
-        for pdf_file in pdf_files:
-            try:
-                doc_id = pdf_file.split('/')[-1].replace('.pdf', '')
-                records = self.parser.parse_pdf_improved(pdf_file, doc_id, "Test")
+        found_dates = []
+        for pattern in date_patterns:
+            matches = re.finditer(pattern, line)
+            for match in matches:
+                date_str = match.group(1)
+                position = match.start()
                 
-                if records:
-                    results['successful_parses'] += 1
-                    results['records_extracted'] += len(records)
-                    all_records.extend(records)
-                    
-                    # Analyze confidence scores
-                    for record in records:
-                        if record.confidence_score < 0.7:
-                            results['low_confidence_records'] += 1
-                        results['confidence_distribution'].append(record.confidence_score)
-                        
-                        # Count validation errors
-                        if record.parsing_notes:
-                            results['validation_errors'] += len(record.parsing_notes)
-                            for note in record.parsing_notes:
-                                error_type = note.split(':')[0]
-                                results['common_errors'][error_type] = results['common_errors'].get(error_type, 0) + 1
-                                
-                else:
-                    results['failed_parses'] += 1
-                    
-            except Exception as e:
-                results['failed_parses'] += 1
-                logging.error(f"Failed to parse {pdf_file}: {e}")
+                # Validate the date format
+                if self._validate_date_format(date_str):
+                    found_dates.append((date_str, position))
         
-        # Calculate accuracy metrics
-        if all_records:
-            results['ticker_accuracy'] = self._calculate_ticker_accuracy(all_records)
-            results['date_accuracy'] = self._calculate_date_accuracy(all_records)
-            results['amount_accuracy'] = self._calculate_amount_accuracy(all_records)
-            
-        return results
-    
-    def _calculate_ticker_accuracy(self, records: List[TradeRecord]) -> float:
-        """Calculate ticker symbol accuracy"""
-        valid_tickers = sum(1 for r in records if r.ticker in self.parser.tickers or r.ticker == "NaN")
-        return valid_tickers / len(records) if records else 0
-    
-    def _calculate_date_accuracy(self, records: List[TradeRecord]) -> float:
-        """Calculate date parsing accuracy"""
-        valid_dates = 0
-        for record in records:
-            try:
-                datetime.strptime(record.transaction_date, "%m/%d/%Y")
-                datetime.strptime(record.notification_date, "%m/%d/%Y")
-                valid_dates += 1
-            except:
-                pass
-        return valid_dates / len(records) if records else 0
-    
-    def _calculate_amount_accuracy(self, records: List[TradeRecord]) -> float:
-        """Calculate amount parsing accuracy"""
-        valid_amounts = sum(1 for r in records if r.amount and ("$" in r.amount or r.amount == "None"))
-        return valid_amounts / len(records) if records else 0
-    
-    def generate_test_report(self, results: Dict[str, any]) -> str:
-        """Generate a comprehensive test report"""
-        report = f"""
-PDF Parsing Validation Report
-=============================
-
-Overall Statistics:
-- Total Files Processed: {results['total_files']}
-- Successful Parses: {results['successful_parses']} ({results['successful_parses']/results['total_files']*100:.1f}%)
-- Failed Parses: {results['failed_parses']} ({results['failed_parses']/results['total_files']*100:.1f}%)
-- Total Records Extracted: {results['records_extracted']}
-- Low Confidence Records: {results['low_confidence_records']} ({results['low_confidence_records']/max(1,results['records_extracted'])*100:.1f}%)
-
-Accuracy Metrics:
-- Ticker Accuracy: {results['ticker_accuracy']:.2%}
-- Date Accuracy: {results['date_accuracy']:.2%}
-- Amount Accuracy: {results['amount_accuracy']:.2%}
-
-Validation Issues:
-- Total Validation Errors: {results['validation_errors']}
-- Most Common Errors:
-"""
+        # Remove duplicates and sort by position
+        found_dates = list(set(found_dates))
+        found_dates.sort(key=lambda x: x[1])
         
-        for error_type, count in sorted(results['common_errors'].items(), key=lambda x: x[1], reverse=True)[:5]:
-            report += f"  - {error_type}: {count} occurrences\n"
+        # Extract transaction and notification dates
+        transaction_date = ""
+        notification_date = ""
+        
+        if len(found_dates) >= 2:
+            # Use the first two dates found
+            transaction_date = found_dates[0][0]
+            notification_date = found_dates[1][0]
+        elif len(found_dates) == 1:
+            # Use the same date for both
+            transaction_date = found_dates[0][0]
+            notification_date = found_dates[0][0]
+        else:
+            # Try to find dates in individual parts
+            for part in parts:
+                if self._validate_date_format(part):
+                    if not transaction_date:
+                        transaction_date = part
+                    elif not notification_date:
+                        notification_date = part
+                    else:
+                        break
             
-        if results['confidence_distribution']:
-            import statistics
-            report += f"\nConfidence Score Distribution:\n"
-            report += f"- Average: {statistics.mean(results['confidence_distribution']):.2f}\n"
-            report += f"- Median: {statistics.median(results['confidence_distribution']):.2f}\n"
-            report += f"- Min: {min(results['confidence_distribution']):.2f}\n"
-            report += f"- Max: {max(results['confidence_distribution']):.2f}\n"
+            # If still missing notification date, use transaction date
+            if transaction_date and not notification_date:
+                notification_date = transaction_date
+        
+        # Validate and correct the extracted dates
+        transaction_date = self._correct_date_format(transaction_date)
+        notification_date = self._correct_date_format(notification_date)
+        
+        return transaction_date, notification_date 
+
+    def _extract_and_validate_amounts(self, line: str, parts: List[str]) -> str:
+        """Extract and validate amount from line with comprehensive pattern matching"""
+        # Define amount patterns in order of preference
+        amount_patterns = [
+            # Range patterns (most specific first)
+            r'\$(\d{1,3}(?:,\d{3})*)\s*-\s*\$(\d{1,3}(?:,\d{3})*)',  # $1,000 - $15,000
+            r'\$(\d{1,3}(?:,\d{3})*)\s*to\s*\$(\d{1,3}(?:,\d{3})*)',  # $1,000 to $15,000
+            r'\$(\d{1,3}(?:,\d{3})*)\s*\-\s*(\d{1,3}(?:,\d{3})*)',   # $1,000 - 15,000
             
-        return report 
+            # Single amount patterns
+            r'\$(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',  # $1,000.00 or $1,000
+            r'(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*dollars?',  # 1,000 dollars
+            
+            # Special cases
+            r'\$(\d+)',  # Simple $1000 format
+            r'(\d+)\s*\$',  # 1000$ format
+            
+            # Partial amount indicators
+            r'over\s*\$(\d{1,3}(?:,\d{3})*)',  # over $1,000
+            r'under\s*\$(\d{1,3}(?:,\d{3})*)',  # under $1,000
+            r'up\s*to\s*\$(\d{1,3}(?:,\d{3})*)',  # up to $1,000
+        ]
+        
+        # Find all potential amounts in the line
+        found_amounts = []
+        
+        for pattern in amount_patterns:
+            matches = re.finditer(pattern, line, re.IGNORECASE)
+            for match in matches:
+                amount_str = match.group(0)
+                position = match.start()
+                
+                # Normalize the amount
+                normalized = self._normalize_amount_string(amount_str)
+                if normalized:
+                    found_amounts.append((normalized, position, amount_str))
+        
+        # If no amounts found in full line, search individual parts
+        if not found_amounts:
+            for part in parts:
+                for pattern in amount_patterns:
+                    match = re.search(pattern, part, re.IGNORECASE)
+                    if match:
+                        amount_str = match.group(0)
+                        normalized = self._normalize_amount_string(amount_str)
+                        if normalized:
+                            found_amounts.append((normalized, 0, amount_str))
+                            break
+        
+        # Select the best amount (prefer ranges, then later positions)
+        if found_amounts:
+            # Sort by preference: ranges first, then by position
+            found_amounts.sort(key=lambda x: (
+                0 if '-' in x[0] else 1,  # Ranges first
+                -x[1]  # Later positions first
+            ))
+            return found_amounts[0][0]
+        
+        # Special handling for common edge cases
+        return self._handle_special_amount_cases(line, parts)
+    
+    def _normalize_amount_string(self, amount_str: str) -> str:
+        """Normalize amount string to standard format"""
+        if not amount_str:
+            return ""
+        
+        # Remove extra whitespace
+        amount_str = amount_str.strip()
+        
+        # Handle range patterns
+        range_match = re.search(r'\$(\d{1,3}(?:,\d{3})*)\s*-\s*\$(\d{1,3}(?:,\d{3})*)', amount_str)
+        if range_match:
+            low_amount = range_match.group(1)
+            high_amount = range_match.group(2)
+            return f"${low_amount} - ${high_amount}"
+        
+        # Handle single amount with dollar sign
+        single_match = re.search(r'\$(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)', amount_str)
+        if single_match:
+            amount = single_match.group(1)
+            # Convert to standard range format based on amount
+            return self._convert_to_standard_range(amount)
+        
+        # Handle amount without dollar sign
+        number_match = re.search(r'(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)', amount_str)
+        if number_match:
+            amount = number_match.group(1)
+            return self._convert_to_standard_range(amount)
+        
+        return ""
+    
+    def _convert_to_standard_range(self, amount_str: str) -> str:
+        """Convert single amount to standard range format"""
+        if not amount_str:
+            return ""
+        
+        # Remove commas and convert to integer for comparison
+        try:
+            amount_num = int(amount_str.replace(',', '').replace('.00', ''))
+            
+            # Define standard ranges
+            if amount_num <= 1000:
+                return "$1 - $1,000"
+            elif amount_num <= 15000:
+                return "$1,001 - $15,000"
+            elif amount_num <= 50000:
+                return "$15,001 - $50,000"
+            elif amount_num <= 100000:
+                return "$50,001 - $100,000"
+            elif amount_num <= 250000:
+                return "$100,001 - $250,000"
+            elif amount_num <= 500000:
+                return "$250,001 - $500,000"
+            elif amount_num <= 1000000:
+                return "$500,001 - $1,000,000"
+            elif amount_num <= 5000000:
+                return "$1,000,001 - $5,000,000"
+            elif amount_num <= 25000000:
+                return "$5,000,001 - $25,000,000"
+            else:
+                return f"${amount_str}+"
+                
+        except ValueError:
+            # If we can't parse it, return as-is with dollar sign
+            return f"${amount_str}"
+    
+    def _handle_special_amount_cases(self, line: str, parts: List[str]) -> str:
+        """Handle special cases for amount extraction"""
+        # Look for "None" or "N/A" indicators
+        if any(indicator in line.upper() for indicator in ['NONE', 'N/A', 'NOT APPLICABLE', 'ZERO']):
+            return "None"
+        
+        # Look for percentage indicators (bonds, etc.)
+        percentage_match = re.search(r'(\d+(?:\.\d+)?)\%', line)
+        if percentage_match:
+            return f"{percentage_match.group(1)}%"
+        
+        # Look for share counts that might be mistaken for amounts
+        share_match = re.search(r'(\d+)\s*shares?', line, re.IGNORECASE)
+        if share_match:
+            # This is likely a share count, not an amount
+            return "Amount not specified"
+        
+        # Look for "partial" indicators
+        if 'partial' in line.lower():
+            return "Partial amount"
+        
+        # If we find any numbers, try to make sense of them
+        numbers = re.findall(r'\d{1,3}(?:,\d{3})*', line)
+        if numbers:
+            # Take the largest number as it's likely the amount
+            largest = max(numbers, key=lambda x: int(x.replace(',', '')))
+            return self._convert_to_standard_range(largest)
+        
+        return ""
+    
+    def _validate_amount_format(self, amount: str) -> bool:
+        """Validate if amount is in proper format"""
+        if not amount:
+            return False
+        
+        # Valid formats
+        valid_patterns = [
+            r'^\$[\d,]+\s*-\s*\$[\d,]+$',  # Range format
+            r'^\$[\d,]+$',  # Single amount
+            r'^None$',  # None
+            r'^\d+(?:\.\d+)?%$',  # Percentage
+            r'^[\d,]+$',  # Number only
+            r'^Partial amount$',  # Partial
+            r'^Amount not specified$',  # Not specified
+        ]
+        
+        return any(re.match(pattern, amount.strip()) for pattern in valid_patterns)
+    
+    def _fix_amount_parsing_issues(self, record: TradeRecord) -> TradeRecord:
+        """Fix common amount parsing issues"""
+        if not record.amount or not self._validate_amount_format(record.amount):
+            # Try to extract amount from asset field
+            if record.asset:
+                extracted_amount = self._extract_and_validate_amounts(record.asset, [record.asset])
+                if extracted_amount and self._validate_amount_format(extracted_amount):
+                    record.amount = extracted_amount
+                    record.parsing_notes.append("Fixed: Amount extracted from asset field")
+                    # Remove amount from asset field
+                    record.asset = re.sub(r'\$[\d,]+(?:\s*-\s*\$[\d,]+)?', '', record.asset).strip()
+        
+        # Clean up amount format
+        if record.amount:
+            record.amount = self._normalize_amount(record.amount)
+        
+        return record 

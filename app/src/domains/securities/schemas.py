@@ -12,8 +12,7 @@ from decimal import Decimal
 from pydantic import Field, field_validator
 
 from domains.base.schemas import (
-    CapitolScopeBaseSchema, IDMixin, TimestampMixin, TechnicalIndicators,
-    validate_ticker_symbol
+    CapitolScopeBaseSchema, UUIDMixin, TimestampMixin, TechnicalIndicators, TransactionType
 )
 from core.logging import get_logger
 
@@ -46,7 +45,7 @@ class AssetTypeUpdate(CapitolScopeBaseSchema):
     risk_level: Optional[int] = Field(None, description="Risk level 1-5", ge=1, le=5)
 
 
-class AssetTypeResponse(AssetTypeBase, IDMixin, TimestampMixin):
+class AssetTypeResponse(AssetTypeBase, UUIDMixin, TimestampMixin):
     """Schema for asset type responses."""
     securities_count: Optional[int] = Field(None, description="Number of securities", ge=0)
 
@@ -78,7 +77,7 @@ class SectorUpdate(CapitolScopeBaseSchema):
     volatility_score: Optional[float] = Field(None, description="Historical volatility score")
 
 
-class SectorResponse(SectorBase, IDMixin, TimestampMixin):
+class SectorResponse(SectorBase, UUIDMixin, TimestampMixin):
     """Schema for sector responses."""
     securities_count: Optional[int] = Field(None, description="Number of securities", ge=0)
     sub_sectors: Optional[List["SectorResponse"]] = Field(None, description="Sub-sectors")
@@ -112,7 +111,7 @@ class ExchangeUpdate(CapitolScopeBaseSchema):
     market_cap_rank: Optional[int] = Field(None, description="Market cap ranking", ge=1)
 
 
-class ExchangeResponse(ExchangeBase, IDMixin, TimestampMixin):
+class ExchangeResponse(ExchangeBase, UUIDMixin, TimestampMixin):
     """Schema for exchange responses."""
     securities_count: Optional[int] = Field(None, description="Number of securities", ge=0)
 
@@ -195,7 +194,7 @@ class SecurityUpdate(CapitolScopeBaseSchema):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class SecurityResponse(SecurityBase, IDMixin, TimestampMixin):
+class SecurityResponse(SecurityBase, UUIDMixin, TimestampMixin):
     """Schema for security responses."""
     # Related object responses (optional includes)
     asset_type: Optional[AssetTypeResponse] = Field(None, description="Asset type details")
@@ -275,7 +274,7 @@ class DailyPriceUpdate(CapitolScopeBaseSchema):
     bollinger_lower: Optional[int] = Field(None, description="Bollinger lower band (cents)")
 
 
-class DailyPriceResponse(DailyPriceBase, IDMixin, TimestampMixin):
+class DailyPriceResponse(DailyPriceBase, UUIDMixin, TimestampMixin):
     """Schema for daily price responses."""
     # Technical indicators (if calculated)
     technical_indicators: Optional[TechnicalIndicators] = Field(None, description="Technical indicators")
@@ -347,7 +346,7 @@ class CorporateActionUpdate(CapitolScopeBaseSchema):
     volume_impact_1d: Optional[float] = Field(None, description="1-day volume impact")
 
 
-class CorporateActionResponse(CorporateActionBase, IDMixin, TimestampMixin):
+class CorporateActionResponse(CorporateActionBase, UUIDMixin, TimestampMixin):
     """Schema for corporate action responses."""
     security: Optional[SecuritySummary] = Field(None, description="Security details")
     
@@ -462,7 +461,7 @@ class SecurityWatchlistUpdate(CapitolScopeBaseSchema):
     alert_enabled: Optional[bool] = Field(None, description="Alert enabled status")
 
 
-class SecurityWatchlistResponse(SecurityWatchlistBase, IDMixin, TimestampMixin):
+class SecurityWatchlistResponse(SecurityWatchlistBase, UUIDMixin, TimestampMixin):
     """Schema for security watchlist responses."""
     user_id: str = Field(..., description="User ID")
     security: Optional[SecuritySummary] = Field(None, description="Security details")

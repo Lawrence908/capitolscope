@@ -29,10 +29,10 @@ class DailyPrice(BaseModel, TimestampMixin):
     __tablename__ = "daily_prices"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Security relationship
-    security_id: Mapped[int] = mapped_column(Integer, ForeignKey("securities.id"), nullable=False)
+    security_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("securities.id"), nullable=False)
     
     # Date and pricing data
     price_date: Mapped[date] = mapped_column(Date, nullable=False)
@@ -94,10 +94,10 @@ class IntradayPrice(BaseModel, TimestampMixin):
     __tablename__ = "intraday_prices"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Security relationship
-    security_id: Mapped[int] = mapped_column(Integer, ForeignKey("securities.id"), nullable=False)
+    security_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("securities.id"), nullable=False)
     
     # Timestamp and pricing
     price_timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
@@ -143,7 +143,7 @@ class MarketIndex(BaseModel, TimestampMixin):
     __tablename__ = "market_indices"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Index identification
     symbol: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
@@ -193,10 +193,10 @@ class IndexHistory(BaseModel, TimestampMixin):
     __tablename__ = "index_history"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Index relationship
-    index_id: Mapped[int] = mapped_column(Integer, ForeignKey("market_indices.id"), nullable=False)
+    index_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("market_indices.id"), nullable=False)
     
     # Date and values
     history_date: Mapped[date] = mapped_column(Date, nullable=False)
@@ -233,7 +233,7 @@ class EconomicIndicator(BaseModel, TimestampMixin):
     __tablename__ = "economic_indicators"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Indicator identification
     indicator_code: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -277,7 +277,7 @@ class DataFeed(BaseModel, TimestampMixin):
     __tablename__ = "data_feeds"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Feed identification
     feed_name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
@@ -327,7 +327,7 @@ class MarketHoliday(BaseModel, TimestampMixin):
     __tablename__ = "market_holidays"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Holiday details
     holiday_date: Mapped[date] = mapped_column(Date, nullable=False)
@@ -365,7 +365,7 @@ class TreasuryRate(BaseModel, TimestampMixin):
     __tablename__ = "treasury_rates"
     
     # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     
     # Date and rates
     rate_date: Mapped[date] = mapped_column(Date, nullable=False)

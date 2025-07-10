@@ -19,7 +19,7 @@ from domains.congressional.interfaces import (
     MemberPortfolioRepositoryInterface, PortfolioPerformanceRepositoryInterface
 )
 from domains.congressional.models import (
-    CongressMember, CongressionalTrade, MemberPortfolio, PortfolioPerformance
+    CongressMember, CongressionalTrade, MemberPortfolio, MemberPortfolioPerformance
 )
 from domains.congressional.schemas import (
     CongressMemberCreate, CongressMemberUpdate, CongressMemberDetail, CongressMemberSummary,
@@ -697,72 +697,72 @@ class MemberPortfolioRepository(CRUDBase[MemberPortfolio, dict, dict], MemberPor
         return {}
 
 
-class PortfolioPerformanceRepository(CRUDBase[PortfolioPerformance, dict, dict], PortfolioPerformanceRepositoryInterface):
-    """Repository for portfolio performance operations."""
+class MemberPortfolioPerformanceRepository(CRUDBase[MemberPortfolioPerformance, dict, dict], PortfolioPerformanceRepositoryInterface):
+    """Repository for member portfolio performance data."""
     
     def __init__(self, db: Session):
-        super().__init__(PortfolioPerformance, db)
-        self.db = db
+        super().__init__(MemberPortfolioPerformance, db)
     
     def record_daily_performance(self, member_id: int, date: date, performance_data: Dict[str, Any]) -> PortfolioPerformanceSummary:
-        """Record daily portfolio performance."""
-        # Get or create performance record
-        db_performance = (
-            self.db.query(PortfolioPerformance)
+        """Record daily performance for a member."""
+        # Check if performance already exists for this date
+        existing = (
+            self.db.query(MemberPortfolioPerformance)
             .filter(
-                and_(
-                    PortfolioPerformance.member_id == member_id,
-                    PortfolioPerformance.date == date
-                )
+                MemberPortfolioPerformance.member_id == member_id,
+                MemberPortfolioPerformance.date == date
             )
             .first()
         )
         
-        if not db_performance:
-            db_performance = PortfolioPerformance(
-                member_id=member_id,
-                date=date,
-                **performance_data
-            )
-            self.db.add(db_performance)
-        else:
+        if existing:
+            # Update existing record
             for key, value in performance_data.items():
-                setattr(db_performance, key, value)
+                setattr(existing, key, value)
+            self.db.commit()
+            return PortfolioPerformanceSummary.from_orm(existing)
         
+        # Create new performance record
+        db_performance = MemberPortfolioPerformance(
+            member_id=member_id,
+            date=date,
+            **performance_data
+        )
+        
+        self.db.add(db_performance)
         self.db.commit()
         self.db.refresh(db_performance)
         
         return PortfolioPerformanceSummary.from_orm(db_performance)
     
     def get_performance_history(self, member_id: int, start_date: date, end_date: date) -> List[PortfolioPerformanceSummary]:
-        """Get performance history for a date range."""
+        """Get performance history for a member."""
         db_performance = (
-            self.db.query(PortfolioPerformance)
+            self.db.query(MemberPortfolioPerformance)
             .filter(
-                and_(
-                    PortfolioPerformance.member_id == member_id,
-                    PortfolioPerformance.date >= start_date,
-                    PortfolioPerformance.date <= end_date
-                )
+                MemberPortfolioPerformance.member_id == member_id,
+                MemberPortfolioPerformance.date >= start_date,
+                MemberPortfolioPerformance.date <= end_date
             )
-            .order_by(PortfolioPerformance.date)
+            .order_by(MemberPortfolioPerformance.date)
             .all()
         )
         
         return [PortfolioPerformanceSummary.from_orm(perf) for perf in db_performance]
     
     def get_latest_performance(self, member_id: int) -> Optional[PortfolioPerformanceSummary]:
-        """Get latest performance record for a member."""
+        """Get latest performance for a member."""
         db_performance = (
-            self.db.query(PortfolioPerformance)
-            .filter(PortfolioPerformance.member_id == member_id)
-            .order_by(desc(PortfolioPerformance.date))
+            self.db.query(MemberPortfolioPerformance)
+            .filter(MemberPortfolioPerformance.member_id == member_id)
+            .order_by(desc(MemberPortfolioPerformance.date))
             .first()
         )
         
-        if db_performance:
-            return PortfolioPerformanceSummary.from_orm(db_performance)
-        return None
+        if not db_performance:
+            return None
+        
+        return PortfolioPerformanceSummary.from_orm(db_performance)
     
     def calculate_returns(self, member_id: int, period_days: int) -> Optional[MarketPerformanceComparison]:
         """Calculate returns for a specific period."""
@@ -784,14 +784,14 @@ logger.info("Congressional domain CRUD operations initialized")
 CongressMemberCRUD = CongressMemberRepository
 CongressionalTradeCRUD = CongressionalTradeRepository
 MemberPortfolioCRUD = MemberPortfolioRepository
-PortfolioPerformanceCRUD = PortfolioPerformanceRepository
+PortfolioPerformanceCRUD = MemberPortfolioPerformanceRepository
 
 # Export all repositories
 __all__ = [
     "CongressMemberRepository",
     "CongressionalTradeRepository", 
     "MemberPortfolioRepository",
-    "PortfolioPerformanceRepository",
+    "MemberPortfolioPerformanceRepository",
     "CongressMemberCRUD",
     "CongressionalTradeCRUD",
     "MemberPortfolioCRUD", 

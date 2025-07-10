@@ -18,7 +18,7 @@ from domains.congressional.interfaces import (
 )
 from domains.congressional.crud import (
     CongressMemberRepository, CongressionalTradeRepository,
-    MemberPortfolioRepository, PortfolioPerformanceRepository
+    MemberPortfolioRepository, MemberPortfolioPerformanceRepository
 )
 from domains.congressional.client import CongressAPIClient, get_congress_api_client
 from domains.congressional.schemas import (
@@ -48,7 +48,7 @@ class CongressMemberService(CongressMemberServiceInterface):
         member_repo: CongressMemberRepository,
         trade_repo: CongressionalTradeRepository,
         portfolio_repo: MemberPortfolioRepository,
-        performance_repo: PortfolioPerformanceRepository
+        performance_repo: MemberPortfolioPerformanceRepository
     ):
         self.member_repo = member_repo
         self.trade_repo = trade_repo
@@ -427,7 +427,7 @@ class PortfolioService(PortfolioServiceInterface):
     def __init__(
         self,
         portfolio_repo: MemberPortfolioRepository,
-        performance_repo: PortfolioPerformanceRepository,
+        performance_repo: MemberPortfolioPerformanceRepository,
         trade_repo: CongressionalTradeRepository
     ):
         self.portfolio_repo = portfolio_repo
@@ -570,15 +570,19 @@ class PortfolioService(PortfolioServiceInterface):
 # ============================================================================
 
 class CongressAPIService:
-    """Service for synchronizing member data with Congress.gov API."""
+    """Service for Congress.gov API operations."""
     
     def __init__(
         self,
         member_repo: CongressMemberRepository,
-        api_client: Optional[CongressAPIClient] = None
+        trade_repo: CongressionalTradeRepository,
+        portfolio_repo: MemberPortfolioRepository,
+        performance_repo: MemberPortfolioPerformanceRepository
     ):
         self.member_repo = member_repo
-        self.api_client = api_client
+        self.trade_repo = trade_repo
+        self.portfolio_repo = portfolio_repo
+        self.performance_repo = performance_repo
     
     async def sync_all_members(self) -> Dict[str, int]:
         """

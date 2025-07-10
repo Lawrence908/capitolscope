@@ -262,7 +262,7 @@ class UserPreference(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_preferences'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Display Preferences
     theme = Column(String(20), default='dark')  # light, dark, auto
@@ -313,7 +313,7 @@ class UserWatchlist(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_watchlists'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     name = Column(String(100), nullable=False)
     description = Column(Text)
     
@@ -391,7 +391,7 @@ class UserAlert(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_alerts'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Alert Configuration
     name = Column(String(100), nullable=False)
@@ -459,7 +459,7 @@ class UserNotification(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_notifications'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Notification Content
     title = Column(String(200), nullable=False)
@@ -529,7 +529,7 @@ class UserSession(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_sessions'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     session_id = Column(String(255), unique=True, nullable=False, index=True)
     
     # Session Information
@@ -592,7 +592,7 @@ class UserApiKey(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_api_keys'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Key Information
     key_id = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)

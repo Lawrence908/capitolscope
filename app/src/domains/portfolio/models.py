@@ -17,10 +17,10 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
-from domains.base.models import BaseModel, TimestampMixin
+from domains.base.models import CapitolScopeBaseModel, TimestampMixin
 
 
-class Portfolio(BaseModel, TimestampMixin):
+class Portfolio(CapitolScopeBaseModel, TimestampMixin):
     """
     Portfolio entity representing a congress member's investment portfolio.
     
@@ -29,12 +29,8 @@ class Portfolio(BaseModel, TimestampMixin):
     """
     __tablename__ = "portfolios"
     
-    # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    external_id: Mapped[str] = mapped_column(UUID(as_uuid=False), default=lambda: str(uuid.uuid4()), unique=True)
-    
     # Portfolio ownership
-    member_id: Mapped[int] = mapped_column(Integer, ForeignKey("congress_members.id"), nullable=False)
+    member_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("congress_members.id"), nullable=False)
     portfolio_type: Mapped[str] = mapped_column(String(50), default="congressional")  # congressional, spouse, dependent
     
     # Portfolio metadata
@@ -73,7 +69,6 @@ class Portfolio(BaseModel, TimestampMixin):
         Index("idx_portfolios_member_id", "member_id"),
         Index("idx_portfolios_type", "portfolio_type"),
         Index("idx_portfolios_active", "is_active"),
-        Index("idx_portfolios_external_id", "external_id"),
         UniqueConstraint("member_id", "portfolio_type", name="uq_member_portfolio_type"),
     )
     
@@ -81,7 +76,7 @@ class Portfolio(BaseModel, TimestampMixin):
         return f"<Portfolio(id={self.id}, member_id={self.member_id}, name='{self.name}', value={self.total_value})>"
 
 
-class PortfolioHolding(BaseModel, TimestampMixin):
+class PortfolioHolding(CapitolScopeBaseModel, TimestampMixin):
     """
     Individual security holding within a portfolio.
     
@@ -89,12 +84,9 @@ class PortfolioHolding(BaseModel, TimestampMixin):
     """
     __tablename__ = "portfolio_holdings"
     
-    # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    
     # Relationships
-    portfolio_id: Mapped[int] = mapped_column(Integer, ForeignKey("portfolios.id"), nullable=False)
-    security_id: Mapped[int] = mapped_column(Integer, ForeignKey("securities.id"), nullable=False)
+    portfolio_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("portfolios.id"), nullable=False, index=True)
+    security_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("securities.id"), nullable=False, index=True)
     
     # Position information
     quantity: Mapped[Decimal] = mapped_column(Numeric(15, 6), nullable=False)  # Shares/units held
@@ -136,7 +128,7 @@ class PortfolioHolding(BaseModel, TimestampMixin):
         return f"<PortfolioHolding(id={self.id}, portfolio_id={self.portfolio_id}, security_id={self.security_id}, quantity={self.quantity})>"
 
 
-class PortfolioPerformance(BaseModel, TimestampMixin):
+class PortfolioPerformance(CapitolScopeBaseModel, TimestampMixin):
     """
     Historical performance metrics for a portfolio over time.
     
@@ -144,11 +136,8 @@ class PortfolioPerformance(BaseModel, TimestampMixin):
     """
     __tablename__ = "portfolio_performance"
     
-    # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    
     # Relationships
-    portfolio_id: Mapped[int] = mapped_column(Integer, ForeignKey("portfolios.id"), nullable=False)
+    portfolio_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("portfolios.id"), nullable=False)
     
     # Time period
     performance_date: Mapped[date] = mapped_column(Date, nullable=False)
@@ -195,7 +184,7 @@ class PortfolioPerformance(BaseModel, TimestampMixin):
         return f"<PortfolioPerformance(id={self.id}, portfolio_id={self.portfolio_id}, date={self.performance_date}, return={self.total_return_percent}%)>"
 
 
-class PortfolioSnapshot(BaseModel, TimestampMixin):
+class PortfolioSnapshot(CapitolScopeBaseModel, TimestampMixin):
     """
     Point-in-time snapshot of portfolio state.
     
@@ -203,11 +192,8 @@ class PortfolioSnapshot(BaseModel, TimestampMixin):
     """
     __tablename__ = "portfolio_snapshots"
     
-    # Primary identification
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    
     # Relationships
-    portfolio_id: Mapped[int] = mapped_column(Integer, ForeignKey("portfolios.id"), nullable=False)
+    portfolio_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("portfolios.id"), nullable=False)
     
     # Snapshot metadata
     snapshot_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
@@ -249,7 +235,6 @@ class PortfolioSnapshot(BaseModel, TimestampMixin):
         Index("idx_snapshots_portfolio_id", "portfolio_id"),
         Index("idx_snapshots_date", "snapshot_date"),
         Index("idx_snapshots_type", "snapshot_type"),
-        Index("idx_snapshots_portfolio_date", "portfolio_id", "snapshot_date"),
     )
     
     def __repr__(self):

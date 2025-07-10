@@ -11,7 +11,7 @@ from typing import Optional, List, Dict, Any
 from pydantic import Field, field_validator, EmailStr, HttpUrl
 
 from schemas.base import (
-    CapitolScopeBaseModel, IDMixin, TimestampMixin, AmountRange, 
+    CapitolScopeBaseModel, UUIDMixin, TimestampMixin, AmountRange,
     PerformanceMetrics, SocialMediaLinks, ResearchLinks,
     validate_political_party, validate_chamber, validate_transaction_type
 )
@@ -137,7 +137,7 @@ class CongressMemberUpdate(CapitolScopeBaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class CongressMemberResponse(CongressMemberBase, IDMixin, TimestampMixin):
+class CongressMemberResponse(CongressMemberBase, UUIDMixin, TimestampMixin):
     """Schema for congress member responses."""
     # Calculated fields
     full_name: Optional[str] = Field(None, description="Full name display")
@@ -247,7 +247,7 @@ class CongressionalTradeUpdate(CapitolScopeBaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class CongressionalTradeResponse(CongressionalTradeBase, IDMixin, TimestampMixin):
+class CongressionalTradeResponse(CongressionalTradeBase, UUIDMixin, TimestampMixin):
     """Schema for congressional trade responses."""
     # Related objects (optional includes)
     member: Optional[CongressMemberSummary] = Field(None, description="Congress member details")

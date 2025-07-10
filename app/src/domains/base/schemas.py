@@ -10,6 +10,7 @@ from typing import Optional, List, Dict, Any, Union
 from decimal import Decimal
 from enum import Enum
 import uuid
+from uuid import UUID
 
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from pydantic import EmailStr, HttpUrl
@@ -46,14 +47,9 @@ class TimestampMixin(BaseModel):
     updated_at: Optional[datetime] = Field(None, description="Last update timestamp")
 
 
-class IDMixin(BaseModel):
-    """Mixin for schemas with integer ID primary key."""
-    id: int = Field(..., description="Unique identifier", gt=0)
-
-
 class UUIDMixin(BaseModel):
-    """Mixin for schemas with UUID primary key."""
-    id: uuid.UUID = Field(..., description="Unique identifier")
+    """Mixin for schemas with UUID ID primary key."""
+    id: UUID = Field(..., description="Unique identifier (UUID)")
 
 
 # ============================================================================
@@ -359,7 +355,6 @@ def validate_transaction_type(v: str) -> str:
 __all__ = [
     "CapitolScopeBaseSchema",
     "TimestampMixin",
-    "IDMixin",
     "UUIDMixin",
     "PoliticalParty",
     "Chamber",

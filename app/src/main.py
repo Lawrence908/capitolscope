@@ -4,6 +4,14 @@ CapitolScope FastAPI Application
 Main entry point for the congressional trading transparency platform.
 """
 
+import sys
+import os
+from pathlib import Path
+
+# Add the app/src directory to Python path for proper imports
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
+
 from contextlib import asynccontextmanager
 from typing import Dict, Any
 

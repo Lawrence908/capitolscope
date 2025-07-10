@@ -470,11 +470,18 @@ class CongressTrades:
         trades_by_member_df.reset_index(drop=True, inplace=True)
         # Save the DataFrame to a CSV file
         trades_by_member_df.to_csv(self.data_path + current_fd + '.csv', index=False)
-        trades_by_member_df.to_excel(self.data_path + current_fd + '.xlsx', index=False)
+        
+        # Try to save Excel file, but handle illegal character errors gracefully
+        try:
+            trades_by_member_df.to_excel(self.data_path + current_fd + '.xlsx', index=False)
+            logger.info(f"Saved: {current_fd}.xlsx")
+        except Exception as e:
+            logger.warning(f"Could not save Excel file: {e}")
+            logger.info("Excel export skipped due to illegal characters in data")
+        
         trades_by_member_df.to_sql(name=current_fd, con=disk_engine, if_exists='replace', index=False)
         
         logger.info(f"Saved: {current_fd}.csv")
-        logger.info(f"Saved: {current_fd}.xlsx")
         logger.info(f"Saved: {current_fd}.db")
         return trades_by_member_df
 

@@ -107,6 +107,57 @@ def sync_congressional_members(self, action: str = "sync-all", **kwargs):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def sync_congressional_members(self, action: str = "sync-all", **kwargs):
+    """
+    Sync congressional members from Congress.gov API.
+    
+    Args:
+        action: Action to perform ('sync-all', 'sync-state', 'enrich-existing')
+        **kwargs: Additional parameters for specific actions
+    """
+    try:
+        logger.info(f"Starting congressional members sync: {action}")
+        
+        import subprocess
+        import sys
+        
+        # Build command
+        cmd = [
+            sys.executable, 
+            "-m", "scripts.sync_congress_members",
+            "--action", action
+        ]
+        
+        # Add additional parameters based on action
+        if action == "sync-state" and "state" in kwargs:
+            cmd.extend(["--state", kwargs["state"]])
+        elif action == "sync-member" and "bioguide_id" in kwargs:
+            cmd.extend(["--bioguide-id", kwargs["bioguide_id"]])
+        
+        # Execute sync script
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)  # 30 min timeout
+        
+        if result.returncode == 0:
+            logger.info(f"Congressional members sync completed successfully: {action}")
+            return {
+                "status": "success",
+                "action": action,
+                "stdout": result.stdout,
+                "stderr": result.stderr
+            }
+        else:
+            logger.error(f"Congressional members sync failed: {result.stderr}")
+            raise Exception(f"Sync script failed with return code {result.returncode}")
+        
+    except subprocess.TimeoutExpired:
+        logger.error("Congressional members sync timed out")
+        raise Exception("Sync operation timed out")
+    except Exception as exc:
+        logger.error(f"Congressional members sync failed: {exc}")
+        raise self.retry(exc=exc, countdown=300, max_retries=3)
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def update_stock_prices(self, symbols: Optional[List[str]] = None):
     """
     Update stock prices for tracked securities.

@@ -21,80 +21,40 @@ from core.config import settings
 from domains.congressional.models import CongressMember, CongressionalTrade, MemberPortfolio
 from domains.congressional.crud import CongressMemberCRUD, CongressionalTradeCRUD
 from domains.congressional.schemas import CongressMemberCreate, CongressionalTradeCreate
-from domains.securities.models import Security
-from domains.securities.crud import SecurityCRUD
+from domains.securities.models import Security, AssetType
+from domains.securities.crud import SecurityCRUD, AssetTypeCRUD
+from domains.securities.schemas import SecurityCreate, AssetTypeCreate
 
 logger = get_logger(__name__)
 
 
 class CongressionalDataIngester:
     """
-    Congressional trading data ingestion service for CapitolScope.
+    Congressional data ingestion service.
     
-    Handles importing data from CSV files, SQLite databases, and extracting
-    member information for profile creation.
+    Handles importing congressional trade data from CSV files and databases,
+    parsing complex data formats, and enriching with external data sources.
     """
     
     def __init__(self, session):
-        """
-        Initialize the ingester with a database session.
-        
-        Args:
-            session: Either AsyncSession (for async operations) or Session (for sync operations)
-        """
+        """Initialize with database session and CRUD objects."""
         self.session = session
         self.member_crud = CongressMemberCRUD(session)
         self.trade_crud = CongressionalTradeCRUD(session)
         self.security_crud = SecurityCRUD(session)
+        self.asset_type_crud = AssetTypeCRUD(session)
         
         # Asset type mapping from the original script
-        self.asset_type_dict = {
-            "4K": "401K and Other Non-Federal Retirement Accounts",
-            "5C": "529 College Savings Plan",
-            "5F": "529 Portfolio",
-            "5P": "529 Prepaid Tuition Plan",
-            "AB": "Asset-Backed Securities",
-            "BA": "Bank Accounts, Money Market Accounts and CDs",
-            "BK": "Brokerage Accounts",
-            "CO": "Collectibles",
-            "CS": "Corporate Securities (Bonds and Notes)",
-            "CT": "Cryptocurrency",
-            "DB": "Defined Benefit Pension",
-            "DO": "Debts Owed to the Filer",
-            "DS": "Delaware Statutory Trust",
-            "EF": "Exchange Traded Funds (ETF)",
-            "EQ": "Excepted/Qualified Blind Trust",
-            "ET": "Exchange Traded Notes",
-            "FA": "Farms",
-            "FE": "Foreign Exchange Position (Currency)",
-            "FN": "Fixed Annuity",
-            "FU": "Futures",
-            "GS": "Government Securities and Agency Debt",
-            "HE": "Hedge Funds & Private Equity Funds (EIF)",
-            "HN": "Hedge Funds & Private Equity Funds (non-EIF)",
-            "IC": "Investment Club",
-            "IH": "IRA (Held in Cash)",
-            "IP": "Intellectual Property & Royalties",
-            "IR": "IRA",
-            "MA": "Managed Accounts (e.g., SMA and UMA)",
-            "MF": "Mutual Funds",
-            "MO": "Mineral/Oil/Solar Energy Rights",
-            "OI": "Ownership Interest (Holding Investments)",
-            "OL": "Ownership Interest (Engaged in a Trade or Business)",
-            "OP": "Options",
-            "OT": "Other",
-            "PE": "Pensions",
-            "PM": "Precious Metals",
-            "PS": "Stock (Not Publicly Traded)",
-            "RE": "Real Estate Invest. Trust (REIT)",
-            "RP": "Real Property",
-            "RS": "Restricted Stock Units (RSUs)",
-            "SA": "Stock Appreciation Right",
-            "ST": "Stocks (including ADRs)",
-            "TR": "Trust",
-            "VA": "Variable Annuity",
-            "VI": "Variable Insurance",
-            "WU": "Whole/Universal Insurance"
+        self.asset_type_mapping = {
+            "ST": "Stock",
+            "BND": "Bond", 
+            "OP": "Option",
+            "MF": "Mutual Fund",
+            "ETF": "ETF",
+            "FUT": "Future",
+            "REIT": "REIT",
+            "CASH": "Cash",
+            "OTHER": "Other"
         }
     
     async def import_congressional_data_from_csvs(self, data_directory: str) -> Dict[str, int]:
@@ -635,49 +595,61 @@ class CongressionalDataIngester:
                     failed_count += 1
                     continue
                 
-                # Extract trade data with better validation
-                doc_id = str(row['DocID']).strip()
-                owner = str(row['Owner']).strip() if 'Owner' in df.columns and pd.notna(row['Owner']) else "Unknown"
-                asset = str(row['Asset']).strip()
-                ticker = str(row['Ticker']).strip() if 'Ticker' in df.columns and pd.notna(row['Ticker']) else ""
+                # Extract transaction details
+                doc_id = str(row['DocID']).strip() if 'DocID' in row and pd.notna(row['DocID']) else f"UNKNOWN_{idx}"
+                ticker = str(row['Ticker']).strip() if 'Ticker' in row and pd.notna(row['Ticker']) else ""
+                asset = str(row['Asset']).strip() if 'Asset' in row and pd.notna(row['Asset']) else ""
+                transaction_type = str(row['Transaction Type']).strip() if 'Transaction Type' in row and pd.notna(row['Transaction Type']) else "P"
+                transaction_date = str(row['Transaction Date']).strip() if 'Transaction Date' in row and pd.notna(row['Transaction Date']) else ""
+                notification_date = str(row['Notification Date']).strip() if 'Notification Date' in row and pd.notna(row['Notification Date']) else ""
+                amount = str(row['Amount']).strip() if 'Amount' in row and pd.notna(row['Amount']) else ""
+                owner = str(row['Owner']).strip() if 'Owner' in row and pd.notna(row['Owner']) else ""
+                description = str(row['Description']).strip() if 'Description' in row and pd.notna(row['Description']) else ""
                 
-                # Handle malformed data where columns are shifted
-                transaction_type_raw = str(row['Transaction Type']).strip()
-                transaction_date_raw = str(row['Transaction Date']).strip()
-                notification_date_raw = str(row['Notification Date']).strip()
-                amount_raw = str(row['Amount']).strip()
-                
-                # Try to determine which field is which based on content patterns
-                transaction_type = self._extract_transaction_type(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                transaction_date = self._extract_transaction_date(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                notification_date = self._extract_notification_date(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                amount = self._extract_amount(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                
-                filing_status = str(row['Filing Status']).strip() if 'Filing Status' in df.columns and pd.notna(row['Filing Status']) else "New"
-                description = str(row['Description']).strip() if 'Description' in df.columns and pd.notna(row['Description']) else ""
-                
-                # Extract asset description for raw_asset_description field
+                # Extract asset description for raw storage
                 raw_asset_description = self._extract_asset_description(row)
                 
-                # Clean up amount (remove $ and commas)
-                if amount.startswith('$'):
-                    amount = amount[1:]
-                amount = amount.replace(',', '')
+                # Parse amount into min/max fields
+                amount_min, amount_max = self._parse_amount_to_fields(amount)
+                
+                # Find or create security
+                security_id = None
+                asset_name = ""
+                asset_type = ""
+                if ticker:
+                    security_id = self._find_or_create_security(ticker, raw_asset_description)
+                    if security_id:
+                        # Get the created security info
+                        security = self.security_crud.get(security_id)
+                        if security:
+                            asset_name = security.name
+                            if security.asset_type:
+                                asset_type = security.asset_type.name
+                    else:
+                        # Extract asset info manually if security creation failed
+                        asset_name, asset_type = self._extract_asset_info(raw_asset_description, ticker)
+                else:
+                    # No ticker - extract what we can from description
+                    asset_name, asset_type = self._extract_asset_info(raw_asset_description, "")
                 
                 # Create trade record with proper validation
                 trade_data = CongressionalTradeCreate(
                     member_id=member.id,
+                    security_id=security_id,
                     doc_id=doc_id,
-                    owner=owner,
+                    owner=owner if owner else None,
                     raw_asset_description=raw_asset_description,
-                    ticker=ticker,
+                    ticker=ticker if ticker else None,
+                    asset_name=asset_name if asset_name else None,
+                    asset_type=asset_type if asset_type else None,
                     transaction_type=transaction_type if transaction_type else "P",  # Default to Purchase if empty
-                    transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,  # Allow None for missing dates
-                    notification_date=self._parse_date_string(notification_date) if notification_date else None,  # Allow None for missing dates
-                    amount=amount if amount else None,  # Allow None for missing amounts
+                    transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,
+                    notification_date=self._parse_date_string(notification_date) if notification_date else None,
+                    amount_min=amount_min,
+                    amount_max=amount_max,
+                    amount_exact=None,  # We use ranges, not exact amounts from these CSVs
                     filing_status="N",  # Use "N" for New instead of "New"
-                    description=description,
-                    source_table=source_table
+                    comment=description if description else None
                 )
                 
                 await self.trade_crud.create(trade_data)
@@ -763,49 +735,61 @@ class CongressionalDataIngester:
                     failed_count += 1
                     continue
                 
-                # Extract trade data with better validation
-                doc_id = str(row['DocID']).strip()
-                owner = str(row['Owner']).strip() if 'Owner' in df.columns and pd.notna(row['Owner']) else "Unknown"
-                asset = str(row['Asset']).strip()
-                ticker = str(row['Ticker']).strip() if 'Ticker' in df.columns and pd.notna(row['Ticker']) else ""
+                # Extract transaction details
+                doc_id = str(row['DocID']).strip() if 'DocID' in row and pd.notna(row['DocID']) else f"UNKNOWN_{idx}"
+                ticker = str(row['Ticker']).strip() if 'Ticker' in row and pd.notna(row['Ticker']) else ""
+                asset = str(row['Asset']).strip() if 'Asset' in row and pd.notna(row['Asset']) else ""
+                transaction_type = str(row['Transaction Type']).strip() if 'Transaction Type' in row and pd.notna(row['Transaction Type']) else "P"
+                transaction_date = str(row['Transaction Date']).strip() if 'Transaction Date' in row and pd.notna(row['Transaction Date']) else ""
+                notification_date = str(row['Notification Date']).strip() if 'Notification Date' in row and pd.notna(row['Notification Date']) else ""
+                amount = str(row['Amount']).strip() if 'Amount' in row and pd.notna(row['Amount']) else ""
+                owner = str(row['Owner']).strip() if 'Owner' in row and pd.notna(row['Owner']) else ""
+                description = str(row['Description']).strip() if 'Description' in row and pd.notna(row['Description']) else ""
                 
-                # Handle malformed data where columns are shifted
-                transaction_type_raw = str(row['Transaction Type']).strip()
-                transaction_date_raw = str(row['Transaction Date']).strip()
-                notification_date_raw = str(row['Notification Date']).strip()
-                amount_raw = str(row['Amount']).strip()
-                
-                # Try to determine which field is which based on content patterns
-                transaction_type = self._extract_transaction_type(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                transaction_date = self._extract_transaction_date(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                notification_date = self._extract_notification_date(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                amount = self._extract_amount(transaction_type_raw, transaction_date_raw, notification_date_raw, amount_raw)
-                
-                filing_status = str(row['Filing Status']).strip() if 'Filing Status' in df.columns and pd.notna(row['Filing Status']) else "New"
-                description = str(row['Description']).strip() if 'Description' in df.columns and pd.notna(row['Description']) else ""
-                
-                # Extract asset description for raw_asset_description field
+                # Extract asset description for raw storage
                 raw_asset_description = self._extract_asset_description(row)
                 
-                # Clean up amount (remove $ and commas)
-                if amount.startswith('$'):
-                    amount = amount[1:]
-                amount = amount.replace(',', '')
+                # Parse amount into min/max fields
+                amount_min, amount_max = self._parse_amount_to_fields(amount)
+                
+                # Find or create security
+                security_id = None
+                asset_name = ""
+                asset_type = ""
+                if ticker:
+                    security_id = self._find_or_create_security(ticker, raw_asset_description)
+                    if security_id:
+                        # Get the created security info
+                        security = self.security_crud.get(security_id)
+                        if security:
+                            asset_name = security.name
+                            if security.asset_type:
+                                asset_type = security.asset_type.name
+                    else:
+                        # Extract asset info manually if security creation failed
+                        asset_name, asset_type = self._extract_asset_info(raw_asset_description, ticker)
+                else:
+                    # No ticker - extract what we can from description
+                    asset_name, asset_type = self._extract_asset_info(raw_asset_description, "")
                 
                 # Create trade record with proper validation
                 trade_data = CongressionalTradeCreate(
                     member_id=member.id,
+                    security_id=security_id,
                     doc_id=doc_id,
-                    owner=owner,
+                    owner=owner if owner else None,
                     raw_asset_description=raw_asset_description,
-                    ticker=ticker,
+                    ticker=ticker if ticker else None,
+                    asset_name=asset_name if asset_name else None,
+                    asset_type=asset_type if asset_type else None,
                     transaction_type=transaction_type if transaction_type else "P",  # Default to Purchase if empty
-                    transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,  # Allow None for missing dates
-                    notification_date=self._parse_date_string(notification_date) if notification_date else None,  # Allow None for missing dates
-                    amount=amount if amount else None,  # Allow None for missing amounts
+                    transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,
+                    notification_date=self._parse_date_string(notification_date) if notification_date else None,
+                    amount_min=amount_min,
+                    amount_max=amount_max,
+                    amount_exact=None,  # We use ranges, not exact amounts from these CSVs
                     filing_status="N",  # Use "N" for New instead of "New"
-                    description=description,
-                    source_table=source_table
+                    comment=description if description else None
                 )
                 
                 self.trade_crud.create(trade_data)
@@ -938,7 +922,7 @@ class CongressionalDataIngester:
                     updated = True
                 
                 if updated:
-                enriched_count += 1
+                    enriched_count += 1
                 
             except Exception as e:
                 logger.error(f"Failed to enrich data for member {member.full_name}: {e}")
@@ -1112,6 +1096,155 @@ class CongressionalDataIngester:
             # Parse MM/DD/YYYY format
             return datetime.strptime(date_str.strip(), '%m/%d/%Y').date()
         except ValueError:
+            return None
+
+    def _parse_amount_to_fields(self, amount_str: str) -> Tuple[Optional[int], Optional[int]]:
+        """
+        Parse amount string into min and max cents.
+        Handles ranges like $1,001 - $15,000 or single values like $1,001.
+        """
+        if not amount_str or pd.isna(amount_str):
+            return None, None
+
+        try:
+            # Remove common characters
+            cleaned = str(amount_str).replace('$', '').replace(',', '').strip()
+
+            # Handle ranges
+            if ' - ' in cleaned:
+                parts = cleaned.split(' - ')
+                if len(parts) == 2:
+                    min_val = float(parts[0].strip()) * 100  # Convert to cents
+                    max_val = float(parts[1].strip()) * 100
+                    return int(min_val), int(max_val)
+
+            # Handle single values
+            if cleaned.replace('.', '').isdigit():
+                val = float(cleaned) * 100
+                return int(val), int(val)
+
+            # Handle special cases like "$50,001 +"
+            if '+' in cleaned:
+                min_val = float(cleaned.replace('+', '').strip()) * 100
+                return int(min_val), None
+
+        except Exception as e:
+            logger.debug(f"Failed to parse amount '{amount_str}': {e}")
+
+        return None, None
+
+    def _find_or_create_security(self, ticker: str, asset_description: str) -> Optional[int]:
+        """
+        Find existing security or create new one.
+        Returns security_id if found/created, None if failed.
+        """
+        if not ticker or ticker.strip() == '':
+            return None
+            
+        try:
+            # Clean ticker
+            ticker = ticker.strip().upper()
+            
+            # Try to find existing security
+            security = self.security_crud.get_by_ticker(ticker)
+            if security:
+                logger.debug(f"Found existing security: {ticker}")
+                return security.id
+            
+            # Extract asset name and type from description
+            asset_name, asset_type = self._extract_asset_info(asset_description, ticker)
+            
+            # Create new security
+            security_data = SecurityCreate(
+                ticker=ticker,
+                name=asset_name,
+                asset_type_id=self._get_asset_type_id(asset_type),
+                currency="USD",
+                is_active=True
+            )
+            
+            security = self.security_crud.create(security_data)
+            logger.info(f"Created new security: {ticker} - {asset_name}")
+            return security.id
+            
+        except Exception as e:
+            logger.error(f"Failed to find/create security for ticker {ticker}: {e}")
+            return None
+
+    def _extract_asset_info(self, description: str, ticker: str) -> Tuple[str, str]:
+        """
+        Extract asset name and type from raw description.
+        Returns (asset_name, asset_type).
+        """
+        if not description:
+            return f"Unknown Asset ({ticker})", "Stock"
+        
+        description = description.lower()
+        
+        # Determine asset type based on description keywords
+        if any(keyword in description for keyword in ['bond', 'treasury', 'municipal', 'note']):
+            asset_type = "Bond"
+        elif any(keyword in description for keyword in ['option', 'call', 'put']):
+            asset_type = "Option"
+        elif any(keyword in description for keyword in ['etf', 'fund']):
+            asset_type = "ETF"
+        elif any(keyword in description for keyword in ['reit']):
+            asset_type = "REIT"
+        else:
+            asset_type = "Stock"
+        
+        # Extract asset name - clean up common patterns
+        asset_name = description.title()
+        
+        # Remove common suffixes that aren't part of the name
+        suffixes_to_remove = [
+            " Common Stock", " Common", " Inc.", " Corp.", " Corporation",
+            " Class A", " Class B", " Ordinary Shares", " American Depositary",
+            " S/ADR", " ADR"
+        ]
+        
+        for suffix in suffixes_to_remove:
+            if asset_name.endswith(suffix):
+                asset_name = asset_name[:-len(suffix)]
+                break
+        
+        # Limit length
+        if len(asset_name) > 200:
+            asset_name = asset_name[:200].strip()
+        
+        return asset_name, asset_type
+
+    def _get_asset_type_id(self, asset_type: str) -> Optional[int]:
+        """
+        Get asset type ID from the asset_types table.
+        Creates asset type if it doesn't exist.
+        """
+        try:
+            # Try to find existing asset type
+            from sqlalchemy import select
+            result = self.session.execute(
+                select(AssetType).where(AssetType.name == asset_type)
+            )
+            asset_type_obj = result.scalar_one_or_none()
+            
+            if asset_type_obj:
+                return asset_type_obj.id
+            
+            # Create new asset type if not found
+            from domains.securities.schemas import AssetTypeCreate
+            asset_type_data = AssetTypeCreate(
+                code=asset_type[:5].upper(),
+                name=asset_type,
+                description=f"Auto-created asset type for {asset_type}",
+                category=asset_type.lower()
+            )
+            
+            new_asset_type = self.asset_type_crud.create(asset_type_data)
+            logger.info(f"Created new asset type: {asset_type}")
+            return new_asset_type.id
+            
+        except Exception as e:
+            logger.error(f"Failed to get/create asset type {asset_type}: {e}")
             return None
 
 

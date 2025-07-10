@@ -205,11 +205,16 @@ class CongressionalTradeCreate(CongressionalTradeBase):
         amount_max = self.amount_max
         amount_exact = self.amount_exact
         
-        # Must have either exact amount or min/max range
-        if not amount_exact and not (amount_min and amount_max):
-            raise ValueError('Must provide either exact amount or min/max range')
+        # Must have at least one amount field, but can be all None for unknown amounts
+        has_exact = amount_exact is not None
+        has_range = amount_min is not None or amount_max is not None
         
-        if amount_min and amount_max and amount_min > amount_max:
+        if not has_exact and not has_range:
+            # Allow trades with no amount information
+            return self
+        
+        # If we have a range, validate it
+        if amount_min is not None and amount_max is not None and amount_min > amount_max:
             raise ValueError('Minimum amount cannot be greater than maximum amount')
         
         return self

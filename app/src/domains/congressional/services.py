@@ -37,7 +37,7 @@ logger = get_logger(__name__)
 # CONGRESS MEMBER SERVICE
 # ============================================================================
 
-class CongressMemberService(BaseService, CongressMemberServiceInterface):
+class CongressMemberService(CongressMemberServiceInterface):
     """Service for congress member business logic."""
     
     def __init__(
@@ -214,7 +214,7 @@ class CongressMemberService(BaseService, CongressMemberServiceInterface):
 # CONGRESSIONAL TRADE SERVICE
 # ============================================================================
 
-class CongressionalTradeService(BaseService, CongressionalTradeServiceInterface):
+class CongressionalTradeService(CongressionalTradeServiceInterface):
     """Service for congressional trade business logic."""
     
     def __init__(
@@ -418,7 +418,7 @@ class CongressionalTradeService(BaseService, CongressionalTradeServiceInterface)
 # PORTFOLIO SERVICE
 # ============================================================================
 
-class PortfolioService(BaseService, PortfolioServiceInterface):
+class PortfolioService(PortfolioServiceInterface):
     """Service for portfolio management business logic."""
     
     def __init__(

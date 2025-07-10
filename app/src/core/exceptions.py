@@ -35,6 +35,14 @@ class ValidationError(CapitolScopeException):
         self.field = field
 
 
+class BusinessLogicError(CapitolScopeException):
+    """Exception raised when business logic rules are violated."""
+    
+    def __init__(self, message: str, rule: Optional[str] = None, details: Optional[Dict[str, Any]] = None):
+        super().__init__(message, details)
+        self.rule = rule
+
+
 class AuthenticationError(CapitolScopeException):
     """Exception raised when authentication fails."""
     
@@ -111,6 +119,7 @@ __all__ = [
     "CapitolScopeException",
     "NotFoundError", 
     "ValidationError",
+    "BusinessLogicError",
     "AuthenticationError",
     "AuthorizationError", 
     "DatabaseError",

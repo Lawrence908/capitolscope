@@ -67,7 +67,7 @@ async def get_members(
         )
         
         # Get members
-        members, total = member_repo.list_members(query)
+        members, total = await member_repo.list_members(query)
         
         data = {
             "members": [member.dict() for member in members],

@@ -8,6 +8,7 @@ data access operations. Supports CAP-10 (Transaction List) and CAP-11 (Member Pr
 from datetime import date, datetime, timedelta
 from typing import List, Optional, Dict, Any, Tuple
 from decimal import Decimal
+from uuid import UUID
 
 from sqlalchemy import and_, or_, desc, asc, func, text, select
 from sqlalchemy.orm import Session, joinedload, selectinload
@@ -46,72 +47,75 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
         super().__init__(CongressMember, db)
         self.db = db
     
-    def create(self, member_data: CongressMemberCreate) -> CongressMemberDetail:
+    async def create(self, member_data: CongressMemberCreate) -> CongressMemberDetail:
         """Create a new congress member."""
         try:
             db_member = CongressMember(**member_data.dict())
             self.db.add(db_member)
-            self.db.commit()
-            self.db.refresh(db_member)
+            await self.db.commit()
+            await self.db.refresh(db_member)
             
             logger.info(f"Created congress member: {db_member.full_name} ({db_member.id})")
             return CongressMemberDetail.from_orm(db_member)
             
         except IntegrityError as e:
-            self.db.rollback()
+            await self.db.rollback()
             logger.error(f"Failed to create congress member: {e}")
             raise ValidationError(f"Member with this bioguide_id already exists")
     
-    def get_by_id(self, member_id: int) -> Optional[CongressMemberDetail]:
+    async def get_by_id(self, member_id: UUID) -> Optional[CongressMemberDetail]:
         """Get congress member by ID."""
-        db_member = self.db.query(CongressMember).filter(CongressMember.id == member_id).first()
+        stmt = select(CongressMember).where(CongressMember.id == member_id)
+        result = await self.db.execute(stmt)
+        db_member = result.scalar_one_or_none()
         if db_member:
             return CongressMemberDetail.from_orm(db_member)
         return None
     
-    def get_by_bioguide_id(self, bioguide_id: str) -> Optional[CongressMemberDetail]:
+    async def get_by_bioguide_id(self, bioguide_id: str) -> Optional[CongressMemberDetail]:
         """Get congress member by bioguide ID."""
-        db_member = self.db.query(CongressMember).filter(CongressMember.bioguide_id == bioguide_id).first()
+        stmt = select(CongressMember).where(CongressMember.bioguide_id == bioguide_id)
+        result = await self.db.execute(stmt)
+        db_member = result.scalar_one_or_none()
         if db_member:
             return CongressMemberDetail.from_orm(db_member)
         return None
     
-    def get_by_congress_gov_id(self, congress_gov_id: str) -> Optional[CongressMemberDetail]:
+    async def get_by_congress_gov_id(self, congress_gov_id: str) -> Optional[CongressMemberDetail]:
         """Get congress member by congress.gov ID."""
-        db_member = self.db.query(CongressMember).filter(CongressMember.congress_gov_id == congress_gov_id).first()
+        stmt = select(CongressMember).where(CongressMember.congress_gov_id == congress_gov_id)
+        result = await self.db.execute(stmt)
+        db_member = result.scalar_one_or_none()
         if db_member:
             return CongressMemberDetail.from_orm(db_member)
         return None
     
-    def get_by_name(self, last_name: str, first_name: str = "") -> Optional[CongressMemberDetail]:
+    async def get_by_name(self, last_name: str, first_name: str = "") -> Optional[CongressMemberDetail]:
         """Get congress member by last name and first name."""
         # Try to find by last name and first name combination
         if first_name:
-            db_member = (
-                self.db.query(CongressMember)
-                .filter(
-                    and_(
-                        CongressMember.last_name == last_name,
-                        CongressMember.first_name == first_name
-                    )
+            stmt = select(CongressMember).where(
+                and_(
+                    CongressMember.last_name == last_name,
+                    CongressMember.first_name == first_name
                 )
-                .first()
             )
         else:
             # If no first name, try to find by last name only
-            db_member = (
-                self.db.query(CongressMember)
-                .filter(CongressMember.last_name == last_name)
-                .first()
-            )
+            stmt = select(CongressMember).where(CongressMember.last_name == last_name)
+        
+        result = await self.db.execute(stmt)
+        db_member = result.scalar_one_or_none()
         
         if db_member:
             return CongressMemberDetail.from_orm(db_member)
         return None
     
-    def update(self, member_id: int, update_data: CongressMemberUpdate) -> Optional[CongressMemberDetail]:
+    async def update(self, member_id: UUID, update_data: CongressMemberUpdate) -> Optional[CongressMemberDetail]:
         """Update congress member."""
-        db_member = self.db.query(CongressMember).filter(CongressMember.id == member_id).first()
+        stmt = select(CongressMember).where(CongressMember.id == member_id)
+        result = await self.db.execute(stmt)
+        db_member = result.scalar_one_or_none()
         if not db_member:
             raise NotFoundError(f"Congress member {member_id} not found")
         
@@ -119,8 +123,8 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
         for key, value in update_dict.items():
             setattr(db_member, key, value)
         
-        self.db.commit()
-        self.db.refresh(db_member)
+        await self.db.commit()
+        await self.db.refresh(db_member)
         
         logger.info(f"Updated congress member: {db_member.full_name} ({db_member.id})")
         return CongressMemberDetail.from_orm(db_member)
@@ -189,12 +193,12 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
         
         return members, total_count
     
-    def search_members(self, search_term: str, limit: int = 10) -> List[CongressMemberSummary]:
+    async def search_members(self, search_term: str, limit: int = 10) -> List[CongressMemberSummary]:
         """Search congress members by name."""
         search_pattern = f"%{search_term}%"
-        db_members = (
-            self.db.query(CongressMember)
-            .filter(
+        stmt = (
+            select(CongressMember)
+            .where(
                 or_(
                     CongressMember.full_name.ilike(search_pattern),
                     CongressMember.first_name.ilike(search_pattern),
@@ -203,8 +207,9 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
             )
             .order_by(CongressMember.last_name)
             .limit(limit)
-            .all()
         )
+        result = await self.db.execute(stmt)
+        db_members = result.scalars().all()
         
         return [CongressMemberSummary.from_orm(member) for member in db_members]
     
@@ -311,7 +316,7 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
 class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTradeCreate, CongressionalTradeUpdate], CongressionalTradeRepositoryInterface):
     """Repository for congressional trade operations."""
     
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         super().__init__(CongressionalTrade, db)
         self.db = db
     
@@ -593,7 +598,7 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
 class MemberPortfolioRepository(CRUDBase[MemberPortfolio, dict, dict], MemberPortfolioRepositoryInterface):
     """Repository for member portfolio operations."""
     
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         super().__init__(MemberPortfolio, db)
         self.db = db
     
@@ -710,7 +715,7 @@ class MemberPortfolioRepository(CRUDBase[MemberPortfolio, dict, dict], MemberPor
 class MemberPortfolioPerformanceRepository(CRUDBase[MemberPortfolioPerformance, dict, dict], PortfolioPerformanceRepositoryInterface):
     """Repository for member portfolio performance data."""
     
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         super().__init__(MemberPortfolioPerformance, db)
     
     def record_daily_performance(self, member_id: int, date: date, performance_data: Dict[str, Any]) -> PortfolioPerformanceSummary:

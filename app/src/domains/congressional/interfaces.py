@@ -9,6 +9,7 @@ from abc import ABC, abstractmethod
 from datetime import date, datetime
 from typing import List, Optional, Dict, Any, Tuple
 from decimal import Decimal
+from uuid import UUID
 
 from domains.base.interfaces import (
     BaseRepository, BaseService, AnalyticsInterface
@@ -38,7 +39,7 @@ class CongressMemberRepositoryInterface(BaseRepository, ABC):
         pass
     
     @abstractmethod
-    async def get_by_id(self, member_id: int) -> Optional[CongressMemberDetail]:
+    async def get_by_id(self, member_id: UUID) -> Optional[CongressMemberDetail]:
         """Get congress member by ID."""
         pass
     
@@ -48,7 +49,7 @@ class CongressMemberRepositoryInterface(BaseRepository, ABC):
         pass
     
     @abstractmethod
-    async def update(self, member_id: int, update_data: CongressMemberUpdate) -> Optional[CongressMemberDetail]:
+    async def update(self, member_id: UUID, update_data: CongressMemberUpdate) -> Optional[CongressMemberDetail]:
         """Update congress member."""
         pass
     

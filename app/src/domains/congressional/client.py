@@ -385,18 +385,26 @@ class CongressAPIClient(ExternalAPIInterface):
             Current Congress number.
         """
         # Calculate based on current date
-        # 118th Congress started January 3, 2023
+        # 118th Congress started January 3, 2023 and runs until January 3, 2025
         # Each Congress lasts 2 years
         import datetime
         
-        base_year = 2023
-        base_congress = 118
-        current_year = datetime.datetime.now().year
+        now = datetime.datetime.now()
         
-        years_since_base = current_year - base_year
-        congress_periods = years_since_base // 2
+        # 118th Congress: January 3, 2023 - January 3, 2025
+        congress_118_start = datetime.datetime(2023, 1, 3)
+        congress_119_start = datetime.datetime(2025, 1, 3)
         
-        return base_congress + congress_periods
+        if now < congress_119_start:
+            logger.debug(f"Current date {now} is before 119th Congress start, using 118th Congress")
+            return 118
+        else:
+            # 119th Congress and beyond
+            years_since_119 = (now - congress_119_start).days // 365
+            congress_periods = years_since_119 // 2
+            result = 119 + congress_periods
+            logger.debug(f"Current date {now} is after 119th Congress start, using Congress {result}")
+            return result
     
     async def bulk_fetch_members(self, bioguide_ids: List[str]) -> List[Dict[str, Any]]:
         """

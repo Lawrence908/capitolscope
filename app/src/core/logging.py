@@ -10,6 +10,7 @@ import logging
 import os
 from typing import Dict, Any, Optional
 from enum import Enum
+from pathlib import Path
 
 import structlog
 from structlog.stdlib import LoggerFactory
@@ -43,7 +44,7 @@ LOGGING_CONFIG = {
     LogComponent.API: LogLevel.INFO,
     LogComponent.BACKGROUND_TASKS: LogLevel.INFO,
     LogComponent.DATABASE: LogLevel.INFO,
-    LogComponent.CONGRESS_API: LogLevel.INFO,
+    LogComponent.CONGRESS_API: LogLevel.DEBUG,
     LogComponent.SECURITIES: LogLevel.INFO,
     LogComponent.AUTH: LogLevel.INFO,
     LogComponent.GENERAL: LogLevel.INFO,
@@ -94,6 +95,44 @@ def is_debug_enabled(component: LogComponent) -> bool:
     return get_component_log_level(component) == LogLevel.DEBUG
 
 
+def setup_file_logging():
+    """Set up file logging handlers."""
+    # Create logs directory
+    logs_dir = Path("logs")
+    logs_dir.mkdir(exist_ok=True)
+    
+    # Main application log
+    app_handler = logging.FileHandler(logs_dir / "app.log")
+    app_handler.setLevel(logging.DEBUG)
+    
+    # Background tasks log
+    tasks_handler = logging.FileHandler(logs_dir / "background_tasks.log")
+    tasks_handler.setLevel(logging.DEBUG)
+    
+    # Congress API log
+    api_handler = logging.FileHandler(logs_dir / "congress_api.log")
+    api_handler.setLevel(logging.DEBUG)
+    
+    # Set formatters
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    app_handler.setFormatter(formatter)
+    tasks_handler.setFormatter(formatter)
+    api_handler.setFormatter(formatter)
+    
+    # Get root logger and add handlers
+    root_logger = logging.getLogger()
+    root_logger.addHandler(app_handler)
+    
+    # Add specific handlers for components
+    tasks_logger = logging.getLogger("background_tasks")
+    tasks_logger.addHandler(tasks_handler)
+    
+    api_logger = logging.getLogger("congress_api")
+    api_logger.addHandler(api_handler)
+
+
 def configure_logging() -> structlog.stdlib.BoundLogger:
     """
     Configure structured logging for the application.
@@ -101,6 +140,9 @@ def configure_logging() -> structlog.stdlib.BoundLogger:
     Returns:
         Configured structlog logger instance.
     """
+    # Set up file logging first
+    setup_file_logging()
+    
     # Configure standard library logging
     logging.basicConfig(
         format="%(message)s",

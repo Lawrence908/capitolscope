@@ -611,25 +611,46 @@ class CongressAPIService:
             limit = 250
             
             while True:
+                logger.debug(f"Fetching members batch: offset={offset}, limit={limit}, congress={current_congress}")
                 response = await self.api_client.get_members_by_congress(
                     congress_number=current_congress,
                     limit=limit,
                     offset=offset
                 )
                 
+                # DEBUG: Log the raw response structure
+                logger.debug(f"API response type: {type(response)}")
+                logger.debug(f"API response attributes: {dir(response)}")
+                if hasattr(response, 'members'):
+                    logger.debug(f"Members found: {len(response.members) if response.members else 0}")
+                    if response.members and len(response.members) > 0:
+                        logger.debug(f"First member structure: {response.members[0]}")
+                        logger.debug(f"Sample member fields: {list(response.members[0].keys()) if isinstance(response.members[0], dict) else 'Not a dict'}")
+                else:
+                    logger.debug(f"Response has no 'members' attribute")
+                
+                # Convert response to dict for debugging
+                if hasattr(response, '__dict__'):
+                    logger.debug(f"Response dict: {response.__dict__}")
+                
                 if not response.members:
+                    logger.warning(f"No members returned from API for congress {current_congress}, offset {offset}")
                     break
                 
+                logger.info(f"Processing {len(response.members)} members from API response")
+                
                 # Process batch of members
-                for member_data in response.members:
+                for i, member_data in enumerate(response.members):
+                    logger.debug(f"Processing member {i+1}/{len(response.members)}: {member_data}")
                     try:
                         result = await self.sync_member_from_api_data(member_data)
                         if result == "created":
                             created_count += 1
                         elif result == "updated":
                             updated_count += 1
+                        logger.debug(f"Member sync result: {result}")
                     except Exception as e:
-                        logger.error(f"Failed to sync member {member_data.get('name', 'unknown')}: {e}")
+                        logger.error(f"Failed to sync member {member_data.get('name', 'unknown')}: {e}", exc_info=True)
                         failed_count += 1
                         continue
                 
@@ -696,6 +717,11 @@ class CongressAPIService:
         """
         # Extract member information from API data
         member_info = self._extract_member_info(api_member_data)
+        
+        logger.debug(f"Processing member: {member_info.get('full_name', 'unknown')}", 
+                   bioguide_id=member_info.get('bioguide_id'),
+                   state=member_info.get('state'),
+                   party=member_info.get('party'))
         
         # Check if member exists
         existing_member = None
@@ -774,15 +800,40 @@ class CongressAPIService:
                 member_info["first_name"] = ""
                 member_info["full_name"] = name.strip()
         
-        # Political info
-        party_map = {"R": "Republican", "D": "Democrat", "I": "Independent"}
+        # Political info - handle both 'party' and 'partyName' fields
+        party_name = api_member_data.get("partyName", "")
         party_code = api_member_data.get("party", "")
-        if party_code in party_map:
+        
+        # Map full party names to single letter codes
+        if party_name:
+            party_map = {"Republican": "R", "Democratic": "D", "Independent": "I"}
+            if party_name in party_map:
+                member_info["party"] = party_map[party_name]
+        elif party_code in ["R", "D", "I"]:
             member_info["party"] = party_code
         
         # Geographic info
-        member_info["state"] = api_member_data.get("state", "").upper()
-        member_info["district"] = api_member_data.get("district")
+        state_full = api_member_data.get("state", "")
+        if state_full:
+            # Map full state names to 2-letter codes
+            state_mapping = {
+                "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA",
+                "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "Florida": "FL", "Georgia": "GA",
+                "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA",
+                "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD",
+                "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO",
+                "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+                "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH",
+                "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+                "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT",
+                "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
+                "District of Columbia": "DC", "Puerto Rico": "PR"
+            }
+            member_info["state"] = state_mapping.get(state_full, state_full.upper()[:2] if len(state_full) <= 2 else state_full.upper())
+        
+        district = api_member_data.get("district")
+        if district is not None:
+            member_info["district"] = str(district) if district else None
         
         # Determine chamber from district
         if member_info.get("district"):
@@ -791,17 +842,19 @@ class CongressAPIService:
             member_info["chamber"] = "Senate"
         
         # Extract term information from terms array
-        terms = api_member_data.get("terms", [])
-        if terms:
-            # Get the most recent term
-            latest_term = terms[-1] if terms else {}
-            
-            member_info["term_start"] = self._parse_api_date(latest_term.get("startYear"))
-            member_info["term_end"] = self._parse_api_date(latest_term.get("endYear"))
-            
-            # Extract congress number
-            if "congress" in latest_term:
-                member_info["congress_number"] = latest_term["congress"]
+        terms = api_member_data.get("terms", {})
+        if terms and "item" in terms:
+            terms_list = terms["item"]
+            if terms_list:
+                # Get the most recent term
+                latest_term = terms_list[-1] if terms_list else {}
+                
+                member_info["term_start"] = self._parse_api_date(latest_term.get("startYear"))
+                member_info["term_end"] = self._parse_api_date(latest_term.get("endYear"))
+                
+                # Extract congress number
+                if "congress" in latest_term:
+                    member_info["congress_number"] = latest_term["congress"]
         
         # Note: congress_gov_id is set to bioguide_id above since they're the same value
         

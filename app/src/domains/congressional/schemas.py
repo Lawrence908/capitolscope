@@ -9,6 +9,7 @@ from datetime import datetime, date
 from typing import Optional, List, Dict, Any, Union
 from decimal import Decimal
 from enum import Enum
+from uuid import UUID
 
 from pydantic import BaseModel, Field, validator, model_validator
 from pydantic.types import NonNegativeInt, PositiveInt
@@ -106,7 +107,7 @@ class CongressMemberUpdate(CapitolScopeBaseSchema):
 
 class CongressMemberSummary(CongressMemberBase, TimestampMixin):
     """Summary congress member schema for list views."""
-    id: int
+    id: UUID
     age: Optional[int] = None
     profession: Optional[str] = None
     
@@ -151,7 +152,7 @@ class CongressMemberDetail(CongressMemberSummary):
 
 class CongressMemberPortfolioSummary(CapitolScopeBaseSchema):
     """Portfolio summary for a congress member."""
-    member_id: int
+    member_id: UUID
     total_value: int = Field(..., description="Total portfolio value in cents")
     total_cost_basis: int = Field(..., description="Total cost basis in cents")
     unrealized_gain_loss: int = Field(..., description="Unrealized gain/loss in cents")
@@ -171,7 +172,7 @@ class CongressMemberPortfolioSummary(CapitolScopeBaseSchema):
 
 class CongressionalTradeBase(CapitolScopeBaseSchema):
     """Base congressional trade schema."""
-    member_id: int = Field(..., gt=0)
+    member_id: UUID = Field(...)
     doc_id: str = Field(..., min_length=1, max_length=50)
     raw_asset_description: str = Field(..., min_length=1)
     transaction_type: TransactionType
@@ -187,7 +188,7 @@ class CongressionalTradeBase(CapitolScopeBaseSchema):
 
 class CongressionalTradeCreate(CongressionalTradeBase):
     """Schema for creating a congressional trade."""
-    security_id: Optional[int] = None
+    security_id: Optional[UUID] = None
     document_url: Optional[str] = Field(None, max_length=500)
     owner: Optional[TradeOwner] = None
     ticker: Optional[str] = Field(None, max_length=20)
@@ -223,7 +224,7 @@ class CongressionalTradeCreate(CongressionalTradeBase):
 
 class CongressionalTradeUpdate(CapitolScopeBaseSchema):
     """Schema for updating a congressional trade."""
-    security_id: Optional[int] = None
+    security_id: Optional[UUID] = None
     ticker: Optional[str] = Field(None, max_length=20)
     asset_name: Optional[str] = Field(None, max_length=300)
     asset_type: Optional[str] = Field(None, max_length=100)
@@ -236,8 +237,8 @@ class CongressionalTradeUpdate(CapitolScopeBaseSchema):
 
 class CongressionalTradeSummary(CongressionalTradeBase, TimestampMixin):
     """Summary congressional trade schema for list views."""
-    id: int
-    security_id: Optional[int] = None
+    id: UUID
+    security_id: Optional[UUID] = None
     owner: Optional[TradeOwner] = None
     ticker: Optional[str] = None
     asset_name: Optional[str] = None
@@ -292,15 +293,15 @@ class CongressionalTradeWithMember(CongressionalTradeDetail):
 
 class MemberPortfolioBase(CapitolScopeBaseSchema):
     """Base member portfolio schema."""
-    member_id: int = Field(..., gt=0)
-    security_id: int = Field(..., gt=0)
+    member_id: UUID = Field(...)
+    security_id: UUID = Field(...)
     shares: Decimal = Field(..., ge=0, decimal_places=6)
     cost_basis: int = Field(..., ge=0, description="Total cost basis in cents")
 
 
 class MemberPortfolioSummary(MemberPortfolioBase, TimestampMixin):
     """Summary member portfolio schema."""
-    id: int
+    id: UUID
     avg_cost_per_share: Optional[int] = None
     first_purchase_date: Optional[date] = None
     last_transaction_date: Optional[date] = None
@@ -330,7 +331,7 @@ class MemberPortfolioDetail(MemberPortfolioSummary):
 
 class PortfolioPerformanceBase(CapitolScopeBaseSchema):
     """Base portfolio performance schema."""
-    member_id: int = Field(..., gt=0)
+    member_id: UUID = Field(...)
     date: date
     total_value: int = Field(..., description="Total portfolio value in cents")
     total_cost_basis: int = Field(..., description="Total cost basis in cents")
@@ -340,7 +341,7 @@ class PortfolioPerformanceBase(CapitolScopeBaseSchema):
 
 class PortfolioPerformanceSummary(PortfolioPerformanceBase, TimestampMixin):
     """Summary portfolio performance schema."""
-    id: int
+    id: UUID
     daily_return: Optional[Decimal] = None
     daily_gain_loss: Optional[int] = None
     benchmark_return: Optional[Decimal] = None
@@ -369,7 +370,7 @@ class PortfolioPerformanceDetail(PortfolioPerformanceSummary):
 
 class CongressionalTradeFilter(CapitolScopeBaseSchema):
     """Filters for congressional trade queries."""
-    member_ids: Optional[List[int]] = Field(None, description="Filter by member IDs")
+    member_ids: Optional[List[UUID]] = Field(None, description="Filter by member IDs")
     member_names: Optional[List[str]] = Field(None, description="Filter by member names")
     parties: Optional[List[PoliticalParty]] = Field(None, description="Filter by political parties")
     chambers: Optional[List[Chamber]] = Field(None, description="Filter by chambers")
@@ -494,7 +495,7 @@ class MarketPerformanceComparison(CapitolScopeBaseSchema):
 
 class MemberAnalytics(CapitolScopeBaseSchema):
     """Comprehensive analytics for a congress member."""
-    member_id: int
+    member_id: UUID
     trading_stats: TradingStatistics
     portfolio_summary: Optional[CongressMemberPortfolioSummary] = None
     performance_1m: Optional[MarketPerformanceComparison] = None

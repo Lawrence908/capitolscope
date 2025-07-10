@@ -47,6 +47,9 @@ class CongressionalDataIngester:
         self.trade_crud = CongressionalTradeCRUD(session)
         self.security_crud = SecurityCRUD(session)
         
+        # Validation system (optional)
+        self.validator = None
+        
         # Asset type mapping from the original script
         self.asset_type_dict = {
             "4K": "401K and Other Non-Federal Retirement Accounts",
@@ -96,6 +99,16 @@ class CongressionalDataIngester:
             "VI": "Variable Insurance",
             "WU": "Whole/Universal Insurance"
         }
+    
+    def set_validator(self, validator):
+        """
+        Set the validator for data quality validation.
+        
+        Args:
+            validator: CongressionalDataValidator instance
+        """
+        self.validator = validator
+        logger.info("Data validator set for ingestion")
     
     async def import_congressional_data_from_csvs(self, data_directory: str) -> Dict[str, int]:
         """
@@ -351,6 +364,7 @@ class CongressionalDataIngester:
     def _extract_and_create_members_sync(self, df: pd.DataFrame) -> int:
         """
         Synchronous version of _extract_and_create_members for use with sync sessions.
+        Uses UPSERT pattern to preserve existing member data like party, chamber, state.
         
         Args:
             df: DataFrame containing congressional trade data
@@ -381,87 +395,88 @@ class CongressionalDataIngester:
         created_count = 0
         
         for member_name in unique_members:
-            if not member_name or member_name.strip() == '':
+            member_name = str(member_name).strip()
+            if not member_name or member_name == 'nan':
                 continue
-                
-            # Extract names based on available data
-            prefix = ""
-            first_name = ""
-            last_name = ""
-            full_name = member_name.strip()
             
-            if has_separate_names:
-                member_data = df[df['Member'] == member_name]
-                best_entry = None
-                jt_entries = member_data[member_data['Owner'] == 'JT']
-                jt_with_names = jt_entries[
-                    (jt_entries['FirstName'].notna()) & 
-                    (jt_entries['FirstName'] != '') & 
-                    (jt_entries['LastName'].notna()) & 
-                    (jt_entries['LastName'] != '')
-                ]
-                if not jt_with_names.empty:
-                    best_entry = jt_with_names.iloc[0]
-                else:
-                    entries_with_names = member_data[
-                        (member_data['FirstName'].notna()) & 
-                        (member_data['FirstName'] != '') & 
-                        (member_data['LastName'].notna()) & 
-                        (member_data['LastName'] != '')
-                    ]
-                    if not entries_with_names.empty:
-                        best_entry = entries_with_names.iloc[0]
-                if best_entry is not None:
-                    prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else ""
-                    first_name = str(best_entry['FirstName']).strip()
-                    last_name = str(best_entry['LastName']).strip()
-                    if prefix:
-                        full_name = f"{prefix} {first_name} {last_name}".strip()
+            try:
+                # Extract name components based on available columns
+                if has_separate_names:
+                    # Find the best row with complete data for this member
+                    member_rows = df[df['Member'] == member_name]
+                    
+                    best_entry = None
+                    for _, row in member_rows.iterrows():
+                        if pd.notna(row.get('FirstName')) and pd.notna(row.get('LastName')):
+                            best_entry = row
+                            break
+                    
+                    if best_entry is not None:
+                        prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else ""
+                        first_name = str(best_entry['FirstName']).strip()
+                        last_name = str(best_entry['LastName']).strip()
+                        if prefix:
+                            full_name = f"{prefix} {first_name} {last_name}".strip()
+                        else:
+                            full_name = f"{first_name} {last_name}".strip()
+                        member_names[member_name] = (prefix, first_name, last_name, full_name)
                     else:
+                        first_name, last_name = self._parse_name_from_member(member_name)
                         full_name = f"{first_name} {last_name}".strip()
-                    member_names[member_name] = (prefix, first_name, last_name, full_name)
+                        member_names[member_name] = ("", first_name, last_name, full_name)
                 else:
                     first_name, last_name = self._parse_name_from_member(member_name)
                     full_name = f"{first_name} {last_name}".strip()
-                    member_names[member_name] = (prefix, first_name, last_name, full_name)
-            else:
-                first_name, last_name = self._parse_name_from_member(member_name)
-                full_name = f"{first_name} {last_name}".strip()
-                member_names[member_name] = (prefix, first_name, last_name, full_name)
+                    member_names[member_name] = ("", first_name, last_name, full_name)
 
-            # Check if member already exists (by last and first name)
-            existing_member = self.member_crud.get_by_name(last_name, first_name)
-            if existing_member:
-                # Update member details if changed
-                from domains.congressional.schemas import CongressMemberUpdate
-                update_data = CongressMemberUpdate(
-                    first_name=first_name or None,
-                    last_name=last_name or None,
-                    full_name=full_name or None,
-                    prefix=prefix or None
+                prefix, first_name, last_name, full_name = member_names[member_name]
+
+                # Check if member already exists (by last and first name)
+                existing_member = self.member_crud.get_by_name(last_name, first_name)
+                if existing_member:
+                    # Update member details ONLY if the new data is better/more complete
+                    # and preserve existing party, chamber, state data
+                    from domains.congressional.schemas import CongressMemberUpdate
+                    update_data = CongressMemberUpdate()
+                    
+                    # Only update fields that are not already set or are improved
+                    if prefix and not existing_member.prefix:
+                        update_data.prefix = prefix
+                    if full_name and len(full_name) > len(existing_member.full_name or ""):
+                        update_data.full_name = full_name
+                    
+                    # Only update if we have actual changes to make
+                    update_dict = update_data.model_dump(exclude_unset=True, exclude_none=True)
+                    if update_dict:
+                        self.member_crud.update(existing_member.id, update_data)
+                        logger.info(f"Updated congress member: {existing_member.full_name} ({existing_member.id})")
+                        logger.debug(f"Updated member: {existing_member.full_name}")
+                    continue
+
+                # Create new member record with minimal required data
+                # Leave party, chamber, state empty for later enrichment via external APIs
+                member_data = CongressMemberCreate(
+                    first_name=first_name or "Unknown",
+                    last_name=last_name,
+                    full_name=full_name,
+                    prefix=prefix if prefix else None,
+                    # These fields are left empty for later enrichment from external APIs
+                    chamber=None,  
+                    party=None,   
+                    state=None,   
+                    district=None,
+                    is_active=True
                 )
-                self.member_crud.update(existing_member.id, update_data)
-                logger.debug(f"Updated member: {full_name}")
-                continue
-
-            # Create new member record
-            member_data = CongressMemberCreate(
-                first_name=first_name or "Unknown",
-                last_name=last_name,
-                full_name=full_name,
-                prefix=prefix,
-                chamber="House",  # Default to House, will be updated later
-                party="I",  # Default to Independent, will be updated later
-                state="DC",  # Default to DC, will be updated later
-                district=None,
-                is_active=True
-            )
-            try:
-                self.member_crud.create(member_data)
+                
+                member = self.member_crud.create(member_data)
                 created_count += 1
-                logger.debug(f"Created member: {full_name}")
+                
+                logger.info(f"Created congress member: {member.full_name} ({member.id})")
+                logger.debug(f"Created member: {member.full_name}")
+                
             except Exception as e:
-                logger.warning(f"Failed to create member {full_name}: {e}")
+                logger.error(f"Failed to create member {member_name}: {e}")
+                continue
         
         logger.info(f"Created {created_count} new members")
         return created_count
@@ -668,9 +683,7 @@ class CongressionalDataIngester:
                 trade_data = CongressionalTradeCreate(
                     member_id=member.id,
                     doc_id=doc_id,
-                    owner=owner,
                     raw_asset_description=raw_asset_description,
-                    ticker=ticker,
                     transaction_type=transaction_type if transaction_type else "P",  # Default to Purchase if empty
                     transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,  # Allow None for missing dates
                     notification_date=self._parse_date_string(notification_date) if notification_date else None,  # Allow None for missing dates
@@ -742,6 +755,18 @@ class CongressionalDataIngester:
         
         for idx, row in df.iterrows():
             try:
+                # Validate record if validator is available
+                if self.validator:
+                    validation_result = self.validator.validate_record(row.to_dict())
+                    if not validation_result.is_valid:
+                        logger.debug(f"Record validation failed at row {idx}: {validation_result.errors}")
+                        failed_count += 1
+                        continue
+                    
+                    # Use cleaned data if available
+                    if validation_result.cleaned_data:
+                        row = pd.Series(validation_result.cleaned_data)
+                
                 # Extract member information
                 member_key = str(row['Member']).strip()
                 if not member_key or member_key == 'nan':
@@ -787,25 +812,24 @@ class CongressionalDataIngester:
                 # Extract asset description for raw_asset_description field
                 raw_asset_description = self._extract_asset_description(row)
                 
-                # Clean up amount (remove $ and commas)
-                if amount.startswith('$'):
-                    amount = amount[1:]
-                amount = amount.replace(',', '')
+                # Parse amount into amount_min, amount_max, or amount_exact
+                amount_min, amount_max, amount_exact = self._parse_amount_to_fields(amount)
                 
                 # Create trade record with proper validation
                 trade_data = CongressionalTradeCreate(
                     member_id=member.id,
                     doc_id=doc_id,
-                    owner=owner,
+                    owner=owner if owner and owner != "Unknown" else None,
                     raw_asset_description=raw_asset_description,
-                    ticker=ticker,
+                    ticker=ticker if ticker else None,
                     transaction_type=transaction_type if transaction_type else "P",  # Default to Purchase if empty
                     transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,  # Allow None for missing dates
                     notification_date=self._parse_date_string(notification_date) if notification_date else None,  # Allow None for missing dates
-                    amount=amount if amount else None,  # Allow None for missing amounts
+                    amount_min=amount_min,
+                    amount_max=amount_max,
+                    amount_exact=amount_exact,
                     filing_status="N",  # Use "N" for New instead of "New"
-                    description=description,
-                    source_table=source_table
+                    comment=description if description else None
                 )
                 
                 self.trade_crud.create(trade_data)
@@ -1100,6 +1124,53 @@ class CongressionalDataIngester:
             return datetime.strptime(date_str.strip(), '%m/%d/%Y').date()
         except ValueError:
             return None
+
+    def _parse_amount_to_fields(self, amount_str: str) -> Tuple[Optional[int], Optional[int], Optional[int]]:
+        """
+        Parse amount string into amount_min, amount_max, and amount_exact fields.
+        
+        Args:
+            amount_str: Amount string from CSV (e.g., "$15,001 - $50,000", "$1,000", "None")
+            
+        Returns:
+            Tuple of (amount_min, amount_max, amount_exact) in cents
+        """
+        if not amount_str or amount_str.strip() == '' or amount_str.strip().lower() == 'none':
+            # If no amount, set a minimal range of $1 to indicate unknown amount
+            return 100, 100, None  # $1 - $1 range
+        
+        try:
+            # Clean the string
+            cleaned = amount_str.strip()
+            
+            # Remove dollar signs and commas
+            cleaned = cleaned.replace('$', '').replace(',', '')
+            
+            # Check if it's a range (contains " - ")
+            if ' - ' in cleaned:
+                parts = cleaned.split(' - ')
+                if len(parts) == 2:
+                    try:
+                        min_val = int(float(parts[0].strip()) * 100)  # Convert to cents
+                        max_val = int(float(parts[1].strip()) * 100)
+                        return min_val, max_val, None
+                    except ValueError:
+                        pass
+            
+            # Check if it's a single exact value
+            try:
+                exact_val = int(float(cleaned) * 100)  # Convert to cents
+                return None, None, exact_val
+            except ValueError:
+                pass
+            
+            # If parsing fails, default to $1 range
+            logger.debug(f"Could not parse amount '{amount_str}', defaulting to $1 range")
+            return 100, 100, None  # $1 - $1 range
+            
+        except Exception as e:
+            logger.debug(f"Error parsing amount '{amount_str}': {e}")
+            return 100, 100, None  # $1 - $1 range
 
 
 # Main import functions for scripts

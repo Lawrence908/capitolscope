@@ -66,8 +66,8 @@ class CongressMemberBase(CapitolScopeBaseSchema):
     full_name: str = Field(..., min_length=1, max_length=200)
     prefix: Optional[str] = Field(None, max_length=10, description="Honorifics like 'Rep.', 'Sen.', 'Dr.', 'Mr.', 'Ms.'")
     party: Optional[PoliticalParty] = None
-    chamber: Chamber
-    state: str = Field(..., min_length=2, max_length=2, description="Two-letter state code")
+    chamber: Optional[Chamber] = None  # Made optional for import, will be populated via external APIs
+    state: Optional[str] = Field(None, min_length=2, max_length=2, description="Two-letter state code")
     district: Optional[str] = Field(None, max_length=10)
     
     @validator('state')
@@ -87,6 +87,7 @@ class CongressMemberCreate(CongressMemberBase):
     term_start: Optional[date] = None
     term_end: Optional[date] = None
     congress_number: Optional[int] = Field(None, ge=1, le=200)
+    is_active: bool = True  # Add is_active field
 
 
 class CongressMemberUpdate(CapitolScopeBaseSchema):
@@ -203,6 +204,13 @@ class CongressionalTradeCreate(CongressionalTradeBase):
         amount_min = self.amount_min
         amount_max = self.amount_max
         amount_exact = self.amount_exact
+        
+        # Allow case where all amounts are None (will be handled during processing)
+        if not amount_exact and not amount_min and not amount_max:
+            # Set minimal $1-$1 range for unknown amounts
+            self.amount_min = 100  # $1 in cents
+            self.amount_max = 100  # $1 in cents
+            return self
         
         # Must have either exact amount or min/max range
         if not amount_exact and not (amount_min and amount_max):

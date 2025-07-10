@@ -30,45 +30,45 @@ logger = get_logger(__name__)
 # ENUMS
 # ============================================================================
 
-class UserStatus(PyEnum):
+class UserStatus(str, PyEnum):
     """User account status."""
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    SUSPENDED = "suspended"
-    PENDING_VERIFICATION = "pending_verification"
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    SUSPENDED = "SUSPENDED"
+    PENDING_VERIFICATION = "PENDING_VERIFICATION"
 
 
-class AuthProvider(PyEnum):
+class AuthProvider(str, PyEnum):
     """Authentication provider types."""
-    EMAIL = "email"
-    GOOGLE = "google"
-    GITHUB = "github"
-    TWITTER = "twitter"
+    EMAIL = "EMAIL"
+    GOOGLE = "GOOGLE"
+    GITHUB = "GITHUB"
+    TWITTER = "TWITTER"
 
 
-class UserRole(PyEnum):
+class UserRole(str, PyEnum):
     """User role types."""
-    USER = "user"
-    MODERATOR = "moderator"
-    ADMIN = "admin"
-    SUPER_ADMIN = "super_admin"
+    USER = "USER"
+    MODERATOR = "MODERATOR"
+    ADMIN = "ADMIN"
+    SUPER_ADMIN = "SUPER_ADMIN"
 
 
-class NotificationChannel(PyEnum):
+class NotificationChannel(str, PyEnum):
     """Notification delivery channels."""
-    EMAIL = "email"
-    SMS = "sms"
-    PUSH = "push"
-    IN_APP = "in_app"
+    EMAIL = "EMAIL"
+    SMS = "SMS"
+    PUSH = "PUSH"
+    IN_APP = "IN_APP"
 
 
-class NotificationType(PyEnum):
+class NotificationType(str, PyEnum):
     """Types of notifications."""
-    TRADE_ALERT = "trade_alert"
-    PORTFOLIO_UPDATE = "portfolio_update"
-    NEWS_DIGEST = "news_digest"
-    SYSTEM_ANNOUNCEMENT = "system_announcement"
-    SUBSCRIPTION_UPDATE = "subscription_update"
+    TRADE_ALERT = "TRADE_ALERT"
+    PORTFOLIO_UPDATE = "PORTFOLIO_UPDATE"
+    NEWS_DIGEST = "NEWS_DIGEST"
+    SYSTEM_ANNOUNCEMENT = "SYSTEM_ANNOUNCEMENT"
+    SUBSCRIPTION_UPDATE = "SUBSCRIPTION_UPDATE"
 
 
 # ============================================================================

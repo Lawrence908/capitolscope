@@ -45,11 +45,13 @@ class LoginRequest(BaseModel):
     class Config:
         """Pydantic config."""
         json_schema_extra = {
-            "examples": [{
-                "email": "chrislawrencedev@gmail.com",
-                "password": "r!4$gs5syHWkuML",
-                "remember_me": True
-            }]
+            "examples": [
+                {
+                    "email": "chrislawrencedev@gmail.com",
+                    "password": "r!4$gs5syHWkuML",
+                    "remember_me": True
+                }
+            ]
         }  
 
 
@@ -92,14 +94,16 @@ class RegisterRequest(BaseModel):
     class Config:
         """Pydantic config."""
         json_schema_extra = {
-            "examples": [{
-                "email": "chrislawrencedev@gmail.com",
-                "password": "r!4$gs5syHWkuML",
-                "first_name": "Chris",
-                "last_name": "Lawrence",
-                "username": "CapitolScopeAdmin",
-                "terms_accepted": True
-            }]
+            "examples": [
+                {
+                    "email": "chrislawrencedev@gmail.com",
+                    "password": "r!4$gs5syHWkuML",
+                    "first_name": "Chris",
+                    "last_name": "Lawrence",
+                    "username": "CapitolScopeAdmin",
+                    "terms_accepted": True
+                }
+            ]
         }  
 
 

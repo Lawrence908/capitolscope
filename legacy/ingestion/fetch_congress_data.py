@@ -86,7 +86,6 @@ db_path = root_path / 'data' / 'congress'
 disk_engine = create_engine(f'sqlite:///{db_path}/congress_trades.db', echo=False)
 
 # Import the get_tickers function
-# from src.ingestion.fetch_stock_data import get_tickers, get_tickers_company_dict
 from fetch_stock_data import get_tickers, get_tickers_company_dict
 from pdf_parsing_improvements import ImprovedPDFParser
 

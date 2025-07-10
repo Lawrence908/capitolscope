@@ -2,16 +2,28 @@
 Background tasks for CapitolScope data processing and maintenance.
 """
 
+import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
 from celery import Task
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from background.celery_app import celery_app
 from core.config import get_settings
-from core.database import get_db_session
+from core.database import DatabaseManager, db_manager, get_sync_db_session
+from core.logging import get_logger
+from domains.congressional.services import CongressAPIService
+from domains.congressional.crud import CongressMemberRepository
+from domains.congressional.ingestion import CongressionalDataIngester
+from domains.securities.ingestion import (
+    populate_securities_from_major_indices,
+    ingest_price_data_for_all_securities
+)
+from domains.securities.data_fetcher import EnhancedStockDataService, StockDataRequest
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 settings = get_settings()
 
 
@@ -25,6 +37,260 @@ class DatabaseTask(Task):
             logger.error(f"Task {self.name} failed: {exc}")
             raise
 
+
+def run_async_task(coro):
+    """
+    Helper function to run async functions in sync Celery tasks.
+    
+    This handles different execution contexts:
+    - Celery workers (separate processes)
+    - FastAPI background tasks (uvloop context)
+    - Direct script execution
+    """
+    try:
+        # Try to get the current event loop
+        loop = asyncio.get_event_loop()
+        
+        # Check if loop is already running
+        if loop.is_running():
+            # We're in an environment with a running loop (like FastAPI/uvloop)
+            # Check if it's uvloop (which doesn't support nest_asyncio)
+            loop_type = type(loop).__name__
+            
+            if 'uvloop' in loop_type.lower():
+                # In uvloop context (FastAPI), we can't use nest_asyncio
+                # This should not happen in Celery workers, but if it does,
+                # we need to run in a separate thread
+                import concurrent.futures
+                import threading
+                
+                logger.warning(f"Running async task in uvloop context ({loop_type}), using thread pool")
+                
+                def run_in_thread():
+                    # Create a new event loop in this thread
+                    new_loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(new_loop)
+                    try:
+                        return new_loop.run_until_complete(coro)
+                    finally:
+                        new_loop.close()
+                
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                    future = executor.submit(run_in_thread)
+                    return future.result()
+            else:
+                # Non-uvloop event loop, try nest_asyncio
+                try:
+                    import nest_asyncio
+                    # Check if already patched to avoid double-patching
+                    if not hasattr(loop, '_nest_asyncio_patched'):
+                        nest_asyncio.apply(loop)
+                        loop._nest_asyncio_patched = True
+                    
+                    logger.debug(f"Using nest_asyncio for loop type: {loop_type}")
+                    return loop.run_until_complete(coro)
+                    
+                except ImportError:
+                    logger.error("nest_asyncio not available and running loop detected")
+                    raise RuntimeError(
+                        "Cannot run async task: nest_asyncio not available and event loop is running"
+                    )
+                except Exception as e:
+                    logger.error(f"nest_asyncio failed: {e}")
+                    raise RuntimeError(f"Failed to patch event loop with nest_asyncio: {e}")
+        else:
+            # No running loop, we can create our own
+            logger.debug("No running event loop, creating new one")
+            return loop.run_until_complete(coro)
+            
+    except RuntimeError as e:
+        if "no running event loop" in str(e).lower() or "no current event loop" in str(e).lower():
+            # No event loop exists, create a new one
+            logger.debug("Creating new event loop for async task")
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                return loop.run_until_complete(coro)
+            finally:
+                # Clean up the loop
+                asyncio.set_event_loop(None)
+                loop.close()
+        else:
+            logger.error(f"Event loop error: {e}")
+            raise
+
+
+async def get_db_session_async():
+    """Get async database session for background tasks."""
+    db_manager = DatabaseManager()
+    await db_manager.initialize()
+    
+    if not db_manager.session_factory:
+        raise RuntimeError("Database session factory not initialized")
+        
+    async with db_manager.session_factory() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await db_manager.close()
+
+
+# ============================================================================
+# CONGRESSIONAL DATA INGESTION TASKS
+# ============================================================================
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def sync_congressional_members(self, action: str = "sync-all", **kwargs):
+    """
+    Sync congressional members from Congress.gov API.
+    
+    Args:
+        action: Action to perform ('sync-all', 'sync-state', 'sync-member', 'enrich-existing')
+        **kwargs: Additional parameters for specific actions
+    """
+    return run_async_task(_sync_congressional_members_async(action, **kwargs))
+
+
+async def _sync_congressional_members_async(action: str, **kwargs) -> Dict[str, Any]:
+    """Async implementation of congressional members sync."""
+    try:
+        logger.info(f"Starting congressional members sync: {action}")
+        
+        # Initialize database first
+        from core.database import db_manager, get_sync_db_session
+        
+        # Ensure database is initialized
+        if not db_manager._initialized:
+            await db_manager.initialize()
+        
+        with get_sync_db_session() as session:
+            # Initialize services with sync session
+            member_repo = CongressMemberRepository(session)
+            api_service = CongressAPIService(member_repo)
+            
+            # Execute the appropriate sync action
+            if action == "sync-all":
+                results = await api_service.sync_all_members()
+            elif action == "sync-state" and "state" in kwargs:
+                results = await api_service.sync_members_by_state(kwargs["state"])
+            elif action == "sync-member" and "bioguide_id" in kwargs:
+                result = await api_service.sync_member_by_bioguide_id(kwargs["bioguide_id"])
+                results = {"action": result, "bioguide_id": kwargs["bioguide_id"]}
+            elif action == "enrich-existing":
+                results = await _enrich_existing_members(member_repo, api_service)
+            else:
+                raise ValueError(f"Invalid action: {action}")
+            
+            # Commit changes (handled by context manager)
+            logger.info(f"Congressional members sync completed: {results}")
+            return {
+                "status": "success",
+                "action": action,
+                "results": results,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+    except Exception as exc:
+        logger.error(f"Congressional members sync failed: {exc}")
+        raise
+
+
+async def _enrich_existing_members(member_repo: CongressMemberRepository, api_service: CongressAPIService) -> Dict[str, Any]:
+    """Enrich existing members with additional Congress.gov data."""
+    from domains.congressional.schemas import MemberQuery
+    
+    # Get all members with bioguide IDs using sync repository
+    query = MemberQuery(limit=1000)
+    members, _ = member_repo.list_members(query)
+    
+    enriched_count = 0
+    failed_count = 0
+    
+    for member in members:
+        if member.bioguide_id:
+            try:
+                result = await api_service.sync_member_by_bioguide_id(member.bioguide_id)
+                if result in ["updated", "created"]:
+                    enriched_count += 1
+                    logger.info(f"Enriched member: {member.full_name}")
+            except Exception as e:
+                logger.error(f"Failed to enrich member {member.full_name}: {e}")
+                failed_count += 1
+                continue
+    
+    return {
+        "enriched": enriched_count,
+        "failed": failed_count,
+        "total_processed": enriched_count + failed_count
+    }
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def comprehensive_data_ingestion(self):
+    """
+    Comprehensive data ingestion workflow that syncs all congressional data.
+    
+    This is the main orchestration task that runs:
+    1. Member data sync from Congress.gov
+    2. Legislative data enrichment
+    3. Trading data updates
+    4. Portfolio recalculations
+    """
+    return run_async_task(_comprehensive_data_ingestion_async())
+
+
+async def _comprehensive_data_ingestion_async() -> Dict[str, Any]:
+    """Async implementation of comprehensive data ingestion."""
+    try:
+        logger.info("Starting comprehensive data ingestion workflow")
+        start_time = datetime.utcnow()
+        results = {}
+        
+        # Step 1: Sync congressional members
+        logger.info("Step 1: Syncing congressional members")
+        member_sync_results = await _sync_congressional_members_async("sync-all")
+        results["member_sync"] = member_sync_results
+        
+        # Step 2: Enrich member data with legislation
+        logger.info("Step 2: Enriching member data")
+        enrich_results = await _sync_congressional_members_async("enrich-existing")
+        results["enrichment"] = enrich_results
+        
+        # Step 3: Update stock prices (if we have trades)
+        logger.info("Step 3: Updating stock prices")
+        price_update_results = await _update_stock_prices_async()
+        results["price_updates"] = price_update_results
+        
+        # Step 4: Recalculate portfolios and performance
+        logger.info("Step 4: Recalculating portfolios")
+        portfolio_results = await _recalculate_portfolios_async()
+        results["portfolio_calculations"] = portfolio_results
+        
+        end_time = datetime.utcnow()
+        duration = end_time - start_time
+        
+        logger.info(f"Comprehensive data ingestion completed in {duration}")
+        
+        return {
+            "status": "success",
+            "start_time": start_time.isoformat(),
+            "end_time": end_time.isoformat(),
+            "duration_seconds": duration.total_seconds(),
+            "results": results
+        }
+        
+    except Exception as exc:
+        logger.error(f"Comprehensive data ingestion failed: {exc}")
+        raise
+
+
+# ============================================================================
+# TRADING DATA TASKS
+# ============================================================================
 
 @celery_app.task(base=DatabaseTask, bind=True)
 def sync_congressional_trades(self, date_from: Optional[str] = None):
@@ -56,108 +322,6 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
-def sync_congressional_members(self, action: str = "sync-all", **kwargs):
-    """
-    Sync congressional members from Congress.gov API.
-    
-    Args:
-        action: Action to perform ('sync-all', 'sync-state', 'enrich-existing')
-        **kwargs: Additional parameters for specific actions
-    """
-    try:
-        logger.info(f"Starting congressional members sync: {action}")
-        
-        import subprocess
-        import sys
-        
-        # Build command
-        cmd = [
-            sys.executable, 
-            "-m", "scripts.sync_congress_members",
-            "--action", action
-        ]
-        
-        # Add additional parameters based on action
-        if action == "sync-state" and "state" in kwargs:
-            cmd.extend(["--state", kwargs["state"]])
-        elif action == "sync-member" and "bioguide_id" in kwargs:
-            cmd.extend(["--bioguide-id", kwargs["bioguide_id"]])
-        
-        # Execute sync script
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)  # 30 min timeout
-        
-        if result.returncode == 0:
-            logger.info(f"Congressional members sync completed successfully: {action}")
-            return {
-                "status": "success",
-                "action": action,
-                "stdout": result.stdout,
-                "stderr": result.stderr
-            }
-        else:
-            logger.error(f"Congressional members sync failed: {result.stderr}")
-            raise Exception(f"Sync script failed with return code {result.returncode}")
-        
-    except subprocess.TimeoutExpired:
-        logger.error("Congressional members sync timed out")
-        raise Exception("Sync operation timed out")
-    except Exception as exc:
-        logger.error(f"Congressional members sync failed: {exc}")
-        raise self.retry(exc=exc, countdown=300, max_retries=3)
-
-
-@celery_app.task(base=DatabaseTask, bind=True)
-def sync_congressional_members(self, action: str = "sync-all", **kwargs):
-    """
-    Sync congressional members from Congress.gov API.
-    
-    Args:
-        action: Action to perform ('sync-all', 'sync-state', 'enrich-existing')
-        **kwargs: Additional parameters for specific actions
-    """
-    try:
-        logger.info(f"Starting congressional members sync: {action}")
-        
-        import subprocess
-        import sys
-        
-        # Build command
-        cmd = [
-            sys.executable, 
-            "-m", "scripts.sync_congress_members",
-            "--action", action
-        ]
-        
-        # Add additional parameters based on action
-        if action == "sync-state" and "state" in kwargs:
-            cmd.extend(["--state", kwargs["state"]])
-        elif action == "sync-member" and "bioguide_id" in kwargs:
-            cmd.extend(["--bioguide-id", kwargs["bioguide_id"]])
-        
-        # Execute sync script
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)  # 30 min timeout
-        
-        if result.returncode == 0:
-            logger.info(f"Congressional members sync completed successfully: {action}")
-            return {
-                "status": "success",
-                "action": action,
-                "stdout": result.stdout,
-                "stderr": result.stderr
-            }
-        else:
-            logger.error(f"Congressional members sync failed: {result.stderr}")
-            raise Exception(f"Sync script failed with return code {result.returncode}")
-        
-    except subprocess.TimeoutExpired:
-        logger.error("Congressional members sync timed out")
-        raise Exception("Sync operation timed out")
-    except Exception as exc:
-        logger.error(f"Congressional members sync failed: {exc}")
-        raise self.retry(exc=exc, countdown=300, max_retries=3)
-
-
-@celery_app.task(base=DatabaseTask, bind=True)
 def update_stock_prices(self, symbols: Optional[List[str]] = None):
     """
     Update stock prices for tracked securities.
@@ -165,6 +329,11 @@ def update_stock_prices(self, symbols: Optional[List[str]] = None):
     Args:
         symbols: List of stock symbols to update (defaults to all tracked)
     """
+    return run_async_task(_update_stock_prices_async(symbols))
+
+
+async def _update_stock_prices_async(symbols: Optional[List[str]] = None) -> Dict[str, Any]:
+    """Async implementation of stock price updates."""
     try:
         logger.info("Starting stock price updates")
         
@@ -186,8 +355,34 @@ def update_stock_prices(self, symbols: Optional[List[str]] = None):
         
     except Exception as exc:
         logger.error(f"Stock price update failed: {exc}")
-        raise self.retry(exc=exc, countdown=180, max_retries=5)
+        raise
 
+
+async def _recalculate_portfolios_async() -> Dict[str, Any]:
+    """Recalculate portfolio values and performance metrics."""
+    try:
+        logger.info("Starting portfolio recalculations")
+        
+        # TODO: Implement portfolio recalculation logic
+        # This would typically involve:
+        # 1. Getting all congressional members with trades
+        # 2. Recalculating current portfolio values
+        # 3. Updating performance metrics
+        # 4. Generating analytics summaries
+        
+        portfolios_updated = 0
+        logger.info(f"Recalculated {portfolios_updated} member portfolios")
+        
+        return {"status": "success", "portfolios_updated": portfolios_updated}
+        
+    except Exception as exc:
+        logger.error(f"Portfolio recalculation failed: {exc}")
+        raise
+
+
+# ============================================================================
+# MAINTENANCE AND CLEANUP TASKS
+# ============================================================================
 
 @celery_app.task(base=DatabaseTask, bind=True)
 def cleanup_old_data(self, days_to_keep: int = 90):
@@ -271,4 +466,310 @@ def generate_analytics_report(self, report_type: str = "daily"):
         
     except Exception as exc:
         logger.error(f"Analytics report generation failed: {exc}")
-        raise self.retry(exc=exc, countdown=600, max_retries=2) 
+        raise self.retry(exc=exc, countdown=600, max_retries=2)
+
+
+# ============================================================================
+# HEALTH CHECK AND MONITORING TASKS
+# ============================================================================
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def health_check_congress_api(self):
+    """
+    Health check for Congress.gov API connectivity.
+    """
+    return run_async_task(_health_check_congress_api_async())
+
+
+async def _health_check_congress_api_async() -> Dict[str, Any]:
+    """Async implementation of Congress API health check."""
+    try:
+        from domains.congressional.client import CongressAPIClient
+        
+        logger.info("Running Congress.gov API health check")
+        
+        async with CongressAPIClient() as client:
+            # Try to fetch a small number of members
+            response = await client.get_member_list(limit=1)
+            
+            if response.members:
+                logger.info("Congress.gov API health check passed")
+                return {
+                    "status": "healthy",
+                    "api_name": "Congress.gov",
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "response_time_ms": None  # Could measure this
+                }
+            else:
+                logger.warning("Congress.gov API health check failed - no data returned")
+                return {
+                    "status": "unhealthy",
+                    "api_name": "Congress.gov",
+                    "error": "No data returned",
+                    "timestamp": datetime.utcnow().isoformat()
+                }
+                
+    except Exception as exc:
+        logger.error(f"Congress.gov API health check failed: {exc}")
+        return {
+            "status": "unhealthy",
+            "api_name": "Congress.gov",
+            "error": str(exc),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+
+# ============================================================================
+# TASK SCHEDULING AND ORCHESTRATION
+# ============================================================================
+
+@celery_app.task(bind=True)
+def schedule_daily_ingestion(self):
+    """
+    Schedule the daily comprehensive data ingestion workflow.
+    This task is typically run by a cron job or periodic scheduler.
+    """
+    try:
+        logger.info("Scheduling daily data ingestion workflow")
+        
+        # Queue the comprehensive ingestion task
+        result = comprehensive_data_ingestion.delay()
+        
+        return {
+            "status": "scheduled",
+            "task_id": result.id,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"Failed to schedule daily ingestion: {exc}")
+        raise
+
+
+@celery_app.task(bind=True) 
+def schedule_weekly_maintenance(self):
+    """
+    Schedule weekly maintenance tasks.
+    """
+    try:
+        logger.info("Scheduling weekly maintenance tasks")
+        
+        # Queue maintenance tasks
+        cleanup_task = cleanup_old_data.delay(days_to_keep=90)
+        analytics_task = generate_analytics_report.delay(report_type="weekly")
+        
+        return {
+            "status": "scheduled",
+            "cleanup_task_id": cleanup_task.id,
+            "analytics_task_id": analytics_task.id,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"Failed to schedule weekly maintenance: {exc}")
+        raise
+
+
+# ============================================================================
+# ENHANCED DATA TASKS
+# ============================================================================
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def seed_securities_database(self, include_prices: bool = False, batch_size: int = 50):
+    """
+    Seed the securities database with major market indices.
+    
+    Args:
+        include_prices: Whether to also fetch historical price data
+        batch_size: Batch size for price data processing
+    """
+    return run_async_task(_seed_securities_database_async(include_prices, batch_size))
+
+
+async def _seed_securities_database_async(include_prices: bool, batch_size: int) -> Dict[str, Any]:
+    """Async implementation of securities database seeding."""
+    try:
+        logger.info("Starting securities database seeding")
+        
+        db_manager = DatabaseManager()
+        await db_manager.initialize()
+        
+        results = {}
+        
+        async with db_manager.session_factory() as session:
+            # Step 1: Populate securities from major indices
+            logger.info("Populating securities from major market indices")
+            securities_result = await populate_securities_from_major_indices(session)
+            results["securities"] = securities_result
+            
+            # Step 2: Fetch price data (optional)
+            if include_prices:
+                logger.info("Fetching historical price data for all securities")
+                prices_result = await ingest_price_data_for_all_securities(
+                    session, batch_size=batch_size
+                )
+                results["prices"] = prices_result
+            
+            await session.commit()
+        
+        logger.info(f"Securities database seeding completed: {results}")
+        return {
+            "status": "success",
+            "results": results,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"Securities database seeding failed: {exc}")
+        raise
+    finally:
+        await db_manager.close()
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def fetch_stock_data_enhanced(self, tickers: Optional[List[str]] = None, 
+                            interval: str = "1d", 
+                            start_date: str = "2014-01-01",
+                            end_date: Optional[str] = None,
+                            source: str = "yfinance",
+                            use_async: bool = True,
+                            batch_size: int = 10):
+    """
+    Fetch stock data using the enhanced stock data service.
+    
+    Args:
+        tickers: List of ticker symbols (None for all major indices)
+        interval: Data interval (1d, 1wk, 1mo)
+        start_date: Start date in YYYY-MM-DD format
+        end_date: End date in YYYY-MM-DD format (None for today)
+        source: Data source (yfinance, alpha_vantage)
+        use_async: Whether to use async fetching
+        batch_size: Batch size for async operations
+    """
+    return run_async_task(_fetch_stock_data_enhanced_async(
+        tickers, interval, start_date, end_date, source, use_async, batch_size
+    ))
+
+
+async def _fetch_stock_data_enhanced_async(tickers: Optional[List[str]], 
+                                         interval: str,
+                                         start_date: str, 
+                                         end_date: Optional[str],
+                                         source: str,
+                                         use_async: bool,
+                                         batch_size: int) -> Dict[str, Any]:
+    """Async implementation of enhanced stock data fetching."""
+    try:
+        logger.info("Starting enhanced stock data fetching")
+        
+        # Initialize service
+        service = EnhancedStockDataService()
+        
+        # Create request template
+        request_template = StockDataRequest(
+            symbol="",  # Will be replaced
+            interval=interval,
+            start_date=start_date,
+            end_date=end_date or str(datetime.now().date()),
+            source=source
+        )
+        
+        if tickers:
+            # Fetch specific tickers
+            requests = []
+            for ticker in tickers:
+                request = StockDataRequest(
+                    symbol=ticker,
+                    interval=interval,
+                    start_date=start_date,
+                    end_date=end_date or str(datetime.now().date()),
+                    source=source
+                )
+                requests.append(request)
+            
+            if use_async:
+                responses = await service.fetch_multiple_stocks_async(requests, batch_size)
+            else:
+                responses = service.fetch_multiple_stocks(requests)
+        else:
+            # Fetch all major indices
+            if use_async:
+                responses = await service.fetch_all_major_stocks_async(request_template, batch_size)
+            else:
+                responses = service.fetch_all_major_stocks(request_template)
+        
+        # Analyze results
+        successful = [r for r in responses if r.success]
+        failed = [r for r in responses if not r.success]
+        total_records = sum(len(r.data) for r in successful)
+        
+        results = {
+            "total_tickers": len(responses),
+            "successful_tickers": len(successful),
+            "failed_tickers": len(failed),
+            "total_records": total_records,
+            "success_rate": len(successful) / len(responses) * 100 if responses else 0,
+            "failed_symbols": [(r.symbol, r.error) for r in failed]
+        }
+        
+        logger.info(f"Enhanced stock data fetching completed: {results}")
+        return {
+            "status": "success",
+            "results": results,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"Enhanced stock data fetching failed: {exc}")
+        raise
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def import_congressional_data_csvs(self, csv_directory: str):
+    """
+    Import congressional trading data from CSV files.
+    
+    Args:
+        csv_directory: Path to directory containing CSV files
+    """
+    try:
+        logger.info(f"Starting congressional data import from CSVs: {csv_directory}")
+        
+        with get_sync_db_session() as session:
+            ingester = CongressionalDataIngester(session)
+            result = ingester.import_congressional_data_from_csvs_sync(csv_directory)
+        
+        logger.info(f"Congressional CSV import completed: {result}")
+        return {
+            "status": "success",
+            "results": result,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"Congressional CSV import failed: {exc}")
+        raise
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def enrich_congressional_member_data(self):
+    """
+    Enrich congressional member profiles with additional data.
+    """
+    try:
+        logger.info("Starting congressional member data enrichment")
+        
+        with get_sync_db_session() as session:
+            ingester = CongressionalDataIngester(session)
+            result = ingester.enrich_member_data_sync()
+        
+        logger.info(f"Congressional member enrichment completed: {result}")
+        return {
+            "status": "success",
+            "results": result,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"Congressional member enrichment failed: {exc}")
+        raise

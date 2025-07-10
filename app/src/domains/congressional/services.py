@@ -25,8 +25,11 @@ from domains.congressional.schemas import (
     CongressMemberCreate, CongressMemberUpdate, CongressMemberDetail, CongressMemberSummary,
     CongressionalTradeCreate, CongressionalTradeUpdate, CongressionalTradeDetail,
     CongressionalTradeFilter, MemberPortfolioSummary, PortfolioPerformanceSummary,
-    TradingStatistics, MemberAnalytics, MarketPerformanceComparison
+    TradingStatistics, MemberAnalytics, MarketPerformanceComparison,
+    CongressMemberPortfolioSummary
 )
+
+
 from core.exceptions import NotFoundError, ValidationError, BusinessLogicError
 from core.logging import get_logger
 

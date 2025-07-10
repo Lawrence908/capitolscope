@@ -5,7 +5,6 @@ This module provides JWT token generation, validation, and authentication
 middleware for the FastAPI application.
 """
 
-import jwt
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any
 from fastapi import HTTPException, status, Depends
@@ -13,6 +12,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from passlib.context import CryptContext
+from jose import jwt, JWTError
 
 from core.database import get_db_session
 from core.config import settings
@@ -91,7 +91,7 @@ def verify_token(token: str) -> Dict[str, Any]:
         return payload
     except jwt.ExpiredSignatureError:
         raise AuthenticationError("Token has expired")
-    except jwt.JWTError:
+    except JWTError:
         raise AuthenticationError("Invalid token")
 
 

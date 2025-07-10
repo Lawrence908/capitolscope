@@ -18,7 +18,13 @@ from domains.congressional.schemas import (
     MemberQuery, CongressMemberDetail, CongressMemberSummary,
     CongressMemberListResponse, CongressMemberDetailResponse
 )
-from background.tasks import sync_congressional_members
+from background.tasks import (
+    sync_congressional_members, 
+    seed_securities_database,
+    fetch_stock_data_enhanced,
+    import_congressional_data_csvs,
+    enrich_congressional_member_data
+)
 
 logger = get_logger(__name__)
 router = APIRouter()
@@ -276,8 +282,8 @@ async def sync_members_from_api(
 
 @router.post("/sync/{bioguide_id}")
 async def sync_specific_member(
-    bioguide_id: str = Path(..., description="Bioguide ID of member to sync"),
     background_tasks: BackgroundTasks,
+    bioguide_id: str = Path(..., description="Bioguide ID of member to sync"),
     current_user: User = Depends(require_admin),
     session: AsyncSession = Depends(get_db_session),
 ) -> JSONResponse:
@@ -313,6 +319,94 @@ async def sync_specific_member(
         return error_response(
             message=f"Failed to queue sync for member {bioguide_id}",
             error_code="member_sync_queue_failed"
+        )
+
+
+@router.post("/comprehensive-ingestion")
+async def trigger_comprehensive_ingestion(
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(require_admin),
+) -> JSONResponse:
+    """
+    Trigger comprehensive data ingestion workflow.
+    
+    This endpoint starts the complete data ingestion process that includes:
+    1. Syncing congressional members from Congress.gov
+    2. Enriching member data with legislation
+    3. Updating stock prices
+    4. Recalculating portfolios
+    
+    **Admin Only**: Requires administrator permissions.
+    """
+    logger.info("Triggering comprehensive data ingestion", user_id=current_user.id)
+    
+    try:
+        from background.tasks import comprehensive_data_ingestion
+        
+        # Add background task for comprehensive ingestion
+        task_result = comprehensive_data_ingestion.delay()
+        
+        data = {
+            "task_id": task_result.id,
+            "action": "comprehensive-ingestion",
+            "status": "queued",
+            "message": "Comprehensive data ingestion workflow has been queued for processing",
+            "workflow_steps": [
+                "1. Sync congressional members",
+                "2. Enrich member data",
+                "3. Update stock prices", 
+                "4. Recalculate portfolios"
+            ]
+        }
+        
+        return success_response(
+            data=data,
+            meta={"message": "Comprehensive ingestion workflow queued successfully"}
+        )
+        
+    except Exception as e:
+        logger.error(f"Error queuing comprehensive ingestion: {e}")
+        return error_response(
+            message="Failed to queue comprehensive ingestion workflow",
+            error_code="comprehensive_ingestion_queue_failed"
+        )
+
+
+@router.post("/health-check")
+async def health_check_apis(
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(require_admin),
+) -> JSONResponse:
+    """
+    Run health checks on external APIs.
+    
+    **Admin Only**: Requires administrator permissions.
+    """
+    logger.info("Triggering API health checks", user_id=current_user.id)
+    
+    try:
+        from background.tasks import health_check_congress_api
+        
+        # Add background task for health check
+        task_result = health_check_congress_api.delay()
+        
+        data = {
+            "task_id": task_result.id,
+            "action": "health-check",
+            "status": "queued",
+            "message": "API health check has been queued for processing"
+        }
+        
+        return success_response(
+            data=data,
+            meta={"message": "Health check task queued successfully"}
+        )
+        
+    except Exception as e:
+        logger.error(f"Error queuing health check: {e}")
+        return error_response(
+            message="Failed to queue health check",
+            error_code="health_check_queue_failed"
         )
 
 

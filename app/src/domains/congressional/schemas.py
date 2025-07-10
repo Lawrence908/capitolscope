@@ -83,7 +83,7 @@ class CongressMemberCreate(CongressMemberBase):
     phone: Optional[str] = Field(None, max_length=20)
     office_address: Optional[str] = None
     bioguide_id: Optional[str] = Field(None, max_length=10)
-    congress_gov_id: Optional[str] = Field(None, max_length=20)
+    congress_gov_id: Optional[str] = Field(None, max_length=20, description="ID from Congress.gov API")
     term_start: Optional[date] = None
     term_end: Optional[date] = None
     congress_number: Optional[int] = Field(None, ge=1, le=200)
@@ -98,6 +98,7 @@ class CongressMemberUpdate(CapitolScopeBaseSchema):
     email: Optional[str] = Field(None, max_length=255)
     phone: Optional[str] = Field(None, max_length=20)
     office_address: Optional[str] = None
+    congress_gov_id: Optional[str] = Field(None, max_length=20, description="ID from Congress.gov API")
     term_start: Optional[date] = None
     term_end: Optional[date] = None
 

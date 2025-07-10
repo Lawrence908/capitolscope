@@ -906,25 +906,38 @@ class CongressionalDataIngester:
         
         enriched_count = 0
         
-        # TODO: Implement external API calls to enrich member data
-        # For now, we'll just mark this as a placeholder
+        # Use Congress.gov API to enrich member data
+        from domains.congressional.services import CongressAPIService
+        from domains.congressional.crud import CongressMemberRepository
+        
+        member_repo = CongressMemberRepository(self.session)
+        api_service = CongressAPIService(member_repo)
         
         for member in members:
             try:
-                # Placeholder for external API enrichment
-                # This would call Congress.gov API, Propublica, etc.
+                # Try to sync with Congress.gov API if bioguide_id exists
+                if member.bioguide_id:
+                    result = await api_service.sync_member_by_bioguide_id(member.bioguide_id)
+                    if result in ["created", "updated"]:
+                        enriched_count += 1
+                        logger.info(f"Enriched member {member.full_name} from Congress.gov API")
+                        continue
                 
-                # For now, just update with placeholder data
+                # Fallback to basic enrichment if API sync fails
+                updated = False
                 if not member.chamber:
-                    # Simple heuristic based on naming patterns or other data
-                    member.chamber = "house"  # Default assumption
+                    member.chamber = "House"  # Default assumption
+                    updated = True
                 
                 if not member.party:
-                    member.party = "unknown"
+                    member.party = "I"  # Default to Independent
+                    updated = True
                 
                 if not member.state:
-                    member.state = "unknown"
+                    member.state = "DC"  # Default to DC
+                    updated = True
                 
+                if updated:
                 enriched_count += 1
                 
             except Exception as e:

@@ -53,7 +53,7 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     
     # Congressional Identifiers
     bioguide_id = Column(String(10), unique=True, index=True)
-    congress_gov_id = Column(String(20), unique=True, index=True)
+    congress_gov_id = Column(String(20), unique=True, index=True)  # ID from Congress.gov API
     
     # Term Information
     term_start = Column(Date)

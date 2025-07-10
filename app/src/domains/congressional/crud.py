@@ -75,6 +75,13 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
             return CongressMemberDetail.from_orm(db_member)
         return None
     
+    def get_by_congress_gov_id(self, congress_gov_id: str) -> Optional[CongressMemberDetail]:
+        """Get congress member by congress.gov ID."""
+        db_member = self.db.query(CongressMember).filter(CongressMember.congress_gov_id == congress_gov_id).first()
+        if db_member:
+            return CongressMemberDetail.from_orm(db_member)
+        return None
+    
     def get_by_name(self, last_name: str, first_name: str = "") -> Optional[CongressMemberDetail]:
         """Get congress member by last name and first name."""
         # Try to find by last name and first name combination

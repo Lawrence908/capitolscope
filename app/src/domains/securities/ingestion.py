@@ -90,7 +90,11 @@ async def get_or_create_sector(session: AsyncSession, name: str, gics_code: str 
     return sector
 
 
-def fetch_yfinance_data(ticker: str, retry_count: int = 3, delay: float = 1.0) -> Dict:
+# Global rate limiting state
+yfinance_rate_limited = False
+rate_limit_detected_time = 0
+
+def fetch_yfinance_data(ticker: str, retry_count: int = 1, delay: float = 0.0) -> Dict:
     """Fetch comprehensive company data from YFinance with rate limiting and retries."""
     for attempt in range(retry_count):
         try:
@@ -736,6 +740,57 @@ def fetch_etf_securities() -> List[Dict[str, str]]:
     return etf_securities
 
 
+def fetch_security_data_alpha_vantage_only(ticker: str) -> Dict:
+    """
+    Fetch security data using only Alpha Vantage API to avoid Yahoo Finance rate limiting.
+    
+    This function completely bypasses Yahoo Finance and uses Alpha Vantage as the primary
+    data source to avoid the widespread 429 rate limiting issues.
+    """
+    api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
+    if not api_key:
+        logger.warning("Alpha Vantage API key not set. Cannot fetch data.")
+        return {}
+    
+    try:
+        # Add delay to be respectful to Alpha Vantage API
+        time.sleep(1.0)
+        
+        url = f"https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={api_key}"
+        resp = requests.get(url, timeout=15)
+        
+        if resp.status_code == 200:
+            data = resp.json()
+            if data and 'Symbol' in data:
+                # Convert Alpha Vantage format to our expected format
+                result = {
+                    'market_cap': int(data.get('MarketCapitalization', 0)) if data.get('MarketCapitalization') else None,
+                    'shares_outstanding': int(data.get('SharesOutstanding', 0)) if data.get('SharesOutstanding') else None,
+                    'pe_ratio': float(data.get('PERatio', 0)) if data.get('PERatio') else None,
+                    'dividend_yield': float(data.get('DividendYield', 0)) if data.get('DividendYield') else None,
+                    'business_summary': data.get('Description', ''),
+                    'industry': data.get('Industry', ''),
+                    'website': data.get('Website', ''),
+                    'employees': int(data.get('FullTimeEmployees', 0)) if data.get('FullTimeEmployees') else None,
+                    'currency': data.get('Currency', 'USD'),
+                    'beta': float(data.get('Beta', 0)) if data.get('Beta') else None,
+                    'data_source': 'alpha_vantage'
+                }
+                
+                logger.debug(f"Fetched Alpha Vantage data for {ticker}: market_cap={result.get('market_cap')}")
+                return result
+            else:
+                logger.warning(f"Alpha Vantage returned no data for {ticker}")
+                return {}
+        else:
+            logger.warning(f"Alpha Vantage API error for {ticker}: HTTP {resp.status_code}")
+            return {}
+            
+    except Exception as e:
+        logger.error(f"Alpha Vantage error for {ticker}: {e}")
+        return {}
+
+
 # ============================================================================
 # MAIN INGESTION FUNCTIONS
 # ============================================================================
@@ -857,7 +912,7 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
     
     logger.info(f"Processing {len(all_tickers)} total tickers...")
     
-    for info in all_tickers:
+    for i, info in enumerate(all_tickers):
         # Check for shutdown request
         if shutdown_requested:
             logger.warning("Shutdown requested during processing. Stopping gracefully.")
@@ -866,6 +921,13 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
         try:
             ticker = info['ticker']
             name = info['name']
+            
+            # # Add delay between processing tickers to avoid rate limiting
+            # if i > 0 and i % 10 == 0:  # Every 10 tickers, add a longer delay
+            #     logger.info(f"Rate limiting: pausing for 5 seconds after processing {i} tickers...")
+            #     time.sleep(5.0)
+            # elif i > 0:  # Add small delay between each ticker
+            #     time.sleep(0.5)
             
             # Determine exchange (enhanced logic)
             if any(x in info['index'] for x in ['NASDAQ', 'Tech']):

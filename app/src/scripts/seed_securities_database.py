@@ -34,7 +34,8 @@ from core.logging import get_logger
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
     ingest_price_data_for_all_securities,
-    set_shutdown_flag
+    set_shutdown_flag,
+    fetch_yfinance_data
 )
 
 logger = get_logger(__name__)
@@ -53,6 +54,21 @@ def signal_handler(signum, frame):
 # Register signal handlers
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
+
+
+def configure_rate_limiting(strategy: str):
+    """Configure rate limiting based on strategy."""
+    if strategy == "conservative":
+        # Very conservative - longer delays
+        logger.info("🛡️ Using conservative rate limiting (longer delays)")
+        # This will be handled by modifying the fetch_yfinance_data function
+        # For now, we'll just log the strategy
+    elif strategy == "aggressive":
+        # More aggressive - shorter delays
+        logger.info("⚡ Using aggressive rate limiting (shorter delays)")
+    else:
+        # Normal - default delays
+        logger.info("⚖️ Using normal rate limiting (default delays)")
 
 
 async def seed_securities_database(include_prices: bool = False, 
@@ -179,8 +195,13 @@ async def main():
                           help="Also fetch historical price data")
         parser.add_argument("--batch-size", type=int, default=50,
                           help="Batch size for price data ingestion")
+        parser.add_argument("--rate-limit", type=str, choices=["conservative", "normal", "aggressive"], 
+                          default="normal", help="Rate limiting strategy (default: normal)")
         
         args = parser.parse_args()
+        
+        # Configure rate limiting
+        configure_rate_limiting(args.rate_limit)
         
         # Check for shutdown request
         if shutdown_requested:

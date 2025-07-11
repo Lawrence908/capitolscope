@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Dict, Any
 
 # Add the app/src directory to Python path so we can import modules
-script_dir = Path(__file__).parent
+script_dir = Path(__file__).parent.resolve()
 app_src_dir = script_dir.parent
 project_root = app_src_dir.parent
 
@@ -30,6 +30,13 @@ from core.logging import get_logger
 from domains.congressional.ingestion import CongressionalDataIngester
 
 logger = get_logger(__name__)
+
+
+def resolve_data_path(input_path: str) -> Path:
+    p = Path(input_path)
+    if p.is_absolute():
+        return p
+    return (Path(__file__).parent / p).resolve()
 
 
 def import_from_csvs(csv_directory: str) -> Dict[str, Any]:
@@ -54,7 +61,13 @@ async def fetch_live_data(years: list = None) -> Dict[str, Any]:
     if years is None:
         years = list(range(2014, 2026))  # 2014-2025
     
-    async with DatabaseManager.session_scope() as session:
+    db_manager = DatabaseManager()
+    await db_manager.initialize()
+
+    if not db_manager.session_factory:
+        raise RuntimeError("Database session factory not initialized")
+
+    async with db_manager.session_factory() as session:
         try:
             # Use the Congress API service to fetch latest data
             from domains.congressional.services import CongressAPIService
@@ -191,9 +204,14 @@ async def main():
         # Initialize database
         await init_database()
         
+        # Resolve data directory path
+        csv_dir = resolve_data_path(args.csv_directory)
+        if not csv_dir.exists():
+            raise ValueError(f"Data directory does not exist: {csv_dir}")
+        
         # Execute based on mode
         if args.csvs:
-            results = import_from_csvs(args.csv_directory)
+            results = import_from_csvs(csv_dir)
             mode = "CSV Import"
             
         elif args.live:
@@ -203,7 +221,7 @@ async def main():
         elif args.hybrid:
             # First import existing CSVs
             logger.info("📁 Step 1: Importing existing CSV files...")
-            csv_results = import_from_csvs(args.csv_directory)
+            csv_results = import_from_csvs(csv_dir)
             
             # Then fetch latest data (just 2025)
             logger.info("🔄 Step 2: Fetching latest live data...")

@@ -393,6 +393,15 @@ class CongressionalDataIngester:
         logger.info(f"Created {created_count} new members")
         return created_count
     
+    def get_member_by_name_sync(self, last_name: str, first_name: str = ""):
+        # Use the SQLAlchemy session directly for sync lookup
+        query = self.session.query(CongressMember)
+        if first_name:
+            query = query.filter(CongressMember.last_name == last_name, CongressMember.first_name == first_name)
+        else:
+            query = query.filter(CongressMember.last_name == last_name)
+        return query.first()
+    
     def _extract_and_create_members_sync(self, df: pd.DataFrame) -> int:
         """
         Synchronous version of _extract_and_create_members for use with sync sessions.
@@ -464,7 +473,7 @@ class CongressionalDataIngester:
                 prefix, first_name, last_name, full_name = member_names[member_name]
 
                 # Check if member already exists (by last and first name)
-                existing_member = self.member_crud.get_by_name(last_name, first_name)
+                existing_member = self.get_member_by_name_sync(last_name, first_name)
                 if existing_member:
                     # Update member details ONLY if the new data is better/more complete
                     # and preserve existing party, chamber, state data
@@ -472,15 +481,16 @@ class CongressionalDataIngester:
                     update_data = CongressMemberUpdate()
                     
                     # Only update fields that are not already set or are improved
-                    if prefix and not existing_member.prefix:
-                        update_data.prefix = prefix
-                    if full_name and len(full_name) > len(existing_member.full_name or ""):
-                        update_data.full_name = full_name
+                    update_fields = {}
+                    if prefix and (not getattr(existing_member, 'prefix', None) or existing_member.prefix == ""):
+                        update_fields['prefix'] = prefix
+                    if full_name and len(full_name) > len(getattr(existing_member, 'full_name', "") or ""):
+                        update_fields['full_name'] = full_name
                     
                     # Only update if we have actual changes to make
                     update_dict = update_data.model_dump(exclude_unset=True, exclude_none=True)
                     if update_dict:
-                        self.member_crud.update(existing_member.id, update_data)
+                        self.member_crud.update(existing_member, update_fields)
                         logger.info(f"Updated congress member: {existing_member.full_name} ({existing_member.id})")
                         logger.debug(f"Updated member: {existing_member.full_name}")
                     continue
@@ -499,8 +509,12 @@ class CongressionalDataIngester:
                     district=None,
                     is_active=True
                 )
-                
-                member = self.member_crud.create(member_data)
+                # Use direct SQLAlchemy session for sync creation
+                db_obj = CongressMember(**member_data.dict())
+                self.session.add(db_obj)
+                self.session.commit()
+                self.session.refresh(db_obj)
+                member = db_obj
                 created_count += 1
                 
                 logger.info(f"Created congress member: {member.full_name} ({member.id})")
@@ -685,6 +699,7 @@ class CongressionalDataIngester:
                 # Extract transaction details
                 doc_id = str(row['DocID']).strip() if 'DocID' in row and pd.notna(row['DocID']) else f"UNKNOWN_{idx}"
                 ticker = str(row['Ticker']).strip() if 'Ticker' in row and pd.notna(row['Ticker']) else ""
+                ticker = self.normalize_ticker(ticker)
                 asset = str(row['Asset']).strip() if 'Asset' in row and pd.notna(row['Asset']) else ""
                 transaction_type = str(row['Transaction Type']).strip() if 'Transaction Type' in row and pd.notna(row['Transaction Type']) else "P"
                 transaction_date = str(row['Transaction Date']).strip() if 'Transaction Date' in row and pd.notna(row['Transaction Date']) else ""
@@ -799,6 +814,7 @@ class CongressionalDataIngester:
         
         logger.info(f"Processing {len(df)} trades from {source_table}")
         
+        skipped_rows = []
         for idx, row in df.iterrows():
             try:
                 # Validate record if validator is available
@@ -821,14 +837,10 @@ class CongressionalDataIngester:
                 
                 # Get consistent member names
                 if member_key in member_names:
-                    first_name, last_name, full_name, prefix = member_names[member_key]
+                    first_name, last_name, _, _ = member_names[member_key]
                 else:
                     first_name, last_name = self._parse_name_from_member(member_key)
-                    full_name = f"{first_name} {last_name}".strip()
-                    prefix = ""
-                
-                # Get or create member
-                member = self.member_crud.get_by_name(member_key)
+                member = self.get_member_by_name_sync(last_name, first_name)
                 if not member:
                     logger.warning(f"Member not found for key: {member_key}")
                     failed_count += 1
@@ -837,6 +849,7 @@ class CongressionalDataIngester:
                 # Extract transaction details
                 doc_id = str(row['DocID']).strip() if 'DocID' in row and pd.notna(row['DocID']) else f"UNKNOWN_{idx}"
                 ticker = str(row['Ticker']).strip() if 'Ticker' in row and pd.notna(row['Ticker']) else ""
+                ticker = self.normalize_ticker(ticker)
                 asset = str(row['Asset']).strip() if 'Asset' in row and pd.notna(row['Asset']) else ""
                 transaction_type = str(row['Transaction Type']).strip() if 'Transaction Type' in row and pd.notna(row['Transaction Type']) else "P"
                 transaction_date = str(row['Transaction Date']).strip() if 'Transaction Date' in row and pd.notna(row['Transaction Date']) else ""
@@ -899,8 +912,12 @@ class CongressionalDataIngester:
                     
             except Exception as e:
                 logger.warning(f"Failed to import trade at row {idx}: {e}")
+                skipped_rows.append((idx, str(e)))
                 failed_count += 1
-        
+        if skipped_rows:
+            logger.warning(f"Summary of skipped/failed trade rows in {source_table}:")
+            for idx, reason in skipped_rows:
+                logger.warning(f"  Row {idx}: {reason}")
         logger.info(f"Trade import for {source_table}: {created_count} successful, {failed_count} failed")
         return created_count, failed_count
     
@@ -1345,6 +1362,11 @@ class CongressionalDataIngester:
         except Exception as e:
             logger.error(f"Failed to get/create asset type {asset_type}: {e}")
             return None
+
+    def normalize_ticker(self, ticker: str) -> str:
+        if not ticker:
+            return ""
+        return ticker.replace('.', '-').upper().strip()
 
 
 # Main import functions for scripts

@@ -249,16 +249,19 @@ async def get_or_create_security_enhanced(session: AsyncSession, ticker: str, na
                     logger.warning(f"Alpha Vantage failed for TSX {ticker}: {av_e}")
                     yf_data = {}
             else:
-                # For non-TSX tickers, try YFinance first, then Alpha Vantage as fallback
+                # For non-TSX tickers, try YFinance first, then Alpha Vantage as fallback if YF returns no data
                 try:
                     yf_data = fetch_yfinance_data(ticker)
                     used_source = 'yfinance'
                 except Exception as e:
                     logger.warning(f"YFinance failed for {ticker}: {e}")
-                    # Try Alpha Vantage as fallback for non-TSX tickers
+                    yf_data = {}
+                # Fallback to Alpha Vantage if YFinance returns no data
+                if not yf_data:
                     try:
                         yf_data = fetch_alpha_vantage_overview(ticker)
-                        used_source = 'alpha_vantage'
+                        if yf_data:
+                            used_source = 'alpha_vantage'
                     except Exception as av_e:
                         logger.warning(f"Alpha Vantage also failed for {ticker}: {av_e}")
                         yf_data = {}

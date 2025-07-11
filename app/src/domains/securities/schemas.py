@@ -56,9 +56,9 @@ class AssetTypeResponse(AssetTypeBase, UUIDMixin, TimestampMixin):
 
 class SectorBase(CapitolScopeBaseSchema):
     """Base sector schema."""
+    gics_code: str = Field(..., description="GICS sector code", max_length=10)
     name: str = Field(..., description="Sector name", max_length=100)
-    gics_code: Optional[str] = Field(None, description="GICS sector code", max_length=10)
-    parent_sector_id: Optional[int] = Field(None, description="Parent sector ID for sub-sectors")
+    parent_sector_gics_code: Optional[str] = Field(None, description="Parent sector GICS code", max_length=10)
     market_sensitivity: Optional[float] = Field(None, description="Market beta sensitivity")
     volatility_score: Optional[float] = Field(None, description="Historical volatility score")
 
@@ -71,8 +71,7 @@ class SectorCreate(SectorBase):
 class SectorUpdate(CapitolScopeBaseSchema):
     """Schema for updating sectors."""
     name: Optional[str] = Field(None, description="Sector name", max_length=100)
-    gics_code: Optional[str] = Field(None, description="GICS sector code", max_length=10)
-    parent_sector_id: Optional[int] = Field(None, description="Parent sector ID")
+    parent_sector_gics_code: Optional[str] = Field(None, description="Parent sector GICS code", max_length=10)
     market_sensitivity: Optional[float] = Field(None, description="Market beta sensitivity")
     volatility_score: Optional[float] = Field(None, description="Historical volatility score")
 
@@ -124,9 +123,9 @@ class SecurityBase(CapitolScopeBaseSchema):
     """Base security schema."""
     ticker: str = Field(..., description="Security ticker symbol", max_length=20)
     name: str = Field(..., description="Security name", max_length=200)
-    asset_type_id: Optional[int] = Field(None, description="Asset type ID")
-    sector_id: Optional[int] = Field(None, description="Sector ID")
-    exchange_id: Optional[int] = Field(None, description="Exchange ID")
+    asset_type_code: Optional[str] = Field(None, description="Asset type code", max_length=5)
+    sector_gics_code: Optional[str] = Field(None, description="Sector GICS code", max_length=10)
+    exchange_code: Optional[str] = Field(None, description="Exchange code", max_length=10)
     currency: str = Field("USD", description="Currency code", max_length=3)
     market_cap: Optional[int] = Field(None, description="Market cap in cents", ge=0)
     shares_outstanding: Optional[int] = Field(None, description="Shares outstanding", ge=0)
@@ -166,9 +165,9 @@ class SecurityCreate(SecurityBase):
 class SecurityUpdate(CapitolScopeBaseSchema):
     """Schema for updating securities."""
     name: Optional[str] = Field(None, description="Security name", max_length=200)
-    asset_type_id: Optional[int] = Field(None, description="Asset type ID")
-    sector_id: Optional[int] = Field(None, description="Sector ID")
-    exchange_id: Optional[int] = Field(None, description="Exchange ID")
+    asset_type_code: Optional[str] = Field(None, description="Asset type code", max_length=5)
+    sector_gics_code: Optional[str] = Field(None, description="Sector GICS code", max_length=10)
+    exchange_code: Optional[str] = Field(None, description="Exchange code", max_length=10)
     currency: Optional[str] = Field(None, description="Currency code", max_length=3)
     market_cap: Optional[int] = Field(None, description="Market cap in cents", ge=0)
     shares_outstanding: Optional[int] = Field(None, description="Shares outstanding", ge=0)
@@ -362,9 +361,9 @@ class CorporateActionResponse(CorporateActionBase, UUIDMixin, TimestampMixin):
 class SecuritySearchParams(CapitolScopeBaseSchema):
     """Security search parameters."""
     query: Optional[str] = Field(None, description="Search query (ticker, name)", max_length=200)
-    asset_type_ids: Optional[List[int]] = Field(None, description="Asset type IDs to filter by")
-    sector_ids: Optional[List[int]] = Field(None, description="Sector IDs to filter by")
-    exchange_ids: Optional[List[int]] = Field(None, description="Exchange IDs to filter by")
+    asset_type_codes: Optional[List[str]] = Field(None, description="Asset type codes to filter by")
+    sector_gics_codes: Optional[List[str]] = Field(None, description="Sector GICS codes to filter by")
+    exchange_codes: Optional[List[str]] = Field(None, description="Exchange codes to filter by")
     min_market_cap: Optional[int] = Field(None, description="Minimum market cap in cents", ge=0)
     max_market_cap: Optional[int] = Field(None, description="Maximum market cap in cents", ge=0)
     is_active: Optional[bool] = Field(None, description="Filter by active status")

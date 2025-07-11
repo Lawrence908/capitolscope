@@ -35,14 +35,14 @@ class AssetType(CapitolScopeBaseModel, ActiveRecordMixin):
     
     __tablename__ = 'asset_types'
     
-    code = Column(String(5), nullable=False, unique=True, index=True)
+    code = Column(String(5), primary_key=True, unique=True, index=True)
     name = Column(String(200), nullable=False)
     description = Column(Text)
     category = Column(String(50))  # equity, bond, derivative, etc.
     risk_level = Column(Integer)  # 1-5 scale
     
     # Relationships
-    securities = relationship("Security", back_populates="asset_type")
+    securities = relationship("Security", back_populates="asset_type", foreign_keys="Security.asset_type_code")
     
     def __repr__(self):
         return f"<AssetType(code={self.code}, name={self.name})>"
@@ -57,15 +57,15 @@ class Sector(CapitolScopeBaseModel, ActiveRecordMixin):
     
     __tablename__ = 'sectors'
     
+    gics_code = Column(String(10), primary_key=True, unique=True, index=True)
     name = Column(String(100), nullable=False, unique=True, index=True)
-    gics_code = Column(String(10), index=True)  # Global Industry Classification Standard
-    parent_sector_id = Column(UUID(as_uuid=True), ForeignKey('sectors.id'))
+    parent_sector_gics_code = Column(String(10), ForeignKey('sectors.gics_code'))
     market_sensitivity = Column(SQLDecimal(5, 4))  # Beta-like measure
     volatility_score = Column(SQLDecimal(5, 4))  # Historical volatility
     
     # Relationships
-    securities = relationship("Security", back_populates="sector")
-    parent_sector = relationship("Sector", remote_side="Sector.id")
+    securities = relationship("Security", back_populates="sector", foreign_keys="Security.sector_gics_code")
+    parent_sector = relationship("Sector", remote_side="Sector.gics_code")
     
     def __repr__(self):
         return f"<Sector(name={self.name}, gics_code={self.gics_code})>"
@@ -80,7 +80,7 @@ class Exchange(CapitolScopeBaseModel, ActiveRecordMixin):
     
     __tablename__ = 'exchanges'
     
-    code = Column(String(10), nullable=False, unique=True, index=True)
+    code = Column(String(10), primary_key=True, unique=True, index=True)
     name = Column(String(100), nullable=False)
     country = Column(String(3), nullable=False)  # ISO 3166-1 alpha-3
     timezone = Column(String(50), nullable=False)
@@ -88,7 +88,7 @@ class Exchange(CapitolScopeBaseModel, ActiveRecordMixin):
     market_cap_rank = Column(Integer)  # Global ranking
     
     # Relationships
-    securities = relationship("Security", back_populates="exchange")
+    securities = relationship("Security", back_populates="exchange", foreign_keys="Security.exchange_code")
     
     def __repr__(self):
         return f"<Exchange(code={self.code}, name={self.name})>"
@@ -108,9 +108,9 @@ class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Timestam
     name = Column(String(200), nullable=False)
     
     # Foreign keys
-    asset_type_id = Column(UUID(as_uuid=True), ForeignKey('asset_types.id'), index=True)
-    sector_id = Column(UUID(as_uuid=True), ForeignKey('sectors.id'), index=True)
-    exchange_id = Column(UUID(as_uuid=True), ForeignKey('exchanges.id'), index=True)
+    asset_type_code = Column(String(5), ForeignKey('asset_types.code'), index=True)
+    sector_gics_code = Column(String(10), ForeignKey('sectors.gics_code'), index=True)
+    exchange_code = Column(String(10), ForeignKey('exchanges.code'), index=True)
     
     # Financial data
     currency = Column(String(3), default='USD')
@@ -134,15 +134,15 @@ class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Timestam
     controversy_score = Column(SQLDecimal(5, 2))  # Controversy score
     
     # Relationships
-    asset_type = relationship("AssetType", back_populates="securities")
-    sector = relationship("Sector", back_populates="securities")
-    exchange = relationship("Exchange", back_populates="securities")
+    asset_type = relationship("AssetType", back_populates="securities", foreign_keys=[asset_type_code])
+    sector = relationship("Sector", back_populates="securities", foreign_keys=[sector_gics_code])
+    exchange = relationship("Exchange", back_populates="securities", foreign_keys=[exchange_code])
     daily_prices = relationship("DailyPrice", back_populates="security")
     corporate_actions = relationship("CorporateAction", back_populates="security")
     
     # Indexes
     __table_args__ = (
-        UniqueConstraint('ticker', 'exchange_id', name='unique_ticker_exchange'),
+        UniqueConstraint('ticker', 'exchange_code', name='unique_ticker_exchange'),
         Index('idx_security_ticker', 'ticker'),
         Index('idx_security_name', 'name'),
         Index('idx_security_active', 'is_active'),

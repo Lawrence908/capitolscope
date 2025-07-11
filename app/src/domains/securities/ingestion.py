@@ -146,7 +146,7 @@ def fetch_yfinance_data(ticker: str, retry_count: int = 3, delay: float = 1.0) -
 
 
 async def get_or_create_security_enhanced(session: AsyncSession, ticker: str, name: str, 
-                                         asset_type_id: int, exchange_id: int, sector_id: int = None) -> Security:
+                                         asset_type_code: str, exchange_code: str, sector_gics_code: str = None) -> Security:
     """Get or create a security with enhanced YFinance data."""
     # Check if exists
     result = await session.execute(
@@ -157,6 +157,12 @@ async def get_or_create_security_enhanced(session: AsyncSession, ticker: str, na
     if not security:
         # Fetch YFinance data
         yf_data = fetch_yfinance_data(ticker)
+        
+        # --- CAD override for TSX tickers ---
+        currency = yf_data.get('currency', 'USD')
+        if ticker.upper().endswith('.TO') and (not currency or currency == 'USD'):
+            currency = 'CAD'
+        # --- end CAD override ---
         
         # Convert market cap to cents (our DB stores in cents)
         market_cap_cents = None
@@ -195,10 +201,10 @@ async def get_or_create_security_enhanced(session: AsyncSession, ticker: str, na
         security = Security(
             ticker=ticker.upper(),
             name=name,
-            asset_type_id=asset_type_id,
-            exchange_id=exchange_id,
-            sector_id=sector_id,
-            currency=yf_data.get('currency', 'USD'),
+            asset_type_code=asset_type_code,
+            exchange_code=exchange_code,
+            sector_gics_code=sector_gics_code,
+            currency=currency,
             market_cap=market_cap_cents,
             shares_outstanding=yf_data.get('shares_outstanding'),
             beta=yf_data.get('beta'),
@@ -470,15 +476,14 @@ def fetch_tsx_tickers() -> List[Dict[str, str]]:
                 'sector': sector,
                 'index': 'TSX'
             })
-        
-        logger.info(f"Fetched {len(tickers)} TSX tickers")
+        logger.info(f"Fetched {len(tickers)} TSX tickers. First 5: {tickers[:5]}")
         return tickers
         
     except Exception as e:
         logger.error(f"Error fetching TSX tickers: {e}")
         # Fallback to major Canadian stocks
         logger.info("Using fallback list of major TSX stocks")
-        return [
+        fallback = [
             {'ticker': 'RY.TO', 'name': 'Royal Bank of Canada', 'sector': 'Financials', 'index': 'TSX'},
             {'ticker': 'TD.TO', 'name': 'Toronto-Dominion Bank', 'sector': 'Financials', 'index': 'TSX'},
             {'ticker': 'SHOP.TO', 'name': 'Shopify Inc.', 'sector': 'Technology', 'index': 'TSX'},
@@ -495,6 +500,119 @@ def fetch_tsx_tickers() -> List[Dict[str, str]]:
             {'ticker': 'L.TO', 'name': 'Loblaw Companies Limited', 'sector': 'Consumer Staples', 'index': 'TSX'},
             {'ticker': 'MRU.TO', 'name': 'Metro Inc.', 'sector': 'Consumer Staples', 'index': 'TSX'},
         ]
+        logger.info(f"Fallback TSX tickers: {fallback[:5]}")
+        return fallback
+
+
+def fetch_bond_securities() -> List[Dict[str, str]]:
+    """Fetch major bond ETFs and government bonds that congress members commonly trade."""
+    logger.info("Adding major bond securities...")
+    
+    # Major bond ETFs and government bonds
+    bond_securities = [
+        # Government Bonds
+        {'ticker': 'TLT', 'name': 'iShares 20+ Year Treasury Bond ETF', 'sector': 'Government', 'index': 'Bonds'},
+        {'ticker': 'IEF', 'name': 'iShares 7-10 Year Treasury Bond ETF', 'sector': 'Government', 'index': 'Bonds'},
+        {'ticker': 'SHY', 'name': 'iShares 1-3 Year Treasury Bond ETF', 'sector': 'Government', 'index': 'Bonds'},
+        {'ticker': 'VGIT', 'name': 'Vanguard Intermediate-Term Treasury ETF', 'sector': 'Government', 'index': 'Bonds'},
+        {'ticker': 'VGSH', 'name': 'Vanguard Short-Term Treasury ETF', 'sector': 'Government', 'index': 'Bonds'},
+        {'ticker': 'VGLT', 'name': 'Vanguard Long-Term Treasury ETF', 'sector': 'Government', 'index': 'Bonds'},
+        
+        # Corporate Bonds
+        {'ticker': 'LQD', 'name': 'iShares iBoxx $ Investment Grade Corporate Bond ETF', 'sector': 'Corporate', 'index': 'Bonds'},
+        {'ticker': 'VCIT', 'name': 'Vanguard Intermediate-Term Corporate Bond ETF', 'sector': 'Corporate', 'index': 'Bonds'},
+        {'ticker': 'VCSH', 'name': 'Vanguard Short-Term Corporate Bond ETF', 'sector': 'Corporate', 'index': 'Bonds'},
+        {'ticker': 'VCLT', 'name': 'Vanguard Long-Term Corporate Bond ETF', 'sector': 'Corporate', 'index': 'Bonds'},
+        {'ticker': 'HYG', 'name': 'iShares iBoxx $ High Yield Corporate Bond ETF', 'sector': 'High Yield', 'index': 'Bonds'},
+        {'ticker': 'JNK', 'name': 'SPDR Bloomberg High Yield Bond ETF', 'sector': 'High Yield', 'index': 'Bonds'},
+        
+        # Municipal Bonds
+        {'ticker': 'MUB', 'name': 'iShares National Muni Bond ETF', 'sector': 'Municipal', 'index': 'Bonds'},
+        {'ticker': 'VTEB', 'name': 'Vanguard Tax-Exempt Bond ETF', 'sector': 'Municipal', 'index': 'Bonds'},
+        {'ticker': 'TFI', 'name': 'SPDR Nuveen Bloomberg Municipal Bond ETF', 'sector': 'Municipal', 'index': 'Bonds'},
+        
+        # International Bonds
+        {'ticker': 'BWX', 'name': 'SPDR Bloomberg International Treasury Bond ETF', 'sector': 'International', 'index': 'Bonds'},
+        {'ticker': 'EMB', 'name': 'iShares J.P. Morgan USD Emerging Markets Bond ETF', 'sector': 'Emerging Markets', 'index': 'Bonds'},
+        {'ticker': 'PCY', 'name': 'Invesco Emerging Markets Sovereign Debt ETF', 'sector': 'Emerging Markets', 'index': 'Bonds'},
+        
+        # TIPS (Treasury Inflation-Protected Securities)
+        {'ticker': 'TIP', 'name': 'iShares TIPS Bond ETF', 'sector': 'Government', 'index': 'Bonds'},
+        {'ticker': 'VTIP', 'name': 'Vanguard Short-Term Inflation-Protected Securities ETF', 'sector': 'Government', 'index': 'Bonds'},
+        {'ticker': 'SCHP', 'name': 'Schwab U.S. TIPS ETF', 'sector': 'Government', 'index': 'Bonds'},
+        
+        # Floating Rate Bonds
+        {'ticker': 'FLOT', 'name': 'iShares Floating Rate Bond ETF', 'sector': 'Corporate', 'index': 'Bonds'},
+        {'ticker': 'FLRN', 'name': 'SPDR Bloomberg Investment Grade Floating Rate ETF', 'sector': 'Corporate', 'index': 'Bonds'},
+        
+        # Preferred Stock ETFs (often traded like bonds)
+        {'ticker': 'PFF', 'name': 'iShares Preferred and Income Securities ETF', 'sector': 'Preferred', 'index': 'Bonds'},
+        {'ticker': 'PGX', 'name': 'Invesco Preferred ETF', 'sector': 'Preferred', 'index': 'Bonds'},
+        {'ticker': 'PSK', 'name': 'SPDR ICE Preferred Securities ETF', 'sector': 'Preferred', 'index': 'Bonds'},
+    ]
+    
+    logger.info(f"Added {len(bond_securities)} bond securities")
+    return bond_securities
+
+
+def fetch_etf_securities() -> List[Dict[str, str]]:
+    """Fetch major ETFs that congress members commonly trade."""
+    logger.info("Adding major ETF securities...")
+    
+    # Major ETFs across different categories
+    etf_securities = [
+        # Broad Market ETFs
+        {'ticker': 'SPY', 'name': 'SPDR S&P 500 ETF Trust', 'sector': 'Broad Market', 'index': 'ETFs'},
+        {'ticker': 'VOO', 'name': 'Vanguard S&P 500 ETF', 'sector': 'Broad Market', 'index': 'ETFs'},
+        {'ticker': 'IVV', 'name': 'iShares Core S&P 500 ETF', 'sector': 'Broad Market', 'index': 'ETFs'},
+        {'ticker': 'QQQ', 'name': 'Invesco QQQ Trust', 'sector': 'Technology', 'index': 'ETFs'},
+        {'ticker': 'IWM', 'name': 'iShares Russell 2000 ETF', 'sector': 'Small Cap', 'index': 'ETFs'},
+        {'ticker': 'VTI', 'name': 'Vanguard Total Stock Market ETF', 'sector': 'Broad Market', 'index': 'ETFs'},
+        {'ticker': 'ITOT', 'name': 'iShares Core S&P Total U.S. Stock Market ETF', 'sector': 'Broad Market', 'index': 'ETFs'},
+        
+        # International ETFs
+        {'ticker': 'EFA', 'name': 'iShares MSCI EAFE ETF', 'sector': 'International', 'index': 'ETFs'},
+        {'ticker': 'VEA', 'name': 'Vanguard FTSE Developed Markets ETF', 'sector': 'International', 'index': 'ETFs'},
+        {'ticker': 'EEM', 'name': 'iShares MSCI Emerging Markets ETF', 'sector': 'Emerging Markets', 'index': 'ETFs'},
+        {'ticker': 'VWO', 'name': 'Vanguard FTSE Emerging Markets ETF', 'sector': 'Emerging Markets', 'index': 'ETFs'},
+        {'ticker': 'IEMG', 'name': 'iShares Core MSCI Emerging Markets ETF', 'sector': 'Emerging Markets', 'index': 'ETFs'},
+        
+        # Sector ETFs
+        {'ticker': 'XLK', 'name': 'Technology Select Sector SPDR Fund', 'sector': 'Technology', 'index': 'ETFs'},
+        {'ticker': 'XLF', 'name': 'Financial Select Sector SPDR Fund', 'sector': 'Financials', 'index': 'ETFs'},
+        {'ticker': 'XLV', 'name': 'Health Care Select Sector SPDR Fund', 'sector': 'Health Care', 'index': 'ETFs'},
+        {'ticker': 'XLE', 'name': 'Energy Select Sector SPDR Fund', 'sector': 'Energy', 'index': 'ETFs'},
+        {'ticker': 'XLI', 'name': 'Industrial Select Sector SPDR Fund', 'sector': 'Industrials', 'index': 'ETFs'},
+        {'ticker': 'XLP', 'name': 'Consumer Staples Select Sector SPDR Fund', 'sector': 'Consumer Staples', 'index': 'ETFs'},
+        {'ticker': 'XLY', 'name': 'Consumer Discretionary Select Sector SPDR Fund', 'sector': 'Consumer Discretionary', 'index': 'ETFs'},
+        {'ticker': 'XLU', 'name': 'Utilities Select Sector SPDR Fund', 'sector': 'Utilities', 'index': 'ETFs'},
+        {'ticker': 'XLB', 'name': 'Materials Select Sector SPDR Fund', 'sector': 'Materials', 'index': 'ETFs'},
+        {'ticker': 'XLRE', 'name': 'Real Estate Select Sector SPDR Fund', 'sector': 'Real Estate', 'index': 'ETFs'},
+        
+        # Commodity ETFs
+        {'ticker': 'GLD', 'name': 'SPDR Gold Shares', 'sector': 'Commodities', 'index': 'ETFs'},
+        {'ticker': 'SLV', 'name': 'iShares Silver Trust', 'sector': 'Commodities', 'index': 'ETFs'},
+        {'ticker': 'USO', 'name': 'United States Oil Fund LP', 'sector': 'Commodities', 'index': 'ETFs'},
+        {'ticker': 'UNG', 'name': 'United States Natural Gas Fund LP', 'sector': 'Commodities', 'index': 'ETFs'},
+        
+        # Dividend ETFs
+        {'ticker': 'DVY', 'name': 'iShares Select Dividend ETF', 'sector': 'Dividend', 'index': 'ETFs'},
+        {'ticker': 'VYM', 'name': 'Vanguard High Dividend Yield ETF', 'sector': 'Dividend', 'index': 'ETFs'},
+        {'ticker': 'SCHD', 'name': 'Schwab U.S. Dividend Equity ETF', 'sector': 'Dividend', 'index': 'ETFs'},
+        
+        # Growth/Value ETFs
+        {'ticker': 'VUG', 'name': 'Vanguard Growth ETF', 'sector': 'Growth', 'index': 'ETFs'},
+        {'ticker': 'VTV', 'name': 'Vanguard Value ETF', 'sector': 'Value', 'index': 'ETFs'},
+        {'ticker': 'IWF', 'name': 'iShares Russell 1000 Growth ETF', 'sector': 'Growth', 'index': 'ETFs'},
+        {'ticker': 'IWD', 'name': 'iShares Russell 1000 Value ETF', 'sector': 'Value', 'index': 'ETFs'},
+        
+        # Volatility ETFs
+        {'ticker': 'VXX', 'name': 'iPath Series B S&P 500 VIX Short-Term Futures ETN', 'sector': 'Volatility', 'index': 'ETFs'},
+        {'ticker': 'UVXY', 'name': 'ProShares Ultra VIX Short-Term Futures ETF', 'sector': 'Volatility', 'index': 'ETFs'},
+    ]
+    
+    logger.info(f"Added {len(etf_securities)} ETF securities")
+    return etf_securities
 
 
 # ============================================================================
@@ -532,20 +650,20 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
     materials_sector = await get_or_create_sector(session, "Materials", "15")
 
     sector_map = {
-        'Technology': tech_sector.id,
-        'Information Technology': tech_sector.id,
-        'Financials': finance_sector.id,
-        'Financial Services': finance_sector.id,
-        'Health Care': healthcare_sector.id,
-        'Healthcare': healthcare_sector.id,
-        'Consumer Discretionary': consumer_discretionary_sector.id,
-        'Consumer Staples': consumer_staples_sector.id,
-        'Communication Services': communication_services_sector.id,
-        'Industrials': industrials_sector.id,
-        'Energy': energy_sector.id,
-        'Utilities': utilities_sector.id,
-        'Real Estate': real_estate_sector.id,
-        'Materials': materials_sector.id,
+        'Technology': tech_sector.gics_code,
+        'Information Technology': tech_sector.gics_code,
+        'Financials': finance_sector.gics_code,
+        'Financial Services': finance_sector.gics_code,
+        'Health Care': healthcare_sector.gics_code,
+        'Healthcare': healthcare_sector.gics_code,
+        'Consumer Discretionary': consumer_discretionary_sector.gics_code,
+        'Consumer Staples': consumer_staples_sector.gics_code,
+        'Communication Services': communication_services_sector.gics_code,
+        'Industrials': industrials_sector.gics_code,
+        'Energy': energy_sector.gics_code,
+        'Utilities': utilities_sector.gics_code,
+        'Real Estate': real_estate_sector.gics_code,
+        'Materials': materials_sector.gics_code,
         # Add more mappings as needed for completeness
     }
     
@@ -555,9 +673,13 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
     nasdaq = fetch_nasdaq100_tickers()
     dow = fetch_dow_jones_tickers()
     tsx = fetch_tsx_tickers()
+    bonds = fetch_bond_securities()
+    etfs = fetch_etf_securities()
+    
+    logger.info(f"TSX tickers fetched: {len(tsx)}. First 5: {tsx[:5]}")
     
     # If all are empty, forcibly use the fallback from fetch_sp500_tickers
-    if not sp500 and not nasdaq and not dow and not tsx:
+    if not sp500 and not nasdaq and not dow and not tsx and not bonds and not etfs:
         logger.info("All ticker fetches failed, using fallback S&P 500 list only.")
         all_tickers = fetch_sp500_tickers()
     else:
@@ -565,6 +687,8 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
         all_tickers.extend(nasdaq)
         all_tickers.extend(dow)
         all_tickers.extend(tsx)
+        all_tickers.extend(bonds)
+        all_tickers.extend(etfs)
     
     # Remove duplicates
     unique_tickers = {}
@@ -573,6 +697,10 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
         if ticker not in unique_tickers:
             unique_tickers[ticker] = ticker_info
     
+    # Log TSX tickers after deduplication
+    tsx_after = [t for t in unique_tickers.values() if t['index'] == 'TSX']
+    logger.info(f"TSX tickers after deduplication: {len(tsx_after)}. First 5: {tsx_after[:5]}")
+
     logger.info(f"Processing {len(unique_tickers)} unique tickers with YFinance enhancement...")
     
     created_count = 0
@@ -582,23 +710,31 @@ async def populate_securities_from_major_indices(session: AsyncSession) -> Dict[
         try:
             # Determine exchange (enhanced logic)
             if any(x in info['index'] for x in ['NASDAQ', 'Tech']):
-                exchange_id = nasdaq_exchange.id
+                exchange_code = nasdaq_exchange.code
             elif any(x in info['index'] for x in ['TSX']):
-                exchange_id = tsx_exchange.id
+                exchange_code = tsx_exchange.code
             else:
-                exchange_id = nyse_exchange.id
+                exchange_code = nyse_exchange.code
             
-            # Get sector ID
-            sector_id = sector_map.get(info.get('sector'), tech_sector.id)
+            # Get sector GICS code
+            sector_gics_code = sector_map.get(info.get('sector'), tech_sector.gics_code)
+            
+            # Determine asset type based on index and ticker
+            if info['index'] == 'Bonds':
+                asset_type_code = bond_asset_type.code
+            elif info['index'] == 'ETFs':
+                asset_type_code = etf_asset_type.code
+            else:
+                asset_type_code = stock_asset_type.code
             
             # Create enhanced security with YFinance data
             security = await get_or_create_security_enhanced(
                 session=session,
                 ticker=ticker,
                 name=info['name'],
-                asset_type_id=stock_asset_type.id,
-                exchange_id=exchange_id,
-                sector_id=sector_id
+                asset_type_code=asset_type_code,
+                exchange_code=exchange_code,
+                sector_gics_code=sector_gics_code
             )
             
             created_count += 1

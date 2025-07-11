@@ -6,25 +6,53 @@ This script populates the securities database with stock data from major market 
 (S&P 500, NASDAQ-100, Dow Jones) and fetches historical price data.
 
 Usage:
-    python scripts/seed_securities_database.py
-    python scripts/seed_securities_database.py --prices  # Also fetch price data
-    python scripts/seed_securities_database.py --batch-size 100
+    python app/src/scripts/seed_securities_database.py
+    python app/src/scripts/seed_securities_database.py --prices  # Also fetch price data
+    python app/src/scripts/seed_securities_database.py --batch-size 100
 """
 
 import asyncio
 import sys
-import argparse
+import os
 from pathlib import Path
+
+# Add the app/src directory to Python path so we can import modules
+script_dir = Path(__file__).parent
+app_src_dir = script_dir.parent
+project_root = app_src_dir.parent
+
+# Add app/src to Python path
+sys.path.insert(0, str(app_src_dir))
+
+import argparse
+import signal
 from typing import Dict, Any
+from sqlalchemy.exc import IntegrityError
 
 from core.database import db_manager, init_database
 from core.logging import get_logger
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
-    ingest_price_data_for_all_securities
+    ingest_price_data_for_all_securities,
+    set_shutdown_flag
 )
 
 logger = get_logger(__name__)
+
+# Global flag for graceful shutdown
+shutdown_requested = False
+
+def signal_handler(signum, frame):
+    """Handle interrupt signals gracefully."""
+    global shutdown_requested
+    logger.warning(f"Received signal {signum}. Starting graceful shutdown...")
+    shutdown_requested = True
+    # Also set the flag in the ingestion module
+    set_shutdown_flag()
+
+# Register signal handlers
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 
 async def seed_securities_database(include_prices: bool = False, 
@@ -41,104 +69,123 @@ async def seed_securities_database(include_prices: bool = False,
     """
     logger.info("🌱 Starting securities database seeding...")
     
-    # Initialize database connection
-    await init_database()
-    
-    results = {}
-    
-    async with db_manager.session_scope() as session:
-        try:
-            # Step 1: Populate securities from major indices
-            logger.info("📈 Populating securities from major market indices...")
-            securities_result = await populate_securities_from_major_indices(session)
-            results["securities"] = securities_result
-            
-            logger.info(f"✅ Securities populated: {securities_result}")
-            
-            # Step 2: Fetch price data (optional)
-            if include_prices:
-                logger.info("💰 Fetching historical price data for all securities...")
-                logger.info(f"⚠️  This may take a while for {securities_result.get('created', 0)} securities...")
+    try:
+        # Initialize database
+        await init_database()
+        
+        # Get database session
+        async with db_manager.get_session() as session:
+            try:
+                # Populate securities from major indices
+                logger.info("📊 Populating securities from major market indices...")
+                securities_stats = await populate_securities_from_major_indices(session)
                 
-                prices_result = await ingest_price_data_for_all_securities(
-                    session, batch_size=batch_size
-                )
-                results["prices"] = prices_result
+                # Commit the securities data
+                await session.commit()
+                logger.info("✅ Securities data committed successfully")
                 
-                logger.info(f"✅ Price data ingested: {prices_result}")
-            
-            logger.info("🎉 Securities database seeding completed successfully!")
-            
-        except Exception as e:
-            logger.error(f"❌ Securities seeding failed: {e}")
-            raise
-    
-    return results
+                price_stats = {}
+                if include_prices:
+                    logger.info("📈 Fetching historical price data...")
+                    try:
+                        price_stats = await ingest_price_data_for_all_securities(session, batch_size)
+                        await session.commit()
+                        logger.info("✅ Price data committed successfully")
+                    except Exception as e:
+                        logger.error(f"❌ Price data ingestion failed: {e}")
+                        await session.rollback()
+                        price_stats = {"error": str(e)}
+                
+                return {
+                    "securities": securities_stats,
+                    "prices": price_stats,
+                    "success": True
+                }
+                
+            except IntegrityError as e:
+                logger.error(f"❌ Database integrity error: {e}")
+                await session.rollback()
+                return {
+                    "securities": {"error": "IntegrityError"},
+                    "prices": {},
+                    "success": False,
+                    "error": str(e)
+                }
+            except Exception as e:
+                logger.error(f"❌ Unexpected error during seeding: {e}")
+                await session.rollback()
+                return {
+                    "securities": {"error": "UnexpectedError"},
+                    "prices": {},
+                    "success": False,
+                    "error": str(e)
+                }
+                
+    except Exception as e:
+        logger.error(f"❌ Database initialization failed: {e}")
+        return {
+            "securities": {"error": "DatabaseInitError"},
+            "prices": {},
+            "success": False,
+            "error": str(e)
+        }
 
 
 def print_results_summary(results: Dict[str, Any]):
-    """Print a formatted summary of the seeding results."""
+    """Print a summary of the seeding results."""
     print("\n" + "="*60)
-    print("📊 SECURITIES DATABASE SEEDING SUMMARY")
+    print("🌱 SECURITIES DATABASE SEEDING SUMMARY")
     print("="*60)
     
-    if "securities" in results:
-        sec_data = results["securities"]
-        print(f"🏢 Securities Created:    {sec_data.get('created', 0):,}")
-        print(f"❌ Securities Failed:     {sec_data.get('failed', 0):,}")
-        print(f"📊 Total Tickers:        {sec_data.get('total_tickers', 0):,}")
-    
-    if "prices" in results:
-        price_data = results["prices"]
-        print(f"📈 Securities Processed:  {price_data.get('total_securities', 0):,}")
-        print(f"💰 Price Records:        {price_data.get('total_price_records', 0):,}")
-        print(f"❌ Failed Securities:    {price_data.get('failed_securities', 0):,}")
+    if results.get("success"):
+        print("✅ Seeding completed successfully!")
+        
+        # Securities summary
+        securities = results.get("securities", {})
+        if "error" not in securities:
+            print(f"\n📊 Securities Created:")
+            for index, count in securities.items():
+                if isinstance(count, int):
+                    print(f"   • {index}: {count} securities")
+        else:
+            print(f"\n❌ Securities Error: {securities['error']}")
+        
+        # Price data summary
+        prices = results.get("prices", {})
+        if "error" not in prices:
+            print(f"\n📈 Price Data:")
+            for key, value in prices.items():
+                if isinstance(value, int):
+                    print(f"   • {key}: {value}")
+        else:
+            print(f"\n❌ Price Data Error: {prices['error']}")
+            
+    else:
+        print("❌ Seeding failed!")
+        error = results.get("error", "Unknown error")
+        print(f"Error: {error}")
     
     print("="*60)
 
 
 async def main():
-    """Main function with command line argument parsing."""
-    parser = argparse.ArgumentParser(
-        description='Seed the securities database with stock data'
-    )
-    parser.add_argument(
-        '--prices', 
-        action='store_true',
-        help='Also fetch historical price data (slow)'
-    )
-    parser.add_argument(
-        '--batch-size',
-        type=int,
-        default=50,
-        help='Batch size for price data processing (default: 50)'
-    )
-    parser.add_argument(
-        '--log-level',
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
-        default='INFO',
-        help='Set logging level (default: INFO)'
-    )
-    
-    args = parser.parse_args()
-    
-    # Configure logging level
-    import logging
-    log_level = getattr(logging, args.log_level.upper())
-    logging.getLogger().setLevel(log_level)
+    """Main function with robust error handling."""
+    global shutdown_requested
     
     try:
-        # Show what we're about to do
-        print("🚀 CapitolScope Securities Database Seeding")
-        print("-" * 50)
-        print(f"📊 Fetching major market indices (S&P 500, NASDAQ-100, Dow Jones)")
-        if args.prices:
-            print(f"💰 Will also fetch historical price data (batch size: {args.batch_size})")
-            print(f"⏱️  Expected time: 30-60 minutes depending on network speed")
-        else:
-            print(f"⚡ Securities only (use --prices for historical data)")
-            print(f"⏱️  Expected time: 2-5 minutes")
-        print()
+        # Parse command line arguments
+        parser = argparse.ArgumentParser(description="Seed securities database")
+        parser.add_argument("--prices", action="store_true", 
+                          help="Also fetch historical price data")
+        parser.add_argument("--batch-size", type=int, default=50,
+                          help="Batch size for price data ingestion")
+        
+        args = parser.parse_args()
+        
+        # Check for shutdown request
+        if shutdown_requested:
+            logger.warning("Shutdown requested before starting. Exiting.")
+            return
         
         # Run the seeding
         results = await seed_securities_database(
@@ -146,29 +193,29 @@ async def main():
             batch_size=args.batch_size
         )
         
-        # Print summary
+        # Print results
         print_results_summary(results)
         
-        # Next steps
-        print("\n🎯 NEXT STEPS:")
-        if not args.prices:
-            print("1. Run with --prices to fetch historical data")
-            print("   python scripts/seed_securities_database.py --prices")
-        print("2. Import congressional trading data:")
-        print("   python scripts/import_congressional_data.py")
-        print("3. Start the API server:")
-        print("   cd app && python -m uvicorn main:app --reload")
-        
-        return 0
-        
+        # Exit with appropriate code
+        if results.get("success"):
+            sys.exit(0)
+        else:
+            sys.exit(1)
+            
     except KeyboardInterrupt:
-        logger.info("🛑 Seeding interrupted by user")
-        return 1
+        logger.warning("🛑 Seeding interrupted by user. Exiting gracefully.")
+        sys.exit(130)  # Standard exit code for SIGINT
     except Exception as e:
-        logger.error(f"❌ Seeding failed: {e}")
-        return 1
+        logger.error(f"💥 Fatal error in main: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    exit_code = asyncio.run(main())
-    sys.exit(exit_code) 
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.warning("🛑 Script interrupted. Exiting.")
+        sys.exit(130)
+    except Exception as e:
+        logger.error(f"💥 Unhandled exception: {e}")
+        sys.exit(1) 

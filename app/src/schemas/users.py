@@ -220,6 +220,10 @@ class SocialConnectionBase(CapitolScopeBaseModel):
     # Platform-specific settings
     settings: Optional[Dict[str, Any]] = Field(None, description="Platform-specific settings")
     
+    model_config = {
+        "arbitrary_types_allowed": True
+    }
+    
     @field_validator('platform')
     @classmethod
     def validate_platform(cls, v):

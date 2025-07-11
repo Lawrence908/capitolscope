@@ -14,6 +14,8 @@ from pydantic import Field, field_validator
 from domains.base.schemas import (
     CapitolScopeBaseSchema, UUIDMixin, TimestampMixin, TechnicalIndicators, TransactionType
 )
+from schemas.base import validate_ticker_symbol
+
 from core.logging import get_logger
 
 logger = get_logger(__name__)

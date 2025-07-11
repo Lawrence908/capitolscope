@@ -17,7 +17,15 @@ import argparse
 from pathlib import Path
 from typing import Dict, Any
 
-from core.database import db_manager, init_database, get_sync_db_session
+# Add the app/src directory to Python path so we can import modules
+script_dir = Path(__file__).parent
+app_src_dir = script_dir.parent
+project_root = app_src_dir.parent
+
+# Add app/src to Python path
+sys.path.insert(0, str(app_src_dir))
+
+from core.database import DatabaseManager, init_database, get_sync_db_session
 from core.logging import get_logger
 from domains.congressional.ingestion import CongressionalDataIngester
 
@@ -46,7 +54,7 @@ async def fetch_live_data(years: list = None) -> Dict[str, Any]:
     if years is None:
         years = list(range(2014, 2026))  # 2014-2025
     
-    async with db_manager.session_scope() as session:
+    async with DatabaseManager.session_scope() as session:
         try:
             # Use the Congress API service to fetch latest data
             from domains.congressional.services import CongressAPIService

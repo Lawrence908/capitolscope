@@ -31,7 +31,8 @@ class CapitolScopeBaseModel(BaseModel):
             datetime: lambda v: v.isoformat(),
             date: lambda v: v.isoformat(),
             Decimal: lambda v: float(v),
-        }
+        },
+        arbitrary_types_allowed=True
     )
 
 
@@ -137,6 +138,53 @@ class SocialPlatform(str):
     TELEGRAM = "telegram"
     REDDIT = "reddit"
     FACEBOOK = "facebook"
+
+
+class EngagementType(str):
+    """Engagement type enumeration."""
+    LIKE = "like"
+    SHARE = "share"
+    COMMENT = "comment"
+    VIEW = "view"
+    CLICK = "click"
+    BOOKMARK = "bookmark"
+
+
+class PostStatus(str):
+    """Post status enumeration."""
+    DRAFT = "draft"
+    SCHEDULED = "scheduled"
+    POSTING = "posting"
+    POSTED = "posted"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+
+
+class SystemStatus(str):
+    """System status enumeration."""
+    ONLINE = "online"
+    OFFLINE = "offline"
+    MAINTENANCE = "maintenance"
+    DEGRADED = "degraded"
+    ERROR = "error"
+
+
+class LogLevel(str):
+    """Log level enumeration."""
+    DEBUG = "debug"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+
+
+class FeatureStatus(str):
+    """Feature status enumeration."""
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    DEPRECATED = "deprecated"
+    BETA = "beta"
+    EXPERIMENTAL = "experimental"
 
 
 # ============================================================================
@@ -401,6 +449,11 @@ __all__ = [
     "SubscriptionTier",
     "SubscriptionStatus",
     "SocialPlatform",
+    "EngagementType",
+    "PostStatus",
+    "SystemStatus",
+    "LogLevel",
+    "FeatureStatus",
     "PaginationParams",
     "SortParams",
     "PaginatedResponse",

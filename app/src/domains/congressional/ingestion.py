@@ -676,7 +676,7 @@ class CongressionalDataIngester:
                     prefix = ""
                 
                 # Get or create member
-                member = self.member_crud.get_by_name(member_key)
+                member = await self.member_crud.get_by_name(member_key)
                 if not member:
                     logger.warning(f"Member not found for key: {member_key}")
                     failed_count += 1

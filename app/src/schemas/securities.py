@@ -15,6 +15,7 @@ from schemas.base import (
     CapitolScopeBaseModel, UUIDMixin, TimestampMixin, TechnicalIndicators,
     PoliticalParty, Chamber, TransactionType, AssetType, Sector, Exchange
 )
+from schemas.base import validate_ticker_symbol
 
 
 # ============================================================================
@@ -218,7 +219,7 @@ class SecuritySummary(CapitolScopeBaseModel):
 class DailyPriceBase(CapitolScopeBaseModel):
     """Base daily price schema."""
     security_id: int = Field(..., description="Security ID")
-    date: date = Field(..., description="Price date")
+    price_date: date = Field(..., description="Price date")
     open_price: int = Field(..., description="Opening price in cents", ge=0)
     high_price: int = Field(..., description="High price in cents", ge=0)
     low_price: int = Field(..., description="Low price in cents", ge=0)

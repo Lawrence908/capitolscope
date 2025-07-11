@@ -431,7 +431,7 @@ class MemberTradingStats(CapitolScopeBaseModel):
 
 class TradingActivity(CapitolScopeBaseModel):
     """Trading activity summary."""
-    date: date = Field(..., description="Activity date")
+    activity_date: date = Field(..., alias="date", description="Activity date")
     trade_count: int = Field(..., description="Number of trades", ge=0)
     member_count: int = Field(..., description="Number of active members", ge=0)
     total_value: int = Field(..., description="Total trade value in cents", ge=0)

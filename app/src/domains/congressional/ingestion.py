@@ -673,6 +673,26 @@ class CongressionalDataIngester:
         
         logger.info(f"Processing {len(df)} trades from {source_table}")
         
+        # Apply comprehensive data quality enhancements
+        try:
+            from domains.congressional.data_quality import enhance_congressional_data_quality
+            
+            logger.info("Applying comprehensive data quality enhancements...")
+            enhanced_df, quality_stats = enhance_congressional_data_quality(df)
+            
+            logger.info(f"Data quality enhancement completed:")
+            logger.info(f"  Total rows: {quality_stats.get('total_rows', 0)}")
+            logger.info(f"  Fixed owner fields: {quality_stats.get('fixed_owner_field', 0)}")
+            logger.info(f"  Fixed amount parsing: {quality_stats.get('fixed_amount_parsing', 0)}")
+            logger.info(f"  Removed garbage chars: {quality_stats.get('removed_garbage_chars', 0)}")
+            logger.info(f"  Unfixable rows: {quality_stats.get('unfixable_rows', 0)}")
+            
+            # Use enhanced dataframe for processing
+            df = enhanced_df
+            
+        except Exception as e:
+            logger.warning(f"Data quality enhancement failed, proceeding with original data: {e}")
+        
         for idx, row in df.iterrows():
             try:
                 # Extract member information
@@ -814,6 +834,26 @@ class CongressionalDataIngester:
         
         logger.info(f"Processing {len(df)} trades from {source_table}")
         
+        # Apply comprehensive data quality enhancements
+        try:
+            from domains.congressional.data_quality import enhance_congressional_data_quality
+            
+            logger.info("Applying comprehensive data quality enhancements...")
+            enhanced_df, quality_stats = enhance_congressional_data_quality(df)
+            
+            logger.info(f"Data quality enhancement completed:")
+            logger.info(f"  Total rows: {quality_stats.get('total_rows', 0)}")
+            logger.info(f"  Fixed owner fields: {quality_stats.get('fixed_owner_field', 0)}")
+            logger.info(f"  Fixed amount parsing: {quality_stats.get('fixed_amount_parsing', 0)}")
+            logger.info(f"  Removed garbage chars: {quality_stats.get('removed_garbage_chars', 0)}")
+            logger.info(f"  Unfixable rows: {quality_stats.get('unfixable_rows', 0)}")
+            
+            # Use enhanced dataframe for processing
+            df = enhanced_df
+            
+        except Exception as e:
+            logger.warning(f"Data quality enhancement failed, proceeding with original data: {e}")
+        
         skipped_rows = []
         for idx, row in df.iterrows():
             try:
@@ -924,6 +964,7 @@ class CongressionalDataIngester:
     def _parse_amount_range(self, amount_str: str) -> Tuple[Optional[int], Optional[int]]:
         """
         Parse amount range strings like '$1,001 - $15,000' into min/max values in cents.
+        Enhanced version that handles garbage characters and validates against standard ranges.
         
         Args:
             amount_str: Amount string from CSV
@@ -935,29 +976,46 @@ class CongressionalDataIngester:
             return None, None
         
         try:
-            # Remove common characters
-            cleaned = str(amount_str).replace('$', '').replace(',', '').strip()
+            # Import data quality enhancer
+            from domains.congressional.data_quality import CongressionalDataQualityEnhancer
             
-            # Handle ranges
-            if ' - ' in cleaned:
-                parts = cleaned.split(' - ')
-                if len(parts) == 2:
-                    min_val = float(parts[0].strip()) * 100  # Convert to cents
-                    max_val = float(parts[1].strip()) * 100
-                    return int(min_val), int(max_val)
-            
-            # Handle single values
-            if cleaned.replace('.', '').isdigit():
-                val = float(cleaned) * 100
-                return int(val), int(val)
-            
-            # Handle special cases like "$50,001 +"
-            if '+' in cleaned:
-                min_val = float(cleaned.replace('+', '').strip()) * 100
-                return int(min_val), None
+            # Use enhanced parsing from data quality module
+            enhancer = CongressionalDataQualityEnhancer()
+            return enhancer._parse_amount_range(str(amount_str))
                 
         except Exception as e:
             logger.debug(f"Failed to parse amount '{amount_str}': {e}")
+            
+            # Fallback to original logic if enhanced parsing fails
+            try:
+                # Remove common characters
+                cleaned = str(amount_str).replace('$', '').replace(',', '').strip()
+                
+                # Remove garbage characters like 'gfedc'
+                import re
+                cleaned = re.sub(r'\s+gfedc\s*$', '', cleaned, flags=re.IGNORECASE).strip()
+                cleaned = re.sub(r'\s+[a-z]{3,}\s*$', '', cleaned, flags=re.IGNORECASE).strip()
+                
+                # Handle ranges
+                if ' - ' in cleaned:
+                    parts = cleaned.split(' - ')
+                    if len(parts) == 2:
+                        min_val = float(parts[0].strip()) * 100  # Convert to cents
+                        max_val = float(parts[1].strip()) * 100
+                        return int(min_val), int(max_val)
+                
+                # Handle single values
+                if cleaned.replace('.', '').isdigit():
+                    val = float(cleaned) * 100
+                    return int(val), int(val)
+                
+                # Handle special cases like "$50,001 +"
+                if '+' in cleaned:
+                    min_val = float(cleaned.replace('+', '').strip()) * 100
+                    return int(min_val), None
+                    
+            except Exception as fallback_e:
+                logger.debug(f"Fallback parsing also failed for '{amount_str}': {fallback_e}")
         
         return None, None
     
@@ -1217,37 +1275,13 @@ class CongressionalDataIngester:
     def _parse_amount_to_fields(self, amount_str: str) -> Tuple[Optional[int], Optional[int]]:
         """
         Parse amount string into min and max cents.
-        Handles ranges like $1,001 - $15,000 or single values like $1,001.
+        Enhanced version that handles ranges like $1,001 - $15,000 with garbage character removal.
         """
         if not amount_str or pd.isna(amount_str):
             return None, None
 
-        try:
-            # Remove common characters
-            cleaned = str(amount_str).replace('$', '').replace(',', '').strip()
-
-            # Handle ranges
-            if ' - ' in cleaned:
-                parts = cleaned.split(' - ')
-                if len(parts) == 2:
-                    min_val = float(parts[0].strip()) * 100  # Convert to cents
-                    max_val = float(parts[1].strip()) * 100
-                    return int(min_val), int(max_val)
-
-            # Handle single values
-            if cleaned.replace('.', '').isdigit():
-                val = float(cleaned) * 100
-                return int(val), int(val)
-
-            # Handle special cases like "$50,001 +"
-            if '+' in cleaned:
-                min_val = float(cleaned.replace('+', '').strip()) * 100
-                return int(min_val), None
-
-        except Exception as e:
-            logger.debug(f"Failed to parse amount '{amount_str}': {e}")
-
-        return None, None
+        # Use the enhanced parsing from _parse_amount_range method
+        return self._parse_amount_range(amount_str)
 
     def _find_or_create_security(self, ticker: str, asset_description: str) -> Optional[int]:
         """

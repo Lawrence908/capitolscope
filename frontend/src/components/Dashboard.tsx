@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   UserGroupIcon,
   DocumentTextIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import { CongressionalTrade, CongressMember, DataQualityStats } from '../types';
@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
     {
       title: 'Unique Tickers',
       value: stats?.unique_tickers?.toLocaleString() || '0',
-      icon: TrendingUpIcon,
+      icon: ArrowTrendingUpIcon,
       color: 'bg-purple-500',
       link: '/trades',
     },

@@ -30,45 +30,45 @@ logger = get_logger(__name__)
 # ENUMS
 # ============================================================================
 
-class UserStatus(PyEnum):
+class UserStatus(str, PyEnum):
     """User account status."""
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    SUSPENDED = "suspended"
-    PENDING_VERIFICATION = "pending_verification"
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    SUSPENDED = "SUSPENDED"
+    PENDING_VERIFICATION = "PENDING_VERIFICATION"
 
 
-class AuthProvider(PyEnum):
+class AuthProvider(str, PyEnum):
     """Authentication provider types."""
-    EMAIL = "email"
-    GOOGLE = "google"
-    GITHUB = "github"
-    TWITTER = "twitter"
+    EMAIL = "EMAIL"
+    GOOGLE = "GOOGLE"
+    GITHUB = "GITHUB"
+    TWITTER = "TWITTER"
 
 
-class UserRole(PyEnum):
+class UserRole(str, PyEnum):
     """User role types."""
-    USER = "user"
-    MODERATOR = "moderator"
-    ADMIN = "admin"
-    SUPER_ADMIN = "super_admin"
+    USER = "USER"
+    MODERATOR = "MODERATOR"
+    ADMIN = "ADMIN"
+    SUPER_ADMIN = "SUPER_ADMIN"
 
 
-class NotificationChannel(PyEnum):
+class NotificationChannel(str, PyEnum):
     """Notification delivery channels."""
-    EMAIL = "email"
-    SMS = "sms"
-    PUSH = "push"
-    IN_APP = "in_app"
+    EMAIL = "EMAIL"
+    SMS = "SMS"
+    PUSH = "PUSH"
+    IN_APP = "IN_APP"
 
 
-class NotificationType(PyEnum):
+class NotificationType(str, PyEnum):
     """Types of notifications."""
-    TRADE_ALERT = "trade_alert"
-    PORTFOLIO_UPDATE = "portfolio_update"
-    NEWS_DIGEST = "news_digest"
-    SYSTEM_ANNOUNCEMENT = "system_announcement"
-    SUBSCRIPTION_UPDATE = "subscription_update"
+    TRADE_ALERT = "TRADE_ALERT"
+    PORTFOLIO_UPDATE = "PORTFOLIO_UPDATE"
+    NEWS_DIGEST = "NEWS_DIGEST"
+    SYSTEM_ANNOUNCEMENT = "SYSTEM_ANNOUNCEMENT"
+    SUBSCRIPTION_UPDATE = "SUBSCRIPTION_UPDATE"
 
 
 # ============================================================================
@@ -262,7 +262,7 @@ class UserPreference(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_preferences'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Display Preferences
     theme = Column(String(20), default='dark')  # light, dark, auto
@@ -313,7 +313,7 @@ class UserWatchlist(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_watchlists'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     name = Column(String(100), nullable=False)
     description = Column(Text)
     
@@ -391,7 +391,7 @@ class UserAlert(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_alerts'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Alert Configuration
     name = Column(String(100), nullable=False)
@@ -459,7 +459,7 @@ class UserNotification(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_notifications'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Notification Content
     title = Column(String(200), nullable=False)
@@ -529,7 +529,7 @@ class UserSession(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_sessions'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     session_id = Column(String(255), unique=True, nullable=False, index=True)
     
     # Session Information
@@ -592,7 +592,7 @@ class UserApiKey(CapitolScopeBaseModel, TimestampMixin):
     
     __tablename__ = 'user_api_keys'
     
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
     
     # Key Information
     key_id = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)

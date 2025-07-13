@@ -12,8 +12,8 @@ from typing import Optional, List, Dict, Any
 from pydantic import Field, field_validator, HttpUrl
 
 from schemas.base import (
-    CapitolScopeBaseModel, IDMixin, UUIDMixin, TimestampMixin,
-    SocialPlatform
+    CapitolScopeBaseModel, UUIDMixin, TimestampMixin,
+    SocialPlatform, EngagementType, PostStatus
 )
 
 
@@ -81,7 +81,7 @@ class SocialPostUpdate(CapitolScopeBaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class SocialPostResponse(SocialPostBase, IDMixin, TimestampMixin):
+class SocialPostResponse(SocialPostBase, UUIDMixin, TimestampMixin):
     """Schema for social media post responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
     
@@ -169,7 +169,7 @@ class PostTemplateUpdate(CapitolScopeBaseModel):
     is_public: Optional[bool] = Field(None, description="Public template")
 
 
-class PostTemplateResponse(PostTemplateBase, IDMixin, TimestampMixin):
+class PostTemplateResponse(PostTemplateBase, UUIDMixin, TimestampMixin):
     """Schema for post template responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
     
@@ -246,7 +246,7 @@ class AutomationRuleUpdate(CapitolScopeBaseModel):
     max_posts_per_day: Optional[int] = Field(None, description="Max posts per day", ge=1)
 
 
-class AutomationRuleResponse(AutomationRuleBase, IDMixin, TimestampMixin):
+class AutomationRuleResponse(AutomationRuleBase, UUIDMixin, TimestampMixin):
     """Schema for automation rule responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
     
@@ -291,7 +291,7 @@ class EngagementMetricCreate(EngagementMetricBase):
     pass
 
 
-class EngagementMetricResponse(EngagementMetricBase, IDMixin, TimestampMixin):
+class EngagementMetricResponse(EngagementMetricBase, UUIDMixin, TimestampMixin):
     """Schema for engagement metric responses."""
     pass
 
@@ -357,7 +357,7 @@ class CommunityPostUpdate(CapitolScopeBaseModel):
     allow_comments: Optional[bool] = Field(None, description="Allow comments")
 
 
-class CommunityPostResponse(CommunityPostBase, IDMixin, TimestampMixin):
+class CommunityPostResponse(CommunityPostBase, UUIDMixin, TimestampMixin):
     """Schema for community post responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
     
@@ -402,7 +402,7 @@ class CommunityCommentUpdate(CapitolScopeBaseModel):
     content: Optional[str] = Field(None, description="Comment content", max_length=2000)
 
 
-class CommunityCommentResponse(CommunityCommentBase, IDMixin, TimestampMixin):
+class CommunityCommentResponse(CommunityCommentBase, UUIDMixin, TimestampMixin):
     """Schema for community comment responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
     

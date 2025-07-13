@@ -43,7 +43,7 @@
 # | 2023-12-02  |  151.0 |  153.0 | 149.0 |   152.5 |   450000 |
 
 # Configuration Reference:
-# - The API key is stored in src/utils/config.py as ALPHA_VANTAGE_API_KEY.
+# - The API key is in ENV variable ALPHA_VANTAGE_API_KEY.
 # - The base URL for AlphaVantage API calls is https://www.alphavantage.co/query.
 
 # Function Signature:

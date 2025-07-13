@@ -90,6 +90,7 @@ class Settings(BaseSettings):
     ALPHA_VANTAGE_API_KEY: Optional[SecretStr] = Field(None, description="Alpha Vantage API key")
     POLYGON_API_KEY: Optional[SecretStr] = Field(None, description="Polygon API key")
     YAHOO_FINANCE_API_KEY: Optional[SecretStr] = Field(None, description="Yahoo Finance API key")
+    CONGRESS_GOV_API_KEY: Optional[SecretStr] = Field(None, description="Congress.gov API key")
     
     # Social Media APIs
     TWITTER_API_KEY: Optional[SecretStr] = Field(None, description="Twitter API key")

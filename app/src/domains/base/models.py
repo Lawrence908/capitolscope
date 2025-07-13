@@ -5,12 +5,14 @@ This module defines the base model classes and common database configurations
 that are used across all domains.
 """
 
+import uuid
 from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import UUID
 
 from core.logging import get_logger
 
@@ -109,7 +111,7 @@ class CapitolScopeBaseModel(Base, BaseModel, TimestampMixin):
     
     __abstract__ = True
     
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

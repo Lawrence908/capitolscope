@@ -12,9 +12,10 @@ from decimal import Decimal
 from pydantic import Field, field_validator
 
 from schemas.base import (
-    CapitolScopeBaseModel, IDMixin, TimestampMixin, TechnicalIndicators,
-    validate_ticker_symbol
+    CapitolScopeBaseModel, UUIDMixin, TimestampMixin, TechnicalIndicators,
+    PoliticalParty, Chamber, TransactionType, AssetType, Sector, Exchange
 )
+from schemas.base import validate_ticker_symbol
 
 
 # ============================================================================
@@ -43,7 +44,7 @@ class AssetTypeUpdate(CapitolScopeBaseModel):
     risk_level: Optional[int] = Field(None, description="Risk level 1-5", ge=1, le=5)
 
 
-class AssetTypeResponse(AssetTypeBase, IDMixin, TimestampMixin):
+class AssetTypeResponse(AssetTypeBase, UUIDMixin, TimestampMixin):
     """Schema for asset type responses."""
     pass
 
@@ -75,7 +76,7 @@ class SectorUpdate(CapitolScopeBaseModel):
     volatility_score: Optional[float] = Field(None, description="Historical volatility score")
 
 
-class SectorResponse(SectorBase, IDMixin, TimestampMixin):
+class SectorResponse(SectorBase, UUIDMixin, TimestampMixin):
     """Schema for sector responses."""
     pass
 
@@ -108,7 +109,7 @@ class ExchangeUpdate(CapitolScopeBaseModel):
     market_cap_rank: Optional[int] = Field(None, description="Market cap ranking", ge=1)
 
 
-class ExchangeResponse(ExchangeBase, IDMixin, TimestampMixin):
+class ExchangeResponse(ExchangeBase, UUIDMixin, TimestampMixin):
     """Schema for exchange responses."""
     pass
 
@@ -191,7 +192,7 @@ class SecurityUpdate(CapitolScopeBaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class SecurityResponse(SecurityBase, IDMixin, TimestampMixin):
+class SecurityResponse(SecurityBase, UUIDMixin, TimestampMixin):
     """Schema for security responses."""
     # Related object responses (optional includes)
     asset_type: Optional[AssetTypeResponse] = Field(None, description="Asset type details")
@@ -218,7 +219,7 @@ class SecuritySummary(CapitolScopeBaseModel):
 class DailyPriceBase(CapitolScopeBaseModel):
     """Base daily price schema."""
     security_id: int = Field(..., description="Security ID")
-    date: date = Field(..., description="Price date")
+    price_date: date = Field(..., description="Price date")
     open_price: int = Field(..., description="Opening price in cents", ge=0)
     high_price: int = Field(..., description="High price in cents", ge=0)
     low_price: int = Field(..., description="Low price in cents", ge=0)
@@ -263,7 +264,7 @@ class DailyPriceCreate(DailyPriceBase):
     pass
 
 
-class DailyPriceResponse(DailyPriceBase, IDMixin, TimestampMixin):
+class DailyPriceResponse(DailyPriceBase, UUIDMixin, TimestampMixin):
     """Schema for daily price responses."""
     # Technical indicators (if calculated)
     technical_indicators: Optional[TechnicalIndicators] = Field(None, description="Technical indicators")
@@ -327,7 +328,7 @@ class CorporateActionUpdate(CapitolScopeBaseModel):
     volume_impact_1d: Optional[float] = Field(None, description="1-day volume impact")
 
 
-class CorporateActionResponse(CorporateActionBase, IDMixin, TimestampMixin):
+class CorporateActionResponse(CorporateActionBase, UUIDMixin, TimestampMixin):
     """Schema for corporate action responses."""
     security: Optional[SecuritySummary] = Field(None, description="Security details")
 

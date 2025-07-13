@@ -20,12 +20,47 @@ class TradeRecord:
     amount: str
     filing_status: str
     description: str
+    first_name: str = ""
+    last_name: str = ""
     confidence_score: float = 0.0
     parsing_notes: List[str] = None
     
     def __post_init__(self):
         if self.parsing_notes is None:
             self.parsing_notes = []
+        
+        # Extract first and last names from description if not already set
+        if not self.first_name and not self.last_name:
+            self._extract_names_from_description()
+    
+    def _extract_names_from_description(self):
+        """Extract first and last names from description field"""
+        if not self.description:
+            return
+            
+        # Look for patterns like "Mr. Lou Barletta", "Ms. Suzan K. DelBene", etc.
+        name_patterns = [
+            r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Z][a-z]+(?:\s+[A-Z]\.)?\s+[A-Z][a-z]+)',
+            r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
+        ]
+        
+        for pattern in name_patterns:
+            match = re.search(pattern, self.description)
+            if match:
+                full_name = match.group(2).strip()
+                # Split the full name into first and last
+                name_parts = full_name.split()
+                if len(name_parts) >= 2:
+                    # Handle middle initials
+                    if len(name_parts) == 3 and len(name_parts[1]) == 1:
+                        # Format: "Suzan K. DelBene" -> first: "Suzan", last: "DelBene"
+                        self.first_name = name_parts[0]
+                        self.last_name = name_parts[2]
+                    else:
+                        # Format: "Lou Barletta" -> first: "Lou", last: "Barletta"
+                        self.first_name = name_parts[0]
+                        self.last_name = name_parts[-1]
+                break
 
 class PDFParsingValidator:
     """Validation framework for PDF parsing results"""
@@ -153,12 +188,27 @@ class ImprovedPDFParser:
     
     def _is_trade_line_start(self, line: str) -> bool:
         """Improved detection of trade line starts"""
-        # Match original parser logic - just check if line starts with owner type
-        parts = line.split()
-        if len(parts) < 1:
+        line = line.strip()
+        if not line:
             return False
-            
-        return parts[0] in ['SP', 'DC', 'JT']
+        
+        # Skip header lines and other non-trade content
+        if any(skip in line.upper() for skip in [
+            'FILING', 'INITIAL', 'CERTIFICATION', 'DIGITALLY', 'ASSET CLASS',
+            'LOCATION:', 'SUBHOLDING', 'BEST OF MY', 'TRANSACTION', 'OWNER', 'ASSET',
+            'TYPE', 'DATE', 'NOTIFICATION', 'AMOUNT'
+        ]):
+            return False
+        
+        # Look for transaction patterns: [Asset] [P/S/E] [Date] [Date] [Amount]
+        # Use enhanced transaction type detection
+        transaction_type, _, _ = self._enhanced_transaction_type_detection(line)
+        has_transaction_type = bool(transaction_type)
+        has_date_pattern = bool(re.search(r'\d{1,2}/\d{1,2}/\d{4}', line))
+        has_amount_pattern = '$' in line
+        
+        # A valid trade line should have transaction type, date, and amount
+        return has_transaction_type and has_date_pattern and has_amount_pattern
     
     def _parse_trade_entry(self, lines: List[str], doc_id: str, member: str) -> Tuple[Optional[TradeRecord], int]:
         """Parse a complete trade entry spanning multiple lines"""
@@ -175,15 +225,18 @@ class ImprovedPDFParser:
             
         # Look for continuation lines - extend lookahead like original parser
         additional_data = {}
-        owner_types = ["SP", "DC", "JT"]
         
         for i in range(1, len(lines)):  # Look ahead through all remaining lines
             line = lines[i].strip()
             
-            # Stop if we hit a new trade line or section break
-            if any(line.startswith(owner_type) for owner_type in owner_types):
+            # Stop if we hit a new trade line
+            if self._is_trade_line_start(line):
                 break
+                
+            # Stop if we hit section breaks
             if line.startswith("* For the") or line.startswith("Initial") or line.startswith("Asset"):
+                break
+            if any(section in line.upper() for section in ["CERTIFICATION", "DIGITALLY SIGNED", "INITIAL PUBLIC"]):
                 break
                 
             if self._is_continuation_line(line):
@@ -208,6 +261,12 @@ class ImprovedPDFParser:
             description=merged_data.get('description', '')
         )
         
+        # Apply field validation and correction
+        record = self._validate_and_fix_field_alignment(record)
+        
+        # Apply enhanced amount parsing fixes
+        record = self._fix_amount_parsing_issues(record)
+        
         # Calculate confidence score
         record.confidence_score = self._calculate_confidence_score(record)
         
@@ -226,14 +285,10 @@ class ImprovedPDFParser:
         if len(parts) < 2:  # Reduced from 6 to 2 - need at least owner and something else
             return None
             
-        data = {}
-        
-        # Owner is always first
-        data['owner'] = parts[0]
-        
         # Try multiple parsing strategies
         strategies = [
             self._parse_strategy_standard,
+            self._parse_strategy_malformed_line,
             self._parse_strategy_shifted_amounts,
             self._parse_strategy_missing_fields
         ]
@@ -242,59 +297,287 @@ class ImprovedPDFParser:
             try:
                 result = strategy(parts)
                 if result:  # Remove strict validation to match original parser's flexibility
-                    return {**data, **result}
+                    return result
             except Exception as e:
                 continue
                 
         return None
     
     def _parse_strategy_standard(self, parts: List[str]) -> Dict[str, str]:
-        """Standard parsing strategy assuming normal column layout"""
+        """Standard parsing strategy using regex-based field extraction"""
         if len(parts) < 2:
             return {}
         
-        # Extract asset (everything between owner and the last 6 fields, similar to original parser)
-        if len(parts) >= 7:  # owner + asset + 5 trailing fields minimum
-            asset = " ".join(parts[1:-6]).split("-", 1)[0].strip()
-        elif len(parts) >= 3:
-            asset = parts[1]  # Just take the second part if not enough fields
-        else:
-            asset = ""
+        # Reconstruct the original line from parts
+        line = " ".join(parts)
         
+        # Use regex to extract fields from the end of the line
+        # Pattern: [Asset Name] [Transaction Type] [Date1] [Date2] [Amount]
+        # Transaction Type: P, S, E (single letter)
+        # Dates: MM/DD/YYYY format
+        # Amount: $X,XXX - $X,XXX format
+        
+        # Regex pattern to match the trailing fields
+        pattern = r'^(.+?)\s+([PSE])\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s+(.+)$'
+        
+        match = re.match(pattern, line, re.IGNORECASE)
+        if match:
+            asset_with_owner = match.group(1).strip()
+            transaction_type = match.group(2).upper()
+            transaction_date = match.group(3)
+            notification_date = match.group(4)
+            amount = match.group(5).strip()
+            
+            # For PDFs without explicit owner fields, check if first word looks like an owner type
+            asset_parts = asset_with_owner.split(None, 1)
+            first_word = asset_parts[0] if asset_parts else ""
+            
+            # If first word is a known owner type (SP, JT, DC), use it as owner
+            if first_word.upper() in ['SP', 'JT', 'DC']:
+                owner = first_word.upper()
+                asset = asset_parts[1] if len(asset_parts) > 1 else ""
+            else:
+                # No explicit owner, use default "JT" (Joint) and treat entire match as asset
+                owner = "JT"
+                asset = asset_with_owner
+            
+            # Extract ticker from asset
+            ticker = self._extract_ticker(asset)
+            
+            # Clean asset name by removing ticker information
+            if ticker:
+                asset = re.sub(r'\([^)]*\)', '', asset).strip()
+                asset = re.sub(r'\[[^\]]*\]', '', asset).strip()
+            
+            return {
+                'owner': owner,
+                'asset': asset,
+                'ticker': ticker,
+                'transaction_type': transaction_type,
+                'transaction_date': transaction_date,
+                'notification_date': notification_date,
+                'amount': amount,
+                'filing_status': "New",
+                'description': ""
+            }
+        
+        # Fallback: Try a more flexible pattern for malformed data
+        # Look for any single letter followed by dates
+        flexible_pattern = r'^(.+?)\s+([PSEpse])\s+(\d{1,2}/\d{1,2}/\d{4})(?:\s+(\d{1,2}/\d{1,2}/\d{4}))?(?:\s+(.+))?$'
+        
+        flexible_match = re.match(flexible_pattern, line, re.IGNORECASE)
+        if flexible_match:
+            asset_with_owner = flexible_match.group(1).strip()
+            transaction_type = flexible_match.group(2).upper()
+            transaction_date = flexible_match.group(3)
+            notification_date = flexible_match.group(4) or ""
+            amount = flexible_match.group(5) or ""
+            
+            # For PDFs without explicit owner fields, check if first word looks like an owner type
+            asset_parts = asset_with_owner.split(None, 1)
+            first_word = asset_parts[0] if asset_parts else ""
+            
+            # If first word is a known owner type (SP, JT, DC), use it as owner
+            if first_word.upper() in ['SP', 'JT', 'DC']:
+                owner = first_word.upper()
+                asset = asset_parts[1] if len(asset_parts) > 1 else ""
+            else:
+                # No explicit owner, use default "JT" (Joint) and treat entire match as asset
+                owner = "JT"
+                asset = asset_with_owner
+            
+            # Extract ticker from asset
+            ticker = self._extract_ticker(asset)
+            
+            # Clean asset name
+            if ticker:
+                asset = re.sub(r'\([^)]*\)', '', asset).strip()
+                asset = re.sub(r'\[[^\]]*\]', '', asset).strip()
+            
+            return {
+                'owner': owner,
+                'asset': asset,
+                'ticker': ticker,
+                'transaction_type': transaction_type,
+                'transaction_date': transaction_date,
+                'notification_date': notification_date,
+                'amount': amount,
+                'filing_status': "New",
+                'description': ""
+            }
+        
+        # If regex patterns fail, fall back to the old method but with better field detection
+        return self._parse_strategy_fallback(parts)
+    
+    def _parse_strategy_fallback(self, parts: List[str]) -> Dict[str, str]:
+        """Fallback parsing strategy when regex patterns fail"""
+        if len(parts) < 2:
+            return {}
+        
+        # Use the original approach but with better validation
+        owner = parts[0]
+        
+        # Try to find transaction type using enhanced detection
+        line = " ".join(parts)
+        transaction_type, position = self._find_transaction_type_in_context(parts, line)
+        transaction_type_idx = None
+        
+        if transaction_type:
+            # Find the index of the part containing the transaction type
+            for i, part in enumerate(parts[1:], 1):
+                if transaction_type in part.upper() or part.upper() in transaction_type:
+                    transaction_type_idx = i
+                    break
+        
+        if transaction_type_idx is None:
+            # No valid transaction type found, treat as malformed
+            return {
+                'owner': owner,
+                'asset': " ".join(parts[1:]) if len(parts) > 1 else "",
+                'ticker': "",
+                'transaction_type': transaction_type if transaction_type else "",
+                'transaction_date': "",
+                'notification_date': "",
+                'amount': "",
+                'filing_status': "New",
+                'description': ""
+            }
+        
+        # Asset is everything between owner and transaction type
+        asset = " ".join(parts[1:transaction_type_idx])
         ticker = self._extract_ticker(asset)
         
-        # Clean asset name by removing ticker information
+        # Clean asset name
         if ticker:
             asset = re.sub(r'\([^)]*\)', '', asset).strip()
             asset = re.sub(r'\[[^\]]*\]', '', asset).strip()
         
-        # Handle cases with different numbers of trailing fields (like original parser)
+        # Extract remaining fields after transaction type
+        remaining_parts = parts[transaction_type_idx:]
+        
         result = {
-            'owner': parts[0],
+            'owner': owner,
             'asset': asset,
             'ticker': ticker,
+            'transaction_type': transaction_type if transaction_type else (remaining_parts[0].upper() if remaining_parts else ""),
+            'transaction_date': remaining_parts[1] if len(remaining_parts) > 1 else "",
+            'notification_date': remaining_parts[2] if len(remaining_parts) > 2 else "",
+            'amount': remaining_parts[3] if len(remaining_parts) > 3 else "",
             'filing_status': "New",
             'description': ""
         }
         
-        # Extract trailing fields based on available parts
-        if len(parts) >= 6:
-            result['transaction_type'] = parts[-5]
-            result['transaction_date'] = parts[-4]
-            result['notification_date'] = parts[-3]
-            result['amount'] = parts[-2]
-        elif len(parts) >= 4:
-            result['transaction_type'] = parts[-3] if len(parts) > 3 else ""
-            result['transaction_date'] = parts[-2] if len(parts) > 2 else ""
-            result['notification_date'] = parts[-1] if len(parts) > 1 else ""
-            result['amount'] = ""
-        else:
-            result['transaction_type'] = ""
-            result['transaction_date'] = ""
-            result['notification_date'] = ""
-            result['amount'] = ""
-        
         return result
+    
+    def _parse_strategy_malformed_line(self, parts: List[str]) -> Dict[str, str]:
+        """Handle lines where transaction data is embedded in asset field"""
+        if len(parts) < 2:
+            return {}
+        
+        line = " ".join(parts)
+        
+        # Enhanced pattern for malformed lines with multiple variations:
+        # 1. "Royal Bank Of Canada   P 08/09/2023 08/11/2023 $15,001" - spaces between asset and transaction
+        # 2. "Cree, Inc. P 05/12/2014 05/12/2014 $15,001" - minimal spacing
+        # 3. "Apple Inc.   P 01/27/2023 02/06/2023 $1,001" - multiple spaces
+        
+        # Primary pattern: Asset name followed by transaction type, dates, and amount
+        malformed_patterns = [
+            # Pattern 1: Multiple spaces between asset and transaction data
+            r'^(\w+)\s+(.+?)\s{2,}([PSE])\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s+(.+)$',
+            # Pattern 2: Single space between asset and transaction data
+            r'^(\w+)\s+(.+?)\s+([PSE])\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s+(.+)$',
+            # Pattern 3: Asset name with commas/periods followed by transaction data
+            r'^(\w+)\s+(.+?[,.])\s*([PSE])\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s+(.+)$',
+            # Pattern 4: No owner prefix, just asset with embedded transaction
+            r'^(.+?)\s+([PSE])\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s+(.+)$'
+        ]
+        
+        for i, pattern in enumerate(malformed_patterns):
+            match = re.match(pattern, line, re.IGNORECASE)
+            if match:
+                if i < 3:  # Patterns 1-3 have owner prefix
+                    owner = match.group(1)
+                    asset = match.group(2).strip()
+                    transaction_type = match.group(3).upper()
+                    transaction_date = match.group(4)
+                    notification_date = match.group(5)
+                    amount = match.group(6)
+                else:  # Pattern 4 - no owner prefix
+                    owner = "JT"  # Default to Joint
+                    asset = match.group(1).strip()
+                    transaction_type = match.group(2).upper()
+                    transaction_date = match.group(3)
+                    notification_date = match.group(4)
+                    amount = match.group(5)
+                
+                # Clean up asset name - remove trailing punctuation that might be artifacts
+                asset = re.sub(r'[,\s]+$', '', asset)
+                
+                # Extract ticker from asset
+                ticker = self._extract_ticker(asset)
+                
+                # Clean asset name by removing ticker information
+                if ticker:
+                    asset = re.sub(r'\([^)]*\)', '', asset).strip()
+                    asset = re.sub(r'\[[^\]]*\]', '', asset).strip()
+                
+                # Clean up amount - remove trailing characters that might be artifacts
+                amount = re.sub(r'[,\s]+$', '', amount)
+                
+                return {
+                    'owner': owner,
+                    'asset': asset,
+                    'ticker': ticker,
+                    'transaction_type': transaction_type,
+                    'transaction_date': transaction_date,
+                    'notification_date': notification_date,
+                    'amount': amount,
+                    'filing_status': "New",
+                    'description': ""
+                }
+        
+        # Additional strategy for very malformed lines where we can detect transaction patterns
+        # Look for transaction type anywhere in the line followed by dates
+        transaction_in_line = re.search(r'\b([PSE])\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s*(.*)$', line, re.IGNORECASE)
+        if transaction_in_line:
+            # Everything before the transaction type is likely the owner and asset
+            prefix = line[:transaction_in_line.start()].strip()
+            transaction_type = transaction_in_line.group(1).upper()
+            transaction_date = transaction_in_line.group(2)
+            notification_date = transaction_in_line.group(3)
+            amount = transaction_in_line.group(4).strip()
+            
+            # Try to split prefix into owner and asset
+            prefix_parts = prefix.split(None, 1)
+            if len(prefix_parts) >= 2:
+                owner = prefix_parts[0]
+                asset = prefix_parts[1]
+            else:
+                owner = "JT"
+                asset = prefix
+            
+            # Extract ticker from asset
+            ticker = self._extract_ticker(asset)
+            
+            # Clean asset name
+            if ticker:
+                asset = re.sub(r'\([^)]*\)', '', asset).strip()
+                asset = re.sub(r'\[[^\]]*\]', '', asset).strip()
+            
+            return {
+                'owner': owner,
+                'asset': asset,
+                'ticker': ticker,
+                'transaction_type': transaction_type,
+                'transaction_date': transaction_date,
+                'notification_date': notification_date,
+                'amount': amount,
+                'filing_status': "New",
+                'description': ""
+            }
+        
+        return {}
     
     def _parse_strategy_shifted_amounts(self, parts: List[str]) -> Dict[str, str]:
         """Parsing strategy for when amounts are shifted due to missing fields"""
@@ -552,123 +835,586 @@ class ImprovedPDFParser:
         
         return ""
 
-class PDFParsingTestSuite:
-    """Comprehensive testing suite for PDF parsing validation"""
-    
-    def __init__(self, parser: ImprovedPDFParser):
-        self.parser = parser
-        self.test_results = []
+    def _validate_and_fix_field_alignment(self, record: TradeRecord) -> TradeRecord:
+        """Validate and fix field alignment issues in parsed records"""
+        # Create a copy to avoid modifying the original
+        fixed_record = TradeRecord(
+            member=record.member,
+            doc_id=record.doc_id,
+            owner=record.owner,
+            asset=record.asset,
+            ticker=record.ticker,
+            transaction_type=record.transaction_type,
+            transaction_date=record.transaction_date,
+            notification_date=record.notification_date,
+            amount=record.amount,
+            filing_status=record.filing_status,
+            description=record.description,
+            first_name=record.first_name,
+            last_name=record.last_name,
+            confidence_score=record.confidence_score,
+            parsing_notes=record.parsing_notes.copy() if record.parsing_notes else []
+        )
         
-    def run_validation_tests(self, pdf_files: List[str]) -> Dict[str, any]:
-        """Run comprehensive validation tests on PDF files"""
-        results = {
-            'total_files': len(pdf_files),
-            'successful_parses': 0,
-            'failed_parses': 0,
-            'records_extracted': 0,
-            'low_confidence_records': 0,
-            'validation_errors': 0,
-            'common_errors': {},
-            'confidence_distribution': [],
-            'ticker_accuracy': 0,
-            'date_accuracy': 0,
-            'amount_accuracy': 0
-        }
+        # Check for field misalignment patterns and fix them
         
-        all_records = []
-        
-        for pdf_file in pdf_files:
-            try:
-                doc_id = pdf_file.split('/')[-1].replace('.pdf', '')
-                records = self.parser.parse_pdf_improved(pdf_file, doc_id, "Test")
+        # Pattern 1: Date in transaction_type field
+        if self._is_date_format(fixed_record.transaction_type):
+            fixed_record.parsing_notes.append("Fixed: Date found in transaction_type field")
+            # Shift fields: transaction_type -> transaction_date, transaction_date -> notification_date, etc.
+            temp_transaction_date = fixed_record.transaction_type
+            fixed_record.transaction_type = ""
+            
+            # Try to find the actual transaction type in other fields
+            for field_name, field_value in [
+                ("transaction_date", fixed_record.transaction_date),
+                ("notification_date", fixed_record.notification_date),
+                ("amount", fixed_record.amount)
+            ]:
+                if field_value in ['P', 'S', 'E', 'S (partial)']:
+                    fixed_record.transaction_type = field_value
+                    break
+            
+            # Shift the dates
+            if not fixed_record.transaction_type:
+                fixed_record.transaction_type = "P"  # Default assumption
                 
-                if records:
-                    results['successful_parses'] += 1
-                    results['records_extracted'] += len(records)
-                    all_records.extend(records)
-                    
-                    # Analyze confidence scores
-                    for record in records:
-                        if record.confidence_score < 0.7:
-                            results['low_confidence_records'] += 1
-                        results['confidence_distribution'].append(record.confidence_score)
-                        
-                        # Count validation errors
-                        if record.parsing_notes:
-                            results['validation_errors'] += len(record.parsing_notes)
-                            for note in record.parsing_notes:
-                                error_type = note.split(':')[0]
-                                results['common_errors'][error_type] = results['common_errors'].get(error_type, 0) + 1
-                                
-                else:
-                    results['failed_parses'] += 1
-                    
-            except Exception as e:
-                results['failed_parses'] += 1
-                logging.error(f"Failed to parse {pdf_file}: {e}")
-        
-        # Calculate accuracy metrics
-        if all_records:
-            results['ticker_accuracy'] = self._calculate_ticker_accuracy(all_records)
-            results['date_accuracy'] = self._calculate_date_accuracy(all_records)
-            results['amount_accuracy'] = self._calculate_amount_accuracy(all_records)
-            
-        return results
-    
-    def _calculate_ticker_accuracy(self, records: List[TradeRecord]) -> float:
-        """Calculate ticker symbol accuracy"""
-        valid_tickers = sum(1 for r in records if r.ticker in self.parser.tickers or r.ticker == "NaN")
-        return valid_tickers / len(records) if records else 0
-    
-    def _calculate_date_accuracy(self, records: List[TradeRecord]) -> float:
-        """Calculate date parsing accuracy"""
-        valid_dates = 0
-        for record in records:
-            try:
-                datetime.strptime(record.transaction_date, "%m/%d/%Y")
-                datetime.strptime(record.notification_date, "%m/%d/%Y")
-                valid_dates += 1
-            except:
+            fixed_record.transaction_date = temp_transaction_date
+            if self._is_date_format(fixed_record.notification_date):
+                # Keep notification_date as is
                 pass
-        return valid_dates / len(records) if records else 0
-    
-    def _calculate_amount_accuracy(self, records: List[TradeRecord]) -> float:
-        """Calculate amount parsing accuracy"""
-        valid_amounts = sum(1 for r in records if r.amount and ("$" in r.amount or r.amount == "None"))
-        return valid_amounts / len(records) if records else 0
-    
-    def generate_test_report(self, results: Dict[str, any]) -> str:
-        """Generate a comprehensive test report"""
-        report = f"""
-PDF Parsing Validation Report
-=============================
-
-Overall Statistics:
-- Total Files Processed: {results['total_files']}
-- Successful Parses: {results['successful_parses']} ({results['successful_parses']/results['total_files']*100:.1f}%)
-- Failed Parses: {results['failed_parses']} ({results['failed_parses']/results['total_files']*100:.1f}%)
-- Total Records Extracted: {results['records_extracted']}
-- Low Confidence Records: {results['low_confidence_records']} ({results['low_confidence_records']/max(1,results['records_extracted'])*100:.1f}%)
-
-Accuracy Metrics:
-- Ticker Accuracy: {results['ticker_accuracy']:.2%}
-- Date Accuracy: {results['date_accuracy']:.2%}
-- Amount Accuracy: {results['amount_accuracy']:.2%}
-
-Validation Issues:
-- Total Validation Errors: {results['validation_errors']}
-- Most Common Errors:
-"""
+            else:
+                fixed_record.notification_date = fixed_record.transaction_date
         
-        for error_type, count in sorted(results['common_errors'].items(), key=lambda x: x[1], reverse=True)[:5]:
-            report += f"  - {error_type}: {count} occurrences\n"
+        # Pattern 2: Amount in date fields
+        if self._is_amount_format(fixed_record.transaction_date):
+            fixed_record.parsing_notes.append("Fixed: Amount found in transaction_date field")
+            # Amount is in wrong place, need to find dates elsewhere
+            temp_amount = fixed_record.transaction_date
+            fixed_record.amount = temp_amount
+            fixed_record.transaction_date = ""
+            fixed_record.notification_date = ""
             
-        if results['confidence_distribution']:
-            import statistics
-            report += f"\nConfidence Score Distribution:\n"
-            report += f"- Average: {statistics.mean(results['confidence_distribution']):.2f}\n"
-            report += f"- Median: {statistics.median(results['confidence_distribution']):.2f}\n"
-            report += f"- Min: {min(results['confidence_distribution']):.2f}\n"
-            report += f"- Max: {max(results['confidence_distribution']):.2f}\n"
+            # Look for dates in other fields
+            if self._is_date_format(fixed_record.notification_date):
+                fixed_record.transaction_date = fixed_record.notification_date
+                fixed_record.notification_date = fixed_record.transaction_date  # Duplicate for now
+            elif self._is_date_format(fixed_record.amount):
+                fixed_record.transaction_date = fixed_record.amount
+                fixed_record.amount = temp_amount
+                fixed_record.notification_date = fixed_record.transaction_date
+        
+        # Pattern 3: Transaction type in wrong position
+        if not fixed_record.transaction_type or fixed_record.transaction_type not in ['P', 'S', 'E', 'S (partial)']:
+            # Look for transaction type in other fields
+            for field_name, field_value in [
+                ("transaction_date", fixed_record.transaction_date),
+                ("notification_date", fixed_record.notification_date),
+                ("amount", fixed_record.amount),
+                ("asset", fixed_record.asset)
+            ]:
+                if field_value in ['P', 'S', 'E', 'S (partial)']:
+                    fixed_record.parsing_notes.append(f"Fixed: Transaction type found in {field_name} field")
+                    fixed_record.transaction_type = field_value
+                    # Clear the field where we found it
+                    if field_name == "transaction_date":
+                        fixed_record.transaction_date = ""
+                    elif field_name == "notification_date":
+                        fixed_record.notification_date = ""
+                    elif field_name == "amount":
+                        fixed_record.amount = ""
+                    break
+        
+        # Pattern 4: Missing dates - try to extract from asset or description
+        if not fixed_record.transaction_date or not self._is_date_format(fixed_record.transaction_date):
+            # Look for dates in asset field (common in malformed lines)
+            date_match = re.search(r'(\d{1,2}/\d{1,2}/\d{4})', fixed_record.asset)
+            if date_match:
+                fixed_record.parsing_notes.append("Fixed: Date extracted from asset field")
+                fixed_record.transaction_date = date_match.group(1)
+                # Remove date from asset field
+                fixed_record.asset = re.sub(r'\d{1,2}/\d{1,2}/\d{4}', '', fixed_record.asset).strip()
+                
+                # Look for second date
+                second_date_match = re.search(r'(\d{1,2}/\d{1,2}/\d{4})', fixed_record.asset)
+                if second_date_match:
+                    fixed_record.notification_date = second_date_match.group(1)
+                    fixed_record.asset = re.sub(r'\d{1,2}/\d{1,2}/\d{4}', '', fixed_record.asset).strip()
+                else:
+                    fixed_record.notification_date = fixed_record.transaction_date
+        
+        # Pattern 5: Missing or malformed amounts
+        if not fixed_record.amount or not self._is_amount_format(fixed_record.amount):
+            # Look for amounts in asset field
+            amount_match = re.search(r'(\$[\d,]+(?:\s*-\s*\$[\d,]+)?)', fixed_record.asset)
+            if amount_match:
+                fixed_record.parsing_notes.append("Fixed: Amount extracted from asset field")
+                fixed_record.amount = amount_match.group(1)
+                # Remove amount from asset field
+                fixed_record.asset = re.sub(r'\$[\d,]+(?:\s*-\s*\$[\d,]+)?', '', fixed_record.asset).strip()
+        
+        # Pattern 6: Clean up asset field from remaining artifacts
+        if fixed_record.asset:
+            # Remove transaction types that might be left over
+            fixed_record.asset = re.sub(r'\b[PSE]\b', '', fixed_record.asset)
+            # Remove isolated dates
+            fixed_record.asset = re.sub(r'\b\d{1,2}/\d{1,2}/\d{4}\b', '', fixed_record.asset)
+            # Remove isolated amounts
+            fixed_record.asset = re.sub(r'\$[\d,]+(?:\s*-\s*\$[\d,]+)?', '', fixed_record.asset)
+            # Clean up multiple spaces
+            fixed_record.asset = re.sub(r'\s+', ' ', fixed_record.asset).strip()
+        
+        # Final validation and cleanup
+        fixed_record = self._final_field_cleanup(fixed_record)
+        
+        return fixed_record
+    
+    def _final_field_cleanup(self, record: TradeRecord) -> TradeRecord:
+        """Final cleanup and validation of all fields"""
+        # Ensure transaction_type is valid
+        if record.transaction_type not in ['P', 'S', 'E', 'S (partial)']:
+            if record.transaction_type.upper() in ['P', 'S', 'E']:
+                record.transaction_type = record.transaction_type.upper()
+            else:
+                record.transaction_type = "P"  # Default assumption
+                record.parsing_notes.append("Warning: Invalid transaction type, defaulted to 'P'")
+        
+        # Ensure dates are properly formatted
+        if record.transaction_date and not self._is_date_format(record.transaction_date):
+            record.parsing_notes.append("Warning: Invalid transaction date format")
+        
+        if record.notification_date and not self._is_date_format(record.notification_date):
+            record.parsing_notes.append("Warning: Invalid notification date format")
+        
+        # If notification date is missing, use transaction date
+        if not record.notification_date and record.transaction_date:
+            record.notification_date = record.transaction_date
+            record.parsing_notes.append("Info: Notification date set to transaction date")
+        
+        # Normalize amount format
+        if record.amount:
+            record.amount = self._normalize_amount(record.amount)
+        
+        # Clean up asset name
+        if record.asset:
+            # Remove extra whitespace
+            record.asset = re.sub(r'\s+', ' ', record.asset).strip()
+            # Remove leading/trailing punctuation
+            record.asset = record.asset.strip('.,;:')
+        
+        return record
+    
+    def _is_date_format(self, value: str) -> bool:
+        """Check if value matches date format patterns"""
+        if not value:
+            return False
+        
+        date_patterns = [
+            r'^\d{1,2}/\d{1,2}/\d{4}$',
+            r'^\d{2}/\d{2}/\d{4}$',
+            r'^\d{4}-\d{2}-\d{2}$'
+        ]
+        
+        return any(re.match(pattern, value.strip()) for pattern in date_patterns)
+    
+    def _is_amount_format(self, value: str) -> bool:
+        """Check if value matches amount format patterns"""
+        if not value:
+            return False
+        
+        amount_patterns = [
+            r'^\$[\d,]+$',
+            r'^\$[\d,]+\s*-\s*\$[\d,]+$',
+            r'^[\d,]+$',
+            r'^None$'
+        ]
+        
+        return any(re.match(pattern, value.strip()) for pattern in amount_patterns)
+
+    def _enhanced_transaction_type_detection(self, line: str) -> Tuple[str, str, int]:
+        """Enhanced detection of transaction types with position tracking"""
+        # Define all possible transaction type patterns
+        transaction_patterns = [
+            # Standard single-letter patterns
+            (r'\b([PSE])\b', 1),
+            # Case-insensitive patterns
+            (r'\b([pse])\b', 1),
+            # Partial sale patterns
+            (r'\b(S\s*\(partial\))\b', 1),
+            (r'\b(s\s*\(partial\))\b', 1),
+            # Exchange patterns
+            (r'\b(Exchange)\b', 1),
+            (r'\b(exchange)\b', 1),
+            # Purchase patterns
+            (r'\b(Purchase)\b', 1),
+            (r'\b(purchase)\b', 1),
+            # Sale patterns
+            (r'\b(Sale)\b', 1),
+            (r'\b(sale)\b', 1),
+            # Sell patterns
+            (r'\b(Sell)\b', 1),
+            (r'\b(sell)\b', 1),
+        ]
+        
+        # Try each pattern and find the best match
+        best_match = None
+        best_position = -1
+        best_normalized = ""
+        
+        for pattern, group_num in transaction_patterns:
+            matches = list(re.finditer(pattern, line, re.IGNORECASE))
+            for match in matches:
+                transaction_type = match.group(group_num)
+                position = match.start()
+                
+                # Normalize the transaction type
+                normalized = self._normalize_transaction_type(transaction_type)
+                
+                # Prefer matches that are:
+                # 1. Closer to the end of the line (more likely to be in the right position)
+                # 2. Standard single-letter formats
+                # 3. Not part of a larger word (surrounded by spaces or punctuation)
+                
+                score = 0
+                
+                # Score based on position (later in line is better)
+                score += position / len(line) * 10
+                
+                # Score based on format (single letters are better)
+                if normalized in ['P', 'S', 'E']:
+                    score += 20
+                elif normalized == 'S (partial)':
+                    score += 15
+                else:
+                    score += 5
+                
+                # Score based on context (surrounded by whitespace/punctuation is better)
+                start_char = line[position - 1] if position > 0 else ' '
+                end_char = line[position + len(transaction_type)] if position + len(transaction_type) < len(line) else ' '
+                
+                if start_char in ' \t\n.,;:' and end_char in ' \t\n.,;:':
+                    score += 10
+                
+                # Check if this is the best match so far
+                if best_match is None or score > best_match[0]:
+                    best_match = (score, match, normalized)
+                    best_position = position
+                    best_normalized = normalized
+        
+        if best_match:
+            return best_normalized, line, best_position
+        
+        return "", line, -1
+    
+    def _normalize_transaction_type(self, transaction_type: str) -> str:
+        """Normalize transaction type to standard format"""
+        if not transaction_type:
+            return ""
+        
+        # Convert to uppercase for comparison
+        upper_type = transaction_type.upper().strip()
+        
+        # Handle various formats
+        if upper_type == 'P':
+            return 'P'
+        elif upper_type == 'S':
+            return 'S'
+        elif upper_type == 'E':
+            return 'E'
+        elif 'PARTIAL' in upper_type or '(PARTIAL)' in upper_type:
+            return 'S (partial)'
+        elif upper_type in ['PURCHASE', 'BUY', 'BOUGHT']:
+            return 'P'
+        elif upper_type in ['SALE', 'SELL', 'SOLD']:
+            return 'S'
+        elif upper_type in ['EXCHANGE', 'EXCHANGED']:
+            return 'E'
+        else:
+            # Return the original if we can't normalize it
+            return transaction_type
+    
+    def _find_transaction_type_in_context(self, parts: List[str], line: str) -> Tuple[str, int]:
+        """Find transaction type considering context and position"""
+        # First, try the enhanced detection on the full line
+        transaction_type, _, position = self._enhanced_transaction_type_detection(line)
+        if transaction_type:
+            return transaction_type, position
+        
+        # If not found in full line, search through parts
+        for i, part in enumerate(parts):
+            if part.upper() in ['P', 'S', 'E']:
+                return part.upper(), i
+            elif 'partial' in part.lower():
+                return 'S (partial)', i
+        
+        # Look for transaction types that might be concatenated with other text
+        for i, part in enumerate(parts):
+            # Check if part contains a transaction type
+            for trans_type in ['P', 'S', 'E']:
+                if trans_type in part.upper():
+                    # Make sure it's not part of a larger word
+                    if re.search(r'\b' + trans_type + r'\b', part, re.IGNORECASE):
+                        return trans_type, i
+        
+        # If still not found, make educated guesses based on context
+        # Look for words that might indicate transaction type
+        for i, part in enumerate(parts):
+            part_lower = part.lower()
+            if any(word in part_lower for word in ['purchase', 'buy', 'bought']):
+                return 'P', i
+            elif any(word in part_lower for word in ['sale', 'sell', 'sold']):
+                return 'S', i
+            elif any(word in part_lower for word in ['exchange', 'exchanged']):
+                return 'E', i
+        
+        return "", -1
+
+    def _extract_and_validate_dates(self, line: str, parts: List[str]) -> Tuple[str, str]:
+        """Extract and validate transaction and notification dates from line"""
+        # Find all date patterns in the line
+        date_patterns = [
+            r'\b(\d{1,2}/\d{1,2}/\d{4})\b',  # MM/DD/YYYY or M/D/YYYY
+            r'\b(\d{2}/\d{2}/\d{4})\b',      # MM/DD/YYYY strict
+            r'\b(\d{1,2}/\d{1}/\d{4})\b',    # MM/D/YYYY or M/D/YYYY
+            r'\b(\d{1}/\d{1,2}/\d{4})\b',    # M/MM/YYYY or M/M/YYYY
+        ]
+        
+        found_dates = []
+        for pattern in date_patterns:
+            matches = re.finditer(pattern, line)
+            for match in matches:
+                date_str = match.group(1)
+                position = match.start()
+                
+                # Validate the date format
+                if self._validate_date_format(date_str):
+                    found_dates.append((date_str, position))
+        
+        # Remove duplicates and sort by position
+        found_dates = list(set(found_dates))
+        found_dates.sort(key=lambda x: x[1])
+        
+        # Extract transaction and notification dates
+        transaction_date = ""
+        notification_date = ""
+        
+        if len(found_dates) >= 2:
+            # Use the first two dates found
+            transaction_date = found_dates[0][0]
+            notification_date = found_dates[1][0]
+        elif len(found_dates) == 1:
+            # Use the same date for both
+            transaction_date = found_dates[0][0]
+            notification_date = found_dates[0][0]
+        else:
+            # Try to find dates in individual parts
+            for part in parts:
+                if self._validate_date_format(part):
+                    if not transaction_date:
+                        transaction_date = part
+                    elif not notification_date:
+                        notification_date = part
+                    else:
+                        break
             
-        return report 
+            # If still missing notification date, use transaction date
+            if transaction_date and not notification_date:
+                notification_date = transaction_date
+        
+        # Validate and correct the extracted dates
+        transaction_date = self._correct_date_format(transaction_date)
+        notification_date = self._correct_date_format(notification_date)
+        
+        return transaction_date, notification_date 
+
+    def _extract_and_validate_amounts(self, line: str, parts: List[str]) -> str:
+        """Extract and validate amount from line with comprehensive pattern matching"""
+        # Define amount patterns in order of preference
+        amount_patterns = [
+            # Range patterns (most specific first)
+            r'\$(\d{1,3}(?:,\d{3})*)\s*-\s*\$(\d{1,3}(?:,\d{3})*)',  # $1,000 - $15,000
+            r'\$(\d{1,3}(?:,\d{3})*)\s*to\s*\$(\d{1,3}(?:,\d{3})*)',  # $1,000 to $15,000
+            r'\$(\d{1,3}(?:,\d{3})*)\s*\-\s*(\d{1,3}(?:,\d{3})*)',   # $1,000 - 15,000
+            
+            # Single amount patterns
+            r'\$(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',  # $1,000.00 or $1,000
+            r'(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*dollars?',  # 1,000 dollars
+            
+            # Special cases
+            r'\$(\d+)',  # Simple $1000 format
+            r'(\d+)\s*\$',  # 1000$ format
+            
+            # Partial amount indicators
+            r'over\s*\$(\d{1,3}(?:,\d{3})*)',  # over $1,000
+            r'under\s*\$(\d{1,3}(?:,\d{3})*)',  # under $1,000
+            r'up\s*to\s*\$(\d{1,3}(?:,\d{3})*)',  # up to $1,000
+        ]
+        
+        # Find all potential amounts in the line
+        found_amounts = []
+        
+        for pattern in amount_patterns:
+            matches = re.finditer(pattern, line, re.IGNORECASE)
+            for match in matches:
+                amount_str = match.group(0)
+                position = match.start()
+                
+                # Normalize the amount
+                normalized = self._normalize_amount_string(amount_str)
+                if normalized:
+                    found_amounts.append((normalized, position, amount_str))
+        
+        # If no amounts found in full line, search individual parts
+        if not found_amounts:
+            for part in parts:
+                for pattern in amount_patterns:
+                    match = re.search(pattern, part, re.IGNORECASE)
+                    if match:
+                        amount_str = match.group(0)
+                        normalized = self._normalize_amount_string(amount_str)
+                        if normalized:
+                            found_amounts.append((normalized, 0, amount_str))
+                            break
+        
+        # Select the best amount (prefer ranges, then later positions)
+        if found_amounts:
+            # Sort by preference: ranges first, then by position
+            found_amounts.sort(key=lambda x: (
+                0 if '-' in x[0] else 1,  # Ranges first
+                -x[1]  # Later positions first
+            ))
+            return found_amounts[0][0]
+        
+        # Special handling for common edge cases
+        return self._handle_special_amount_cases(line, parts)
+    
+    def _normalize_amount_string(self, amount_str: str) -> str:
+        """Normalize amount string to standard format"""
+        if not amount_str:
+            return ""
+        
+        # Remove extra whitespace
+        amount_str = amount_str.strip()
+        
+        # Handle range patterns
+        range_match = re.search(r'\$(\d{1,3}(?:,\d{3})*)\s*-\s*\$(\d{1,3}(?:,\d{3})*)', amount_str)
+        if range_match:
+            low_amount = range_match.group(1)
+            high_amount = range_match.group(2)
+            return f"${low_amount} - ${high_amount}"
+        
+        # Handle single amount with dollar sign
+        single_match = re.search(r'\$(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)', amount_str)
+        if single_match:
+            amount = single_match.group(1)
+            # Convert to standard range format based on amount
+            return self._convert_to_standard_range(amount)
+        
+        # Handle amount without dollar sign
+        number_match = re.search(r'(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)', amount_str)
+        if number_match:
+            amount = number_match.group(1)
+            return self._convert_to_standard_range(amount)
+        
+        return ""
+    
+    def _convert_to_standard_range(self, amount_str: str) -> str:
+        """Convert single amount to standard range format"""
+        if not amount_str:
+            return ""
+        
+        # Remove commas and convert to integer for comparison
+        try:
+            amount_num = int(amount_str.replace(',', '').replace('.00', ''))
+            
+            # Define standard ranges
+            if amount_num <= 1000:
+                return "$1 - $1,000"
+            elif amount_num <= 15000:
+                return "$1,001 - $15,000"
+            elif amount_num <= 50000:
+                return "$15,001 - $50,000"
+            elif amount_num <= 100000:
+                return "$50,001 - $100,000"
+            elif amount_num <= 250000:
+                return "$100,001 - $250,000"
+            elif amount_num <= 500000:
+                return "$250,001 - $500,000"
+            elif amount_num <= 1000000:
+                return "$500,001 - $1,000,000"
+            elif amount_num <= 5000000:
+                return "$1,000,001 - $5,000,000"
+            elif amount_num <= 25000000:
+                return "$5,000,001 - $25,000,000"
+            else:
+                return f"${amount_str}+"
+                
+        except ValueError:
+            # If we can't parse it, return as-is with dollar sign
+            return f"${amount_str}"
+    
+    def _handle_special_amount_cases(self, line: str, parts: List[str]) -> str:
+        """Handle special cases for amount extraction"""
+        # Look for "None" or "N/A" indicators
+        if any(indicator in line.upper() for indicator in ['NONE', 'N/A', 'NOT APPLICABLE', 'ZERO']):
+            return "None"
+        
+        # Look for percentage indicators (bonds, etc.)
+        percentage_match = re.search(r'(\d+(?:\.\d+)?)\%', line)
+        if percentage_match:
+            return f"{percentage_match.group(1)}%"
+        
+        # Look for share counts that might be mistaken for amounts
+        share_match = re.search(r'(\d+)\s*shares?', line, re.IGNORECASE)
+        if share_match:
+            # This is likely a share count, not an amount
+            return "Amount not specified"
+        
+        # Look for "partial" indicators
+        if 'partial' in line.lower():
+            return "Partial amount"
+        
+        # If we find any numbers, try to make sense of them
+        numbers = re.findall(r'\d{1,3}(?:,\d{3})*', line)
+        if numbers:
+            # Take the largest number as it's likely the amount
+            largest = max(numbers, key=lambda x: int(x.replace(',', '')))
+            return self._convert_to_standard_range(largest)
+        
+        return ""
+    
+    def _validate_amount_format(self, amount: str) -> bool:
+        """Validate if amount is in proper format"""
+        if not amount:
+            return False
+        
+        # Valid formats
+        valid_patterns = [
+            r'^\$[\d,]+\s*-\s*\$[\d,]+$',  # Range format
+            r'^\$[\d,]+$',  # Single amount
+            r'^None$',  # None
+            r'^\d+(?:\.\d+)?%$',  # Percentage
+            r'^[\d,]+$',  # Number only
+            r'^Partial amount$',  # Partial
+            r'^Amount not specified$',  # Not specified
+        ]
+        
+        return any(re.match(pattern, amount.strip()) for pattern in valid_patterns)
+    
+    def _fix_amount_parsing_issues(self, record: TradeRecord) -> TradeRecord:
+        """Fix common amount parsing issues"""
+        if not record.amount or not self._validate_amount_format(record.amount):
+            # Try to extract amount from asset field
+            if record.asset:
+                extracted_amount = self._extract_and_validate_amounts(record.asset, [record.asset])
+                if extracted_amount and self._validate_amount_format(extracted_amount):
+                    record.amount = extracted_amount
+                    record.parsing_notes.append("Fixed: Amount extracted from asset field")
+                    # Remove amount from asset field
+                    record.asset = re.sub(r'\$[\d,]+(?:\s*-\s*\$[\d,]+)?', '', record.asset).strip()
+        
+        # Clean up amount format
+        if record.amount:
+            record.amount = self._normalize_amount(record.amount)
+        
+        return record 

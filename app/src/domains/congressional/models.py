@@ -5,6 +5,7 @@ This module contains SQLAlchemy models for congress members, their trades,
 and portfolio tracking. Supports CAP-10 (Transaction List) and CAP-11 (Member Profiles).
 """
 
+import uuid
 from datetime import datetime, date
 from typing import Optional, List
 from decimal import Decimal
@@ -15,7 +16,7 @@ from sqlalchemy import (
     UniqueConstraint, Index, ARRAY
 )
 from sqlalchemy.types import Numeric as SQLDecimal
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -38,11 +39,12 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     first_name = Column(String(100), nullable=False, index=True)
     last_name = Column(String(100), nullable=False, index=True)
     full_name = Column(String(200), nullable=False, index=True)
+    prefix = Column(String(10), index=True)  # Honorifics like "Rep.", "Sen.", "Dr.", "Mr.", "Ms."
     party = Column(String(1), index=True)  # D, R, I
-    chamber = Column(String(6), nullable=False, index=True)  # House, Senate
+    chamber = Column(String(6), nullable=True, index=True)  # House, Senate - nullable for import, populated via APIs
     
     # Geographic Information
-    state = Column(String(2), nullable=False, index=True)  # Two-letter state code
+    state = Column(String(2), nullable=True, index=True)  # Two-letter state code - nullable for import
     district = Column(String(10))  # For House members (e.g., "01", "02", "AL" for at-large)
     
     # Contact and Bio Information
@@ -52,7 +54,13 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     
     # Congressional Identifiers
     bioguide_id = Column(String(10), unique=True, index=True)
-    congress_gov_id = Column(String(20), unique=True, index=True)
+    congress_gov_id = Column(String(20), unique=True, index=True)  # ID from Congress.gov API
+    
+    # Congress.gov API Data
+    congress_gov_url = Column(String(500))  # Direct link to member's Congress.gov page
+    image_url = Column(String(500))  # Official member photo URL
+    image_attribution = Column(String(200))  # Photo credit/source
+    last_api_update = Column(DateTime(timezone=True))  # When Congress.gov last updated this member
     
     # Term Information
     term_start = Column(Date)
@@ -93,7 +101,7 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     # Relationships
     congressional_trades = relationship("CongressionalTrade", back_populates="member", cascade="all, delete-orphan")
     member_portfolios = relationship("MemberPortfolio", back_populates="member", cascade="all, delete-orphan")
-    portfolio_performance = relationship("PortfolioPerformance", back_populates="member", cascade="all, delete-orphan")
+    member_portfolio_performance = relationship("MemberPortfolioPerformance", back_populates="member", cascade="all, delete-orphan")
     
     # Indexes and constraints
     __table_args__ = (
@@ -155,8 +163,8 @@ class CongressionalTrade(CapitolScopeBaseModel, AuditMixin):
     __tablename__ = 'congressional_trades'
     
     # Member and Security References
-    member_id = Column(Integer, ForeignKey('congress_members.id'), nullable=False, index=True)
-    security_id = Column(Integer, ForeignKey('securities.id'), index=True)  # May be null if not matched
+    member_id = Column(UUID(as_uuid=True), ForeignKey('congress_members.id'), nullable=False, index=True)
+    security_id = Column(UUID(as_uuid=True), ForeignKey('securities.id'), index=True)  # May be null if not matched
     
     # Document Information
     doc_id = Column(String(50), nullable=False, index=True)  # Disclosure document ID
@@ -272,8 +280,8 @@ class MemberPortfolio(CapitolScopeBaseModel):
     __tablename__ = 'member_portfolios'
     
     # References
-    member_id = Column(Integer, ForeignKey('congress_members.id'), nullable=False, index=True)
-    security_id = Column(Integer, ForeignKey('securities.id'), nullable=False, index=True)
+    member_id = Column(UUID(as_uuid=True), ForeignKey('congress_members.id'), nullable=False, index=True)
+    security_id = Column(UUID(as_uuid=True), ForeignKey('securities.id'), nullable=False, index=True)
     
     # Position Information
     shares = Column(SQLDecimal(15, 6), nullable=False, default=0)  # Number of shares held
@@ -370,70 +378,66 @@ class MemberPortfolio(CapitolScopeBaseModel):
 # PORTFOLIO PERFORMANCE
 # ============================================================================
 
-class PortfolioPerformance(CapitolScopeBaseModel):
-    """Daily portfolio performance tracking for members."""
+class MemberPortfolioPerformance(CapitolScopeBaseModel):
+    """Member portfolio performance tracking."""
     
-    __tablename__ = 'portfolio_performance'
+    __tablename__ = 'member_portfolio_performance'
     
     # References
-    member_id = Column(Integer, ForeignKey('congress_members.id'), nullable=False, index=True)
+    member_id = Column(UUID(as_uuid=True), ForeignKey('congress_members.id'), nullable=False, index=True)
+    
+    # Performance data
     date = Column(Date, nullable=False, index=True)
+    total_value = Column(BigInteger, nullable=False)  # Total portfolio value in cents
+    total_gain_loss = Column(BigInteger, default=0)  # Total gain/loss in cents
+    total_gain_loss_percent = Column(SQLDecimal(8, 4))  # Total gain/loss percentage
     
-    # Portfolio Values (all in cents)
-    total_value = Column(BigInteger, nullable=False)  # Total portfolio value
-    total_cost_basis = Column(BigInteger, nullable=False)  # Total cost basis
-    unrealized_gain_loss = Column(BigInteger, nullable=False)  # Total unrealized gain/loss
-    realized_gain_loss = Column(BigInteger, nullable=False)  # Total realized gain/loss
+    # Performance metrics
+    daily_return = Column(SQLDecimal(8, 4))  # Daily return percentage
+    weekly_return = Column(SQLDecimal(8, 4))  # Weekly return percentage
+    monthly_return = Column(SQLDecimal(8, 4))  # Monthly return percentage
+    ytd_return = Column(SQLDecimal(8, 4))  # Year-to-date return percentage
     
-    # Daily Performance
-    daily_return = Column(SQLDecimal(8, 6))  # Daily return percentage
-    daily_gain_loss = Column(BigInteger)  # Daily gain/loss in cents
+    # Risk metrics
+    volatility = Column(SQLDecimal(8, 4))  # Portfolio volatility
+    beta = Column(SQLDecimal(6, 3))  # Portfolio beta vs market
+    sharpe_ratio = Column(SQLDecimal(8, 4))  # Sharpe ratio
+    max_drawdown = Column(SQLDecimal(8, 4))  # Maximum drawdown
     
-    # Benchmark Comparisons
-    benchmark_return = Column(SQLDecimal(8, 6))  # Benchmark return (e.g., S&P 500)
-    alpha = Column(SQLDecimal(8, 6))  # Alpha vs benchmark
-    beta = Column(SQLDecimal(8, 6))  # Beta vs benchmark
+    # Benchmark comparison
+    sp500_return = Column(SQLDecimal(8, 4))  # S&P 500 return for comparison
+    alpha = Column(SQLDecimal(8, 4))  # Alpha vs S&P 500
     
-    # Risk Metrics
-    volatility = Column(SQLDecimal(8, 6))  # Portfolio volatility
-    sharpe_ratio = Column(SQLDecimal(8, 6))  # Sharpe ratio
-    max_drawdown = Column(SQLDecimal(8, 6))  # Maximum drawdown
-    
-    # Portfolio Composition
-    position_count = Column(Integer, default=0)  # Number of positions
-    sector_allocation = Column(JSONB)  # Sector allocation percentages
-    top_holdings = Column(JSONB)  # Top 10 holdings with percentages
+    # Portfolio composition
+    number_of_positions = Column(Integer, default=0)
+    largest_position_percent = Column(SQLDecimal(5, 2))
+    sector_concentration = Column(SQLDecimal(5, 2))
     
     # Relationships
-    member = relationship("CongressMember", back_populates="portfolio_performance")
+    member = relationship("CongressMember", back_populates="member_portfolio_performance")
     
     # Indexes and constraints
     __table_args__ = (
-        UniqueConstraint('member_id', 'date', name='unique_member_date'),
-        Index('idx_portfolio_performance_member_date', 'member_id', 'date'),
-        Index('idx_portfolio_performance_date', 'date'),
+        Index('idx_member_portfolio_performance_member_date', 'member_id', 'date'),
+        Index('idx_member_portfolio_performance_date', 'date'),
+        UniqueConstraint('member_id', 'date', name='unique_member_performance_date'),
     )
     
     def __repr__(self):
-        return f"<PortfolioPerformance(member_id={self.member_id}, date={self.date}, value=${self.total_value/100:,.2f})>"
+        return f"<MemberPortfolioPerformance(member_id={self.member_id}, date={self.date}, value={self.total_value})>"
     
-    @property
-    def total_return_percent(self) -> Optional[float]:
-        """Calculate total return percentage."""
-        if self.total_cost_basis and self.total_cost_basis > 0:
-            total_gain_loss = self.unrealized_gain_loss + self.realized_gain_loss
-            return (total_gain_loss / self.total_cost_basis) * 100
-        return None
-    
-    def get_formatted_value(self) -> str:
-        """Return formatted portfolio value."""
-        return f"${self.total_value / 100:,.2f}"
+    def get_formatted_total_value(self) -> str:
+        """Return formatted total value."""
+        if self.total_value:
+            return f"${self.total_value / 100:,.2f}"
+        return "N/A"
     
     def get_formatted_gain_loss(self) -> str:
-        """Return formatted total gain/loss."""
-        total_gain_loss = self.unrealized_gain_loss + self.realized_gain_loss
-        sign = "+" if total_gain_loss >= 0 else ""
-        return f"{sign}${total_gain_loss / 100:,.2f}"
+        """Return formatted gain/loss."""
+        if self.total_gain_loss:
+            sign = "+" if self.total_gain_loss > 0 else ""
+            return f"{sign}${self.total_gain_loss / 100:,.2f}"
+        return "N/A"
 
 
 # ============================================================================
@@ -445,7 +449,7 @@ class TradeDiscussion(CapitolScopeBaseModel):
     
     __tablename__ = 'trade_discussions'
     
-    trade_id = Column(Integer, ForeignKey('congressional_trades.id'), nullable=False, index=True)
+    trade_id = Column(UUID(as_uuid=True), ForeignKey('congressional_trades.id'), nullable=False, index=True)
     topic_id = Column(Integer, nullable=False, index=True)  # Will link to discussion_topics when implemented
     
     # Discussion metadata
@@ -470,8 +474,8 @@ logger.info("Congressional domain models initialized")
 # Export all models
 __all__ = [
     "CongressMember",
-    "CongressionalTrade",
+    "CongressionalTrade", 
     "MemberPortfolio",
-    "PortfolioPerformance",
+    "MemberPortfolioPerformance",
     "TradeDiscussion"
 ] 

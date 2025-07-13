@@ -1,485 +1,1049 @@
 """
-Congressional Trade Data Quality Enhancement Module.
+Congressional data quality enhancement module.
 
-This module provides comprehensive data quality improvements for congressional trade data import,
-including:
-1. Enhanced amount parsing with standard congressional disclosure ranges
-2. Owner field validation and correction
-3. Column misalignment detection and correction
-4. Garbage character removal and normalization
+This module provides advanced data quality processing for congressional trade data:
+- Enhanced ticker extraction with fuzzy matching and pattern recognition
+- Amount range standardization with garbage character removal
+- Owner field normalization and validation
+- Comprehensive quality metrics and reporting
 """
 
 import re
-import logging
-from typing import Dict, List, Optional, Tuple, Any
-from dataclasses import dataclass
+import json
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Tuple, Set, Any, NamedTuple
+from dataclasses import dataclass, field
+from decimal import Decimal
 from enum import Enum
-import pandas as pd
-from fuzzywuzzy import fuzz
 
-logger = logging.getLogger(__name__)
+from fuzzywuzzy import fuzz, process
+import regex
 
-class OwnerType(Enum):
-    """Valid owner types for congressional trades."""
-    CONGRESS_MEMBER = "C"
-    SPOUSE = "SP"
-    JOINT = "JT"
-    DEPENDENT_CHILD = "DC"
+from core.logging import get_logger
+from domains.congressional.schemas import TradeOwner
+
+logger = get_logger(__name__)
+
+
+class TickerExtractionResult(NamedTuple):
+    """Result of ticker extraction process."""
+    ticker: Optional[str]
+    asset_name: Optional[str]
+    asset_type: Optional[str]
+    confidence: Decimal
+    extraction_method: str
+    notes: List[str]
+
+
+class AmountNormalizationResult(NamedTuple):
+    """Result of amount normalization process."""
+    amount_min: Optional[int]
+    amount_max: Optional[int]
+    amount_exact: Optional[int]
+    original_amount: str
+    normalized_amount: str
+    confidence: Decimal
+    notes: List[str]
+
+
+class OwnerNormalizationResult(NamedTuple):
+    """Result of owner normalization process."""
+    normalized_owner: Optional[TradeOwner]
+    original_owner: str
+    confidence: Decimal
+    notes: List[str]
+
 
 @dataclass
-class AmountRange:
-    """Standard congressional disclosure amount range."""
-    min_amount: int
-    max_amount: Optional[int]
-    display_text: str
+class QualityReport:
+    """Comprehensive quality report for import process."""
+    total_records: int
+    successful_records: int
+    failed_records: int
+    processing_errors: int
+    ticker_extraction_rate: float
+    amount_parsing_rate: float
+    owner_normalization_rate: float
+    duplicate_count: int
+    processing_time: float
+    recommendations: List[str]
     
-    def contains_amount(self, amount: int) -> bool:
-        """Check if amount falls within this range."""
-        if self.max_amount is None:
-            return amount >= self.min_amount
-        return self.min_amount <= amount <= self.max_amount
+    # Detailed breakdowns
+    ticker_extraction_methods: Dict[str, int] = field(default_factory=dict)
+    amount_parsing_issues: Dict[str, int] = field(default_factory=dict)
+    owner_normalization_issues: Dict[str, int] = field(default_factory=dict)
 
-class CongressionalAmountValidator:
-    """Validator for congressional disclosure amount ranges."""
-    
-    # Standard congressional disclosure amount ranges in cents
-    STANDARD_RANGES = [
-        AmountRange(100_100, 1_500_000, "$1,001 - $15,000"),
-        AmountRange(1_500_100, 5_000_000, "$15,001 - $50,000"),
-        AmountRange(5_000_100, 10_000_000, "$50,001 - $100,000"),
-        AmountRange(10_000_100, 25_000_000, "$100,001 - $250,000"),
-        AmountRange(25_000_100, 50_000_000, "$250,001 - $500,000"),
-        AmountRange(50_000_100, 100_000_000, "$500,001 - $1,000,000"),
-        AmountRange(100_000_100, 500_000_000, "$1,000,001 - $5,000,000"),
-        AmountRange(500_000_100, 2_500_000_000, "$5,000,001 - $25,000,000"),
-        AmountRange(2_500_000_100, 5_000_000_000, "$25,000,001 - $50,000,000"),
-        AmountRange(5_000_000_100, None, "$50,000,001 +"),
-    ]
-    
-    @classmethod
-    def get_standard_range(self, min_amount: int, max_amount: Optional[int]) -> Optional[AmountRange]:
-        """Get the standard range that matches the given min/max amounts."""
-        for range_obj in self.STANDARD_RANGES:
-            if range_obj.min_amount == min_amount and range_obj.max_amount == max_amount:
-                return range_obj
-        return None
-    
-    @classmethod
-    def normalize_to_standard_range(self, min_amount: int, max_amount: Optional[int]) -> Optional[AmountRange]:
-        """Normalize amounts to closest standard range."""
-        # Find the best matching standard range
-        best_match = None
-        best_score = 0
-        
-        for range_obj in self.STANDARD_RANGES:
-            # Calculate match score based on how close the amounts are
-            score = 0
-            if range_obj.min_amount <= min_amount <= (range_obj.max_amount or float('inf')):
-                score += 50  # Min amount is within range
-            if max_amount and range_obj.max_amount:
-                if range_obj.min_amount <= max_amount <= range_obj.max_amount:
-                    score += 50  # Max amount is within range
-            
-            # Prefer exact matches
-            if range_obj.min_amount == min_amount and range_obj.max_amount == max_amount:
-                score = 100
-            
-            if score > best_score:
-                best_score = score
-                best_match = range_obj
-        
-        return best_match if best_score >= 50 else None
 
-class CongressionalDataQualityEnhancer:
-    """Enhanced data quality processor for congressional trade data."""
+@dataclass
+class ImportStatistics:
+    """Statistics tracking for import process."""
+    records_processed: int = 0
+    records_successful: int = 0
+    records_failed: int = 0
+    processing_errors: int = 0
+    
+    # Timing
+    import_start_time: Optional[datetime] = None
+    import_end_time: Optional[datetime] = None
+    
+    # Quality metrics
+    ticker_extractions: Dict[str, int] = field(default_factory=dict)
+    amount_normalizations: Dict[str, int] = field(default_factory=dict)
+    owner_normalizations: Dict[str, int] = field(default_factory=dict)
+    
+    def reset(self):
+        """Reset all statistics."""
+        self.records_processed = 0
+        self.records_successful = 0
+        self.records_failed = 0
+        self.processing_errors = 0
+        self.import_start_time = None
+        self.import_end_time = None
+        self.ticker_extractions.clear()
+        self.amount_normalizations.clear()
+        self.owner_normalizations.clear()
+    
+    @property
+    def processing_time_seconds(self) -> float:
+        """Calculate processing time in seconds."""
+        if self.import_start_time and self.import_end_time:
+            return (self.import_end_time - self.import_start_time).total_seconds()
+        return 0.0
+
+
+class DataQualityEnhancer:
+    """Enhanced data quality processor for congressional trades."""
     
     def __init__(self):
-        self.amount_validator = CongressionalAmountValidator()
-        self.statistics = {
-            'total_rows': 0,
-            'fixed_owner_field': 0,
-            'fixed_amount_parsing': 0,
-            'fixed_column_alignment': 0,
-            'removed_garbage_chars': 0,
-            'rows_with_errors': 0,
-            'unfixable_rows': 0
-        }
-    
-    def enhance_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Enhance the entire dataframe with comprehensive data quality improvements.
+        self._init_ticker_patterns()
+        self._init_amount_patterns()
+        self._init_owner_patterns()
+        self._init_asset_type_patterns()
         
-        Args:
-            df: Input dataframe with potentially problematic data
+    def _init_ticker_patterns(self):
+        """Initialize ticker extraction patterns."""
+        # Enhanced regex patterns for ticker extraction
+        self.ticker_patterns = [
+            # Standard ticker patterns
+            r'\b([A-Z]{1,5})\b',  # 1-5 uppercase letters
+            r'\(([A-Z]{1,5})\)',  # Ticker in parentheses
+            r'Symbol:\s*([A-Z]{1,5})',  # "Symbol: AAPL"
+            r'Ticker:\s*([A-Z]{1,5})',  # "Ticker: AAPL"
+            r'NYSE:\s*([A-Z]{1,5})',  # "NYSE: AAPL"
+            r'NASDAQ:\s*([A-Z]{1,5})',  # "NASDAQ: AAPL"
+            r'AMEX:\s*([A-Z]{1,5})',  # "AMEX: AAPL"
             
-        Returns:
-            Enhanced dataframe with improved data quality
-        """
-        logger.info(f"Starting data quality enhancement for {len(df)} rows")
-        self.statistics['total_rows'] = len(df)
-        
-        # Create a copy to avoid modifying original
-        enhanced_df = df.copy()
-        
-        # Step 1: Detect and fix column misalignment
-        enhanced_df = self._fix_column_misalignment(enhanced_df)
-        
-        # Step 2: Clean and validate owner field
-        enhanced_df = self._enhance_owner_field(enhanced_df)
-        
-        # Step 3: Enhanced amount parsing
-        enhanced_df = self._enhance_amount_parsing(enhanced_df)
-        
-        # Step 4: Remove garbage characters from all text fields
-        enhanced_df = self._remove_garbage_characters(enhanced_df)
-        
-        # Step 5: Validate and normalize data
-        enhanced_df = self._validate_and_normalize(enhanced_df)
-        
-        # Log statistics
-        self._log_enhancement_statistics()
-        
-        return enhanced_df
-    
-    def _fix_column_misalignment(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Detect and fix column misalignment issues.
-        
-        This happens when data shifts columns due to parsing errors.
-        """
-        logger.info("Checking for column misalignment...")
-        
-        # Check if owner field contains company names instead of valid owner types
-        if 'Owner' in df.columns:
-            invalid_owners = df[df['Owner'].str.len() > 5]  # Owner should be 1-2 chars
+            # Complex ticker patterns
+            r'\b([A-Z]{1,4}\.[A-Z])\b',  # Berkshire Hathaway style (BRK.A)
+            r'\b([A-Z]{1,4}-[A-Z])\b',  # Hyphenated tickers
+            r'\b([A-Z]{2,4}\d{1,2})\b',  # Bonds/Options with numbers
             
-            if len(invalid_owners) > 0:
-                logger.warning(f"Found {len(invalid_owners)} rows with invalid owner data")
-                
-                # Try to fix by shifting columns
-                for idx, row in invalid_owners.iterrows():
-                    fixed_row = self._attempt_column_shift_fix(row)
-                    if fixed_row is not None:
-                        df.loc[idx] = fixed_row
-                        self.statistics['fixed_column_alignment'] += 1
-        
-        return df
-    
-    def _attempt_column_shift_fix(self, row: pd.Series) -> Optional[pd.Series]:
-        """
-        Attempt to fix a misaligned row by shifting columns.
-        
-        This is a heuristic approach that looks for patterns that indicate
-        the data has shifted columns.
-        """
-        try:
-            # Look for valid owner types in nearby columns
-            potential_owners = []
-            for col in row.index:
-                if isinstance(row[col], str) and len(row[col]) <= 3:
-                    val = row[col].strip().upper()
-                    if val in ['C', 'SP', 'JT', 'DC']:
-                        potential_owners.append((col, val))
-            
-            if potential_owners:
-                # Found a valid owner type, try to reconstruct the row
-                # This is a simplified approach - in practice, you'd want more sophisticated logic
-                logger.debug(f"Found potential owner fixes: {potential_owners}")
-                return row  # Return as-is for now, but could implement column shifting
-        
-        except Exception as e:
-            logger.debug(f"Failed to fix column alignment: {e}")
-        
-        return None
-    
-    def _enhance_owner_field(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Clean and validate owner field values.
-        
-        Args:
-            df: Input dataframe
-            
-        Returns:
-            Dataframe with enhanced owner field
-        """
-        if 'Owner' not in df.columns:
-            return df
-        
-        logger.info("Enhancing owner field...")
-        
-        # Define valid owner types and their variations
-        owner_mappings = {
-            'C': ['C', 'CONGRESS', 'MEMBER', 'CONGRESSMAN', 'CONGRESSWOMAN'],
-            'SP': ['SP', 'SPOUSE', 'S'],
-            'JT': ['JT', 'JOINT', 'J'],
-            'DC': ['DC', 'DEPENDENT', 'CHILD', 'DEPENDENT CHILD']
-        }
-        
-        def fix_owner_value(value):
-            if pd.isna(value) or value == '':
-                return None
-            
-            value_str = str(value).strip().upper()
-            
-            # Check for exact matches first
-            if value_str in [e.value for e in OwnerType]:
-                return value_str
-            
-            # Check for fuzzy matches
-            for standard_owner, variations in owner_mappings.items():
-                for variation in variations:
-                    if fuzz.ratio(value_str, variation) > 80:  # 80% similarity
-                        self.statistics['fixed_owner_field'] += 1
-                        return standard_owner
-            
-            # If it's a company name or other invalid data, check if it should be 'C'
-            if len(value_str) > 10:  # Likely a company name
-                logger.warning(f"Invalid owner value (likely company name): {value_str}")
-                self.statistics['rows_with_errors'] += 1
-                return 'C'  # Default to Congress member
-            
-            # Return None for unfixable values
-            logger.warning(f"Could not fix owner value: {value_str}")
-            return None
-        
-        # Apply the fix
-        df['Owner'] = df['Owner'].apply(fix_owner_value)
-        
-        return df
-    
-    def _enhance_amount_parsing(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Enhanced amount parsing with garbage character removal and validation.
-        
-        Args:
-            df: Input dataframe
-            
-        Returns:
-            Dataframe with enhanced amount parsing
-        """
-        amount_columns = ['Amount', 'amount', 'Value', 'value']
-        found_column = None
-        
-        for col in amount_columns:
-            if col in df.columns:
-                found_column = col
-                break
-        
-        if not found_column:
-            return df
-        
-        logger.info(f"Enhancing amount parsing for column: {found_column}")
-        
-        def parse_enhanced_amount(value):
-            """Enhanced amount parser that handles garbage characters."""
-            if pd.isna(value) or value == '':
-                return None, None
-            
-            value_str = str(value).strip()
-            
-            # Remove garbage characters like 'gfedc' at the end
-            # Common garbage patterns to remove
-            garbage_patterns = [
-                r'\s+gfedc\s*$',  # 'gfedc' at end
-                r'\s+[a-z]{3,}\s*$',  # Any 3+ letter sequence at end
-                r'\s+\w{1,3}\s*$',  # Short word patterns at end
-            ]
-            
-            cleaned_value = value_str
-            for pattern in garbage_patterns:
-                old_value = cleaned_value
-                cleaned_value = re.sub(pattern, '', cleaned_value, flags=re.IGNORECASE).strip()
-                if old_value != cleaned_value:
-                    self.statistics['removed_garbage_chars'] += 1
-            
-            # Parse the cleaned amount
-            min_amount, max_amount = self._parse_amount_range(cleaned_value)
-            
-            if min_amount is not None or max_amount is not None:
-                self.statistics['fixed_amount_parsing'] += 1
-                
-                # Try to normalize to standard congressional ranges
-                if min_amount and max_amount:
-                    standard_range = self.amount_validator.normalize_to_standard_range(min_amount, max_amount)
-                    if standard_range:
-                        return standard_range.min_amount, standard_range.max_amount
-                
-                return min_amount, max_amount
-            
-            return None, None
-        
-        # Apply enhanced parsing
-        df[['amount_min', 'amount_max']] = df[found_column].apply(
-            lambda x: pd.Series(parse_enhanced_amount(x))
-        )
-        
-        return df
-    
-    def _parse_amount_range(self, amount_str: str) -> Tuple[Optional[int], Optional[int]]:
-        """
-        Parse amount range strings with comprehensive pattern matching.
-        
-        Args:
-            amount_str: Amount string from CSV
-            
-        Returns:
-            Tuple of (min_cents, max_cents)
-        """
-        if not amount_str:
-            return None, None
-        
-        try:
-            # Remove common characters and normalize
-            cleaned = re.sub(r'[^\d,.$\-+\s]', '', amount_str)
-            cleaned = cleaned.replace('$', '').replace(',', '').strip()
-            
-            # Handle different range patterns
-            range_patterns = [
-                r'^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)$',  # 1001 - 15000
-                r'^(\d+(?:\.\d+)?)\s*to\s*(\d+(?:\.\d+)?)$',  # 1001 to 15000
-                r'^(\d+(?:\.\d+)?)\s*\+$',  # 50001+
-                r'^(\d+(?:\.\d+)?)$',  # Single value
-            ]
-            
-            # Try range patterns
-            for pattern in range_patterns:
-                match = re.match(pattern, cleaned, re.IGNORECASE)
-                if match:
-                    groups = match.groups()
-                    
-                    if len(groups) == 2:  # Range
-                        min_val = float(groups[0]) * 100  # Convert to cents
-                        max_val = float(groups[1]) * 100 if groups[1] else None
-                        return int(min_val), int(max_val) if max_val else None
-                    elif len(groups) == 1:  # Single value or plus
-                        if '+' in cleaned:
-                            min_val = float(groups[0]) * 100
-                            return int(min_val), None
-                        else:
-                            val = float(groups[0]) * 100
-                            return int(val), int(val)
-            
-            # Try to extract numbers and infer ranges
-            numbers = re.findall(r'\d+(?:\.\d+)?', cleaned)
-            if len(numbers) >= 2:
-                min_val = float(numbers[0]) * 100
-                max_val = float(numbers[1]) * 100
-                return int(min_val), int(max_val)
-            elif len(numbers) == 1:
-                val = float(numbers[0]) * 100
-                return int(val), int(val)
-                
-        except Exception as e:
-            logger.debug(f"Failed to parse amount '{amount_str}': {e}")
-        
-        return None, None
-    
-    def _remove_garbage_characters(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Remove garbage characters from all text fields.
-        
-        Args:
-            df: Input dataframe
-            
-        Returns:
-            Dataframe with cleaned text fields
-        """
-        logger.info("Removing garbage characters from text fields...")
-        
-        # Define common garbage patterns
-        garbage_patterns = [
-            r'\s+gfedc\s*',  # 'gfedc' pattern
-            r'\s+[a-z]{4,}\s*$',  # Long lowercase sequences at end
-            r'[^\x00-\x7F]+',  # Non-ASCII characters
-            r'\s+$',  # Trailing whitespace
+            # ETF patterns
+            r'\b(SPY|VTI|QQQ|IVV|VOO|VEA|VWO|EFA|EEM)\b',  # Common ETFs
+            r'\b(XL[A-Z]{1,2})\b',  # Sector ETFs (XLF, XLK, etc.)
+            r'\b(I[A-Z]{2,3})\b',  # iShares ETFs
+            r'\b(V[A-Z]{2,3})\b',  # Vanguard ETFs
         ]
         
-        # Apply cleaning to all string columns
-        for col in df.columns:
-            if df[col].dtype == 'object':  # String-like columns
-                def clean_text(value):
-                    if pd.isna(value) or not isinstance(value, str):
-                        return value
-                    
-                    cleaned = value
-                    for pattern in garbage_patterns:
-                        cleaned = re.sub(pattern, '', cleaned, flags=re.IGNORECASE)
-                    
-                    return cleaned.strip()
-                
-                df[col] = df[col].apply(clean_text)
+        # Compile patterns for performance
+        self.compiled_ticker_patterns = [re.compile(pattern) for pattern in self.ticker_patterns]
         
-        return df
-    
-    def _validate_and_normalize(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Final validation and normalization of the dataframe.
+        # Common false positives to exclude
+        self.ticker_blacklist = {
+            'INC', 'CORP', 'LLC', 'LTD', 'CO', 'THE', 'AND', 'OR', 'OF', 'IN', 'ON', 'AT',
+            'FOR', 'TO', 'BY', 'WITH', 'FROM', 'UP', 'OUT', 'IF', 'SO', 'NO', 'AS', 'DO',
+            'BE', 'HE', 'SHE', 'IT', 'WE', 'YOU', 'THEY', 'AM', 'IS', 'ARE', 'WAS', 'WERE',
+            'BEEN', 'BEING', 'HAVE', 'HAS', 'HAD', 'WILL', 'WOULD', 'COULD', 'SHOULD',
+            'MAY', 'MIGHT', 'MUST', 'CAN', 'CANT', 'WONT', 'DONT', 'DIDNT', 'HAVENT',
+            'HASNT', 'HADNT', 'WOULDNT', 'COULDNT', 'SHOULDNT', 'MUSTNT', 'MAYN',
+            'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST',
+            'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER', 'JAN', 'FEB', 'MAR', 'APR',
+            'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'MONDAY', 'TUESDAY',
+            'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY', 'MON', 'TUE',
+            'WED', 'THU', 'FRI', 'SAT', 'SUN', 'STOCK', 'SHARE', 'SHARES', 'OPTION',
+            'OPTIONS', 'CALL', 'PUT', 'BOND', 'BONDS', 'FUND', 'FUNDS', 'ETF', 'ETFS',
+            'MUTUAL', 'INDEX', 'COMMODITY', 'COMMODITIES', 'FUTURE', 'FUTURES',
+            'WARRANT', 'WARRANTS', 'RIGHT', 'RIGHTS', 'UNIT', 'UNITS', 'SECURITY',
+            'SECURITIES', 'INVESTMENT', 'INVESTMENTS', 'PORTFOLIO', 'PORTFOLIOS',
+            'ACCOUNT', 'ACCOUNTS', 'TRUST', 'TRUSTS', 'FUND', 'FUNDS', 'PARTNERSHIP',
+            'PARTNERSHIPS', 'VEHICLE', 'VEHICLES', 'HOLDING', 'HOLDINGS', 'ASSET',
+            'ASSETS', 'PROPERTY', 'PROPERTIES', 'REAL', 'ESTATE', 'REIT', 'REITS'
+        }
         
-        Args:
-            df: Input dataframe
+        # Enhanced company name to ticker mapping
+        self.company_ticker_mapping = {
+            # Technology companies
+            'APPLE': 'AAPL',
+            'APPLE INC': 'AAPL',
+            'APPLE COMPUTER': 'AAPL',
+            'MICROSOFT': 'MSFT',
+            'MICROSOFT CORP': 'MSFT',
+            'MICROSOFT CORPORATION': 'MSFT',
+            'AMAZON': 'AMZN',
+            'AMAZON.COM': 'AMZN',
+            'AMAZON.COM INC': 'AMZN',
+            'AMAZON COM INC': 'AMZN',
+            'ALPHABET': 'GOOGL',
+            'ALPHABET INC': 'GOOGL',
+            'GOOGLE': 'GOOGL',
+            'GOOGLE INC': 'GOOGL',
+            'TESLA': 'TSLA',
+            'TESLA INC': 'TSLA',
+            'TESLA MOTORS': 'TSLA',
+            'META': 'META',
+            'META PLATFORMS': 'META',
+            'META PLATFORMS INC': 'META',
+            'FACEBOOK': 'META',
+            'FACEBOOK INC': 'META',
+            'NVIDIA': 'NVDA',
+            'NVIDIA CORP': 'NVDA',
+            'NVIDIA CORPORATION': 'NVDA',
+            'ORACLE': 'ORCL',
+            'ORACLE CORP': 'ORCL',
+            'ORACLE CORPORATION': 'ORCL',
+            'SALESFORCE': 'CRM',
+            'SALESFORCE.COM': 'CRM',
+            'SALESFORCE INC': 'CRM',
+            'NETFLIX': 'NFLX',
+            'NETFLIX INC': 'NFLX',
+            'ADOBE': 'ADBE',
+            'ADOBE INC': 'ADBE',
+            'ADOBE SYSTEMS': 'ADBE',
+            'PAYPAL': 'PYPL',
+            'PAYPAL HOLDINGS': 'PYPL',
+            'PAYPAL HOLDINGS INC': 'PYPL',
+            'INTEL': 'INTC',
+            'INTEL CORP': 'INTC',
+            'INTEL CORPORATION': 'INTC',
+            'CISCO': 'CSCO',
+            'CISCO SYSTEMS': 'CSCO',
+            'CISCO SYSTEMS INC': 'CSCO',
+            'IBM': 'IBM',
+            'IBM CORP': 'IBM',
+            'INTERNATIONAL BUSINESS MACHINES': 'IBM',
             
-        Returns:
-            Validated and normalized dataframe
-        """
-        logger.info("Performing final validation and normalization...")
+            # Financial services
+            'JPMORGAN': 'JPM',
+            'JP MORGAN': 'JPM',
+            'JPMORGAN CHASE': 'JPM',
+            'JPMORGAN CHASE & CO': 'JPM',
+            'BANK OF AMERICA': 'BAC',
+            'BANK OF AMERICA CORP': 'BAC',
+            'BERKSHIRE HATHAWAY': 'BRK.B',
+            'BERKSHIRE HATHAWAY INC': 'BRK.B',
+            'GOLDMAN SACHS': 'GS',
+            'GOLDMAN SACHS GROUP': 'GS',
+            'GOLDMAN SACHS GROUP INC': 'GS',
+            'MORGAN STANLEY': 'MS',
+            'WELLS FARGO': 'WFC',
+            'WELLS FARGO & CO': 'WFC',
+            'AMERICAN EXPRESS': 'AXP',
+            'AMERICAN EXPRESS CO': 'AXP',
+            'VISA': 'V',
+            'VISA INC': 'V',
+            'MASTERCARD': 'MA',
+            'MASTERCARD INC': 'MA',
+            'MASTERCARD INCORPORATED': 'MA',
+            
+            # Healthcare
+            'JOHNSON & JOHNSON': 'JNJ',
+            'JOHNSON AND JOHNSON': 'JNJ',
+            'PFIZER': 'PFE',
+            'PFIZER INC': 'PFE',
+            'ABBVIE': 'ABBV',
+            'ABBVIE INC': 'ABBV',
+            'MERCK': 'MRK',
+            'MERCK & CO': 'MRK',
+            'MERCK AND CO': 'MRK',
+            'BRISTOL MYERS': 'BMY',
+            'BRISTOL MYERS SQUIBB': 'BMY',
+            'BRISTOL-MYERS SQUIBB': 'BMY',
+            'UNITED HEALTH': 'UNH',
+            'UNITED HEALTH GROUP': 'UNH',
+            'UNITEDHEALTH GROUP': 'UNH',
+            'THERMO FISHER': 'TMO',
+            'THERMO FISHER SCIENTIFIC': 'TMO',
+            'MEDTRONIC': 'MDT',
+            'MEDTRONIC PLC': 'MDT',
+            
+            # Consumer goods
+            'COCA COLA': 'KO',
+            'COCA-COLA': 'KO',
+            'COCA COLA CO': 'KO',
+            'THE COCA-COLA COMPANY': 'KO',
+            'PEPSI': 'PEP',
+            'PEPSICO': 'PEP',
+            'PEPSICO INC': 'PEP',
+            'PROCTER & GAMBLE': 'PG',
+            'PROCTER AND GAMBLE': 'PG',
+            'PROCTER & GAMBLE CO': 'PG',
+            'WALMART': 'WMT',
+            'WALMART INC': 'WMT',
+            'WAL-MART': 'WMT',
+            'HOME DEPOT': 'HD',
+            'HOME DEPOT INC': 'HD',
+            'THE HOME DEPOT': 'HD',
+            'MCDONALDS': 'MCD',
+            'MCDONALD\'S': 'MCD',
+            'MCDONALDS CORP': 'MCD',
+            'NIKE': 'NKE',
+            'NIKE INC': 'NKE',
+            'STARBUCKS': 'SBUX',
+            'STARBUCKS CORP': 'SBUX',
+            'STARBUCKS CORPORATION': 'SBUX',
+            'COSTCO': 'COST',
+            'COSTCO WHOLESALE': 'COST',
+            'COSTCO WHOLESALE CORP': 'COST',
+            
+            # Energy
+            'EXXON': 'XOM',
+            'EXXON MOBIL': 'XOM',
+            'EXXON MOBIL CORP': 'XOM',
+            'EXXONMOBIL': 'XOM',
+            'CHEVRON': 'CVX',
+            'CHEVRON CORP': 'CVX',
+            'CHEVRON CORPORATION': 'CVX',
+            
+            # Industrial
+            'BOEING': 'BA',
+            'BOEING CO': 'BA',
+            'THE BOEING COMPANY': 'BA',
+            'GENERAL ELECTRIC': 'GE',
+            'GENERAL ELECTRIC CO': 'GE',
+            'CATERPILLAR': 'CAT',
+            'CATERPILLAR INC': 'CAT',
+            'LOCKHEED MARTIN': 'LMT',
+            'LOCKHEED MARTIN CORP': 'LMT',
+            'UNION PACIFIC': 'UNP',
+            'UNION PACIFIC CORP': 'UNP',
+            'DANAHER': 'DHR',
+            'DANAHER CORP': 'DHR',
+            'DANAHER CORPORATION': 'DHR',
+            
+            # Automotive
+            'FORD': 'F',
+            'FORD MOTOR': 'F',
+            'FORD MOTOR CO': 'F',
+            'GENERAL MOTORS': 'GM',
+            'GENERAL MOTORS CO': 'GM',
+            
+            # Telecommunications
+            'VERIZON': 'VZ',
+            'VERIZON COMMUNICATIONS': 'VZ',
+            'VERIZON COMMUNICATIONS INC': 'VZ',
+            'AT&T': 'T',
+            'ATT': 'T',
+            'AT&T INC': 'T',
+            'COMCAST': 'CMCSA',
+            'COMCAST CORP': 'CMCSA',
+            'COMCAST CORPORATION': 'CMCSA',
+            
+            # Entertainment
+            'DISNEY': 'DIS',
+            'WALT DISNEY': 'DIS',
+            'WALT DISNEY CO': 'DIS',
+            'THE WALT DISNEY COMPANY': 'DIS',
+            'DISNEY WALT CO': 'DIS',
+        }
         
-        # Count rows with remaining errors
-        if 'Owner' in df.columns:
-            invalid_owners = df[df['Owner'].isna() | ~df['Owner'].isin(['C', 'SP', 'JT', 'DC'])]
-            self.statistics['unfixable_rows'] += len(invalid_owners)
+        # ETF mappings
+        self.etf_mappings = {
+            'SPDR S&P 500': 'SPY',
+            'SPDR S&P 500 ETF': 'SPY',
+            'SPDR S&P 500 ETF TRUST': 'SPY',
+            'ISHARES RUSSELL 2000': 'IWM',
+            'ISHARES RUSSELL 2000 ETF': 'IWM',
+            'VANGUARD TOTAL STOCK MARKET': 'VTI',
+            'VANGUARD TOTAL STOCK MARKET ETF': 'VTI',
+            'INVESCO QQQ': 'QQQ',
+            'INVESCO QQQ TRUST': 'QQQ',
+            'POWERSHARES QQQ': 'QQQ',
+            'ISHARES CORE S&P 500': 'IVV',
+            'ISHARES CORE S&P 500 ETF': 'IVV',
+            'VANGUARD S&P 500': 'VOO',
+            'VANGUARD S&P 500 ETF': 'VOO',
+            'FINANCIAL SELECT SECTOR SPDR': 'XLF',
+            'TECHNOLOGY SELECT SECTOR SPDR': 'XLK',
+            'HEALTH CARE SELECT SECTOR SPDR': 'XLV',
+            'ENERGY SELECT SECTOR SPDR': 'XLE',
+            'CONSUMER DISCRETIONARY SELECT SECTOR SPDR': 'XLY',
+            'CONSUMER STAPLES SELECT SECTOR SPDR': 'XLP',
+            'INDUSTRIAL SELECT SECTOR SPDR': 'XLI',
+            'MATERIALS SELECT SECTOR SPDR': 'XLB',
+            'UTILITIES SELECT SECTOR SPDR': 'XLU',
+            'REAL ESTATE SELECT SECTOR SPDR': 'XLRE',
+        }
         
-        # Additional validation can be added here
+        # Combine all mappings
+        self.company_ticker_mapping.update(self.etf_mappings)
         
-        return df
+    def _init_amount_patterns(self):
+        """Initialize amount parsing patterns."""
+        # Standard congressional disclosure ranges
+        self.standard_ranges = {
+            '$1,001 - $15,000': (100100, 1500000),
+            '$15,001 - $50,000': (1500100, 5000000),
+            '$50,001 - $100,000': (5000100, 10000000),
+            '$100,001 - $250,000': (10000100, 25000000),
+            '$250,001 - $500,000': (25000100, 50000000),
+            '$500,001 - $1,000,000': (50000100, 100000000),
+            '$1,000,001 - $5,000,000': (100000100, 500000000),
+            '$5,000,001 - $25,000,000': (500000100, 2500000000),
+            '$25,000,001 - $50,000,000': (2500000100, 5000000000),
+            '$50,000,000+': (5000000000, None),
+            '$50,000,001+': (5000000100, None),
+            'Over $50,000,000': (5000000000, None),
+            'Greater than $50,000,000': (5000000000, None),
+        }
+        
+        # Garbage characters commonly found in amount fields
+        self.garbage_chars = re.compile(r'[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]+$')
+        
+        # Amount extraction patterns
+        self.amount_patterns = [
+            # Standard ranges
+            r'\$[\d,]+\s*-\s*\$[\d,]+',
+            r'\$[\d,]+\s*to\s*\$[\d,]+',
+            r'\$[\d,]+\s*through\s*\$[\d,]+',
+            r'Between\s*\$[\d,]+\s*and\s*\$[\d,]+',
+            r'From\s*\$[\d,]+\s*to\s*\$[\d,]+',
+            
+            # Single amounts
+            r'\$[\d,]+\+?',
+            r'Over\s*\$[\d,]+',
+            r'Greater than\s*\$[\d,]+',
+            r'More than\s*\$[\d,]+',
+            r'Above\s*\$[\d,]+',
+            r'At least\s*\$[\d,]+',
+            r'Minimum\s*\$[\d,]+',
+            r'Maximum\s*\$[\d,]+',
+            
+            # Numeric only
+            r'[\d,]+',
+        ]
+        
+        # Common variations and typos
+        self.amount_variations = {
+            '1,001 - 15,000': '$1,001 - $15,000',
+            '15,001 - 50,000': '$15,001 - $50,000',
+            '50,001 - 100,000': '$50,001 - $100,000',
+            '100,001 - 250,000': '$100,001 - $250,000',
+            '250,001 - 500,000': '$250,001 - $500,000',
+            '500,001 - 1,000,000': '$500,001 - $1,000,000',
+            '1,000,001 - 5,000,000': '$1,000,001 - $5,000,000',
+            '5,000,001 - 25,000,000': '$5,000,001 - $25,000,000',
+            '25,000,001 - 50,000,000': '$25,000,001 - $50,000,000',
+            '50,000,000+': '$50,000,000+',
+            '50,000,001+': '$50,000,001+',
+            # Common typos
+            '$1,001-$15,000': '$1,001 - $15,000',
+            '$15,001-$50,000': '$15,001 - $50,000',
+            '$50,001-$100,000': '$50,001 - $100,000',
+            '$100,001-$250,000': '$100,001 - $250,000',
+            '$250,001-$500,000': '$250,001 - $500,000',
+            '$500,001-$1,000,000': '$500,001 - $1,000,000',
+            '$1,000,001-$5,000,000': '$1,000,001 - $5,000,000',
+            '$5,000,001-$25,000,000': '$5,000,001 - $25,000,000',
+            '$25,000,001-$50,000,000': '$25,000,001 - $50,000,000',
+        }
+        
+    def _init_owner_patterns(self):
+        """Initialize owner field patterns."""
+        self.owner_mappings = {
+            # Standard values
+            'C': TradeOwner.SELF,
+            'SP': TradeOwner.SPOUSE,
+            'JT': TradeOwner.JOINT,
+            'DC': TradeOwner.DEPENDENT_CHILD,
+            
+            # Full text mappings
+            'SELF': TradeOwner.SELF,
+            'CONGRESSMAN': TradeOwner.SELF,
+            'CONGRESSWOMAN': TradeOwner.SELF,
+            'REPRESENTATIVE': TradeOwner.SELF,
+            'SENATOR': TradeOwner.SELF,
+            'MEMBER': TradeOwner.SELF,
+            'MYSELF': TradeOwner.SELF,
+            'PERSONAL': TradeOwner.SELF,
+            'INDIVIDUAL': TradeOwner.SELF,
+            'OWN': TradeOwner.SELF,
+            'OWNED': TradeOwner.SELF,
+            'DIRECT': TradeOwner.SELF,
+            'DIRECTLY': TradeOwner.SELF,
+            
+            'SPOUSE': TradeOwner.SPOUSE,
+            'WIFE': TradeOwner.SPOUSE,
+            'HUSBAND': TradeOwner.SPOUSE,
+            'PARTNER': TradeOwner.SPOUSE,
+            'MARRIED': TradeOwner.SPOUSE,
+            'SPOUSES': TradeOwner.SPOUSE,
+            
+            'JOINT': TradeOwner.JOINT,
+            'JOINTLY': TradeOwner.JOINT,
+            'JOINT ACCOUNT': TradeOwner.JOINT,
+            'JOINT OWNERSHIP': TradeOwner.JOINT,
+            'TOGETHER': TradeOwner.JOINT,
+            'BOTH': TradeOwner.JOINT,
+            'SHARED': TradeOwner.JOINT,
+            'COMBINED': TradeOwner.JOINT,
+            'MUTUAL': TradeOwner.JOINT,
+            
+            'DEPENDENT': TradeOwner.DEPENDENT_CHILD,
+            'DEPENDENT CHILD': TradeOwner.DEPENDENT_CHILD,
+            'CHILD': TradeOwner.DEPENDENT_CHILD,
+            'CHILDREN': TradeOwner.DEPENDENT_CHILD,
+            'MINOR': TradeOwner.DEPENDENT_CHILD,
+            'MINOR CHILD': TradeOwner.DEPENDENT_CHILD,
+            'SON': TradeOwner.DEPENDENT_CHILD,
+            'DAUGHTER': TradeOwner.DEPENDENT_CHILD,
+            'KID': TradeOwner.DEPENDENT_CHILD,
+            'KIDS': TradeOwner.DEPENDENT_CHILD,
+            'JUVENILE': TradeOwner.DEPENDENT_CHILD,
+            'UNDERAGE': TradeOwner.DEPENDENT_CHILD,
+        }
+        
+    def _init_asset_type_patterns(self):
+        """Initialize asset type detection patterns."""
+        self.asset_type_patterns = {
+            'STOCK': [
+                r'\bstock\b', r'\bshares?\b', r'\bequity\b', r'\bequities\b',
+                r'\bcommon\b', r'\bordinary\b', r'\bvoting\b', r'\bnon-voting\b'
+            ],
+            'BOND': [
+                r'\bbond\b', r'\bbonds\b', r'\bdebt\b', r'\bdebenture\b',
+                r'\bnote\b', r'\bnotes\b', r'\bfixed.income\b', r'\btreasury\b',
+                r'\bcorporate.bond\b', r'\bgovernment.bond\b', r'\bmunicipal\b'
+            ],
+            'ETF': [
+                r'\betf\b', r'\betfs\b', r'\bfund\b', r'\bfunds\b',
+                r'\bexchange.traded\b', r'\bindex.fund\b', r'\bspdr\b',
+                r'\bishares\b', r'\bvanguard\b', r'\binvesco\b'
+            ],
+            'OPTION': [
+                r'\boption\b', r'\boptions\b', r'\bcall\b', r'\bcalls\b',
+                r'\bput\b', r'\bputs\b', r'\bstrike\b', r'\bexpiration\b',
+                r'\bderivative\b', r'\bderivatives\b'
+            ],
+            'MUTUAL_FUND': [
+                r'\bmutual.fund\b', r'\bmutual.funds\b', r'\bopen.end\b',
+                r'\bclosed.end\b', r'\bload\b', r'\bno.load\b', r'\bfund\b'
+            ],
+            'REIT': [
+                r'\breit\b', r'\breits\b', r'\breal.estate\b', r'\bproperty\b',
+                r'\breal.estate.investment\b', r'\breal.estate.trust\b'
+            ],
+            'CRYPTOCURRENCY': [
+                r'\bcrypto\b', r'\bcryptocurrency\b', r'\bbitcoin\b', r'\bethereum\b',
+                r'\bdigital.currency\b', r'\bvirtual.currency\b', r'\btoken\b'
+            ],
+        }
+        
+        # Compile patterns
+        self.compiled_asset_patterns = {}
+        for asset_type, patterns in self.asset_type_patterns.items():
+            self.compiled_asset_patterns[asset_type] = [
+                re.compile(pattern, re.IGNORECASE) for pattern in patterns
+            ]
     
-    def _log_enhancement_statistics(self):
-        """Log comprehensive statistics about the enhancement process."""
-        logger.info("Data Quality Enhancement Statistics:")
-        logger.info(f"  Total rows processed: {self.statistics['total_rows']}")
-        logger.info(f"  Fixed owner field: {self.statistics['fixed_owner_field']}")
-        logger.info(f"  Fixed amount parsing: {self.statistics['fixed_amount_parsing']}")
-        logger.info(f"  Fixed column alignment: {self.statistics['fixed_column_alignment']}")
-        logger.info(f"  Removed garbage characters: {self.statistics['removed_garbage_chars']}")
-        logger.info(f"  Rows with errors: {self.statistics['rows_with_errors']}")
-        logger.info(f"  Unfixable rows: {self.statistics['unfixable_rows']}")
+    def extract_ticker(self, asset_description: str) -> TickerExtractionResult:
+        """Extract ticker symbol from asset description with enhanced accuracy."""
+        if not asset_description:
+            return TickerExtractionResult(
+                ticker=None,
+                asset_name=None,
+                asset_type=None,
+                confidence=Decimal('0.0'),
+                extraction_method='no_input',
+                notes=['No asset description provided']
+            )
         
-        # Calculate success rate
-        if self.statistics['total_rows'] > 0:
-            success_rate = (1 - self.statistics['unfixable_rows'] / self.statistics['total_rows']) * 100
-            logger.info(f"  Data quality success rate: {success_rate:.1f}%")
-    
-    def get_statistics(self) -> Dict[str, Any]:
-        """Get enhancement statistics."""
-        return self.statistics.copy()
-
-# Utility functions for external use
-
-def enhance_congressional_data_quality(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, Any]]:
-    """
-    Enhance congressional data quality for a dataframe.
-    
-    Args:
-        df: Input dataframe with congressional trade data
+        original_description = asset_description
+        normalized_description = asset_description.upper().strip()
+        notes = []
         
-    Returns:
-        Tuple of (enhanced_dataframe, statistics)
-    """
-    enhancer = CongressionalDataQualityEnhancer()
-    enhanced_df = enhancer.enhance_dataframe(df)
-    statistics = enhancer.get_statistics()
-    
-    return enhanced_df, statistics
-
-def validate_congressional_amount_range(min_amount: int, max_amount: Optional[int]) -> Optional[str]:
-    """
-    Validate if an amount range matches congressional disclosure standards.
-    
-    Args:
-        min_amount: Minimum amount in cents
-        max_amount: Maximum amount in cents (None for open-ended)
+        # Method 1: Direct ticker pattern matching
+        ticker_candidates = []
+        for pattern in self.compiled_ticker_patterns:
+            matches = pattern.findall(normalized_description)
+            for match in matches:
+                if match not in self.ticker_blacklist and len(match) <= 5:
+                    ticker_candidates.append((match, 'regex_pattern'))
         
-    Returns:
-        Standard range display text if valid, None otherwise
-    """
-    standard_range = CongressionalAmountValidator.normalize_to_standard_range(min_amount, max_amount)
-    return standard_range.display_text if standard_range else None 
+        # Method 2: Company name mapping
+        company_matches = []
+        for company_name, ticker in self.company_ticker_mapping.items():
+            if ticker and company_name in normalized_description:
+                company_matches.append((ticker, 'company_mapping'))
+        
+        # Method 3: Fuzzy matching against company names
+        fuzzy_matches = []
+        if not ticker_candidates and not company_matches:
+            # Extract potential company names (sequences of words)
+            words = re.findall(r'\b[A-Z][A-Z\s&\.]+\b', normalized_description)
+            for word_group in words:
+                if len(word_group) > 3:  # Skip very short matches
+                    best_match = process.extractOne(
+                        word_group,
+                        self.company_ticker_mapping.keys(),
+                        scorer=fuzz.ratio,
+                        score_cutoff=85
+                    )
+                    if best_match:
+                        ticker = self.company_ticker_mapping[best_match[0]]
+                        if ticker:
+                            fuzzy_matches.append((ticker, 'fuzzy_company'))
+                            notes.append(f"Fuzzy matched: {word_group} -> {best_match[0]}")
+        
+        # Method 4: ETF pattern matching
+        etf_matches = []
+        for etf_name, ticker in self.etf_mappings.items():
+            if etf_name in normalized_description:
+                etf_matches.append((ticker, 'etf_mapping'))
+        
+        # Combine all matches and score them
+        all_matches = ticker_candidates + company_matches + fuzzy_matches + etf_matches
+        
+        if not all_matches:
+            # Method 5: Fallback pattern matching
+            fallback_patterns = [
+                r'\b([A-Z]{2,5})\s+(?:STOCK|SHARES|EQUITY|COMMON|ORDINARY)\b',
+                r'(?:STOCK|SHARES|EQUITY|COMMON|ORDINARY)\s+([A-Z]{2,5})\b',
+                r'\b([A-Z]{2,5})\s+(?:INC|CORP|CO|LTD|LLC)\b',
+                r'(?:INC|CORP|CO|LTD|LLC)\s+([A-Z]{2,5})\b',
+            ]
+            
+            for pattern in fallback_patterns:
+                matches = re.findall(pattern, normalized_description)
+                for match in matches:
+                    if match not in self.ticker_blacklist:
+                        all_matches.append((match, 'fallback_pattern'))
+        
+        # Select best match
+        if all_matches:
+            # Priority order: company_mapping > etf_mapping > regex_pattern > fuzzy_company > fallback_pattern
+            method_priority = {
+                'company_mapping': 5,
+                'etf_mapping': 4,
+                'regex_pattern': 3,
+                'fuzzy_company': 2,
+                'fallback_pattern': 1
+            }
+            
+            # Sort by priority and take the best
+            sorted_matches = sorted(all_matches, key=lambda x: method_priority.get(x[1], 0), reverse=True)
+            best_ticker, best_method = sorted_matches[0]
+            
+            # Calculate confidence based on method and context
+            confidence = self._calculate_ticker_confidence(best_ticker, best_method, normalized_description)
+            
+            # Extract asset name and type
+            asset_name = self._extract_asset_name(original_description, best_ticker)
+            asset_type = self._detect_asset_type(normalized_description)
+            
+            notes.append(f"Extracted using {best_method}")
+            if len(all_matches) > 1:
+                notes.append(f"Multiple candidates found: {[m[0] for m in all_matches[:3]]}")
+            
+            return TickerExtractionResult(
+                ticker=best_ticker,
+                asset_name=asset_name,
+                asset_type=asset_type,
+                confidence=confidence,
+                extraction_method=best_method,
+                notes=notes
+            )
+        
+        # No ticker found
+        notes.append("No ticker patterns matched")
+        return TickerExtractionResult(
+            ticker=None,
+            asset_name=self._extract_asset_name(original_description, None),
+            asset_type=self._detect_asset_type(normalized_description),
+            confidence=Decimal('0.0'),
+            extraction_method='no_match',
+            notes=notes
+        )
+    
+    def _calculate_ticker_confidence(self, ticker: str, method: str, description: str) -> Decimal:
+        """Calculate confidence score for ticker extraction."""
+        base_confidence = {
+            'company_mapping': Decimal('0.95'),
+            'etf_mapping': Decimal('0.95'),
+            'regex_pattern': Decimal('0.80'),
+            'fuzzy_company': Decimal('0.70'),
+            'fallback_pattern': Decimal('0.60'),
+        }
+        
+        confidence = base_confidence.get(method, Decimal('0.50'))
+        
+        # Adjust based on context
+        if len(ticker) <= 2:
+            confidence *= Decimal('0.8')  # Very short tickers are less reliable
+        elif len(ticker) == 3:
+            confidence *= Decimal('0.9')  # 3-letter tickers are common
+        elif len(ticker) >= 5:
+            confidence *= Decimal('0.85')  # Long tickers are less common
+        
+        # Boost confidence if ticker appears multiple times
+        ticker_count = description.count(ticker)
+        if ticker_count > 1:
+            confidence *= Decimal('1.1')
+        
+        # Reduce confidence if description is very short
+        if len(description) < 20:
+            confidence *= Decimal('0.9')
+        
+        return min(confidence, Decimal('1.0'))
+    
+    def _extract_asset_name(self, description: str, ticker: Optional[str]) -> Optional[str]:
+        """Extract clean asset name from description."""
+        if not description:
+            return None
+        
+        # Clean the description
+        clean_desc = description.strip()
+        
+        # Remove ticker if present
+        if ticker:
+            clean_desc = re.sub(rf'\b{re.escape(ticker)}\b', '', clean_desc, flags=re.IGNORECASE)
+        
+        # Remove common noise words
+        noise_patterns = [
+            r'\b(?:STOCK|SHARES|EQUITY|COMMON|ORDINARY|SECURITIES?)\b',
+            r'\b(?:INC|CORP|CO|LTD|LLC|CORPORATION|INCORPORATED|COMPANY)\b',
+            r'\b(?:THE|AND|OR|OF|IN|ON|AT|FOR|TO|BY|WITH|FROM)\b',
+            r'\([^)]*\)',  # Remove parentheses
+            r'\[[^\]]*\]',  # Remove brackets
+            r'\s+',  # Multiple spaces
+        ]
+        
+        for pattern in noise_patterns:
+            clean_desc = re.sub(pattern, ' ', clean_desc, flags=re.IGNORECASE)
+        
+        # Clean up spacing and return
+        clean_desc = ' '.join(clean_desc.split())
+        return clean_desc[:300] if clean_desc else None
+    
+    def _detect_asset_type(self, description: str) -> Optional[str]:
+        """Detect asset type from description."""
+        if not description:
+            return None
+        
+        # Check each asset type pattern
+        for asset_type, patterns in self.compiled_asset_patterns.items():
+            for pattern in patterns:
+                if pattern.search(description):
+                    return asset_type
+        
+        # Default to STOCK if no specific type detected
+        return 'STOCK'
+    
+    def normalize_amount(self, amount_str: str) -> AmountNormalizationResult:
+        """Normalize amount string to standard congressional ranges."""
+        if not amount_str:
+            return AmountNormalizationResult(
+                amount_min=None,
+                amount_max=None,
+                amount_exact=None,
+                original_amount=amount_str,
+                normalized_amount='',
+                confidence=Decimal('0.0'),
+                notes=['No amount provided']
+            )
+        
+        original_amount = amount_str
+        notes = []
+        
+        # Clean garbage characters
+        cleaned_amount = amount_str.strip()
+        
+        # Remove trailing garbage characters (common issue)
+        garbage_match = self.garbage_chars.search(cleaned_amount)
+        if garbage_match:
+            garbage_text = garbage_match.group()
+            cleaned_amount = cleaned_amount.replace(garbage_text, '').strip()
+            notes.append(f"Removed garbage characters: {garbage_text}")
+        
+        # Handle common variations
+        if cleaned_amount in self.amount_variations:
+            cleaned_amount = self.amount_variations[cleaned_amount]
+            notes.append("Applied variation mapping")
+        
+        # Try exact match with standard ranges
+        if cleaned_amount in self.standard_ranges:
+            amount_min, amount_max = self.standard_ranges[cleaned_amount]
+            return AmountNormalizationResult(
+                amount_min=amount_min,
+                amount_max=amount_max,
+                amount_exact=None,
+                original_amount=original_amount,
+                normalized_amount=cleaned_amount,
+                confidence=Decimal('0.95'),
+                notes=notes + ['Exact range match']
+            )
+        
+        # Try pattern matching
+        confidence = Decimal('0.0')
+        amount_min = None
+        amount_max = None
+        amount_exact = None
+        
+        # Extract dollar amounts
+        dollar_amounts = re.findall(r'\$?([\d,]+)', cleaned_amount)
+        if dollar_amounts:
+            try:
+                # Convert to integers (in cents)
+                amounts = [int(amt.replace(',', '')) * 100 for amt in dollar_amounts]
+                
+                if len(amounts) == 1:
+                    # Single amount
+                    amount_exact = amounts[0]
+                    confidence = Decimal('0.85')
+                    notes.append("Single amount extracted")
+                    
+                elif len(amounts) == 2:
+                    # Range
+                    amount_min = min(amounts)
+                    amount_max = max(amounts)
+                    confidence = Decimal('0.90')
+                    notes.append("Range extracted")
+                    
+                else:
+                    # Multiple amounts, use first two
+                    amount_min = amounts[0]
+                    amount_max = amounts[1]
+                    confidence = Decimal('0.70')
+                    notes.append(f"Multiple amounts found, using first two: {amounts}")
+                    
+            except (ValueError, IndexError) as e:
+                notes.append(f"Error parsing amounts: {e}")
+        
+        # Check for "over" or "+" indicators
+        if any(word in cleaned_amount.lower() for word in ['over', 'greater', 'more', 'above', 'minimum', '+']):
+            if amount_exact:
+                amount_min = amount_exact
+                amount_max = None
+                amount_exact = None
+                confidence *= Decimal('0.9')
+                notes.append("Interpreted as minimum amount")
+        
+        # Validate amounts are reasonable
+        if amount_min and amount_min < 0:
+            amount_min = None
+            confidence *= Decimal('0.5')
+            notes.append("Negative minimum amount adjusted")
+        
+        if amount_max and amount_max < 0:
+            amount_max = None
+            confidence *= Decimal('0.5')
+            notes.append("Negative maximum amount adjusted")
+        
+        if amount_min and amount_max and amount_min > amount_max:
+            amount_min, amount_max = amount_max, amount_min
+            confidence *= Decimal('0.8')
+            notes.append("Swapped min/max amounts")
+        
+        # Final validation
+        if not any([amount_min, amount_max, amount_exact]):
+            confidence = Decimal('0.0')
+            notes.append("No valid amounts extracted")
+        
+        return AmountNormalizationResult(
+            amount_min=amount_min,
+            amount_max=amount_max,
+            amount_exact=amount_exact,
+            original_amount=original_amount,
+            normalized_amount=cleaned_amount,
+            confidence=confidence,
+            notes=notes
+        )
+    
+    def normalize_owner(self, owner_str: str) -> OwnerNormalizationResult:
+        """Normalize owner field to standard enum values."""
+        if not owner_str:
+            return OwnerNormalizationResult(
+                normalized_owner=None,
+                original_owner=owner_str,
+                confidence=Decimal('0.0'),
+                notes=['No owner provided']
+            )
+        
+        original_owner = owner_str
+        normalized_owner_str = owner_str.upper().strip()
+        notes = []
+        
+        # Direct mapping
+        if normalized_owner_str in self.owner_mappings:
+            return OwnerNormalizationResult(
+                normalized_owner=self.owner_mappings[normalized_owner_str],
+                original_owner=original_owner,
+                confidence=Decimal('0.95'),
+                notes=['Direct mapping']
+            )
+        
+        # Fuzzy matching
+        best_match = process.extractOne(
+            normalized_owner_str,
+            self.owner_mappings.keys(),
+            scorer=fuzz.ratio,
+            score_cutoff=70
+        )
+        
+        if best_match:
+            matched_key = best_match[0]
+            score = best_match[1]
+            confidence = Decimal(str(score / 100.0))
+            
+            notes.append(f"Fuzzy matched: {normalized_owner_str} -> {matched_key} (score: {score})")
+            
+            return OwnerNormalizationResult(
+                normalized_owner=self.owner_mappings[matched_key],
+                original_owner=original_owner,
+                confidence=confidence,
+                notes=notes
+            )
+        
+        # Check if it's a company name (likely misaligned data)
+        if any(word in normalized_owner_str for word in ['INC', 'CORP', 'LLC', 'CO', 'COMPANY', 'CORPORATION']):
+            notes.append("Detected company name in owner field - likely data misalignment")
+            
+            # Try to map to common corporate structures
+            if any(word in normalized_owner_str for word in ['FAMILY', 'TRUST', 'FOUNDATION']):
+                return OwnerNormalizationResult(
+                    normalized_owner=TradeOwner.JOINT,
+                    original_owner=original_owner,
+                    confidence=Decimal('0.60'),
+                    notes=notes + ['Assumed JOINT for family/trust structure']
+                )
+        
+        # Check for member names (another misalignment indicator)
+        if len(normalized_owner_str.split()) >= 2 and all(word.isalpha() for word in normalized_owner_str.split()):
+            notes.append("Detected person name in owner field - likely data misalignment")
+            
+            return OwnerNormalizationResult(
+                normalized_owner=TradeOwner.SELF,
+                original_owner=original_owner,
+                confidence=Decimal('0.50'),
+                notes=notes + ['Assumed SELF for person name']
+            )
+        
+        # No match found
+        notes.append("No owner mapping found")
+        return OwnerNormalizationResult(
+            normalized_owner=None,
+            original_owner=original_owner,
+            confidence=Decimal('0.0'),
+            notes=notes
+        )
+    
+    def analyze_data_quality(self, sample_records: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Analyze data quality of a sample of records."""
+        if not sample_records:
+            return {'error': 'No sample records provided'}
+        
+        analysis = {
+            'total_records': len(sample_records),
+            'ticker_analysis': self._analyze_ticker_quality(sample_records),
+            'amount_analysis': self._analyze_amount_quality(sample_records),
+            'owner_analysis': self._analyze_owner_quality(sample_records),
+            'overall_recommendations': []
+        }
+        
+        # Generate overall recommendations
+        ticker_success_rate = analysis['ticker_analysis']['success_rate']
+        amount_success_rate = analysis['amount_analysis']['success_rate']
+        owner_success_rate = analysis['owner_analysis']['success_rate']
+        
+        if ticker_success_rate < 80:
+            analysis['overall_recommendations'].append(
+                f"Ticker extraction success rate is {ticker_success_rate:.1f}%. Consider expanding company name mappings."
+            )
+        
+        if amount_success_rate < 95:
+            analysis['overall_recommendations'].append(
+                f"Amount parsing success rate is {amount_success_rate:.1f}%. Review amount field data quality."
+            )
+        
+        if owner_success_rate < 99:
+            analysis['overall_recommendations'].append(
+                f"Owner normalization success rate is {owner_success_rate:.1f}%. Check for data misalignment issues."
+            )
+        
+        return analysis
+    
+    def _analyze_ticker_quality(self, records: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Analyze ticker extraction quality."""
+        successful_extractions = 0
+        extraction_methods = {}
+        confidence_scores = []
+        
+        for record in records:
+            asset_desc = record.get('raw_asset_description', '')
+            result = self.extract_ticker(asset_desc)
+            
+            if result.ticker:
+                successful_extractions += 1
+                extraction_methods[result.extraction_method] = extraction_methods.get(result.extraction_method, 0) + 1
+                confidence_scores.append(float(result.confidence))
+        
+        return {
+            'success_rate': (successful_extractions / len(records)) * 100,
+            'extraction_methods': extraction_methods,
+            'average_confidence': sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0,
+            'successful_extractions': successful_extractions,
+            'failed_extractions': len(records) - successful_extractions
+        }
+    
+    def _analyze_amount_quality(self, records: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Analyze amount normalization quality."""
+        successful_normalizations = 0
+        garbage_char_count = 0
+        confidence_scores = []
+        
+        for record in records:
+            amount_str = record.get('amount', '')
+            result = self.normalize_amount(amount_str)
+            
+            if any([result.amount_min, result.amount_max, result.amount_exact]):
+                successful_normalizations += 1
+                confidence_scores.append(float(result.confidence))
+            
+            if any('garbage' in note.lower() for note in result.notes):
+                garbage_char_count += 1
+        
+        return {
+            'success_rate': (successful_normalizations / len(records)) * 100,
+            'garbage_character_rate': (garbage_char_count / len(records)) * 100,
+            'average_confidence': sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0,
+            'successful_normalizations': successful_normalizations,
+            'failed_normalizations': len(records) - successful_normalizations
+        }
+    
+    def _analyze_owner_quality(self, records: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Analyze owner normalization quality."""
+        successful_normalizations = 0
+        misalignment_count = 0
+        confidence_scores = []
+        owner_distribution = {}
+        
+        for record in records:
+            owner_str = record.get('owner', '')
+            result = self.normalize_owner(owner_str)
+            
+            if result.normalized_owner:
+                successful_normalizations += 1
+                confidence_scores.append(float(result.confidence))
+                owner_type = result.normalized_owner.value
+                owner_distribution[owner_type] = owner_distribution.get(owner_type, 0) + 1
+            
+            if any('misalignment' in note.lower() for note in result.notes):
+                misalignment_count += 1
+        
+        return {
+            'success_rate': (successful_normalizations / len(records)) * 100,
+            'misalignment_rate': (misalignment_count / len(records)) * 100,
+            'average_confidence': sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0,
+            'owner_distribution': owner_distribution,
+            'successful_normalizations': successful_normalizations,
+            'failed_normalizations': len(records) - successful_normalizations
+        }

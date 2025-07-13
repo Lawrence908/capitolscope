@@ -538,8 +538,8 @@ def import_from_csvs(csv_directory: str) -> Dict[str, Any]:
     with get_sync_db_session() as session:
         try:
             # Create synchronous ingester
-            from domains.congressional.ingestion import CongressionalDataIngester
-            ingester = CongressionalDataIngester(session)
+            from domains.congressional.ingestion import CongressionalDataIngestion
+            ingester = CongressionalDataIngestion(session)
             
             # Add validation to the ingester
             ingester.set_validator(validator)
@@ -601,8 +601,8 @@ async def fetch_live_data(years: list = None) -> Dict[str, Any]:
         validator = CongressionalDataValidator()
         
         with get_sync_db_session() as session:
-            from domains.congressional.ingestion import CongressionalDataIngester
-            ingester = CongressionalDataIngester(session)
+            from domains.congressional.ingestion import CongressionalDataIngestion
+            ingester = CongressionalDataIngestion(session)
             ingester.set_validator(validator)
             import_results = ingester.import_congressional_data_from_csvs_sync(str(csv_directory))
             results.update(import_results)
@@ -622,8 +622,8 @@ def enrich_members() -> Dict[str, Any]:
     
     with get_sync_db_session() as session:
         try:
-            from domains.congressional.ingestion import CongressionalDataIngester
-            ingester = CongressionalDataIngester(session)
+            from domains.congressional.ingestion import CongressionalDataIngestion
+            ingester = CongressionalDataIngestion(session)
             results = ingester.enrich_member_data_sync()
             logger.info(f"✅ Member enrichment completed: {results}")
             return results

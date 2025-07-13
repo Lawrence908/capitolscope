@@ -1,1488 +1,954 @@
 """
-Congressional domain data ingestion module.
+Congressional data ingestion pipeline with enhanced data quality processing.
 
-This module handles importing congressional trading data from CSV files,
-extracting member information, and parsing PDF files for new data.
-Supports CAP-10 (Transaction List) and CAP-11 (Member Profiles).
+This module handles the import and processing of congressional trade data with focus on:
+- Enhanced ticker extraction from asset descriptions
+- Amount range standardization and garbage character removal
+- Owner field normalization and validation
+- Comprehensive data quality reporting and batch processing
 """
 
-import os
-import pandas as pd
-import sqlite3
 import re
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
+import csv
+import json
+import logging
 from datetime import datetime, date
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text
+from typing import Dict, List, Optional, Tuple, Set, Any
+from dataclasses import dataclass, field
+from pathlib import Path
+from decimal import Decimal
 
+from fuzzywuzzy import fuzz, process
+from sqlalchemy import text, or_
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
+
+from core.database import db_manager
 from core.logging import get_logger
-from core.config import settings
-from domains.congressional.models import CongressMember, CongressionalTrade, MemberPortfolio
-from domains.congressional.crud import CongressMemberCRUD, CongressionalTradeCRUD
-from domains.congressional.schemas import CongressMemberCreate, CongressionalTradeCreate
-from domains.securities.models import Security, AssetType
-from domains.securities.crud import SecurityCRUD, AssetTypeCRUD
-from domains.securities.schemas import SecurityCreate, AssetTypeCreate
+from domains.congressional.models import CongressMember, CongressionalTrade
+from domains.congressional.schemas import TradeOwner, FilingStatus, TransactionType
+from domains.congressional.data_quality import DataQualityEnhancer, QualityReport, ImportStatistics
+from domains.securities.models import Security
 
 logger = get_logger(__name__)
 
+@dataclass
+class TradeRecord:
+    """Raw trade record from import source."""
+    doc_id: str
+    member_name: str
+    raw_asset_description: str
+    transaction_type: str
+    transaction_date: date
+    notification_date: date
+    owner: str
+    amount: str
+    filing_status: Optional[str] = None
+    comment: Optional[str] = None
+    cap_gains_over_200: bool = False
+    
+    # Processing metadata
+    source_line: str = ""
+    line_number: int = 0
+    batch_id: Optional[str] = None
 
-class CongressionalDataIngester:
-    """
-    Congressional data ingestion service.
+@dataclass
+class ProcessedTrade:
+    """Processed trade record with enhanced data quality."""
+    # Original fields
+    doc_id: str
+    member_id: int
+    raw_asset_description: str
+    transaction_type: str
+    transaction_date: date
+    notification_date: date
+    owner: TradeOwner
+    amount_min: Optional[int]
+    amount_max: Optional[int]
+    amount_exact: Optional[int]
+    filing_status: Optional[FilingStatus]
+    comment: Optional[str]
+    cap_gains_over_200: bool
     
-    Handles importing congressional trade data from CSV files and databases,
-    parsing complex data formats, and enriching with external data sources.
-    """
+    # Enhanced fields
+    ticker: Optional[str]
+    asset_name: Optional[str]
+    asset_type: Optional[str]
+    security_id: Optional[int]
     
-    def __init__(self, session):
-        """Initialize with database session and CRUD objects."""
-        self.session = session
-        self.member_crud = CongressMemberCRUD(session)
-        self.trade_crud = CongressionalTradeCRUD(session)
-        self.security_crud = SecurityCRUD(session)
-        self.asset_type_crud = AssetTypeCRUD(session)
-        
-        # Validation system (optional)
-        self.validator = None
-        
-        # Asset type mapping from the original script
-        self.asset_type_mapping = {
-            "4K": "401K and Other Non-Federal Retirement Accounts",
-            "5C": "529 College Savings Plan",
-            "5F": "529 Portfolio",
-            "5P": "529 Prepaid Tuition Plan",
-            "AB": "Asset-Backed Securities",
-            "BA": "Bank Accounts, Money Market Accounts and CDs",
-            "BK": "Brokerage Accounts",
-            "CO": "Collectibles",
-            "CS": "Corporate Securities (Bonds and Notes)",
-            "CT": "Cryptocurrency",
-            "DB": "Defined Benefit Pension",
-            "DO": "Debts Owed to the Filer",
-            "DS": "Delaware Statutory Trust",
-            "EF": "Exchange Traded Funds (ETF)",
-            "EQ": "Excepted/Qualified Blind Trust",
-            "ET": "Exchange Traded Notes",
-            "FA": "Farms",
-            "FE": "Foreign Exchange Position (Currency)",
-            "FN": "Fixed Annuity",
-            "FU": "Futures",
-            "GS": "Government Securities and Agency Debt",
-            "HE": "Hedge Funds & Private Equity Funds (EIF)",
-            "HN": "Hedge Funds & Private Equity Funds (non-EIF)",
-            "IC": "Investment Club",
-            "IH": "IRA (Held in Cash)",
-            "IP": "Intellectual Property & Royalties",
-            "IR": "IRA",
-            "MA": "Managed Accounts (e.g., SMA and UMA)",
-            "MF": "Mutual Funds",
-            "MO": "Mineral/Oil/Solar Energy Rights",
-            "OI": "Ownership Interest (Holding Investments)",
-            "OL": "Ownership Interest (Engaged in a Trade or Business)",
-            "OP": "Options",
-            "OT": "Other",
-            "PE": "Pensions",
-            "PM": "Precious Metals",
-            "PS": "Stock (Not Publicly Traded)",
-            "RE": "Real Estate Invest. Trust (REIT)",
-            "RP": "Real Property",
-            "RS": "Restricted Stock Units (RSUs)",
-            "SA": "Stock Appreciation Right",
-            "ST": "Stocks (including ADRs)",
-            "TR": "Trust",
-            "VA": "Variable Annuity",
-            "VI": "Variable Insurance",
-            "WU": "Whole/Universal Insurance",
-            "BND": "Bond", 
-            "ETF": "ETF",
-            "FUT": "Future",
-            "CASH": "Cash",
-            "OTHER": "Other"
-        }
+    # Quality metrics
+    ticker_confidence: Decimal
+    amount_confidence: Decimal
+    parsed_successfully: bool
+    parsing_notes: List[str] = field(default_factory=list)
     
-    def set_validator(self, validator):
-        """
-        Set the validator for data quality validation.
-        
-        Args:
-            validator: CongressionalDataValidator instance
-        """
-        self.validator = validator
-        logger.info("Data validator set for ingestion")
-    
-    async def import_congressional_data_from_csvs(self, data_directory: str) -> Dict[str, int]:
-        """
-        Import congressional trading data from CSV files.
-        
-        Args:
-            data_directory: Path to directory containing CSV files (2014FD.csv, 2015FD.csv, etc.)
-            
-        Returns:
-            Dict with import statistics
-        """
-        data_path = Path(data_directory)
-        if not data_path.exists():
-            raise ValueError(f"Data directory does not exist: {data_directory}")
-        
-        logger.info(f"Starting congressional data import from {data_directory}")
-        
-        # Find all FD CSV files
-        csv_files = list(data_path.glob("*FD.csv"))
-        csv_files = [f for f in csv_files if not f.name.endswith("_old.csv") and not f.name.endswith("_docIDlist.csv")]
-        
-        total_members = 0
-        total_trades = 0
-        failed_trades = 0
-        
-        for csv_file in sorted(csv_files):
-            logger.info(f"Processing {csv_file.name}...")
-            
-            try:
-                # Read CSV file
-                df = pd.read_csv(csv_file)
-                logger.info(f"Loaded {len(df)} records from {csv_file.name}")
-                
-                # Extract and create members from this file
-                members_created = await self._extract_and_create_members(df)
-                total_members += members_created
-                
-                # Import trades
-                trades_created, trades_failed = await self._import_trades_from_dataframe(df, csv_file.stem)
-                total_trades += trades_created
-                failed_trades += trades_failed
-                
-                logger.info(f"Completed {csv_file.name}: {members_created} members, {trades_created} trades")
-                
-            except Exception as e:
-                logger.error(f"Failed to process {csv_file.name}: {e}")
-                continue
-        
-        await self.session.commit()
-        
-        result = {
-            "csv_files_processed": len(csv_files),
-            "total_members": total_members,
-            "total_trades": total_trades,
-            "failed_trades": failed_trades
-        }
-        
-        logger.info(f"Congressional data import complete: {result}")
-        return result
-    
-    def import_congressional_data_from_csvs_sync(self, data_directory: str) -> Dict[str, int]:
-        """
-        Synchronous version of import_congressional_data_from_csvs for use with sync sessions.
-        
-        Args:
-            data_directory: Path to directory containing CSV files (2014FD.csv, 2015FD.csv, etc.)
-            
-        Returns:
-            Dict with import statistics
-        """
-        data_path = Path(data_directory)
-        if not data_path.exists():
-            raise ValueError(f"Data directory does not exist: {data_directory}")
-        
-        logger.info(f"Starting congressional data import from {data_directory}")
-        
-        # Find all FD CSV files
-        csv_files = list(data_path.glob("*FD.csv"))
-        csv_files = [f for f in csv_files if not f.name.endswith("_old.csv") and not f.name.endswith("_docIDlist.csv")]
-        
-        total_members = 0
-        total_trades = 0
-        failed_trades = 0
-        
-        for csv_file in sorted(csv_files):
-            logger.info(f"Processing {csv_file.name}...")
-            
-            try:
-                # Read CSV file
-                df = pd.read_csv(csv_file)
-                logger.info(f"Loaded {len(df)} records from {csv_file.name}")
-                
-                # Extract and create members from this file
-                members_created = self._extract_and_create_members_sync(df)
-                total_members += members_created
-                
-                # Import trades
-                trades_created, trades_failed = self._import_trades_from_dataframe_sync(df, csv_file.stem)
-                total_trades += trades_created
-                failed_trades += trades_failed
-                
-                logger.info(f"Completed {csv_file.name}: {members_created} members, {trades_created} trades")
-                
-            except Exception as e:
-                logger.error(f"Failed to process {csv_file.name}: {e}")
-                # Rollback any partial changes from this file
-                try:
-                    self.session.rollback()
-                except Exception:
-                    pass
-                continue
-        
-        # Final commit for any remaining member data
-        try:
-            self.session.commit()
-            logger.info("Final commit completed for all remaining data")
-        except Exception as e:
-            logger.error(f"Failed final commit: {e}")
-            self.session.rollback()
-        
-        result = {
-            "csv_files_processed": len(csv_files),
-            "total_members": total_members,
-            "total_trades": total_trades,
-            "failed_trades": failed_trades
-        }
-        
-        logger.info(f"Congressional data import complete: {result}")
-        return result
-    
-    async def import_from_sqlite_database(self, sqlite_path: str) -> Dict[str, int]:
-        """
-        Import congressional trading data from existing SQLite database.
-        
-        Args:
-            sqlite_path: Path to the SQLite database file
-            
-        Returns:
-            Dict with import statistics
-        """
-        sqlite_file = Path(sqlite_path)
-        if not sqlite_file.exists():
-            raise ValueError(f"SQLite database does not exist: {sqlite_path}")
-        
-        logger.info(f"Starting import from SQLite database: {sqlite_path}")
-        
-        # Connect to SQLite database
-        conn = sqlite3.connect(sqlite_path)
-        
-        try:
-            # Get list of tables
-            cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%FD';")
-            tables = [row[0] for row in cursor.fetchall()]
-            
-            logger.info(f"Found {len(tables)} FD tables in SQLite database")
-            
-            total_members = 0
-            total_trades = 0
-            failed_trades = 0
-            
-            for table_name in sorted(tables):
-                logger.info(f"Processing table {table_name}...")
-                
-                try:
-                    # Read table into DataFrame
-                    df = pd.read_sql_query(f"SELECT * FROM {table_name}", conn)
-                    logger.info(f"Loaded {len(df)} records from {table_name}")
-                    
-                    # Extract and create members
-                    members_created = await self._extract_and_create_members(df)
-                    total_members += members_created
-                    
-                    # Import trades
-                    trades_created, trades_failed = await self._import_trades_from_dataframe(df, table_name)
-                    total_trades += trades_created
-                    failed_trades += trades_failed
-                    
-                    logger.info(f"Completed {table_name}: {members_created} members, {trades_created} trades")
-                    
-                except Exception as e:
-                    logger.error(f"Failed to process table {table_name}: {e}")
-                    continue
-            
-            await self.session.commit()
-            
-            result = {
-                "tables_processed": len(tables),
-                "total_members": total_members,
-                "total_trades": total_trades,
-                "failed_trades": failed_trades
-            }
-            
-            logger.info(f"SQLite import complete: {result}")
-            return result
-            
-        finally:
-            conn.close()
-    
-    async def _extract_and_create_members(self, df: pd.DataFrame) -> int:
-        """
-        Extract unique members from DataFrame and create member records.
-        
-        Args:
-            df: DataFrame containing congressional trade data
-            
-        Returns:
-            Number of new members created
-        """
-        if 'Member' not in df.columns:
-            logger.warning("No 'Member' column found in DataFrame")
-            return 0
-        
-        has_separate_names = 'FirstName' in df.columns and 'LastName' in df.columns
-        has_prefix = 'Prefix' in df.columns
-        
-        # Get unique member names
-        unique_members = df['Member'].dropna().unique()
-        logger.info(f"Found {len(unique_members)} unique members in data")
-        
-        created_count = 0
-        
-        for member_name in unique_members:
-            if not member_name or pd.isna(member_name):
-                continue
-            try:
-                prefix = None
-                first_name = ""
-                last_name = ""
-                full_name = member_name.strip()
-                if has_separate_names:
-                    member_rows = df[df['Member'] == member_name]
-                    best_entry = None
-                    for _, row in member_rows.iterrows():
-                        if pd.notna(row.get('FirstName')) and pd.notna(row.get('LastName')):
-                            best_entry = row
-                            break
-                    if best_entry is not None:
-                        prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else None
-                        first_name = str(best_entry['FirstName']).strip()
-                        last_name = str(best_entry['LastName']).strip()
-                        if prefix:
-                            full_name = f"{prefix} {first_name} {last_name}".strip()
-                        else:
-                            full_name = f"{first_name} {last_name}".strip()
-                else:
-                    name_parts = member_name.strip().split(',')
-                    if len(name_parts) >= 2:
-                        last_name = name_parts[0].strip()
-                        first_name = name_parts[1].strip()
-                    else:
-                        last_name = member_name.strip()
-                        first_name = ""
-                
-                # Check if member already exists
-                existing = await self.member_crud.get_by_name(last_name, first_name)
-                if existing:
-                    from domains.congressional.schemas import CongressMemberUpdate
-                    update_data = CongressMemberUpdate()
-                    # Only update prefix if present and not already set
-                    if prefix and not existing.prefix:
-                        update_data.prefix = prefix
-                    # Only update full_name if new one is longer
-                    if full_name and len(full_name) > len(existing.full_name or ""):
-                        update_data.full_name = full_name
-                    update_dict = update_data.model_dump(exclude_unset=True, exclude_none=True)
-                    if update_dict:
-                        await self.member_crud.update(existing.id, update_data)
-                        logger.info(f"Updated congress member: {existing.full_name} ({existing.id})")
-                        logger.debug(f"Updated member: {existing.full_name}")
-                    continue
-                # Create new member record
-                member_data = CongressMemberCreate(
-                    first_name=first_name or "Unknown",
-                    last_name=last_name,
-                    full_name=full_name,
-                    prefix=prefix if prefix else None,
-                    # These will be populated later from external APIs
-                    chamber="House",  # Default to House, will be updated later
-                    party="I",  # Default to Independent, will be updated later
-                    state="DC",  # Default to DC, will be updated later
-                    district=None,
-                    is_active=True
-                )
-                member = await self.member_crud.create(member_data)
-                created_count += 1
-                logger.debug(f"Created member: {member_name}")
-            except Exception as e:
-                logger.error(f"Failed to create member {member_name}: {e}")
-                continue
-        logger.info(f"Created {created_count} new members")
-        return created_count
-    
-    def get_member_by_name_sync(self, last_name: str, first_name: str = ""):
-        # Use the SQLAlchemy session directly for sync lookup
-        query = self.session.query(CongressMember)
-        if first_name:
-            query = query.filter(CongressMember.last_name == last_name, CongressMember.first_name == first_name)
-        else:
-            query = query.filter(CongressMember.last_name == last_name)
-        return query.first()
-    
-    def _extract_and_create_members_sync(self, df: pd.DataFrame) -> int:
-        """
-        Synchronous version of _extract_and_create_members for use with sync sessions.
-        Uses UPSERT pattern to preserve existing member data like party, chamber, state.
-        
-        Args:
-            df: DataFrame containing congressional trade data
-            
-        Returns:
-            Number of new members created
-        """
-        if 'Member' not in df.columns:
-            logger.warning("No 'Member' column found in DataFrame")
-            return 0
-        
-        # Check if we have FirstName and LastName columns (new format)
-        has_separate_names = 'FirstName' in df.columns and 'LastName' in df.columns
-        has_prefix = 'Prefix' in df.columns
-        
-        if has_separate_names:
-            logger.info("Using FirstName/LastName columns for member extraction")
-        else:
-            logger.info("Using Member column parsing for member extraction")
-        
-        # Track member names to ensure consistency
-        member_names = {}  # {member_key: (prefix, first_name, last_name, full_name)}
-        
-        # Get unique member names
-        unique_members = df['Member'].dropna().unique()
-        logger.info(f"Found {len(unique_members)} unique members in data")
-        
-        created_count = 0
-        
-        for member_name in unique_members:
-            member_name = str(member_name).strip()
-            if not member_name or member_name == 'nan':
-                continue
-            
-            try:
-                # Extract name components based on available columns
-                if has_separate_names:
-                    # Find the best row with complete data for this member
-                    member_rows = df[df['Member'] == member_name]
-                    
-                    best_entry = None
-                    for _, row in member_rows.iterrows():
-                        if pd.notna(row.get('FirstName')) and pd.notna(row.get('LastName')):
-                            best_entry = row
-                            break
-                    
-                    if best_entry is not None:
-                        prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else ""
-                        first_name = str(best_entry['FirstName']).strip()
-                        last_name = str(best_entry['LastName']).strip()
-                        if prefix:
-                            full_name = f"{prefix} {first_name} {last_name}".strip()
-                        else:
-                            full_name = f"{first_name} {last_name}".strip()
-                        member_names[member_name] = (prefix, first_name, last_name, full_name)
-                    else:
-                        first_name, last_name = self._parse_name_from_member(member_name)
-                        full_name = f"{first_name} {last_name}".strip()
-                        member_names[member_name] = ("", first_name, last_name, full_name)
-                else:
-                    first_name, last_name = self._parse_name_from_member(member_name)
-                    full_name = f"{first_name} {last_name}".strip()
-                    member_names[member_name] = ("", first_name, last_name, full_name)
+    # Validation flags
+    is_valid: bool = True
+    validation_errors: List[str] = field(default_factory=list)
 
-                prefix, first_name, last_name, full_name = member_names[member_name]
 
-                # Check if member already exists (by last and first name)
-                existing_member = self.get_member_by_name_sync(last_name, first_name)
-                if existing_member:
-                    # Update member details ONLY if the new data is better/more complete
-                    # and preserve existing party, chamber, state data
-                    from domains.congressional.schemas import CongressMemberUpdate
-                    update_data = CongressMemberUpdate()
-                    
-                    # Only update fields that are not already set or are improved
-                    update_fields = {}
-                    if prefix and (not getattr(existing_member, 'prefix', None) or existing_member.prefix == ""):
-                        update_fields['prefix'] = prefix
-                    if full_name and len(full_name) > len(getattr(existing_member, 'full_name', "") or ""):
-                        update_fields['full_name'] = full_name
-                    
-                    # Only update if we have actual changes to make
-                    update_dict = update_data.model_dump(exclude_unset=True, exclude_none=True)
-                    if update_dict:
-                        self.member_crud.update(existing_member, update_fields)
-                        logger.info(f"Updated congress member: {existing_member.full_name} ({existing_member.id})")
-                        logger.debug(f"Updated member: {existing_member.full_name}")
-                    continue
-
-                # Create new member record with minimal required data
-                # Leave party, chamber, state empty for later enrichment via external APIs
-                member_data = CongressMemberCreate(
-                    first_name=first_name or "Unknown",
-                    last_name=last_name,
-                    full_name=full_name,
-                    prefix=prefix if prefix else None,
-                    # These fields are left empty for later enrichment from external APIs
-                    chamber=None,  
-                    party=None,   
-                    state=None,   
-                    district=None,
-                    is_active=True
-                )
-                # Use direct SQLAlchemy session for sync creation
-                db_obj = CongressMember(**member_data.dict())
-                self.session.add(db_obj)
-                self.session.commit()
-                self.session.refresh(db_obj)
-                member = db_obj
-                created_count += 1
-                
-                logger.info(f"Created congress member: {member.full_name} ({member.id})")
-                logger.debug(f"Created member: {member.full_name}")
-                
-            except Exception as e:
-                logger.error(f"Failed to create member {member_name}: {e}")
-                continue
-        
-        logger.info(f"Created {created_count} new members")
-        return created_count
+class CongressionalDataIngestion:
+    """Enhanced congressional data ingestion with quality processing."""
     
-    def _parse_name_from_member(self, member_name: str) -> Tuple[str, str]:
-        """
-        Parse first and last name from member name string.
+    def __init__(self, batch_size: int = 100, session: Optional[Session] = None):
+        self.batch_size = batch_size
+        self.data_quality = DataQualityEnhancer()
+        self.statistics = ImportStatistics()
+        self.external_session = session  # For sync operations
         
-        Args:
-            member_name: Member name string (e.g., "Barletta", "Brooks", "DelBene")
+        # Load reference data
+        self._load_ticker_database()
+        self._load_member_mapping()
+        self._load_company_ticker_mapping()
+        
+        # Processing state
+        self.current_batch = []
+        self.processed_records = 0
+        self.failed_records = 0
+        self.session: Optional[Session] = None
+        
+    def _load_ticker_database(self):
+        """Load known ticker symbols from securities table."""
+        with db_manager.session_scope() as session:
+            securities = session.query(Security).filter(Security.is_active == True).all()
             
-        Returns:
-            Tuple of (first_name, last_name)
-        """
-        if not member_name:
-            return "", ""
-        
-        # Try to extract from description patterns
-        # Common patterns: "Mr. Lou Barletta", "Ms. Suzan K. DelBene", "Mr. Mo Brooks"
-        name_patterns = [
-            r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Za-z]+(?:\s+[A-Za-z]+)*)\s+([A-Za-z]+)',
-            r'(Mr\.|Ms\.|Mrs\.|Dr\.|Sen\.|Rep\.)\s+([A-Za-z]+)\s+([A-Za-z]+)',
-        ]
-        
-        # For now, just use the member name as last name
-        # This will be improved when we have better name extraction
-        last_name = member_name.strip()
-        first_name = ""  # Will be populated later from external APIs
-        
-        return first_name, last_name
+            self.known_tickers = {s.ticker.upper() for s in securities}
+            self.ticker_to_security = {s.ticker.upper(): s for s in securities}
+            
+            # Also store by name for fuzzy matching
+            self.company_names = {s.name.upper(): s.ticker.upper() for s in securities}
+            
+        logger.info(f"Loaded {len(self.known_tickers)} known tickers")
     
-    def _get_consistent_member_names(self, df: pd.DataFrame) -> Dict[str, Tuple[str, str, str, str]]:
-        """
-        Build a mapping of member names to consistent (first_name, last_name, full_name, prefix) tuples.
-        
-        Args:
-            df: DataFrame containing trade data
+    def _load_member_mapping(self):
+        """Load congress member name to ID mapping."""
+        with db_manager.session_scope() as session:
+            members = session.query(CongressMember).all()
             
-        Returns:
-            Dict mapping member_key to (first_name, last_name, full_name, prefix)
-        """
-        member_names = {}
-        has_separate_names = 'FirstName' in df.columns and 'LastName' in df.columns
-        has_prefix = 'Prefix' in df.columns
-        
-        for member_name in df['Member'].dropna().unique():
-            if not member_name or member_name.strip() == '':
-                continue
-            
-            member_data = df[df['Member'] == member_name]
-            
-            # Find the best name entry for this member
-            # Priority: JT (joint) entries with names > any entry with names
-            best_entry = None
-            
-            if has_separate_names:
-                # First try to find JT entries with names
-                jt_entries = member_data[member_data['Owner'] == 'JT']
-                jt_with_names = jt_entries[
-                    (jt_entries['FirstName'].notna()) & 
-                    (jt_entries['FirstName'] != '') & 
-                    (jt_entries['LastName'].notna()) & 
-                    (jt_entries['LastName'] != '')
+            self.member_mapping = {}
+            for member in members:
+                # Create variations of member names
+                variations = [
+                    member.full_name.upper(),
+                    f"{member.first_name} {member.last_name}".upper(),
+                    f"{member.last_name}, {member.first_name}".upper(),
                 ]
                 
-                if not jt_with_names.empty:
-                    best_entry = jt_with_names.iloc[0]
-                else:
-                    # Try any entry with names
-                    entries_with_names = member_data[
-                        (member_data['FirstName'].notna()) & 
-                        (member_data['FirstName'] != '') & 
-                        (member_data['LastName'].notna()) & 
-                        (member_data['LastName'] != '')
-                    ]
-                    if not entries_with_names.empty:
-                        best_entry = entries_with_names.iloc[0]
-                
-                if best_entry is not None:
-                    prefix = str(best_entry.get('Prefix', '')).strip() if has_prefix and pd.notna(best_entry.get('Prefix')) else ""
-                    first_name = str(best_entry['FirstName']).strip()
-                    last_name = str(best_entry['LastName']).strip()
+                for variation in variations:
+                    self.member_mapping[variation] = member.id
                     
-                    # Create full name with prefix
-                    if prefix:
-                        full_name = f"{prefix} {first_name} {last_name}".strip()
-                    else:
-                        full_name = f"{first_name} {last_name}".strip()
-                else:
-                    # Fall back to parsing from Member column
-                    first_name, last_name = self._parse_name_from_member(member_name)
-                    full_name = f"{first_name} {last_name}".strip()
-                    prefix = ""
-            else:
-                # Parse from Member column
-                first_name, last_name = self._parse_name_from_member(member_name)
-                full_name = f"{first_name} {last_name}".strip()
-                prefix = ""
-            
-            member_names[member_name] = (first_name, last_name, full_name, prefix)
-        
-        return member_names
+        logger.info(f"Loaded {len(self.member_mapping)} member name mappings")
     
-    async def _import_trades_from_dataframe(self, df: pd.DataFrame, source_table: str) -> Tuple[int, int]:
-        """
-        Import trades from DataFrame into database.
-        
-        Args:
-            df: DataFrame containing trade data
-            source_table: Name of source table/file for reference
-            
-        Returns:
-            Tuple of (successful_imports, failed_imports)
-        """
-        created_count = 0
-        failed_count = 0
-        
-        # Check if we have FirstName and LastName columns (new format)
-        has_separate_names = 'FirstName' in df.columns and 'LastName' in df.columns
-        
-        # Get consistent member names mapping
-        member_names = self._get_consistent_member_names(df)
-        
-        # Expected column mappings
-        column_mappings = {
-            'member': 'Member',
-            'doc_id': 'DocID',
-            'owner': 'Owner',
-            'asset': 'Asset',
-            'ticker': 'Ticker',
-            'transaction_type': 'Transaction Type',
-            'transaction_date': 'Transaction Date',
-            'notification_date': 'Notification Date',
-            'amount': 'Amount',
-            'filing_status': 'Filing Status',
-            'description': 'Description'
+    def _load_company_ticker_mapping(self):
+        """Load enhanced company name to ticker mapping."""
+        # Common company name patterns that map to tickers
+        self.company_ticker_mapping = {
+            'APPLE INC': 'AAPL',
+            'MICROSOFT CORP': 'MSFT',
+            'AMAZON.COM INC': 'AMZN',
+            'ALPHABET INC': 'GOOGL',
+            'TESLA INC': 'TSLA',
+            'META PLATFORMS INC': 'META',
+            'NVIDIA CORP': 'NVDA',
+            'BERKSHIRE HATHAWAY': 'BRK.B',
+            'JOHNSON & JOHNSON': 'JNJ',
+            'EXXON MOBIL CORP': 'XOM',
+            'JPMORGAN CHASE & CO': 'JPM',
+            'BANK OF AMERICA CORP': 'BAC',
+            'COCA COLA CO': 'KO',
+            'WALMART INC': 'WMT',
+            'PROCTER & GAMBLE': 'PG',
+            'VISA INC': 'V',
+            'MASTERCARD INC': 'MA',
+            'UNITED HEALTH GROUP': 'UNH',
+            'HOME DEPOT INC': 'HD',
+            'DISNEY WALT CO': 'DIS',
+            'VERIZON COMMUNICATIONS': 'VZ',
+            'AT&T INC': 'T',
+            'CHEVRON CORP': 'CVX',
+            'PFIZER INC': 'PFE',
+            'ABBVIE INC': 'ABBV',
+            'MERCK & CO': 'MRK',
+            'BRISTOL MYERS SQUIBB': 'BMY',
+            'INTEL CORP': 'INTC',
+            'CISCO SYSTEMS': 'CSCO',
+            'ORACLE CORP': 'ORCL',
+            'SALESFORCE INC': 'CRM',
+            'NETFLIX INC': 'NFLX',
+            'ADOBE INC': 'ADBE',
+            'PAYPAL HOLDINGS': 'PYPL',
+            'COMCAST CORP': 'CMCSA',
+            'PEPSICO INC': 'PEP',
+            'THERMO FISHER SCIENTIFIC': 'TMO',
+            'COSTCO WHOLESALE': 'COST',
+            'DANAHER CORP': 'DHR',
+            'TEXAS INSTRUMENTS': 'TXN',
+            'MEDTRONIC PLC': 'MDT',
+            'UNION PACIFIC CORP': 'UNP',
+            'MCDONALD\'S CORP': 'MCD',
+            'LOCKHEED MARTIN': 'LMT',
+            'GOLDMAN SACHS GROUP': 'GS',
+            'MORGAN STANLEY': 'MS',
+            'AMERICAN EXPRESS': 'AXP',
+            'NIKE INC': 'NKE',
+            'CATERPILLAR INC': 'CAT',
+            'BOEING CO': 'BA',
+            'IBM CORP': 'IBM',
+            'GENERAL ELECTRIC': 'GE',
+            'FORD MOTOR CO': 'F',
+            'GENERAL MOTORS': 'GM',
+            'STARBUCKS CORP': 'SBUX',
+            'TIKTOK': None,  # Not publicly traded
+            'CRYPTOCURRENCY': None,  # Not a single ticker
+            'BITCOIN': None,  # Not a traditional ticker
+            'ETHEREUM': None,  # Not a traditional ticker
         }
         
-        # Validate required columns exist
-        missing_columns = []
-        for expected_col in ['Member', 'DocID', 'Asset', 'Transaction Type', 'Transaction Date', 'Notification Date', 'Amount']:
-            if expected_col not in df.columns:
-                missing_columns.append(expected_col)
-        
-        if missing_columns:
-            logger.error(f"Missing required columns in {source_table}: {missing_columns}")
-            return 0, len(df)
-        
-        logger.info(f"Processing {len(df)} trades from {source_table}")
-        
-        # Apply comprehensive data quality enhancements
-        try:
-            from domains.congressional.data_quality import enhance_congressional_data_quality
-            
-            logger.info("Applying comprehensive data quality enhancements...")
-            enhanced_df, quality_stats = enhance_congressional_data_quality(df)
-            
-            logger.info(f"Data quality enhancement completed:")
-            logger.info(f"  Total rows: {quality_stats.get('total_rows', 0)}")
-            logger.info(f"  Fixed owner fields: {quality_stats.get('fixed_owner_field', 0)}")
-            logger.info(f"  Fixed amount parsing: {quality_stats.get('fixed_amount_parsing', 0)}")
-            logger.info(f"  Removed garbage chars: {quality_stats.get('removed_garbage_chars', 0)}")
-            logger.info(f"  Unfixable rows: {quality_stats.get('unfixable_rows', 0)}")
-            
-            # Use enhanced dataframe for processing
-            df = enhanced_df
-            
-        except Exception as e:
-            logger.warning(f"Data quality enhancement failed, proceeding with original data: {e}")
-        
-        for idx, row in df.iterrows():
-            try:
-                # Extract member information
-                member_key = str(row['Member']).strip()
-                if not member_key or member_key == 'nan':
-                    failed_count += 1
-                    continue
-                
-                # Get consistent member names
-                if member_key in member_names:
-                    first_name, last_name, full_name, prefix = member_names[member_key]
-                else:
-                    first_name, last_name = self._parse_name_from_member(member_key)
-                    full_name = f"{first_name} {last_name}".strip()
-                    prefix = ""
-                
-                # Get or create member
-                member = await self.member_crud.get_by_name(member_key)
-                if not member:
-                    logger.warning(f"Member not found for key: {member_key}")
-                    failed_count += 1
-                    continue
-                
-                # Extract transaction details
-                doc_id = str(row['DocID']).strip() if 'DocID' in row and pd.notna(row['DocID']) else f"UNKNOWN_{idx}"
-                ticker = str(row['Ticker']).strip() if 'Ticker' in row and pd.notna(row['Ticker']) else ""
-                ticker = self.normalize_ticker(ticker)
-                asset = str(row['Asset']).strip() if 'Asset' in row and pd.notna(row['Asset']) else ""
-                transaction_type = str(row['Transaction Type']).strip() if 'Transaction Type' in row and pd.notna(row['Transaction Type']) else "P"
-                transaction_date = str(row['Transaction Date']).strip() if 'Transaction Date' in row and pd.notna(row['Transaction Date']) else ""
-                notification_date = str(row['Notification Date']).strip() if 'Notification Date' in row and pd.notna(row['Notification Date']) else ""
-                amount = str(row['Amount']).strip() if 'Amount' in row and pd.notna(row['Amount']) else ""
-                owner = str(row['Owner']).strip() if 'Owner' in row and pd.notna(row['Owner']) else ""
-                description = str(row['Description']).strip() if 'Description' in row and pd.notna(row['Description']) else ""
-                
-                # Extract asset description for raw storage
-                raw_asset_description = self._extract_asset_description(row)
-                
-                # Parse amount into min/max fields
-                amount_min, amount_max = self._parse_amount_to_fields(amount)
-                
-                # Find or create security
-                security_id = None
-                asset_name = ""
-                asset_type = ""
-                if ticker:
-                    security_id = self._find_or_create_security(ticker, raw_asset_description)
-                    if security_id:
-                        # Get the created security info
-                        security = self.security_crud.get(security_id)
-                        if security:
-                            asset_name = security.name
-                            if security.asset_type:
-                                asset_type = security.asset_type.name
-                    else:
-                        # Extract asset info manually if security creation failed
-                        asset_name, asset_type = self._extract_asset_info(raw_asset_description, ticker)
-                else:
-                    # No ticker - extract what we can from description
-                    asset_name, asset_type = self._extract_asset_info(raw_asset_description, "")
-                
-                # Create trade record with proper validation
-                trade_data = CongressionalTradeCreate(
-                    member_id=member.id,
-                    security_id=security_id,
-                    doc_id=doc_id,
-                    owner=owner if owner else None,
-                    raw_asset_description=raw_asset_description,
-                    ticker=ticker if ticker else None,
-                    asset_name=asset_name if asset_name else None,
-                    asset_type=asset_type if asset_type else None,
-                    transaction_type=transaction_type if transaction_type else "P",  # Default to Purchase if empty
-                    transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,
-                    notification_date=self._parse_date_string(notification_date) if notification_date else None,
-                    amount_min=amount_min,
-                    amount_max=amount_max,
-                    amount_exact=None,  # We use ranges, not exact amounts from these CSVs
-                    filing_status="N",  # Use "N" for New instead of "New"
-                    comment=description if description else None
-                )
-                
-                await self.trade_crud.create(trade_data)
-                created_count += 1
-                
-                if created_count % 100 == 0:
-                    logger.info(f"Processed {created_count} trades from {source_table}")
-                    
-            except Exception as e:
-                logger.warning(f"Failed to import trade at row {idx}: {e}")
-                failed_count += 1
-        
-        logger.info(f"Trade import for {source_table}: {created_count} successful, {failed_count} failed")
-        return created_count, failed_count
-    
-    def _import_trades_from_dataframe_sync(self, df: pd.DataFrame, source_table: str) -> Tuple[int, int]:
-        """
-        Synchronous version of _import_trades_from_dataframe for use with sync sessions.
-        
-        Args:
-            df: DataFrame containing trade data
-            source_table: Name of source table/file for reference
-            
-        Returns:
-            Tuple of (successful_imports, failed_imports)
-        """
-        created_count = 0
-        failed_count = 0
-        
-        # Check if we have FirstName and LastName columns (new format)
-        has_separate_names = 'FirstName' in df.columns and 'LastName' in df.columns
-        
-        # Get consistent member names mapping
-        member_names = self._get_consistent_member_names(df)
-        
-        # Expected column mappings
-        column_mappings = {
-            'member': 'Member',
-            'doc_id': 'DocID',
-            'owner': 'Owner',
-            'asset': 'Asset',
-            'ticker': 'Ticker',
-            'transaction_type': 'Transaction Type',
-            'transaction_date': 'Transaction Date',
-            'notification_date': 'Notification Date',
-            'amount': 'Amount',
-            'filing_status': 'Filing Status',
-            'description': 'Description'
+        # ETF and Index mappings
+        self.etf_mappings = {
+            'SPDR S&P 500 ETF': 'SPY',
+            'ISHARES RUSSELL 2000 ETF': 'IWM',
+            'VANGUARD TOTAL STOCK MARKET': 'VTI',
+            'INVESCO QQQ': 'QQQ',
+            'ISHARES CORE S&P 500': 'IVV',
+            'VANGUARD S&P 500': 'VOO',
+            'VANGUARD FTSE DEVELOPED': 'VEA',
+            'VANGUARD FTSE EMERGING': 'VWO',
+            'ISHARES MSCI EAFE': 'EFA',
+            'ISHARES MSCI EMERGING': 'EEM',
+            'FINANCIAL SELECT SECTOR': 'XLF',
+            'TECHNOLOGY SELECT SECTOR': 'XLK',
+            'HEALTH CARE SELECT SECTOR': 'XLV',
+            'ENERGY SELECT SECTOR': 'XLE',
+            'CONSUMER DISCRETIONARY': 'XLY',
+            'CONSUMER STAPLES': 'XLP',
+            'INDUSTRIAL SELECT SECTOR': 'XLI',
+            'MATERIALS SELECT SECTOR': 'XLB',
+            'UTILITIES SELECT SECTOR': 'XLU',
+            'REAL ESTATE SELECT SECTOR': 'XLRE',
         }
         
-        # Validate required columns exist
-        missing_columns = []
-        for expected_col in ['Member', 'DocID', 'Asset', 'Transaction Type', 'Transaction Date', 'Notification Date', 'Amount']:
-            if expected_col not in df.columns:
-                missing_columns.append(expected_col)
+        # Combine all mappings
+        self.company_ticker_mapping.update(self.etf_mappings)
         
-        if missing_columns:
-            logger.error(f"Missing required columns in {source_table}: {missing_columns}")
-            return 0, len(df)
+    def process_csv_file(self, csv_path: str, member_name: str = None) -> QualityReport:
+        """Process a CSV file of congressional trades."""
+        logger.info(f"Processing CSV file: {csv_path}")
         
-        logger.info(f"Processing {len(df)} trades from {source_table}")
+        self.statistics.reset()
+        self.statistics.import_start_time = datetime.now()
         
-        # Apply comprehensive data quality enhancements
         try:
-            from domains.congressional.data_quality import enhance_congressional_data_quality
-            
-            logger.info("Applying comprehensive data quality enhancements...")
-            enhanced_df, quality_stats = enhance_congressional_data_quality(df)
-            
-            logger.info(f"Data quality enhancement completed:")
-            logger.info(f"  Total rows: {quality_stats.get('total_rows', 0)}")
-            logger.info(f"  Fixed owner fields: {quality_stats.get('fixed_owner_field', 0)}")
-            logger.info(f"  Fixed amount parsing: {quality_stats.get('fixed_amount_parsing', 0)}")
-            logger.info(f"  Removed garbage chars: {quality_stats.get('removed_garbage_chars', 0)}")
-            logger.info(f"  Unfixable rows: {quality_stats.get('unfixable_rows', 0)}")
-            
-            # Use enhanced dataframe for processing
-            df = enhanced_df
-            
+            with open(csv_path, 'r', encoding='utf-8') as file:
+                # Detect CSV format
+                dialect = csv.Sniffer().sniff(file.read(1024))
+                file.seek(0)
+                
+                reader = csv.DictReader(file, dialect=dialect)
+                
+                # Process in batches
+                with db_manager.session_scope() as session:
+                    self.session = session
+                    batch = []
+                    
+                    for row_num, row in enumerate(reader, 1):
+                        try:
+                            # Convert row to TradeRecord
+                            trade_record = self._parse_csv_row(row, row_num)
+                            if trade_record:
+                                batch.append(trade_record)
+                                
+                                # Process batch when full
+                                if len(batch) >= self.batch_size:
+                                    self._process_batch(batch)
+                                    batch = []
+                                    
+                        except Exception as e:
+                            logger.error(f"Error processing row {row_num}: {e}")
+                            self.statistics.processing_errors += 1
+                    
+                    # Process final batch
+                    if batch:
+                        self._process_batch(batch)
+                        
         except Exception as e:
-            logger.warning(f"Data quality enhancement failed, proceeding with original data: {e}")
-        
-        skipped_rows = []
-        batch_size = 100  # Commit every 100 records to prevent large transaction failures
-        
-        for idx, row in df.iterrows():
-            try:
-                # Validate record if validator is available
-                if self.validator:
-                    validation_result = self.validator.validate_record(row.to_dict())
-                    if not validation_result.is_valid:
-                        logger.debug(f"Record validation failed at row {idx}: {validation_result.errors}")
-                        failed_count += 1
-                        continue
-                    
-                    # Use cleaned data if available
-                    if validation_result.cleaned_data:
-                        row = pd.Series(validation_result.cleaned_data)
-                
-                # Extract member information
-                member_key = str(row['Member']).strip()
-                if not member_key or member_key == 'nan':
-                    failed_count += 1
-                    continue
-                
-                # Get consistent member names
-                if member_key in member_names:
-                    first_name, last_name, _, _ = member_names[member_key]
-                else:
-                    first_name, last_name = self._parse_name_from_member(member_key)
-                member = self.get_member_by_name_sync(last_name, first_name)
-                if not member:
-                    logger.warning(f"Member not found for key: {member_key}")
-                    failed_count += 1
-                    continue
-                
-                # Extract transaction details
-                doc_id = str(row['DocID']).strip() if 'DocID' in row and pd.notna(row['DocID']) else f"UNKNOWN_{idx}"
-                ticker = str(row['Ticker']).strip() if 'Ticker' in row and pd.notna(row['Ticker']) else ""
-                ticker = self.normalize_ticker(ticker)
-                asset = str(row['Asset']).strip() if 'Asset' in row and pd.notna(row['Asset']) else ""
-                transaction_type = str(row['Transaction Type']).strip() if 'Transaction Type' in row and pd.notna(row['Transaction Type']) else "P"
-                transaction_date = str(row['Transaction Date']).strip() if 'Transaction Date' in row and pd.notna(row['Transaction Date']) else ""
-                notification_date = str(row['Notification Date']).strip() if 'Notification Date' in row and pd.notna(row['Notification Date']) else ""
-                amount = str(row['Amount']).strip() if 'Amount' in row and pd.notna(row['Amount']) else ""
-                owner = str(row['Owner']).strip() if 'Owner' in row and pd.notna(row['Owner']) else ""
-                description = str(row['Description']).strip() if 'Description' in row and pd.notna(row['Description']) else ""
-                
-                # Extract asset description for raw storage
-                raw_asset_description = self._extract_asset_description(row)
-                
-                # Parse amount into min/max fields
-                amount_min, amount_max = self._parse_amount_to_fields(amount)
-                
-                # Find or create security
-                security_id = None
-                asset_name = ""
-                asset_type = ""
-                if ticker:
-                    security_id = self._find_or_create_security(ticker, raw_asset_description)
-                    if security_id:
-                        # Get the created security info
-                        security = self.security_crud.get(security_id)
-                        if security:
-                            asset_name = security.name
-                            if security.asset_type:
-                                asset_type = security.asset_type.name
-                    else:
-                        # Extract asset info manually if security creation failed
-                        asset_name, asset_type = self._extract_asset_info(raw_asset_description, ticker)
-                else:
-                    # No ticker - extract what we can from description
-                    asset_name, asset_type = self._extract_asset_info(raw_asset_description, "")
-                
-                # Create trade record with proper validation
-                trade_data = CongressionalTradeCreate(
-                    member_id=member.id,
-                    security_id=security_id,
-                    doc_id=doc_id,
-                    owner=owner if owner else None,
-                    raw_asset_description=raw_asset_description,
-                    ticker=ticker if ticker else None,
-                    asset_name=asset_name if asset_name else None,
-                    asset_type=asset_type if asset_type else None,
-                    transaction_type=transaction_type if transaction_type else "P",  # Default to Purchase if empty
-                    transaction_date=self._parse_date_string(transaction_date) if transaction_date else None,
-                    notification_date=self._parse_date_string(notification_date) if notification_date else None,
-                    amount_min=amount_min,
-                    amount_max=amount_max,
-                    amount_exact=None,  # We use ranges, not exact amounts from these CSVs
-                    filing_status="N",  # Use "N" for New instead of "New"
-                    comment=description if description else None
-                )
-                
-                self.trade_crud.create(trade_data)
-                created_count += 1
-                
-                # Commit in batches to prevent large transaction failures
-                if created_count % batch_size == 0:
-                    try:
-                        self.session.commit()
-                        logger.info(f"Committed batch: {created_count} trades from {source_table}")
-                    except Exception as commit_error:
-                        logger.error(f"Failed to commit batch at {created_count}: {commit_error}")
-                        self.session.rollback()
-                        # Continue processing after rollback
-                        failed_count += batch_size  # Count the failed batch
-                        created_count -= batch_size  # Adjust created count
-                    
-            except Exception as e:
-                logger.warning(f"Failed to import trade at row {idx}: {e}")
-                skipped_rows.append((idx, str(e)))
-                failed_count += 1
-                
-                # Critical: Rollback the transaction if it's in a failed state
-                try:
-                    self.session.rollback()
-                except Exception as rollback_error:
-                    logger.error(f"Failed to rollback transaction at row {idx}: {rollback_error}")
-        
-        # Final commit for any remaining records
-        try:
-            if created_count % batch_size != 0:  # Only commit if there are uncommitted records
-                self.session.commit()
-                logger.info(f"Final commit: {created_count} total trades from {source_table}")
-        except Exception as final_commit_error:
-            logger.error(f"Failed final commit for {source_table}: {final_commit_error}")
-            self.session.rollback()
-        if skipped_rows:
-            logger.warning(f"Summary of skipped/failed trade rows in {source_table}:")
-            for idx, reason in skipped_rows:
-                logger.warning(f"  Row {idx}: {reason}")
-        logger.info(f"Trade import for {source_table}: {created_count} successful, {failed_count} failed")
-        return created_count, failed_count
+            logger.error(f"Error processing CSV file: {e}")
+            self.statistics.processing_errors += 1
+            
+        finally:
+            self.statistics.import_end_time = datetime.now()
+            self.session = None
+            
+        return self._generate_quality_report()
     
-    def _parse_amount_range(self, amount_str: str) -> Tuple[Optional[int], Optional[int]]:
-        """
-        Parse amount range strings like '$1,001 - $15,000' into min/max values in cents.
-        Enhanced version that handles garbage characters and validates against standard ranges.
-        
-        Args:
-            amount_str: Amount string from CSV
-            
-        Returns:
-            Tuple of (min_cents, max_cents)
-        """
-        if not amount_str or pd.isna(amount_str):
-            return None, None
-        
+    def _parse_csv_row(self, row: Dict[str, str], row_num: int) -> Optional[TradeRecord]:
+        """Parse a CSV row into a TradeRecord."""
         try:
-            # Import data quality enhancer
-            from domains.congressional.data_quality import CongressionalDataQualityEnhancer
+            # Map CSV columns to our fields (flexible mapping)
+            doc_id = row.get('doc_id', row.get('Document ID', row.get('document_id', f"unknown_{row_num}")))
+            member_name = row.get('member_name', row.get('Member', row.get('member', '')))
+            raw_asset = row.get('raw_asset_description', row.get('Asset', row.get('asset', '')))
+            transaction_type = row.get('transaction_type', row.get('Type', row.get('type', '')))
+            owner = row.get('owner', row.get('Owner', row.get('owner', '')))
+            amount = row.get('amount', row.get('Amount', row.get('amount', '')))
             
-            # Use enhanced parsing from data quality module
-            enhancer = CongressionalDataQualityEnhancer()
-            return enhancer._parse_amount_range(str(amount_str))
+            # Parse dates
+            transaction_date = self._parse_date(row.get('transaction_date', row.get('Transaction Date', '')))
+            notification_date = self._parse_date(row.get('notification_date', row.get('Notification Date', '')))
+            
+            if not all([doc_id, member_name, raw_asset, transaction_type, transaction_date]):
+                logger.warning(f"Missing required fields in row {row_num}")
+                return None
                 
+            return TradeRecord(
+                doc_id=doc_id,
+                member_name=member_name.strip(),
+                raw_asset_description=raw_asset.strip(),
+                transaction_type=transaction_type.strip(),
+                transaction_date=transaction_date,
+                notification_date=notification_date or transaction_date,
+                owner=owner.strip(),
+                amount=amount.strip(),
+                filing_status=row.get('filing_status', ''),
+                comment=row.get('comment', ''),
+                cap_gains_over_200=row.get('cap_gains_over_200', '').lower() == 'true',
+                source_line=str(row),
+                line_number=row_num
+            )
+            
         except Exception as e:
-            logger.debug(f"Failed to parse amount '{amount_str}': {e}")
-            
-            # Fallback to original logic if enhanced parsing fails
-            try:
-                # Remove common characters
-                cleaned = str(amount_str).replace('$', '').replace(',', '').strip()
-                
-                # Remove garbage characters like 'gfedc'
-                import re
-                cleaned = re.sub(r'\s+gfedc\s*$', '', cleaned, flags=re.IGNORECASE).strip()
-                cleaned = re.sub(r'\s+[a-z]{3,}\s*$', '', cleaned, flags=re.IGNORECASE).strip()
-                
-                # Handle ranges
-                if ' - ' in cleaned:
-                    parts = cleaned.split(' - ')
-                    if len(parts) == 2:
-                        min_val = float(parts[0].strip()) * 100  # Convert to cents
-                        max_val = float(parts[1].strip()) * 100
-                        return int(min_val), int(max_val)
-                
-                # Handle single values
-                if cleaned.replace('.', '').isdigit():
-                    val = float(cleaned) * 100
-                    return int(val), int(val)
-                
-                # Handle special cases like "$50,001 +"
-                if '+' in cleaned:
-                    min_val = float(cleaned.replace('+', '').strip()) * 100
-                    return int(min_val), None
-                    
-            except Exception as fallback_e:
-                logger.debug(f"Fallback parsing also failed for '{amount_str}': {fallback_e}")
-        
-        return None, None
+            logger.error(f"Error parsing row {row_num}: {e}")
+            return None
     
     def _parse_date(self, date_str: str) -> Optional[date]:
-        """Parse date string into date object."""
-        if not date_str or pd.isna(date_str):
-            return None
-        
-        try:
-            if isinstance(date_str, str):
-                for fmt in ['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y']:
-                    try:
-                        return datetime.strptime(date_str, fmt).date()
-                    except ValueError:
-                        continue
-            elif hasattr(date_str, 'date'):
-                return date_str.date()
-        except Exception:
-            pass
-        
-        return None
-    
-    async def enrich_member_data(self) -> Dict[str, int]:
-        """
-        Enrich member data with additional information from external APIs.
-        
-        This would fetch chamber, party, state, district info from:
-        - congress.gov API
-        - Propublica Congress API
-        - Ballotpedia
-        
-        Returns:
-            Dict with enrichment statistics
-        """
-        # Get all members without complete data
-        result = await self.session.execute(
-            select(CongressMember).where(
-                (CongressMember.chamber.is_(None)) |
-                (CongressMember.party.is_(None)) |
-                (CongressMember.state.is_(None))
-            )
-        )
-        members = result.scalars().all()
-        
-        logger.info(f"Found {len(members)} members needing data enrichment")
-        
-        enriched_count = 0
-        
-        # Use Congress.gov API to enrich member data
-        from domains.congressional.services import CongressAPIService
-        from domains.congressional.crud import CongressMemberRepository
-        
-        member_repo = CongressMemberRepository(self.session)
-        api_service = CongressAPIService(member_repo)
-        
-        for member in members:
-            try:
-                # Try to sync with Congress.gov API if bioguide_id exists
-                if member.bioguide_id:
-                    result = await api_service.sync_member_by_bioguide_id(member.bioguide_id)
-                    if result in ["created", "updated"]:
-                        enriched_count += 1
-                        logger.info(f"Enriched member {member.full_name} from Congress.gov API")
-                        continue
-                
-                # Fallback to basic enrichment if API sync fails
-                updated = False
-                if not member.chamber:
-                    member.chamber = "House"  # Default assumption
-                    updated = True
-                
-                if not member.party:
-                    member.party = "I"  # Default to Independent
-                    updated = True
-                
-                if not member.state:
-                    member.state = "DC"  # Default to DC
-                    updated = True
-                
-                if updated:
-                    enriched_count += 1
-                
-            except Exception as e:
-                logger.error(f"Failed to enrich data for member {member.full_name}: {e}")
-                continue
-        
-        await self.session.commit()
-        
-        logger.info(f"Enriched data for {enriched_count} members")
-        return {
-            "members_processed": len(members),
-            "members_enriched": enriched_count
-        }
-    
-    def enrich_member_data_sync(self) -> Dict[str, int]:
-        """
-        Synchronous version of enrich_member_data for use with sync sessions.
-        
-        Enrich member data with additional information from external APIs.
-        
-        This would fetch chamber, party, state, district info from:
-        - congress.gov API
-        - Propublica Congress API
-        - Ballotpedia
-        
-        Returns:
-            Dict with enrichment statistics
-        """
-        # Get all members without complete data
-        from sqlalchemy import select
-        result = self.session.execute(
-            select(CongressMember).where(
-                (CongressMember.chamber.is_(None)) |
-                (CongressMember.party.is_(None)) |
-                (CongressMember.state.is_(None))
-            )
-        )
-        members = result.scalars().all()
-        
-        logger.info(f"Found {len(members)} members to enrich")
-        
-        enriched_count = 0
-        failed_count = 0
-        
-        for member in members:
-            try:
-                # TODO: Implement actual API calls to enrich member data
-                # For now, just mark as processed
-                enriched_count += 1
-                
-                if enriched_count % 50 == 0:
-                    logger.info(f"Enriched {enriched_count} members...")
-                    
-            except Exception as e:
-                logger.error(f"Failed to enrich member {member.full_name}: {e}")
-                failed_count += 1
-                continue
-        
-        self.session.commit()
-        
-        result = {
-            "members_enriched": enriched_count,
-            "members_failed": failed_count,
-            "total_processed": enriched_count + failed_count
-        }
-        
-        logger.info(f"Member enrichment complete: {result}")
-        return result
-
-    def _extract_transaction_type(self, col1: str, col2: str, col3: str, col4: str) -> str:
-        """
-        Extract transaction type from potentially malformed columns.
-        Transaction type should be 'P' (Purchase), 'S' (Sale), or 'E' (Exchange).
-        Prefers blank over wrong data.
-        """
-        # Look for valid transaction types - be very strict
-        for col in [col1, col2, col3, col4]:
-            if col.strip().upper() in ['P', 'S', 'E']:
-                return col.strip().upper()
-        
-        # Don't try to guess - return blank if no valid type found
-        return ""
-    
-    def _extract_transaction_date(self, col1: str, col2: str, col3: str, col4: str) -> str:
-        """
-        Extract transaction date from potentially malformed columns.
-        Look for date patterns like MM/DD/YYYY. Prefers blank over wrong data.
-        """
-        import re
-        
-        # Only accept proper date format MM/DD/YYYY
-        date_pattern = r'^\d{1,2}/\d{1,2}/\d{4}$'
-        
-        for col in [col1, col2, col3, col4]:
-            if re.match(date_pattern, col.strip()):
-                return col.strip()
-        
-        # Don't provide fallback - return blank if no valid date found
-        return ""
-    
-    def _extract_notification_date(self, col1: str, col2: str, col3: str, col4: str) -> str:
-        """
-        Extract notification date from potentially malformed columns.
-        Look for date patterns like MM/DD/YYYY. Prefers blank over wrong data.
-        """
-        import re
-        
-        # Only accept proper date format MM/DD/YYYY
-        date_pattern = r'^\d{1,2}/\d{1,2}/\d{4}$'
-        
-        # Look for second date (notification date is usually after transaction date)
-        dates_found = []
-        for col in [col1, col2, col3, col4]:
-            if re.match(date_pattern, col.strip()):
-                dates_found.append(col.strip())
-        
-        if len(dates_found) >= 2:
-            return dates_found[1]  # Return second date found
-        elif len(dates_found) == 1:
-            return dates_found[0]  # Return the only date found
-        
-        # Don't provide fallback - return blank if no valid date found
-        return ""
-    
-    def _extract_amount(self, col1: str, col2: str, col3: str, col4: str) -> str:
-        """
-        Extract amount from potentially malformed columns.
-        Look for dollar amount patterns like $1,001 or $15,001.
-        Prefers blank over wrong data.
-        """
-        import re
-        
-        # Only accept proper dollar amount format
-        amount_pattern = r'^\$[\d,]+$'
-        
-        for col in [col1, col2, col3, col4]:
-            if re.match(amount_pattern, col.strip()):
-                return col.strip()
-        
-        # Don't provide fallback - return blank if no valid amount found
-        return ""
-    
-    def _extract_asset_description(self, row: pd.Series) -> str:
-        """
-        Extract asset description from the row data.
-        """
-        asset = str(row['Asset']).strip() if 'Asset' in row and pd.notna(row['Asset']) else ""
-        ticker = str(row['Ticker']).strip() if 'Ticker' in row and pd.notna(row['Ticker']) else ""
-        description = str(row['Description']).strip() if 'Description' in row and pd.notna(row['Description']) else ""
-        
-        # Combine available information
-        parts = []
-        if asset:
-            parts.append(asset)
-        if ticker:
-            parts.append(f"({ticker})")
-        if description:
-            parts.append(description)
-        
-        return " - ".join(parts) if parts else "Unknown Asset"
-
-    def _parse_date_string(self, date_str: str) -> Optional[date]:
-        """
-        Parse date string in MM/DD/YYYY format to date object.
-        Returns None if parsing fails.
-        """
-        if not date_str or date_str.strip() == '':
-            return None
-        
-        try:
-            from datetime import datetime
-            # Parse MM/DD/YYYY format
-            return datetime.strptime(date_str.strip(), '%m/%d/%Y').date()
-        except ValueError:
-            return None
-
-    def _parse_amount_to_fields(self, amount_str: str) -> Tuple[Optional[int], Optional[int]]:
-        """
-        Parse amount string into min and max cents.
-        Enhanced version that handles ranges like $1,001 - $15,000 with garbage character removal.
-        """
-        if not amount_str or pd.isna(amount_str):
-            return None, None
-
-        # Use the enhanced parsing from _parse_amount_range method
-        return self._parse_amount_range(amount_str)
-
-    def _find_or_create_security(self, ticker: str, asset_description: str) -> Optional[int]:
-        """
-        Find existing security or create new one.
-        Returns security_id if found/created, None if failed.
-        """
-        if not ticker or ticker.strip() == '':
+        """Parse date string with multiple format support."""
+        if not date_str:
             return None
             
-        try:
-            # Clean ticker
-            ticker = ticker.strip().upper()
-            
-            # Try to find existing security
-            security = self.security_crud.get_by_ticker(ticker)
-            if security:
-                logger.debug(f"Found existing security: {ticker}")
-                return security.id
-            
-            # Extract asset name and type from description
-            asset_name, asset_type = self._extract_asset_info(asset_description, ticker)
-            
-            # Create new security
-            security_data = SecurityCreate(
-                ticker=ticker,
-                name=asset_name,
-                asset_type_id=self._get_asset_type_id(asset_type),
-                currency="USD",
-                is_active=True
-            )
-            
-            security = self.security_crud.create(security_data)
-            logger.info(f"Created new security: {ticker} - {asset_name}")
-            return security.id
-            
-        except Exception as e:
-            logger.error(f"Failed to find/create security for ticker {ticker}: {e}")
-            return None
-
-    def _extract_asset_info(self, description: str, ticker: str) -> Tuple[str, str]:
-        """
-        Extract asset name and type from raw description.
-        Returns (asset_name, asset_type).
-        """
-        if not description:
-            return f"Unknown Asset ({ticker})", "Stock"
-        
-        description = description.lower()
-        
-        # Determine asset type based on description keywords
-        if any(keyword in description for keyword in ['bond', 'treasury', 'municipal', 'note']):
-            asset_type = "Bond"
-        elif any(keyword in description for keyword in ['option', 'call', 'put']):
-            asset_type = "Option"
-        elif any(keyword in description for keyword in ['etf', 'fund']):
-            asset_type = "ETF"
-        elif any(keyword in description for keyword in ['reit']):
-            asset_type = "REIT"
-        else:
-            asset_type = "Stock"
-        
-        # Extract asset name - clean up common patterns
-        asset_name = description.title()
-        
-        # Remove common suffixes that aren't part of the name
-        suffixes_to_remove = [
-            " Common Stock", " Common", " Inc.", " Corp.", " Corporation",
-            " Class A", " Class B", " Ordinary Shares", " American Depositary",
-            " S/ADR", " ADR"
+        # Common date formats
+        formats = [
+            '%Y-%m-%d',
+            '%m/%d/%Y',
+            '%d/%m/%Y',
+            '%Y-%m-%d %H:%M:%S',
+            '%m/%d/%Y %H:%M:%S'
         ]
         
-        for suffix in suffixes_to_remove:
-            if asset_name.endswith(suffix):
-                asset_name = asset_name[:-len(suffix)]
-                break
+        for fmt in formats:
+            try:
+                return datetime.strptime(date_str.strip(), fmt).date()
+            except ValueError:
+                continue
+                
+        logger.warning(f"Could not parse date: {date_str}")
+        return None
+    
+    def _process_batch(self, batch: List[TradeRecord]):
+        """Process a batch of trade records with transaction management."""
+        logger.info(f"Processing batch of {len(batch)} records")
         
-        # Limit length
-        if len(asset_name) > 200:
-            asset_name = asset_name[:200].strip()
-        
-        return asset_name, asset_type
-
-    def _get_asset_type_id(self, asset_type: str) -> Optional[int]:
-        """
-        Get asset type ID from the asset_types table.
-        Creates asset type if it doesn't exist.
-        """
         try:
-            # Try to find existing asset type
-            from sqlalchemy import select
-            result = self.session.execute(
-                select(AssetType).where(AssetType.name == asset_type)
-            )
-            asset_type_obj = result.scalar_one_or_none()
+            processed_trades = []
             
-            if asset_type_obj:
-                return asset_type_obj.id
+            for trade_record in batch:
+                processed_trade = self._process_single_trade(trade_record)
+                if processed_trade:
+                    processed_trades.append(processed_trade)
+                    
+            # Insert valid trades
+            valid_trades = [t for t in processed_trades if t.is_valid]
+            self._insert_trades(valid_trades)
             
-            # Create new asset type if not found
-            from domains.securities.schemas import AssetTypeCreate
-            asset_type_data = AssetTypeCreate(
-                code=asset_type[:5].upper(),
-                name=asset_type,
-                description=f"Auto-created asset type for {asset_type}",
-                category=asset_type.lower()
-            )
+            # Update statistics
+            self.statistics.records_processed += len(batch)
+            self.statistics.records_successful += len(valid_trades)
+            self.statistics.records_failed += len(batch) - len(valid_trades)
             
-            new_asset_type = self.asset_type_crud.create(asset_type_data)
-            logger.info(f"Created new asset type: {asset_type}")
-            return new_asset_type.id
+            # Log batch summary
+            logger.info(f"Batch processed: {len(valid_trades)}/{len(batch)} successful")
             
         except Exception as e:
-            logger.error(f"Failed to get/create asset type {asset_type}: {e}")
+            logger.error(f"Error processing batch: {e}")
+            self.statistics.processing_errors += 1
+            # Rollback handled by session_scope context manager
+            
+    def _process_single_trade(self, trade_record: TradeRecord) -> Optional[ProcessedTrade]:
+        """Process a single trade record with quality enhancement."""
+        try:
+            # Get member ID
+            member_id = self._resolve_member_id(trade_record.member_name)
+            if not member_id:
+                logger.warning(f"Could not resolve member: {trade_record.member_name}")
+                return None
+                
+            # Enhance ticker extraction
+            ticker_result = self.data_quality.extract_ticker(trade_record.raw_asset_description)
+            
+            # Normalize amount
+            amount_result = self.data_quality.normalize_amount(trade_record.amount)
+            
+            # Normalize owner
+            owner_result = self.data_quality.normalize_owner(trade_record.owner)
+            
+            # Resolve security ID
+            security_id = None
+            if ticker_result.ticker:
+                security_id = self._resolve_security_id(ticker_result.ticker)
+                
+            # Create processed trade
+            processed_trade = ProcessedTrade(
+                doc_id=trade_record.doc_id,
+                member_id=member_id,
+                raw_asset_description=trade_record.raw_asset_description,
+                transaction_type=trade_record.transaction_type,
+                transaction_date=trade_record.transaction_date,
+                notification_date=trade_record.notification_date,
+                owner=owner_result.normalized_owner,
+                amount_min=amount_result.amount_min,
+                amount_max=amount_result.amount_max,
+                amount_exact=amount_result.amount_exact,
+                filing_status=self._parse_filing_status(trade_record.filing_status),
+                comment=trade_record.comment,
+                cap_gains_over_200=trade_record.cap_gains_over_200,
+                ticker=ticker_result.ticker,
+                asset_name=ticker_result.asset_name,
+                asset_type=ticker_result.asset_type,
+                security_id=security_id,
+                ticker_confidence=ticker_result.confidence,
+                amount_confidence=amount_result.confidence,
+                parsed_successfully=True,
+                parsing_notes=ticker_result.notes + amount_result.notes + owner_result.notes
+            )
+            
+            # Validate trade
+            self._validate_trade(processed_trade)
+            
+            return processed_trade
+            
+        except Exception as e:
+            logger.error(f"Error processing trade: {e}")
             return None
-
-    def normalize_ticker(self, ticker: str) -> str:
+    
+    def _resolve_member_id(self, member_name: str) -> Optional[int]:
+        """Resolve member name to ID with fuzzy matching."""
+        if not member_name:
+            return None
+            
+        # Try exact match first
+        normalized_name = member_name.upper().strip()
+        if normalized_name in self.member_mapping:
+            return self.member_mapping[normalized_name]
+            
+        # Try fuzzy matching
+        best_match = process.extractOne(
+            normalized_name,
+            self.member_mapping.keys(),
+            scorer=fuzz.ratio,
+            score_cutoff=80
+        )
+        
+        if best_match:
+            logger.info(f"Fuzzy matched member: {member_name} -> {best_match[0]}")
+            return self.member_mapping[best_match[0]]
+            
+        return None
+    
+    def _resolve_security_id(self, ticker: str) -> Optional[int]:
+        """Resolve ticker to security ID."""
         if not ticker:
-            return ""
-        return ticker.replace('.', '-').upper().strip()
-
-
-# Main import functions for scripts
-
-async def import_congressional_data_from_csvs(session: AsyncSession, 
-                                            csv_directory: str) -> Dict[str, int]:
-    """
-    Main function to import congressional data from CSV files.
+            return None
+            
+        ticker_upper = ticker.upper()
+        security = self.ticker_to_security.get(ticker_upper)
+        return security.id if security else None
     
-    Args:
-        session: Database session
-        csv_directory: Path to directory containing CSV files
+    def _parse_filing_status(self, status: str) -> Optional[FilingStatus]:
+        """Parse filing status string."""
+        if not status:
+            return None
+            
+        status_map = {
+            'N': FilingStatus.NEW,
+            'P': FilingStatus.PARTIAL,
+            'A': FilingStatus.AMENDMENT,
+            'NEW': FilingStatus.NEW,
+            'PARTIAL': FilingStatus.PARTIAL,
+            'AMENDMENT': FilingStatus.AMENDMENT,
+        }
         
-    Returns:
-        Dict with import statistics
-    """
-    ingester = CongressionalDataIngester(session)
-    return await ingester.import_congressional_data_from_csvs(csv_directory)
-
-
-async def import_congressional_data_from_sqlite(session: AsyncSession,
-                                              sqlite_path: str) -> Dict[str, int]:
-    """
-    Main function to import congressional data from SQLite database.
+        return status_map.get(status.upper())
     
-    Args:
-        session: Database session
-        sqlite_path: Path to SQLite database file
+    def _validate_trade(self, trade: ProcessedTrade):
+        """Validate a processed trade record."""
+        errors = []
         
-    Returns:
-        Dict with import statistics
-    """
-    ingester = CongressionalDataIngester(session)
-    return await ingester.import_from_sqlite_database(sqlite_path)
-
-
-async def enrich_member_profiles(session: AsyncSession) -> Dict[str, int]:
-    """
-    Main function to enrich member profile data from external APIs.
+        # Required fields
+        if not trade.doc_id:
+            errors.append("Missing document ID")
+        if not trade.member_id:
+            errors.append("Missing member ID")
+        if not trade.transaction_date:
+            errors.append("Missing transaction date")
+        if not trade.transaction_type:
+            errors.append("Missing transaction type")
+            
+        # Transaction type validation
+        if trade.transaction_type not in ['P', 'S', 'E']:
+            errors.append(f"Invalid transaction type: {trade.transaction_type}")
+            
+        # Amount validation
+        if not any([trade.amount_min, trade.amount_max, trade.amount_exact]):
+            errors.append("Missing amount information")
+            
+        # Owner validation
+        if not trade.owner:
+            errors.append("Missing owner information")
+            
+        # Date validation
+        if trade.notification_date and trade.transaction_date:
+            if trade.notification_date < trade.transaction_date:
+                errors.append("Notification date cannot be before transaction date")
+                
+        trade.validation_errors = errors
+        trade.is_valid = len(errors) == 0
     
-    Args:
-        session: Database session
+    def _insert_trades(self, trades: List[ProcessedTrade]):
+        """Insert processed trades into database."""
+        if not trades:
+            return
+            
+        for trade in trades:
+            try:
+                # Check for duplicate
+                existing = self.session.query(CongressionalTrade).filter(
+                    CongressionalTrade.doc_id == trade.doc_id,
+                    CongressionalTrade.member_id == trade.member_id,
+                    CongressionalTrade.transaction_date == trade.transaction_date,
+                    CongressionalTrade.raw_asset_description == trade.raw_asset_description
+                ).first()
+                
+                if existing:
+                    logger.debug(f"Duplicate trade found, skipping: {trade.doc_id}")
+                    continue
+                    
+                # Create database record
+                db_trade = CongressionalTrade(
+                    doc_id=trade.doc_id,
+                    member_id=trade.member_id,
+                    security_id=trade.security_id,
+                    raw_asset_description=trade.raw_asset_description,
+                    ticker=trade.ticker,
+                    asset_name=trade.asset_name,
+                    asset_type=trade.asset_type,
+                    transaction_type=trade.transaction_type,
+                    transaction_date=trade.transaction_date,
+                    notification_date=trade.notification_date,
+                    owner=trade.owner.value if trade.owner else None,
+                    amount_min=trade.amount_min,
+                    amount_max=trade.amount_max,
+                    amount_exact=trade.amount_exact,
+                    filing_status=trade.filing_status.value if trade.filing_status else None,
+                    comment=trade.comment,
+                    cap_gains_over_200=trade.cap_gains_over_200,
+                    ticker_confidence=trade.ticker_confidence,
+                    amount_confidence=trade.amount_confidence,
+                    parsed_successfully=trade.parsed_successfully,
+                    parsing_notes='; '.join(trade.parsing_notes) if trade.parsing_notes else None
+                )
+                
+                self.session.add(db_trade)
+                
+            except Exception as e:
+                logger.error(f"Error inserting trade: {e}")
+                continue
+                
+        # Commit the batch
+        self.session.commit()
+        logger.info(f"Inserted {len(trades)} trades")
+    
+    def _generate_quality_report(self) -> QualityReport:
+        """Generate comprehensive quality report."""
+        return QualityReport(
+            total_records=self.statistics.records_processed,
+            successful_records=self.statistics.records_successful,
+            failed_records=self.statistics.records_failed,
+            processing_errors=self.statistics.processing_errors,
+            ticker_extraction_rate=self._calculate_ticker_extraction_rate(),
+            amount_parsing_rate=self._calculate_amount_parsing_rate(),
+            owner_normalization_rate=self._calculate_owner_normalization_rate(),
+            duplicate_count=self._count_duplicates(),
+            processing_time=self.statistics.processing_time_seconds,
+            recommendations=self._generate_recommendations()
+        )
+    
+    def _calculate_ticker_extraction_rate(self) -> float:
+        """Calculate ticker extraction success rate."""
+        if not self.session:
+            return 0.0
+            
+        total_trades = self.session.query(CongressionalTrade).count()
+        trades_with_ticker = self.session.query(CongressionalTrade).filter(
+            CongressionalTrade.ticker.isnot(None)
+        ).count()
         
-    Returns:
-        Dict with enrichment statistics
-    """
-    ingester = CongressionalDataIngester(session)
-    return await ingester.enrich_member_data() 
+        return (trades_with_ticker / total_trades) * 100 if total_trades > 0 else 0.0
+    
+    def _calculate_amount_parsing_rate(self) -> float:
+        """Calculate amount parsing success rate."""
+        if not self.session:
+            return 0.0
+            
+        total_trades = self.session.query(CongressionalTrade).count()
+        trades_with_amount = self.session.query(CongressionalTrade).filter(
+            or_(
+                CongressionalTrade.amount_min.isnot(None),
+                CongressionalTrade.amount_max.isnot(None),
+                CongressionalTrade.amount_exact.isnot(None)
+            )
+        ).count()
+        
+        return (trades_with_amount / total_trades) * 100 if total_trades > 0 else 0.0
+    
+    def _calculate_owner_normalization_rate(self) -> float:
+        """Calculate owner normalization success rate."""
+        if not self.session:
+            return 0.0
+            
+        total_trades = self.session.query(CongressionalTrade).count()
+        trades_with_valid_owner = self.session.query(CongressionalTrade).filter(
+            CongressionalTrade.owner.in_(['C', 'SP', 'JT', 'DC'])
+        ).count()
+        
+        return (trades_with_valid_owner / total_trades) * 100 if total_trades > 0 else 0.0
+    
+    def _count_duplicates(self) -> int:
+        """Count duplicate trades in database."""
+        if not self.session:
+            return 0
+            
+        # Count trades with identical key fields
+        query = text("""
+            SELECT COUNT(*) - COUNT(DISTINCT doc_id, member_id, transaction_date, raw_asset_description)
+            FROM congressional_trades
+        """)
+        
+        result = self.session.execute(query).scalar()
+        return result or 0
+    
+    def _generate_recommendations(self) -> List[str]:
+        """Generate recommendations based on quality metrics."""
+        recommendations = []
+        
+        ticker_rate = self._calculate_ticker_extraction_rate()
+        amount_rate = self._calculate_amount_parsing_rate()
+        owner_rate = self._calculate_owner_normalization_rate()
+        
+        if ticker_rate < 80:
+            recommendations.append("Consider expanding ticker extraction patterns")
+        if amount_rate < 95:
+            recommendations.append("Review amount parsing logic for edge cases")
+        if owner_rate < 99:
+            recommendations.append("Investigate owner field data quality issues")
+        if self.statistics.processing_errors > 0:
+            recommendations.append("Review processing errors and improve error handling")
+            
+        return recommendations
+    
+    def export_problematic_records(self, output_path: str):
+        """Export problematic records to CSV for manual review."""
+        logger.info(f"Exporting problematic records to: {output_path}")
+        
+        with db_manager.session_scope() as session:
+            # Query problematic records
+            problematic_trades = session.query(CongressionalTrade).filter(
+                or_(
+                    CongressionalTrade.ticker.is_(None),
+                    CongressionalTrade.amount_min.is_(None),
+                    CongressionalTrade.amount_max.is_(None),
+                    CongressionalTrade.owner.notin_(['C', 'SP', 'JT', 'DC']),
+                    CongressionalTrade.parsed_successfully == False
+                )
+            ).all()
+            
+            # Export to CSV
+            with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
+                fieldnames = [
+                    'id', 'doc_id', 'member_id', 'raw_asset_description',
+                    'ticker', 'asset_name', 'transaction_type', 'transaction_date',
+                    'owner', 'amount_min', 'amount_max', 'amount_exact',
+                    'ticker_confidence', 'amount_confidence', 'parsing_notes'
+                ]
+                
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                
+                for trade in problematic_trades:
+                    writer.writerow({
+                        'id': trade.id,
+                        'doc_id': trade.doc_id,
+                        'member_id': trade.member_id,
+                        'raw_asset_description': trade.raw_asset_description,
+                        'ticker': trade.ticker,
+                        'asset_name': trade.asset_name,
+                        'transaction_type': trade.transaction_type,
+                        'transaction_date': trade.transaction_date,
+                        'owner': trade.owner,
+                        'amount_min': trade.amount_min,
+                        'amount_max': trade.amount_max,
+                        'amount_exact': trade.amount_exact,
+                        'ticker_confidence': trade.ticker_confidence,
+                        'amount_confidence': trade.amount_confidence,
+                        'parsing_notes': trade.parsing_notes
+                    })
+                    
+        logger.info(f"Exported {len(problematic_trades)} problematic records")
+
+    def import_congressional_data_from_csvs_sync(self, csv_directory: str) -> Dict[str, Any]:
+        """
+        Import congressional data from CSV files in a directory (synchronous version).
+        
+        Args:
+            csv_directory: Path to directory containing CSV files
+            
+        Returns:
+            Dictionary with import results and statistics
+        """
+        import os
+        from pathlib import Path
+        
+        logger.info(f"Starting CSV import from directory: {csv_directory}")
+        
+        csv_dir = Path(csv_directory)
+        if not csv_dir.exists():
+            raise FileNotFoundError(f"CSV directory not found: {csv_directory}")
+        
+        # Find all CSV files
+        csv_files = list(csv_dir.glob("*.csv"))
+        if not csv_files:
+            logger.warning(f"No CSV files found in directory: {csv_directory}")
+            return {"status": "no_files", "files_processed": 0}
+        
+        # Process each CSV file
+        results = {
+            "status": "success",
+            "files_processed": 0,
+            "total_records": 0,
+            "successful_records": 0,
+            "failed_records": 0,
+            "processing_errors": 0,
+            "files": []
+        }
+        
+        # Use external session if provided, otherwise create session scope
+        if self.external_session:
+            session_context = self.external_session
+            should_close = False
+        else:
+            session_context = db_manager.session_scope()
+            should_close = True
+        
+        try:
+            if should_close:
+                session_context = session_context.__enter__()
+            
+            self.session = session_context
+            
+            for csv_file in csv_files:
+                try:
+                    logger.info(f"Processing CSV file: {csv_file.name}")
+                    
+                    # Process the file
+                    report = self.process_csv_file(str(csv_file))
+                    
+                    # Update results
+                    results["files_processed"] += 1
+                    results["total_records"] += report.total_records
+                    results["successful_records"] += report.successful_records
+                    results["failed_records"] += report.failed_records
+                    results["processing_errors"] += report.processing_errors
+                    
+                    # Add file-specific results
+                    results["files"].append({
+                        "filename": csv_file.name,
+                        "total_records": report.total_records,
+                        "successful_records": report.successful_records,
+                        "failed_records": report.failed_records,
+                        "ticker_extraction_rate": report.ticker_extraction_rate,
+                        "amount_parsing_rate": report.amount_parsing_rate,
+                        "owner_normalization_rate": report.owner_normalization_rate
+                    })
+                    
+                    logger.info(f"Completed processing {csv_file.name}: {report.successful_records}/{report.total_records} successful")
+                    
+                except Exception as e:
+                    logger.error(f"Error processing CSV file {csv_file.name}: {e}")
+                    results["processing_errors"] += 1
+                    results["files"].append({
+                        "filename": csv_file.name,
+                        "error": str(e)
+                    })
+            
+            if should_close:
+                session_context.__exit__(None, None, None)
+                
+        except Exception as e:
+            if should_close:
+                session_context.__exit__(type(e), e, e.__traceback__)
+            raise
+        finally:
+            self.session = None
+        
+        logger.info(f"CSV import completed: {results['successful_records']}/{results['total_records']} records successful")
+        return results
+
+    def enrich_member_data_sync(self) -> Dict[str, Any]:
+        """
+        Enrich existing member data with additional information (synchronous version).
+        
+        Returns:
+            Dictionary with enrichment results
+        """
+        logger.info("Starting member data enrichment")
+        
+        # Use external session if provided, otherwise create session scope
+        if self.external_session:
+            session_context = self.external_session
+            should_close = False
+        else:
+            session_context = db_manager.session_scope()
+            should_close = True
+        
+        results = {
+            "status": "success",
+            "members_processed": 0,
+            "members_enriched": 0,
+            "errors": 0,
+            "enrichment_details": []
+        }
+        
+        try:
+            if should_close:
+                session_context = session_context.__enter__()
+            
+            self.session = session_context
+            
+            # Get all members
+            members = self.session.query(CongressMember).all()
+            logger.info(f"Found {len(members)} members to enrich")
+            
+            for member in members:
+                try:
+                    results["members_processed"] += 1
+                    
+                    # Basic enrichment - this could be expanded with more data sources
+                    enriched = False
+                    
+                    # Example: Normalize member names
+                    if member.full_name:
+                        original_name = member.full_name
+                        normalized_name = self._normalize_member_name(member.full_name)
+                        if normalized_name != original_name:
+                            member.full_name = normalized_name
+                            enriched = True
+                    
+                    # Example: Populate missing fields from existing data
+                    if not member.display_name and member.full_name:
+                        member.display_name = member.full_name
+                        enriched = True
+                    
+                    # Example: Update party affiliation formatting
+                    if member.party:
+                        normalized_party = member.party.upper().strip()
+                        if normalized_party != member.party:
+                            member.party = normalized_party
+                            enriched = True
+                    
+                    if enriched:
+                        results["members_enriched"] += 1
+                        results["enrichment_details"].append({
+                            "member_id": member.id,
+                            "name": member.full_name,
+                            "changes": "Normalized name and party data"
+                        })
+                        logger.debug(f"Enriched member: {member.full_name}")
+                    
+                except Exception as e:
+                    logger.error(f"Error enriching member {member.id}: {e}")
+                    results["errors"] += 1
+            
+            # Commit changes
+            self.session.commit()
+            
+            if should_close:
+                session_context.__exit__(None, None, None)
+                
+        except Exception as e:
+            if should_close:
+                session_context.__exit__(type(e), e, e.__traceback__)
+            raise
+        finally:
+            self.session = None
+        
+        logger.info(f"Member enrichment completed: {results['members_enriched']}/{results['members_processed']} members enriched")
+        return results
+
+    def _normalize_member_name(self, name: str) -> str:
+        """Normalize member name format."""
+        if not name:
+            return name
+        
+        # Basic normalization
+        normalized = name.strip()
+        
+        # Remove extra whitespace
+        normalized = ' '.join(normalized.split())
+        
+        # Standardize title case
+        normalized = normalized.title()
+        
+        # Handle common name patterns
+        normalized = normalized.replace("Mc ", "Mc")
+        normalized = normalized.replace("O'", "O'")
+        
+        return normalized
+
+
+def main():
+    """Main ingestion function for CLI usage."""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Congressional data ingestion')
+    parser.add_argument('csv_file', help='Path to CSV file to import')
+    parser.add_argument('--batch-size', type=int, default=100, help='Batch size for processing')
+    parser.add_argument('--export-problems', help='Export problematic records to CSV')
+    
+    args = parser.parse_args()
+    
+    # Initialize ingestion
+    ingestion = CongressionalDataIngestion(batch_size=args.batch_size)
+    
+    # Process file
+    report = ingestion.process_csv_file(args.csv_file)
+    
+    # Print summary
+    print(f"\n=== Import Summary ===")
+    print(f"Total records: {report.total_records}")
+    print(f"Successful: {report.successful_records}")
+    print(f"Failed: {report.failed_records}")
+    print(f"Processing time: {report.processing_time:.2f} seconds")
+    print(f"Ticker extraction rate: {report.ticker_extraction_rate:.1f}%")
+    print(f"Amount parsing rate: {report.amount_parsing_rate:.1f}%")
+    print(f"Owner normalization rate: {report.owner_normalization_rate:.1f}%")
+    
+    if report.recommendations:
+        print(f"\n=== Recommendations ===")
+        for rec in report.recommendations:
+            print(f"- {rec}")
+    
+    # Export problematic records if requested
+    if args.export_problems:
+        ingestion.export_problematic_records(args.export_problems)
+
+
+if __name__ == "__main__":
+    main()

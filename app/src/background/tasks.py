@@ -19,7 +19,7 @@ from domains.congressional.crud import (
     CongressMemberRepository, CongressionalTradeRepository,
     MemberPortfolioRepository, MemberPortfolioPerformanceRepository
 )
-from domains.congressional.ingestion import CongressionalDataIngester
+from domains.congressional.ingestion import CongressionalDataIngestion
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
     ingest_price_data_for_all_securities
@@ -869,8 +869,8 @@ def import_congressional_data_csvs(self, csv_directory: str):
         logger.info(f"Starting congressional data import from CSVs", csv_directory=csv_directory)
         
         with get_sync_db_session() as session:
-            logger.debug("Creating CongressionalDataIngester")
-            ingester = CongressionalDataIngester(session)
+            logger.debug("Creating CongressionalDataIngestion")
+            ingester = CongressionalDataIngestion(session)
             logger.debug("Starting CSV import")
             result = ingester.import_congressional_data_from_csvs_sync(csv_directory)
         
@@ -895,8 +895,8 @@ def enrich_congressional_member_data(self):
         logger.info("Starting congressional member data enrichment")
         
         with get_sync_db_session() as session:
-            logger.debug("Creating CongressionalDataIngester for enrichment")
-            ingester = CongressionalDataIngester(session)
+            logger.debug("Creating CongressionalDataIngestion for enrichment")
+            ingester = CongressionalDataIngestion(session)
             logger.debug("Starting member data enrichment")
             result = ingester.enrich_member_data_sync()
         

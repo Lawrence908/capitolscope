@@ -27,7 +27,7 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from core.config import settings
 from core.database import init_database, close_database
 from core.logging import configure_logging
-from api import trades, members, auth, health, portfolios, market_data, notifications
+from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
@@ -182,6 +182,9 @@ app.include_router(members.router, prefix=f"{settings.API_V1_PREFIX}/members", t
 app.include_router(portfolios.router, prefix=f"{settings.API_V1_PREFIX}/portfolios", tags=["Portfolios"])
 app.include_router(market_data.router, prefix=f"{settings.API_V1_PREFIX}/market-data", tags=["Market Data"])
 app.include_router(notifications.router, prefix=f"{settings.API_V1_PREFIX}/notifications", tags=["Notifications"])
+
+# Development endpoints (remove in production)
+app.include_router(dev_endpoints.router, prefix=f"{settings.API_V1_PREFIX}/congressional", tags=["Development"])
 
 
 @app.get("/")

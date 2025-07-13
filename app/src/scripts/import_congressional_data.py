@@ -27,7 +27,7 @@ sys.path.insert(0, str(app_src_dir))
 
 from core.database import DatabaseManager, init_database, get_sync_db_session
 from core.logging import get_logger
-from domains.congressional.ingestion import CongressionalDataIngester
+from domains.congressional.ingestion import CongressionalDataIngestion
 
 logger = get_logger(__name__)
 
@@ -45,7 +45,7 @@ def import_from_csvs(csv_directory: str) -> Dict[str, Any]:
     
     with get_sync_db_session() as session:
         try:
-            ingester = CongressionalDataIngester(session)
+            ingester = CongressionalDataIngestion(session)
             results = ingester.import_congressional_data_from_csvs_sync(csv_directory)
             logger.info(f"✅ CSV import completed: {results}")
             return results
@@ -93,7 +93,7 @@ def enrich_members() -> Dict[str, Any]:
     
     with get_sync_db_session() as session:
         try:
-            ingester = CongressionalDataIngester(session)
+            ingester = CongressionalDataIngestion(session)
             results = ingester.enrich_member_data_sync()
             logger.info(f"✅ Member enrichment completed: {results}")
             return results

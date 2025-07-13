@@ -216,9 +216,20 @@ class CongressionalDataIngester:
                 
             except Exception as e:
                 logger.error(f"Failed to process {csv_file.name}: {e}")
+                # Rollback any partial changes from this file
+                try:
+                    self.session.rollback()
+                except Exception:
+                    pass
                 continue
         
-        self.session.commit()
+        # Final commit for any remaining member data
+        try:
+            self.session.commit()
+            logger.info("Final commit completed for all remaining data")
+        except Exception as e:
+            logger.error(f"Failed final commit: {e}")
+            self.session.rollback()
         
         result = {
             "csv_files_processed": len(csv_files),
@@ -855,6 +866,8 @@ class CongressionalDataIngester:
             logger.warning(f"Data quality enhancement failed, proceeding with original data: {e}")
         
         skipped_rows = []
+        batch_size = 100  # Commit every 100 records to prevent large transaction failures
+        
         for idx, row in df.iterrows():
             try:
                 # Validate record if validator is available
@@ -947,13 +960,37 @@ class CongressionalDataIngester:
                 self.trade_crud.create(trade_data)
                 created_count += 1
                 
-                if created_count % 100 == 0:
-                    logger.info(f"Processed {created_count} trades from {source_table}")
+                # Commit in batches to prevent large transaction failures
+                if created_count % batch_size == 0:
+                    try:
+                        self.session.commit()
+                        logger.info(f"Committed batch: {created_count} trades from {source_table}")
+                    except Exception as commit_error:
+                        logger.error(f"Failed to commit batch at {created_count}: {commit_error}")
+                        self.session.rollback()
+                        # Continue processing after rollback
+                        failed_count += batch_size  # Count the failed batch
+                        created_count -= batch_size  # Adjust created count
                     
             except Exception as e:
                 logger.warning(f"Failed to import trade at row {idx}: {e}")
                 skipped_rows.append((idx, str(e)))
                 failed_count += 1
+                
+                # Critical: Rollback the transaction if it's in a failed state
+                try:
+                    self.session.rollback()
+                except Exception as rollback_error:
+                    logger.error(f"Failed to rollback transaction at row {idx}: {rollback_error}")
+        
+        # Final commit for any remaining records
+        try:
+            if created_count % batch_size != 0:  # Only commit if there are uncommitted records
+                self.session.commit()
+                logger.info(f"Final commit: {created_count} total trades from {source_table}")
+        except Exception as final_commit_error:
+            logger.error(f"Failed final commit for {source_table}: {final_commit_error}")
+            self.session.rollback()
         if skipped_rows:
             logger.warning(f"Summary of skipped/failed trade rows in {source_table}:")
             for idx, reason in skipped_rows:

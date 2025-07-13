@@ -330,12 +330,16 @@ async def _comprehensive_data_ingestion_async() -> Dict[str, Any]:
         results["enrichment"] = enrich_results
         logger.info("Step 2 completed", results=enrich_results)
         
-        # Step 3: Update stock prices (if we have trades)
-        logger.info("Step 3: Updating stock prices")
-        price_update_results = await _update_stock_prices_async()
-        results["price_updates"] = price_update_results
-        logger.info("Step 3 completed", results=price_update_results)
+        # TODO: Implement stock price update logic
+        # NOTE: Do I implement this here or in the ingestion task?
+        # # Step 3: Update stock prices (if we have trades)
+        # logger.info("Step 3: Updating stock prices")
+        # price_update_results = await _update_stock_prices_async()
+        # results["price_updates"] = price_update_results
+        # logger.info("Step 3 completed", results=price_update_results)
         
+        # TODO: Implement portfolio recalculation logic
+        # NOTE: Do I implement this here or in the ingestion task?
         # Step 4: Recalculate portfolios and performance
         logger.info("Step 4: Recalculating portfolios")
         portfolio_results = await _recalculate_portfolios_async()
@@ -414,6 +418,8 @@ async def _update_stock_prices_async(symbols: Optional[List[str]] = None) -> Dic
     try:
         logger.info("Starting stock price updates", symbols_count=len(symbols) if symbols else None)
         
+        # NOTE: This is a placeholder for the actual stock price update logic.
+        # Do I implement this here or in the ingestion task?
         # TODO: Implement stock price update logic
         # This would typically involve:
         # 1. Querying all unique symbols from congressional trades

@@ -7,6 +7,7 @@ import {
   CogIcon,
   HomeIcon,
 } from '@heroicons/react/24/outline';
+import DarkModeToggle from './DarkModeToggle';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -31,11 +32,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
-        <div className="flex h-16 items-center justify-center border-b border-gray-200">
-          <h1 className="text-xl font-bold text-primary-700">CapitolScope</h1>
+      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transition-colors duration-200">
+        <div className="flex h-16 items-center justify-center border-b border-gray-200 dark:border-gray-700">
+          <h1 className="text-xl font-bold text-primary-700 dark:text-primary-400">CapitolScope</h1>
         </div>
         
         <nav className="mt-8 px-4">
@@ -48,8 +49,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     to={item.href}
                     className={`flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       isActive(item.href)
-                        ? 'bg-primary-100 text-primary-700'
-                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                        ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100'
                     }`}
                   >
                     <Icon className="mr-3 h-5 w-5" />
@@ -65,22 +66,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main content */}
       <div className="ml-64">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900">
+                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
                   {navigation.find(item => isActive(item.href))?.name || 'CapitolScope'}
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   Congressional trading transparency platform
                 </p>
               </div>
               
               <div className="flex items-center space-x-4">
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   Last updated: {new Date().toLocaleDateString()}
                 </div>
+                <DarkModeToggle />
               </div>
             </div>
           </div>

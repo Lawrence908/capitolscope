@@ -99,10 +99,10 @@ const Dashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Welcome header */}
       <div className="card p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           Welcome to CapitolScope
         </h2>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-400">
           Explore congressional trading data with powerful filtering and analytics tools.
         </p>
       </div>
@@ -115,15 +115,19 @@ const Dashboard: React.FC = () => {
             <Link
               key={stat.title}
               to={stat.link}
-              className="card p-6 hover:shadow-lg transition-shadow"
+              className="card p-6 hover:shadow-lg dark:hover:shadow-gray-900/20 transition-all duration-200"
             >
               <div className="flex items-center">
-                <div className={`${stat.color} rounded-md p-3`}>
+                <div className={`${stat.color} p-3 rounded-lg`}>
                   <Icon className="h-6 w-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    {stat.title}
+                  </p>
+                  <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                    {stat.value}
+                  </p>
                 </div>
               </div>
             </Link>
@@ -136,34 +140,34 @@ const Dashboard: React.FC = () => {
         {/* Recent trades */}
         <div className="card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Trades</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Trades</h3>
             <Link
               to="/trades"
-              className="text-sm text-primary-600 hover:text-primary-700"
+              className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               View all →
             </Link>
           </div>
           <div className="space-y-4">
             {recentTrades.map((trade) => (
-              <div key={trade.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+              <div key={trade.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                     {trade.member?.full_name || 'Unknown'}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {trade.ticker ? (
                       <span className="font-mono">{trade.ticker}</span>
                     ) : (
-                      <span className="text-gray-400">No ticker</span>
+                      <span className="text-gray-400 dark:text-gray-500">No ticker</span>
                     )}
                     {' • '}
                     <span className="capitalize">{trade.type}</span>
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-900">{trade.amount}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{trade.amount}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {new Date(trade.transaction_date).toLocaleDateString()}
                   </p>
                 </div>
@@ -175,30 +179,30 @@ const Dashboard: React.FC = () => {
         {/* Top trading members */}
         <div className="card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Top Trading Members</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Top Trading Members</h3>
             <Link
               to="/members"
-              className="text-sm text-primary-600 hover:text-primary-700"
+              className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               View all →
             </Link>
           </div>
           <div className="space-y-4">
             {topMembers.map((member) => (
-              <div key={member.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+              <div key={member.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                     {member.full_name}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {member.party} • {member.state}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-900">
+                  <p className="text-sm text-gray-900 dark:text-gray-100">
                     {member.total_trades || 0} trades
                   </p>
-                  <p className="text-xs text-gray-500">{member.chamber}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{member.chamber}</p>
                 </div>
               </div>
             ))}
@@ -209,14 +213,14 @@ const Dashboard: React.FC = () => {
       {/* Party distribution */}
       {stats && (
         <div className="card p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
             Party Distribution
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {Object.entries(stats.party_distribution).map(([party, count]) => (
               <div key={party} className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{count}</div>
-                <div className="text-sm text-gray-600">{party}</div>
+                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{count}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">{party}</div>
               </div>
             ))}
           </div>

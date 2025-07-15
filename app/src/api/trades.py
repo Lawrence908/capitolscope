@@ -42,21 +42,25 @@ async def get_trades(
     Returns a list of congressional trades with pagination.
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting congressional trades", page=page, per_page=per_page)  # Removed user_id for now
+    logger.info("Getting congressional trades", page=page, per_page=per_page)
     
     try:
         from sqlalchemy import select, func
         
-        # Build base query with member join
+        # Build base query
         query = (
             select(CongressionalTrade)
             .options(joinedload(CongressionalTrade.member))
             .order_by(CongressionalTrade.transaction_date.desc())
         )
         
+        # Track if we need to join with CongressMember
+        needs_join = False
+        
         # Apply filters
         if search:
             search_term = f"%{search}%"
+            needs_join = True
             query = query.filter(
                 or_(
                     CongressionalTrade.raw_asset_description.ilike(search_term),
@@ -67,10 +71,16 @@ async def get_trades(
             )
         
         if party:
-            query = query.join(CongressMember).filter(CongressMember.party == party)
+            needs_join = True
+            query = query.filter(CongressMember.party == party)
         
         if chamber:
-            query = query.join(CongressMember).filter(CongressMember.chamber == chamber)
+            needs_join = True
+            query = query.filter(CongressMember.chamber == chamber)
+        
+        # Apply the join if needed
+        if needs_join:
+            query = query.join(CongressMember)
         
         if type:
             query = query.filter(CongressionalTrade.transaction_type == type)
@@ -87,8 +97,44 @@ async def get_trades(
         if date_to:
             query = query.filter(CongressionalTrade.transaction_date <= date_to)
         
-        # Get total count
+        # Get total count (apply same filters to count query)
         count_query = select(func.count(CongressionalTrade.id))
+        if needs_join:
+            count_query = count_query.join(CongressMember)
+        
+        # Apply same filters to count query
+        if search:
+            search_term = f"%{search}%"
+            count_query = count_query.filter(
+                or_(
+                    CongressionalTrade.raw_asset_description.ilike(search_term),
+                    CongressionalTrade.ticker.ilike(search_term),
+                    CongressionalTrade.asset_name.ilike(search_term),
+                    CongressMember.full_name.ilike(search_term)
+                )
+            )
+        
+        if party:
+            count_query = count_query.filter(CongressMember.party == party)
+        
+        if chamber:
+            count_query = count_query.filter(CongressMember.chamber == chamber)
+        
+        if type:
+            count_query = count_query.filter(CongressionalTrade.transaction_type == type)
+        
+        if ticker:
+            count_query = count_query.filter(CongressionalTrade.ticker == ticker.upper())
+        
+        if owner:
+            count_query = count_query.filter(CongressionalTrade.owner == owner)
+        
+        if date_from:
+            count_query = count_query.filter(CongressionalTrade.transaction_date >= date_from)
+        
+        if date_to:
+            count_query = count_query.filter(CongressionalTrade.transaction_date <= date_to)
+        
         total = await session.scalar(count_query)
         logger.info(f"Total trades: {total}")
         
@@ -122,7 +168,7 @@ async def get_trades(
                 "id": str(trade.id),
                 "member_id": str(trade.member_id),
                 "member": {
-                    "id": trade.member.id if trade.member else None,
+                    "id": str(trade.member.id) if trade.member else None,
                     "full_name": trade.member.full_name if trade.member else "Unknown",
                     "party": trade.member.party if trade.member else None,
                     "state": trade.member.state if trade.member else None,
@@ -165,8 +211,12 @@ async def get_trades(
         
     except Exception as e:
         import traceback
-        logger.error(f"Error fetching trades: {e}")
-        logger.error(f"Traceback: {traceback.format_exc()}")
+        error_msg = f"Error fetching trades: {e}"
+        traceback_msg = f"Traceback: {traceback.format_exc()}"
+        logger.error(error_msg)
+        logger.error(traceback_msg)
+        print(f"DEBUG: {error_msg}")  # Print to console for immediate visibility
+        print(f"DEBUG: {traceback_msg}")  # Print to console for immediate visibility
         return error_response(
             message="Failed to fetch trades",
             error_code="database_error",
@@ -174,63 +224,6 @@ async def get_trades(
         )
 
 
-@router.get("/{trade_id}")
-async def get_trade(
-    trade_id: int,
-    session: AsyncSession = Depends(get_db_session),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
-    """
-    Get a specific congressional trade by ID.
-    **Authenticated Feature**: Requires user authentication.
-    """
-    logger.info("Getting trade by ID", trade_id=trade_id)  # Removed user_id for now
-    
-    # TODO: Implement actual trade retrieval from database
-    data = {
-        "trade_id": trade_id,
-        # "user_tier": current_user.subscription_tier,  # Temporarily disabled
-    }
-    
-    return success_response(
-        data=data,
-        meta={"message": "Trade detail endpoint ready - database models needed"}
-    )
-
-
-@router.get("/member/{member_id}")
-async def get_member_trades(
-    member_id: int,
-    session: AsyncSession = Depends(get_db_session),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
-    """
-    Get trades for a specific congress member.
-    
-    **Authenticated Feature**: Requires user authentication.
-    """
-    logger.info("Getting trades for member", member_id=member_id, skip=skip, limit=limit)  # Removed user_id for now
-    
-    # Enhanced features for authenticated users
-    # premium_features = current_user.is_premium  # Temporarily disabled
-    
-    # TODO: Implement actual member trade retrieval from database
-    data = {
-        "member_id": member_id,
-        "trades": [],
-        "total": 0,
-        "skip": skip,
-        "limit": limit,
-        # "premium_features": premium_features,  # Temporarily disabled
-        # "user_tier": current_user.subscription_tier,  # Temporarily disabled
-    }
-    
-    return success_response(
-        data=data,
-        meta={"message": "Member trades endpoint ready - database models needed"}
-    )
 
 
 @router.get("/analytics/advanced")
@@ -437,32 +430,6 @@ async def delete_trade(
     )
 
 
-@router.post("/{trade_id}/flag")
-async def flag_trade(
-    trade_id: int,
-    session: AsyncSession = Depends(get_db_session),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
-    """
-    Flag a trade for review.
-    
-    **Authenticated Feature**: Requires user authentication.
-    """
-    logger.info("Flagging trade", trade_id=trade_id)  # Removed user_id for now
-    
-    # TODO: Implement trade flagging
-    data = {
-        "trade_id": trade_id,
-        # "flagged_by": current_user.id,  # Temporarily disabled
-        "flagged_at": "2024-01-01T00:00:00Z",
-    }
-    
-    return success_response(
-        data=data,
-        meta={"message": "Trade flagged for review"}
-    ) 
-
-
 @router.get("/data-quality/stats")
 async def get_data_quality_stats(
     session: AsyncSession = Depends(get_db_session),
@@ -589,3 +556,89 @@ async def test_trades(
             "status": "error",
             "error": str(e)
         }) 
+        
+        
+        
+@router.get("/member/{member_id}")
+async def get_member_trades(
+    member_id: str,  # Changed from int to str to accept UUID
+    session: AsyncSession = Depends(get_db_session),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
+) -> JSONResponse:
+    """
+    Get trades for a specific congress member.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info("Getting trades for member", member_id=member_id, skip=skip, limit=limit)
+    
+    # Enhanced features for authenticated users
+    # premium_features = current_user.is_premium  # Temporarily disabled
+    
+    # TODO: Implement actual member trade retrieval from database
+    data = {
+        "member_id": member_id,
+        "trades": [],
+        "total": 0,
+        "skip": skip,
+        "limit": limit,
+        # "premium_features": premium_features,  # Temporarily disabled
+        # "user_tier": current_user.subscription_tier,  # Temporarily disabled
+    }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Member trades endpoint ready - database models needed"}
+            )
+
+
+@router.get("/{trade_id}")
+async def get_trade(
+    trade_id: int,
+    session: AsyncSession = Depends(get_db_session),
+    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
+) -> JSONResponse:
+    """
+    Get a specific congressional trade by ID.
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info("Getting trade by ID", trade_id=trade_id)
+    
+    # TODO: Implement actual trade retrieval from database
+    data = {
+        "trade_id": trade_id,
+        # "user_tier": current_user.subscription_tier,  # Temporarily disabled
+    }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Trade detail endpoint ready - database models needed"}
+    )
+
+
+@router.post("/{trade_id}/flag")
+async def flag_trade(
+    trade_id: int,
+    session: AsyncSession = Depends(get_db_session),
+    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
+) -> JSONResponse:
+    """
+    Flag a trade for review.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info("Flagging trade", trade_id=trade_id)  # Removed user_id for now
+    
+    # TODO: Implement trade flagging
+    data = {
+        "trade_id": trade_id,
+        # "flagged_by": current_user.id,  # Temporarily disabled
+        "flagged_at": "2024-01-01T00:00:00Z",
+    }
+    
+    return success_response(
+        data=data,
+        meta={"message": "Trade flagged for review"}
+    ) 

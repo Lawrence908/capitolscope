@@ -7,7 +7,7 @@ import {
   ArrowDownIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
-import { CongressionalTrade, TradeFilters, PaginatedResponse } from '../types';
+import type { CongressionalTrade, TradeFilters, PaginatedResponse } from '../types';
 import apiClient from '../services/api';
 
 const TradeBrowser: React.FC = () => {

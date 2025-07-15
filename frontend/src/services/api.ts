@@ -1,5 +1,6 @@
-import axios, { AxiosInstance } from 'axios';
-import {
+import axios from 'axios';
+import type { AxiosInstance } from 'axios';
+import type {
   CongressMember,
   CongressionalTrade,
   PaginatedResponse,
@@ -73,17 +74,17 @@ class APIClient {
       }
     });
 
-    const response = await this.client.get(`/api/v1/congressional/members?${params}`);
+    const response = await this.client.get(`/api/v1/members?${params}`);
     return response.data;
   }
 
   async getMember(id: number): Promise<CongressMember> {
-    const response = await this.client.get(`/api/v1/congressional/members/${id}`);
+    const response = await this.client.get(`/api/v1/members/${id}`);
     return response.data;
   }
 
   async getMemberProfile(id: number): Promise<MemberProfile> {
-    const response = await this.client.get(`/api/v1/congressional/members/${id}/profile`);
+    const response = await this.client.get(`/api/v1/members/${id}/profile`);
     return response.data;
   }
 
@@ -105,7 +106,7 @@ class APIClient {
       }
     });
 
-    const response = await this.client.get(`/api/v1/congressional/trades?${params}`);
+    const response = await this.client.get(`/api/v1/trades?${params}`);
     return response.data;
   }
 
@@ -132,7 +133,7 @@ class APIClient {
 
   // Data Quality
   async getDataQualityStats(): Promise<DataQualityStats> {
-    const response = await this.client.get('/api/v1/congressional/data-quality/stats');
+    const response = await this.client.get('/api/v1/trades/data-quality/stats');
     return response.data;
   }
 
@@ -161,12 +162,12 @@ class APIClient {
 
   // Analytics
   async getTopTradingMembers(limit: number = 10): Promise<CongressMember[]> {
-    const response = await this.client.get(`/api/v1/congressional/analytics/top-trading-members?limit=${limit}`);
+    const response = await this.client.get(`/api/v1/trades/analytics/top-trading-members?limit=${limit}`);
     return response.data;
   }
 
   async getTopTradedTickers(limit: number = 10): Promise<Array<{ ticker: string; count: number; total_value: number }>> {
-    const response = await this.client.get(`/api/v1/congressional/analytics/top-traded-tickers?limit=${limit}`);
+    const response = await this.client.get(`/api/v1/trades/analytics/top-traded-tickers?limit=${limit}`);
     return response.data;
   }
 

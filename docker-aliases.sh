@@ -3,8 +3,8 @@
 # CapitolScope Docker Aliases
 # Source this file in your ~/.bashrc or ~/.zshrc: source /path/to/docker-aliases.sh
 
-# Build and run containers with file watching enabled
-alias capitol-build='docker compose -p capitolscope up --build --watch'
+# Build and run containers with file watching enabled and show logs
+alias capitol-build='docker compose -p capitolscope up --build -d && docker compose -p capitolscope logs -f'
 
 # Display logs for running containers
 alias capitol-logs='docker compose -p capitolscope logs -f'

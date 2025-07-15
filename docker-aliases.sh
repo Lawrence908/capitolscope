@@ -4,28 +4,28 @@
 # Source this file in your ~/.bashrc or ~/.zshrc: source /path/to/docker-aliases.sh
 
 # Build and run containers with file watching enabled
-alias capitol-build='docker-compose -p capitolscope up --build --watch'
+alias capitol-build='docker compose -p capitolscope up --build --watch'
 
 # Display logs for running containers
-alias capitol-logs='docker-compose -p capitolscope logs -f'
+alias capitol-logs='docker compose -p capitolscope logs -f'
 
 # Stop all containers
-alias capitol-stop='docker-compose -p capitolscope down'
+alias capitol-stop='docker compose -p capitolscope down'
 
 # Restart just the main app container
-alias capitol-restart='docker-compose -p capitolscope restart capitolscope'
+alias capitol-restart='docker compose -p capitolscope restart capitolscope'
 
 # Execute bash in the running container
-alias capitol-shell='docker-compose -p capitolscope exec capitolscope bash'
+alias capitol-shell='docker compose -p capitolscope exec capitolscope bash'
 
 # Run database migrations
-alias capitol-migrate='docker-compose -p capitolscope exec capitolscope python -m alembic upgrade head'
+alias capitol-migrate='docker compose -p capitolscope exec capitolscope python -m alembic upgrade head'
 
 # View only app logs
-alias capitol-app-logs='docker-compose -p capitolscope logs -f capitolscope'
+alias capitol-app-logs='docker compose -p capitolscope logs -f capitolscope'
 
 # View only worker logs  
-alias capitol-worker-logs='docker-compose -p capitolscope logs -f worker'
+alias capitol-worker-logs='docker compose -p capitolscope logs -f worker'
 
 echo "CapitolScope Docker aliases loaded:"
 echo "  capitol-build     - Build and run with file watching"

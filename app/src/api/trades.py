@@ -21,64 +21,6 @@ logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/debug")
-async def debug_trades(
-    session: AsyncSession = Depends(get_db_session),
-):
-    """
-    Debug endpoint to test database connection.
-    """
-    try:
-        from sqlalchemy import select, func
-        
-        # Simple count query
-        count_query = select(func.count(CongressionalTrade.id))
-        total = await session.scalar(count_query)
-        
-        # Try to get one trade
-        trade_query = select(CongressionalTrade).limit(1)
-        result = await session.execute(trade_query)
-        trade = result.scalar_one_or_none()
-        
-        if trade:
-            trade_data = {
-                "id": str(trade.id),
-                "ticker": trade.ticker,
-                "transaction_date": trade.transaction_date.isoformat() if trade.transaction_date else None,
-                "owner": trade.owner,
-            }
-        else:
-            trade_data = None
-        
-        return {
-            "status": "success",
-            "total_trades": total,
-            "sample_trade": trade_data,
-            "message": "Database connection working"
-        }
-        
-    except Exception as e:
-        import traceback
-        return {
-            "status": "error",
-            "error": str(e),
-            "traceback": traceback.format_exc()
-        }
-
-
-@router.get("/simple-test")
-async def simple_test() -> JSONResponse:
-    """
-    Simple test endpoint without database.
-    """
-    logger.info("Simple test endpoint called")
-    
-    return JSONResponse(content={
-        "status": "success",
-        "message": "Simple test working"
-    })
-
-
 @router.get("/")
 async def get_trades(
     session: AsyncSession = Depends(get_db_session),
@@ -105,15 +47,30 @@ async def get_trades(
     try:
         from sqlalchemy import select, func
         
-        # Build base query (simplified, working version)
-        query = select(CongressionalTrade).order_by(CongressionalTrade.transaction_date.desc())
+        # Build base query with member join
+        query = (
+            select(CongressionalTrade)
+            .options(joinedload(CongressionalTrade.member))
+            .order_by(CongressionalTrade.transaction_date.desc())
+        )
         
-        # Apply basic filters (without joins for now)
+        # Apply filters
         if search:
             search_term = f"%{search}%"
             query = query.filter(
-                CongressionalTrade.raw_asset_description.ilike(search_term)
+                or_(
+                    CongressionalTrade.raw_asset_description.ilike(search_term),
+                    CongressionalTrade.ticker.ilike(search_term),
+                    CongressionalTrade.asset_name.ilike(search_term),
+                    CongressMember.full_name.ilike(search_term)
+                )
             )
+        
+        if party:
+            query = query.join(CongressMember).filter(CongressMember.party == party)
+        
+        if chamber:
+            query = query.join(CongressMember).filter(CongressMember.chamber == chamber)
         
         if type:
             query = query.filter(CongressionalTrade.transaction_type == type)
@@ -141,7 +98,7 @@ async def get_trades(
         
         # Execute query
         result = await session.execute(query)
-        trades = result.scalars().all()
+        trades = result.scalars().unique().all()
         logger.info(f"Retrieved {len(trades)} trades")
         
         # Convert to response format
@@ -164,7 +121,13 @@ async def get_trades(
             trade_item = {
                 "id": str(trade.id),
                 "member_id": str(trade.member_id),
-                "member": None,  # Temporarily disabled member info
+                "member": {
+                    "id": trade.member.id if trade.member else None,
+                    "full_name": trade.member.full_name if trade.member else "Unknown",
+                    "party": trade.member.party if trade.member else None,
+                    "state": trade.member.state if trade.member else None,
+                    "chamber": trade.member.chamber if trade.member else None,
+                } if trade.member else None,
                 "disclosure_date": trade.notification_date.isoformat() if trade.notification_date else None,
                 "transaction_date": trade.transaction_date.isoformat() if trade.transaction_date else None,
                 "owner": trade.owner,

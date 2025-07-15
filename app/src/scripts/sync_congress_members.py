@@ -4,6 +4,15 @@ Script to sync congressional members from Congress.gov API.
 
 This script fetches member data from the Congress.gov API and updates the database
 with the latest information. It can be run manually or scheduled as a cron job.
+
+Usage:
+    python src/scripts/sync_congress_members.py --action sync-all
+    python src/scripts/sync_congress_members.py --action sync-member --bioguide-id <bioguide_id>
+    python src/scripts/sync_congress_members.py --action sync-state --state <state_code>
+    python src/scripts/sync_congress_members.py --action test-api
+    python src/scripts/sync_congress_members.py --action enrich-existing
+    
+    docker exec -it capitolscope-dev python /app/src/scripts/sync_congress_members.py --action sync-all
 """
 
 import asyncio
@@ -11,16 +20,25 @@ import argparse
 from datetime import datetime, timedelta
 from typing import Dict, Any
 
+from dotenv import load_dotenv
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.config import settings
 from core.database import DatabaseManager
 from core.logging import get_logger
 from domains.congressional.services import CongressAPIService
-from domains.congressional.crud import CongressMemberRepository
+from domains.congressional.crud import (
+    CongressMemberRepository, 
+    CongressionalTradeRepository,
+    MemberPortfolioRepository,
+    MemberPortfolioPerformanceRepository
+)
 from domains.congressional.client import CongressAPIClient
 
 logger = get_logger(__name__)
+
+load_dotenv()
 
 
 async def sync_all_members() -> Dict[str, Any]:
@@ -40,9 +58,19 @@ async def sync_all_members() -> Dict[str, Any]:
         if not db_manager.session_factory:
             raise RuntimeError("Database session factory not initialized")
         async with db_manager.session_factory() as session:
-            # Initialize services
+            # Initialize repositories
             member_repo = CongressMemberRepository(session)
-            api_service = CongressAPIService(member_repo)
+            trade_repo = CongressionalTradeRepository(session)
+            portfolio_repo = MemberPortfolioRepository(session)
+            performance_repo = MemberPortfolioPerformanceRepository(session)
+            
+            # Initialize service with all required repositories
+            api_service = CongressAPIService(
+                member_repo=member_repo,
+                trade_repo=trade_repo,
+                portfolio_repo=portfolio_repo,
+                performance_repo=performance_repo
+            )
             
             # Perform sync
             results = await api_service.sync_all_members()
@@ -77,9 +105,19 @@ async def sync_member_by_bioguide_id(bioguide_id: str) -> Dict[str, Any]:
     
     try:
         async with db_manager.session_factory() as session:
-            # Initialize services
+            # Initialize repositories
             member_repo = CongressMemberRepository(session)
-            api_service = CongressAPIService(member_repo)
+            trade_repo = CongressionalTradeRepository(session)
+            portfolio_repo = MemberPortfolioRepository(session)
+            performance_repo = MemberPortfolioPerformanceRepository(session)
+            
+            # Initialize service with all required repositories
+            api_service = CongressAPIService(
+                member_repo=member_repo,
+                trade_repo=trade_repo,
+                portfolio_repo=portfolio_repo,
+                performance_repo=performance_repo
+            )
             
             # Perform sync
             result = await api_service.sync_member_by_bioguide_id(bioguide_id)
@@ -114,9 +152,19 @@ async def sync_members_by_state(state_code: str) -> Dict[str, Any]:
     
     try:
         async with db_manager.session_factory() as session:
-            # Initialize services
+            # Initialize repositories
             member_repo = CongressMemberRepository(session)
-            api_service = CongressAPIService(member_repo)
+            trade_repo = CongressionalTradeRepository(session)
+            portfolio_repo = MemberPortfolioRepository(session)
+            performance_repo = MemberPortfolioPerformanceRepository(session)
+            
+            # Initialize service with all required repositories
+            api_service = CongressAPIService(
+                member_repo=member_repo,
+                trade_repo=trade_repo,
+                portfolio_repo=portfolio_repo,
+                performance_repo=performance_repo
+            )
             
             # Perform sync
             results = await api_service.sync_members_by_state(state_code)
@@ -174,9 +222,19 @@ async def enrich_existing_members() -> Dict[str, Any]:
     
     try:
         async with db_manager.session_factory() as session:
-            # Initialize services
+            # Initialize repositories
             member_repo = CongressMemberRepository(session)
-            api_service = CongressAPIService(member_repo)
+            trade_repo = CongressionalTradeRepository(session)
+            portfolio_repo = MemberPortfolioRepository(session)
+            performance_repo = MemberPortfolioPerformanceRepository(session)
+            
+            # Initialize service with all required repositories
+            api_service = CongressAPIService(
+                member_repo=member_repo,
+                trade_repo=trade_repo,
+                portfolio_repo=portfolio_repo,
+                performance_repo=performance_repo
+            )
             
             # Get all members with bioguide IDs
             from domains.congressional.schemas import MemberQuery

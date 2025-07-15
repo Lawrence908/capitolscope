@@ -13,6 +13,7 @@ Usage:
     python src/scripts/sync_congress_members.py --action enrich-existing
     
     docker exec -it capitolscope-dev python /app/src/scripts/sync_congress_members.py --action sync-all
+    docker exec -it capitolscope-dev python /app/src/scripts/sync_congress_members.py --action enrich-existing
 """
 
 import asyncio

@@ -898,19 +898,16 @@ class CongressAPIService:
         """
         if not date_str:
             return None
-        
         try:
             # Handle year-only dates
             if len(date_str) == 4 and date_str.isdigit():
+                logger.debug(f"Parsed year-only date: {date_str}")
                 return date(int(date_str), 1, 1)
-            
             # Handle full ISO dates
             if "T" in date_str:
                 return datetime.fromisoformat(date_str.replace("Z", "+00:00")).date()
-            
             # Handle date-only strings
             return datetime.strptime(date_str, "%Y-%m-%d").date()
-            
         except (ValueError, TypeError):
             logger.warning(f"Failed to parse date: {date_str}")
             return None

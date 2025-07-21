@@ -11,7 +11,7 @@ services:
     volumes:
       - ./app/logs:/app/logs
       - ./app/src:/app/src
-      - ./data:/app/data
+      - ./app/data:/app/data
       - ./alembic:/app/alembic
       - ./alembic.ini:/app/alembic.ini
     ports:

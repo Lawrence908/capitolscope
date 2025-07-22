@@ -10,7 +10,11 @@ Usage:
     python scripts/import_congressional_data.py --live  # Fetch live data (10-15 min)
     python scripts/import_congressional_data.py --hybrid # CSVs + latest live data
     
+    
     docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --csvs
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --hybrid
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --live
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --live --years 2025
 """
 
 import asyncio
@@ -266,7 +270,15 @@ async def main():
         
         # Print summary
         print_results_summary(results, mode)
-        
+
+        # Print error summary and export failed records
+        if 'ingester' in locals():
+            ingester.print_error_summary()
+            ingester.export_failed_records()
+        elif 'csv_results' in locals() and hasattr(csv_results, 'print_error_summary'):
+            csv_results.print_error_summary()
+            csv_results.export_failed_records()
+
         # Next steps
         print("\n🎯 NEXT STEPS:")
         print("1. Start the API server:")

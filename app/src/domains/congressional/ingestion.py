@@ -9,7 +9,7 @@ This module handles the import and processing of congressional trade data with f
 """
 
 import re
-import csv
+import csv as pycsv  # Avoid conflict with csv module
 import json
 import logging
 from datetime import datetime, date
@@ -95,6 +95,10 @@ class CongressionalDataIngestion:
         self.data_quality = DataQualityEnhancer()
         self.statistics = ImportStatistics()
         self.external_session = session  # For sync operations
+        # Error collector
+        self.error_counts = {}
+        self.error_samples = {}
+        self.error_records = []
         
         # Load reference data
         self._load_ticker_database()
@@ -107,6 +111,15 @@ class CongressionalDataIngestion:
         self.failed_records = 0
         self.session: Optional[Session] = None
         
+    def record_error(self, category, doc_id, member_name, message, row=None):
+        self.error_counts[category] = self.error_counts.get(category, 0) + 1
+        if category not in self.error_samples:
+            self.error_samples[category] = []
+        if len(self.error_samples[category]) < 5:
+            self.error_samples[category].append({'doc_id': doc_id, 'member_name': member_name, 'message': message})
+        # For CSV export
+        self.error_records.append({'category': category, 'doc_id': doc_id, 'member_name': member_name, 'message': message, 'row': str(row) if row else ''})
+
     def _load_ticker_database(self):
         """Load known ticker symbols from securities table."""
         with db_manager.sync_session_scope() as session:  # Use sync session scope
@@ -241,10 +254,10 @@ class CongressionalDataIngestion:
         try:
             with open(csv_path, 'r', encoding='utf-8') as file:
                 # Detect CSV format
-                dialect = csv.Sniffer().sniff(file.read(1024))
+                dialect = pycsv.Sniffer().sniff(file.read(1024))
                 file.seek(0)
                 
-                reader = csv.DictReader(file, dialect=dialect)
+                reader = pycsv.DictReader(file, dialect=dialect)
                 
                 # Process in batches
                 with db_manager.sync_session_scope() as session:  # Use sync session scope
@@ -274,6 +287,7 @@ class CongressionalDataIngestion:
                                     batch = []
                                     
                         except Exception as e:
+                            self.record_error('parse_error', row.get('DocID', ''), row.get('Member', ''), str(e), row)
                             logger.error(f"Error processing row {row_num}: {e}")
                             self.statistics.processing_errors += 1
                     
@@ -284,6 +298,7 @@ class CongressionalDataIngestion:
                     logger.info(f"Completed processing CSV file. Total rows processed: {total_rows}")
                     
         except Exception as e:
+            self.record_error('parse_error', '', '', str(e), None)
             logger.error(f"Error processing CSV file: {e}")
             self.statistics.processing_errors += 1
             
@@ -315,7 +330,8 @@ class CongressionalDataIngestion:
             notification_date = self._parse_date(row.get('Notification Date', row.get('notification_date', '')))
             
             if not all([doc_id, member_name, raw_asset, transaction_type, transaction_date]):
-                logger.warning(f"Missing required fields in row {row_num}: doc_id={doc_id}, member_name={member_name}, raw_asset={raw_asset}, transaction_type={transaction_type}, transaction_date={transaction_date}")
+                msg = f"Missing required fields: doc_id={doc_id}, member_name={member_name}, raw_asset={raw_asset}, transaction_type={transaction_type}, transaction_date={transaction_date}"
+                self.record_error('missing_field', doc_id, member_name, msg, row)
                 return None
                 
             return TradeRecord(
@@ -335,6 +351,7 @@ class CongressionalDataIngestion:
             )
             
         except Exception as e:
+            self.record_error('parse_error', row.get('DocID', ''), row.get('Member', ''), str(e), row)
             logger.error(f"Error parsing row {row_num}: {e}")
             return None
     
@@ -414,6 +431,7 @@ class CongressionalDataIngestion:
                 # Only log warnings occasionally to reduce spam
                 if self.processed_records % 100 == 0:
                     logger.warning(f"Could not resolve member: {trade_record.member_name}")
+                self.record_error('member_not_found', trade_record.doc_id, trade_record.member_name, 'Could not resolve member', trade_record.source_line)
                 return None
                 
             # Enhance ticker extraction
@@ -461,6 +479,7 @@ class CongressionalDataIngestion:
             return processed_trade
             
         except Exception as e:
+            self.record_error('unknown', getattr(trade_record, 'doc_id', ''), getattr(trade_record, 'member_name', ''), str(e), getattr(trade_record, 'source_line', ''))
             logger.error(f"Error processing trade: {e}")
             return None
     
@@ -716,7 +735,7 @@ class CongressionalDataIngestion:
                     'ticker_confidence', 'amount_confidence', 'parsing_notes'
                 ]
                 
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer = pycsv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
                 
                 for trade in problematic_trades:
@@ -739,6 +758,26 @@ class CongressionalDataIngestion:
                     })
                     
         logger.info(f"Exported {len(problematic_trades)} problematic records")
+
+    def export_failed_records(self, path='failed_imports.csv'):
+        if not self.error_records:
+            return
+        with open(path, 'w', newline='', encoding='utf-8') as csvfile:
+            fieldnames = ['category', 'doc_id', 'member_name', 'message', 'row']
+            writer = pycsv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for rec in self.error_records:
+                writer.writerow(rec)
+
+    def print_error_summary(self):
+        print("\n===== IMPORT ERROR SUMMARY =====")
+        for cat, count in self.error_counts.items():
+            print(f"  {cat}: {count}")
+        print("\nSample errors:")
+        for cat, samples in self.error_samples.items():
+            print(f"  {cat}:")
+            for s in samples:
+                print(f"    - DocID: {s['doc_id']}, Member: {s['member_name']}, Msg: {s['message']}")
 
     def import_congressional_data_from_csvs_sync(self, csv_directory: str) -> Dict[str, Any]:
         """

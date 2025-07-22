@@ -26,6 +26,7 @@ from background.tasks import (
     enrich_congressional_member_data
 )
 from domains.congressional.models import CongressMember
+from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
 logger = get_logger(__name__)
 router = APIRouter()
@@ -33,7 +34,7 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=CongressMemberListResponse,
+    response_model=ResponseEnvelope[PaginatedResponse[CongressMemberSummary]],
     responses={
         200: {"description": "Congressional members retrieved successfully"},
         400: {"description": "Invalid parameters"},
@@ -45,7 +46,7 @@ async def get_members(
     filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(get_current_active_user),
-) -> CongressMemberListResponse:
+) -> ResponseEnvelope[PaginatedResponse[CongressMemberSummary]]:
     """
     Get congressional members with filtering and pagination.
     
@@ -102,30 +103,30 @@ async def get_members(
                 'I': 'Independent'
             }
             
-            member_item = {
-                "id": member.id,
-                "bioguide_id": member.bioguide_id or "",
-                "first_name": member.first_name,
-                "last_name": member.last_name,
-                "full_name": member.full_name,
-                "party": party_map.get(member.party, member.party),
-                "state": member.state,
-                "district": member.district,
-                "chamber": member.chamber,
-                "office": member.office,
-                "phone": member.phone,
-                "url": member.website_url,
-                "image_url": member.image_url,
-                "twitter_account": member.twitter_handle,
-                "facebook_account": member.facebook_url,
-                "youtube_account": None,  # Not in our model
-                "in_office": member.is_active if hasattr(member, 'is_active') else True,
-                "next_election": member.next_election,
-                "total_trades": member.total_trades,
-                "total_value": member.total_value,
-                "created_at": member.created_at.isoformat() if member.created_at else None,
-                "updated_at": member.updated_at.isoformat() if member.updated_at else None,
-            }
+            member_item = CongressMemberSummary(
+                id=member.id,
+                bioguide_id=member.bioguide_id or "",
+                first_name=member.first_name,
+                last_name=member.last_name,
+                full_name=member.full_name,
+                party=party_map.get(member.party, member.party),
+                state=member.state,
+                district=member.district,
+                chamber=member.chamber,
+                office=getattr(member, 'office', None),
+                phone=member.phone,
+                url=member.website_url,
+                image_url=member.image_url,
+                twitter_account=member.twitter_handle,
+                facebook_account=member.facebook_url,
+                youtube_account=None,
+                in_office=getattr(member, 'is_active', True),
+                next_election=getattr(member, 'next_election', None),
+                total_trades=getattr(member, 'total_trades', None),
+                total_value=getattr(member, 'total_value', None),
+                created_at=member.created_at.isoformat() if member.created_at else None,
+                updated_at=member.updated_at.isoformat() if member.updated_at else None,
+            )
             member_items.append(member_item)
         
         # Calculate pagination info
@@ -133,24 +134,24 @@ async def get_members(
         has_next = filters.page < pages
         has_prev = filters.page > 1
         
-        response_data = {
-            "items": member_items,
-            "total": total,
-            "page": filters.page,
-            "per_page": filters.limit,
-            "pages": pages,
-            "has_next": has_next,
-            "has_prev": has_prev,
-        }
+        pagination_meta = PaginationMeta(
+            page=filters.page,
+            per_page=filters.limit,
+            total=total,
+            pages=pages,
+            has_next=has_next,
+            has_prev=has_prev
+        )
+        paginated = PaginatedResponse[CongressMemberSummary](
+            items=member_items,
+            meta=pagination_meta
+        )
         
-        return CongressMemberListResponse(**response_data)
+        return create_response(paginated)
         
     except Exception as e:
         logger.error(f"Error retrieving members: {e}")
-        return error_response(
-            message="Failed to retrieve congressional members",
-            error_code="members_retrieval_failed"
-        )
+        return create_response(None, error="Failed to retrieve congressional members")
 
 
 @router.get(

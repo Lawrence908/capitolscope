@@ -31,24 +31,27 @@ logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=CongressMemberListResponse,
+    responses={
+        200: {"description": "Congressional members retrieved successfully"},
+        400: {"description": "Invalid parameters"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_members(
+    filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
-    page: int = Query(1, ge=1, description="Page number"),
-    per_page: int = Query(50, ge=1, le=100, description="Items per page"),
-    chamber: Optional[str] = Query(None, description="Filter by chamber (House/Senate)"),
-    party: Optional[str] = Query(None, description="Filter by party (D/R/I)"),
-    state: Optional[str] = Query(None, description="Filter by state code"),
-    search: Optional[str] = Query(None, description="Search by name"),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+    # current_user: User = Depends(get_current_active_user),
+) -> CongressMemberListResponse:
     """
     Get congressional members with filtering and pagination.
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting congressional members", page=page, per_page=per_page, 
-               chamber=chamber, party=party, state=state, search=search)  # Removed user_id for now
+    logger.info("Getting congressional members", filters=filters.dict())
     
     try:
         from sqlalchemy import select, func, and_, or_
@@ -58,8 +61,8 @@ async def get_members(
         query = select(CongressMember)
         
         # Apply filters
-        if search:
-            search_term = f"%{search}%"
+        if filters.search:
+            search_term = f"%{filters.search}%"
             query = query.filter(
                 or_(
                     CongressMember.full_name.ilike(search_term),
@@ -68,22 +71,22 @@ async def get_members(
                 )
             )
         
-        if party:
-            query = query.filter(CongressMember.party == party)
+        if filters.party:
+            query = query.filter(CongressMember.party == filters.party)
         
-        if chamber:
-            query = query.filter(CongressMember.chamber == chamber)
+        if filters.chamber:
+            query = query.filter(CongressMember.chamber == filters.chamber)
         
-        if state:
-            query = query.filter(CongressMember.state == state.upper())
+        if filters.state:
+            query = query.filter(CongressMember.state == filters.state.upper())
         
         # Get total count
         count_query = select(func.count()).select_from(query.subquery())
         total = await session.scalar(count_query)
         
         # Apply pagination
-        offset = (page - 1) * per_page
-        query = query.offset(offset).limit(per_page)
+        offset = (filters.page - 1) * filters.limit
+        query = query.offset(offset).limit(filters.limit)
         
         # Execute query
         result = await session.execute(query)
@@ -126,21 +129,21 @@ async def get_members(
             member_items.append(member_item)
         
         # Calculate pagination info
-        pages = (total + per_page - 1) // per_page
-        has_next = page < pages
-        has_prev = page > 1
+        pages = (total + filters.limit - 1) // filters.limit
+        has_next = filters.page < pages
+        has_prev = filters.page > 1
         
         response_data = {
             "items": member_items,
             "total": total,
-            "page": page,
-            "per_page": per_page,
+            "page": filters.page,
+            "per_page": filters.limit,
             "pages": pages,
             "has_next": has_next,
             "has_prev": has_prev,
         }
         
-        return JSONResponse(content=response_data)
+        return CongressMemberListResponse(**response_data)
         
     except Exception as e:
         logger.error(f"Error retrieving members: {e}")
@@ -150,12 +153,22 @@ async def get_members(
         )
 
 
-@router.get("/{member_id}", response_model=CongressMemberDetailResponse)
+@router.get(
+    "/{member_id}",
+    response_model=CongressMemberDetailResponse,
+    responses={
+        200: {"description": "Member details retrieved successfully"},
+        400: {"description": "Invalid member ID"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Member not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_member(
     member_id: int = Path(..., description="Member ID"),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> CongressMemberDetailResponse:
     """
     Get detailed information about a specific congressional member.
     
@@ -193,10 +206,7 @@ async def get_member(
             "premium_features": current_user.is_premium
         }
         
-        return success_response(
-            data=data,
-            meta={"message": "Member details retrieved successfully"}
-        )
+        return CongressMemberDetailResponse(**data)
         
     except Exception as e:
         logger.error(f"Error retrieving member {member_id}: {e}")
@@ -207,39 +217,44 @@ async def get_member(
         )
 
 
-@router.get("/search")
+@router.get(
+    "/search",
+    response_model=CongressMemberListResponse,
+    responses={
+        200: {"description": "Search results for congressional members"},
+        400: {"description": "Invalid search parameters"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def search_members(
-    q: str = Query(..., min_length=1, description="Search query"),
+    filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
-    limit: int = Query(10, ge=1, le=50, description="Number of results"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> CongressMemberListResponse:
     """
     Search congressional members by name or other criteria.
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Searching members", query=q, limit=limit, user_id=current_user.id)
+    logger.info("Searching members", filters=filters.dict(), user_id=current_user.id)
     
     try:
         # Initialize repository
         member_repo = CongressMemberRepository(session)
         
         # Perform search
-        members = member_repo.search_members(q, limit=limit)
+        members = member_repo.search_members(filters.search, limit=filters.limit)
         
         data = {
-            "query": q,
+            "query": filters.search,
             "results": [member.dict() for member in members],
             "total": len(members),
-            "limit": limit,
+            "limit": filters.limit,
             "user_tier": current_user.subscription_tier,
         }
         
-        return success_response(
-            data=data,
-            meta={"message": f"Found {len(members)} members matching '{q}'"}
-        )
+        return CongressMemberListResponse(**data)
         
     except Exception as e:
         logger.error(f"Error searching members: {e}")
@@ -249,18 +264,29 @@ async def search_members(
         )
 
 
-@router.get("/state/{state_code}")
+@router.get(
+    "/state/{state_code}",
+    response_model=CongressMemberListResponse,
+    responses={
+        200: {"description": "Members by state retrieved successfully"},
+        400: {"description": "Invalid state code"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "State not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_members_by_state(
     state_code: str = Path(..., description="Two-letter state code"),
+    filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> CongressMemberListResponse:
     """
     Get all congressional members from a specific state.
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting members by state", state_code=state_code, user_id=current_user.id)
+    logger.info("Getting members by state", state_code=state_code, filters=filters.dict(), user_id=current_user.id)
     
     try:
         # Initialize repository
@@ -276,10 +302,7 @@ async def get_members_by_state(
             "user_tier": current_user.subscription_tier,
         }
         
-        return success_response(
-            data=data,
-            meta={"message": f"Retrieved {len(members)} members from {state_code.upper()}"}
-        )
+        return CongressMemberListResponse(**data)
         
     except Exception as e:
         logger.error(f"Error retrieving members for state {state_code}: {e}")

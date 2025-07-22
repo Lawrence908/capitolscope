@@ -282,9 +282,9 @@ class CongressionalDataIngestion:
                                 total_rows += 1
                                 
                                 # Process batch when full
-                                logger.info(f"Processing batch of {len(batch)} records")
-                                logger.info(f"Batch: {batch[0]}")
-                                logger.info(f"Batch size: {self.batch_size}")
+                                # logger.info(f"Processing batch of {len(batch)} records")
+                                # logger.info(f"Batch: {batch[0]}")
+                                # logger.info(f"Batch size: {self.batch_size}")
                                 if len(batch) >= self.batch_size:
                                     self._process_batch(batch)
                                     batch = []
@@ -328,15 +328,24 @@ class CongressionalDataIngestion:
             owner = row.get('Owner', row.get('owner', ''))
             amount = row.get('Amount', row.get('amount', ''))
             
-            # Parse dates
-            transaction_date = self._parse_date(row.get('Transaction Date', row.get('transaction_date', '')))
-            notification_date = self._parse_date(row.get('Notification Date', row.get('notification_date', '')))
-            
+            # Parse dates with fallback and notes
+            transaction_date_str = row.get('Transaction Date', row.get('transaction_date', ''))
+            notification_date_str = row.get('Notification Date', row.get('notification_date', ''))
+            transaction_date = self._parse_date(transaction_date_str)
+            notification_date = self._parse_date(notification_date_str)
+            date_notes = []
+            if not transaction_date:
+                # Try notification date as fallback
+                if notification_date:
+                    transaction_date = notification_date
+                    date_notes.append('transaction_date_inferred_from_notification_date')
+                else:
+                    self.record_error('invalid_date', doc_id, member_name, f"Invalid or missing transaction date: {transaction_date_str}", row)
+                    return None
             if not all([doc_id, member_name, raw_asset, transaction_type, transaction_date]):
                 msg = f"Missing required fields: doc_id={doc_id}, member_name={member_name}, raw_asset={raw_asset}, transaction_type={transaction_type}, transaction_date={transaction_date}"
                 self.record_error('missing_field', doc_id, member_name, msg, row)
                 return None
-                
             return TradeRecord(
                 doc_id=doc_id,
                 member_name=member_name,
@@ -352,7 +361,6 @@ class CongressionalDataIngestion:
                 source_line=str(row),
                 line_number=row_num
             )
-            
         except Exception as e:
             self.record_error('parse_error', row.get('DocID', ''), row.get('Member', ''), str(e), row)
             logger.error(f"Error parsing row {row_num}: {e}")
@@ -383,7 +391,7 @@ class CongressionalDataIngestion:
     
     def _process_batch(self, batch: List[TradeRecord]):
         """Process a batch of trade records with transaction management."""
-        logger.info(f"Processing batch of {len(batch)} records")
+        # logger.info(f"Processing batch of {len(batch)} records")
         
         try:
             processed_trades = []
@@ -415,7 +423,7 @@ class CongressionalDataIngestion:
             
             # Log batch summary
             elapsed = (datetime.now() - start_time).total_seconds()
-            logger.info(f"Batch processed: {len(valid_trades)}/{len(batch)} successful (elapsed: {elapsed:.1f}s)")
+            # logger.info(f"Batch processed: {len(valid_trades)}/{len(batch)} successful (elapsed: {elapsed:.1f}s)")
             
         except Exception as e:
             logger.error(f"Error processing batch: {e}")
@@ -428,8 +436,8 @@ class CongressionalDataIngestion:
             # Increment processed records counter
             self.processed_records += 1
             
-            # Get member ID
-            member_id = self._resolve_member_id(trade_record.member_name)
+            # Get member ID, pass trade_record for auto-creation
+            member_id = self._resolve_member_id(trade_record.member_name, trade_record)
             if not member_id:
                 # Only log warnings occasionally to reduce spam
                 if self.processed_records % 100 == 0:
@@ -486,32 +494,119 @@ class CongressionalDataIngestion:
             logger.error(f"Error processing trade: {e}")
             return None
     
-    def _resolve_member_id(self, member_name: str) -> Optional[int]:
-        """Resolve member name to ID with fuzzy matching."""
+    def _resolve_member_id(self, member_name: str, trade_record: 'TradeRecord' = None) -> Optional[int]:
+        """Resolve member name to ID with fuzzy matching and auto-creation if not found."""
         if not member_name:
             return None
-            
-        # Try exact match first
+
+        # Normalize and split name
         normalized_name = member_name.upper().strip()
+        name_parts = normalized_name.split()
+        first_name = name_parts[1] if len(name_parts) > 1 else ''
+        last_name = name_parts[-1] if len(name_parts) > 0 else ''
+
+        # Try exact match first
         if normalized_name in self.member_mapping:
             return self.member_mapping[normalized_name]
-            
-        # Try fuzzy matching
+
+        # Try first + last name only (ignore prefix)
+        fl_name = f"{first_name} {last_name}".strip().upper()
+        if fl_name in self.member_mapping:
+            return self.member_mapping[fl_name]
+
+        # Try last, first
+        lf_name = f"{last_name}, {first_name}".strip().upper()
+        if lf_name in self.member_mapping:
+            return self.member_mapping[lf_name]
+
+        # Try partial match on first name (case-insensitive)
+        for key in self.member_mapping.keys():
+            if last_name in key and (first_name[:2] in key):
+                logger.debug(f"Partial match for member: {member_name} -> {key}")
+                return self.member_mapping[key]
+
+        # Fuzzy match with lower threshold
         best_match = process.extractOne(
-            normalized_name,
+            fl_name,
             self.member_mapping.keys(),
             scorer=fuzz.ratio,
-            score_cutoff=80
+            score_cutoff=70
         )
-        
         if best_match:
-            # Only log fuzzy matches occasionally to reduce spam
-            if self.processed_records % 100 == 0:  # Log every 100th match
-                logger.info(f"Fuzzy matched member: {member_name} -> {best_match[0]}")
+            logger.debug(f"Fuzzy matched member: {member_name} -> {best_match[0]}")
             return self.member_mapping[best_match[0]]
-            
+
+        # If still not found, auto-create member if trade_record is provided
+        if trade_record:
+            new_member_id = self.create_member_from_trade(trade_record)
+            if new_member_id:
+                logger.info(f"Auto-created new member: {trade_record.member_name}")
+                return new_member_id
+
         return None
-    
+
+    def create_member_from_trade(self, trade_record: 'TradeRecord') -> Optional[int]:
+        """Create a new CongressMember from trade record and add to DB. Log and export."""
+        # Only use first and last name, ignore prefix
+        name_parts = trade_record.member_name.strip().split()
+        first_name = name_parts[1] if len(name_parts) > 1 else ''
+        last_name = name_parts[-1] if len(name_parts) > 0 else ''
+        full_name = f"{first_name} {last_name}".strip()
+        # Check for duplicate (same first and last name)
+        with db_manager.sync_session_scope() as session:
+            existing = session.query(CongressMember).filter(
+                CongressMember.first_name.ilike(first_name),
+                CongressMember.last_name.ilike(last_name)
+            ).first()
+            if existing:
+                logger.debug(f"Duplicate member found, not auto-creating: {full_name}")
+                return existing.id
+            # Create new member
+            new_member = CongressMember(
+                first_name=first_name,
+                last_name=last_name,
+                full_name=full_name,
+                prefix=name_parts[0] if len(name_parts) > 2 else None,
+                party=None,
+                chamber=None,
+                state=None,
+                district=None
+            )
+            session.add(new_member)
+            session.commit()
+            # Add to mapping for future lookups
+            variations = [
+                full_name.upper(),
+                f"{first_name} {last_name}".upper(),
+                f"{last_name}, {first_name}".upper(),
+            ]
+            for variation in variations:
+                self.member_mapping[variation] = new_member.id
+            # Log and export
+            self.auto_created_members = getattr(self, 'auto_created_members', [])
+            self.auto_created_members.append({
+                'first_name': first_name,
+                'last_name': last_name,
+                'full_name': full_name,
+                'prefix': name_parts[0] if len(name_parts) > 2 else '',
+                'source_doc_id': trade_record.doc_id,
+                'source_line': trade_record.source_line
+            })
+            logger.debug(f"Auto-created member: {full_name}")
+            return new_member.id
+
+    def export_auto_created_members(self, path='logs/auto_created_members.csv'):
+        if not hasattr(self, 'auto_created_members') or not self.auto_created_members:
+            return
+        import os
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', newline='', encoding='utf-8') as csvfile:
+            fieldnames = ['first_name', 'last_name', 'full_name', 'prefix', 'source_doc_id', 'source_line']
+            writer = pycsv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for rec in self.auto_created_members:
+                writer.writerow(rec)
+
     def _resolve_security_id(self, ticker: str) -> Optional[int]:
         """Resolve ticker to security ID."""
         if not ticker:
@@ -572,25 +667,23 @@ class CongressionalDataIngestion:
         trade.is_valid = len(errors) == 0
     
     def _insert_trades(self, trades: List[ProcessedTrade]):
-        """Insert processed trades into database."""
+        """Insert processed trades into database with diagnostics."""
         if not trades:
+            logger.debug("No trades to insert.")
             return
-            
+        logger.debug(f"Attempting to insert {len(trades)} trades.")
+        inserted = 0
         for trade in trades:
             try:
-                # Check for duplicate
                 existing = self.session.query(CongressionalTrade).filter(
                     CongressionalTrade.doc_id == trade.doc_id,
                     CongressionalTrade.member_id == trade.member_id,
                     CongressionalTrade.transaction_date == trade.transaction_date,
                     CongressionalTrade.raw_asset_description == trade.raw_asset_description
                 ).first()
-                
                 if existing:
                     logger.debug(f"Duplicate trade found, skipping: {trade.doc_id}")
                     continue
-                    
-                # Create database record
                 db_trade = CongressionalTrade(
                     doc_id=trade.doc_id,
                     member_id=trade.member_id,
@@ -614,16 +707,20 @@ class CongressionalDataIngestion:
                     parsed_successfully=trade.parsed_successfully,
                     parsing_notes='; '.join(trade.parsing_notes) if trade.parsing_notes else None
                 )
-                
                 self.session.add(db_trade)
-                
+                inserted += 1
             except Exception as e:
                 logger.error(f"Error inserting trade: {e}")
+                self.record_error('db_insert_error', getattr(trade, 'doc_id', ''), getattr(trade, 'member_id', ''), str(e), str(trade))
                 continue
-                
-        # Commit the batch
-        self.session.commit()
-        logger.info(f"Inserted {len(trades)} trades")
+        try:
+            self.session.commit()
+            logger.debug(f"Committed {inserted} trades to the database.")
+        except Exception as e:
+            logger.error(f"DB commit failed: {e}")
+            self.record_error('db_commit_error', '', '', str(e), '')
+            self.session.rollback()
+        logger.info(f"Inserted {inserted} trades")
     
     def _generate_quality_report(self) -> QualityReport:
         """Generate comprehensive quality report."""
@@ -762,9 +859,11 @@ class CongressionalDataIngestion:
                     
         logger.info(f"Exported {len(problematic_trades)} problematic records")
 
-    def export_failed_records(self, path='failed_imports.csv'):
+    def export_failed_records(self, path='logs/failed_imports.csv'):
         if not self.error_records:
             return
+        import os
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'w', newline='', encoding='utf-8') as csvfile:
             fieldnames = ['category', 'doc_id', 'member_name', 'message', 'row']
             writer = pycsv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -781,6 +880,8 @@ class CongressionalDataIngestion:
             summary_lines.append(f"  {cat}:")
             for s in samples:
                 summary_lines.append(f"    - DocID: {s['doc_id']}, Member: {s['member_name']}, Msg: {s['message']}")
+        if hasattr(self, 'auto_created_members') and self.auto_created_members:
+            summary_lines.append(f"\nAuto-created members: {len(self.auto_created_members)} (see logs/auto_created_members.csv)")
         summary = "\n".join(summary_lines)
         print(summary)
         logger = get_logger(__name__)

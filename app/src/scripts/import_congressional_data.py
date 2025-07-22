@@ -67,9 +67,25 @@ def import_from_csvs(csv_directory: str) -> Dict[str, Any]:
     
     with get_sync_db_session() as session:
         try:
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             results = ingester.import_congressional_data_from_csvs_sync(csv_directory)
             logger.info(f"✅ CSV import completed: {results}")
+            
+            # Print error summary to console and log
+            summary_lines = ["\n===== IMPORT ERROR SUMMARY ====="]
+            for cat, count in ingester.error_counts.items():
+                summary_lines.append(f"  {cat}: {count}")
+            summary_lines.append("\nSample errors:")
+            for cat, samples in ingester.error_samples.items():
+                summary_lines.append(f"  {cat}:")
+                for s in samples:
+                    summary_lines.append(f"    - DocID: {s['doc_id']}, Member: {s['member_name']}, Msg: {s['message']}")
+            summary = "\n".join(summary_lines)
+            print(summary)
+            logger.info(summary)
+
+            ingester.export_failed_records()
+            ingester.export_auto_created_members()
             return results
         except Exception as e:
             logger.error(f"❌ CSV import failed: {e}")
@@ -119,7 +135,7 @@ def enrich_members() -> Dict[str, Any]:
     
     with get_sync_db_session() as session:
         try:
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             results = ingester.enrich_member_data_sync()
             logger.info(f"✅ Member enrichment completed: {results}")
             return results

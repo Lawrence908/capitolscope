@@ -282,6 +282,9 @@ class CongressionalDataIngestion:
                                 total_rows += 1
                                 
                                 # Process batch when full
+                                logger.info(f"Processing batch of {len(batch)} records")
+                                logger.info(f"Batch: {batch[0]}")
+                                logger.info(f"Batch size: {self.batch_size}")
                                 if len(batch) >= self.batch_size:
                                     self._process_batch(batch)
                                     batch = []
@@ -387,8 +390,8 @@ class CongressionalDataIngestion:
             start_time = datetime.now()
             
             for i, trade_record in enumerate(batch):
-                # Add progress indicator every 10 records
-                if i % 10 == 0 and i > 0:
+                # Add progress indicator every 1000 records
+                if i % 1000 == 0 and i > 0:
                     elapsed = (datetime.now() - start_time).total_seconds()
                     logger.info(f"Processed {i}/{len(batch)} records in current batch (elapsed: {elapsed:.1f}s)")
                 
@@ -770,14 +773,18 @@ class CongressionalDataIngestion:
                 writer.writerow(rec)
 
     def print_error_summary(self):
-        print("\n===== IMPORT ERROR SUMMARY =====")
+        summary_lines = ["\n===== IMPORT ERROR SUMMARY ====="]
         for cat, count in self.error_counts.items():
-            print(f"  {cat}: {count}")
-        print("\nSample errors:")
+            summary_lines.append(f"  {cat}: {count}")
+        summary_lines.append("\nSample errors:")
         for cat, samples in self.error_samples.items():
-            print(f"  {cat}:")
+            summary_lines.append(f"  {cat}:")
             for s in samples:
-                print(f"    - DocID: {s['doc_id']}, Member: {s['member_name']}, Msg: {s['message']}")
+                summary_lines.append(f"    - DocID: {s['doc_id']}, Member: {s['member_name']}, Msg: {s['message']}")
+        summary = "\n".join(summary_lines)
+        print(summary)
+        logger = get_logger(__name__)
+        logger.info(summary)
 
     def import_congressional_data_from_csvs_sync(self, csv_directory: str) -> Dict[str, Any]:
         """
@@ -798,10 +805,10 @@ class CongressionalDataIngestion:
         if not csv_dir.exists():
             raise FileNotFoundError(f"CSV directory not found: {csv_directory}")
         
-        # Find all CSV files
-        csv_files = list(csv_dir.glob("*.csv"))
+        # Find all main CSV files (e.g., 2014FD.csv, 2015FD.csv, etc.)
+        csv_files = [f for f in csv_dir.glob("[0-9][0-9][0-9][0-9]FD.csv") if f.is_file()]
         if not csv_files:
-            logger.warning(f"No CSV files found in directory: {csv_directory}")
+            logger.warning(f"No main CSV files found in directory: {csv_directory}")
             return {"status": "no_files", "files_processed": 0}
         
         # Process each CSV file

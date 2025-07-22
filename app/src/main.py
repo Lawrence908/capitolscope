@@ -183,8 +183,8 @@ app.include_router(portfolios.router, prefix=f"{settings.API_V1_PREFIX}/portfoli
 app.include_router(market_data.router, prefix=f"{settings.API_V1_PREFIX}/market-data", tags=["Market Data"])
 app.include_router(notifications.router, prefix=f"{settings.API_V1_PREFIX}/notifications", tags=["Notifications"])
 
-# Development endpoints (remove in production)
-app.include_router(dev_endpoints.router, prefix=f"{settings.API_V1_PREFIX}/congressional", tags=["Development"])
+# Development endpoints (disabled - using real database endpoints)
+# app.include_router(dev_endpoints.router, prefix=f"{settings.API_V1_PREFIX}/congressional", tags=["Development"])
 
 
 @app.get("/")

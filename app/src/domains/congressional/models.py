@@ -21,6 +21,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from domains.base.models import CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, AuditMixin
+from domains.securities.models import Security  # Import Security model to fix relationship
 from core.logging import get_logger
 
 logger = get_logger(__name__)

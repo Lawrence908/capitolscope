@@ -9,11 +9,14 @@ Usage:
     python scripts/import_congressional_data.py --csvs  # Import from existing CSVs
     python scripts/import_congressional_data.py --live  # Fetch live data (10-15 min)
     python scripts/import_congressional_data.py --hybrid # CSVs + latest live data
+    
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --csvs
 """
 
 import asyncio
 import sys
 import argparse
+import logging
 from pathlib import Path
 from typing import Dict, Any
 
@@ -25,11 +28,22 @@ project_root = app_src_dir.parent
 # Add app/src to Python path
 sys.path.insert(0, str(app_src_dir))
 
+# Configure logging first
+from core.logging import configure_logging
+configure_logging()
+
 from core.database import DatabaseManager, init_database, get_sync_db_session
 from core.logging import get_logger
 from domains.congressional.ingestion import CongressionalDataIngestion
 
 logger = get_logger(__name__)
+
+# Add a dedicated log file for this script
+script_log_handler = logging.FileHandler("/app/logs/import_script.log")
+script_log_handler.setLevel(logging.DEBUG)
+script_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+script_log_handler.setFormatter(script_formatter)
+logging.getLogger().addHandler(script_log_handler)
 
 
 def resolve_data_path(input_path: str) -> Path:
@@ -42,6 +56,10 @@ def resolve_data_path(input_path: str) -> Path:
 def import_from_csvs(csv_directory: str) -> Dict[str, Any]:
     """Import congressional data from existing CSV files."""
     logger.info("🗂️  Importing congressional data from CSV files...")
+    
+    # Debug: Check what get_sync_db_session returns
+    logger.info(f"DEBUG: get_sync_db_session type: {type(get_sync_db_session())}")
+    logger.info(f"DEBUG: get_sync_db_session: {get_sync_db_session()}")
     
     with get_sync_db_session() as session:
         try:
@@ -90,6 +108,10 @@ async def fetch_live_data(years: list = None) -> Dict[str, Any]:
 def enrich_members() -> Dict[str, Any]:
     """Enrich member profiles with additional data."""
     logger.info("👥 Enriching member profiles...")
+    
+    # Debug: Check what get_sync_db_session returns
+    logger.info(f"DEBUG: get_sync_db_session type: {type(get_sync_db_session())}")
+    logger.info(f"DEBUG: get_sync_db_session: {get_sync_db_session()}")
     
     with get_sync_db_session() as session:
         try:

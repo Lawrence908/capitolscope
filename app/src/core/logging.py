@@ -97,8 +97,8 @@ def is_debug_enabled(component: LogComponent) -> bool:
 
 def setup_file_logging():
     """Set up file logging handlers."""
-    # Create logs directory
-    logs_dir = Path("logs")
+    # Use LOG_DIR env var if set, else default to "logs"
+    logs_dir = Path(os.environ.get("LOG_DIR", "logs"))
     logs_dir.mkdir(exist_ok=True)
     
     # Main application log

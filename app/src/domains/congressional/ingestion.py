@@ -90,7 +90,7 @@ class ProcessedTrade:
 class CongressionalDataIngestion:
     """Enhanced congressional data ingestion with quality processing."""
     
-    def __init__(self, batch_size: int = 100, session: Optional[Session] = None):
+    def __init__(self, batch_size: int = 50, session: Optional[Session] = None):  # Reduced from 100 to 50
         self.batch_size = batch_size
         self.data_quality = DataQualityEnhancer()
         self.statistics = ImportStatistics()
@@ -109,7 +109,7 @@ class CongressionalDataIngestion:
         
     def _load_ticker_database(self):
         """Load known ticker symbols from securities table."""
-        with db_manager.session_scope() as session:
+        with db_manager.sync_session_scope() as session:  # Use sync session scope
             securities = session.query(Security).filter(Security.is_active == True).all()
             
             self.known_tickers = {s.ticker.upper() for s in securities}
@@ -122,7 +122,7 @@ class CongressionalDataIngestion:
     
     def _load_member_mapping(self):
         """Load congress member name to ID mapping."""
-        with db_manager.session_scope() as session:
+        with db_manager.sync_session_scope() as session:  # Use sync session scope
             members = session.query(CongressMember).all()
             
             self.member_mapping = {}
@@ -247,16 +247,26 @@ class CongressionalDataIngestion:
                 reader = csv.DictReader(file, dialect=dialect)
                 
                 # Process in batches
-                with db_manager.session_scope() as session:
+                with db_manager.sync_session_scope() as session:  # Use sync session scope
                     self.session = session
                     batch = []
+                    total_rows = 0
+                    last_progress_time = datetime.now()
                     
                     for row_num, row in enumerate(reader, 1):
+                        # Add progress indicator every 1000 rows
+                        if row_num % 1000 == 0:
+                            current_time = datetime.now()
+                            elapsed = (current_time - last_progress_time).total_seconds()
+                            logger.info(f"Processed {row_num} rows from CSV file (elapsed: {elapsed:.1f}s)")
+                            last_progress_time = current_time
+                        
                         try:
                             # Convert row to TradeRecord
                             trade_record = self._parse_csv_row(row, row_num)
                             if trade_record:
                                 batch.append(trade_record)
+                                total_rows += 1
                                 
                                 # Process batch when full
                                 if len(batch) >= self.batch_size:
@@ -271,6 +281,8 @@ class CongressionalDataIngestion:
                     if batch:
                         self._process_batch(batch)
                         
+                    logger.info(f"Completed processing CSV file. Total rows processed: {total_rows}")
+                    
         except Exception as e:
             logger.error(f"Error processing CSV file: {e}")
             self.statistics.processing_errors += 1
@@ -284,33 +296,39 @@ class CongressionalDataIngestion:
     def _parse_csv_row(self, row: Dict[str, str], row_num: int) -> Optional[TradeRecord]:
         """Parse a CSV row into a TradeRecord."""
         try:
-            # Map CSV columns to our fields (flexible mapping)
-            doc_id = row.get('doc_id', row.get('Document ID', row.get('document_id', f"unknown_{row_num}")))
-            member_name = row.get('member_name', row.get('Member', row.get('member', '')))
-            raw_asset = row.get('raw_asset_description', row.get('Asset', row.get('asset', '')))
-            transaction_type = row.get('transaction_type', row.get('Type', row.get('type', '')))
-            owner = row.get('owner', row.get('Owner', row.get('owner', '')))
-            amount = row.get('amount', row.get('Amount', row.get('amount', '')))
+            # Map CSV columns to our fields (matching actual congressional data format)
+            doc_id = row.get('DocID', row.get('doc_id', row.get('Document ID', row.get('document_id', f"unknown_{row_num}"))))
+            
+            # Handle member name - combine prefix, first name, and last name
+            prefix = row.get('Prefix', '').strip()
+            first_name = row.get('FirstName', row.get('first_name', '')).strip()
+            last_name = row.get('LastName', row.get('last_name', '')).strip()
+            member_name = f"{prefix} {first_name} {last_name}".strip()
+            
+            raw_asset = row.get('Asset', row.get('raw_asset_description', row.get('asset', '')))
+            transaction_type = row.get('Transaction Type', row.get('transaction_type', row.get('Type', row.get('type', ''))))
+            owner = row.get('Owner', row.get('owner', ''))
+            amount = row.get('Amount', row.get('amount', ''))
             
             # Parse dates
-            transaction_date = self._parse_date(row.get('transaction_date', row.get('Transaction Date', '')))
-            notification_date = self._parse_date(row.get('notification_date', row.get('Notification Date', '')))
+            transaction_date = self._parse_date(row.get('Transaction Date', row.get('transaction_date', '')))
+            notification_date = self._parse_date(row.get('Notification Date', row.get('notification_date', '')))
             
             if not all([doc_id, member_name, raw_asset, transaction_type, transaction_date]):
-                logger.warning(f"Missing required fields in row {row_num}")
+                logger.warning(f"Missing required fields in row {row_num}: doc_id={doc_id}, member_name={member_name}, raw_asset={raw_asset}, transaction_type={transaction_type}, transaction_date={transaction_date}")
                 return None
                 
             return TradeRecord(
                 doc_id=doc_id,
-                member_name=member_name.strip(),
+                member_name=member_name,
                 raw_asset_description=raw_asset.strip(),
                 transaction_type=transaction_type.strip(),
                 transaction_date=transaction_date,
                 notification_date=notification_date or transaction_date,
                 owner=owner.strip(),
                 amount=amount.strip(),
-                filing_status=row.get('filing_status', ''),
-                comment=row.get('comment', ''),
+                filing_status=row.get('Filing Status', row.get('filing_status', '')),
+                comment=row.get('Description', row.get('comment', '')),
                 cap_gains_over_200=row.get('cap_gains_over_200', '').lower() == 'true',
                 source_line=str(row),
                 line_number=row_num
@@ -349,8 +367,19 @@ class CongressionalDataIngestion:
         
         try:
             processed_trades = []
+            start_time = datetime.now()
             
-            for trade_record in batch:
+            for i, trade_record in enumerate(batch):
+                # Add progress indicator every 10 records
+                if i % 10 == 0 and i > 0:
+                    elapsed = (datetime.now() - start_time).total_seconds()
+                    logger.info(f"Processed {i}/{len(batch)} records in current batch (elapsed: {elapsed:.1f}s)")
+                
+                # Add timeout check - if processing takes too long, skip remaining records
+                if i > 0 and (datetime.now() - start_time).total_seconds() > 300:  # 5 minute timeout
+                    logger.warning(f"Batch processing timeout after {i} records, skipping remaining {len(batch) - i} records")
+                    break
+                
                 processed_trade = self._process_single_trade(trade_record)
                 if processed_trade:
                     processed_trades.append(processed_trade)
@@ -365,7 +394,8 @@ class CongressionalDataIngestion:
             self.statistics.records_failed += len(batch) - len(valid_trades)
             
             # Log batch summary
-            logger.info(f"Batch processed: {len(valid_trades)}/{len(batch)} successful")
+            elapsed = (datetime.now() - start_time).total_seconds()
+            logger.info(f"Batch processed: {len(valid_trades)}/{len(batch)} successful (elapsed: {elapsed:.1f}s)")
             
         except Exception as e:
             logger.error(f"Error processing batch: {e}")
@@ -375,10 +405,15 @@ class CongressionalDataIngestion:
     def _process_single_trade(self, trade_record: TradeRecord) -> Optional[ProcessedTrade]:
         """Process a single trade record with quality enhancement."""
         try:
+            # Increment processed records counter
+            self.processed_records += 1
+            
             # Get member ID
             member_id = self._resolve_member_id(trade_record.member_name)
             if not member_id:
-                logger.warning(f"Could not resolve member: {trade_record.member_name}")
+                # Only log warnings occasionally to reduce spam
+                if self.processed_records % 100 == 0:
+                    logger.warning(f"Could not resolve member: {trade_record.member_name}")
                 return None
                 
             # Enhance ticker extraction
@@ -448,7 +483,9 @@ class CongressionalDataIngestion:
         )
         
         if best_match:
-            logger.info(f"Fuzzy matched member: {member_name} -> {best_match[0]}")
+            # Only log fuzzy matches occasionally to reduce spam
+            if self.processed_records % 100 == 0:  # Log every 100th match
+                logger.info(f"Fuzzy matched member: {member_name} -> {best_match[0]}")
             return self.member_mapping[best_match[0]]
             
         return None
@@ -739,12 +776,12 @@ class CongressionalDataIngestion:
             "files": []
         }
         
-        # Use external session if provided, otherwise create session scope
+        # Use external session if provided, otherwise create sync session scope
         if self.external_session:
             session_context = self.external_session
             should_close = False
         else:
-            session_context = db_manager.session_scope()
+            session_context = db_manager.sync_session_scope()  # Use sync session scope
             should_close = True
         
         try:
@@ -756,6 +793,7 @@ class CongressionalDataIngestion:
             for csv_file in csv_files:
                 try:
                     logger.info(f"Processing CSV file: {csv_file.name}")
+                    print(f"📁 Processing: {csv_file.name}")
                     
                     # Process the file
                     report = self.process_csv_file(str(csv_file))
@@ -810,12 +848,12 @@ class CongressionalDataIngestion:
         """
         logger.info("Starting member data enrichment")
         
-        # Use external session if provided, otherwise create session scope
+        # Use external session if provided, otherwise create sync session scope
         if self.external_session:
             session_context = self.external_session
             should_close = False
         else:
-            session_context = db_manager.session_scope()
+            session_context = db_manager.sync_session_scope()  # Use sync session scope
             should_close = True
         
         results = {

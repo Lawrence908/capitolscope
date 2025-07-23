@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_
 from sqlalchemy.orm import joinedload
+from datetime import datetime
 
 from core.database import get_db_session
 from core.logging import get_logger
@@ -61,6 +62,20 @@ async def get_trades(
     try:
         from sqlalchemy import select, func
         
+        # Parse date_from and date_to to date objects
+        date_from_parsed = None
+        date_to_parsed = None
+        if date_from:
+            try:
+                date_from_parsed = datetime.strptime(date_from, "%Y-%m-%d").date()
+            except ValueError:
+                raise HTTPException(status_code=400, detail="Invalid date_from format. Use YYYY-MM-DD.")
+        if date_to:
+            try:
+                date_to_parsed = datetime.strptime(date_to, "%Y-%m-%d").date()
+            except ValueError:
+                raise HTTPException(status_code=400, detail="Invalid date_to format. Use YYYY-MM-DD.")
+
         # Build base query
         query = (
             select(CongressionalTrade)
@@ -105,11 +120,11 @@ async def get_trades(
         if owner:
             query = query.filter(CongressionalTrade.owner == owner)
         
-        if date_from:
-            query = query.filter(CongressionalTrade.transaction_date >= date_from)
+        if date_from_parsed:
+            query = query.filter(CongressionalTrade.transaction_date >= date_from_parsed)
         
-        if date_to:
-            query = query.filter(CongressionalTrade.transaction_date <= date_to)
+        if date_to_parsed:
+            query = query.filter(CongressionalTrade.transaction_date <= date_to_parsed)
         
         # Get total count (apply same filters to count query)
         count_query = select(func.count(CongressionalTrade.id))
@@ -143,11 +158,11 @@ async def get_trades(
         if owner:
             count_query = count_query.filter(CongressionalTrade.owner == owner)
         
-        if date_from:
-            count_query = count_query.filter(CongressionalTrade.transaction_date >= date_from)
+        if date_from_parsed:
+            count_query = count_query.filter(CongressionalTrade.transaction_date >= date_from_parsed)
         
-        if date_to:
-            count_query = count_query.filter(CongressionalTrade.transaction_date <= date_to)
+        if date_to_parsed:
+            count_query = count_query.filter(CongressionalTrade.transaction_date <= date_to_parsed)
         
         total = await session.scalar(count_query)
         logger.info(f"Total trades: {total}")

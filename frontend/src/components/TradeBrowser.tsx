@@ -316,13 +316,13 @@ const TradeBrowser: React.FC = () => {
                           <div className="flex items-center">
                             <div>
                               <div className="text-sm font-medium text-gray-900">
-                                {trade.member?.full_name || 'Unknown'}
+                                {trade.member_name || 'Unknown'}
                               </div>
                               <div className="text-sm text-gray-500">
-                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPartyColor(trade.member?.party || '')}`}>
-                                  {trade.member?.party}
+                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPartyColor(trade.member_party || '')}`}>
+                                  {trade.member_party}
                                 </span>
-                                <span className="ml-2">{trade.member?.state}</span>
+                                <span className="ml-2">{trade.member_state}</span>
                               </div>
                             </div>
                           </div>

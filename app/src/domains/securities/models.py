@@ -139,6 +139,9 @@ class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Timestam
     exchange = relationship("Exchange", back_populates="securities", foreign_keys=[exchange_code])
     daily_prices = relationship("DailyPrice", back_populates="security")
     corporate_actions = relationship("CorporateAction", back_populates="security")
+    portfolio_holdings = relationship("PortfolioHolding", back_populates="security")
+    member_portfolios = relationship("MemberPortfolio", back_populates="security")
+    congressional_trades = relationship("CongressionalTrade", back_populates="security")
     
     # Indexes
     __table_args__ = (

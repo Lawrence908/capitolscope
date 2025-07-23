@@ -13,7 +13,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field, ConfigDict, computed_field, field_validator
 from pydantic.types import PositiveInt, NonNegativeInt
 
-from schemas.base import BaseResponse, PaginatedResponse
+from schemas.base import ResponseEnvelope, PaginatedResponse
 
 
 # ============================================================================
@@ -48,7 +48,7 @@ class PortfolioUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 
-class PortfolioResponse(PortfolioBase, BaseResponse):
+class PortfolioResponse(PortfolioBase, ResponseEnvelope):
     """Schema for portfolio response data."""
     id: int
     external_id: str
@@ -130,7 +130,7 @@ class PortfolioHoldingUpdate(BaseModel):
     current_price: Optional[Decimal] = Field(None, gt=0)
 
 
-class PortfolioHoldingResponse(PortfolioHoldingBase, BaseResponse):
+class PortfolioHoldingResponse(PortfolioHoldingBase, ResponseEnvelope):
     """Schema for portfolio holding response data."""
     id: int
     portfolio_id: int
@@ -192,7 +192,7 @@ class PortfolioPerformanceCreate(PortfolioPerformanceBase):
         return v
 
 
-class PortfolioPerformanceResponse(PortfolioPerformanceBase, BaseResponse):
+class PortfolioPerformanceResponse(PortfolioPerformanceBase, ResponseEnvelope):
     """Schema for portfolio performance response data."""
     id: int
     portfolio_id: int
@@ -262,7 +262,7 @@ class PortfolioSnapshotCreate(PortfolioSnapshotBase):
         return v
 
 
-class PortfolioSnapshotResponse(PortfolioSnapshotBase, BaseResponse):
+class PortfolioSnapshotResponse(PortfolioSnapshotBase, ResponseEnvelope):
     """Schema for portfolio snapshot response data."""
     id: int
     portfolio_id: int

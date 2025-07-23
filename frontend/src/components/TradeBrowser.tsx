@@ -94,6 +94,9 @@ const TradeBrowser: React.FC = () => {
     }
   };
 
+  // Patch: Ensure trades.items is always an array
+  const tradeItems = trades?.items ?? [];
+
   if (loading && !trades) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -273,86 +276,93 @@ const TradeBrowser: React.FC = () => {
       {/* Trades table */}
       {trades && (
         <div className="card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-800">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Member
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Asset
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Owner
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {trades.items.map((trade) => {
-                  const { icon: TypeIcon, color } = getTransactionTypeStyle(trade.type);
-                  
-                  return (
-                    <tr key={trade.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {trade.member?.full_name || 'Unknown'}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPartyColor(trade.member?.party || '')}`}>
-                                {trade.member?.party}
-                              </span>
-                              <span className="ml-2">{trade.member?.state}</span>
+          {tradeItems.length === 0 ? (
+            <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+              <p className="text-lg font-semibold mb-2">No trades found</p>
+              <p className="text-sm">Try adjusting your filters or check back later.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Member
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Asset
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Owner
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  {tradeItems.map((trade) => {
+                    const { icon: TypeIcon, color } = getTransactionTypeStyle(trade.type);
+                    
+                    return (
+                      <tr key={trade.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {trade.member?.full_name || 'Unknown'}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPartyColor(trade.member?.party || '')}`}>
+                                  {trade.member?.party}
+                                </span>
+                                <span className="ml-2">{trade.member?.state}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {trade.ticker ? (
-                            <span className="font-mono font-semibold">{trade.ticker}</span>
-                          ) : (
-                            <span className="text-gray-400">No ticker</span>
-                          )}
-                        </div>
-                        <div className="text-sm text-gray-500 max-w-xs truncate">
-                          {trade.asset_description}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className={`flex items-center ${color}`}>
-                          <TypeIcon className="h-4 w-4 mr-1" />
-                          <span className="capitalize text-sm font-medium">{trade.type}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatAmount(trade.amount)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {format(new Date(trade.transaction_date), 'MMM d, yyyy')}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {trade.owner === 'SP' ? 'Spouse' : 
-                         trade.owner === 'JT' ? 'Joint' :
-                         trade.owner === 'DC' ? 'Child' : 'Self'}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {trade.ticker ? (
+                              <span className="font-mono font-semibold">{trade.ticker}</span>
+                            ) : (
+                              <span className="text-gray-400">No ticker</span>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-500 max-w-xs truncate">
+                            {trade.asset_description}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className={`flex items-center ${color}`}>
+                            <TypeIcon className="h-4 w-4 mr-1" />
+                            <span className="capitalize text-sm font-medium">{trade.type}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatAmount(trade.amount)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {format(new Date(trade.transaction_date), 'MMM d, yyyy')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {trade.owner === 'SP' ? 'Spouse' : 
+                           trade.owner === 'JT' ? 'Joint' :
+                           trade.owner === 'DC' ? 'Child' : 'Self'}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {/* Pagination */}
           {trades.pages > 1 && (

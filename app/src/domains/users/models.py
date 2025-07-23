@@ -132,6 +132,8 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     alerts = relationship("UserAlert", back_populates="user", cascade="all, delete-orphan")
     notifications = relationship("UserNotification", back_populates="user", cascade="all, delete-orphan")
     sessions = relationship("UserSession", back_populates="user", cascade="all, delete-orphan")
+    notification_subscriptions = relationship("NotificationSubscription", back_populates="user", cascade="all, delete-orphan")
+    newsletter_subscriptions = relationship("NewsletterSubscription", back_populates="user", cascade="all, delete-orphan")
     
     # Indexes and constraints
     __table_args__ = (

@@ -103,6 +103,7 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     congressional_trades = relationship("CongressionalTrade", back_populates="member", cascade="all, delete-orphan")
     member_portfolios = relationship("MemberPortfolio", back_populates="member", cascade="all, delete-orphan")
     member_portfolio_performance = relationship("MemberPortfolioPerformance", back_populates="member", cascade="all, delete-orphan")
+    portfolios = relationship("Portfolio", back_populates="member", cascade="all, delete-orphan")
     
     # Indexes and constraints
     __table_args__ = (
@@ -211,7 +212,7 @@ class CongressionalTrade(CapitolScopeBaseModel, AuditMixin):
     
     # Relationships
     member = relationship("CongressMember", back_populates="congressional_trades")
-    security = relationship("Security", foreign_keys=[security_id])  # From securities domain
+    security = relationship("Security", back_populates="congressional_trades", foreign_keys=[security_id])  # From securities domain
     
     # Indexes and constraints
     __table_args__ = (
@@ -305,7 +306,7 @@ class MemberPortfolio(CapitolScopeBaseModel):
     
     # Relationships
     member = relationship("CongressMember", back_populates="member_portfolios")
-    security = relationship("Security", foreign_keys=[security_id])  # From securities domain
+    security = relationship("Security", back_populates="member_portfolios", foreign_keys=[security_id])  # From securities domain
     
     # Indexes and constraints
     __table_args__ = (

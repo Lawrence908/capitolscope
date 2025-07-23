@@ -15,7 +15,11 @@ from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
 from domains.congressional.models import CongressionalTrade, CongressMember
-from domains.congressional.schemas import CongressionalTradeSummary, CongressionalTradeDetail
+from domains.congressional.schemas import (
+    CongressionalTradeSummary, CongressionalTradeDetail, 
+    CongressionalTradeListResponse, CongressionalTradeDetailResponse,
+    TradingStatistics, MarketPerformanceComparison
+)
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
 logger = get_logger(__name__)
@@ -24,7 +28,7 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    response_model=ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]],
     responses={
         200: {"description": "Congressional trades retrieved successfully"},
         400: {"description": "Invalid parameters"},
@@ -45,7 +49,7 @@ async def get_trades(
     date_from: Optional[str] = Query(None, description="Date from filter"),
     date_to: Optional[str] = Query(None, description="Date to filter"),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
+) -> ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]]:
     """
     Get congressional trades.
     
@@ -160,46 +164,9 @@ async def get_trades(
         # Convert to response format
         trade_items = []
         for trade in trades:
-            # Format amount string
-            amount_str = "Unknown"
-            if trade.amount_exact:
-                amount_str = f"${trade.amount_exact / 100:,.0f}"
-            elif trade.amount_min and trade.amount_max:
-                amount_str = f"${trade.amount_min / 100:,.0f} - ${trade.amount_max / 100:,.0f}"
-            
-            # Map transaction type
-            type_map = {
-                'P': 'purchase',
-                'S': 'sale', 
-                'E': 'exchange'
-            }
-            
-            trade_item = {
-                "id": str(trade.id),
-                "member_id": str(trade.member_id),
-                "member": {
-                    "id": str(trade.member.id) if trade.member else None,
-                    "full_name": trade.member.full_name if trade.member else "Unknown",
-                    "party": trade.member.party if trade.member else None,
-                    "state": trade.member.state if trade.member else None,
-                    "chamber": trade.member.chamber if trade.member else None,
-                } if trade.member else None,
-                "disclosure_date": trade.notification_date.isoformat() if trade.notification_date else None,
-                "transaction_date": trade.transaction_date.isoformat() if trade.transaction_date else None,
-                "owner": trade.owner,
-                "ticker": trade.ticker,
-                "asset_description": trade.raw_asset_description,
-                "asset_type": trade.asset_type or "Stock",
-                "type": type_map.get(trade.transaction_type, trade.transaction_type),
-                "amount": amount_str,
-                "amount_min": trade.amount_min,
-                "amount_max": trade.amount_max,
-                "comment": trade.comment,
-                "ptr_link": trade.document_url,
-                "created_at": trade.created_at.isoformat() if trade.created_at else None,
-                "updated_at": trade.updated_at.isoformat() if trade.updated_at else None,
-            }
-            trade_items.append(trade_item)
+            # Convert to schema
+            trade_summary = CongressionalTradeSummary.model_validate(trade)
+            trade_items.append(trade_summary)
         
         # Calculate pagination info
         pages = (total + per_page - 1) // per_page
@@ -272,7 +239,7 @@ async def get_advanced_analytics(
 
 @router.get(
     "/analytics/top-trading-members",
-    response_model=ResponseEnvelope[List[Dict[str, Any]]],
+    response_model=ResponseEnvelope[List[TradingStatistics]],
     responses={
         200: {"description": "Top trading members retrieved successfully"},
         401: {"description": "Not authenticated"},
@@ -283,7 +250,7 @@ async def get_top_trading_members(
     session: AsyncSession = Depends(get_db_session),
     limit: int = Query(10, ge=1, le=100, description="Number of members to return"),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> ResponseEnvelope[List[Dict[str, Any]]]:
+) -> ResponseEnvelope[List[TradingStatistics]]:
     """
     Get top trading members by number of trades.
     
@@ -320,22 +287,17 @@ async def get_top_trading_members(
         members = []
         
         for row in result:
-            party_map = {
-                'D': 'Democratic',
-                'R': 'Republican', 
-                'I': 'Independent'
-            }
-            
-            member = {
-                "id": row.id,
-                "full_name": row.full_name,
-                "party": party_map.get(row.party, row.party),
-                "state": row.state,
-                "chamber": row.chamber,
-                "total_trades": row.trade_count,
-                "total_value": row.total_value or 0,
-            }
-            members.append(member)
+            # Convert to TradingStatistics schema
+            stats = TradingStatistics(
+                member_id=row.id,
+                total_trades=row.trade_count,
+                total_value=row.total_value or 0,
+                purchase_count=0,  # TODO: Calculate from actual data
+                sale_count=0,      # TODO: Calculate from actual data
+                purchase_value=0,   # TODO: Calculate from actual data
+                sale_value=0       # TODO: Calculate from actual data
+            )
+            members.append(stats)
         
         return create_response(data=members)
         
@@ -604,7 +566,7 @@ async def test_trades(
 
 @router.get(
     "/member/{member_id}",
-    response_model=ResponseEnvelope[Dict[str, Any]],
+    response_model=ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]],
     responses={
         200: {"description": "Member trades retrieved successfully"},
         401: {"description": "Not authenticated"},
@@ -618,7 +580,7 @@ async def get_member_trades(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> ResponseEnvelope[Dict[str, Any]]:
+) -> ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]]:
     """
     Get trades for a specific congress member.
     
@@ -640,12 +602,27 @@ async def get_member_trades(
         # "user_tier": current_user.subscription_tier,  # Temporarily disabled
     }
     
-    return create_response(data=data)
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=limit,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
+    )
+    
+    paginated_data = PaginatedResponse(
+        items=[],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
 @router.get(
     "/{trade_id}",
-    response_model=ResponseEnvelope[Dict[str, Any]],
+    response_model=ResponseEnvelope[CongressionalTradeDetail],
     responses={
         200: {"description": "Trade details retrieved successfully"},
         401: {"description": "Not authenticated"},
@@ -657,7 +634,7 @@ async def get_trade(
     trade_id: int,
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> ResponseEnvelope[Dict[str, Any]]:
+) -> ResponseEnvelope[CongressionalTradeDetail]:
     """
     Get a specific congressional trade by ID.
     **Authenticated Feature**: Requires user authentication.
@@ -665,12 +642,8 @@ async def get_trade(
     logger.info("Getting trade by ID", trade_id=trade_id)
     
     # TODO: Implement actual trade retrieval from database
-    data = {
-        "trade_id": trade_id,
-        # "user_tier": current_user.subscription_tier,  # Temporarily disabled
-    }
-    
-    return create_response(data=data)
+    # For now, return a placeholder
+    return create_response(error="Trade detail endpoint ready - database models needed")
 
 
 @router.post(

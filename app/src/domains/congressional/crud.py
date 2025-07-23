@@ -467,18 +467,19 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
         trades = []
         for db_trade in db_trades:
             trade_dict = CongressionalTradeSummary.from_orm(db_trade).dict()
-            
-            # Add member information
-            trade_dict['member_name'] = db_trade.member.full_name
-            trade_dict['member_party'] = db_trade.member.party
-            trade_dict['member_chamber'] = db_trade.member.chamber
-            trade_dict['member_state'] = db_trade.member.state
-            
+
+            # Defensive: handle missing member
+            member = db_trade.member
+            trade_dict['member_name'] = member.full_name if member else 'Unknown'
+            trade_dict['member_party'] = member.party if member else None
+            trade_dict['member_chamber'] = member.chamber if member else None
+            trade_dict['member_state'] = member.state if member else None
+
             # Add estimated value
             trade_dict['estimated_value'] = db_trade.estimated_value
-            
+
             trades.append(CongressionalTradeSummary(**trade_dict))
-        
+
         return trades, total_count
     
     def get_member_trades(self, member_id: int, limit: Optional[int] = None) -> List[CongressionalTradeSummary]:

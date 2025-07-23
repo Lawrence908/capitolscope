@@ -22,16 +22,25 @@ from domains.users.schemas import (
     LoginRequest, RegisterRequest, TokenResponse, RefreshTokenRequest,
     UserResponse, ChangePasswordRequest, ResetPasswordRequest
 )
+from schemas.base import ResponseEnvelope, create_response
 
 logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.post("/login")
+@router.post(
+    "/login",
+    response_model=ResponseEnvelope[TokenResponse],
+    responses={
+        200: {"description": "Login successful"},
+        401: {"description": "Invalid credentials"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def login(
     request: LoginRequest,
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[TokenResponse]:
     """
     User login endpoint.
     
@@ -42,11 +51,7 @@ async def login(
     # Authenticate user
     user = await authenticate_user(request.email, request.password, session)
     if not user:
-        return error_response(
-            message="Incorrect email or password",
-            error_code="invalid_credentials",
-            status_code=status.HTTP_401_UNAUTHORIZED
-        )
+        return create_response(error="Incorrect email or password")
     
     # Update last login
     from sqlalchemy.sql import func
@@ -57,17 +62,12 @@ async def login(
     token_data = create_token_response(user)
     
     logger.info("User login successful", user_id=user.id, email=user.email)
-    return success_response(
-        data=token_data,
-        meta={"message": "Login successful"}
-    )
+    return create_response(data=token_data)
 
 
 @router.get(
     "/me",
-    summary="Get Current User Info",
-    description="Returns user profile for authenticated user.",
-    dependencies=[Depends(get_current_active_user)],
+    response_model=ResponseEnvelope[UserResponse],
     responses={
         200: {"description": "Current user information"},
         401: {"description": "Not authenticated"},
@@ -76,7 +76,7 @@ async def login(
 )
 async def get_current_user_info(
     current_user: User = Depends(get_current_active_user)
-) -> JSONResponse:
+) -> ResponseEnvelope[UserResponse]:
     """
     Get current user information.
     
@@ -85,45 +85,18 @@ async def get_current_user_info(
     logger.info("Getting current user info", user_id=current_user.id, email=current_user.email)
     
     try:
-        # User data with safe property access
-        user_data = {
-            "id": current_user.id,
-            "email": current_user.email,
-            "username": current_user.username,
-            "first_name": current_user.first_name,
-            "last_name": current_user.last_name,
-            "full_name": current_user.full_name,
-            "subscription_tier": current_user.subscription_tier,
-            "is_verified": current_user.is_verified,
-            # Role information
-            "role": current_user.role.value if current_user.role else "user",
-            "is_admin": current_user.is_admin,
-            "is_moderator": current_user.is_moderator,
-            "is_super_admin": current_user.is_super_admin,
-            # Additional properties
-            "is_premium": current_user.is_premium,
-            "is_active": current_user.is_active,
-        }
-        
-        return success_response(
-            data=user_data,
-            meta={"message": "Current user information retrieved successfully"}
-        )
+        # Convert user model to response schema
+        user_data = UserResponse.model_validate(current_user)
+        return create_response(data=user_data)
         
     except Exception as e:
         logger.error("Error getting current user info", error=str(e), user_id=getattr(current_user, 'id', 'unknown'))
-        return error_response(
-            message=f"Failed to retrieve user information: {str(e)}",
-            error_code="user_info_error",
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return create_response(error=f"Failed to retrieve user information: {str(e)}")
 
 
 @router.post(
     "/logout",
-    summary="Logout User",
-    description="Logout current user. Clients should discard the token on logout.",
-    dependencies=[Depends(get_current_active_user)],
+    response_model=ResponseEnvelope[Dict[str, bool]],
     responses={
         200: {"description": "Successfully logged out"},
         401: {"description": "Not authenticated"}
@@ -131,7 +104,7 @@ async def get_current_user_info(
 )
 async def logout(
     current_user: User = Depends(get_current_active_user)
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, bool]]:
     """
     Logout current user.
     
@@ -140,17 +113,22 @@ async def logout(
     """
     logger.info("User logout", user_id=current_user.id, email=current_user.email)
     
-    return success_response(
-        data={"logged_out": True},
-        meta={"message": "Logged out successfully"}
-    )
+    return create_response(data={"logged_out": True})
 
 
-@router.post("/refresh")
+@router.post(
+    "/refresh",
+    response_model=ResponseEnvelope[TokenResponse],
+    responses={
+        200: {"description": "Token refreshed successfully"},
+        401: {"description": "Invalid refresh token"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def refresh_token(
     request: RefreshTokenRequest,
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[TokenResponse]:
     """
     Refresh authentication token.
     
@@ -164,19 +142,11 @@ async def refresh_token(
         
         # Check if it's a refresh token
         if payload.get("type") != "refresh":
-            return error_response(
-                message="Invalid token type",
-                error_code="invalid_token_type",
-                status_code=status.HTTP_401_UNAUTHORIZED
-            )
+            return create_response(error="Invalid token type")
         
         user_id = payload.get("sub")
         if not user_id:
-            return error_response(
-                message="Invalid token payload",
-                error_code="invalid_token_payload",
-                status_code=status.HTTP_401_UNAUTHORIZED
-            )
+            return create_response(error="Invalid token payload")
         
         # Get user from database
         result = await session.execute(
@@ -185,42 +155,35 @@ async def refresh_token(
         user = result.scalar_one_or_none()
         
         if not user or not user.is_active:
-            return error_response(
-                message="User not found or inactive",
-                error_code="user_not_found",
-                status_code=status.HTTP_401_UNAUTHORIZED
-            )
+            return create_response(error="User not found or inactive")
         
         # Create new token response
         token_data = create_token_response(user)
         
         logger.info("Token refresh successful", user_id=user.id)
-        return success_response(
-            data=token_data,
-            meta={"message": "Token refreshed successfully"}
-        )
+        return create_response(data=token_data)
         
     except AuthenticationError as e:
         logger.warning("Token refresh failed", error=str(e))
-        return error_response(
-            message=str(e),
-            error_code="authentication_failed",
-            status_code=status.HTTP_401_UNAUTHORIZED
-        )
+        return create_response(error=str(e))
     except Exception as e:
         logger.error("Token refresh error", error=str(e))
-        return error_response(
-            message="Token refresh failed",
-            error_code="internal_error",
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return create_response(error="Token refresh failed")
 
 
-@router.post("/register")
+@router.post(
+    "/register",
+    response_model=ResponseEnvelope[TokenResponse],
+    responses={
+        200: {"description": "Registration successful"},
+        400: {"description": "Email already exists"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def register(
     request: RegisterRequest,
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[TokenResponse]:
     """
     User registration endpoint.
     
@@ -236,11 +199,7 @@ async def register(
         existing_user = result.scalar_one_or_none()
         
         if existing_user:
-            return error_response(
-                message="Email already registered",
-                error_code="email_exists",
-                status_code=status.HTTP_400_BAD_REQUEST
-            )
+            return create_response(error="Email already registered")
         
         # Create new user
         user = User(
@@ -272,34 +231,21 @@ async def register(
         token_data = create_token_response(user)
         
         logger.info("User registration successful", user_id=user.id, email=user.email)
-        return success_response(
-            data=token_data,
-            meta={"message": "Registration successful"}
-        )
+        return create_response(data=token_data)
         
     except IntegrityError as e:
         await session.rollback()
         logger.error("Database integrity error during registration", error=str(e))
-        return error_response(
-            message="Registration failed - user may already exist",
-            error_code="integrity_error",
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
+        return create_response(error="Registration failed - user may already exist")
     except Exception as e:
         await session.rollback()
         logger.error("Registration error", error=str(e))
-        return error_response(
-            message="Registration failed",
-            error_code="internal_error",
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return create_response(error="Registration failed")
 
 
 @router.post(
     "/change-password",
-    summary="Change Password",
-    description="Change user password. Requires current password verification.",
-    dependencies=[Depends(get_current_active_user)],
+    response_model=ResponseEnvelope[Dict[str, str]],
     responses={
         200: {"description": "Password changed successfully"},
         400: {"description": "Current password is incorrect"},
@@ -310,7 +256,7 @@ async def change_password(
     request: ChangePasswordRequest,
     current_user: User = Depends(get_current_active_user),
     session: AsyncSession = Depends(get_db_session),
-) -> Dict[str, Any]:
+) -> ResponseEnvelope[Dict[str, str]]:
     """
     Change user password.
     
@@ -331,14 +277,21 @@ async def change_password(
     await session.commit()
     
     logger.info("Password changed successfully", user_id=current_user.id)
-    return {"message": "Password changed successfully"}
+    return create_response(data={"message": "Password changed successfully"})
 
 
-@router.post("/reset-password")
+@router.post(
+    "/reset-password",
+    response_model=ResponseEnvelope[Dict[str, str]],
+    responses={
+        200: {"description": "Reset email sent if account exists"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def reset_password(
     request: ResetPasswordRequest,
     session: AsyncSession = Depends(get_db_session),
-) -> Dict[str, Any]:
+) -> ResponseEnvelope[Dict[str, str]]:
     """
     Request password reset.
     
@@ -358,7 +311,7 @@ async def reset_password(
         # For now, we'll just log it
         logger.info("Password reset token would be sent", user_id=user.id)
     
-    return {"message": "If an account with that email exists, a reset link has been sent"}
+    return create_response(data={"message": "If an account with that email exists, a reset link has been sent"})
 
 
 

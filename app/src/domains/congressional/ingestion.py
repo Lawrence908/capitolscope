@@ -498,7 +498,7 @@ class CongressionalDataIngestion:
         """Resolve member name to ID with fuzzy matching and auto-creation if not found."""
         if not member_name:
             return None
-
+            
         # Normalize and split name
         normalized_name = member_name.upper().strip()
         name_parts = normalized_name.split()
@@ -508,7 +508,7 @@ class CongressionalDataIngestion:
         # Try exact match first
         if normalized_name in self.member_mapping:
             return self.member_mapping[normalized_name]
-
+            
         # Try first + last name only (ignore prefix)
         fl_name = f"{first_name} {last_name}".strip().upper()
         if fl_name in self.member_mapping:
@@ -535,7 +535,7 @@ class CongressionalDataIngestion:
         if best_match:
             logger.debug(f"Fuzzy matched member: {member_name} -> {best_match[0]}")
             return self.member_mapping[best_match[0]]
-
+            
         # If still not found, auto-create member if trade_record is provided
         if trade_record:
             new_member_id = self.create_member_from_trade(trade_record)
@@ -544,7 +544,7 @@ class CongressionalDataIngestion:
                 return new_member_id
 
         return None
-
+    
     def create_member_from_trade(self, trade_record: 'TradeRecord') -> Optional[int]:
         """Create a new CongressMember from trade record and add to DB. Log and export."""
         # Only use first and last name, ignore prefix

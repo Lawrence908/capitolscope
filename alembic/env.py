@@ -28,6 +28,8 @@ from domains.base.models import CapitolScopeBaseModel
 from domains.securities.models import *
 from domains.congressional.models import *
 from domains.users.models import *
+from domains.notifications.models import *
+from domains.portfolio.models import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

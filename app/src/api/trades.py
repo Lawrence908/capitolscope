@@ -22,11 +22,13 @@ from domains.congressional.schemas import (
     TradingStatistics, MarketPerformanceComparison
 )
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
+from schemas.congressional import CongressionalTradeQuery
 
 logger = get_logger(__name__)
 router = APIRouter()
 
 
+# TODO: Update frontend TradeFilters to match CongressionalTradeQuery model
 @router.get(
     "/",
     response_model=ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]],
@@ -38,17 +40,8 @@ router = APIRouter()
     }
 )
 async def get_trades(
+    filters: CongressionalTradeQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
-    page: int = Query(1, ge=1, description="Page number"),
-    per_page: int = Query(50, ge=1, le=100, description="Items per page"),
-    search: Optional[str] = Query(None, description="Search query"),
-    party: Optional[str] = Query(None, description="Party filter"),
-    chamber: Optional[str] = Query(None, description="Chamber filter"),
-    type: Optional[str] = Query(None, description="Transaction type filter"),
-    ticker: Optional[str] = Query(None, description="Ticker filter"),
-    owner: Optional[str] = Query(None, description="Owner filter"),
-    date_from: Optional[str] = Query(None, description="Date from filter"),
-    date_to: Optional[str] = Query(None, description="Date to filter"),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
 ) -> ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]]:
     """
@@ -57,25 +50,23 @@ async def get_trades(
     Returns a list of congressional trades with pagination.
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting congressional trades", page=page, per_page=per_page)
+    logger.info("Getting congressional trades", filters=filters.dict())
     
     try:
         from sqlalchemy import select, func
         
         # Parse date_from and date_to to date objects
-        date_from_parsed = None
-        date_to_parsed = None
-        if date_from:
-            try:
-                date_from_parsed = datetime.strptime(date_from, "%Y-%m-%d").date()
-            except ValueError:
-                raise HTTPException(status_code=400, detail="Invalid date_from format. Use YYYY-MM-DD.")
-        if date_to:
-            try:
-                date_to_parsed = datetime.strptime(date_to, "%Y-%m-%d").date()
-            except ValueError:
-                raise HTTPException(status_code=400, detail="Invalid date_to format. Use YYYY-MM-DD.")
-
+        date_from_parsed = filters.transaction_date_from
+        date_to_parsed = filters.transaction_date_to
+        page = filters.page
+        per_page = filters.limit
+        search = filters.search
+        party = filters.parties[0] if filters.parties else None
+        chamber = filters.chambers[0] if filters.chambers else None
+        type = filters.transaction_types[0] if filters.transaction_types else None
+        ticker = filters.tickers[0] if filters.tickers else None
+        owner = filters.owners[0] if filters.owners else None
+        
         # Build base query
         query = (
             select(CongressionalTrade)

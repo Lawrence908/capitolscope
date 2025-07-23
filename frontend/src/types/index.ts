@@ -57,19 +57,29 @@ export interface PaginatedResponse<T> {
 }
 
 export interface TradeFilters {
-  member_id?: number;
-  ticker?: string;
-  asset_type?: string;
-  type?: 'purchase' | 'sale' | 'exchange';
-  owner?: 'SP' | 'JT' | 'DC' | 'C';
-  party?: string;
-  state?: string;
-  chamber?: 'House' | 'Senate';
-  date_from?: string;
-  date_to?: string;
+  member_ids?: string[];
+  member_names?: string[];
+  parties?: string[];
+  chambers?: string[];
+  states?: string[];
+  tickers?: string[];
+  asset_types?: string[];
+  transaction_types?: string[];
+  owners?: string[];
+  transaction_date_from?: string;
+  transaction_date_to?: string;
+  notification_date_from?: string;
+  notification_date_to?: string;
   amount_min?: number;
   amount_max?: number;
   search?: string;
+  sort_by?: 'transaction_date' | 'notification_date' | 'amount' | 'member_name' | 'ticker' | 'transaction_type';
+  sort_order?: 'asc' | 'desc';
+  page?: number;
+  limit?: number;
+  include_member?: boolean;
+  include_security?: boolean;
+  include_performance?: boolean;
 }
 
 export interface MemberFilters {

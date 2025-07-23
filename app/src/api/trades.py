@@ -22,7 +22,7 @@ from domains.congressional.schemas import (
     TradingStatistics, MarketPerformanceComparison
 )
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
-from schemas.congressional import CongressionalTradeQuery
+from domains.congressional.schemas import CongressionalTradeQuery
 
 logger = get_logger(__name__)
 router = APIRouter()

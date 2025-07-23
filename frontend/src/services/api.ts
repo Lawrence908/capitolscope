@@ -92,22 +92,21 @@ class APIClient {
   async getTrades(
     filters: TradeFilters = {},
     page: number = 1,
-    perPage: number = 50
+    limit: number = 50
   ): Promise<PaginatedResponse<CongressionalTrade>> {
-    const params = new URLSearchParams({
-      page: page.toString(),
-      per_page: perPage.toString(),
-    });
-
-    // Add filters to params
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
     Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
+      if (value === undefined || value === null || value === '') return;
+      if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, v.toString()));
+      } else {
         params.append(key, value.toString());
       }
     });
-
     const response = await this.client.get(`/api/v1/trades?${params}`);
-    return response.data;
+    return response.data.data;
   }
 
   async getTrade(id: number): Promise<CongressionalTrade> {

@@ -7,7 +7,7 @@ import {
   ArrowDownIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
-import type { CongressionalTrade, TradeFilters, PaginatedResponse } from '../types';
+import type { CongressionalTrade, TradeFilters, PaginatedResponse } from '../types/index';
 import apiClient from '../services/api';
 
 const TradeBrowser: React.FC = () => {
@@ -43,7 +43,7 @@ const TradeBrowser: React.FC = () => {
 
   // Handle filter changes
   const handleFilterChange = (key: keyof TradeFilters, value: string | number | undefined) => {
-    setFilters(prev => ({
+    setFilters((prev: TradeFilters) => ({
       ...prev,
       [key]: value === '' ? undefined : value,
     }));
@@ -52,7 +52,7 @@ const TradeBrowser: React.FC = () => {
   // Handle search
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setFilters(prev => ({
+    setFilters((prev: TradeFilters) => ({
       ...prev,
       search: searchQuery || undefined,
     }));
@@ -65,10 +65,17 @@ const TradeBrowser: React.FC = () => {
   };
 
   // Format currency amounts
-  const formatAmount = (amount: string) => {
-    if (!amount) return 'N/A';
-    return amount.replace(/\$/, '$');
+  const formatAmount = (amount: number | string | undefined | null) => {
+    if (amount === undefined || amount === null || amount === '') return 'N/A';
+    const num = typeof amount === 'number' ? amount : parseFloat(amount);
+    if (isNaN(num)) return 'N/A';
+    return `$${num.toLocaleString()}`;
   };
+
+  const formatCentsToDollars = (cents?: number | null) =>
+    cents !== undefined && cents !== null
+      ? `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      : 'N/A';
 
   // Get party color
   const getPartyColor = (party: string) => {
@@ -94,6 +101,37 @@ const TradeBrowser: React.FC = () => {
     }
   };
 
+  // Helper for party badge
+  const getPartyBadge = (party: string | null | undefined) => {
+    if (!party) return <span className="inline-block px-2 py-1 text-xs rounded bg-gray-400 text-white font-semibold" aria-label="Unknown party">Unknown</span>;
+    switch (party.toLowerCase()) {
+      case 'democratic':
+      case 'd':
+        return <span className="inline-block px-2 py-1 text-xs rounded bg-blue-600 text-white font-semibold" aria-label="Democratic">Democratic</span>;
+      case 'republican':
+      case 'r':
+        return <span className="inline-block px-2 py-1 text-xs rounded bg-red-600 text-white font-semibold" aria-label="Republican">Republican</span>;
+      case 'independent':
+      case 'i':
+        return <span className="inline-block px-2 py-1 text-xs rounded bg-gray-700 text-white font-semibold" aria-label="Independent">Independent</span>;
+      default:
+        return <span className="inline-block px-2 py-1 text-xs rounded bg-gray-500 text-white font-semibold" aria-label={party}>{party}</span>;
+    }
+  };
+
+  // Helper for chamber badge
+  const getChamberBadge = (chamber: string | null | undefined) => {
+    if (!chamber) return <span className="inline-block px-2 py-1 text-xs rounded bg-gray-400 text-white font-semibold" aria-label="Unknown chamber">Unknown</span>;
+    switch (chamber.toLowerCase()) {
+      case 'senate':
+        return <span className="inline-block px-2 py-1 text-xs rounded bg-purple-700 text-white font-semibold" aria-label="Senate">Senate</span>;
+      case 'house':
+        return <span className="inline-block px-2 py-1 text-xs rounded bg-green-700 text-white font-semibold" aria-label="House">House</span>;
+      default:
+        return <span className="inline-block px-2 py-1 text-xs rounded bg-gray-500 text-white font-semibold" aria-label={chamber}>{chamber}</span>;
+    }
+  };
+
   // Patch: Ensure trades.items is always an array
   const tradeItems = trades?.items ?? [];
 
@@ -105,13 +143,22 @@ const TradeBrowser: React.FC = () => {
     );
   }
 
+  const formatDate = (dateStr?: string | null) => {
+    if (!dateStr) return 'N/A';
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  // Helper to ensure a string is always passed
+  const safeString = (val: string | null | undefined) => (typeof val === 'string' ? val : '');
+
   return (
     <div className="space-y-6">
       {/* Header with search and filters */}
       <div className="card p-6">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Congressional Trades</h2>
+            <h2 className="text-xl font-semibold text-white">Congressional Trades</h2>
             <p className="text-sm text-gray-600 mt-1">
               {trades?.total ? `${trades.total.toLocaleString()} total trades` : 'Loading...'}
             </p>
@@ -151,8 +198,8 @@ const TradeBrowser: React.FC = () => {
                   Transaction Type
                 </label>
                 <select
-                  value={filters.type || ''}
-                  onChange={(e) => handleFilterChange('type', e.target.value as any)}
+                  value={filters.transaction_types || ''}
+                  onChange={(e) => handleFilterChange('transaction_types', e.target.value as any)}
                   className="input-field"
                 >
                   <option value="">All Types</option>
@@ -167,8 +214,8 @@ const TradeBrowser: React.FC = () => {
                   Party
                 </label>
                 <select
-                  value={filters.party || ''}
-                  onChange={(e) => handleFilterChange('party', e.target.value)}
+                  value={filters.parties || ''}
+                  onChange={(e) => handleFilterChange('parties', e.target.value as any)}
                   className="input-field"
                 >
                   <option value="">All Parties</option>
@@ -183,8 +230,8 @@ const TradeBrowser: React.FC = () => {
                   Chamber
                 </label>
                 <select
-                  value={filters.chamber || ''}
-                  onChange={(e) => handleFilterChange('chamber', e.target.value as any)}
+                  value={filters.chambers || ''}
+                  onChange={(e) => handleFilterChange('chambers', e.target.value as any)}
                   className="input-field"
                 >
                   <option value="">All Chambers</option>
@@ -198,8 +245,8 @@ const TradeBrowser: React.FC = () => {
                   Owner
                 </label>
                 <select
-                  value={filters.owner || ''}
-                  onChange={(e) => handleFilterChange('owner', e.target.value as any)}
+                  value={filters.owners || ''}
+                  onChange={(e) => handleFilterChange('owners', e.target.value as any)}
                   className="input-field"
                 >
                   <option value="">All Owners</option>
@@ -216,8 +263,8 @@ const TradeBrowser: React.FC = () => {
                 </label>
                 <input
                   type="date"
-                  value={filters.date_from || ''}
-                  onChange={(e) => handleFilterChange('date_from', e.target.value)}
+                  value={filters.transaction_date_from || ''}
+                  onChange={(e) => handleFilterChange('transaction_date_from', e.target.value)}
                   className="input-field"
                 />
               </div>
@@ -228,8 +275,8 @@ const TradeBrowser: React.FC = () => {
                 </label>
                 <input
                   type="date"
-                  value={filters.date_to || ''}
-                  onChange={(e) => handleFilterChange('date_to', e.target.value)}
+                  value={filters.transaction_date_to || ''}
+                  onChange={(e) => handleFilterChange('transaction_date_to', e.target.value)}
                   className="input-field"
                 />
               </div>
@@ -241,8 +288,8 @@ const TradeBrowser: React.FC = () => {
                 <input
                   type="text"
                   placeholder="e.g., AAPL, MSFT"
-                  value={filters.ticker || ''}
-                  onChange={(e) => handleFilterChange('ticker', e.target.value)}
+                  value={filters.tickers?.[0] || ''}
+                  onChange={(e) => handleFilterChange('tickers', e.target.value ? e.target.value : undefined)}
                   className="input-field"
                 />
               </div>
@@ -307,51 +354,52 @@ const TradeBrowser: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {tradeItems.map((trade) => {
-                    const { icon: TypeIcon, color } = getTransactionTypeStyle(trade.type);
+                  {tradeItems.map((trade: CongressionalTrade) => {
+                    const { icon: TypeIcon, color } = getTransactionTypeStyle(trade.transaction_type);
                     
                     return (
-                      <tr key={trade.id} className="hover:bg-gray-50">
+                      <tr key={trade.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                {trade.member_name || 'Unknown'}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPartyColor(trade.member_party || '')}`}>
-                                  {trade.member_party}
-                                </span>
-                                <span className="ml-2">{trade.member_state}</span>
-                              </div>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-gray-900 dark:text-white" aria-label="Member name">
+                              {trade.member_name || 'Unknown'}
+                            </span>
+                            <div className="flex gap-2 mt-1">
+                              {getPartyBadge(trade.member_party)}
+                              {getChamberBadge(trade.member_chamber)}
+                              {(() => { const memberState = trade.member_state ? trade.member_state : ''; return memberState && (
+                                <span className="inline-block px-2 py-1 text-xs rounded bg-gray-700 text-white font-semibold" aria-label={memberState || ''}>{memberState}</span>
+                              ); })()}
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-gray-900 dark:text-white font-semibold" aria-label="Ticker">
                             {trade.ticker ? (
                               <span className="font-mono font-semibold">{trade.ticker}</span>
                             ) : (
-                              <span className="text-gray-400">No ticker</span>
+                              <span className="text-gray-400 dark:text-gray-500">No ticker</span>
                             )}
                           </div>
-                          <div className="text-sm text-gray-500 max-w-xs truncate">
-                            {trade.asset_description}
+                          <div className="text-sm text-gray-700 dark:text-gray-300 max-w-xs truncate" aria-label="Asset name">
+                            {trade.asset_name}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className={`flex items-center ${color}`}>
+                          <div className={`flex items-center ${color}`}> {/* color is still used for icon */}
                             <TypeIcon className="h-4 w-4 mr-1" />
-                            <span className="capitalize text-sm font-medium">{trade.type}</span>
+                            <span className="capitalize text-sm font-semibold text-gray-900 dark:text-white" aria-label="Transaction type">{trade.transaction_type}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {formatAmount(trade.amount)}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-semibold" aria-label="Amount">
+                          {trade.amount_exact !== undefined && trade.amount_exact !== null
+                            ? formatCentsToDollars(trade.amount_exact)
+                            : `${formatCentsToDollars(trade.amount_min)} - ${formatCentsToDollars(trade.amount_max)}`}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {format(new Date(trade.transaction_date), 'MMM d, yyyy')}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white" aria-label="Date">
+                          {formatDate(safeString(trade.transaction_date))}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white" aria-label="Owner">
                           {trade.owner === 'SP' ? 'Spouse' : 
                            trade.owner === 'JT' ? 'Joint' :
                            trade.owner === 'DC' ? 'Child' : 'Self'}

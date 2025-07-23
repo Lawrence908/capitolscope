@@ -26,23 +26,26 @@ export interface CongressMember {
 
 // Congressional Trade Types
 export interface CongressionalTrade {
-  id: number;
-  member_id: number;
-  member?: CongressMember;
-  disclosure_date: string;
-  transaction_date: string;
-  owner: 'SP' | 'JT' | 'DC' | 'C';
-  ticker?: string;
-  asset_description: string;
-  asset_type: string;
-  type: 'purchase' | 'sale' | 'exchange';
-  amount: string;
-  amount_min?: number;
-  amount_max?: number;
-  comment?: string;
-  ptr_link?: string;
-  created_at: string;
-  updated_at: string;
+  id: string;
+  member_id?: string;
+  member_name?: string;
+  member_party?: string;
+  member_chamber?: string;
+  member_state?: string;
+  ticker?: string | null;
+  asset_name?: string | null;
+  asset_type?: string | null;
+  transaction_type?: string | null;
+  transaction_date?: string | null;
+  notification_date?: string | null;
+  amount_min?: number | null;
+  amount_max?: number | null;
+  amount_exact?: number | null;
+  estimated_value?: number | null;
+  filing_status?: string | null;
+  owner?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // API Response Types

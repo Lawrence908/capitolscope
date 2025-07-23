@@ -376,6 +376,11 @@ class SecurityWatchlist(CapitolScopeBaseModel, TimestampMixin):
         return f"<SecurityWatchlist(user_id={self.user_id}, security_id={self.security_id})>"
 
 
+# --- Fix for circular import: Import PortfolioHolding and assign relationship after both classes are defined ---
+from domains.portfolio.models import PortfolioHolding
+
+Security.portfolio_holdings = relationship("PortfolioHolding", back_populates="security")
+
 # Log model creation
 logger.info("Securities domain models initialized")
 

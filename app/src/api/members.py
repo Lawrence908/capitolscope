@@ -156,7 +156,7 @@ async def get_members(
 
 @router.get(
     "/{member_id}",
-    response_model=CongressMemberDetailResponse,
+    response_model=ResponseEnvelope[CongressMemberDetail],
     responses={
         200: {"description": "Member details retrieved successfully"},
         400: {"description": "Invalid member ID"},
@@ -169,58 +169,38 @@ async def get_member(
     member_id: int = Path(..., description="Member ID"),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> CongressMemberDetailResponse:
+) -> ResponseEnvelope[CongressMemberDetail]:
     """
     Get detailed information about a specific congressional member.
-    
-    **Authenticated Feature**: Requires user authentication.
     """
     logger.info("Getting member by ID", member_id=member_id, user_id=current_user.id)
-    
     try:
-        # Initialize repository
         member_repo = CongressMemberRepository(session)
-        
-        # Get member profile
         member = member_repo.get_by_id(member_id)
         if not member:
-            return error_response(
-                message="Member not found",
-                error_code="member_not_found",
-                status_code=404
-            )
-        
-        # Get analytics for premium users (placeholder for now)
+            return create_response(None, error="Member not found")
         analytics = None
         if current_user.is_premium:
-            # TODO: Implement analytics retrieval
             analytics = {
                 "trade_count": 0,
                 "total_trade_value": 0,
                 "portfolio_value": 0
             }
-        
-        data = {
-            "member": member.dict(),
-            "analytics": analytics if analytics else None,
-            "user_tier": current_user.subscription_tier,
-            "premium_features": current_user.is_premium
-        }
-        
-        return CongressMemberDetailResponse(**data)
-        
+        member_detail = CongressMemberDetail(
+            member=member.dict(),
+            analytics=analytics,
+            user_tier=current_user.subscription_tier,
+            premium_features=current_user.is_premium
+        )
+        return create_response(member_detail)
     except Exception as e:
         logger.error(f"Error retrieving member {member_id}: {e}")
-        return error_response(
-            message="Failed to retrieve member details",
-            error_code="member_not_found",
-            status_code=404 if "not found" in str(e).lower() else 500
-        )
+        return create_response(None, error="Failed to retrieve member details")
 
 
 @router.get(
     "/search",
-    response_model=CongressMemberListResponse,
+    response_model=ResponseEnvelope[PaginatedResponse[CongressMemberSummary]],
     responses={
         200: {"description": "Search results for congressional members"},
         400: {"description": "Invalid search parameters"},
@@ -232,42 +212,36 @@ async def search_members(
     filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> CongressMemberListResponse:
+) -> ResponseEnvelope[PaginatedResponse[CongressMemberSummary]]:
     """
     Search congressional members by name or other criteria.
-    
-    **Authenticated Feature**: Requires user authentication.
     """
     logger.info("Searching members", filters=filters.dict(), user_id=current_user.id)
-    
     try:
-        # Initialize repository
         member_repo = CongressMemberRepository(session)
-        
-        # Perform search
         members = member_repo.search_members(filters.search, limit=filters.limit)
-        
-        data = {
-            "query": filters.search,
-            "results": [member.dict() for member in members],
-            "total": len(members),
-            "limit": filters.limit,
-            "user_tier": current_user.subscription_tier,
-        }
-        
-        return CongressMemberListResponse(**data)
-        
+        member_items = [CongressMemberSummary.from_orm(member) for member in members]
+        pagination_meta = PaginationMeta(
+            page=filters.page,
+            per_page=filters.limit,
+            total=len(members),
+            pages=1,
+            has_next=False,
+            has_prev=False
+        )
+        paginated = PaginatedResponse[CongressMemberSummary](
+            items=member_items,
+            meta=pagination_meta
+        )
+        return create_response(paginated)
     except Exception as e:
         logger.error(f"Error searching members: {e}")
-        return error_response(
-            message="Failed to search members",
-            error_code="search_failed"
-        )
+        return create_response(None, error="Failed to search members")
 
 
 @router.get(
     "/state/{state_code}",
-    response_model=CongressMemberListResponse,
+    response_model=ResponseEnvelope[PaginatedResponse[CongressMemberSummary]],
     responses={
         200: {"description": "Members by state retrieved successfully"},
         400: {"description": "Invalid state code"},
@@ -281,36 +255,31 @@ async def get_members_by_state(
     filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> CongressMemberListResponse:
+) -> ResponseEnvelope[PaginatedResponse[CongressMemberSummary]]:
     """
     Get all congressional members from a specific state.
-    
-    **Authenticated Feature**: Requires user authentication.
     """
     logger.info("Getting members by state", state_code=state_code, filters=filters.dict(), user_id=current_user.id)
-    
     try:
-        # Initialize repository
         member_repo = CongressMemberRepository(session)
-        
-        # Get members by state
         members = member_repo.get_members_by_state(state_code.upper())
-        
-        data = {
-            "state_code": state_code.upper(),
-            "members": [member.dict() for member in members],
-            "total": len(members),
-            "user_tier": current_user.subscription_tier,
-        }
-        
-        return CongressMemberListResponse(**data)
-        
+        member_items = [CongressMemberSummary.from_orm(member) for member in members]
+        pagination_meta = PaginationMeta(
+            page=filters.page,
+            per_page=filters.limit,
+            total=len(members),
+            pages=1,
+            has_next=False,
+            has_prev=False
+        )
+        paginated = PaginatedResponse[CongressMemberSummary](
+            items=member_items,
+            meta=pagination_meta
+        )
+        return create_response(paginated)
     except Exception as e:
         logger.error(f"Error retrieving members for state {state_code}: {e}")
-        return error_response(
-            message=f"Failed to retrieve members for state {state_code}",
-            error_code="state_members_failed"
-        )
+        return create_response(None, error=f"Failed to retrieve members for state {state_code}")
 
 
 # Administrative endpoints
@@ -321,40 +290,26 @@ async def sync_members_from_api(
     state: Optional[str] = Query(None, description="State code for sync-state action"),
     current_user: User = Depends(require_admin()),
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Trigger sync of congressional members from Congress.gov API.
-    
-    **Admin Only**: Requires administrator permissions.
     """
     logger.info("Triggering member sync", action=action, state=state, user_id=current_user.id)
-    
     try:
-        # Add background task for sync
         kwargs = {}
         if action == "sync-state" and state:
             kwargs["state"] = state.upper()
-        
         background_tasks.add_task(sync_congressional_members.delay, action, **kwargs)
-        
         data = {
             "action": action,
             "parameters": kwargs,
             "status": "queued",
             "message": f"Member sync ({action}) has been queued for processing"
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Sync task queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing sync task: {e}")
-        return error_response(
-            message="Failed to queue sync task",
-            error_code="sync_queue_failed"
-        )
+        return create_response(None, error="Failed to queue sync task")
 
 
 @router.post("/sync/{bioguide_id}")
@@ -363,66 +318,41 @@ async def sync_specific_member(
     bioguide_id: str = Path(..., description="Bioguide ID of member to sync"),
     current_user: User = Depends(require_admin()),
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Sync a specific member from Congress.gov API.
-    
-    **Admin Only**: Requires administrator permissions.
     """
     logger.info("Triggering specific member sync", bioguide_id=bioguide_id, user_id=current_user.id)
-    
     try:
-        # Add background task for specific member sync
         background_tasks.add_task(
             sync_congressional_members.delay, 
             "sync-member", 
             bioguide_id=bioguide_id
         )
-        
         data = {
             "bioguide_id": bioguide_id,
             "action": "sync-member",
             "status": "queued",
             "message": f"Member sync for {bioguide_id} has been queued for processing"
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Member sync task queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing member sync for {bioguide_id}: {e}")
-        return error_response(
-            message=f"Failed to queue sync for member {bioguide_id}",
-            error_code="member_sync_queue_failed"
-        )
+        return create_response(None, error=f"Failed to queue sync for member {bioguide_id}")
 
 
 @router.post("/comprehensive-ingestion")
 async def trigger_comprehensive_ingestion(
     background_tasks: BackgroundTasks,
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Trigger comprehensive data ingestion workflow.
-    
-    This endpoint starts the complete data ingestion process that includes:
-    1. Syncing congressional members from Congress.gov
-    2. Enriching member data with legislation
-    3. Updating stock prices
-    4. Recalculating portfolios
-    
-    **Admin Only**: Requires administrator permissions.
     """
     logger.info("Triggering comprehensive data ingestion", user_id=current_user.id)
-    
     try:
         from background.tasks import comprehensive_data_ingestion
-        
-        # Add background task for comprehensive ingestion
         task_result = comprehensive_data_ingestion.delay()
-        
         data = {
             "task_id": task_result.id,
             "action": "comprehensive-ingestion",
@@ -435,56 +365,34 @@ async def trigger_comprehensive_ingestion(
                 "4. Recalculate portfolios"
             ]
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Comprehensive ingestion workflow queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing comprehensive ingestion: {e}")
-        return error_response(
-            message="Failed to queue comprehensive ingestion workflow",
-            error_code="comprehensive_ingestion_queue_failed"
-        )
+        return create_response(None, error="Failed to queue comprehensive ingestion workflow")
 
 
 @router.post("/health-check")
 async def health_check_apis(
     background_tasks: BackgroundTasks,
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Run health checks on external APIs.
-    
-    **Admin Only**: Requires administrator permissions.
     """
     logger.info("Triggering API health checks", user_id=current_user.id)
-    
     try:
         from background.tasks import health_check_congress_api
-        
-        # Add background task for health check
         task_result = health_check_congress_api.delay()
-        
         data = {
             "task_id": task_result.id,
             "action": "health-check",
             "status": "queued",
             "message": "API health check has been queued for processing"
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Health check task queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing health check: {e}")
-        return error_response(
-            message="Failed to queue health check",
-            error_code="health_check_queue_failed"
-        )
+        return create_response(None, error="Failed to queue health check")
 
 
 @router.get("/{member_id}/legislation")
@@ -494,45 +402,25 @@ async def get_member_legislation(
     legislation_type: str = Query("sponsored", description="Type: sponsored or cosponsored"),
     limit: int = Query(20, ge=1, le=100, description="Number of bills to return"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get legislation sponsored or cosponsored by a member.
-    
-    **Premium Feature**: Enhanced data for premium users.
     """
     logger.info("Getting member legislation", member_id=member_id, 
                legislation_type=legislation_type, user_id=current_user.id)
-    
     if not current_user.is_premium:
-        return error_response(
-            message="This feature requires a premium subscription",
-            error_code="premium_required",
-            status_code=403
-        )
-    
+        return create_response(None, error="This feature requires a premium subscription")
     try:
-        # Initialize services
         member_repo = CongressMemberRepository(session)
         api_service = CongressAPIService(member_repo)
-        
-        # Get member
         member = member_repo.get_by_id(member_id)
         if not member or not member.bioguide_id:
-            return error_response(
-                message="Member not found or missing bioguide ID",
-                error_code="member_not_found",
-                status_code=404
-            )
-        
-        # Get legislation data
+            return create_response(None, error="Member not found or missing bioguide ID")
         legislation_data = await api_service.enrich_member_with_legislation(member_id)
-        
-        # Extract the requested type
         if legislation_type == "sponsored":
             legislation = legislation_data.get("sponsored_legislation", {})
         else:
             legislation = legislation_data.get("cosponsored_legislation", {})
-        
         data = {
             "member_id": member_id,
             "member_name": member.full_name,
@@ -542,15 +430,7 @@ async def get_member_legislation(
             "total_bills": len(legislation.get("bills", [])),
             "user_tier": current_user.subscription_tier
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": f"Retrieved {legislation_type} legislation for {member.full_name}"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error retrieving legislation for member {member_id}: {e}")
-        return error_response(
-            message="Failed to retrieve member legislation",
-            error_code="legislation_retrieval_failed"
-        ) 
+        return create_response(None, error="Failed to retrieve member legislation") 

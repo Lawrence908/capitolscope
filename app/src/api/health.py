@@ -13,13 +13,21 @@ import structlog
 from core.database import check_database_health, DatabaseManager
 from core.config import settings
 from core.responses import success_response, error_response
+from schemas.base import ResponseEnvelope, create_response
 
 logger = structlog.get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/")
-async def health_check() -> JSONResponse:
+@router.get(
+    "/",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Health check successful"},
+        500: {"description": "Health check failed"}
+    }
+)
+async def health_check() -> ResponseEnvelope[Dict[str, Any]]:
     """
     Basic health check endpoint.
     
@@ -33,11 +41,19 @@ async def health_check() -> JSONResponse:
         "service": "capitolscope-api"
     }
     
-    return success_response(data=data)
+    return create_response(data=data)
 
 
-@router.get("/detailed")
-async def detailed_health_check() -> JSONResponse:
+@router.get(
+    "/detailed",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Detailed health check successful"},
+        503: {"description": "System degraded"},
+        500: {"description": "Health check failed"}
+    }
+)
+async def detailed_health_check() -> ResponseEnvelope[Dict[str, Any]]:
     """
     Detailed health check with database and external service status.
     
@@ -86,17 +102,21 @@ async def detailed_health_check() -> JSONResponse:
     
     # Return success or error based on overall status
     if overall_status == "healthy":
-        return success_response(data=data)
+        return create_response(data=data)
     else:
-        return error_response(
-            message="System degraded - check service health",
-            error_code="system_degraded",
-            status_code=503
-        )
+        return create_response(error="System degraded - check service health")
 
 
-@router.get("/congress-api")
-async def congress_api_health_check() -> JSONResponse:
+@router.get(
+    "/congress-api",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Congress API health check successful"},
+        503: {"description": "Congress API unhealthy"},
+        500: {"description": "Health check failed"}
+    }
+)
+async def congress_api_health_check() -> ResponseEnvelope[Dict[str, Any]]:
     """
     Specific health check for Congress.gov API integration.
     
@@ -111,21 +131,20 @@ async def congress_api_health_check() -> JSONResponse:
     health_data["timestamp"] = time.time()
     
     if health_data["status"] == "healthy":
-        return success_response(
-            data=health_data,
-            meta={"message": "Congress.gov API is healthy and operational"}
-        )
+        return create_response(data=health_data)
     else:
-        return error_response(
-            message="Congress.gov API health check failed",
-            error_code="congress_api_unhealthy",
-            status_code=503,
-            details=health_data
-        )
+        return create_response(error="Congress.gov API health check failed")
 
 
-@router.get("/ready")
-async def readiness_check() -> JSONResponse:
+@router.get(
+    "/ready",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Service ready"},
+        503: {"description": "Service not ready"}
+    }
+)
+async def readiness_check() -> ResponseEnvelope[Dict[str, Any]]:
     """
     Kubernetes-style readiness probe.
     
@@ -137,26 +156,25 @@ async def readiness_check() -> JSONResponse:
     if database_health["status"] != "healthy":
         logger.warning("Readiness check failed", reason="database_unhealthy")
         
-        return error_response(
-            message="Service not ready - database connection failed",
-            error_code="not_ready",
-            status_code=503,
-            details={
-                "reason": "database_connection_failed",
-                "timestamp": time.time()
-            }
-        )
+        return create_response(error="Service not ready - database connection failed")
     
     data = {
         "status": "ready",
         "timestamp": time.time()
     }
     
-    return success_response(data=data)
+    return create_response(data=data)
 
 
-@router.get("/live")
-async def liveness_check() -> JSONResponse:
+@router.get(
+    "/live",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Service alive"},
+        500: {"description": "Service not alive"}
+    }
+)
+async def liveness_check() -> ResponseEnvelope[Dict[str, Any]]:
     """
     Kubernetes-style liveness probe.
     
@@ -168,7 +186,7 @@ async def liveness_check() -> JSONResponse:
         "service": "capitolscope-api"
     }
     
-    return success_response(data=data)
+    return create_response(data=data)
 
 
 async def check_congress_api_health() -> Dict[str, Any]:

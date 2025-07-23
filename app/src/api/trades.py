@@ -3,7 +3,7 @@ Congressional trades API endpoints.
 """
 
 from typing import List, Dict, Any, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, Security
+from fastapi import APIRouter, Depends, HTTPException, Query, Security, Path
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_
@@ -16,12 +16,22 @@ from core.auth import get_current_active_user, require_subscription, require_adm
 from domains.users.models import User
 from domains.congressional.models import CongressionalTrade, CongressMember
 from domains.congressional.schemas import CongressionalTradeSummary, CongressionalTradeDetail
+from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
 logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Congressional trades retrieved successfully"},
+        400: {"description": "Invalid parameters"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_trades(
     session: AsyncSession = Depends(get_db_session),
     page: int = Query(1, ge=1, description="Page number"),
@@ -35,7 +45,7 @@ async def get_trades(
     date_from: Optional[str] = Query(None, description="Date from filter"),
     date_to: Optional[str] = Query(None, description="Date to filter"),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get congressional trades.
     
@@ -196,18 +206,22 @@ async def get_trades(
         has_next = page < pages
         has_prev = page > 1
         
-        response_data = {
-            "items": trade_items,
-            "total": total,
-            "page": page,
-            "per_page": per_page,
-            "pages": pages,
-            "has_next": has_next,
-            "has_prev": has_prev,
-        }
+        pagination_meta = PaginationMeta(
+            page=page,
+            per_page=per_page,
+            total=total,
+            pages=pages,
+            has_next=has_next,
+            has_prev=has_prev
+        )
+        
+        paginated_data = PaginatedResponse(
+            items=trade_items,
+            meta=pagination_meta
+        )
         
         logger.info("Returning response...")
-        return JSONResponse(content=response_data)
+        return create_response(data=paginated_data)
         
     except Exception as e:
         import traceback
@@ -217,20 +231,23 @@ async def get_trades(
         logger.error(traceback_msg)
         print(f"DEBUG: {error_msg}")  # Print to console for immediate visibility
         print(f"DEBUG: {traceback_msg}")  # Print to console for immediate visibility
-        return error_response(
-            message="Failed to fetch trades",
-            error_code="database_error",
-            status_code=500
-        )
+        return create_response(error="Failed to fetch trades")
 
 
-
-
-@router.get("/analytics/advanced")
+@router.get(
+    "/analytics/advanced",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Advanced analytics retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient subscription"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_advanced_analytics(
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(require_subscription(['pro', 'premium', 'enterprise'])),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get advanced trading analytics.
     
@@ -250,18 +267,23 @@ async def get_advanced_analytics(
         },
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Advanced analytics ready - premium feature implementation needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/analytics/top-trading-members")
+@router.get(
+    "/analytics/top-trading-members",
+    response_model=ResponseEnvelope[List[Dict[str, Any]]],
+    responses={
+        200: {"description": "Top trading members retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_top_trading_members(
     session: AsyncSession = Depends(get_db_session),
     limit: int = Query(10, ge=1, le=100, description="Number of members to return"),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[List[Dict[str, Any]]]:
     """
     Get top trading members by number of trades.
     
@@ -315,23 +337,27 @@ async def get_top_trading_members(
             }
             members.append(member)
         
-        return JSONResponse(content=members)
+        return create_response(data=members)
         
     except Exception as e:
         logger.error(f"Error getting top trading members: {e}")
-        return error_response(
-            message="Failed to get top trading members",
-            error_code="analytics_error",
-            status_code=500
-        )
+        return create_response(error="Failed to get top trading members")
 
 
-@router.get("/analytics/top-traded-tickers")
+@router.get(
+    "/analytics/top-traded-tickers",
+    response_model=ResponseEnvelope[List[Dict[str, Any]]],
+    responses={
+        200: {"description": "Top traded tickers retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_top_traded_tickers(
     session: AsyncSession = Depends(get_db_session),
     limit: int = Query(10, ge=1, le=100, description="Number of tickers to return"),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[List[Dict[str, Any]]]:
     """
     Get top traded tickers by number of trades.
     
@@ -369,22 +395,26 @@ async def get_top_traded_tickers(
             }
             tickers.append(ticker)
         
-        return JSONResponse(content=tickers)
+        return create_response(data=tickers)
         
     except Exception as e:
         logger.error(f"Error getting top traded tickers: {e}")
-        return error_response(
-            message="Failed to get top traded tickers",
-            error_code="analytics_error",
-            status_code=500
-        )
+        return create_response(error="Failed to get top traded tickers")
 
 
-@router.get("/export/csv")
+@router.get(
+    "/export/csv",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "CSV export URL generated successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def export_trades_csv(
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Export trades data to CSV format.
     
@@ -399,18 +429,25 @@ async def export_trades_csv(
         "expires_at": "2024-01-01T00:00:00Z",
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "CSV export ready - implementation needed"}
-    )
+    return create_response(data=data)
 
 
-@router.delete("/{trade_id}")
+@router.delete(
+    "/{trade_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Trade deleted successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient permissions"},
+        404: {"description": "Trade not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def delete_trade(
     trade_id: int,
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(require_admin()),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Delete a congressional trade record.
     
@@ -424,17 +461,22 @@ async def delete_trade(
         # "deleted_by": current_user.id,  # Temporarily disabled
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Trade deleted successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/data-quality/stats")
+@router.get(
+    "/data-quality/stats",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Data quality statistics retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_data_quality_stats(
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get data quality statistics for congressional trades.
     
@@ -516,21 +558,24 @@ async def get_data_quality_stats(
             "chamber_distribution": chamber_distribution,
         }
         
-        return JSONResponse(content=stats)
+        return create_response(data=stats)
         
     except Exception as e:
         logger.error(f"Error getting data quality stats: {e}")
-        return error_response(
-            message="Failed to get data quality stats",
-            error_code="stats_error",
-            status_code=500
-        ) 
+        return create_response(error="Failed to get data quality stats")
 
 
-@router.get("/test")
+@router.get(
+    "/test",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Test successful"},
+        500: {"description": "Test failed"}
+    }
+)
 async def test_trades(
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Test endpoint to check database connectivity.
     """
@@ -544,29 +589,36 @@ async def test_trades(
         
         logger.info(f"Test successful - total trades: {total}")
         
-        return JSONResponse(content={
+        data = {
             "status": "success",
             "total_trades": total,
             "message": "Database connection working"
-        })
+        }
+        
+        return create_response(data=data)
         
     except Exception as e:
         logger.error(f"Test failed: {e}", exc_info=True)
-        return JSONResponse(content={
-            "status": "error",
-            "error": str(e)
-        }) 
-        
-        
-        
-@router.get("/member/{member_id}")
+        return create_response(error=str(e))
+
+
+@router.get(
+    "/member/{member_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Member trades retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Member not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_member_trades(
     member_id: str,  # Changed from int to str to accept UUID
     session: AsyncSession = Depends(get_db_session),
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get trades for a specific congress member.
     
@@ -588,18 +640,24 @@ async def get_member_trades(
         # "user_tier": current_user.subscription_tier,  # Temporarily disabled
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Member trades endpoint ready - database models needed"}
-            )
+    return create_response(data=data)
 
 
-@router.get("/{trade_id}")
+@router.get(
+    "/{trade_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Trade details retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Trade not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_trade(
     trade_id: int,
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get a specific congressional trade by ID.
     **Authenticated Feature**: Requires user authentication.
@@ -612,18 +670,24 @@ async def get_trade(
         # "user_tier": current_user.subscription_tier,  # Temporarily disabled
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Trade detail endpoint ready - database models needed"}
-    )
+    return create_response(data=data)
 
 
-@router.post("/{trade_id}/flag")
+@router.post(
+    "/{trade_id}/flag",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Trade flagged successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Trade not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def flag_trade(
     trade_id: int,
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Flag a trade for review.
     
@@ -638,7 +702,4 @@ async def flag_trade(
         "flagged_at": "2024-01-01T00:00:00Z",
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Trade flagged for review"}
-    ) 
+    return create_response(data=data) 

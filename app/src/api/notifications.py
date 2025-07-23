@@ -16,16 +16,25 @@ from core.logging import get_logger
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_user_optional, get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
+from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
 logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/subscriptions")
+@router.get(
+    "/subscriptions",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "User subscriptions retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_user_subscriptions(
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get user's notification subscriptions and preferences.
     
@@ -47,18 +56,24 @@ async def get_user_subscriptions(
         "total_subscriptions": 0,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "User subscriptions endpoint ready - subscription system needed"}
-    )
+    return create_response(data=data)
 
 
-@router.put("/subscriptions")
+@router.put(
+    "/subscriptions",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Subscription preferences updated successfully"},
+        400: {"description": "Invalid preferences"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def update_user_subscriptions(
     session: AsyncSession = Depends(get_db_session),
     preferences: Dict[str, Any] = Body(..., description="Notification preferences"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Update user's notification preferences.
     
@@ -73,13 +88,18 @@ async def update_user_subscriptions(
         "updated_at": datetime.utcnow().isoformat(),
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Subscription preferences updated successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/alerts")
+@router.get(
+    "/alerts",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "User alerts retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_user_alerts(
     session: AsyncSession = Depends(get_db_session),
     alert_type: Optional[str] = Query(None, description="Filter by alert type"),
@@ -87,7 +107,7 @@ async def get_user_alerts(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get user's configured trade alerts.
     
@@ -110,18 +130,39 @@ async def get_user_alerts(
         "alert_types": ["trade_volume", "price_change", "new_filing", "portfolio_change"],
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "User alerts endpoint ready - alert system needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=limit,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["alerts"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.post("/alerts")
+@router.post(
+    "/alerts",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Trade alert created successfully"},
+        400: {"description": "Invalid alert configuration"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def create_alert(
     session: AsyncSession = Depends(get_db_session),
     alert_data: Dict[str, Any] = Body(..., description="Alert configuration"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Create a new trade alert for the user.
     
@@ -138,19 +179,26 @@ async def create_alert(
         "is_active": True,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Trade alert created successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.put("/alerts/{alert_id}")
+@router.put(
+    "/alerts/{alert_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Trade alert updated successfully"},
+        400: {"description": "Invalid alert configuration"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Alert not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def update_alert(
     alert_id: int = Path(..., description="Alert ID"),
     session: AsyncSession = Depends(get_db_session),
     alert_data: Dict[str, Any] = Body(..., description="Updated alert configuration"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Update an existing trade alert.
     
@@ -166,18 +214,24 @@ async def update_alert(
         "updated_at": datetime.utcnow().isoformat(),
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Trade alert updated successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.delete("/alerts/{alert_id}")
+@router.delete(
+    "/alerts/{alert_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Trade alert deleted successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Alert not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def delete_alert(
     alert_id: int = Path(..., description="Alert ID"),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Delete a trade alert.
     
@@ -192,13 +246,18 @@ async def delete_alert(
         "deleted_at": datetime.utcnow().isoformat(),
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Trade alert deleted successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/alerts/history")
+@router.get(
+    "/alerts/history",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Alert history retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_alert_history(
     session: AsyncSession = Depends(get_db_session),
     alert_id: Optional[int] = Query(None, description="Specific alert ID"),
@@ -206,7 +265,7 @@ async def get_alert_history(
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get history of triggered alerts for the user.
     
@@ -228,17 +287,36 @@ async def get_alert_history(
         },
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Alert history endpoint ready - alert tracking needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=limit,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["alert_history"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.get("/newsletter/subscriptions")
+@router.get(
+    "/newsletter/subscriptions",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Newsletter subscriptions retrieved successfully"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_newsletter_subscriptions(
     session: AsyncSession = Depends(get_db_session),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get available newsletter subscriptions.
     
@@ -257,20 +335,25 @@ async def get_newsletter_subscriptions(
         "enhanced_data": enhanced_data,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Newsletter subscriptions endpoint ready - newsletter system needed"}
-    )
+    return create_response(data=data)
 
 
-@router.post("/newsletter/subscribe")
+@router.post(
+    "/newsletter/subscribe",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Newsletter subscription created successfully"},
+        400: {"description": "Invalid subscription data"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def subscribe_to_newsletter(
     session: AsyncSession = Depends(get_db_session),
     email: str = Body(..., description="Email address"),
     newsletter_type: str = Body("daily", description="Newsletter type"),
     preferences: Optional[Dict[str, Any]] = Body(None, description="Subscription preferences"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Subscribe to newsletter (public endpoint, enhanced for authenticated users).
     
@@ -289,19 +372,24 @@ async def subscribe_to_newsletter(
         "confirmation_required": not bool(current_user),  # No confirmation needed for authenticated users
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Newsletter subscription created successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.post("/newsletter/unsubscribe")
+@router.post(
+    "/newsletter/unsubscribe",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Successfully unsubscribed from newsletter"},
+        400: {"description": "Invalid unsubscribe data"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def unsubscribe_from_newsletter(
     session: AsyncSession = Depends(get_db_session),
     email: Optional[str] = Body(None, description="Email address (for non-authenticated users)"),
     token: Optional[str] = Body(None, description="Unsubscribe token"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Unsubscribe from newsletter.
     
@@ -317,18 +405,24 @@ async def unsubscribe_from_newsletter(
         "method": "authenticated" if current_user else "token",
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Successfully unsubscribed from newsletter"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/templates")
+@router.get(
+    "/templates",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Notification templates retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient permissions"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_notification_templates(
     session: AsyncSession = Depends(get_db_session),
     template_type: Optional[str] = Query(None, description="Filter by template type"),
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get notification templates for administration.
     
@@ -346,20 +440,41 @@ async def get_notification_templates(
         },
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Notification templates endpoint ready - template system needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=50,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["templates"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.get("/delivery/status")
+@router.get(
+    "/delivery/status",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Delivery status retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient permissions"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_delivery_status(
     session: AsyncSession = Depends(get_db_session),
     notification_id: Optional[int] = Query(None, description="Specific notification ID"),
     days: int = Query(7, ge=1, le=30, description="Number of days"),
     status: Optional[str] = Query(None, description="Filter by delivery status"),
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get notification delivery status and metrics.
     
@@ -386,20 +501,27 @@ async def get_delivery_status(
         "statuses": ["pending", "delivered", "failed", "bounced", "opened"],
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Delivery status endpoint ready - tracking system needed"}
-    )
+    return create_response(data=data)
 
 
-@router.post("/test/send")
+@router.post(
+    "/test/send",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Test notification sent successfully"},
+        400: {"description": "Invalid test notification data"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient permissions"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def send_test_notification(
     session: AsyncSession = Depends(get_db_session),
     notification_type: str = Body(..., description="Type of test notification"),
     recipient_email: str = Body(..., description="Test recipient email"),
     test_data: Optional[Dict[str, Any]] = Body(None, description="Test data"),
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Send a test notification for development/testing.
     
@@ -418,20 +540,26 @@ async def send_test_notification(
         "initiated_by": current_user.id,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Test notification sent successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/analytics")
+@router.get(
+    "/analytics",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Notification analytics retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient subscription"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_notification_analytics(
     session: AsyncSession = Depends(get_db_session),
     date_from: Optional[str] = Query(None, description="Start date (YYYY-MM-DD)"),
     date_to: Optional[str] = Query(None, description="End date (YYYY-MM-DD)"),
     notification_type: Optional[str] = Query(None, description="Filter by notification type"),
     current_user: User = Depends(require_subscription(['premium', 'enterprise'])),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get notification analytics and engagement metrics.
     
@@ -458,7 +586,4 @@ async def get_notification_analytics(
         "subscription_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Notification analytics endpoint ready - analytics system needed"}
-    ) 
+    return create_response(data=data) 

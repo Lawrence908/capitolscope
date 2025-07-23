@@ -16,12 +16,22 @@ from core.logging import get_logger
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
+from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
 logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Portfolios retrieved successfully"},
+        400: {"description": "Invalid parameters"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_portfolios(
     session: AsyncSession = Depends(get_db_session),
     skip: int = Query(0, ge=0, description="Number of portfolios to skip"),
@@ -29,7 +39,7 @@ async def get_portfolios(
     member_id: Optional[int] = Query(None, description="Filter by congress member ID"),
     portfolio_type: Optional[str] = Query(None, description="Filter by portfolio type"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get congressional member portfolios.
     
@@ -56,18 +66,39 @@ async def get_portfolios(
         "user_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio endpoints ready - database models needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=limit,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["portfolios"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.get("/{portfolio_id}")
+@router.get(
+    "/{portfolio_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Portfolio details retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Portfolio not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_portfolio(
     portfolio_id: int = Path(..., description="Portfolio ID"),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get a specific portfolio by ID with detailed information.
     
@@ -87,20 +118,26 @@ async def get_portfolio(
         "user_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio detail endpoint ready - database models needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/{portfolio_id}/holdings")
+@router.get(
+    "/{portfolio_id}/holdings",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Portfolio holdings retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Portfolio not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_portfolio_holdings(
     portfolio_id: int = Path(..., description="Portfolio ID"),
     session: AsyncSession = Depends(get_db_session),
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=100),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get holdings for a specific portfolio.
     
@@ -119,13 +156,35 @@ async def get_portfolio_holdings(
         "total_value": 0,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio holdings endpoint ready - database models needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=limit,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["holdings"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.get("/{portfolio_id}/performance")
+@router.get(
+    "/{portfolio_id}/performance",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Portfolio performance retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient subscription"},
+        404: {"description": "Portfolio not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_portfolio_performance(
     portfolio_id: int = Path(..., description="Portfolio ID"),
     session: AsyncSession = Depends(get_db_session),
@@ -133,7 +192,7 @@ async def get_portfolio_performance(
     date_to: Optional[date] = Query(None, description="End date for performance analysis"),
     period: str = Query("daily", description="Period type (daily, weekly, monthly)"),
     current_user: User = Depends(require_subscription(['pro', 'premium', 'enterprise'])),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get portfolio performance metrics and analytics.
     
@@ -163,19 +222,26 @@ async def get_portfolio_performance(
         "subscription_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio performance endpoint ready - calculation engine needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/{portfolio_id}/analytics")
+@router.get(
+    "/{portfolio_id}/analytics",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Portfolio analytics retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient subscription"},
+        404: {"description": "Portfolio not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_portfolio_analytics(
     portfolio_id: int = Path(..., description="Portfolio ID"),
     session: AsyncSession = Depends(get_db_session),
     analysis_type: str = Query("comprehensive", description="Type of analysis"),
     current_user: User = Depends(require_subscription(['premium', 'enterprise'])),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get advanced portfolio analytics and insights.
     
@@ -199,19 +265,25 @@ async def get_portfolio_analytics(
         "subscription_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio analytics endpoint ready - analytics engine needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/member/{member_id}")
+@router.get(
+    "/member/{member_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Member portfolios retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Member not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_member_portfolios(
     member_id: int = Path(..., description="Congress member ID"),
     session: AsyncSession = Depends(get_db_session),
     portfolio_type: Optional[str] = Query(None, description="Filter by portfolio type"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get all portfolios for a specific congress member.
     
@@ -233,20 +305,27 @@ async def get_member_portfolios(
         "user_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Member portfolios endpoint ready - database models needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/{portfolio_id}/compare/{comparison_portfolio_id}")
+@router.get(
+    "/{portfolio_id}/compare/{comparison_portfolio_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Portfolio comparison retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient subscription"},
+        404: {"description": "Portfolio not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def compare_portfolios(
     portfolio_id: int = Path(..., description="Primary portfolio ID"),
     comparison_portfolio_id: int = Path(..., description="Portfolio to compare against"),
     session: AsyncSession = Depends(get_db_session),
     metrics: List[str] = Query(["return", "risk", "sharpe"], description="Metrics to compare"),
     current_user: User = Depends(require_subscription(['premium', 'enterprise'])),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Compare two portfolios across various metrics.
     
@@ -267,19 +346,26 @@ async def compare_portfolios(
         "subscription_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio comparison endpoint ready - comparison engine needed"}
-    )
+    return create_response(data=data)
 
 
-@router.post("/{portfolio_id}/snapshot")
+@router.post(
+    "/{portfolio_id}/snapshot",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Portfolio snapshot created successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient permissions"},
+        404: {"description": "Portfolio not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def create_portfolio_snapshot(
     portfolio_id: int = Path(..., description="Portfolio ID"),
     session: AsyncSession = Depends(get_db_session),
     snapshot_type: str = Query("manual", description="Type of snapshot"),
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Create a portfolio snapshot for historical tracking.
     
@@ -297,13 +383,19 @@ async def create_portfolio_snapshot(
         "created_by": current_user.id,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio snapshot created successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/{portfolio_id}/export")
+@router.get(
+    "/{portfolio_id}/export",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Portfolio export URL generated successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Portfolio not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def export_portfolio_data(
     portfolio_id: int = Path(..., description="Portfolio ID"),
     session: AsyncSession = Depends(get_db_session),
@@ -311,7 +403,7 @@ async def export_portfolio_data(
     include_holdings: bool = Query(True, description="Include holdings data"),
     include_performance: bool = Query(True, description="Include performance data"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Export portfolio data in various formats.
     
@@ -333,7 +425,4 @@ async def export_portfolio_data(
         "user_id": current_user.id,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Portfolio export ready - export implementation needed"}
-    ) 
+    return create_response(data=data) 

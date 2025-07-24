@@ -8,6 +8,7 @@ import {
   HomeIcon,
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
+import MembersBrowser from './MembersBrowser';
 
 interface LayoutProps {
   children: React.ReactNode;

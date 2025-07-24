@@ -21,9 +21,8 @@ import uuid
 
 from domains.base.models import CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin
 from domains.base.schemas import SubscriptionTier
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

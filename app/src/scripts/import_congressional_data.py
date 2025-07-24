@@ -37,10 +37,9 @@ from core.logging import configure_logging
 configure_logging()
 
 from core.database import DatabaseManager, init_database, get_sync_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.congressional.ingestion import CongressionalDataIngestion
-
-logger = get_logger(__name__)
 
 # Add a dedicated log file for this script
 script_log_handler = logging.FileHandler("/app/logs/import_script.log")

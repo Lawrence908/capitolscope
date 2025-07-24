@@ -30,9 +30,8 @@ from domains.users.schemas import (
     SubscriptionUpdate, SubscriptionInfo, UserStatus, SubscriptionTier
 )
 from core.exceptions import NotFoundError, ValidationError, AuthenticationError, BusinessLogicError
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

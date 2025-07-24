@@ -75,6 +75,7 @@ export interface TradeFilters {
   notification_date_to?: string;
   amount_min?: number;
   amount_max?: number;
+  amount_range?: string;
   search?: string;
   sort_by?: 'transaction_date' | 'notification_date' | 'amount' | 'member_name' | 'ticker' | 'transaction_type';
   sort_order?: 'asc' | 'desc';

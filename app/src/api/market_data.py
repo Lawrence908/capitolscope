@@ -12,13 +12,13 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_user_optional, get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
-logger = get_logger(__name__)
 router = APIRouter()
 
 
@@ -47,9 +47,7 @@ async def get_daily_prices(
     Returns OHLC data with volume and technical indicators.
     Optional authentication - authenticated users get enhanced data.
     """
-    logger.info("Getting daily prices", symbol=symbol, symbols=symbols, 
-               date_from=date_from, date_to=date_to, skip=skip, limit=limit,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting daily prices: symbol={symbol}, symbols={symbols}")
     
     # Enhanced features for authenticated users
     enhanced_data = current_user is not None
@@ -117,8 +115,7 @@ async def get_intraday_prices(
     
     **Premium Feature**: Requires Pro, Premium, or Enterprise subscription.
     """
-    logger.info("Getting intraday prices", symbol=symbol, date=date, 
-               interval=interval, user_id=current_user.id)
+    logger.info(f"Getting intraday prices: symbol={symbol}, date={date}, interval={interval}")
     
     # TODO: Implement intraday price retrieval
     data = {
@@ -160,9 +157,7 @@ async def get_symbol_prices(
     
     Enhanced data for authenticated users.
     """
-    logger.info("Getting symbol prices", symbol=symbol, date_from=date_from, 
-               date_to=date_to, include_technical=include_technical,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting symbol prices: symbol={symbol}, date_from={date_from}, date_to={date_to}, include_technical={include_technical}")
     
     enhanced_data = current_user is not None
     premium_features = current_user and current_user.is_premium if current_user else False
@@ -202,8 +197,7 @@ async def get_market_indices(
     
     Real-time values and performance metrics.
     """
-    logger.info("Getting market indices", index_type=index_type,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting market indices: index_type={index_type}")
     
     enhanced_data = current_user is not None
     
@@ -261,8 +255,7 @@ async def get_index_history(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting index history", symbol=symbol, date_from=date_from, 
-               date_to=date_to, user_id=current_user.id)
+    logger.info(f"Getting index history: symbol={symbol}, date_from={date_from}, date_to={date_to}")
     
     # TODO: Implement index history retrieval
     data = {
@@ -304,8 +297,7 @@ async def get_economic_indicators(
     
     **Premium Feature**: Requires Premium or Enterprise subscription.
     """
-    logger.info("Getting economic indicators", category=category, 
-               date_from=date_from, date_to=date_to, user_id=current_user.id)
+    logger.info(f"Getting economic indicators: category={category}, date_from={date_from}, date_to={date_to}")
     
     # TODO: Implement economic indicators retrieval
     data = {
@@ -357,8 +349,7 @@ async def get_treasury_rates(
     
     Risk-free rates for portfolio analysis.
     """
-    logger.info("Getting treasury rates", date_from=date_from, date_to=date_to,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting treasury rates: date_from={date_from}, date_to={date_to}")
     
     enhanced_data = current_user is not None
     
@@ -396,7 +387,7 @@ async def get_data_feed_status(
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Getting data feed status", user_id=current_user.id)
+    logger.info(f"Getting data feed status: user_id={current_user.id}")
     
     # TODO: Implement data feed status monitoring
     data = {
@@ -434,7 +425,7 @@ async def refresh_data_feed(
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Refreshing data feed", feed_id=feed_id, force=force, user_id=current_user.id)
+    logger.info(f"Refreshing data feed: feed_id={feed_id}, force={force}, user_id={current_user.id}")
     
     # TODO: Implement data feed refresh
     data = {
@@ -466,7 +457,7 @@ async def get_market_holidays(
     
     Public endpoint for trading calendar information.
     """
-    logger.info("Getting market holidays", year=year, market=market)
+    logger.info(f"Getting market holidays: year={year}, market={market}")
     
     # TODO: Implement market holidays retrieval
     data = {
@@ -502,8 +493,7 @@ async def search_securities(
     
     Enhanced results for authenticated users.
     """
-    logger.info("Searching securities", query=query, limit=limit, asset_types=asset_types,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Searching securities: query={query}, limit={limit}, asset_types={asset_types}")
     
     enhanced_data = current_user is not None
     

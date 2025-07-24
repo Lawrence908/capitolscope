@@ -97,7 +97,25 @@ class APIClient {
     const params = new URLSearchParams();
     params.append('page', page.toString());
     params.append('limit', limit.toString());
-    Object.entries(filters).forEach(([key, value]) => {
+    
+    // Handle amount_range filter
+    const { amount_range, ...otherFilters } = filters;
+    if (amount_range) {
+      const [min, max] = amount_range.split('-');
+      if (min) {
+        params.append('amount_min', (parseInt(min) * 100).toString()); // Convert to cents
+      }
+      if (max && max !== '+') {
+        params.append('amount_max', (parseInt(max) * 100).toString()); // Convert to cents
+      }
+      // Handle the case where max is '+' (unlimited upper bound)
+      if (max === '+') {
+        // Don't set amount_max, which means no upper limit
+        // The backend will handle this as "greater than amount_min"
+      }
+    }
+    
+    Object.entries(otherFilters).forEach(([key, value]) => {
       if (value === undefined || value === null || value === '') return;
       if (Array.isArray(value)) {
         value.forEach((v) => params.append(key, v.toString()));

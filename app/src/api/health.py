@@ -8,14 +8,14 @@ import time
 
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-import structlog
+import logging
 
 from core.database import check_database_health, DatabaseManager
 from core.config import settings
 from core.responses import success_response, error_response
 from schemas.base import ResponseEnvelope, create_response
 
-logger = structlog.get_logger(__name__)
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -154,7 +154,7 @@ async def readiness_check() -> ResponseEnvelope[Dict[str, Any]]:
     database_health = await check_database_health()
     
     if database_health["status"] != "healthy":
-        logger.warning("Readiness check failed", reason="database_unhealthy")
+        logger.warning(f"Readiness check failed: reason=database_unhealthy")
         
         return create_response(error="Service not ready - database connection failed")
     

@@ -10,7 +10,8 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response
 from core.auth import (
     authenticate_user, get_current_user, get_current_active_user,
@@ -24,7 +25,6 @@ from domains.users.schemas import (
 )
 from schemas.base import ResponseEnvelope, create_response
 
-logger = get_logger(__name__)
 router = APIRouter()
 
 
@@ -46,7 +46,7 @@ async def login(
     
     Returns JWT tokens for valid credentials.
     """
-    logger.info("User login attempt", email=request.email)
+    logger.info(f"User login attempt: email={request.email}")
     
     # Authenticate user
     user = await authenticate_user(request.email, request.password, session)
@@ -61,7 +61,7 @@ async def login(
     # Create token response
     token_data = create_token_response(user)
     
-    logger.info("User login successful", user_id=user.id, email=user.email)
+    logger.info(f"User login successful: user_id={user.id}, email={user.email}")
     return create_response(data=token_data)
 
 
@@ -82,7 +82,7 @@ async def get_current_user_info(
     
     Returns user profile for authenticated user.
     """
-    logger.info("Getting current user info", user_id=current_user.id, email=current_user.email)
+    logger.info(f"Getting current user info: user_id={current_user.id}, email={current_user.email}")
     
     try:
         # Convert user model to response schema
@@ -90,7 +90,7 @@ async def get_current_user_info(
         return create_response(data=user_data)
         
     except Exception as e:
-        logger.error("Error getting current user info", error=str(e), user_id=getattr(current_user, 'id', 'unknown'))
+        logger.error(f"Error getting current user info: error={str(e)}, user_id={getattr(current_user, 'id', 'unknown')}")
         return create_response(error=f"Failed to retrieve user information: {str(e)}")
 
 
@@ -111,7 +111,7 @@ async def logout(
     Note: Since we're using stateless JWT tokens, this is mainly for 
     logging purposes. Clients should discard the token on logout.
     """
-    logger.info("User logout", user_id=current_user.id, email=current_user.email)
+    logger.info(f"User logout: user_id={current_user.id}, email={current_user.email}")
     
     return create_response(data={"logged_out": True})
 
@@ -160,14 +160,14 @@ async def refresh_token(
         # Create new token response
         token_data = create_token_response(user)
         
-        logger.info("Token refresh successful", user_id=user.id)
+        logger.info(f"Token refresh successful: user_id={user.id}")
         return create_response(data=token_data)
         
     except AuthenticationError as e:
-        logger.warning("Token refresh failed", error=str(e))
+        logger.error(f"Token refresh failed: {str(e)}")
         return create_response(error=str(e))
     except Exception as e:
-        logger.error("Token refresh error", error=str(e))
+        logger.error(f"Token refresh error: {str(e)}")
         return create_response(error="Token refresh failed")
 
 
@@ -189,7 +189,7 @@ async def register(
     
     Creates a new user account and returns JWT tokens.
     """
-    logger.info("User registration attempt", email=request.email)
+    logger.info(f"User registration attempt: email={request.email}")
     
     try:
         # Check if user already exists
@@ -230,16 +230,16 @@ async def register(
         # Create token response
         token_data = create_token_response(user)
         
-        logger.info("User registration successful", user_id=user.id, email=user.email)
+        logger.info(f"User registration successful: user_id={user.id}, email={user.email}")
         return create_response(data=token_data)
         
     except IntegrityError as e:
         await session.rollback()
-        logger.error("Database integrity error during registration", error=str(e))
+        logger.error(f"Database integrity error during registration: {str(e)}")
         return create_response(error="Registration failed - user may already exist")
     except Exception as e:
         await session.rollback()
-        logger.error("Registration error", error=str(e))
+        logger.error(f"Registration error: {str(e)}")
         return create_response(error="Registration failed")
 
 
@@ -262,7 +262,7 @@ async def change_password(
     
     Requires current password verification.
     """
-    logger.info("Password change request", user_id=current_user.id)
+    logger.info(f"Password change request: user_id={current_user.id}")
     
     # Verify current password
     user = await authenticate_user(current_user.email, request.current_password, session)
@@ -276,7 +276,7 @@ async def change_password(
     user.password_hash = get_password_hash(request.new_password)
     await session.commit()
     
-    logger.info("Password changed successfully", user_id=current_user.id)
+    logger.info(f"Password changed successfully: user_id={current_user.id}")
     return create_response(data={"message": "Password changed successfully"})
 
 
@@ -297,7 +297,7 @@ async def reset_password(
     
     Sends reset token to user's email.
     """
-    logger.info("Password reset request", email=request.email)
+    logger.info(f"Password reset request: email={request.email}")
     
     # Check if user exists
     result = await session.execute(
@@ -309,7 +309,7 @@ async def reset_password(
     if user:
         # In a real app, you'd send an email with reset token
         # For now, we'll just log it
-        logger.info("Password reset token would be sent", user_id=user.id)
+        logger.info(f"Password reset token would be sent: user_id={user.id}")
     
     return create_response(data={"message": "If an account with that email exists, a reset link has been sent"})
 

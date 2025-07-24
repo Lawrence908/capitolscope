@@ -17,10 +17,10 @@ import yfinance as yf
 from dataclasses import dataclass
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.config import get_settings
 
-logger = get_logger(__name__)
 settings = get_settings()
 
 

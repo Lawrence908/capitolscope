@@ -18,14 +18,13 @@ import argparse
 from pathlib import Path
 from typing import Dict, Any, List
 
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.securities.data_fetcher import (
     EnhancedStockDataService, 
     StockDataRequest,
     TickerListFetcher
 )
-
-logger = get_logger(__name__)
 
 
 def parse_ticker_file(file_path: str) -> List[str]:
@@ -293,7 +292,6 @@ async def main():
     args = parser.parse_args()
     
     # Configure logging level
-    import logging
     log_level = getattr(logging, args.log_level.upper())
     logging.getLogger().setLevel(log_level)
     

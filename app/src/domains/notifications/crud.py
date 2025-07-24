@@ -8,9 +8,8 @@ including subscriptions, alerts, and delivery tracking.
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 class NotificationCRUD:

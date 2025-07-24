@@ -20,15 +20,15 @@ import pandas as pd
 from pathlib import Path
 from typing import Dict, Any, List
 import random
+import logging
 
 # Add src directory to path
 src_path = Path(__file__).parent.parent / "app" / "src"
 sys.path.insert(0, str(src_path))
 
-from core.logging import get_logger
 from import_congressional_data import CongressionalDataValidator
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def test_sample_records(csv_file: str, sample_size: int = 100) -> Dict[str, Any]:

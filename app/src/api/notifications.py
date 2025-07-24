@@ -12,7 +12,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_user_optional, get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
@@ -25,7 +26,6 @@ from domains.notifications.schemas import (
     AlertType, DeliveryStatus, NotificationType
 )
 
-logger = get_logger(__name__)
 router = APIRouter()
 
 
@@ -47,7 +47,7 @@ async def get_user_subscriptions(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting user subscriptions", user_id=current_user.id)
+    logger.info(f"Getting user subscriptions: user_id={current_user.id}")
     
     # TODO: Implement subscription retrieval
     
@@ -90,7 +90,7 @@ async def update_user_subscriptions(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Updating user subscriptions", user_id=current_user.id, preferences=preferences)
+    logger.info(f"Updating user subscriptions: user_id={current_user.id}, preferences={preferences}")
     
     # TODO: Implement subscription update
     
@@ -133,8 +133,8 @@ async def get_user_alerts(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting user alerts", user_id=current_user.id, alert_type=alert_type, 
-               is_active=is_active, skip=skip, limit=limit)
+    logger.info(f"Getting user alerts: user_id={current_user.id}, alert_type={alert_type}, "
+               f"is_active={is_active}, skip={skip}, limit={limit}")
     
     # TODO: Implement user alerts retrieval
     
@@ -197,7 +197,7 @@ async def create_alert(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Creating alert", user_id=current_user.id, alert_data=alert_data)
+    logger.info(f"Creating alert: user_id={current_user.id}, alert_data={alert_data}")
     
     # TODO: Implement alert creation
     
@@ -244,7 +244,7 @@ async def update_alert(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Updating alert", alert_id=alert_id, user_id=current_user.id, alert_data=alert_data)
+    logger.info(f"Updating alert: alert_id={alert_id}, user_id={current_user.id}, alert_data={alert_data}")
     
     # TODO: Implement alert update with ownership validation
     
@@ -289,7 +289,7 @@ async def delete_alert(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Deleting alert", alert_id=alert_id, user_id=current_user.id)
+    logger.info(f"Deleting alert: alert_id={alert_id}, user_id={current_user.id}")
     
     # TODO: Implement alert deletion with ownership validation
     data = {
@@ -322,8 +322,8 @@ async def get_alert_history(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting alert history", user_id=current_user.id, alert_id=alert_id, 
-               days=days, skip=skip, limit=limit)
+    logger.info(f"Getting alert history: user_id={current_user.id}, alert_id={alert_id}, "
+               f"days={days}, skip={skip}, limit={limit}")
     
     # TODO: Implement alert history retrieval
     
@@ -376,7 +376,7 @@ async def get_newsletter_subscriptions(
     
     Enhanced options for authenticated users.
     """
-    logger.info("Getting newsletter subscriptions", user_id=current_user.id if current_user else None)
+    logger.info(f"Getting newsletter subscriptions: user_id={current_user.id if current_user else None}")
     
     enhanced_data = current_user is not None
     
@@ -413,8 +413,8 @@ async def subscribe_to_newsletter(
     
     Public endpoint - no authentication required for basic subscription.
     """
-    logger.info("Newsletter subscription", email=email, newsletter_type=newsletter_type,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Newsletter subscription: email={email}, newsletter_type={newsletter_type}, "
+               f"user_id={current_user.id if current_user else None}")
     
     # TODO: Implement newsletter subscription
     data = NewsletterSubscription(
@@ -450,8 +450,8 @@ async def unsubscribe_from_newsletter(
     
     Can be used by authenticated users or via unsubscribe token.
     """
-    logger.info("Newsletter unsubscription", email=email, token=token,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Newsletter unsubscription: email={email}, token={token}, "
+               f"user_id={current_user.id if current_user else None}")
     
     # TODO: Implement newsletter unsubscription
     data = NewsletterUnsubscribeResponse(
@@ -483,7 +483,7 @@ async def get_notification_templates(
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Getting notification templates", template_type=template_type, user_id=current_user.id)
+    logger.info(f"Getting notification templates: template_type={template_type}, user_id={current_user.id}")
     
     # TODO: Implement template retrieval
     
@@ -543,8 +543,8 @@ async def get_delivery_status(
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Getting delivery status", notification_id=notification_id, 
-               days=days, status=status, user_id=current_user.id)
+    logger.info(f"Getting delivery status: notification_id={notification_id}, "
+               f"days={days}, status={status}, user_id={current_user.id}")
     
     # TODO: Implement delivery status tracking
     data = {
@@ -590,8 +590,8 @@ async def send_test_notification(
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Sending test notification", notification_type=notification_type, 
-               recipient_email=recipient_email, user_id=current_user.id)
+    logger.info(f"Sending test notification: notification_type={notification_type}, "
+               f"recipient_email={recipient_email}, user_id={current_user.id}")
     
     # TODO: Implement test notification sending
     data = {
@@ -628,8 +628,8 @@ async def get_notification_analytics(
     
     **Premium Feature**: Requires Premium or Enterprise subscription.
     """
-    logger.info("Getting notification analytics", date_from=date_from, date_to=date_to,
-               notification_type=notification_type, user_id=current_user.id)
+    logger.info(f"Getting notification analytics: date_from={date_from}, date_to={date_to}, "
+               f"notification_type={notification_type}, user_id={current_user.id}")
     
     # TODO: Implement notification analytics
     data = {

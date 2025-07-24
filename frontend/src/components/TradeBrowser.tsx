@@ -18,11 +18,13 @@ const TradeBrowser: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(false);
 
   // Fetch trades with current filters and pagination
   const fetchTrades = useCallback(async (page: number = 1) => {
     try {
       setLoading(true);
+      setFilterLoading(true);
       setError(null);
       
       const response = await apiClient.getTrades(filters, page, 50);
@@ -33,6 +35,7 @@ const TradeBrowser: React.FC = () => {
       console.error('Error fetching trades:', err);
     } finally {
       setLoading(false);
+      setFilterLoading(false);
     }
   }, [filters]);
 
@@ -45,7 +48,11 @@ const TradeBrowser: React.FC = () => {
   const handleFilterChange = (key: keyof TradeFilters, value: string | number | undefined) => {
     setFilters((prev: TradeFilters) => ({
       ...prev,
-      [key]: value === '' ? undefined : value,
+      [key]: value === '' ? undefined : 
+        // Convert single values to arrays for backend compatibility
+        key === 'parties' || key === 'chambers' || key === 'transaction_types' || key === 'owners' || key === 'tickers'
+          ? (value ? [value] : undefined)
+          : value,
     }));
   };
 
@@ -72,10 +79,17 @@ const TradeBrowser: React.FC = () => {
     return `$${num.toLocaleString()}`;
   };
 
-  const formatCentsToDollars = (cents?: number | null) =>
-    cents !== undefined && cents !== null
-      ? `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-      : 'N/A';
+  const formatCentsToDollars = (cents?: number | null) => {
+    if (cents === undefined || cents === null || cents === 0) return 'N/A';
+    const dollars = cents / 100;
+    if (dollars >= 1000000) {
+      return `$${(dollars / 1000000).toFixed(1)}M`;
+    } else if (dollars >= 1000) {
+      return `$${(dollars / 1000).toFixed(0)}K`;
+    } else {
+      return `$${dollars.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    }
+  };
 
   // Get party color
   const getPartyColor = (party: string) => {
@@ -92,10 +106,12 @@ const TradeBrowser: React.FC = () => {
   // Get transaction type icon and color
   const getTransactionTypeStyle = (type: string) => {
     switch (type) {
-      case 'purchase':
+      case 'P':
         return { icon: ArrowUpIcon, color: 'text-green-600' };
-      case 'sale':
+      case 'S':
         return { icon: ArrowDownIcon, color: 'text-red-600' };
+      case 'E':
+        return { icon: ExclamationTriangleIcon, color: 'text-yellow-600' };
       default:
         return { icon: ExclamationTriangleIcon, color: 'text-yellow-600' };
     }
@@ -162,6 +178,25 @@ const TradeBrowser: React.FC = () => {
             <p className="text-sm text-gray-600 mt-1">
               {trades?.total ? `${trades.total.toLocaleString()} total trades` : 'Loading...'}
             </p>
+            {trades && trades.total > 0 && (
+              <div className="mt-2 flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">
+                <span>📊 {trades.items.filter(t => t.transaction_type === 'P').length} purchases</span>
+                <span>📉 {trades.items.filter(t => t.transaction_type === 'S').length} sales</span>
+                <span>💰 {trades.items.filter(t => t.amount_exact && t.amount_exact >= 1000000).length} major trades</span>
+                <span>👥 {new Set(trades.items.map(t => t.member_name)).size} members</span>
+                {filters.amount_range && (
+                  <span className="text-blue-600 dark:text-blue-400">
+                    🔍 Filtered by amount range
+                  </span>
+                )}
+                {filterLoading && (
+                  <span className="flex items-center text-blue-600 dark:text-blue-400">
+                    <div className="animate-spin rounded-full h-3 w-3 border-b border-current mr-1"></div>
+                    Updating...
+                  </span>
+                )}
+              </div>
+            )}
           </div>
           
           <div className="flex gap-2">
@@ -171,6 +206,18 @@ const TradeBrowser: React.FC = () => {
             >
               <FunnelIcon className="h-4 w-4" />
               Filters
+            </button>
+            <button
+              onClick={() => {
+                // TODO: Implement CSV export
+                alert('Export functionality coming soon!');
+              }}
+              className="btn-secondary flex items-center gap-2"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Export
             </button>
           </div>
         </div>
@@ -189,6 +236,41 @@ const TradeBrowser: React.FC = () => {
           </div>
         </form>
 
+        {/* Quick Amount Filters */}
+        <div className="mt-4 flex flex-wrap gap-2 items-center">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Quick Filters:</span>
+          {[
+            { label: '$1K-$15K', value: '1001-15000', description: 'Standard congressional range: $1,001 - $15,000' },
+            { label: '$15K-$50K', value: '15001-50000', description: 'Standard congressional range: $15,001 - $50,000' },
+            { label: '$50K-$100K', value: '50001-100000', description: 'Standard congressional range: $50,001 - $100,000' },
+            { label: '$100K-$250K', value: '100001-250000', description: 'Standard congressional range: $100,001 - $250,000' },
+            { label: '$250K-$500K', value: '250001-500000', description: 'Standard congressional range: $250,001 - $500,000' },
+            { label: '$500K-$1M', value: '500001-1000000', description: 'Standard congressional range: $500,001 - $1,000,000' },
+            { label: '$1M+', value: '1000001-10000000', description: 'Standard congressional range: $1,000,001+' }
+          ].map((filter) => (
+            <button
+              key={filter.value}
+              onClick={() => handleFilterChange('amount_range', filter.value)}
+              className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                filters.amount_range === filter.value
+                  ? 'bg-primary-600 text-white border-primary-600'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+              }`}
+              title={filter.description}
+            >
+              {filter.label}
+            </button>
+          ))}
+          {filters.amount_range && (
+            <button
+              onClick={() => handleFilterChange('amount_range', undefined)}
+              className="px-2 py-1 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              ✕ Clear
+            </button>
+          )}
+        </div>
+
         {/* Filters panel */}
         {showFilters && (
           <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg transition-colors duration-200">
@@ -203,9 +285,9 @@ const TradeBrowser: React.FC = () => {
                   className="input-field"
                 >
                   <option value="">All Types</option>
-                  <option value="purchase">Purchase</option>
-                  <option value="sale">Sale</option>
-                  <option value="exchange">Exchange</option>
+                  <option value="P">Purchase</option>
+                  <option value="S">Sale</option>
+                  <option value="E">Exchange</option>
                 </select>
               </div>
 
@@ -219,9 +301,9 @@ const TradeBrowser: React.FC = () => {
                   className="input-field"
                 >
                   <option value="">All Parties</option>
-                  <option value="Republican">Republican</option>
-                  <option value="Democratic">Democratic</option>
-                  <option value="Independent">Independent</option>
+                  <option value="R">Republican</option>
+                  <option value="D">Democratic</option>
+                  <option value="I">Independent</option>
                 </select>
               </div>
 
@@ -240,22 +322,7 @@ const TradeBrowser: React.FC = () => {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Owner
-                </label>
-                <select
-                  value={filters.owners || ''}
-                  onChange={(e) => handleFilterChange('owners', e.target.value as any)}
-                  className="input-field"
-                >
-                  <option value="">All Owners</option>
-                  <option value="SP">Spouse</option>
-                  <option value="JT">Joint</option>
-                  <option value="DC">Dependent Child</option>
-                  <option value="C">Self</option>
-                </select>
-              </div>
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -292,6 +359,27 @@ const TradeBrowser: React.FC = () => {
                   onChange={(e) => handleFilterChange('tickers', e.target.value ? e.target.value : undefined)}
                   className="input-field"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Amount Range
+                </label>
+                <select
+                  value={filters.amount_range || ''}
+                  onChange={(e) => handleFilterChange('amount_range', e.target.value as any)}
+                  className="input-field"
+                >
+                  <option value="">All Amounts</option>
+                  <option value="1-1000">$1 - $1,000</option>
+                  <option value="1001-15000">$1,001 - $15,000</option>
+                  <option value="15001-50000">$15,001 - $50,000</option>
+                  <option value="50001-100000">$50,001 - $100,000</option>
+                  <option value="100001-250000">$100,001 - $250,000</option>
+                  <option value="250001-500000">$250,001 - $500,000</option>
+                  <option value="500001-1000000">$500,001 - $1,000,000</option>
+                  <option value="1000001-10000000">$1,000,001+</option>
+                </select>
               </div>
 
               <div className="flex items-end">
@@ -388,13 +476,38 @@ const TradeBrowser: React.FC = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className={`flex items-center ${color}`}> {/* color is still used for icon */}
                             <TypeIcon className="h-4 w-4 mr-1" />
-                            <span className="capitalize text-sm font-semibold text-gray-900 dark:text-white" aria-label="Transaction type">{trade.transaction_type}</span>
+                            <span className="capitalize text-sm font-semibold text-gray-900 dark:text-white" aria-label="Transaction type">
+                              {trade.transaction_type === 'P' ? 'Purchase' : 
+                               trade.transaction_type === 'S' ? 'Sale' : 
+                               trade.transaction_type === 'E' ? 'Exchange' : 
+                               trade.transaction_type || 'Unknown'}
+                            </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-semibold" aria-label="Amount">
-                          {trade.amount_exact !== undefined && trade.amount_exact !== null
-                            ? formatCentsToDollars(trade.amount_exact)
-                            : `${formatCentsToDollars(trade.amount_min)} - ${formatCentsToDollars(trade.amount_max)}`}
+                          <div className="flex items-center">
+                            {trade.amount_exact !== undefined && trade.amount_exact !== null ? (
+                              <span className="flex items-center">
+                                {formatCentsToDollars(trade.amount_exact)}
+                                {trade.amount_exact >= 1000000 && (
+                                  <span className="ml-1 px-1.5 py-0.5 text-xs bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 rounded-full">
+                                    Major
+                                  </span>
+                                )}
+                              </span>
+                            ) : (trade.amount_min !== undefined && trade.amount_min !== null && trade.amount_max !== undefined && trade.amount_max !== null) ? (
+                              <span className="flex items-center">
+                                {formatCentsToDollars(trade.amount_min)} - {formatCentsToDollars(trade.amount_max)}
+                                {trade.amount_max >= 1000000 && (
+                                  <span className="ml-1 px-1.5 py-0.5 text-xs bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 rounded-full">
+                                    Major
+                                  </span>
+                                )}
+                              </span>
+                            ) : (
+                              'N/A'
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white" aria-label="Date">
                           {formatDate(safeString(trade.transaction_date))}

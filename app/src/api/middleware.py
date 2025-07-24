@@ -8,10 +8,10 @@ from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
-from core.logging import get_logger
-from core.config import settings
+import logging
+logger = logging.getLogger(__name__)
 
-logger = get_logger(__name__)
+from core.config import settings
 
 
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
@@ -24,13 +24,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         start_time = time.time()
         
         # Log request
-        logger.info(
-            "HTTP request started",
-            method=request.method,
-            path=request.url.path,
-            query_params=dict(request.query_params),
-            client_host=request.client.host if request.client else None,
-        )
+        logger.info(f"HTTP request started: method={request.method}, path={request.url.path}, query_params={dict(request.query_params)}, client_host={request.client.host if request.client else None}")
         
         # Process request
         response = await call_next(request)
@@ -40,11 +34,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         
         # Log response
         logger.info(
-            "HTTP request completed",
-            method=request.method,
-            path=request.url.path,
-            status_code=response.status_code,
-            duration_ms=round(duration * 1000, 2),
+            f"HTTP request completed: method={request.method}, path={request.url.path}, status_code={response.status_code}, duration_ms={round(duration * 1000, 2)}"
         )
         
         return response
@@ -83,10 +73,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         # Check if rate limit exceeded
         if len(self.client_requests[client_ip]) >= self.requests_per_minute:
             logger.warning(
-                "Rate limit exceeded",
-                client_ip=client_ip,
-                requests_count=len(self.client_requests[client_ip]),
-                limit=self.requests_per_minute,
+                f"Rate limit exceeded: client_ip={client_ip}, requests_count={len(self.client_requests[client_ip])}, limit={self.requests_per_minute}"
             )
             
             return JSONResponse(
@@ -121,11 +108,7 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
         
         except Exception as exc:
             logger.error(
-                "Unhandled exception in middleware",
-                error=str(exc),
-                error_type=type(exc).__name__,
-                path=request.url.path,
-                method=request.method,
+                f"Unhandled exception in middleware: error={str(exc)}, error_type={type(exc).__name__}, path={request.url.path}, method={request.method}",
                 exc_info=True,
             )
             

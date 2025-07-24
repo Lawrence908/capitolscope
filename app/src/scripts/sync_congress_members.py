@@ -27,7 +27,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.config import settings
 from core.database import DatabaseManager
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.congressional.services import CongressAPIService
 from domains.congressional.crud import (
     CongressMemberRepository, 
@@ -36,8 +37,6 @@ from domains.congressional.crud import (
     MemberPortfolioPerformanceRepository
 )
 from domains.congressional.client import CongressAPIClient
-
-logger = get_logger(__name__)
 
 load_dotenv()
 

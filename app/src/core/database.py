@@ -16,7 +16,6 @@ import time
 from contextlib import asynccontextmanager, contextmanager
 from typing import AsyncGenerator, Generator, Optional
 
-import structlog
 from sqlalchemy import text, create_engine
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -30,7 +29,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from core.config import settings
 
-logger = structlog.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 class DatabaseManager:
     """Async database manager for Supabase PostgreSQL."""
@@ -95,14 +94,11 @@ class DatabaseManager:
             
             self._initialized = True
             logger.info(
-                "Database connection initialized successfully",
-                database_url=settings.database_url.split("@")[1] if "@" in settings.database_url else "***",
-                pool_type="NullPool",
-                echo=settings.DATABASE_ECHO,
+                f"Database connection initialized successfully. URL: {settings.database_url.split('@')[1] if '@' in settings.database_url else '***'}, pool_type=NullPool, echo={settings.DATABASE_ECHO}"
             )
             
         except Exception as e:
-            logger.error("Failed to initialize database connection", error=str(e))
+            logger.error(f"Failed to initialize database connection: {e}")
             raise
     
     async def close(self) -> None:
@@ -131,7 +127,7 @@ class DatabaseManager:
             return True
             
         except Exception as e:
-            logger.error("Database connection test failed", error=str(e))
+            logger.error(f"Database connection test failed: {e}")
             raise
     
     def get_session(self) -> AsyncSession:
@@ -224,7 +220,7 @@ async def execute_sql(sql: str, params: dict = None) -> None:
             result = await session.execute(text(sql), params or {})
             return result
     except Exception as e:
-        logger.error("Failed to execute SQL", sql=sql, error=str(e))
+        logger.error(f"Failed to execute SQL: sql={sql}, error={str(e)}")
         raise
 
 

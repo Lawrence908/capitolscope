@@ -28,13 +28,12 @@ from sqlalchemy import text, func, desc, and_, or_
 from sqlalchemy.orm import Session
 
 from core.database import db_manager
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.congressional.models import CongressMember, CongressionalTrade
 from domains.congressional.ingestion import CongressionalDataIngestion
 from domains.congressional.data_quality import DataQualityEnhancer, QualityReport
 from domains.securities.models import Security
-
-logger = get_logger(__name__)
 
 
 @dataclass

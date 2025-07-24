@@ -7,7 +7,7 @@ Supports CAP-10 (Transaction List) and CAP-11 (Member Profiles).
 
 import asyncio
 from datetime import date, datetime, timedelta
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 from decimal import Decimal
 
 from domains.base.services import BaseService
@@ -26,14 +26,13 @@ from domains.congressional.schemas import (
     CongressionalTradeCreate, CongressionalTradeUpdate, CongressionalTradeDetail,
     CongressionalTradeFilter, MemberPortfolioSummary, PortfolioPerformanceSummary,
     TradingStatistics, MemberAnalytics, MarketPerformanceComparison,
-    CongressMemberPortfolioSummary
+    CongressMemberPortfolioSummary, CongressionalTradeQuery, CongressionalTradeSummary
 )
 
 
 from core.exceptions import NotFoundError, ValidationError, BusinessLogicError
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -230,6 +229,21 @@ class CongressionalTradeService(CongressionalTradeServiceInterface):
         self.member_repo = member_repo
         self.portfolio_service = portfolio_service
     
+    async def create(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    async def delete(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    async def get(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    async def get_multi(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    async def update(self, *args, **kwargs):
+        raise NotImplementedError()
+    
     async def process_trade_filing(self, filing_data: Dict[str, Any]) -> List[CongressionalTradeDetail]:
         """Process raw trade filing data into structured trades."""
         # This would parse trade disclosure documents
@@ -373,6 +387,10 @@ class CongressionalTradeService(CongressionalTradeServiceInterface):
             patterns['preferred_transaction_types'] = type_counts
         
         return patterns
+    
+    async def get_trades_with_filters(self, filters: CongressionalTradeQuery) -> Tuple[List[CongressionalTradeSummary], int]:
+        logger.info(f"[Service] transaction_types: {filters.transaction_types} (type: {type(filters.transaction_types)})")
+        return await self.trade_repo.list_trades(filters)
     
     async def get_trade_insights(self, filters: CongressionalTradeFilter) -> Dict[str, Any]:
         """Get insights from filtered trade data."""

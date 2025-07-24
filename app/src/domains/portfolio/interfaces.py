@@ -22,9 +22,8 @@ from domains.portfolio.schemas import (
     PortfolioSnapshotCreate, PortfolioSnapshotResponse,
     PortfolioSummary, PortfolioAnalyticsResponse, PortfolioComparisonResponse
 )
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

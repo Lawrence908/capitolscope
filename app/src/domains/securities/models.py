@@ -21,9 +21,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from domains.base.models import CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, TimestampMixin
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

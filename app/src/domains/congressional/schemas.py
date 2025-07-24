@@ -16,9 +16,8 @@ from pydantic.types import NonNegativeInt, PositiveInt
 
 from domains.base.schemas import CapitolScopeBaseSchema, PaginatedResponse, TimestampMixin
 from domains.base.schemas import PoliticalParty, Chamber, TransactionType
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -264,6 +263,9 @@ class CongressionalTradeSummary(CongressionalTradeBase, TimestampMixin):
     ticker: Optional[str] = None
     asset_name: Optional[str] = None
     asset_type: Optional[str] = None
+    amount_min: Optional[int] = Field(None, description="Minimum amount in cents")
+    amount_max: Optional[int] = Field(None, description="Maximum amount in cents")
+    amount_exact: Optional[int] = Field(None, description="Exact amount in cents")
     estimated_value: Optional[int] = Field(None, description="Estimated trade value in cents")
     filing_status: Optional[FilingStatus] = None
     

@@ -12,7 +12,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
@@ -25,7 +26,6 @@ from domains.portfolio.schemas import (
 )
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
-logger = get_logger(__name__)
 router = APIRouter()
 
 
@@ -53,8 +53,8 @@ async def get_portfolios(
     Returns a list of portfolios with basic information.
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting portfolios", skip=skip, limit=limit, member_id=member_id, 
-               portfolio_type=portfolio_type, user_id=current_user.id)
+    logger.info(f"Getting portfolios: skip={skip}, limit={limit}, member_id={member_id}, "
+               f"portfolio_type={portfolio_type}, user_id={current_user.id}")
     
     # Enhanced features for authenticated users
     premium_features = current_user.is_premium
@@ -111,7 +111,7 @@ async def get_portfolio(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting portfolio by ID", portfolio_id=portfolio_id, user_id=current_user.id)
+    logger.info(f"Getting portfolio by ID: portfolio_id={portfolio_id}, user_id={current_user.id}")
     
     premium_features = current_user.is_premium
     
@@ -142,8 +142,8 @@ async def get_portfolio_holdings(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting portfolio holdings", portfolio_id=portfolio_id, 
-               skip=skip, limit=limit, user_id=current_user.id)
+    logger.info(f"Getting portfolio holdings: portfolio_id={portfolio_id}, "
+               f"skip={skip}, limit={limit}, user_id={current_user.id}")
     
     # TODO: Implement actual holdings retrieval from database
     data = {
@@ -197,8 +197,8 @@ async def get_portfolio_performance(
     
     **Premium Feature**: Requires Pro, Premium, or Enterprise subscription.
     """
-    logger.info("Getting portfolio performance", portfolio_id=portfolio_id, 
-               date_from=date_from, date_to=date_to, period=period, user_id=current_user.id)
+    logger.info(f"Getting portfolio performance: portfolio_id={portfolio_id}, "
+               f"date_from={date_from}, date_to={date_to}, period={period}, user_id={current_user.id}")
     
     # TODO: Implement performance calculation
     # For now, return a placeholder
@@ -227,8 +227,8 @@ async def get_portfolio_analytics(
     
     **Premium Feature**: Requires Premium or Enterprise subscription.
     """
-    logger.info("Getting portfolio analytics", portfolio_id=portfolio_id, 
-               analysis_type=analysis_type, user_id=current_user.id)
+    logger.info(f"Getting portfolio analytics: portfolio_id={portfolio_id}, "
+               f"analysis_type={analysis_type}, user_id={current_user.id}")
     
     # TODO: Implement advanced analytics
     # For now, return a placeholder
@@ -256,8 +256,8 @@ async def get_member_portfolios(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting member portfolios", member_id=member_id, 
-               portfolio_type=portfolio_type, user_id=current_user.id)
+    logger.info(f"Getting member portfolios: member_id={member_id}, "
+               f"portfolio_type={portfolio_type}, user_id={current_user.id}")
     
     premium_features = current_user.is_premium
     
@@ -313,9 +313,9 @@ async def compare_portfolios(
     
     **Premium Feature**: Requires Premium or Enterprise subscription.
     """
-    logger.info("Comparing portfolios", portfolio_id=portfolio_id, 
-               comparison_portfolio_id=comparison_portfolio_id, 
-               metrics=metrics, user_id=current_user.id)
+    logger.info(f"Comparing portfolios: portfolio_id={portfolio_id}, "
+               f"comparison_portfolio_id={comparison_portfolio_id}, "
+               f"metrics={metrics}, user_id={current_user.id}")
     
     # TODO: Implement portfolio comparison
     # For now, return a placeholder
@@ -344,8 +344,8 @@ async def create_portfolio_snapshot(
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Creating portfolio snapshot", portfolio_id=portfolio_id, 
-               snapshot_type=snapshot_type, user_id=current_user.id)
+    logger.info(f"Creating portfolio snapshot: portfolio_id={portfolio_id}, "
+               f"snapshot_type={snapshot_type}, user_id={current_user.id}")
     
     # TODO: Implement snapshot creation
     data = {
@@ -382,8 +382,8 @@ async def export_portfolio_data(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Exporting portfolio data", portfolio_id=portfolio_id, 
-               format=format, user_id=current_user.id)
+    logger.info(f"Exporting portfolio data: portfolio_id={portfolio_id}, "
+               f"format={format}, user_id={current_user.id}")
     
     # TODO: Implement portfolio export
     data = {

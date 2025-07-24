@@ -22,9 +22,8 @@ from sqlalchemy.sql import func
 
 from domains.base.models import CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, AuditMixin
 from domains.securities.models import Security  # Import Security model to fix relationship
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -230,11 +229,9 @@ class CongressionalTrade(CapitolScopeBaseModel, AuditMixin):
     
     @property
     def estimated_value(self) -> Optional[int]:
-        """Get estimated trade value in cents."""
-        if self.amount_exact:
-            return self.amount_exact
-        elif self.amount_min and self.amount_max:
-            return (self.amount_min + self.amount_max) // 2
+        """Get estimated trade value in cents (DEPRECATED - use amount_exact or amount_min/max)."""
+        # This property is deprecated to avoid creating fake "set prices"
+        # Always return None to force use of actual ranges
         return None
     
     @property

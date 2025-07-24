@@ -18,10 +18,9 @@ project_root = app_src_dir.parent
 sys.path.insert(0, str(app_src_dir))
 
 import time
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.securities.ingestion import fetch_yfinance_data
-
-logger = get_logger(__name__)
 
 
 def test_rate_limiting():

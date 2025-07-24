@@ -10,10 +10,9 @@ import sys
 from typing import Dict, Any
 
 from core.config import settings
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.congressional.client import CongressAPIClient
-
-logger = get_logger(__name__)
 
 
 async def test_api_client():

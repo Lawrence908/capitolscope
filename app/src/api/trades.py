@@ -11,7 +11,8 @@ from sqlalchemy.orm import joinedload
 from datetime import datetime
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
@@ -24,9 +25,7 @@ from domains.congressional.schemas import (
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 from domains.congressional.schemas import CongressionalTradeQuery
 
-logger = get_logger(__name__)
 router = APIRouter()
-
 
 # TODO: Update frontend TradeFilters to match CongressionalTradeQuery model
 @router.get(
@@ -49,112 +48,28 @@ async def get_trades(
     Returns a list of congressional trades with pagination.
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting congressional trades", filters=filters.dict())
+    logger.info(f"Getting congressional trades: filters={filters.dict()}")
+    logger.info(f"transaction_types received in endpoint: {filters.transaction_types} (type: {type(filters.transaction_types)})")
     try:
-        from sqlalchemy.future import select
-        from sqlalchemy import func, or_, desc, asc
+        from domains.congressional.crud import CongressionalTradeRepository
         from domains.congressional.models import CongressionalTrade, CongressMember
-        from domains.congressional.schemas import CongressionalTradeSummary
-
-        # Build base query with join
-        stmt = select(CongressionalTrade, CongressMember).join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
-
-        # Apply filters
-        if filters.member_ids:
-            stmt = stmt.where(CongressionalTrade.member_id.in_(filters.member_ids))
-        if filters.parties:
-            stmt = stmt.where(CongressMember.party.in_(filters.parties))
-        if filters.chambers:
-            stmt = stmt.where(CongressMember.chamber.in_(filters.chambers))
-        if filters.tickers:
-            stmt = stmt.where(CongressionalTrade.ticker.in_(filters.tickers))
-        if filters.transaction_types:
-            stmt = stmt.where(CongressionalTrade.transaction_type.in_(filters.transaction_types))
-        if filters.owners:
-            stmt = stmt.where(CongressionalTrade.owner.in_(filters.owners))
-        if filters.transaction_date_from:
-            stmt = stmt.where(CongressionalTrade.transaction_date >= filters.transaction_date_from)
-        if filters.transaction_date_to:
-            stmt = stmt.where(CongressionalTrade.transaction_date <= filters.transaction_date_to)
-        if filters.search:
-            search_term = f"%{filters.search}%"
-            stmt = stmt.where(
-                or_(
-                    CongressionalTrade.raw_asset_description.ilike(search_term),
-                    CongressionalTrade.asset_name.ilike(search_term),
-                    CongressionalTrade.ticker.ilike(search_term),
-                    CongressMember.full_name.ilike(search_term)
-                )
-            )
-
-        # Count total results
-        count_stmt = select(func.count()).select_from(CongressionalTrade).join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
-        if filters.member_ids:
-            count_stmt = count_stmt.where(CongressionalTrade.member_id.in_(filters.member_ids))
-        if filters.parties:
-            count_stmt = count_stmt.where(CongressMember.party.in_(filters.parties))
-        if filters.chambers:
-            count_stmt = count_stmt.where(CongressMember.chamber.in_(filters.chambers))
-        if filters.tickers:
-            count_stmt = count_stmt.where(CongressionalTrade.ticker.in_(filters.tickers))
-        if filters.transaction_types:
-            count_stmt = count_stmt.where(CongressionalTrade.transaction_type.in_(filters.transaction_types))
-        if filters.owners:
-            count_stmt = count_stmt.where(CongressionalTrade.owner.in_(filters.owners))
-        if filters.transaction_date_from:
-            count_stmt = count_stmt.where(CongressionalTrade.transaction_date >= filters.transaction_date_from)
-        if filters.transaction_date_to:
-            count_stmt = count_stmt.where(CongressionalTrade.transaction_date <= filters.transaction_date_to)
-        if filters.search:
-            search_term = f"%{filters.search}%"
-            count_stmt = count_stmt.where(
-                or_(
-                    CongressionalTrade.raw_asset_description.ilike(search_term),
-                    CongressionalTrade.asset_name.ilike(search_term),
-                    CongressionalTrade.ticker.ilike(search_term),
-                    CongressMember.full_name.ilike(search_term)
-                )
-            )
-
-        # Sorting
-        sort_map = {
-            'transaction_date': CongressionalTrade.transaction_date,
-            'notification_date': CongressionalTrade.notification_date,
-            'member_name': CongressMember.full_name,
-            'ticker': CongressionalTrade.ticker,
-            'transaction_type': CongressionalTrade.transaction_type,
-            'amount': func.coalesce(
-                CongressionalTrade.amount_exact,
-                (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
-            )
-        }
-        sort_column = sort_map.get(filters.sort_by, CongressionalTrade.transaction_date)
-        if filters.sort_order == "desc":
-            stmt = stmt.order_by(desc(sort_column))
-        else:
-            stmt = stmt.order_by(asc(sort_column))
-
-        # Pagination
-        offset = (filters.page - 1) * filters.limit
-        stmt = stmt.offset(offset).limit(filters.limit)
-
-        # Execute queries
-        result = await session.execute(stmt)
-        rows = result.all()
-        count_result = await session.execute(count_stmt)
-        total_count = count_result.scalar_one()
-
-        # Build response items
-        items = []
-        for trade, member in rows:
-            trade_dict = CongressionalTradeSummary.from_orm(trade).dict()
-            trade_dict["member_name"] = member.full_name
-            trade_dict["member_party"] = member.party
-            trade_dict["member_chamber"] = member.chamber
-            trade_dict["member_state"] = member.state
-            trade_dict["estimated_value"] = trade.estimated_value
-            items.append(CongressionalTradeSummary(**trade_dict))
-
+        
+        # Use the service layer instead of direct CRUD calls
+        from domains.congressional.services import CongressionalTradeService
+        from domains.congressional.crud import CongressionalTradeRepository, CongressMemberRepository
+        
+        # Create repositories
+        trade_repo = CongressionalTradeRepository(session)
+        member_repo = CongressMemberRepository(session)
+        
+        # Create service
+        trade_service = CongressionalTradeService(trade_repo, member_repo)
+        
+        logger.info(f"Calling trade_service.get_trades_with_filters with transaction_types: {filters.transaction_types}")
+        trades, total_count = await trade_service.get_trades_with_filters(filters)
+        logger.info(f"Service returned {len(trades)} trades (total_count={total_count}) for transaction_types: {filters.transaction_types}")
+        
+        # Calculate pagination
         pages = (total_count + filters.limit - 1) // filters.limit
         has_next = filters.page < pages
         has_prev = filters.page > 1
@@ -172,7 +87,7 @@ async def get_trades(
         response = PaginatedResponse[
             CongressionalTradeSummary
         ](
-            items=items,
+            items=trades,
             meta=pagination_meta
         )
         return create_response(response)
@@ -203,7 +118,7 @@ async def get_advanced_analytics(
     
     **Premium Feature**: Requires Pro, Premium, or Enterprise subscription.
     """
-    logger.info("Getting advanced analytics", user_id=current_user.id)
+    logger.info(f"Getting advanced analytics: user_id={current_user.id}")
     
     # TODO: Implement advanced analytics
     data = {
@@ -239,7 +154,7 @@ async def get_top_trading_members(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting top trading members", limit=limit)  # Removed user_id for now
+    logger.info(f"Getting top trading members: limit={limit}")  # Removed user_id for now
     
     try:
         from sqlalchemy import select, func, and_, or_
@@ -308,7 +223,7 @@ async def get_top_traded_tickers(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting top traded tickers", limit=limit)  # Removed user_id for now
+    logger.info(f"Getting top traded tickers: limit={limit}")  # Removed user_id for now
     
     try:
         from sqlalchemy import select, func, and_, or_
@@ -398,7 +313,7 @@ async def delete_trade(
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Deleting trade", trade_id=trade_id)  # Removed user_id for now
+    logger.info(f"Deleting trade: trade_id={trade_id}")  # Removed user_id for now
     
     # TODO: Implement trade deletion
     data = {
@@ -569,7 +484,7 @@ async def get_member_trades(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting trades for member", member_id=member_id, skip=skip, limit=limit)
+    logger.info(f"Getting trades for member: member_id={member_id}, skip={skip}, limit={limit}")
     
     # Enhanced features for authenticated users
     # premium_features = current_user.is_premium  # Temporarily disabled
@@ -622,7 +537,7 @@ async def get_trade(
     Get a specific congressional trade by ID.
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting trade by ID", trade_id=trade_id)
+    logger.info(f"Getting trade by ID: trade_id={trade_id}")
     
     # TODO: Implement actual trade retrieval from database
     # For now, return a placeholder
@@ -649,7 +564,7 @@ async def flag_trade(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Flagging trade", trade_id=trade_id)  # Removed user_id for now
+    logger.info(f"Flagging trade: trade_id={trade_id}")  # Removed user_id for now
     
     # TODO: Implement trade flagging
     data = {

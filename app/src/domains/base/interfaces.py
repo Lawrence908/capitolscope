@@ -11,9 +11,8 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from uuid import UUID
 
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 # Type variables for generic interfaces
 ModelType = TypeVar('ModelType')

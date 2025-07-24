@@ -8,7 +8,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_active_user, require_admin
 from domains.users.models import User
@@ -28,7 +29,7 @@ from background.tasks import (
 from domains.congressional.models import CongressMember
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
-logger = get_logger(__name__)
+
 router = APIRouter()
 
 
@@ -52,7 +53,7 @@ async def get_members(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting congressional members", filters=filters.dict())
+    logger.info(f"Getting congressional members: filters={filters.dict()}")
     
     try:
         from sqlalchemy import select, func, and_, or_
@@ -173,7 +174,7 @@ async def get_member(
     """
     Get detailed information about a specific congressional member.
     """
-    logger.info("Getting member by ID", member_id=member_id, user_id=current_user.id)
+    logger.info(f"Getting member by ID: member_id={member_id}, user_id={current_user.id}")
     try:
         member_repo = CongressMemberRepository(session)
         member = member_repo.get_by_id(member_id)
@@ -216,7 +217,7 @@ async def search_members(
     """
     Search congressional members by name or other criteria.
     """
-    logger.info("Searching members", filters=filters.dict(), user_id=current_user.id)
+    logger.info(f"Searching members: filters={filters.dict()}, user_id={current_user.id}")
     try:
         member_repo = CongressMemberRepository(session)
         members = member_repo.search_members(filters.search, limit=filters.limit)
@@ -259,7 +260,7 @@ async def get_members_by_state(
     """
     Get all congressional members from a specific state.
     """
-    logger.info("Getting members by state", state_code=state_code, filters=filters.dict(), user_id=current_user.id)
+    logger.info(f"Getting members by state: state_code={state_code}, filters={filters.dict()}, user_id={current_user.id}")
     try:
         member_repo = CongressMemberRepository(session)
         members = member_repo.get_members_by_state(state_code.upper())
@@ -294,7 +295,7 @@ async def sync_members_from_api(
     """
     Trigger sync of congressional members from Congress.gov API.
     """
-    logger.info("Triggering member sync", action=action, state=state, user_id=current_user.id)
+    logger.info(f"Triggering member sync: action={action}, state={state}, user_id={current_user.id}")
     try:
         kwargs = {}
         if action == "sync-state" and state:
@@ -322,7 +323,7 @@ async def sync_specific_member(
     """
     Sync a specific member from Congress.gov API.
     """
-    logger.info("Triggering specific member sync", bioguide_id=bioguide_id, user_id=current_user.id)
+    logger.info(f"Triggering specific member sync: bioguide_id={bioguide_id}, user_id={current_user.id}")
     try:
         background_tasks.add_task(
             sync_congressional_members.delay, 
@@ -349,7 +350,7 @@ async def trigger_comprehensive_ingestion(
     """
     Trigger comprehensive data ingestion workflow.
     """
-    logger.info("Triggering comprehensive data ingestion", user_id=current_user.id)
+    logger.info(f"Triggering comprehensive data ingestion: user_id={current_user.id}")
     try:
         from background.tasks import comprehensive_data_ingestion
         task_result = comprehensive_data_ingestion.delay()
@@ -379,7 +380,7 @@ async def health_check_apis(
     """
     Run health checks on external APIs.
     """
-    logger.info("Triggering API health checks", user_id=current_user.id)
+    logger.info(f"Triggering API health checks: user_id={current_user.id}")
     try:
         from background.tasks import health_check_congress_api
         task_result = health_check_congress_api.delay()
@@ -406,8 +407,7 @@ async def get_member_legislation(
     """
     Get legislation sponsored or cosponsored by a member.
     """
-    logger.info("Getting member legislation", member_id=member_id, 
-               legislation_type=legislation_type, user_id=current_user.id)
+    logger.info(f"Getting member legislation: member_id={member_id}, legislation_type={legislation_type}, user_id={current_user.id}")
     if not current_user.is_premium:
         return create_response(None, error="This feature requires a premium subscription")
     try:

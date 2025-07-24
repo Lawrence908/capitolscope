@@ -24,13 +24,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
 from core.database import db_manager
-from core.logging import get_logger
 from domains.congressional.models import CongressMember, CongressionalTrade
 from domains.congressional.schemas import TradeOwner, FilingStatus, TransactionType
 from domains.congressional.data_quality import DataQualityEnhancer, QualityReport, ImportStatistics
 from domains.securities.models import Security
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 @dataclass
 class TradeRecord:
@@ -884,7 +883,6 @@ class CongressionalDataIngestion:
             summary_lines.append(f"\nAuto-created members: {len(self.auto_created_members)} (see logs/auto_created_members.csv)")
         summary = "\n".join(summary_lines)
         print(summary)
-        logger = get_logger(__name__)
         logger.info(summary)
 
     def import_congressional_data_from_csvs_sync(self, csv_directory: str) -> Dict[str, Any]:

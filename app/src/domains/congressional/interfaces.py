@@ -21,9 +21,8 @@ from domains.congressional.schemas import (
     MemberPortfolioSummary, PortfolioPerformanceSummary,
     TradingStatistics, MemberAnalytics, MarketPerformanceComparison
 )
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

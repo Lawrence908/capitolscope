@@ -30,7 +30,8 @@ from typing import Dict, Any
 from sqlalchemy.exc import IntegrityError
 
 from core.database import db_manager, init_database
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.securities.ingestion import (
     fetch_security_data_alpha_vantage_only,
     fetch_sp500_tickers, fetch_nasdaq100_tickers, 
@@ -38,8 +39,6 @@ from domains.securities.ingestion import (
     fetch_bond_securities, fetch_etf_securities,
     set_shutdown_flag
 )
-
-logger = get_logger(__name__)
 
 # Global flag for graceful shutdown
 shutdown_requested = False

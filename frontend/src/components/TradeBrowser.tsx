@@ -355,7 +355,7 @@ const TradeBrowser: React.FC = () => {
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {tradeItems.map((trade: CongressionalTrade) => {
-                    const { icon: TypeIcon, color } = getTransactionTypeStyle(trade.transaction_type);
+                    const { icon: TypeIcon, color } = getTransactionTypeStyle(trade.transaction_type || '');
                     
                     return (
                       <tr key={trade.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">

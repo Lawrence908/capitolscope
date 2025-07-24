@@ -46,165 +46,142 @@ async def get_trades(
 ) -> ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]]:
     """
     Get congressional trades.
-    
     Returns a list of congressional trades with pagination.
     **Authenticated Feature**: Requires user authentication.
     """
     logger.info("Getting congressional trades", filters=filters.dict())
-    
     try:
-        from sqlalchemy import select, func
-        
-        # Parse date_from and date_to to date objects
-        date_from_parsed = filters.transaction_date_from
-        date_to_parsed = filters.transaction_date_to
-        page = filters.page
-        per_page = filters.limit
-        search = filters.search
-        party = filters.parties[0] if filters.parties else None
-        chamber = filters.chambers[0] if filters.chambers else None
-        type = filters.transaction_types[0] if filters.transaction_types else None
-        ticker = filters.tickers[0] if filters.tickers else None
-        owner = filters.owners[0] if filters.owners else None
-        
-        # Build base query
-        query = (
-            select(CongressionalTrade)
-            .options(joinedload(CongressionalTrade.member))
-            .order_by(CongressionalTrade.transaction_date.desc())
-        )
-        
-        # Track if we need to join with CongressMember
-        needs_join = False
-        
+        from sqlalchemy.future import select
+        from sqlalchemy import func, or_, desc, asc
+        from domains.congressional.models import CongressionalTrade, CongressMember
+        from domains.congressional.schemas import CongressionalTradeSummary
+
+        # Build base query with join
+        stmt = select(CongressionalTrade, CongressMember).join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
+
         # Apply filters
-        if search:
-            search_term = f"%{search}%"
-            needs_join = True
-            query = query.filter(
+        if filters.member_ids:
+            stmt = stmt.where(CongressionalTrade.member_id.in_(filters.member_ids))
+        if filters.parties:
+            stmt = stmt.where(CongressMember.party.in_(filters.parties))
+        if filters.chambers:
+            stmt = stmt.where(CongressMember.chamber.in_(filters.chambers))
+        if filters.tickers:
+            stmt = stmt.where(CongressionalTrade.ticker.in_(filters.tickers))
+        if filters.transaction_types:
+            stmt = stmt.where(CongressionalTrade.transaction_type.in_(filters.transaction_types))
+        if filters.owners:
+            stmt = stmt.where(CongressionalTrade.owner.in_(filters.owners))
+        if filters.transaction_date_from:
+            stmt = stmt.where(CongressionalTrade.transaction_date >= filters.transaction_date_from)
+        if filters.transaction_date_to:
+            stmt = stmt.where(CongressionalTrade.transaction_date <= filters.transaction_date_to)
+        if filters.search:
+            search_term = f"%{filters.search}%"
+            stmt = stmt.where(
                 or_(
                     CongressionalTrade.raw_asset_description.ilike(search_term),
-                    CongressionalTrade.ticker.ilike(search_term),
                     CongressionalTrade.asset_name.ilike(search_term),
+                    CongressionalTrade.ticker.ilike(search_term),
                     CongressMember.full_name.ilike(search_term)
                 )
             )
-        
-        if party:
-            needs_join = True
-            query = query.filter(CongressMember.party == party)
-        
-        if chamber:
-            needs_join = True
-            query = query.filter(CongressMember.chamber == chamber)
-        
-        # Apply the join if needed
-        if needs_join:
-            query = query.join(CongressMember)
-        
-        if type:
-            query = query.filter(CongressionalTrade.transaction_type == type)
-        
-        if ticker:
-            query = query.filter(CongressionalTrade.ticker == ticker.upper())
-        
-        if owner:
-            query = query.filter(CongressionalTrade.owner == owner)
-        
-        if date_from_parsed:
-            query = query.filter(CongressionalTrade.transaction_date >= date_from_parsed)
-        
-        if date_to_parsed:
-            query = query.filter(CongressionalTrade.transaction_date <= date_to_parsed)
-        
-        # Get total count (apply same filters to count query)
-        count_query = select(func.count(CongressionalTrade.id))
-        if needs_join:
-            count_query = count_query.join(CongressMember)
-        
-        # Apply same filters to count query
-        if search:
-            search_term = f"%{search}%"
-            count_query = count_query.filter(
+
+        # Count total results
+        count_stmt = select(func.count()).select_from(CongressionalTrade).join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
+        if filters.member_ids:
+            count_stmt = count_stmt.where(CongressionalTrade.member_id.in_(filters.member_ids))
+        if filters.parties:
+            count_stmt = count_stmt.where(CongressMember.party.in_(filters.parties))
+        if filters.chambers:
+            count_stmt = count_stmt.where(CongressMember.chamber.in_(filters.chambers))
+        if filters.tickers:
+            count_stmt = count_stmt.where(CongressionalTrade.ticker.in_(filters.tickers))
+        if filters.transaction_types:
+            count_stmt = count_stmt.where(CongressionalTrade.transaction_type.in_(filters.transaction_types))
+        if filters.owners:
+            count_stmt = count_stmt.where(CongressionalTrade.owner.in_(filters.owners))
+        if filters.transaction_date_from:
+            count_stmt = count_stmt.where(CongressionalTrade.transaction_date >= filters.transaction_date_from)
+        if filters.transaction_date_to:
+            count_stmt = count_stmt.where(CongressionalTrade.transaction_date <= filters.transaction_date_to)
+        if filters.search:
+            search_term = f"%{filters.search}%"
+            count_stmt = count_stmt.where(
                 or_(
                     CongressionalTrade.raw_asset_description.ilike(search_term),
-                    CongressionalTrade.ticker.ilike(search_term),
                     CongressionalTrade.asset_name.ilike(search_term),
+                    CongressionalTrade.ticker.ilike(search_term),
                     CongressMember.full_name.ilike(search_term)
                 )
             )
+
+        # Sorting
+        sort_map = {
+            'transaction_date': CongressionalTrade.transaction_date,
+            'notification_date': CongressionalTrade.notification_date,
+            'member_name': CongressMember.full_name,
+            'ticker': CongressionalTrade.ticker,
+            'transaction_type': CongressionalTrade.transaction_type,
+            'amount': func.coalesce(
+                CongressionalTrade.amount_exact,
+                (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
+            )
+        }
+        sort_column = sort_map.get(filters.sort_by, CongressionalTrade.transaction_date)
+        if filters.sort_order == "desc":
+            stmt = stmt.order_by(desc(sort_column))
+        else:
+            stmt = stmt.order_by(asc(sort_column))
+
+        # Pagination
+        offset = (filters.page - 1) * filters.limit
+        stmt = stmt.offset(offset).limit(filters.limit)
+
+        # Execute queries
+        result = await session.execute(stmt)
+        rows = result.all()
+        count_result = await session.execute(count_stmt)
+        total_count = count_result.scalar_one()
+
+        # Build response items
+        items = []
+        for trade, member in rows:
+            trade_dict = CongressionalTradeSummary.from_orm(trade).dict()
+            trade_dict["member_name"] = member.full_name
+            trade_dict["member_party"] = member.party
+            trade_dict["member_chamber"] = member.chamber
+            trade_dict["member_state"] = member.state
+            trade_dict["estimated_value"] = trade.estimated_value
+            items.append(CongressionalTradeSummary(**trade_dict))
+
+        pages = (total_count + filters.limit - 1) // filters.limit
+        has_next = filters.page < pages
+        has_prev = filters.page > 1
         
-        if party:
-            count_query = count_query.filter(CongressMember.party == party)
-        
-        if chamber:
-            count_query = count_query.filter(CongressMember.chamber == chamber)
-        
-        if type:
-            count_query = count_query.filter(CongressionalTrade.transaction_type == type)
-        
-        if ticker:
-            count_query = count_query.filter(CongressionalTrade.ticker == ticker.upper())
-        
-        if owner:
-            count_query = count_query.filter(CongressionalTrade.owner == owner)
-        
-        if date_from_parsed:
-            count_query = count_query.filter(CongressionalTrade.transaction_date >= date_from_parsed)
-        
-        if date_to_parsed:
-            count_query = count_query.filter(CongressionalTrade.transaction_date <= date_to_parsed)
-        
-        total = await session.scalar(count_query)
-        logger.info(f"Total trades: {total}")
-        
-        # Apply pagination
-        offset = (page - 1) * per_page
-        query = query.offset(offset).limit(per_page)
-        
-        # Execute query
-        result = await session.execute(query)
-        trades = result.scalars().unique().all()
-        logger.info(f"Retrieved {len(trades)} trades")
-        
-        # Convert to response format
-        trade_items = []
-        for trade in trades:
-            # Convert to schema
-            trade_summary = CongressionalTradeSummary.model_validate(trade)
-            trade_items.append(trade_summary)
-        
-        # Calculate pagination info
-        pages = (total + per_page - 1) // per_page
-        has_next = page < pages
-        has_prev = page > 1
-        
+        # Create pagination meta
         pagination_meta = PaginationMeta(
-            page=page,
-            per_page=per_page,
-            total=total,
+            page=filters.page,
+            per_page=filters.limit,
+            total=total_count,
             pages=pages,
             has_next=has_next,
             has_prev=has_prev
         )
         
-        paginated_data = PaginatedResponse(
-            items=trade_items,
+        response = PaginatedResponse[
+            CongressionalTradeSummary
+        ](
+            items=items,
             meta=pagination_meta
         )
-        
-        logger.info("Returning response...")
-        return create_response(data=paginated_data)
-        
+        return create_response(response)
     except Exception as e:
         import traceback
-        error_msg = f"Error fetching trades: {e}"
-        traceback_msg = f"Traceback: {traceback.format_exc()}"
-        logger.error(error_msg)
-        logger.error(traceback_msg)
-        print(f"DEBUG: {error_msg}")  # Print to console for immediate visibility
-        print(f"DEBUG: {traceback_msg}")  # Print to console for immediate visibility
-        return create_response(error="Failed to fetch trades")
+        logger.error(f"Error fetching trades: {e}")
+        logger.error(traceback.format_exc())
+        print(traceback.format_exc())  # Also print to console for Docker logs
+        raise HTTPException(status_code=500, detail="Failed to fetch trades.")
 
 
 @router.get(

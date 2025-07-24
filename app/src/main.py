@@ -26,13 +26,16 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from core.config import settings
 from core.database import init_database, close_database
-from core.logging import configure_logging
+from core.logging import configure_logging, setup_file_logging
 from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
     ErrorHandlingMiddleware
 )
+
+# Set up file logging first (before Uvicorn starts)
+setup_file_logging()
 
 # Configure structured logging
 logger = configure_logging()

@@ -36,10 +36,6 @@ from .base import (
     ResearchLinks,
     NotificationPreferences,
     
-    # Health check
-    HealthCheckResponse,
-    DetailedHealthCheckResponse,
-    
     # Validators
     validate_ticker_symbol,
     validate_political_party,
@@ -47,8 +43,27 @@ from .base import (
     validate_transaction_type,
 )
 
-# Securities schemas
-from .securities import (
+# Health check schemas from base domain
+from domains.base.schemas import (
+    BasicHealthResponse,
+    LivenessResponse,
+    ReadinessResponse,
+    DatabaseHealth,
+    RedisHealth,
+    CongressAPIHealth,
+    ServiceChecks,
+    ConfigurationInfo,
+    DetailedHealthResponse,
+    SystemMetrics,
+    SystemPerformanceMetrics,
+    SystemStatusResponse,
+    # Legacy aliases
+    HealthCheckResponse,
+    DetailedHealthCheckResponse,
+)
+
+# Securities schemas from domain
+from domains.securities.schemas import (
     # Asset Types
     AssetTypeBase,
     AssetTypeCreate,
@@ -77,6 +92,7 @@ from .securities import (
     # Price Data
     DailyPriceBase,
     DailyPriceCreate,
+    DailyPriceUpdate,
     DailyPriceResponse,
     PriceHistory,
     
@@ -94,91 +110,104 @@ from .securities import (
     BulkSecurityCreate,
     BulkPriceCreate,
     BulkOperationResponse,
+    
+    # Watchlists
+    SecurityWatchlistBase,
+    SecurityWatchlistCreate,
+    SecurityWatchlistUpdate,
+    SecurityWatchlistResponse,
 )
 
-# Congressional schemas
-from .congressional import (
+# Congressional schemas from domain
+from domains.congressional.schemas import (
     # Congress Members
     CongressMemberBase,
     CongressMemberCreate,
     CongressMemberUpdate,
-    CongressMemberResponse,
+    CongressMemberDetail as CongressMemberResponse,
     CongressMemberSummary,
     
     # Congressional Trades
     CongressionalTradeBase,
     CongressionalTradeCreate,
     CongressionalTradeUpdate,
-    CongressionalTradeResponse,
+    CongressionalTradeDetail as CongressionalTradeResponse,
     CongressionalTradeSummary,
     
-    # Search and Filters
-    CongressMemberSearchParams,
-    CongressionalTradeSearchParams,
+    # Member Portfolios
+    MemberPortfolioBase,
+    MemberPortfolioSummary,
+    MemberPortfolioDetail,
     
-    # Bulk Operations
-    BulkCongressMemberCreate,
-    BulkCongressionalTradeCreate,
+    # Portfolio Performance
+    PortfolioPerformanceBase,
+    PortfolioPerformanceSummary,
+    PortfolioPerformanceDetail,
+    
+    # Search and Filters
+    CongressionalTradeFilter,
+    CongressionalTradeQuery,
+    MemberQuery,
+    
+    # Response Schemas
+    CongressionalTradeListResponse,
+    CongressionalTradeDetailResponse,
+    CongressMemberListResponse,
+    CongressMemberDetailResponse,
+    MemberPortfolioListResponse,
+    PortfolioPerformanceListResponse,
     
     # Analytics
-    MemberTradingStats,
-    TradingActivity,
-    PortfolioHolding,
+    TradingStatistics as MemberTradingStats,
+    MarketPerformanceComparison,
+    MemberAnalytics,
+    
+    # Enums
+    TradeOwner,
+    FilingStatus,
+    SortField,
+    SortOrder,
 )
 
-# User schemas
-from .users import (
+# User schemas from domain
+from domains.users.schemas import (
     # User Management
     UserBase,
     UserCreate,
     UserUpdate,
     UserResponse,
-    UserProfile,
-    UserSummary,
+    UserProfileResponse as UserProfile,
+    UserPreferenceResponse as UserPreferencesResponse,
     
     # Authentication
     LoginRequest,
-    LoginResponse,
+    TokenResponse as LoginResponse,
     RefreshTokenRequest,
-    PasswordResetRequest,
-    PasswordResetConfirm,
-    PasswordChangeRequest,
-    EmailVerificationRequest,
-    
-    # Social Connections
-    SocialConnectionBase,
-    SocialConnectionCreate,
-    SocialConnectionUpdate,
-    SocialConnectionResponse,
+    ResetPasswordRequest as PasswordResetRequest,
+    ResetPasswordConfirmRequest as PasswordResetConfirm,
+    ChangePasswordRequest as PasswordChangeRequest,
     
     # Subscriptions
-    UserSubscriptionBase,
-    UserSubscriptionCreate,
-    UserSubscriptionUpdate,
-    UserSubscriptionResponse,
-    SubscriptionPlan,
+    SubscriptionResponse,
+    SubscriptionUpdate,
     
     # Notifications
-    UserNotificationBase,
-    UserNotificationCreate,
-    UserNotificationUpdate,
-    UserNotificationResponse,
+    NotificationResponse as UserNotificationResponse,
+    NotificationMarkReadRequest,
     
     # Preferences
-    UserPreferencesBase,
-    UserPreferencesCreate,
-    UserPreferencesUpdate,
-    UserPreferencesResponse,
+    UserPreferenceUpdate as UserPreferencesUpdate,
     
-    # Search and Filters
-    UserSearchParams,
+    # Watchlists and Alerts
+    WatchlistCreate,
+    WatchlistUpdate,
+    WatchlistResponse,
+    AlertCreate,
+    AlertUpdate,
+    AlertResponse,
     
-    # Bulk Operations
-    BulkUserCreate,
-    BulkUserUpdate,
-    
-    # Analytics
-    UserAnalytics,
+    # Error handling
+    ErrorResponse,
 )
 
 # Social media schemas
@@ -223,6 +252,51 @@ from .social import (
     # Analytics
     SocialAnalytics,
     CommunityAnalytics,
+)
+
+# Notification schemas from domain
+from domains.notifications.schemas import (
+    # Enums
+    NotificationType,
+    AlertType,
+    DeliveryStatus,
+    SubscriptionFrequency,
+    
+    # Subscriptions
+    SubscriptionPreferences,
+    UserSubscriptionResponse,
+    SubscriptionUpdateRequest,
+    SubscriptionUpdateResponse,
+    
+    # Alerts
+    AlertConfiguration,
+    AlertResponse,
+    AlertHistoryItem,
+    AlertHistoryResponse,
+    AlertListResponse,
+    
+    # Newsletters
+    NewsletterSubscription,
+    NewsletterSubscriptionRequest,
+    NewsletterUnsubscribeRequest,
+    NewsletterUnsubscribeResponse,
+    NewsletterOptionsResponse,
+    
+    # Templates
+    NotificationTemplate,
+    TemplateListResponse,
+    
+    # Delivery
+    DeliveryStats,
+    DeliveryStatusResponse,
+    
+    # Testing
+    TestNotificationRequest,
+    TestNotificationResponse,
+    
+    # Analytics
+    NotificationAnalytics,
+    NotificationAnalyticsResponse,
 )
 
 # Admin schemas
@@ -274,9 +348,9 @@ from .admin import (
 
 # Convenience imports for common use cases
 from .base import CapitolScopeBaseModel as BaseModel
-from .securities import SecurityResponse as Security
-from .congressional import CongressMemberResponse as CongressMember, CongressionalTradeResponse as CongressionalTrade
-from .users import UserResponse as User
+from domains.securities.schemas import SecurityResponse as Security
+from domains.congressional.schemas import CongressMemberDetail as CongressMember, CongressionalTradeDetail as CongressionalTrade
+from domains.users.schemas import UserResponse as User
 
 __all__ = [
     # Base
@@ -304,6 +378,20 @@ __all__ = [
     "SocialMediaLinks",
     "ResearchLinks",
     "NotificationPreferences",
+    # Health check schemas
+    "BasicHealthResponse",
+    "LivenessResponse",
+    "ReadinessResponse",
+    "DatabaseHealth",
+    "RedisHealth",
+    "CongressAPIHealth",
+    "ServiceChecks",
+    "ConfigurationInfo",
+    "DetailedHealthResponse",
+    "SystemMetrics",
+    "SystemPerformanceMetrics",
+    "SystemStatusResponse",
+    # Legacy aliases
     "HealthCheckResponse",
     "DetailedHealthCheckResponse",
     
@@ -328,6 +416,7 @@ __all__ = [
     "SecuritySummary",
     "DailyPriceBase",
     "DailyPriceCreate",
+    "DailyPriceUpdate",
     "DailyPriceResponse",
     "PriceHistory",
     "CorporateActionBase",
@@ -339,6 +428,10 @@ __all__ = [
     "BulkSecurityCreate",
     "BulkPriceCreate",
     "BulkOperationResponse",
+    "SecurityWatchlistBase",
+    "SecurityWatchlistCreate",
+    "SecurityWatchlistUpdate",
+    "SecurityWatchlistResponse",
     
     # Congressional
     "CongressMemberBase",
@@ -353,13 +446,28 @@ __all__ = [
     "CongressionalTradeResponse",
     "CongressionalTrade",
     "CongressionalTradeSummary",
-    "CongressMemberSearchParams",
-    "CongressionalTradeSearchParams",
-    "BulkCongressMemberCreate",
-    "BulkCongressionalTradeCreate",
+    "MemberPortfolioBase",
+    "MemberPortfolioSummary",
+    "MemberPortfolioDetail",
+    "PortfolioPerformanceBase",
+    "PortfolioPerformanceSummary",
+    "PortfolioPerformanceDetail",
+    "CongressionalTradeFilter",
+    "CongressionalTradeQuery",
+    "MemberQuery",
+    "CongressionalTradeListResponse",
+    "CongressionalTradeDetailResponse",
+    "CongressMemberListResponse",
+    "CongressMemberDetailResponse",
+    "MemberPortfolioListResponse",
+    "PortfolioPerformanceListResponse",
     "MemberTradingStats",
-    "TradingActivity",
-    "PortfolioHolding",
+    "MarketPerformanceComparison",
+    "MemberAnalytics",
+    "TradeOwner",
+    "FilingStatus",
+    "SortField",
+    "SortOrder",
     
     # Users
     "UserBase",
@@ -368,35 +476,25 @@ __all__ = [
     "UserResponse",
     "User",
     "UserProfile",
-    "UserSummary",
+    "UserPreferencesResponse",
     "LoginRequest",
     "LoginResponse",
     "RefreshTokenRequest",
     "PasswordResetRequest",
     "PasswordResetConfirm",
     "PasswordChangeRequest",
-    "EmailVerificationRequest",
-    "SocialConnectionBase",
-    "SocialConnectionCreate",
-    "SocialConnectionUpdate",
-    "SocialConnectionResponse",
-    "UserSubscriptionBase",
-    "UserSubscriptionCreate",
-    "UserSubscriptionUpdate",
-    "UserSubscriptionResponse",
-    "SubscriptionPlan",
-    "UserNotificationBase",
-    "UserNotificationCreate",
-    "UserNotificationUpdate",
+    "SubscriptionResponse",
+    "SubscriptionUpdate",
     "UserNotificationResponse",
-    "UserPreferencesBase",
-    "UserPreferencesCreate",
+    "NotificationMarkReadRequest",
     "UserPreferencesUpdate",
-    "UserPreferencesResponse",
-    "UserSearchParams",
-    "BulkUserCreate",
-    "BulkUserUpdate",
-    "UserAnalytics",
+    "WatchlistCreate",
+    "WatchlistUpdate",
+    "WatchlistResponse",
+    "AlertCreate",
+    "AlertUpdate",
+    "AlertResponse",
+    "ErrorResponse",
     
     # Social
     "SocialPostBase",
@@ -426,6 +524,34 @@ __all__ = [
     "CommunityPostSearchParams",
     "SocialAnalytics",
     "CommunityAnalytics",
+    
+    # Notifications
+    "NotificationType",
+    "AlertType",
+    "DeliveryStatus",
+    "SubscriptionFrequency",
+    "SubscriptionPreferences",
+    "UserSubscriptionResponse",
+    "SubscriptionUpdateRequest",
+    "SubscriptionUpdateResponse",
+    "AlertConfiguration",
+    "AlertResponse",
+    "AlertHistoryItem",
+    "AlertHistoryResponse",
+    "AlertListResponse",
+    "NewsletterSubscription",
+    "NewsletterSubscriptionRequest",
+    "NewsletterUnsubscribeRequest",
+    "NewsletterUnsubscribeResponse",
+    "NewsletterOptionsResponse",
+    "NotificationTemplate",
+    "TemplateListResponse",
+    "DeliveryStats",
+    "DeliveryStatusResponse",
+    "TestNotificationRequest",
+    "TestNotificationResponse",
+    "NotificationAnalytics",
+    "NotificationAnalyticsResponse",
     
     # Admin
     "SystemMetricsBase",

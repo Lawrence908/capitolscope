@@ -490,6 +490,11 @@ class PortfolioPerformanceListResponse(PaginatedResponse):
 
 class TradingStatistics(CapitolScopeBaseSchema):
     """Trading statistics for a member or group."""
+    member_id: Optional[UUID] = None
+    member_name: Optional[str] = None
+    member_party: Optional[PoliticalParty] = None
+    member_chamber: Optional[Chamber] = None
+    member_state: Optional[str] = None
     total_trades: int = 0
     total_value: int = Field(0, description="Total trade value in cents")
     purchase_count: int = 0

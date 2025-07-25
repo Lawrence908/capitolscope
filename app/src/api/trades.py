@@ -188,6 +188,10 @@ async def get_top_trading_members(
             # Convert to TradingStatistics schema
             stats = TradingStatistics(
                 member_id=row.id,
+                member_name=row.full_name,
+                member_party=row.party,
+                member_chamber=row.chamber,
+                member_state=row.state,
                 total_trades=row.trade_count,
                 total_value=int(row.total_value or 0),
                 purchase_count=0,  # TODO: Calculate from actual data

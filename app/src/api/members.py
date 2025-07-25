@@ -26,7 +26,7 @@ from background.tasks import (
     import_congressional_data_csvs,
     enrich_congressional_member_data
 )
-from domains.congressional.models import CongressMember
+from domains.congressional.models import CongressMember, CongressionalTrade
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
 
@@ -97,12 +97,26 @@ async def get_members(
         # Convert to response format
         member_items = []
         for member in members:
-            # Map party values
+            # Map party values - keep the original enum values for the schema
             party_map = {
-                'D': 'Democratic',
-                'R': 'Republican', 
-                'I': 'Independent'
+                'D': 'D',
+                'R': 'R', 
+                'I': 'I'
             }
+            
+            # Calculate trade statistics for this member
+            trade_stats_query = select(
+                func.count(CongressionalTrade.id).label('trade_count'),
+                func.sum(
+                    func.coalesce(
+                        CongressionalTrade.amount_exact,
+                        (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
+                    )
+                ).label('total_value')
+            ).where(CongressionalTrade.member_id == member.id)
+            
+            trade_stats_result = await session.execute(trade_stats_query)
+            trade_stats = trade_stats_result.first()
             
             member_item = CongressMemberSummary(
                 id=member.id,
@@ -123,8 +137,8 @@ async def get_members(
                 youtube_account=None,
                 in_office=getattr(member, 'is_active', True),
                 next_election=getattr(member, 'next_election', None),
-                total_trades=getattr(member, 'total_trades', None),
-                total_value=getattr(member, 'total_value', None),
+                trade_count=trade_stats.trade_count if trade_stats else 0,
+                total_trade_value=int(trade_stats.total_value or 0),
                 created_at=member.created_at.isoformat() if member.created_at else None,
                 updated_at=member.updated_at.isoformat() if member.updated_at else None,
             )

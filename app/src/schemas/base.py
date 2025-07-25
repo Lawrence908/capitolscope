@@ -37,26 +37,11 @@ def create_response(data, meta=None, error=None):
     return ResponseEnvelope(data=data, meta=meta, error=error)
 
 
-class CapitolScopeBaseModel(BaseModel):
-    """Base model with common configuration for all CapitolScope schemas."""
-    
-    model_config = ConfigDict(
-        # Enable ORM mode for SQLAlchemy integration
-        from_attributes=True,
-        # Use enum values instead of enum objects
-        use_enum_values=True,
-        # Validate assignment after model creation
-        validate_assignment=True,
-        # Allow population by field name or alias
-        populate_by_name=True,
-        # Serialize datetime as ISO format
-        json_encoders={
-            datetime: lambda v: v.isoformat(),
-            date: lambda v: v.isoformat(),
-            Decimal: lambda v: float(v),
-        },
-        arbitrary_types_allowed=True
-    )
+# Import base schema from domains
+from domains.base.schemas import CapitolScopeBaseSchema, CapitolScopeBaseModel
+
+# Legacy alias for backward compatibility
+CapitolScopeBaseModel = CapitolScopeBaseSchema
 
 
 class TimestampMixin(BaseModel):
@@ -385,21 +370,8 @@ class NotificationPreferences(CapitolScopeBaseModel):
 # ============================================================================
 # HEALTH CHECK AND SYSTEM SCHEMAS
 # ============================================================================
-
-class HealthCheckResponse(CapitolScopeBaseModel):
-    """Health check response."""
-    status: str = Field(..., description="Health status")
-    timestamp: float = Field(..., description="Check timestamp")
-    environment: str = Field(..., description="Environment name")
-    version: str = Field(..., description="Application version")
-    service: str = Field(..., description="Service name")
-
-
-class DetailedHealthCheckResponse(HealthCheckResponse):
-    """Detailed health check with dependency status."""
-    response_time_ms: float = Field(..., description="Response time in milliseconds")
-    checks: Dict[str, Dict[str, Any]] = Field(..., description="Individual health checks")
-    configuration: Dict[str, Any] = Field(..., description="Configuration summary")
+# Health check schemas have been moved to domains.base.schemas
+# Import them from there instead of duplicating here
 
 
 # ============================================================================
@@ -474,8 +446,6 @@ __all__ = [
     "SocialMediaLinks",
     "ResearchLinks",
     "NotificationPreferences",
-    "HealthCheckResponse",
-    "DetailedHealthCheckResponse",
     "validate_ticker_symbol",
     "validate_political_party",
     "validate_chamber",

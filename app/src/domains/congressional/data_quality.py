@@ -19,10 +19,10 @@ from enum import Enum
 from fuzzywuzzy import fuzz, process
 import regex
 
-from core.logging import get_logger
 from domains.congressional.schemas import TradeOwner
 
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 class TickerExtractionResult(NamedTuple):

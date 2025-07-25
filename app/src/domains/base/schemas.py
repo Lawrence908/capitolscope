@@ -15,9 +15,8 @@ from uuid import UUID
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from pydantic import EmailStr, HttpUrl
 
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 class CapitolScopeBaseSchema(BaseModel):

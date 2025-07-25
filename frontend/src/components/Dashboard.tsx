@@ -29,9 +29,9 @@ const Dashboard: React.FC = () => {
           apiClient.getTopTradingMembers(10),
         ]);
 
-        setStats(statsResponse);
+        setStats(statsResponse.data);
         setRecentTrades(tradesResponse.items);
-        setTopMembers(membersResponse);
+        setTopMembers(membersResponse.data);
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard error:', err);
@@ -153,7 +153,7 @@ const Dashboard: React.FC = () => {
               <div key={trade.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                    {trade.member?.full_name || 'Unknown'}
+                    {trade.member_name || 'Unknown'}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     {trade.ticker ? (
@@ -192,17 +192,17 @@ const Dashboard: React.FC = () => {
               <div key={member.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                    {member.full_name}
+                    {member.member_name}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {member.party} • {member.state}
+                    {member.member_party} • {member.member_state}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-900 dark:text-gray-100">
                     {member.total_trades || 0} trades
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{member.chamber}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{member.member_chamber}</p>
                 </div>
               </div>
             ))}

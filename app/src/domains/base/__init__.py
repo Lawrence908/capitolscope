@@ -5,9 +5,8 @@ This domain contains common utilities, schemas, and shared functionality
 that is used across multiple domains.
 """
 
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "models",

@@ -74,13 +74,13 @@ class APIClient {
       }
     });
 
-    const response = await this.client.get(`/api/v1/members?${params}`);
-    return response.data;
+    const response = await this.client.get(`/api/v1/members/?${params}`);
+    return response.data.data;
   }
 
-  async getMember(id: number): Promise<CongressMember> {
+  async getMember(id: string): Promise<CongressMember> {
     const response = await this.client.get(`/api/v1/members/${id}`);
-    return response.data;
+    return response.data.data; // Extract the data field from the response envelope
   }
 
   async getMemberProfile(id: number): Promise<MemberProfile> {
@@ -92,22 +92,39 @@ class APIClient {
   async getTrades(
     filters: TradeFilters = {},
     page: number = 1,
-    perPage: number = 50
+    limit: number = 50
   ): Promise<PaginatedResponse<CongressionalTrade>> {
-    const params = new URLSearchParams({
-      page: page.toString(),
-      per_page: perPage.toString(),
-    });
-
-    // Add filters to params
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
+    
+    // Handle amount_range filter
+    const { amount_range, ...otherFilters } = filters;
+    if (amount_range) {
+      const [min, max] = amount_range.split('-');
+      if (min) {
+        params.append('amount_min', (parseInt(min) * 100).toString()); // Convert to cents
+      }
+      if (max && max !== '+') {
+        params.append('amount_max', (parseInt(max) * 100).toString()); // Convert to cents
+      }
+      // Handle the case where max is '+' (unlimited upper bound)
+      if (max === '+') {
+        // Don't set amount_max, which means no upper limit
+        // The backend will handle this as "greater than amount_min"
+      }
+    }
+    
+    Object.entries(otherFilters).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return;
+      if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, v.toString()));
+      } else {
         params.append(key, value.toString());
       }
     });
-
     const response = await this.client.get(`/api/v1/trades?${params}`);
-    return response.data;
+    return response.data.data;
   }
 
   async getTrade(id: number): Promise<CongressionalTrade> {

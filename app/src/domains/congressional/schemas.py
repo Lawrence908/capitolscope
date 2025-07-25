@@ -16,9 +16,8 @@ from pydantic.types import NonNegativeInt, PositiveInt
 
 from domains.base.schemas import CapitolScopeBaseSchema, PaginatedResponse, TimestampMixin
 from domains.base.schemas import PoliticalParty, Chamber, TransactionType
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -264,6 +263,9 @@ class CongressionalTradeSummary(CongressionalTradeBase, TimestampMixin):
     ticker: Optional[str] = None
     asset_name: Optional[str] = None
     asset_type: Optional[str] = None
+    amount_min: Optional[int] = Field(None, description="Minimum amount in cents")
+    amount_max: Optional[int] = Field(None, description="Maximum amount in cents")
+    amount_exact: Optional[int] = Field(None, description="Exact amount in cents")
     estimated_value: Optional[int] = Field(None, description="Estimated trade value in cents")
     filing_status: Optional[FilingStatus] = None
     
@@ -437,12 +439,8 @@ class CongressionalTradeQuery(CongressionalTradeFilter):
 
 class MemberQuery(CapitolScopeBaseSchema):
     """Query parameters for congress members."""
-    parties: Optional[List[PoliticalParty]] = None
-    chambers: Optional[List[Chamber]] = None
-    states: Optional[List[str]] = None
-    congress_numbers: Optional[List[int]] = None
     search: Optional[str] = Field(None, min_length=1)
-    sort_by: str = "last_name"
+    sort_by: SortField = SortField.MEMBER_NAME
     sort_order: SortOrder = SortOrder.ASC
     page: PositiveInt = 1
     limit: int = Field(50, ge=1, le=1000)
@@ -492,6 +490,11 @@ class PortfolioPerformanceListResponse(PaginatedResponse):
 
 class TradingStatistics(CapitolScopeBaseSchema):
     """Trading statistics for a member or group."""
+    member_id: Optional[UUID] = None
+    member_name: Optional[str] = None
+    member_party: Optional[PoliticalParty] = None
+    member_chamber: Optional[Chamber] = None
+    member_state: Optional[str] = None
     total_trades: int = 0
     total_value: int = Field(0, description="Total trade value in cents")
     purchase_count: int = 0

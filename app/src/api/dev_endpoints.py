@@ -11,10 +11,10 @@ from datetime import date, datetime, timedelta
 import random
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, paginated_response
 
-logger = get_logger(__name__)
 router = APIRouter()
 
 # Mock data for development
@@ -134,7 +134,7 @@ async def get_trades_dev(
     """
     Development endpoint for congressional trades (no auth required).
     """
-    logger.info("Getting trades for development", page=page, per_page=per_page)
+    logger.info(f"Getting trades for development: page={page}, per_page={per_page}")
     
     # Generate mock trades
     total_trades = 25000  # Simulate 25k trades
@@ -185,7 +185,7 @@ async def get_members_dev(
     """
     Development endpoint for congress members (no auth required).
     """
-    logger.info("Getting members for development", page=page, per_page=per_page)
+    logger.info(f"Getting members for development: page={page}, per_page={per_page}")
     
     # Generate more mock members
     members = []
@@ -252,7 +252,7 @@ async def get_top_trading_members_dev(
     """
     Development endpoint for top trading members (no auth required).
     """
-    logger.info("Getting top trading members for development", limit=limit)
+    logger.info(f"Getting top trading members for development: limit={limit}")
     
     members = MOCK_MEMBERS[:limit]
     return JSONResponse(content=members)
@@ -265,7 +265,7 @@ async def get_top_traded_tickers_dev(
     """
     Development endpoint for top traded tickers (no auth required).
     """
-    logger.info("Getting top traded tickers for development", limit=limit)
+    logger.info(f"Getting top traded tickers for development: limit={limit}")
     
     tickers = [
         {"ticker": "AAPL", "count": 450, "total_value": 45000000},

@@ -12,9 +12,8 @@ from sqlalchemy.orm import Session
 from domains.base.interfaces import BaseService, BaseRepository
 from domains.base.crud import CRUDBase
 from domains.base.models import CapitolScopeBaseModel
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 ModelType = TypeVar("ModelType", bound=CapitolScopeBaseModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)

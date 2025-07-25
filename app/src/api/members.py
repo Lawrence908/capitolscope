@@ -8,7 +8,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_active_user, require_admin
 from domains.users.models import User
@@ -25,30 +26,34 @@ from background.tasks import (
     import_congressional_data_csvs,
     enrich_congressional_member_data
 )
-from domains.congressional.models import CongressMember
+from domains.congressional.models import CongressMember, CongressionalTrade
+from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
-logger = get_logger(__name__)
+
 router = APIRouter()
 
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=ResponseEnvelope[PaginatedResponse[CongressMemberSummary]],
+    responses={
+        200: {"description": "Congressional members retrieved successfully"},
+        400: {"description": "Invalid parameters"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_members(
+    filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
-    page: int = Query(1, ge=1, description="Page number"),
-    per_page: int = Query(50, ge=1, le=100, description="Items per page"),
-    chamber: Optional[str] = Query(None, description="Filter by chamber (House/Senate)"),
-    party: Optional[str] = Query(None, description="Filter by party (D/R/I)"),
-    state: Optional[str] = Query(None, description="Filter by state code"),
-    search: Optional[str] = Query(None, description="Search by name"),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> JSONResponse:
+    # current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[PaginatedResponse[CongressMemberSummary]]:
     """
     Get congressional members with filtering and pagination.
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting congressional members", page=page, per_page=per_page, 
-               chamber=chamber, party=party, state=state, search=search)  # Removed user_id for now
+    logger.info(f"Getting congressional members: filters={filters.dict()}")
     
     try:
         from sqlalchemy import select, func, and_, or_
@@ -57,9 +62,9 @@ async def get_members(
         # Build base query
         query = select(CongressMember)
         
-        # Apply filters
-        if search:
-            search_term = f"%{search}%"
+        # Apply search filter only (since that's what's in the schema)
+        if filters.search:
+            search_term = f"%{filters.search}%"
             query = query.filter(
                 or_(
                     CongressMember.full_name.ilike(search_term),
@@ -68,225 +73,283 @@ async def get_members(
                 )
             )
         
-        if party:
-            query = query.filter(CongressMember.party == party)
-        
-        if chamber:
-            query = query.filter(CongressMember.chamber == chamber)
-        
-        if state:
-            query = query.filter(CongressMember.state == state.upper())
-        
         # Get total count
         count_query = select(func.count()).select_from(query.subquery())
         total = await session.scalar(count_query)
         
+        # Apply sorting
+        if filters.sort_by == "member_name":
+            query = query.order_by(CongressMember.last_name.asc() if filters.sort_order == "asc" else CongressMember.last_name.desc())
+        else:
+            # Default sorting by last_name
+            query = query.order_by(CongressMember.last_name.asc())
+        
         # Apply pagination
-        offset = (page - 1) * per_page
-        query = query.offset(offset).limit(per_page)
+        offset = (filters.page - 1) * filters.limit
+        query = query.offset(offset).limit(filters.limit)
         
         # Execute query
         result = await session.execute(query)
         members = result.scalars().unique().all()
         
+        logger.info(f"Found {len(members)} members out of {total} total")
+        
         # Convert to response format
         member_items = []
         for member in members:
-            # Map party values
+            # Map party values - keep the original enum values for the schema
             party_map = {
-                'D': 'Democratic',
-                'R': 'Republican', 
-                'I': 'Independent'
+                'D': 'D',
+                'R': 'R', 
+                'I': 'I'
             }
             
-            member_item = {
-                "id": member.id,
-                "bioguide_id": member.bioguide_id or "",
-                "first_name": member.first_name,
-                "last_name": member.last_name,
-                "full_name": member.full_name,
-                "party": party_map.get(member.party, member.party),
-                "state": member.state,
-                "district": member.district,
-                "chamber": member.chamber,
-                "office": member.office,
-                "phone": member.phone,
-                "url": member.website_url,
-                "image_url": member.image_url,
-                "twitter_account": member.twitter_handle,
-                "facebook_account": member.facebook_url,
-                "youtube_account": None,  # Not in our model
-                "in_office": member.is_active if hasattr(member, 'is_active') else True,
-                "next_election": member.next_election,
-                "total_trades": member.total_trades,
-                "total_value": member.total_value,
-                "created_at": member.created_at.isoformat() if member.created_at else None,
-                "updated_at": member.updated_at.isoformat() if member.updated_at else None,
-            }
+            # Calculate trade statistics for this member
+            trade_stats_query = select(
+                func.count(CongressionalTrade.id).label('trade_count'),
+                func.sum(
+                    func.coalesce(
+                        CongressionalTrade.amount_exact,
+                        (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
+                    )
+                ).label('total_value')
+            ).where(CongressionalTrade.member_id == member.id)
+            
+            trade_stats_result = await session.execute(trade_stats_query)
+            trade_stats = trade_stats_result.first()
+            
+            member_item = CongressMemberSummary(
+                id=member.id,
+                bioguide_id=member.bioguide_id or "",
+                first_name=member.first_name,
+                last_name=member.last_name,
+                full_name=member.full_name,
+                party=party_map.get(member.party, member.party),
+                state=member.state,
+                district=member.district,
+                chamber=member.chamber,
+                office=getattr(member, 'office', None),
+                phone=member.phone,
+                url=member.website_url,
+                image_url=member.image_url,
+                twitter_account=member.twitter_handle,
+                facebook_account=member.facebook_url,
+                youtube_account=None,
+                in_office=getattr(member, 'is_active', True),
+                next_election=getattr(member, 'next_election', None),
+                trade_count=trade_stats.trade_count if trade_stats else 0,
+                total_trade_value=int(trade_stats.total_value or 0),
+                created_at=member.created_at.isoformat() if member.created_at else None,
+                updated_at=member.updated_at.isoformat() if member.updated_at else None,
+            )
             member_items.append(member_item)
         
         # Calculate pagination info
-        pages = (total + per_page - 1) // per_page
-        has_next = page < pages
-        has_prev = page > 1
+        pages = (total + filters.limit - 1) // filters.limit
+        has_next = filters.page < pages
+        has_prev = filters.page > 1
         
-        response_data = {
-            "items": member_items,
-            "total": total,
-            "page": page,
-            "per_page": per_page,
-            "pages": pages,
-            "has_next": has_next,
-            "has_prev": has_prev,
-        }
+        pagination_meta = PaginationMeta(
+            page=filters.page,
+            per_page=filters.limit,
+            total=total,
+            pages=pages,
+            has_next=has_next,
+            has_prev=has_prev
+        )
+        paginated = PaginatedResponse[CongressMemberSummary](
+            items=member_items,
+            meta=pagination_meta
+        )
         
-        return JSONResponse(content=response_data)
+        return create_response(paginated)
         
     except Exception as e:
         logger.error(f"Error retrieving members: {e}")
-        return error_response(
-            message="Failed to retrieve congressional members",
-            error_code="members_retrieval_failed"
-        )
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return create_response(None, error="Failed to retrieve congressional members")
 
 
-@router.get("/{member_id}", response_model=CongressMemberDetailResponse)
+@router.get(
+    "/{member_id}",
+    response_model=ResponseEnvelope[CongressMemberDetail],
+    responses={
+        200: {"description": "Member details retrieved successfully"},
+        400: {"description": "Invalid member ID"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Member not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_member(
-    member_id: int = Path(..., description="Member ID"),
+    member_id: str = Path(..., description="Member ID"),
     session: AsyncSession = Depends(get_db_session),
-    current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
+) -> ResponseEnvelope[CongressMemberDetail]:
     """
     Get detailed information about a specific congressional member.
-    
-    **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting member by ID", member_id=member_id, user_id=current_user.id)
-    
+    logger.info(f"Getting member by ID: member_id={member_id}")
     try:
-        # Initialize repository
+        from uuid import UUID
+        member_uuid = UUID(member_id)
+        
         member_repo = CongressMemberRepository(session)
-        
-        # Get member profile
-        member = member_repo.get_by_id(member_id)
+        member = await member_repo.get_by_id(member_uuid)
         if not member:
-            return error_response(
-                message="Member not found",
-                error_code="member_not_found",
-                status_code=404
-            )
+            return create_response(None, error="Member not found")
         
-        # Get analytics for premium users (placeholder for now)
-        analytics = None
-        if current_user.is_premium:
-            # TODO: Implement analytics retrieval
-            analytics = {
-                "trade_count": 0,
-                "total_trade_value": 0,
-                "portfolio_value": 0
-            }
+        # Calculate trade statistics for this member
+        from sqlalchemy import select, func
+        from domains.congressional.models import CongressionalTrade
         
-        data = {
-            "member": member.dict(),
-            "analytics": analytics if analytics else None,
-            "user_tier": current_user.subscription_tier,
-            "premium_features": current_user.is_premium
-        }
+        trade_stats_query = select(
+            func.count(CongressionalTrade.id).label('trade_count'),
+            func.sum(
+                func.coalesce(
+                    CongressionalTrade.amount_exact,
+                    (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
+                )
+            ).label('total_value')
+        ).where(CongressionalTrade.member_id == member_uuid)
         
-        return success_response(
-            data=data,
-            meta={"message": "Member details retrieved successfully"}
+        trade_stats_result = await session.execute(trade_stats_query)
+        trade_stats = trade_stats_result.first()
+        
+        # Create member detail with calculated stats
+        member_detail = CongressMemberDetail(
+            id=member.id,
+            first_name=member.first_name,
+            last_name=member.last_name,
+            full_name=member.full_name,
+            party=member.party,
+            state=member.state,
+            district=member.district,
+            chamber=member.chamber,
+            email=member.email,
+            phone=member.phone,
+            office_address=member.office_address,
+            bioguide_id=member.bioguide_id,
+            congress_gov_id=member.congress_gov_id,
+            congress_gov_url=member.congress_gov_url,
+            image_url=member.image_url,
+            image_attribution=member.image_attribution,
+            last_api_update=member.last_api_update,
+            term_start=member.term_start,
+            term_end=member.term_end,
+            congress_number=member.congress_number,
+            education=member.education,
+            committees=member.committees,
+            leadership_roles=member.leadership_roles,
+            twitter_handle=member.twitter_handle,
+            facebook_url=member.facebook_url,
+            website_url=member.website_url,
+            seniority_rank=member.seniority_rank,
+            vote_percentage=member.vote_percentage,
+            influence_score=member.influence_score,
+            fundraising_total=member.fundraising_total,
+            pac_contributions=member.pac_contributions,
+            wikipedia_url=member.wikipedia_url,
+            ballotpedia_url=member.ballotpedia_url,
+            opensecrets_url=member.opensecrets_url,
+            govtrack_id=member.govtrack_id,
+            votesmart_id=member.votesmart_id,
+            fec_id=member.fec_id,
+            trade_count=trade_stats.trade_count if trade_stats else 0,
+            total_trade_value=int(trade_stats.total_value or 0),
+            portfolio_value=None,  # TODO: Calculate portfolio value
+            created_at=member.created_at.isoformat() if member.created_at else None,
+            updated_at=member.updated_at.isoformat() if member.updated_at else None,
         )
-        
+        return create_response(member_detail)
     except Exception as e:
         logger.error(f"Error retrieving member {member_id}: {e}")
-        return error_response(
-            message="Failed to retrieve member details",
-            error_code="member_not_found",
-            status_code=404 if "not found" in str(e).lower() else 500
-        )
+        return create_response(None, error="Failed to retrieve member details")
 
 
-@router.get("/search")
+@router.get(
+    "/search",
+    response_model=ResponseEnvelope[PaginatedResponse[CongressMemberSummary]],
+    responses={
+        200: {"description": "Search results for congressional members"},
+        400: {"description": "Invalid search parameters"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def search_members(
-    q: str = Query(..., min_length=1, description="Search query"),
+    filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
-    limit: int = Query(10, ge=1, le=50, description="Number of results"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[CongressMemberSummary]]:
     """
     Search congressional members by name or other criteria.
-    
-    **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Searching members", query=q, limit=limit, user_id=current_user.id)
-    
+    logger.info(f"Searching members: filters={filters.dict()}, user_id={current_user.id}")
     try:
-        # Initialize repository
         member_repo = CongressMemberRepository(session)
-        
-        # Perform search
-        members = member_repo.search_members(q, limit=limit)
-        
-        data = {
-            "query": q,
-            "results": [member.dict() for member in members],
-            "total": len(members),
-            "limit": limit,
-            "user_tier": current_user.subscription_tier,
-        }
-        
-        return success_response(
-            data=data,
-            meta={"message": f"Found {len(members)} members matching '{q}'"}
+        members = member_repo.search_members(filters.search, limit=filters.limit)
+        member_items = [CongressMemberSummary.from_orm(member) for member in members]
+        pagination_meta = PaginationMeta(
+            page=filters.page,
+            per_page=filters.limit,
+            total=len(members),
+            pages=1,
+            has_next=False,
+            has_prev=False
         )
-        
+        paginated = PaginatedResponse[CongressMemberSummary](
+            items=member_items,
+            meta=pagination_meta
+        )
+        return create_response(paginated)
     except Exception as e:
         logger.error(f"Error searching members: {e}")
-        return error_response(
-            message="Failed to search members",
-            error_code="search_failed"
-        )
+        return create_response(None, error="Failed to search members")
 
 
-@router.get("/state/{state_code}")
+@router.get(
+    "/state/{state_code}",
+    response_model=ResponseEnvelope[PaginatedResponse[CongressMemberSummary]],
+    responses={
+        200: {"description": "Members by state retrieved successfully"},
+        400: {"description": "Invalid state code"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "State not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_members_by_state(
     state_code: str = Path(..., description="Two-letter state code"),
+    filters: MemberQuery = Depends(),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[CongressMemberSummary]]:
     """
     Get all congressional members from a specific state.
-    
-    **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting members by state", state_code=state_code, user_id=current_user.id)
-    
+    logger.info(f"Getting members by state: state_code={state_code}, filters={filters.dict()}, user_id={current_user.id}")
     try:
-        # Initialize repository
         member_repo = CongressMemberRepository(session)
-        
-        # Get members by state
         members = member_repo.get_members_by_state(state_code.upper())
-        
-        data = {
-            "state_code": state_code.upper(),
-            "members": [member.dict() for member in members],
-            "total": len(members),
-            "user_tier": current_user.subscription_tier,
-        }
-        
-        return success_response(
-            data=data,
-            meta={"message": f"Retrieved {len(members)} members from {state_code.upper()}"}
+        member_items = [CongressMemberSummary.from_orm(member) for member in members]
+        pagination_meta = PaginationMeta(
+            page=filters.page,
+            per_page=filters.limit,
+            total=len(members),
+            pages=1,
+            has_next=False,
+            has_prev=False
         )
-        
+        paginated = PaginatedResponse[CongressMemberSummary](
+            items=member_items,
+            meta=pagination_meta
+        )
+        return create_response(paginated)
     except Exception as e:
         logger.error(f"Error retrieving members for state {state_code}: {e}")
-        return error_response(
-            message=f"Failed to retrieve members for state {state_code}",
-            error_code="state_members_failed"
-        )
+        return create_response(None, error=f"Failed to retrieve members for state {state_code}")
 
 
 # Administrative endpoints
@@ -297,40 +360,26 @@ async def sync_members_from_api(
     state: Optional[str] = Query(None, description="State code for sync-state action"),
     current_user: User = Depends(require_admin()),
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Trigger sync of congressional members from Congress.gov API.
-    
-    **Admin Only**: Requires administrator permissions.
     """
-    logger.info("Triggering member sync", action=action, state=state, user_id=current_user.id)
-    
+    logger.info(f"Triggering member sync: action={action}, state={state}, user_id={current_user.id}")
     try:
-        # Add background task for sync
         kwargs = {}
         if action == "sync-state" and state:
             kwargs["state"] = state.upper()
-        
         background_tasks.add_task(sync_congressional_members.delay, action, **kwargs)
-        
         data = {
             "action": action,
             "parameters": kwargs,
             "status": "queued",
             "message": f"Member sync ({action}) has been queued for processing"
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Sync task queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing sync task: {e}")
-        return error_response(
-            message="Failed to queue sync task",
-            error_code="sync_queue_failed"
-        )
+        return create_response(None, error="Failed to queue sync task")
 
 
 @router.post("/sync/{bioguide_id}")
@@ -339,66 +388,41 @@ async def sync_specific_member(
     bioguide_id: str = Path(..., description="Bioguide ID of member to sync"),
     current_user: User = Depends(require_admin()),
     session: AsyncSession = Depends(get_db_session),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Sync a specific member from Congress.gov API.
-    
-    **Admin Only**: Requires administrator permissions.
     """
-    logger.info("Triggering specific member sync", bioguide_id=bioguide_id, user_id=current_user.id)
-    
+    logger.info(f"Triggering specific member sync: bioguide_id={bioguide_id}, user_id={current_user.id}")
     try:
-        # Add background task for specific member sync
         background_tasks.add_task(
             sync_congressional_members.delay, 
             "sync-member", 
             bioguide_id=bioguide_id
         )
-        
         data = {
             "bioguide_id": bioguide_id,
             "action": "sync-member",
             "status": "queued",
             "message": f"Member sync for {bioguide_id} has been queued for processing"
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Member sync task queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing member sync for {bioguide_id}: {e}")
-        return error_response(
-            message=f"Failed to queue sync for member {bioguide_id}",
-            error_code="member_sync_queue_failed"
-        )
+        return create_response(None, error=f"Failed to queue sync for member {bioguide_id}")
 
 
 @router.post("/comprehensive-ingestion")
 async def trigger_comprehensive_ingestion(
     background_tasks: BackgroundTasks,
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Trigger comprehensive data ingestion workflow.
-    
-    This endpoint starts the complete data ingestion process that includes:
-    1. Syncing congressional members from Congress.gov
-    2. Enriching member data with legislation
-    3. Updating stock prices
-    4. Recalculating portfolios
-    
-    **Admin Only**: Requires administrator permissions.
     """
-    logger.info("Triggering comprehensive data ingestion", user_id=current_user.id)
-    
+    logger.info(f"Triggering comprehensive data ingestion: user_id={current_user.id}")
     try:
         from background.tasks import comprehensive_data_ingestion
-        
-        # Add background task for comprehensive ingestion
         task_result = comprehensive_data_ingestion.delay()
-        
         data = {
             "task_id": task_result.id,
             "action": "comprehensive-ingestion",
@@ -411,56 +435,34 @@ async def trigger_comprehensive_ingestion(
                 "4. Recalculate portfolios"
             ]
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Comprehensive ingestion workflow queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing comprehensive ingestion: {e}")
-        return error_response(
-            message="Failed to queue comprehensive ingestion workflow",
-            error_code="comprehensive_ingestion_queue_failed"
-        )
+        return create_response(None, error="Failed to queue comprehensive ingestion workflow")
 
 
 @router.post("/health-check")
 async def health_check_apis(
     background_tasks: BackgroundTasks,
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Run health checks on external APIs.
-    
-    **Admin Only**: Requires administrator permissions.
     """
-    logger.info("Triggering API health checks", user_id=current_user.id)
-    
+    logger.info(f"Triggering API health checks: user_id={current_user.id}")
     try:
         from background.tasks import health_check_congress_api
-        
-        # Add background task for health check
         task_result = health_check_congress_api.delay()
-        
         data = {
             "task_id": task_result.id,
             "action": "health-check",
             "status": "queued",
             "message": "API health check has been queued for processing"
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": "Health check task queued successfully"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error queuing health check: {e}")
-        return error_response(
-            message="Failed to queue health check",
-            error_code="health_check_queue_failed"
-        )
+        return create_response(None, error="Failed to queue health check")
 
 
 @router.get("/{member_id}/legislation")
@@ -470,45 +472,24 @@ async def get_member_legislation(
     legislation_type: str = Query("sponsored", description="Type: sponsored or cosponsored"),
     limit: int = Query(20, ge=1, le=100, description="Number of bills to return"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get legislation sponsored or cosponsored by a member.
-    
-    **Premium Feature**: Enhanced data for premium users.
     """
-    logger.info("Getting member legislation", member_id=member_id, 
-               legislation_type=legislation_type, user_id=current_user.id)
-    
+    logger.info(f"Getting member legislation: member_id={member_id}, legislation_type={legislation_type}, user_id={current_user.id}")
     if not current_user.is_premium:
-        return error_response(
-            message="This feature requires a premium subscription",
-            error_code="premium_required",
-            status_code=403
-        )
-    
+        return create_response(None, error="This feature requires a premium subscription")
     try:
-        # Initialize services
         member_repo = CongressMemberRepository(session)
         api_service = CongressAPIService(member_repo)
-        
-        # Get member
         member = member_repo.get_by_id(member_id)
         if not member or not member.bioguide_id:
-            return error_response(
-                message="Member not found or missing bioguide ID",
-                error_code="member_not_found",
-                status_code=404
-            )
-        
-        # Get legislation data
+            return create_response(None, error="Member not found or missing bioguide ID")
         legislation_data = await api_service.enrich_member_with_legislation(member_id)
-        
-        # Extract the requested type
         if legislation_type == "sponsored":
             legislation = legislation_data.get("sponsored_legislation", {})
         else:
             legislation = legislation_data.get("cosponsored_legislation", {})
-        
         data = {
             "member_id": member_id,
             "member_name": member.full_name,
@@ -518,15 +499,7 @@ async def get_member_legislation(
             "total_bills": len(legislation.get("bills", [])),
             "user_tier": current_user.subscription_tier
         }
-        
-        return success_response(
-            data=data,
-            meta={"message": f"Retrieved {legislation_type} legislation for {member.full_name}"}
-        )
-        
+        return create_response(data)
     except Exception as e:
         logger.error(f"Error retrieving legislation for member {member_id}: {e}")
-        return error_response(
-            message="Failed to retrieve member legislation",
-            error_code="legislation_retrieval_failed"
-        ) 
+        return create_response(None, error="Failed to retrieve member legislation") 

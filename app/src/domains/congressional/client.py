@@ -15,10 +15,11 @@ from pydantic import BaseModel, Field
 
 from core.config import settings
 from core.exceptions import ExternalAPIError, RateLimitError, NotFoundError
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.base.interfaces import ExternalAPIInterface
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class CongressAPIConfig(BaseModel):

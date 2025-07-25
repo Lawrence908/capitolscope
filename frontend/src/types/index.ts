@@ -1,48 +1,52 @@
 // Congressional Member Types
 export interface CongressMember {
-  id: number;
-  bioguide_id: string;
+  id: string; // Changed from number to string (UUID)
+  bioguide_id?: string | null;
   first_name: string;
   last_name: string;
   full_name: string;
-  party: 'Republican' | 'Democratic' | 'Independent' | string;
-  state: string;
-  district?: string;
-  chamber: 'House' | 'Senate';
-  office?: string;
-  phone?: string;
-  url?: string;
-  image_url?: string;
-  twitter_account?: string;
-  facebook_account?: string;
-  youtube_account?: string;
-  in_office: boolean;
-  next_election?: string;
-  total_trades?: number;
-  total_value?: number;
+  party?: string | null;
+  state?: string | null;
+  district?: string | null;
+  chamber?: string | null;
+  office?: string | null;
+  phone?: string | null;
+  url?: string | null;
+  image_url?: string | null;
+  twitter_account?: string | null;
+  facebook_account?: string | null;
+  youtube_account?: string | null;
+  in_office?: boolean;
+  next_election?: string | null;
+  trade_count?: number | null; // Changed from total_trades
+  total_trade_value?: number | null; // Changed from total_value
+  portfolio_value?: number | null;
   created_at: string;
   updated_at: string;
 }
 
 // Congressional Trade Types
 export interface CongressionalTrade {
-  id: number;
-  member_id: number;
-  member?: CongressMember;
-  disclosure_date: string;
-  transaction_date: string;
-  owner: 'SP' | 'JT' | 'DC' | 'C';
-  ticker?: string;
-  asset_description: string;
-  asset_type: string;
-  type: 'purchase' | 'sale' | 'exchange';
-  amount: string;
-  amount_min?: number;
-  amount_max?: number;
-  comment?: string;
-  ptr_link?: string;
-  created_at: string;
-  updated_at: string;
+  id: string;
+  member_id?: string;
+  member_name?: string;
+  member_party?: string;
+  member_chamber?: string;
+  member_state?: string;
+  ticker?: string | null;
+  asset_name?: string | null;
+  asset_type?: string | null;
+  transaction_type?: string | null;
+  transaction_date?: string | null;
+  notification_date?: string | null;
+  amount_min?: number | null;
+  amount_max?: number | null;
+  amount_exact?: number | null;
+  estimated_value?: number | null;
+  filing_status?: string | null;
+  owner?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // API Response Types
@@ -57,19 +61,30 @@ export interface PaginatedResponse<T> {
 }
 
 export interface TradeFilters {
-  member_id?: number;
-  ticker?: string;
-  asset_type?: string;
-  type?: 'purchase' | 'sale' | 'exchange';
-  owner?: 'SP' | 'JT' | 'DC' | 'C';
-  party?: string;
-  state?: string;
-  chamber?: 'House' | 'Senate';
-  date_from?: string;
-  date_to?: string;
+  member_ids?: string[];
+  member_names?: string[];
+  parties?: string[];
+  chambers?: string[];
+  states?: string[];
+  tickers?: string[];
+  asset_types?: string[];
+  transaction_types?: string[];
+  owners?: string[];
+  transaction_date_from?: string;
+  transaction_date_to?: string;
+  notification_date_from?: string;
+  notification_date_to?: string;
   amount_min?: number;
   amount_max?: number;
+  amount_range?: string;
   search?: string;
+  sort_by?: 'transaction_date' | 'notification_date' | 'amount' | 'member_name' | 'ticker' | 'transaction_type';
+  sort_order?: 'asc' | 'desc';
+  page?: number;
+  limit?: number;
+  include_member?: boolean;
+  include_security?: boolean;
+  include_performance?: boolean;
 }
 
 export interface MemberFilters {

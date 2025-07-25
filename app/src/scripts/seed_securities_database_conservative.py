@@ -30,15 +30,14 @@ from typing import Dict, Any
 from sqlalchemy.exc import IntegrityError
 
 from core.database import db_manager, init_database
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
     ingest_price_data_for_all_securities,
     set_shutdown_flag,
     fetch_yfinance_data
 )
-
-logger = get_logger(__name__)
 
 # Global flag for graceful shutdown
 shutdown_requested = False

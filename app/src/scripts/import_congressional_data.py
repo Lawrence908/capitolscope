@@ -9,11 +9,18 @@ Usage:
     python scripts/import_congressional_data.py --csvs  # Import from existing CSVs
     python scripts/import_congressional_data.py --live  # Fetch live data (10-15 min)
     python scripts/import_congressional_data.py --hybrid # CSVs + latest live data
+    
+    
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --csvs
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --hybrid
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --live
+    docker exec -it capitolscope-dev python /app/src/scripts/import_congressional_data.py --live --years 2025
 """
 
 import asyncio
 import sys
 import argparse
+import logging
 from pathlib import Path
 from typing import Dict, Any
 
@@ -25,11 +32,21 @@ project_root = app_src_dir.parent
 # Add app/src to Python path
 sys.path.insert(0, str(app_src_dir))
 
+# Configure logging first
+from core.logging import configure_logging
+configure_logging()
+
 from core.database import DatabaseManager, init_database, get_sync_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.congressional.ingestion import CongressionalDataIngestion
 
-logger = get_logger(__name__)
+# Add a dedicated log file for this script
+script_log_handler = logging.FileHandler("/app/logs/import_script.log")
+script_log_handler.setLevel(logging.DEBUG)
+script_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+script_log_handler.setFormatter(script_formatter)
+logging.getLogger().addHandler(script_log_handler)
 
 
 def resolve_data_path(input_path: str) -> Path:
@@ -43,11 +60,31 @@ def import_from_csvs(csv_directory: str) -> Dict[str, Any]:
     """Import congressional data from existing CSV files."""
     logger.info("🗂️  Importing congressional data from CSV files...")
     
+    # Debug: Check what get_sync_db_session returns
+    logger.info(f"DEBUG: get_sync_db_session type: {type(get_sync_db_session())}")
+    logger.info(f"DEBUG: get_sync_db_session: {get_sync_db_session()}")
+    
     with get_sync_db_session() as session:
         try:
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             results = ingester.import_congressional_data_from_csvs_sync(csv_directory)
             logger.info(f"✅ CSV import completed: {results}")
+            
+            # Print error summary to console and log
+            summary_lines = ["\n===== IMPORT ERROR SUMMARY ====="]
+            for cat, count in ingester.error_counts.items():
+                summary_lines.append(f"  {cat}: {count}")
+            summary_lines.append("\nSample errors:")
+            for cat, samples in ingester.error_samples.items():
+                summary_lines.append(f"  {cat}:")
+                for s in samples:
+                    summary_lines.append(f"    - DocID: {s['doc_id']}, Member: {s['member_name']}, Msg: {s['message']}")
+            summary = "\n".join(summary_lines)
+            print(summary)
+            logger.info(summary)
+
+            ingester.export_failed_records()
+            ingester.export_auto_created_members()
             return results
         except Exception as e:
             logger.error(f"❌ CSV import failed: {e}")
@@ -91,9 +128,13 @@ def enrich_members() -> Dict[str, Any]:
     """Enrich member profiles with additional data."""
     logger.info("👥 Enriching member profiles...")
     
+    # Debug: Check what get_sync_db_session returns
+    logger.info(f"DEBUG: get_sync_db_session type: {type(get_sync_db_session())}")
+    logger.info(f"DEBUG: get_sync_db_session: {get_sync_db_session()}")
+    
     with get_sync_db_session() as session:
         try:
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             results = ingester.enrich_member_data_sync()
             logger.info(f"✅ Member enrichment completed: {results}")
             return results
@@ -244,7 +285,15 @@ async def main():
         
         # Print summary
         print_results_summary(results, mode)
-        
+
+        # Print error summary and export failed records
+        if 'ingester' in locals():
+            ingester.print_error_summary()
+            ingester.export_failed_records()
+        elif 'csv_results' in locals() and hasattr(csv_results, 'print_error_summary'):
+            csv_results.print_error_summary()
+            csv_results.export_failed_records()
+
         # Next steps
         print("\n🎯 NEXT STEPS:")
         print("1. Start the API server:")

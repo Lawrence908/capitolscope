@@ -6,26 +6,27 @@ and user communication preferences.
 """
 
 from .models import (
-    NotificationTemplate,
-    EmailNotification,
-    TradeAlert,
-    AlertRule,
     NotificationSubscription,
-    NotificationDelivery
+    NotificationAlert,
+    NotificationDeliveryLog,
+    NotificationTemplate,
+    NewsletterSubscription,
+    NotificationAnalytics
 )
 
 from .schemas import (
-    NotificationTemplateCreate,
-    NotificationTemplateResponse,
-    EmailNotificationCreate,
-    EmailNotificationResponse,
-    TradeAlertCreate,
-    TradeAlertResponse,
-    AlertRuleCreate,
-    AlertRuleResponse,
-    SubscriptionCreate,
-    SubscriptionResponse,
-    NotificationPreferences
+    UserSubscriptionResponse,
+    SubscriptionUpdateResponse,
+    AlertListResponse,
+    AlertResponse,
+    AlertHistoryResponse,
+    NewsletterOptionsResponse,
+    NewsletterSubscription,
+    NewsletterUnsubscribeResponse,
+    TemplateListResponse,
+    DeliveryStatusResponse,
+    TestNotificationResponse,
+    NotificationAnalyticsResponse
 )
 
 from .services import NotificationService
@@ -34,25 +35,26 @@ from .interfaces import NotificationRepositoryProtocol, EmailProviderProtocol
 
 __all__ = [
     # Models
-    "NotificationTemplate",
-    "EmailNotification",
-    "TradeAlert",
-    "AlertRule",
     "NotificationSubscription",
-    "NotificationDelivery",
+    "NotificationAlert",
+    "NotificationDeliveryLog",
+    "NotificationTemplate",
+    "NewsletterSubscription",
+    "NotificationAnalytics",
     
     # Schemas
-    "NotificationTemplateCreate",
-    "NotificationTemplateResponse",
-    "EmailNotificationCreate",
-    "EmailNotificationResponse",
-    "TradeAlertCreate",
-    "TradeAlertResponse",
-    "AlertRuleCreate",
-    "AlertRuleResponse",
-    "SubscriptionCreate",
-    "SubscriptionResponse",
-    "NotificationPreferences",
+    "UserSubscriptionResponse",
+    "SubscriptionUpdateResponse",
+    "AlertListResponse",
+    "AlertResponse",
+    "AlertHistoryResponse",
+    "NewsletterOptionsResponse",
+    "NewsletterSubscription",
+    "NewsletterUnsubscribeResponse",
+    "TemplateListResponse",
+    "DeliveryStatusResponse",
+    "TestNotificationResponse",
+    "NotificationAnalyticsResponse",
     
     # Services & CRUD
     "NotificationService",

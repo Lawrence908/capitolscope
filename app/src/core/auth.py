@@ -16,10 +16,9 @@ from jose import jwt, JWTError
 
 from core.database import get_db_session
 from core.config import settings
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.users.models import User, UserStatus
-
-logger = get_logger(__name__)
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -109,24 +108,24 @@ async def authenticate_user(email: str, password: str, session: AsyncSession) ->
         user = result.scalar_one_or_none()
         
         if not user:
-            logger.warning("Authentication failed: user not found", email=email)
+            logger.warning(f"Authentication failed: user not found, email={email}")
             return None
         
         # Check password
         if not user.password_hash or not verify_password(password, user.password_hash):
-            logger.warning("Authentication failed: invalid password", email=email)
+            logger.warning(f"Authentication failed: invalid password, email={email}")
             return None
         
         # Check if user is active
         if user.status != UserStatus.ACTIVE:
-            logger.warning("Authentication failed: user not active", email=email, status=user.status)
+            logger.warning(f"Authentication failed: user not active, email={email}, status={user.status}")
             return None
         
-        logger.info("User authenticated successfully", email=email, user_id=user.id)
+        logger.info(f"User authenticated successfully, email={email}, user_id={user.id}")
         return user
         
     except Exception as e:
-        logger.error("Authentication error", error=str(e), email=email)
+        logger.error(f"Authentication error, email={email}", error=str(e))
         return None
 
 
@@ -138,7 +137,7 @@ async def get_user_by_id(user_id: str, session: AsyncSession) -> Optional[User]:
         )
         return result.scalar_one_or_none()
     except Exception as e:
-        logger.error("Error fetching user", error=str(e), user_id=user_id)
+        logger.error(f"Error fetching user, user_id={user_id}", error=str(e))
         return None
 
 
@@ -174,14 +173,14 @@ async def get_current_user(
         return user
         
     except AuthenticationError as e:
-        logger.warning("Authentication failed", error=str(e))
+        logger.warning(f"Authentication failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e),
             headers={"WWW-Authenticate": "Bearer"},
         )
     except Exception as e:
-        logger.error("Authentication error", error=str(e))
+        logger.error(f"Authentication error", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",

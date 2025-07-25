@@ -33,15 +33,15 @@ sys.path.insert(0, str(app_src_dir))
 
 import argparse
 import requests
+import logging
 from core.database import db_manager, init_database
-from core.logging import get_logger
 from domains.securities.models import Security, AssetType, Exchange, Sector
 from domains.securities.ingestion import (
     fetch_sp500_tickers, fetch_nasdaq100_tickers, fetch_dow_jones_tickers,
     fetch_tsx_tickers, fetch_bond_securities, fetch_etf_securities
 )
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 # Global flag for graceful shutdown
 shutdown_requested = False

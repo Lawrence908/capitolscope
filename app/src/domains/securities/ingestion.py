@@ -20,14 +20,14 @@ import os
 import random
 from sqlalchemy.exc import IntegrityError
 
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
+
 from domains.securities.models import Security, AssetType, Exchange, Sector, DailyPrice
 from domains.base.schemas import validate_ticker_symbol
 from dotenv import load_dotenv
 
 load_dotenv()
-
-logger = get_logger(__name__)
 
 
 # ============================================================================

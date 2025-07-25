@@ -22,13 +22,12 @@ src_path = Path(__file__).parent.parent / "app" / "src"
 sys.path.insert(0, str(src_path))
 
 from core.database import db_manager, init_database
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
     ingest_price_data_for_all_securities
 )
-
-logger = get_logger(__name__)
 
 
 async def seed_securities_database(include_prices: bool = False, 
@@ -127,7 +126,6 @@ async def main():
     args = parser.parse_args()
     
     # Configure logging level
-    import logging
     log_level = getattr(logging, args.log_level.upper())
     logging.getLogger().setLevel(log_level)
     

@@ -25,14 +25,13 @@ src_path = Path(__file__).parent.parent / "app" / "src"
 sys.path.insert(0, str(src_path))
 
 from core.database import db_manager, init_database, get_sync_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.congressional.ingestion import (
     import_congressional_data_from_csvs,
     import_congressional_data_from_sqlite,
     enrich_member_profiles
 )
-
-logger = get_logger(__name__)
 
 
 @dataclass
@@ -726,7 +725,6 @@ async def main():
     args = parser.parse_args()
     
     # Configure logging level
-    import logging
     log_level = getattr(logging, args.log_level.upper())
     logging.getLogger().setLevel(log_level)
     

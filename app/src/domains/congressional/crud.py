@@ -5,6 +5,9 @@ This module contains repository implementations for congressional domain
 data access operations. Supports CAP-10 (Transaction List) and CAP-11 (Member Profiles).
 """
 
+import logging
+logger = logging.getLogger(__name__)
+
 from datetime import date, datetime, timedelta
 from typing import List, Optional, Dict, Any, Tuple
 from decimal import Decimal
@@ -31,9 +34,6 @@ from domains.congressional.schemas import (
     TradingStatistics, SortOrder, MarketPerformanceComparison
 )
 from core.exceptions import NotFoundError, ValidationError
-from core.logging import get_logger
-
-logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -365,54 +365,60 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
         logger.info(f"Updated congressional trade: {trade_id}")
         return CongressionalTradeDetail.from_orm(db_trade)
     
-    def list_trades(self, query: CongressionalTradeQuery) -> Tuple[List[CongressionalTradeSummary], int]:
+    async def list_trades(self, query: CongressionalTradeQuery) -> Tuple[List[CongressionalTradeSummary], int]:
         """List congressional trades with pagination and filtering."""
-        db_query = (
-            self.db.query(CongressionalTrade)
-            .join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
-        )
+        from sqlalchemy.future import select
+        from sqlalchemy import func, or_, desc, asc, and_
+        
+        logger.info(f"[CRUD] transaction_types: {query.transaction_types} (type: {type(query.transaction_types)})")
+        # Fix: Support comma-separated string for transaction_types
+        if query.transaction_types and isinstance(query.transaction_types, str):
+            query.transaction_types = [t.strip() for t in query.transaction_types.split(',') if t.strip()]
+        
+        # Build base query with join
+        stmt = select(CongressionalTrade, CongressMember).join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
         
         # Apply filters
         if query.member_ids:
-            db_query = db_query.filter(CongressionalTrade.member_id.in_(query.member_ids))
+            stmt = stmt.where(CongressionalTrade.member_id.in_(query.member_ids))
         
         if query.member_names:
             name_filters = [CongressMember.full_name.ilike(f"%{name}%") for name in query.member_names]
-            db_query = db_query.filter(or_(*name_filters))
+            stmt = stmt.where(or_(*name_filters))
         
         if query.parties:
-            db_query = db_query.filter(CongressMember.party.in_([p.value for p in query.parties]))
+            stmt = stmt.where(CongressMember.party.in_([p.value for p in query.parties]))
         
         if query.chambers:
-            db_query = db_query.filter(CongressMember.chamber.in_([c.value for c in query.chambers]))
+            stmt = stmt.where(CongressMember.chamber.in_([c.value for c in query.chambers]))
         
         if query.states:
-            db_query = db_query.filter(CongressMember.state.in_(query.states))
+            stmt = stmt.where(CongressMember.state.in_(query.states))
         
         if query.tickers:
-            db_query = db_query.filter(CongressionalTrade.ticker.in_(query.tickers))
+            stmt = stmt.where(CongressionalTrade.ticker.in_(query.tickers))
         
         if query.asset_types:
-            db_query = db_query.filter(CongressionalTrade.asset_type.in_(query.asset_types))
+            stmt = stmt.where(CongressionalTrade.asset_type.in_(query.asset_types))
         
         if query.transaction_types:
-            db_query = db_query.filter(CongressionalTrade.transaction_type.in_([t.value for t in query.transaction_types]))
+            stmt = stmt.where(CongressionalTrade.transaction_type.in_([t.value for t in query.transaction_types]))
         
         if query.owners:
-            db_query = db_query.filter(CongressionalTrade.owner.in_([o.value for o in query.owners]))
+            stmt = stmt.where(CongressionalTrade.owner.in_([o.value for o in query.owners]))
         
         # Date filters
         if query.transaction_date_from:
-            db_query = db_query.filter(CongressionalTrade.transaction_date >= query.transaction_date_from)
+            stmt = stmt.where(CongressionalTrade.transaction_date >= query.transaction_date_from)
         
         if query.transaction_date_to:
-            db_query = db_query.filter(CongressionalTrade.transaction_date <= query.transaction_date_to)
+            stmt = stmt.where(CongressionalTrade.transaction_date <= query.transaction_date_to)
         
         if query.notification_date_from:
-            db_query = db_query.filter(CongressionalTrade.notification_date >= query.notification_date_from)
+            stmt = stmt.where(CongressionalTrade.notification_date >= query.notification_date_from)
         
         if query.notification_date_to:
-            db_query = db_query.filter(CongressionalTrade.notification_date <= query.notification_date_to)
+            stmt = stmt.where(CongressionalTrade.notification_date <= query.notification_date_to)
         
         # Amount filters
         if query.amount_min or query.amount_max:
@@ -421,14 +427,14 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
                 (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
             )
             if query.amount_min:
-                db_query = db_query.filter(estimated_value >= query.amount_min)
+                stmt = stmt.where(estimated_value >= query.amount_min)
             if query.amount_max:
-                db_query = db_query.filter(estimated_value <= query.amount_max)
+                stmt = stmt.where(estimated_value <= query.amount_max)
         
         # Search filter
         if query.search:
             search_term = f"%{query.search}%"
-            db_query = db_query.filter(
+            stmt = stmt.where(
                 or_(
                     CongressionalTrade.raw_asset_description.ilike(search_term),
                     CongressionalTrade.asset_name.ilike(search_term),
@@ -438,7 +444,52 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
             )
         
         # Count total results
-        total_count = db_query.count()
+        count_stmt = select(func.count()).select_from(CongressionalTrade).join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
+        
+        # Apply same filters to count query
+        if query.member_ids:
+            count_stmt = count_stmt.where(CongressionalTrade.member_id.in_(query.member_ids))
+        if query.parties:
+            count_stmt = count_stmt.where(CongressMember.party.in_([p.value for p in query.parties]))
+        if query.chambers:
+            count_stmt = count_stmt.where(CongressMember.chamber.in_([c.value for c in query.chambers]))
+        if query.states:
+            count_stmt = count_stmt.where(CongressMember.state.in_(query.states))
+        if query.tickers:
+            count_stmt = count_stmt.where(CongressionalTrade.ticker.in_(query.tickers))
+        if query.asset_types:
+            count_stmt = count_stmt.where(CongressionalTrade.asset_type.in_(query.asset_types))
+        if query.transaction_types:
+            count_stmt = count_stmt.where(CongressionalTrade.transaction_type.in_([t.value for t in query.transaction_types]))
+        if query.owners:
+            count_stmt = count_stmt.where(CongressionalTrade.owner.in_([o.value for o in query.owners]))
+        if query.transaction_date_from:
+            count_stmt = count_stmt.where(CongressionalTrade.transaction_date >= query.transaction_date_from)
+        if query.transaction_date_to:
+            count_stmt = count_stmt.where(CongressionalTrade.transaction_date <= query.transaction_date_to)
+        if query.notification_date_from:
+            count_stmt = count_stmt.where(CongressionalTrade.notification_date >= query.notification_date_from)
+        if query.notification_date_to:
+            count_stmt = count_stmt.where(CongressionalTrade.notification_date <= query.notification_date_to)
+        if query.amount_min or query.amount_max:
+            estimated_value = func.coalesce(
+                CongressionalTrade.amount_exact,
+                (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
+            )
+            if query.amount_min:
+                count_stmt = count_stmt.where(estimated_value >= query.amount_min)
+            if query.amount_max:
+                count_stmt = count_stmt.where(estimated_value <= query.amount_max)
+        if query.search:
+            search_term = f"%{query.search}%"
+            count_stmt = count_stmt.where(
+                or_(
+                    CongressionalTrade.raw_asset_description.ilike(search_term),
+                    CongressionalTrade.asset_name.ilike(search_term),
+                    CongressionalTrade.ticker.ilike(search_term),
+                    CongressMember.full_name.ilike(search_term)
+                )
+            )
         
         # Apply sorting
         sort_map = {
@@ -452,33 +503,39 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
                 (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
             )
         }
-        
-        sort_column = sort_map.get(query.sort_by.value, CongressionalTrade.transaction_date)
+        # Support both Enum and string for sort_by
+        sort_by_key = query.sort_by.value if hasattr(query.sort_by, 'value') else query.sort_by
+        sort_column = sort_map.get(sort_by_key, CongressionalTrade.transaction_date)
         if query.sort_order == SortOrder.DESC:
-            db_query = db_query.order_by(desc(sort_column))
+            stmt = stmt.order_by(desc(sort_column))
         else:
-            db_query = db_query.order_by(asc(sort_column))
+            stmt = stmt.order_by(asc(sort_column))
         
         # Apply pagination
         offset = (query.page - 1) * query.limit
-        db_trades = db_query.offset(offset).limit(query.limit).all()
+        stmt = stmt.offset(offset).limit(query.limit)
+        
+        # Execute queries
+        result = await self.db.execute(stmt)
+        rows = result.all()
+        count_result = await self.db.execute(count_stmt)
+        total_count = count_result.scalar_one()
         
         # Convert to schemas
         trades = []
-        for db_trade in db_trades:
-            trade_dict = CongressionalTradeSummary.from_orm(db_trade).dict()
-            
-            # Add member information
-            trade_dict['member_name'] = db_trade.member.full_name
-            trade_dict['member_party'] = db_trade.member.party
-            trade_dict['member_chamber'] = db_trade.member.chamber
-            trade_dict['member_state'] = db_trade.member.state
-            
-            # Add estimated value
-            trade_dict['estimated_value'] = db_trade.estimated_value
-            
+        for trade, member in rows:
+            trade_dict = CongressionalTradeSummary.from_orm(trade).dict()
+            trade_dict['member_name'] = member.full_name if member else 'Unknown'
+            trade_dict['member_party'] = member.party if member else None
+            trade_dict['member_chamber'] = member.chamber if member else None
+            trade_dict['member_state'] = member.state if member else None
+            trade_dict['estimated_value'] = trade.estimated_value
+            # Include amount fields
+            trade_dict['amount_min'] = trade.amount_min
+            trade_dict['amount_max'] = trade.amount_max
+            trade_dict['amount_exact'] = trade.amount_exact
             trades.append(CongressionalTradeSummary(**trade_dict))
-        
+
         return trades, total_count
     
     def get_member_trades(self, member_id: int, limit: Optional[int] = None) -> List[CongressionalTradeSummary]:

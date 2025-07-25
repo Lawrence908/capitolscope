@@ -22,9 +22,8 @@ from sqlalchemy.sql import func
 
 from domains.base.models import CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, AuditMixin
 from domains.securities.models import Security  # Import Security model to fix relationship
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -103,6 +102,7 @@ class CongressMember(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Au
     congressional_trades = relationship("CongressionalTrade", back_populates="member", cascade="all, delete-orphan")
     member_portfolios = relationship("MemberPortfolio", back_populates="member", cascade="all, delete-orphan")
     member_portfolio_performance = relationship("MemberPortfolioPerformance", back_populates="member", cascade="all, delete-orphan")
+    portfolios = relationship("Portfolio", back_populates="member", cascade="all, delete-orphan")
     
     # Indexes and constraints
     __table_args__ = (
@@ -211,7 +211,7 @@ class CongressionalTrade(CapitolScopeBaseModel, AuditMixin):
     
     # Relationships
     member = relationship("CongressMember", back_populates="congressional_trades")
-    security = relationship("Security", foreign_keys=[security_id])  # From securities domain
+    security = relationship("Security", back_populates="congressional_trades", foreign_keys=[security_id])  # From securities domain
     
     # Indexes and constraints
     __table_args__ = (
@@ -229,11 +229,9 @@ class CongressionalTrade(CapitolScopeBaseModel, AuditMixin):
     
     @property
     def estimated_value(self) -> Optional[int]:
-        """Get estimated trade value in cents."""
-        if self.amount_exact:
-            return self.amount_exact
-        elif self.amount_min and self.amount_max:
-            return (self.amount_min + self.amount_max) // 2
+        """Get estimated trade value in cents (DEPRECATED - use amount_exact or amount_min/max)."""
+        # This property is deprecated to avoid creating fake "set prices"
+        # Always return None to force use of actual ranges
         return None
     
     @property
@@ -305,7 +303,7 @@ class MemberPortfolio(CapitolScopeBaseModel):
     
     # Relationships
     member = relationship("CongressMember", back_populates="member_portfolios")
-    security = relationship("Security", foreign_keys=[security_id])  # From securities domain
+    security = relationship("Security", back_populates="member_portfolios", foreign_keys=[security_id])  # From securities domain
     
     # Indexes and constraints
     __table_args__ = (

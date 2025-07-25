@@ -15,7 +15,20 @@ sys.path.insert(0, str(current_dir))
 from contextlib import asynccontextmanager
 from typing import Dict, Any
 
-import structlog
+import logging
+
+# Force file logging setup before anything else
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('/app/logs/app.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -26,7 +39,7 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from core.config import settings
 from core.database import init_database, close_database
-from core.logging import configure_logging
+from core.logging import configure_logging, setup_file_logging
 from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints
 from api.middleware import (
     RateLimitMiddleware,
@@ -34,8 +47,11 @@ from api.middleware import (
     ErrorHandlingMiddleware
 )
 
+# Set up file logging first (before Uvicorn starts)
+setup_file_logging()
+
 # Configure structured logging
-logger = configure_logging()
+configure_logging()
 
 # Configure Sentry for error tracking
 if settings.SENTRY_DSN:
@@ -226,14 +242,7 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """General exception handler for unexpected errors."""
-    logger.error(
-        "Unexpected error occurred",
-        error=str(exc),
-        error_type=type(exc).__name__,
-        path=request.url.path,
-        method=request.method,
-        exc_info=True,
-    )
+    logger.error(f"Unhandled exception: {exc} (request: {request.url.path})")
     
     return JSONResponse(
         status_code=500,

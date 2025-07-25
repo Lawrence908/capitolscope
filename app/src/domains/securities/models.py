@@ -21,9 +21,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from domains.base.models import CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, TimestampMixin
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -139,6 +138,9 @@ class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, Timestam
     exchange = relationship("Exchange", back_populates="securities", foreign_keys=[exchange_code])
     daily_prices = relationship("DailyPrice", back_populates="security")
     corporate_actions = relationship("CorporateAction", back_populates="security")
+    portfolio_holdings = relationship("PortfolioHolding", back_populates="security")
+    member_portfolios = relationship("MemberPortfolio", back_populates="security")
+    congressional_trades = relationship("CongressionalTrade", back_populates="security")
     
     # Indexes
     __table_args__ = (
@@ -372,6 +374,11 @@ class SecurityWatchlist(CapitolScopeBaseModel, TimestampMixin):
     def __repr__(self):
         return f"<SecurityWatchlist(user_id={self.user_id}, security_id={self.security_id})>"
 
+
+# --- Fix for circular import: Import PortfolioHolding and assign relationship after both classes are defined ---
+from domains.portfolio.models import PortfolioHolding
+
+Security.portfolio_holdings = relationship("PortfolioHolding", back_populates="security")
 
 # Log model creation
 logger.info("Securities domain models initialized")

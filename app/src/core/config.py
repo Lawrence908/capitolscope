@@ -189,22 +189,21 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         """Get the database URL for SQLAlchemy."""
+        # For development, use local database if available
+        if self.is_development and not self.DATABASE_HOST:
+            # Use local PostgreSQL for development
+            return "postgresql+asyncpg://capitolscope:capitolscope@postgres-dev:5432/capitolscope"
+        
         # Derive database info from Supabase URL if traditional fields not provided
         if not self.DATABASE_HOST and self.SUPABASE_URL:
             # Extract project reference from Supabase URL
             # https://bigsmydtkhfssokvrvyq.supabase.co -> bigsmydtkhfssokvrvyq
             project_ref = self.SUPABASE_URL.split('//')[1].split('.')[0]
             
-            # Use Session pooler for persistent connections (recommended for FastAPI)
-            # 
-            # Supabase connection options:
-            # 1. Direct: db.{project_ref}.supabase.co:5432 (for persistent connections)
-            # 2. Transaction pooler: aws-0-ca-central-1.pooler.supabase.com:6543 (for serverless)
-            # 3. Session pooler: aws-0-ca-central-1.pooler.supabase.com:5432 (for web apps) ← USING THIS
-            #
-            # Format: postgres.{project_ref}@aws-0-ca-central-1.pooler.supabase.com:5432
-            host = "aws-0-ca-central-1.pooler.supabase.com"
-            user = f"postgres.{project_ref}"
+            # Use Supabase connection string format
+            # The hostname should be the project reference with .supabase.co
+            host = f"{project_ref}.supabase.co"
+            user = "postgres"
             database = "postgres"
             port = 5432
             password = self.SUPABASE_PASSWORD.get_secret_value() if self.SUPABASE_PASSWORD else ""
@@ -233,10 +232,10 @@ class Settings(BaseSettings):
             # Extract project reference from Supabase URL
             project_ref = self.SUPABASE_URL.split('//')[1].split('.')[0]
             
-            # Use Session pooler for persistent connections (recommended for FastAPI)
-            # Format: postgres.{project_ref}@aws-0-ca-central-1.pooler.supabase.com:5432
-            host = "aws-0-ca-central-1.pooler.supabase.com"
-            user = f"postgres.{project_ref}"
+            # Use Supabase connection string format
+            # The hostname should be the project reference with .supabase.co
+            host = f"{project_ref}.supabase.co"
+            user = "postgres"
             database = "postgres"
             port = 5432
             password = self.SUPABASE_PASSWORD.get_secret_value() if self.SUPABASE_PASSWORD else ""

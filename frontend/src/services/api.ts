@@ -78,9 +78,9 @@ class APIClient {
     return response.data.data;
   }
 
-  async getMember(id: number): Promise<CongressMember> {
+  async getMember(id: string): Promise<CongressMember> {
     const response = await this.client.get(`/api/v1/members/${id}`);
-    return response.data;
+    return response.data.data; // Extract the data field from the response envelope
   }
 
   async getMemberProfile(id: number): Promise<MemberProfile> {

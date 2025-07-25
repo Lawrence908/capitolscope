@@ -204,8 +204,8 @@ const MembersBrowser: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap">{getPartyBadge(member.party)}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{member.state}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{getChamberBadge(member.chamber)}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{member.total_trades ?? 'N/A'}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{member.total_value ? `$${member.total_value.toLocaleString()}` : 'N/A'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{member.trade_count?.toLocaleString() ?? 'N/A'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{member.total_trade_value ? `$${(member.total_trade_value / 100).toLocaleString()}` : 'N/A'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right">
                         <Link to={`/members/${member.id}`} className="btn-primary btn-sm">Profile</Link>
                       </td>

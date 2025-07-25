@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import TradeBrowser from './components/TradeBrowser';
 import MembersBrowser from './components/MembersBrowser';
+import MemberProfile from './components/MemberProfile';
 import DataQuality from './components/DataQuality';
 
 // Placeholder components for routes we haven't implemented yet
@@ -24,6 +25,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/trades" element={<TradeBrowser />} />
             <Route path="/members" element={<MembersBrowser />} />
+            <Route path="/members/:id" element={<MemberProfile />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/data-quality" element={<DataQuality />} />
           </Routes>

@@ -1,25 +1,26 @@
 // Congressional Member Types
 export interface CongressMember {
-  id: number;
-  bioguide_id: string;
+  id: string; // Changed from number to string (UUID)
+  bioguide_id?: string | null;
   first_name: string;
   last_name: string;
   full_name: string;
-  party: 'Republican' | 'Democratic' | 'Independent' | string;
-  state: string;
-  district?: string;
-  chamber: 'House' | 'Senate';
-  office?: string;
-  phone?: string;
-  url?: string;
-  image_url?: string;
-  twitter_account?: string;
-  facebook_account?: string;
-  youtube_account?: string;
-  in_office: boolean;
-  next_election?: string;
-  total_trades?: number;
-  total_value?: number;
+  party?: string | null;
+  state?: string | null;
+  district?: string | null;
+  chamber?: string | null;
+  office?: string | null;
+  phone?: string | null;
+  url?: string | null;
+  image_url?: string | null;
+  twitter_account?: string | null;
+  facebook_account?: string | null;
+  youtube_account?: string | null;
+  in_office?: boolean;
+  next_election?: string | null;
+  trade_count?: number | null; // Changed from total_trades
+  total_trade_value?: number | null; // Changed from total_value
+  portfolio_value?: number | null;
   created_at: string;
   updated_at: string;
 }

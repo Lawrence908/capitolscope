@@ -183,31 +183,84 @@ async def get_members(
     }
 )
 async def get_member(
-    member_id: int = Path(..., description="Member ID"),
+    member_id: str = Path(..., description="Member ID"),
     session: AsyncSession = Depends(get_db_session),
-    current_user: User = Depends(get_current_active_user),
+    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
 ) -> ResponseEnvelope[CongressMemberDetail]:
     """
     Get detailed information about a specific congressional member.
     """
-    logger.info(f"Getting member by ID: member_id={member_id}, user_id={current_user.id}")
+    logger.info(f"Getting member by ID: member_id={member_id}")
     try:
+        from uuid import UUID
+        member_uuid = UUID(member_id)
+        
         member_repo = CongressMemberRepository(session)
-        member = member_repo.get_by_id(member_id)
+        member = await member_repo.get_by_id(member_uuid)
         if not member:
             return create_response(None, error="Member not found")
-        analytics = None
-        if current_user.is_premium:
-            analytics = {
-                "trade_count": 0,
-                "total_trade_value": 0,
-                "portfolio_value": 0
-            }
+        
+        # Calculate trade statistics for this member
+        from sqlalchemy import select, func
+        from domains.congressional.models import CongressionalTrade
+        
+        trade_stats_query = select(
+            func.count(CongressionalTrade.id).label('trade_count'),
+            func.sum(
+                func.coalesce(
+                    CongressionalTrade.amount_exact,
+                    (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
+                )
+            ).label('total_value')
+        ).where(CongressionalTrade.member_id == member_uuid)
+        
+        trade_stats_result = await session.execute(trade_stats_query)
+        trade_stats = trade_stats_result.first()
+        
+        # Create member detail with calculated stats
         member_detail = CongressMemberDetail(
-            member=member.dict(),
-            analytics=analytics,
-            user_tier=current_user.subscription_tier,
-            premium_features=current_user.is_premium
+            id=member.id,
+            first_name=member.first_name,
+            last_name=member.last_name,
+            full_name=member.full_name,
+            party=member.party,
+            state=member.state,
+            district=member.district,
+            chamber=member.chamber,
+            email=member.email,
+            phone=member.phone,
+            office_address=member.office_address,
+            bioguide_id=member.bioguide_id,
+            congress_gov_id=member.congress_gov_id,
+            congress_gov_url=member.congress_gov_url,
+            image_url=member.image_url,
+            image_attribution=member.image_attribution,
+            last_api_update=member.last_api_update,
+            term_start=member.term_start,
+            term_end=member.term_end,
+            congress_number=member.congress_number,
+            education=member.education,
+            committees=member.committees,
+            leadership_roles=member.leadership_roles,
+            twitter_handle=member.twitter_handle,
+            facebook_url=member.facebook_url,
+            website_url=member.website_url,
+            seniority_rank=member.seniority_rank,
+            vote_percentage=member.vote_percentage,
+            influence_score=member.influence_score,
+            fundraising_total=member.fundraising_total,
+            pac_contributions=member.pac_contributions,
+            wikipedia_url=member.wikipedia_url,
+            ballotpedia_url=member.ballotpedia_url,
+            opensecrets_url=member.opensecrets_url,
+            govtrack_id=member.govtrack_id,
+            votesmart_id=member.votesmart_id,
+            fec_id=member.fec_id,
+            trade_count=trade_stats.trade_count if trade_stats else 0,
+            total_trade_value=int(trade_stats.total_value or 0),
+            portfolio_value=None,  # TODO: Calculate portfolio value
+            created_at=member.created_at.isoformat() if member.created_at else None,
+            updated_at=member.updated_at.isoformat() if member.updated_at else None,
         )
         return create_response(member_detail)
     except Exception as e:

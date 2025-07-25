@@ -56,6 +56,7 @@ class CongressMemberService(CongressMemberServiceInterface):
     
     async def create_member(self, member_data: CongressMemberCreate) -> CongressMemberDetail:
         """Create a new congress member with validation."""
+        logger.error("TEST LOGGING - this should appear in app.log when a member is created")
         # Validate bioguide_id uniqueness
         if member_data.bioguide_id:
             existing = await self.member_repo.get_by_bioguide_id(member_data.bioguide_id)

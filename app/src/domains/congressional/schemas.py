@@ -439,12 +439,8 @@ class CongressionalTradeQuery(CongressionalTradeFilter):
 
 class MemberQuery(CapitolScopeBaseSchema):
     """Query parameters for congress members."""
-    parties: Optional[List[PoliticalParty]] = None
-    chambers: Optional[List[Chamber]] = None
-    states: Optional[List[str]] = None
-    congress_numbers: Optional[List[int]] = None
     search: Optional[str] = Field(None, min_length=1)
-    sort_by: str = "last_name"
+    sort_by: SortField = SortField.MEMBER_NAME
     sort_order: SortOrder = SortOrder.ASC
     page: PositiveInt = 1
     limit: int = Field(50, ge=1, le=1000)

@@ -15,8 +15,6 @@ const Dashboard: React.FC = () => {
   const [topMembers, setTopMembers] = useState<CongressMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [topTickers, setTopTickers] = useState<Array<{ ticker: string; count: number; total_value: number }>>([]);
-  const [millionTrades, setMillionTrades] = useState<CongressionalTrade[]>([]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -25,19 +23,15 @@ const Dashboard: React.FC = () => {
         setError(null);
 
         // Fetch data in parallel
-        const [statsResponse, tradesResponse, membersResponse, tickersResponse, millionTradesResponse] = await Promise.all([
+        const [statsResponse, tradesResponse, membersResponse] = await Promise.all([
           apiClient.getDataQualityStats(),
           apiClient.getTrades({}, 1, 10),
           apiClient.getTopTradingMembers(10),
-          apiClient.getTopTradedTickers(10),
-          apiClient.getTrades({ amount_min: 1000000 }, 1, 10),
         ]);
 
         setStats(statsResponse);
         setRecentTrades(tradesResponse.items);
         setTopMembers(membersResponse);
-        setTopTickers(tickersResponse);
-        setMillionTrades(millionTradesResponse.items);
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard error:', err);
@@ -212,88 +206,6 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Trades Over $1M and Top Traded Tickers */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Trades Over $1M */}
-        <div className="card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Trades Over $1M</h3>
-            <Link
-              to="/trades?amount_min=1000000"
-              className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
-            >
-              View all →
-            </Link>
-          </div>
-          <div className="space-y-4">
-            {millionTrades.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400">No trades over $1M found.</p>
-            ) : (
-              millionTrades.map((trade) => (
-                <div key={trade.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                      {trade.member?.full_name || 'Unknown'}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {trade.ticker ? (
-                        <span className="font-mono">{trade.ticker}</span>
-                      ) : (
-                        <span className="text-gray-400 dark:text-gray-500">No ticker</span>
-                      )}
-                      {' • '}
-                      <span className="capitalize">{trade.type}</span>
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-900 dark:text-gray-100">{trade.amount}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {new Date(trade.transaction_date).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Top Traded Tickers */}
-        <div className="card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Top Traded Tickers</h3>
-            <Link
-              to="/trades"
-              className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
-            >
-              View all →
-            </Link>
-          </div>
-          <div className="space-y-4">
-            {topTickers.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400">No tickers found.</p>
-            ) : (
-              topTickers.map((ticker) => (
-                <div key={ticker.ticker} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 font-mono">
-                      {ticker.ticker}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-900 dark:text-gray-100">
-                      {ticker.count} trades
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      ${ticker.total_value?.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              ))
-            )}
           </div>
         </div>
       </div>

@@ -74,8 +74,8 @@ class APIClient {
       }
     });
 
-    const response = await this.client.get(`/api/v1/members?${params}`);
-    return response.data;
+    const response = await this.client.get(`/api/v1/members/?${params}`);
+    return response.data.data;
   }
 
   async getMember(id: number): Promise<CongressMember> {

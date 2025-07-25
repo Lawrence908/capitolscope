@@ -16,7 +16,20 @@ from contextlib import asynccontextmanager
 from typing import Dict, Any
 
 import logging
+
+# Force file logging setup before anything else
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('/app/logs/app.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
 logger = logging.getLogger(__name__)
+logger.error("TEST LOGGING - Application starting up, file logging should work now")
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -40,6 +53,8 @@ setup_file_logging()
 
 # Configure structured logging
 configure_logging()
+
+logger.error("TEST LOGGING - After configure_logging, should see this in app.log")
 
 # Configure Sentry for error tracking
 if settings.SENTRY_DSN:

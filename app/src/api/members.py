@@ -53,6 +53,7 @@ async def get_members(
     
     **Authenticated Feature**: Requires user authentication.
     """
+    logger.error("TEST LOGGING - this should appear in app.log when /api/v1/members/ is called")
     logger.info(f"Getting congressional members: filters={filters.dict()}")
     
     try:
@@ -62,7 +63,7 @@ async def get_members(
         # Build base query
         query = select(CongressMember)
         
-        # Apply filters
+        # Apply search filter only (since that's what's in the schema)
         if filters.search:
             search_term = f"%{filters.search}%"
             query = query.filter(
@@ -73,18 +74,16 @@ async def get_members(
                 )
             )
         
-        if filters.party:
-            query = query.filter(CongressMember.party == filters.party)
-        
-        if filters.chamber:
-            query = query.filter(CongressMember.chamber == filters.chamber)
-        
-        if filters.state:
-            query = query.filter(CongressMember.state == filters.state.upper())
-        
         # Get total count
         count_query = select(func.count()).select_from(query.subquery())
         total = await session.scalar(count_query)
+        
+        # Apply sorting
+        if filters.sort_by == "member_name":
+            query = query.order_by(CongressMember.last_name.asc() if filters.sort_order == "asc" else CongressMember.last_name.desc())
+        else:
+            # Default sorting by last_name
+            query = query.order_by(CongressMember.last_name.asc())
         
         # Apply pagination
         offset = (filters.page - 1) * filters.limit
@@ -93,6 +92,8 @@ async def get_members(
         # Execute query
         result = await session.execute(query)
         members = result.scalars().unique().all()
+        
+        logger.info(f"Found {len(members)} members out of {total} total")
         
         # Convert to response format
         member_items = []
@@ -152,6 +153,8 @@ async def get_members(
         
     except Exception as e:
         logger.error(f"Error retrieving members: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return create_response(None, error="Failed to retrieve congressional members")
 
 

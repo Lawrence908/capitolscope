@@ -11,7 +11,7 @@ from typing import Optional, List, Dict, Any
 from pydantic import Field, field_validator, EmailStr, HttpUrl
 
 from schemas.base import (
-    CapitolScopeBaseModel, IDMixin, TimestampMixin, AmountRange, 
+    CapitolScopeBaseModel, UUIDMixin, TimestampMixin, AmountRange,
     PerformanceMetrics, SocialMediaLinks, ResearchLinks,
     validate_political_party, validate_chamber, validate_transaction_type
 )
@@ -137,7 +137,7 @@ class CongressMemberUpdate(CapitolScopeBaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class CongressMemberResponse(CongressMemberBase, IDMixin, TimestampMixin):
+class CongressMemberResponse(CongressMemberBase, UUIDMixin, TimestampMixin):
     """Schema for congress member responses."""
     # Calculated fields
     full_name: Optional[str] = Field(None, description="Full name display")
@@ -247,7 +247,7 @@ class CongressionalTradeUpdate(CapitolScopeBaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class CongressionalTradeResponse(CongressionalTradeBase, IDMixin, TimestampMixin):
+class CongressionalTradeResponse(CongressionalTradeBase, UUIDMixin, TimestampMixin):
     """Schema for congressional trade responses."""
     # Related objects (optional includes)
     member: Optional[CongressMemberSummary] = Field(None, description="Congress member details")
@@ -431,7 +431,7 @@ class MemberTradingStats(CapitolScopeBaseModel):
 
 class TradingActivity(CapitolScopeBaseModel):
     """Trading activity summary."""
-    date: date = Field(..., description="Activity date")
+    activity_date: date = Field(..., alias="date", description="Activity date")
     trade_count: int = Field(..., description="Number of trades", ge=0)
     member_count: int = Field(..., description="Number of active members", ge=0)
     total_value: int = Field(..., description="Total trade value in cents", ge=0)

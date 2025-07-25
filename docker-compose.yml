@@ -11,13 +11,14 @@ services:
     volumes:
       - ./app/logs:/app/logs
       - ./app/src:/app/src
-      - ./data:/app/data
+      - ./app/data:/app/data
       - ./alembic:/app/alembic
       - ./alembic.ini:/app/alembic.ini
     ports:
       - "8001:8000"
     depends_on:
       - redis-dev
+      - postgres-dev
     env_file:
       - .env
     networks:
@@ -32,6 +33,28 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 10s
+
+  # PostgreSQL Database for Development
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: capitolscope-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: capitolscope
+      POSTGRES_USER: capitolscope
+      POSTGRES_PASSWORD: capitolscope
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - capitolscope-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U capitolscope -d capitolscope"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
       start_period: 10s
 
   # Redis for Celery and Caching
@@ -81,8 +104,6 @@ services:
       - PYTHONPATH=/app/src
       - DEBUG=true
       - ENVIRONMENT=development
-      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
-      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
     command: python -m celery -A background.celery_app worker --loglevel=info --concurrency=2
     restart: unless-stopped
 
@@ -113,9 +134,37 @@ services:
     command: python -m celery -A background.celery_app beat --loglevel=info
     restart: unless-stopped
 
+  # Frontend React/Vite Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: capitolscope-frontend-dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8001
+    networks:
+      - capitolscope-network
+    depends_on:
+      - capitolscope
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
 volumes:
   redis-data:
     name: capitolscope-redis-data
+  postgres-data:
+    name: capitolscope-postgres-data
 
 networks:
   capitolscope-network:

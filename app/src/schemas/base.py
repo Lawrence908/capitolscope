@@ -6,12 +6,35 @@ for all API request/response validation.
 """
 
 from datetime import datetime, date
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, List, Dict, Any, Union, Generic, TypeVar
 from decimal import Decimal
 import uuid
+from uuid import UUID
 
-from pydantic import BaseModel, Field, ConfigDict, validator, field_validator
-from pydantic.types import EmailStr, HttpUrl
+from pydantic import BaseModel, Field, ConfigDict, validator, field_validator, EmailStr, HttpUrl
+from pydantic.generics import GenericModel
+
+T = TypeVar("T")
+
+class PaginationMeta(BaseModel):
+    page: int
+    per_page: int
+    total: int
+    pages: int
+    has_next: bool
+    has_prev: bool
+
+class PaginatedResponse(GenericModel, Generic[T]):
+    items: List[T]
+    meta: PaginationMeta
+
+class ResponseEnvelope(GenericModel, Generic[T]):
+    data: Optional[T] = None
+    meta: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+
+def create_response(data, meta=None, error=None):
+    return ResponseEnvelope(data=data, meta=meta, error=error)
 
 
 class CapitolScopeBaseModel(BaseModel):
@@ -31,7 +54,8 @@ class CapitolScopeBaseModel(BaseModel):
             datetime: lambda v: v.isoformat(),
             date: lambda v: v.isoformat(),
             Decimal: lambda v: float(v),
-        }
+        },
+        arbitrary_types_allowed=True
     )
 
 
@@ -41,14 +65,9 @@ class TimestampMixin(BaseModel):
     updated_at: Optional[datetime] = Field(None, description="Last update timestamp")
 
 
-class IDMixin(BaseModel):
-    """Mixin for models with integer ID primary key."""
-    id: int = Field(..., description="Unique identifier", gt=0)
-
-
 class UUIDMixin(BaseModel):
-    """Mixin for models with UUID primary key."""
-    id: uuid.UUID = Field(..., description="Unique identifier")
+    """Mixin for models with UUID ID primary key."""
+    id: UUID = Field(..., description="Unique identifier (UUID)")
 
 
 # ============================================================================
@@ -73,6 +92,49 @@ class TransactionType(str):
     PURCHASE = "P"
     SALE = "S"
     EXCHANGE = "E"
+
+
+class AssetType(str):
+    """Asset type enumeration."""
+    STOCK = "stock"
+    BOND = "bond"
+    ETF = "etf"
+    MUTUAL_FUND = "mutual_fund"
+    OPTION = "option"
+    FUTURE = "future"
+    COMMODITY = "commodity"
+    CRYPTO = "crypto"
+    REAL_ESTATE = "real_estate"
+    CASH = "cash"
+
+
+class Sector(str):
+    """Market sector enumeration."""
+    TECHNOLOGY = "technology"
+    HEALTHCARE = "healthcare"
+    FINANCIAL = "financial"
+    CONSUMER_DISCRETIONARY = "consumer_discretionary"
+    CONSUMER_STAPLES = "consumer_staples"
+    INDUSTRIALS = "industrials"
+    ENERGY = "energy"
+    MATERIALS = "materials"
+    UTILITIES = "utilities"
+    REAL_ESTATE = "real_estate"
+    COMMUNICATION_SERVICES = "communication_services"
+
+
+class Exchange(str):
+    """Stock exchange enumeration."""
+    NYSE = "NYSE"
+    NASDAQ = "NASDAQ"
+    AMEX = "AMEX"
+    OTC = "OTC"
+    TSX = "TSX"
+    LSE = "LSE"
+    TSE = "TSE"
+    ASX = "ASX"
+    HKEX = "HKEX"
+    SGX = "SGX"
 
 
 class SubscriptionTier(str):
@@ -101,6 +163,53 @@ class SocialPlatform(str):
     FACEBOOK = "facebook"
 
 
+class EngagementType(str):
+    """Engagement type enumeration."""
+    LIKE = "like"
+    SHARE = "share"
+    COMMENT = "comment"
+    VIEW = "view"
+    CLICK = "click"
+    BOOKMARK = "bookmark"
+
+
+class PostStatus(str):
+    """Post status enumeration."""
+    DRAFT = "draft"
+    SCHEDULED = "scheduled"
+    POSTING = "posting"
+    POSTED = "posted"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+
+
+class SystemStatus(str):
+    """System status enumeration."""
+    ONLINE = "online"
+    OFFLINE = "offline"
+    MAINTENANCE = "maintenance"
+    DEGRADED = "degraded"
+    ERROR = "error"
+
+
+class LogLevel(str):
+    """Log level enumeration."""
+    DEBUG = "debug"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+
+
+class FeatureStatus(str):
+    """Feature status enumeration."""
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    DEPRECATED = "deprecated"
+    BETA = "beta"
+    EXPERIMENTAL = "experimental"
+
+
 # ============================================================================
 # COMMON REQUEST/RESPONSE PATTERNS
 # ============================================================================
@@ -120,23 +229,6 @@ class SortParams(BaseModel):
     """Standard sorting parameters."""
     sort_by: str = Field("created_at", description="Field to sort by")
     sort_order: str = Field("desc", pattern=r"^(asc|desc)$", description="Sort order")
-
-
-class PaginatedResponse(CapitolScopeBaseModel):
-    """Standard paginated response wrapper."""
-    items: List[Any] = Field(..., description="List of items")
-    total: int = Field(..., ge=0, description="Total number of items")
-    page: int = Field(..., ge=1, description="Current page number")
-    size: int = Field(..., ge=1, description="Items per page")
-    pages: int = Field(..., ge=0, description="Total number of pages")
-    
-    @field_validator('pages', mode='before')
-    @classmethod
-    def calculate_pages(cls, v, values):
-        """Calculate total pages from total and size."""
-        total = values.get('total', 0)
-        size = values.get('size', 1)
-        return (total + size - 1) // size if total > 0 else 0
 
 
 class APIResponse(CapitolScopeBaseModel):
@@ -348,3 +440,44 @@ def validate_transaction_type(v: str) -> str:
     if v and v not in ['P', 'S', 'E']:
         raise ValueError('Transaction type must be P (Purchase), S (Sale), or E (Exchange)')
     return v 
+
+__all__ = [
+    "CapitolScopeBaseModel",
+    "BaseModel",
+    "UUIDMixin",
+    "TimestampMixin",
+    "PoliticalParty",
+    "Chamber",
+    "TransactionType",
+    "AssetType",
+    "Sector", 
+    "Exchange",
+    "SubscriptionTier",
+    "SubscriptionStatus",
+    "SocialPlatform",
+    "EngagementType",
+    "PostStatus",
+    "SystemStatus",
+    "LogLevel",
+    "FeatureStatus",
+    "PaginationParams",
+    "SortParams",
+    "PaginatedResponse",
+    "APIResponse",
+    "ErrorResponse",
+    "AmountRange",
+    "PerformanceMetrics",
+    "TechnicalIndicators",
+    "DateRangeFilter",
+    "AmountFilter",
+    "SearchParams",
+    "SocialMediaLinks",
+    "ResearchLinks",
+    "NotificationPreferences",
+    "HealthCheckResponse",
+    "DetailedHealthCheckResponse",
+    "validate_ticker_symbol",
+    "validate_political_party",
+    "validate_chamber",
+    "validate_transaction_type"
+] 

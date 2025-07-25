@@ -14,7 +14,7 @@ from sqlalchemy import and_, or_, desc, asc, func, text
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.exc import IntegrityError
 
-from domains.base.crud import BaseCRUD
+from domains.base.crud import CRUDBase
 from domains.users.interfaces import (
     UserRepositoryInterface, UserPreferenceRepositoryInterface,
     UserWatchlistRepositoryInterface, UserAlertRepositoryInterface,
@@ -35,16 +35,15 @@ from domains.users.schemas import (
     UserQuery, NotificationQuery, UserStatus
 )
 from core.exceptions import NotFoundError, ValidationError
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
 # USER REPOSITORY
 # ============================================================================
 
-class UserRepository(BaseCRUD[User, UserCreate, UserUpdate], UserRepositoryInterface):
+class UserRepository(CRUDBase[User, UserCreate, UserUpdate], UserRepositoryInterface):
     """Repository for user operations."""
     
     def __init__(self, db: Session):
@@ -322,7 +321,7 @@ class UserRepository(BaseCRUD[User, UserCreate, UserUpdate], UserRepositoryInter
 # USER PREFERENCE REPOSITORY
 # ============================================================================
 
-class UserPreferenceRepository(BaseCRUD[UserPreference, UserPreferenceCreate, UserPreferenceUpdate], UserPreferenceRepositoryInterface):
+class UserPreferenceRepository(CRUDBase[UserPreference, UserPreferenceCreate, UserPreferenceUpdate], UserPreferenceRepositoryInterface):
     """Repository for user preference operations."""
     
     def __init__(self, db: Session):
@@ -404,7 +403,7 @@ class UserPreferenceRepository(BaseCRUD[UserPreference, UserPreferenceCreate, Us
 # USER WATCHLIST REPOSITORY
 # ============================================================================
 
-class UserWatchlistRepository(BaseCRUD[UserWatchlist, UserWatchlistCreate, UserWatchlistUpdate], UserWatchlistRepositoryInterface):
+class UserWatchlistRepository(CRUDBase[UserWatchlist, UserWatchlistCreate, UserWatchlistUpdate], UserWatchlistRepositoryInterface):
     """Repository for user watchlist operations."""
     
     def __init__(self, db: Session):
@@ -568,7 +567,7 @@ class UserWatchlistRepository(BaseCRUD[UserWatchlist, UserWatchlistCreate, UserW
 # USER ALERT REPOSITORY
 # ============================================================================
 
-class UserAlertRepository(BaseCRUD[UserAlert, UserAlertCreate, UserAlertUpdate], UserAlertRepositoryInterface):
+class UserAlertRepository(CRUDBase[UserAlert, UserAlertCreate, UserAlertUpdate], UserAlertRepositoryInterface):
     """Repository for user alert operations."""
     
     def __init__(self, db: Session):
@@ -678,7 +677,7 @@ class UserAlertRepository(BaseCRUD[UserAlert, UserAlertCreate, UserAlertUpdate],
 # NOTIFICATION & SESSION REPOSITORIES (Simplified)
 # ============================================================================
 
-class UserNotificationRepository(BaseCRUD[UserNotification, UserNotificationCreate, dict], UserNotificationRepositoryInterface):
+class UserNotificationRepository(CRUDBase[UserNotification, UserNotificationCreate, dict], UserNotificationRepositoryInterface):
     """Repository for user notification operations."""
     
     def __init__(self, db: Session):

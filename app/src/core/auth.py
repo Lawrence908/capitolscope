@@ -5,7 +5,6 @@ This module provides JWT token generation, validation, and authentication
 middleware for the FastAPI application.
 """
 
-import jwt
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any
 from fastapi import HTTPException, status, Depends
@@ -13,13 +12,13 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from passlib.context import CryptContext
+from jose import jwt, JWTError
 
 from core.database import get_db_session
 from core.config import settings
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from domains.users.models import User, UserStatus
-
-logger = get_logger(__name__)
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -91,7 +90,7 @@ def verify_token(token: str) -> Dict[str, Any]:
         return payload
     except jwt.ExpiredSignatureError:
         raise AuthenticationError("Token has expired")
-    except jwt.JWTError:
+    except JWTError:
         raise AuthenticationError("Invalid token")
 
 
@@ -109,28 +108,28 @@ async def authenticate_user(email: str, password: str, session: AsyncSession) ->
         user = result.scalar_one_or_none()
         
         if not user:
-            logger.warning("Authentication failed: user not found", email=email)
+            logger.warning(f"Authentication failed: user not found, email={email}")
             return None
         
         # Check password
         if not user.password_hash or not verify_password(password, user.password_hash):
-            logger.warning("Authentication failed: invalid password", email=email)
+            logger.warning(f"Authentication failed: invalid password, email={email}")
             return None
         
         # Check if user is active
         if user.status != UserStatus.ACTIVE:
-            logger.warning("Authentication failed: user not active", email=email, status=user.status)
+            logger.warning(f"Authentication failed: user not active, email={email}, status={user.status}")
             return None
         
-        logger.info("User authenticated successfully", email=email, user_id=user.id)
+        logger.info(f"User authenticated successfully, email={email}, user_id={user.id}")
         return user
         
     except Exception as e:
-        logger.error("Authentication error", error=str(e), email=email)
+        logger.error(f"Authentication error, email={email}", error=str(e))
         return None
 
 
-async def get_user_by_id(user_id: int, session: AsyncSession) -> Optional[User]:
+async def get_user_by_id(user_id: str, session: AsyncSession) -> Optional[User]:
     """Get user by ID."""
     try:
         result = await session.execute(
@@ -138,7 +137,7 @@ async def get_user_by_id(user_id: int, session: AsyncSession) -> Optional[User]:
         )
         return result.scalar_one_or_none()
     except Exception as e:
-        logger.error("Error fetching user", error=str(e), user_id=user_id)
+        logger.error(f"Error fetching user, user_id={user_id}", error=str(e))
         return None
 
 
@@ -163,7 +162,7 @@ async def get_current_user(
             raise AuthenticationError("Invalid token payload")
         
         # Get user from database
-        user = await get_user_by_id(int(user_id), session)
+        user = await get_user_by_id(user_id, session)
         if user is None:
             raise AuthenticationError("User not found")
         
@@ -174,14 +173,14 @@ async def get_current_user(
         return user
         
     except AuthenticationError as e:
-        logger.warning("Authentication failed", error=str(e))
+        logger.warning(f"Authentication failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e),
             headers={"WWW-Authenticate": "Bearer"},
         )
     except Exception as e:
-        logger.error("Authentication error", error=str(e))
+        logger.error(f"Authentication error", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -257,7 +256,7 @@ def require_permission(permission: str):
 def require_admin():
     """Decorator to require admin privileges."""
     def decorator(current_user: User = Depends(get_current_active_user)):
-        if not current_user.is_admin:
+        if not (current_user.is_admin or current_user.is_super_admin):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Admin privileges required"
@@ -298,7 +297,7 @@ async def get_current_user_optional(
         if user_id is None:
             return None
         
-        user = await get_user_by_id(int(user_id), session)
+        user = await get_user_by_id(user_id, session)
         return user if user and user.is_active else None
         
     except Exception:

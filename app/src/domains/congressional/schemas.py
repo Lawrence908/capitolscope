@@ -9,15 +9,15 @@ from datetime import datetime, date
 from typing import Optional, List, Dict, Any, Union
 from decimal import Decimal
 from enum import Enum
+from uuid import UUID
 
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, validator, model_validator
 from pydantic.types import NonNegativeInt, PositiveInt
 
-from domains.base.schemas import CapitolScopeBaseSchema, PaginatedResponse, ResponseMetadata, TimestampMixin
+from domains.base.schemas import CapitolScopeBaseSchema, PaginatedResponse, TimestampMixin
 from domains.base.schemas import PoliticalParty, Chamber, TransactionType
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -64,9 +64,10 @@ class CongressMemberBase(CapitolScopeBaseSchema):
     first_name: str = Field(..., min_length=1, max_length=100)
     last_name: str = Field(..., min_length=1, max_length=100)
     full_name: str = Field(..., min_length=1, max_length=200)
+    prefix: Optional[str] = Field(None, max_length=10, description="Honorifics like 'Rep.', 'Sen.', 'Dr.', 'Mr.', 'Ms.'")
     party: Optional[PoliticalParty] = None
-    chamber: Chamber
-    state: str = Field(..., min_length=2, max_length=2, description="Two-letter state code")
+    chamber: Optional[Chamber] = None  # Made optional for import, will be populated via external APIs
+    state: Optional[str] = Field(None, min_length=2, max_length=2, description="Two-letter state code")
     district: Optional[str] = Field(None, max_length=10)
     
     @validator('state')
@@ -82,10 +83,18 @@ class CongressMemberCreate(CongressMemberBase):
     phone: Optional[str] = Field(None, max_length=20)
     office_address: Optional[str] = None
     bioguide_id: Optional[str] = Field(None, max_length=10)
-    congress_gov_id: Optional[str] = Field(None, max_length=20)
+    congress_gov_id: Optional[str] = Field(None, max_length=20, description="ID from Congress.gov API")
+    
+    # Congress.gov API Data
+    congress_gov_url: Optional[str] = Field(None, max_length=500, description="Direct link to member's Congress.gov page")
+    image_url: Optional[str] = Field(None, max_length=500, description="Official member photo URL")
+    image_attribution: Optional[str] = Field(None, max_length=200, description="Photo credit/source")
+    last_api_update: Optional[datetime] = Field(None, description="When Congress.gov last updated this member")
+    
     term_start: Optional[date] = None
     term_end: Optional[date] = None
     congress_number: Optional[int] = Field(None, ge=1, le=200)
+    is_active: bool = True  # Add is_active field
 
 
 class CongressMemberUpdate(CapitolScopeBaseSchema):
@@ -97,13 +106,21 @@ class CongressMemberUpdate(CapitolScopeBaseSchema):
     email: Optional[str] = Field(None, max_length=255)
     phone: Optional[str] = Field(None, max_length=20)
     office_address: Optional[str] = None
+    congress_gov_id: Optional[str] = Field(None, max_length=20, description="ID from Congress.gov API")
+    
+    # Congress.gov API Data
+    congress_gov_url: Optional[str] = Field(None, max_length=500, description="Direct link to member's Congress.gov page")
+    image_url: Optional[str] = Field(None, max_length=500, description="Official member photo URL")
+    image_attribution: Optional[str] = Field(None, max_length=200, description="Photo credit/source")
+    last_api_update: Optional[datetime] = Field(None, description="When Congress.gov last updated this member")
+    
     term_start: Optional[date] = None
     term_end: Optional[date] = None
 
 
 class CongressMemberSummary(CongressMemberBase, TimestampMixin):
     """Summary congress member schema for list views."""
-    id: int
+    id: UUID
     age: Optional[int] = None
     profession: Optional[str] = None
     
@@ -112,8 +129,7 @@ class CongressMemberSummary(CongressMemberBase, TimestampMixin):
     total_trade_value: Optional[int] = Field(None, description="Total trade value in cents")
     portfolio_value: Optional[int] = Field(None, description="Current portfolio value in cents")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class CongressMemberDetail(CongressMemberSummary):
@@ -123,6 +139,13 @@ class CongressMemberDetail(CongressMemberSummary):
     office_address: Optional[str] = None
     bioguide_id: Optional[str] = None
     congress_gov_id: Optional[str] = None
+    
+    # Congress.gov API Data
+    congress_gov_url: Optional[str] = None
+    image_url: Optional[str] = None
+    image_attribution: Optional[str] = None
+    last_api_update: Optional[datetime] = None
+    
     term_start: Optional[date] = None
     term_end: Optional[date] = None
     congress_number: Optional[int] = None
@@ -149,7 +172,7 @@ class CongressMemberDetail(CongressMemberSummary):
 
 class CongressMemberPortfolioSummary(CapitolScopeBaseSchema):
     """Portfolio summary for a congress member."""
-    member_id: int
+    member_id: UUID
     total_value: int = Field(..., description="Total portfolio value in cents")
     total_cost_basis: int = Field(..., description="Total cost basis in cents")
     unrealized_gain_loss: int = Field(..., description="Unrealized gain/loss in cents")
@@ -160,8 +183,7 @@ class CongressMemberPortfolioSummary(CapitolScopeBaseSchema):
     total_return_percent: Optional[float] = Field(None, description="Total return percentage")
     daily_return: Optional[Decimal] = Field(None, description="Daily return percentage")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 # ============================================================================
@@ -170,23 +192,23 @@ class CongressMemberPortfolioSummary(CapitolScopeBaseSchema):
 
 class CongressionalTradeBase(CapitolScopeBaseSchema):
     """Base congressional trade schema."""
-    member_id: int = Field(..., gt=0)
+    member_id: UUID = Field(...)
     doc_id: str = Field(..., min_length=1, max_length=50)
     raw_asset_description: str = Field(..., min_length=1)
     transaction_type: TransactionType
-    transaction_date: date
-    notification_date: date
+    transaction_date: Optional[date] = None
+    notification_date: Optional[date] = None
     
     @validator('notification_date')
     def validate_notification_date(cls, v, values):
-        if 'transaction_date' in values and v < values['transaction_date']:
+        if v and 'transaction_date' in values and values['transaction_date'] and v < values['transaction_date']:
             raise ValueError('Notification date cannot be before transaction date')
         return v
 
 
 class CongressionalTradeCreate(CongressionalTradeBase):
     """Schema for creating a congressional trade."""
-    security_id: Optional[int] = None
+    security_id: Optional[UUID] = None
     document_url: Optional[str] = Field(None, max_length=500)
     owner: Optional[TradeOwner] = None
     ticker: Optional[str] = Field(None, max_length=20)
@@ -199,25 +221,30 @@ class CongressionalTradeCreate(CongressionalTradeBase):
     comment: Optional[str] = None
     cap_gains_over_200: bool = False
     
-    @root_validator
-    def validate_amounts(cls, values):
-        amount_min = values.get('amount_min')
-        amount_max = values.get('amount_max')
-        amount_exact = values.get('amount_exact')
+    @model_validator(mode='after')
+    def validate_amounts(self):
+        amount_min = self.amount_min
+        amount_max = self.amount_max
+        amount_exact = self.amount_exact
         
-        # Must have either exact amount or min/max range
-        if not amount_exact and not (amount_min and amount_max):
-            raise ValueError('Must provide either exact amount or min/max range')
+        # Must have at least one amount field, but can be all None for unknown amounts
+        has_exact = amount_exact is not None
+        has_range = amount_min is not None or amount_max is not None
         
-        if amount_min and amount_max and amount_min > amount_max:
+        if not has_exact and not has_range:
+            # Allow trades with no amount information
+            return self
+        
+        # If we have a range, validate it
+        if amount_min is not None and amount_max is not None and amount_min > amount_max:
             raise ValueError('Minimum amount cannot be greater than maximum amount')
         
-        return values
+        return self
 
 
 class CongressionalTradeUpdate(CapitolScopeBaseSchema):
     """Schema for updating a congressional trade."""
-    security_id: Optional[int] = None
+    security_id: Optional[UUID] = None
     ticker: Optional[str] = Field(None, max_length=20)
     asset_name: Optional[str] = Field(None, max_length=300)
     asset_type: Optional[str] = Field(None, max_length=100)
@@ -230,12 +257,15 @@ class CongressionalTradeUpdate(CapitolScopeBaseSchema):
 
 class CongressionalTradeSummary(CongressionalTradeBase, TimestampMixin):
     """Summary congressional trade schema for list views."""
-    id: int
-    security_id: Optional[int] = None
+    id: UUID
+    security_id: Optional[UUID] = None
     owner: Optional[TradeOwner] = None
     ticker: Optional[str] = None
     asset_name: Optional[str] = None
     asset_type: Optional[str] = None
+    amount_min: Optional[int] = Field(None, description="Minimum amount in cents")
+    amount_max: Optional[int] = Field(None, description="Maximum amount in cents")
+    amount_exact: Optional[int] = Field(None, description="Exact amount in cents")
     estimated_value: Optional[int] = Field(None, description="Estimated trade value in cents")
     filing_status: Optional[FilingStatus] = None
     
@@ -245,8 +275,7 @@ class CongressionalTradeSummary(CongressionalTradeBase, TimestampMixin):
     member_chamber: Optional[Chamber] = None
     member_state: Optional[str] = None
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class CongressionalTradeDetail(CongressionalTradeSummary):
@@ -287,15 +316,15 @@ class CongressionalTradeWithMember(CongressionalTradeDetail):
 
 class MemberPortfolioBase(CapitolScopeBaseSchema):
     """Base member portfolio schema."""
-    member_id: int = Field(..., gt=0)
-    security_id: int = Field(..., gt=0)
+    member_id: UUID = Field(...)
+    security_id: UUID = Field(...)
     shares: Decimal = Field(..., ge=0, decimal_places=6)
     cost_basis: int = Field(..., ge=0, description="Total cost basis in cents")
 
 
 class MemberPortfolioSummary(MemberPortfolioBase, TimestampMixin):
     """Summary member portfolio schema."""
-    id: int
+    id: UUID
     avg_cost_per_share: Optional[int] = None
     first_purchase_date: Optional[date] = None
     last_transaction_date: Optional[date] = None
@@ -314,8 +343,7 @@ class MemberPortfolioSummary(MemberPortfolioBase, TimestampMixin):
     # Computed fields
     current_value: Optional[int] = Field(None, description="Current position value in cents")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class MemberPortfolioDetail(MemberPortfolioSummary):
@@ -326,7 +354,7 @@ class MemberPortfolioDetail(MemberPortfolioSummary):
 
 class PortfolioPerformanceBase(CapitolScopeBaseSchema):
     """Base portfolio performance schema."""
-    member_id: int = Field(..., gt=0)
+    member_id: UUID = Field(...)
     date: date
     total_value: int = Field(..., description="Total portfolio value in cents")
     total_cost_basis: int = Field(..., description="Total cost basis in cents")
@@ -336,7 +364,7 @@ class PortfolioPerformanceBase(CapitolScopeBaseSchema):
 
 class PortfolioPerformanceSummary(PortfolioPerformanceBase, TimestampMixin):
     """Summary portfolio performance schema."""
-    id: int
+    id: UUID
     daily_return: Optional[Decimal] = None
     daily_gain_loss: Optional[int] = None
     benchmark_return: Optional[Decimal] = None
@@ -347,8 +375,7 @@ class PortfolioPerformanceSummary(PortfolioPerformanceBase, TimestampMixin):
     # Computed fields
     total_return_percent: Optional[float] = Field(None, description="Total return percentage")
     
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class PortfolioPerformanceDetail(PortfolioPerformanceSummary):
@@ -366,7 +393,7 @@ class PortfolioPerformanceDetail(PortfolioPerformanceSummary):
 
 class CongressionalTradeFilter(CapitolScopeBaseSchema):
     """Filters for congressional trade queries."""
-    member_ids: Optional[List[int]] = Field(None, description="Filter by member IDs")
+    member_ids: Optional[List[UUID]] = Field(None, description="Filter by member IDs")
     member_names: Optional[List[str]] = Field(None, description="Filter by member names")
     parties: Optional[List[PoliticalParty]] = Field(None, description="Filter by political parties")
     chambers: Optional[List[Chamber]] = Field(None, description="Filter by chambers")
@@ -412,12 +439,8 @@ class CongressionalTradeQuery(CongressionalTradeFilter):
 
 class MemberQuery(CapitolScopeBaseSchema):
     """Query parameters for congress members."""
-    parties: Optional[List[PoliticalParty]] = None
-    chambers: Optional[List[Chamber]] = None
-    states: Optional[List[str]] = None
-    congress_numbers: Optional[List[int]] = None
     search: Optional[str] = Field(None, min_length=1)
-    sort_by: str = "last_name"
+    sort_by: SortField = SortField.MEMBER_NAME
     sort_order: SortOrder = SortOrder.ASC
     page: PositiveInt = 1
     limit: int = Field(50, ge=1, le=1000)
@@ -439,7 +462,6 @@ class CongressionalTradeListResponse(PaginatedResponse):
 class CongressionalTradeDetailResponse(CapitolScopeBaseSchema):
     """Response schema for congressional trade detail."""
     data: CongressionalTradeDetail
-    metadata: ResponseMetadata
 
 
 class CongressMemberListResponse(PaginatedResponse):
@@ -450,7 +472,6 @@ class CongressMemberListResponse(PaginatedResponse):
 class CongressMemberDetailResponse(CapitolScopeBaseSchema):
     """Response schema for congress member detail."""
     data: CongressMemberDetail
-    metadata: ResponseMetadata
 
 
 class MemberPortfolioListResponse(PaginatedResponse):
@@ -469,6 +490,11 @@ class PortfolioPerformanceListResponse(PaginatedResponse):
 
 class TradingStatistics(CapitolScopeBaseSchema):
     """Trading statistics for a member or group."""
+    member_id: Optional[UUID] = None
+    member_name: Optional[str] = None
+    member_party: Optional[PoliticalParty] = None
+    member_chamber: Optional[Chamber] = None
+    member_state: Optional[str] = None
     total_trades: int = 0
     total_value: int = Field(0, description="Total trade value in cents")
     purchase_count: int = 0
@@ -493,7 +519,7 @@ class MarketPerformanceComparison(CapitolScopeBaseSchema):
 
 class MemberAnalytics(CapitolScopeBaseSchema):
     """Comprehensive analytics for a congress member."""
-    member_id: int
+    member_id: UUID
     trading_stats: TradingStatistics
     portfolio_summary: Optional[CongressMemberPortfolioSummary] = None
     performance_1m: Optional[MarketPerformanceComparison] = None

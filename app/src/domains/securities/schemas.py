@@ -12,12 +12,12 @@ from decimal import Decimal
 from pydantic import Field, field_validator
 
 from domains.base.schemas import (
-    CapitolScopeBaseSchema, IDMixin, TimestampMixin, TechnicalIndicators,
-    validate_ticker_symbol
+    CapitolScopeBaseSchema, UUIDMixin, TimestampMixin, TechnicalIndicators, TransactionType
 )
-from core.logging import get_logger
+from schemas.base import validate_ticker_symbol
 
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -46,7 +46,7 @@ class AssetTypeUpdate(CapitolScopeBaseSchema):
     risk_level: Optional[int] = Field(None, description="Risk level 1-5", ge=1, le=5)
 
 
-class AssetTypeResponse(AssetTypeBase, IDMixin, TimestampMixin):
+class AssetTypeResponse(AssetTypeBase, UUIDMixin, TimestampMixin):
     """Schema for asset type responses."""
     securities_count: Optional[int] = Field(None, description="Number of securities", ge=0)
 
@@ -57,9 +57,9 @@ class AssetTypeResponse(AssetTypeBase, IDMixin, TimestampMixin):
 
 class SectorBase(CapitolScopeBaseSchema):
     """Base sector schema."""
+    gics_code: str = Field(..., description="GICS sector code", max_length=10)
     name: str = Field(..., description="Sector name", max_length=100)
-    gics_code: Optional[str] = Field(None, description="GICS sector code", max_length=10)
-    parent_sector_id: Optional[int] = Field(None, description="Parent sector ID for sub-sectors")
+    parent_sector_gics_code: Optional[str] = Field(None, description="Parent sector GICS code", max_length=10)
     market_sensitivity: Optional[float] = Field(None, description="Market beta sensitivity")
     volatility_score: Optional[float] = Field(None, description="Historical volatility score")
 
@@ -72,13 +72,12 @@ class SectorCreate(SectorBase):
 class SectorUpdate(CapitolScopeBaseSchema):
     """Schema for updating sectors."""
     name: Optional[str] = Field(None, description="Sector name", max_length=100)
-    gics_code: Optional[str] = Field(None, description="GICS sector code", max_length=10)
-    parent_sector_id: Optional[int] = Field(None, description="Parent sector ID")
+    parent_sector_gics_code: Optional[str] = Field(None, description="Parent sector GICS code", max_length=10)
     market_sensitivity: Optional[float] = Field(None, description="Market beta sensitivity")
     volatility_score: Optional[float] = Field(None, description="Historical volatility score")
 
 
-class SectorResponse(SectorBase, IDMixin, TimestampMixin):
+class SectorResponse(SectorBase, UUIDMixin, TimestampMixin):
     """Schema for sector responses."""
     securities_count: Optional[int] = Field(None, description="Number of securities", ge=0)
     sub_sectors: Optional[List["SectorResponse"]] = Field(None, description="Sub-sectors")
@@ -112,7 +111,7 @@ class ExchangeUpdate(CapitolScopeBaseSchema):
     market_cap_rank: Optional[int] = Field(None, description="Market cap ranking", ge=1)
 
 
-class ExchangeResponse(ExchangeBase, IDMixin, TimestampMixin):
+class ExchangeResponse(ExchangeBase, UUIDMixin, TimestampMixin):
     """Schema for exchange responses."""
     securities_count: Optional[int] = Field(None, description="Number of securities", ge=0)
 
@@ -125,9 +124,9 @@ class SecurityBase(CapitolScopeBaseSchema):
     """Base security schema."""
     ticker: str = Field(..., description="Security ticker symbol", max_length=20)
     name: str = Field(..., description="Security name", max_length=200)
-    asset_type_id: Optional[int] = Field(None, description="Asset type ID")
-    sector_id: Optional[int] = Field(None, description="Sector ID")
-    exchange_id: Optional[int] = Field(None, description="Exchange ID")
+    asset_type_code: Optional[str] = Field(None, description="Asset type code", max_length=5)
+    sector_gics_code: Optional[str] = Field(None, description="Sector GICS code", max_length=10)
+    exchange_code: Optional[str] = Field(None, description="Exchange code", max_length=10)
     currency: str = Field("USD", description="Currency code", max_length=3)
     market_cap: Optional[int] = Field(None, description="Market cap in cents", ge=0)
     shares_outstanding: Optional[int] = Field(None, description="Shares outstanding", ge=0)
@@ -167,9 +166,9 @@ class SecurityCreate(SecurityBase):
 class SecurityUpdate(CapitolScopeBaseSchema):
     """Schema for updating securities."""
     name: Optional[str] = Field(None, description="Security name", max_length=200)
-    asset_type_id: Optional[int] = Field(None, description="Asset type ID")
-    sector_id: Optional[int] = Field(None, description="Sector ID")
-    exchange_id: Optional[int] = Field(None, description="Exchange ID")
+    asset_type_code: Optional[str] = Field(None, description="Asset type code", max_length=5)
+    sector_gics_code: Optional[str] = Field(None, description="Sector GICS code", max_length=10)
+    exchange_code: Optional[str] = Field(None, description="Exchange code", max_length=10)
     currency: Optional[str] = Field(None, description="Currency code", max_length=3)
     market_cap: Optional[int] = Field(None, description="Market cap in cents", ge=0)
     shares_outstanding: Optional[int] = Field(None, description="Shares outstanding", ge=0)
@@ -195,7 +194,7 @@ class SecurityUpdate(CapitolScopeBaseSchema):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class SecurityResponse(SecurityBase, IDMixin, TimestampMixin):
+class SecurityResponse(SecurityBase, UUIDMixin, TimestampMixin):
     """Schema for security responses."""
     # Related object responses (optional includes)
     asset_type: Optional[AssetTypeResponse] = Field(None, description="Asset type details")
@@ -230,7 +229,7 @@ class SecuritySummary(CapitolScopeBaseSchema):
 class DailyPriceBase(CapitolScopeBaseSchema):
     """Base daily price schema."""
     security_id: int = Field(..., description="Security ID")
-    date: date = Field(..., description="Price date")
+    price_date: date = Field(..., description="Price date")
     open_price: int = Field(..., description="Opening price in cents", ge=0)
     high_price: int = Field(..., description="High price in cents", ge=0)
     low_price: int = Field(..., description="Low price in cents", ge=0)
@@ -246,33 +245,18 @@ class DailyPriceBase(CapitolScopeBaseSchema):
     
     @field_validator('high_price')
     @classmethod
-    def validate_high_price(cls, v, values):
-        """Ensure high price is >= other prices."""
-        low_price = values.get('low_price')
-        open_price = values.get('open_price')
-        close_price = values.get('close_price')
-        
-        if low_price and v < low_price:
-            raise ValueError('High price must be >= low price')
-        if open_price and v < open_price:
-            raise ValueError('High price must be >= open price')
-        if close_price and v < close_price:
-            raise ValueError('High price must be >= close price')
-        
+    def validate_high_price(cls, v):
+        """Ensure high price is >= 0."""
+        if v < 0:
+            raise ValueError('High price must be >= 0')
         return v
     
     @field_validator('low_price')
     @classmethod
-    def validate_low_price(cls, v, values):
-        """Ensure low price is <= other prices."""
-        open_price = values.get('open_price')
-        close_price = values.get('close_price')
-        
-        if open_price and v > open_price:
-            raise ValueError('Low price must be <= open price')
-        if close_price and v > close_price:
-            raise ValueError('Low price must be <= close price')
-        
+    def validate_low_price(cls, v):
+        """Ensure low price is >= 0."""
+        if v < 0:
+            raise ValueError('Low price must be >= 0')
         return v
 
 
@@ -290,7 +274,7 @@ class DailyPriceUpdate(CapitolScopeBaseSchema):
     bollinger_lower: Optional[int] = Field(None, description="Bollinger lower band (cents)")
 
 
-class DailyPriceResponse(DailyPriceBase, IDMixin, TimestampMixin):
+class DailyPriceResponse(DailyPriceBase, UUIDMixin, TimestampMixin):
     """Schema for daily price responses."""
     # Technical indicators (if calculated)
     technical_indicators: Optional[TechnicalIndicators] = Field(None, description="Technical indicators")
@@ -362,7 +346,7 @@ class CorporateActionUpdate(CapitolScopeBaseSchema):
     volume_impact_1d: Optional[float] = Field(None, description="1-day volume impact")
 
 
-class CorporateActionResponse(CorporateActionBase, IDMixin, TimestampMixin):
+class CorporateActionResponse(CorporateActionBase, UUIDMixin, TimestampMixin):
     """Schema for corporate action responses."""
     security: Optional[SecuritySummary] = Field(None, description="Security details")
     
@@ -378,9 +362,9 @@ class CorporateActionResponse(CorporateActionBase, IDMixin, TimestampMixin):
 class SecuritySearchParams(CapitolScopeBaseSchema):
     """Security search parameters."""
     query: Optional[str] = Field(None, description="Search query (ticker, name)", max_length=200)
-    asset_type_ids: Optional[List[int]] = Field(None, description="Asset type IDs to filter by")
-    sector_ids: Optional[List[int]] = Field(None, description="Sector IDs to filter by")
-    exchange_ids: Optional[List[int]] = Field(None, description="Exchange IDs to filter by")
+    asset_type_codes: Optional[List[str]] = Field(None, description="Asset type codes to filter by")
+    sector_gics_codes: Optional[List[str]] = Field(None, description="Sector GICS codes to filter by")
+    exchange_codes: Optional[List[str]] = Field(None, description="Exchange codes to filter by")
     min_market_cap: Optional[int] = Field(None, description="Minimum market cap in cents", ge=0)
     max_market_cap: Optional[int] = Field(None, description="Maximum market cap in cents", ge=0)
     is_active: Optional[bool] = Field(None, description="Filter by active status")
@@ -389,11 +373,10 @@ class SecuritySearchParams(CapitolScopeBaseSchema):
     
     @field_validator('max_market_cap')
     @classmethod
-    def validate_market_cap_range(cls, v, values):
-        """Ensure max market cap is greater than min."""
-        min_cap = values.get('min_market_cap')
-        if min_cap and v and v < min_cap:
-            raise ValueError('Maximum market cap must be greater than minimum')
+    def validate_market_cap_range(cls, v):
+        """Ensure max market cap is valid."""
+        if v and v < 0:
+            raise ValueError('Maximum market cap must be greater than 0')
         return v
 
 
@@ -406,11 +389,10 @@ class PriceSearchParams(CapitolScopeBaseSchema):
     
     @field_validator('end_date')
     @classmethod
-    def validate_date_range(cls, v, values):
-        """Ensure end date is after start date."""
-        start_date = values.get('start_date')
-        if start_date and v and v < start_date:
-            raise ValueError('End date must be after start date')
+    def validate_date_range(cls, v):
+        """Ensure end date is valid."""
+        if v and v > date.today():
+            raise ValueError('End date cannot be in the future')
         return v
 
 
@@ -479,7 +461,7 @@ class SecurityWatchlistUpdate(CapitolScopeBaseSchema):
     alert_enabled: Optional[bool] = Field(None, description="Alert enabled status")
 
 
-class SecurityWatchlistResponse(SecurityWatchlistBase, IDMixin, TimestampMixin):
+class SecurityWatchlistResponse(SecurityWatchlistBase, UUIDMixin, TimestampMixin):
     """Schema for security watchlist responses."""
     user_id: str = Field(..., description="User ID")
     security: Optional[SecuritySummary] = Field(None, description="Security details")

@@ -4,10 +4,31 @@ CapitolScope FastAPI Application
 Main entry point for the congressional trading transparency platform.
 """
 
+import sys
+import os
+from pathlib import Path
+
+# Add the app/src directory to Python path for proper imports
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
+
 from contextlib import asynccontextmanager
 from typing import Dict, Any
 
-import structlog
+import logging
+
+# Force file logging setup before anything else
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('/app/logs/app.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -18,16 +39,19 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from core.config import settings
 from core.database import init_database, close_database
-from core.logging import configure_logging
-from api import trades, members, auth, health, portfolios, market_data, notifications
+from core.logging import configure_logging, setup_file_logging
+from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
     ErrorHandlingMiddleware
 )
 
+# Set up file logging first (before Uvicorn starts)
+setup_file_logging()
+
 # Configure structured logging
-logger = configure_logging()
+configure_logging()
 
 # Configure Sentry for error tracking
 if settings.SENTRY_DSN:
@@ -175,6 +199,9 @@ app.include_router(portfolios.router, prefix=f"{settings.API_V1_PREFIX}/portfoli
 app.include_router(market_data.router, prefix=f"{settings.API_V1_PREFIX}/market-data", tags=["Market Data"])
 app.include_router(notifications.router, prefix=f"{settings.API_V1_PREFIX}/notifications", tags=["Notifications"])
 
+# Development endpoints (disabled - using real database endpoints)
+# app.include_router(dev_endpoints.router, prefix=f"{settings.API_V1_PREFIX}/congressional", tags=["Development"])
+
 
 @app.get("/")
 async def root() -> Dict[str, Any]:
@@ -215,14 +242,7 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """General exception handler for unexpected errors."""
-    logger.error(
-        "Unexpected error occurred",
-        error=str(exc),
-        error_type=type(exc).__name__,
-        path=request.url.path,
-        method=request.method,
-        exc_info=True,
-    )
+    logger.error(f"Unhandled exception: {exc} (request: {request.url.path})")
     
     return JSONResponse(
         status_code=500,

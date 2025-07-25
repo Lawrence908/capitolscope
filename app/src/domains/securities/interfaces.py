@@ -14,9 +14,8 @@ from domains.securities.schemas import (
     SecurityCreate, SecurityUpdate, SecurityResponse, SecuritySummary,
     DailyPriceCreate, PriceHistory, BulkOperationResponse
 )
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

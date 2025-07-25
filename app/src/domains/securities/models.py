@@ -5,6 +5,7 @@ This module contains SQLAlchemy models for securities, asset types, exchanges,
 and price data. Supports CAP-24 (Stock Database) and CAP-25 (Price Data Ingestion).
 """
 
+import uuid
 from datetime import datetime, date
 from typing import Optional, List
 from decimal import Decimal
@@ -15,14 +16,13 @@ from sqlalchemy import (
     UniqueConstraint, Index
 )
 from sqlalchemy.types import Numeric as SQLDecimal
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from domains.base.models import CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+from domains.base.models import CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, TimestampMixin
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -34,14 +34,14 @@ class AssetType(CapitolScopeBaseModel, ActiveRecordMixin):
     
     __tablename__ = 'asset_types'
     
-    code = Column(String(5), nullable=False, unique=True, index=True)
+    code = Column(String(5), primary_key=True, unique=True, index=True)
     name = Column(String(200), nullable=False)
     description = Column(Text)
     category = Column(String(50))  # equity, bond, derivative, etc.
     risk_level = Column(Integer)  # 1-5 scale
     
     # Relationships
-    securities = relationship("Security", back_populates="asset_type")
+    securities = relationship("Security", back_populates="asset_type", foreign_keys="Security.asset_type_code")
     
     def __repr__(self):
         return f"<AssetType(code={self.code}, name={self.name})>"
@@ -56,15 +56,15 @@ class Sector(CapitolScopeBaseModel, ActiveRecordMixin):
     
     __tablename__ = 'sectors'
     
+    gics_code = Column(String(10), primary_key=True, unique=True, index=True)
     name = Column(String(100), nullable=False, unique=True, index=True)
-    gics_code = Column(String(10), index=True)  # Global Industry Classification Standard
-    parent_sector_id = Column(Integer, ForeignKey('sectors.id'))
+    parent_sector_gics_code = Column(String(10), ForeignKey('sectors.gics_code'))
     market_sensitivity = Column(SQLDecimal(5, 4))  # Beta-like measure
     volatility_score = Column(SQLDecimal(5, 4))  # Historical volatility
     
     # Relationships
-    securities = relationship("Security", back_populates="sector")
-    parent_sector = relationship("Sector", remote_side=[id])
+    securities = relationship("Security", back_populates="sector", foreign_keys="Security.sector_gics_code")
+    parent_sector = relationship("Sector", remote_side="Sector.gics_code")
     
     def __repr__(self):
         return f"<Sector(name={self.name}, gics_code={self.gics_code})>"
@@ -79,7 +79,7 @@ class Exchange(CapitolScopeBaseModel, ActiveRecordMixin):
     
     __tablename__ = 'exchanges'
     
-    code = Column(String(10), nullable=False, unique=True, index=True)
+    code = Column(String(10), primary_key=True, unique=True, index=True)
     name = Column(String(100), nullable=False)
     country = Column(String(3), nullable=False)  # ISO 3166-1 alpha-3
     timezone = Column(String(50), nullable=False)
@@ -87,7 +87,7 @@ class Exchange(CapitolScopeBaseModel, ActiveRecordMixin):
     market_cap_rank = Column(Integer)  # Global ranking
     
     # Relationships
-    securities = relationship("Security", back_populates="exchange")
+    securities = relationship("Security", back_populates="exchange", foreign_keys="Security.exchange_code")
     
     def __repr__(self):
         return f"<Exchange(code={self.code}, name={self.name})>"
@@ -97,7 +97,7 @@ class Exchange(CapitolScopeBaseModel, ActiveRecordMixin):
 # SECURITIES
 # ============================================================================
 
-class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin):
+class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin, TimestampMixin):
     """Security model for stocks, bonds, ETFs, and other financial instruments."""
     
     __tablename__ = 'securities'
@@ -107,9 +107,9 @@ class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin):
     name = Column(String(200), nullable=False)
     
     # Foreign keys
-    asset_type_id = Column(Integer, ForeignKey('asset_types.id'), index=True)
-    sector_id = Column(Integer, ForeignKey('sectors.id'), index=True)
-    exchange_id = Column(Integer, ForeignKey('exchanges.id'), index=True)
+    asset_type_code = Column(String(5), ForeignKey('asset_types.code'), index=True)
+    sector_gics_code = Column(String(10), ForeignKey('sectors.gics_code'), index=True)
+    exchange_code = Column(String(10), ForeignKey('exchanges.code'), index=True)
     
     # Financial data
     currency = Column(String(3), default='USD')
@@ -133,15 +133,18 @@ class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin):
     controversy_score = Column(SQLDecimal(5, 2))  # Controversy score
     
     # Relationships
-    asset_type = relationship("AssetType", back_populates="securities")
-    sector = relationship("Sector", back_populates="securities")
-    exchange = relationship("Exchange", back_populates="securities")
+    asset_type = relationship("AssetType", back_populates="securities", foreign_keys=[asset_type_code])
+    sector = relationship("Sector", back_populates="securities", foreign_keys=[sector_gics_code])
+    exchange = relationship("Exchange", back_populates="securities", foreign_keys=[exchange_code])
     daily_prices = relationship("DailyPrice", back_populates="security")
     corporate_actions = relationship("CorporateAction", back_populates="security")
+    portfolio_holdings = relationship("PortfolioHolding", back_populates="security")
+    member_portfolios = relationship("MemberPortfolio", back_populates="security")
+    congressional_trades = relationship("CongressionalTrade", back_populates="security")
     
     # Indexes
     __table_args__ = (
-        UniqueConstraint('ticker', 'exchange_id', name='unique_ticker_exchange'),
+        UniqueConstraint('ticker', 'exchange_code', name='unique_ticker_exchange'),
         Index('idx_security_ticker', 'ticker'),
         Index('idx_security_name', 'name'),
         Index('idx_security_active', 'is_active'),
@@ -173,13 +176,13 @@ class Security(CapitolScopeBaseModel, ActiveRecordMixin, MetadataMixin):
 # PRICE DATA
 # ============================================================================
 
-class DailyPrice(CapitolScopeBaseModel):
+class DailyPrice(CapitolScopeBaseModel, TimestampMixin):
     """Daily price data for securities."""
     
     __tablename__ = 'daily_prices'
     
-    security_id = Column(Integer, ForeignKey('securities.id'), nullable=False, index=True)
-    date = Column(Date, nullable=False, index=True)
+    security_id = Column(UUID(as_uuid=True), ForeignKey('securities.id'), nullable=False, index=True)
+    price_date = Column(Date, nullable=False, index=True)
     
     # OHLCV data (all prices in cents)
     open_price = Column(Integer, nullable=False)
@@ -200,9 +203,9 @@ class DailyPrice(CapitolScopeBaseModel):
     
     # Indexes and constraints
     __table_args__ = (
-        UniqueConstraint('security_id', 'date', name='unique_security_date'),
-        Index('idx_daily_price_security_date', 'security_id', 'date'),
-        Index('idx_daily_price_date', 'date'),
+        UniqueConstraint('security_id', 'price_date', name='unique_security_date'),
+        Index('idx_daily_price_security_date', 'security_id', 'price_date'),
+        Index('idx_daily_price_date', 'price_date'),
         # Check constraints for price validity
         CheckConstraint('open_price >= 0', name='check_open_price_positive'),
         CheckConstraint('high_price >= 0', name='check_high_price_positive'),
@@ -213,7 +216,7 @@ class DailyPrice(CapitolScopeBaseModel):
     )
     
     def __repr__(self):
-        return f"<DailyPrice(security_id={self.security_id}, date={self.date}, close={self.close_price})>"
+        return f"<DailyPrice(security_id={self.security_id}, date={self.price_date}, close={self.close_price})>"
     
     @property
     def price_change(self) -> Optional[int]:
@@ -249,12 +252,12 @@ class DailyPrice(CapitolScopeBaseModel):
 # CORPORATE ACTIONS
 # ============================================================================
 
-class CorporateAction(CapitolScopeBaseModel):
+class CorporateAction(CapitolScopeBaseModel, TimestampMixin):
     """Corporate actions affecting securities (splits, dividends, etc.)."""
     
     __tablename__ = 'corporate_actions'
     
-    security_id = Column(Integer, ForeignKey('securities.id'), nullable=False, index=True)
+    security_id = Column(UUID(as_uuid=True), ForeignKey('securities.id'), nullable=False, index=True)
     action_type = Column(String(20), nullable=False, index=True)
     
     # Important dates
@@ -306,12 +309,12 @@ class CorporateAction(CapitolScopeBaseModel):
 # PRICE HISTORY AGGREGATES (For performance)
 # ============================================================================
 
-class PriceHistoryAggregate(CapitolScopeBaseModel):
+class PriceHistoryAggregate(CapitolScopeBaseModel, TimestampMixin):
     """Pre-calculated price history aggregates for performance."""
     
     __tablename__ = 'price_history_aggregates'
     
-    security_id = Column(Integer, ForeignKey('securities.id'), nullable=False, index=True)
+    security_id = Column(UUID(as_uuid=True), ForeignKey('securities.id'), nullable=False, index=True)
     period_type = Column(String(10), nullable=False)  # 'weekly', 'monthly', 'quarterly', 'yearly'
     period_start = Column(Date, nullable=False)
     period_end = Column(Date, nullable=False)
@@ -347,13 +350,13 @@ class PriceHistoryAggregate(CapitolScopeBaseModel):
 # WATCHLISTS (User-specific)
 # ============================================================================
 
-class SecurityWatchlist(CapitolScopeBaseModel):
+class SecurityWatchlist(CapitolScopeBaseModel, TimestampMixin):
     """User watchlists for tracking securities."""
     
     __tablename__ = 'security_watchlists'
     
-    user_id = Column(String(36), nullable=False, index=True)  # UUID as string
-    security_id = Column(Integer, ForeignKey('securities.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), nullable=False, index=True)  # UUID as string
+    security_id = Column(UUID(as_uuid=True), ForeignKey('securities.id'), nullable=False, index=True)
     
     # Watchlist metadata
     notes = Column(Text)
@@ -371,6 +374,11 @@ class SecurityWatchlist(CapitolScopeBaseModel):
     def __repr__(self):
         return f"<SecurityWatchlist(user_id={self.user_id}, security_id={self.security_id})>"
 
+
+# --- Fix for circular import: Import PortfolioHolding and assign relationship after both classes are defined ---
+from domains.portfolio.models import PortfolioHolding
+
+Security.portfolio_holdings = relationship("PortfolioHolding", back_populates="security")
 
 # Log model creation
 logger.info("Securities domain models initialized")

@@ -28,9 +28,8 @@ from domains.securities.schemas import (
     SecuritySearchParams, PriceSearchParams, BulkPriceCreate, BulkOperationResponse
 )
 from domains.base.interfaces import DataIngestionInterface
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

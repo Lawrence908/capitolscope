@@ -24,9 +24,8 @@ from domains.securities.schemas import (
     CorporateActionCreate, CorporateActionUpdate,
     SecurityWatchlistCreate, SecurityWatchlistUpdate
 )
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

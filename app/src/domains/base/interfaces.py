@@ -9,10 +9,10 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List, Optional, Dict, Any, Protocol, runtime_checkable
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from uuid import UUID
 
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 # Type variables for generic interfaces
 ModelType = TypeVar('ModelType')
@@ -38,7 +38,7 @@ class BaseRepository(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]
         pass
     
     @abstractmethod
-    def get(self, id: int) -> Optional[ModelType]:
+    def get(self, id: UUID) -> Optional[ModelType]:
         """Get a record by ID."""
         pass
     
@@ -58,7 +58,7 @@ class BaseRepository(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]
         pass
     
     @abstractmethod
-    def delete(self, id: int) -> bool:
+    def delete(self, id: UUID) -> bool:
         """Delete a record by ID."""
         pass
     

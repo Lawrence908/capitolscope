@@ -21,9 +21,8 @@ Each domain follows a consistent structure:
 - interfaces.py: Abstract interfaces and protocols
 """
 
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "admin",

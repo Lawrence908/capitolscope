@@ -12,16 +12,25 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db_session
-from core.logging import get_logger
+import logging
+logger = logging.getLogger(__name__)
 from core.responses import success_response, error_response, paginated_response
 from core.auth import get_current_user_optional, get_current_active_user, require_subscription, require_admin
 from domains.users.models import User
+from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 
-logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/prices/daily")
+@router.get(
+    "/prices/daily",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Daily prices retrieved successfully"},
+        400: {"description": "Invalid parameters"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_daily_prices(
     session: AsyncSession = Depends(get_db_session),
     symbol: Optional[str] = Query(None, description="Stock symbol (e.g., AAPL)"),
@@ -31,16 +40,14 @@ async def get_daily_prices(
     skip: int = Query(0, ge=0, description="Number of records to skip"),
     limit: int = Query(100, ge=1, le=1000, description="Number of records to return"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get daily price data for securities.
     
     Returns OHLC data with volume and technical indicators.
     Optional authentication - authenticated users get enhanced data.
     """
-    logger.info("Getting daily prices", symbol=symbol, symbols=symbols, 
-               date_from=date_from, date_to=date_to, skip=skip, limit=limit,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting daily prices: symbol={symbol}, symbols={symbols}")
     
     # Enhanced features for authenticated users
     enhanced_data = current_user is not None
@@ -68,27 +75,47 @@ async def get_daily_prices(
         "user_tier": current_user.subscription_tier if current_user else "anonymous"
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Daily prices endpoint ready - price database needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=limit,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["prices"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.get("/prices/intraday")
+@router.get(
+    "/prices/intraday",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Intraday prices retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient subscription"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_intraday_prices(
     session: AsyncSession = Depends(get_db_session),
     symbol: str = Query(..., description="Stock symbol"),
     date: Optional[date] = Query(None, description="Specific date (defaults to today)"),
     interval: str = Query("1min", description="Time interval (1min, 5min, 15min, 1hour)"),
     current_user: User = Depends(require_subscription(['pro', 'premium', 'enterprise'])),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get intraday price data for a security.
     
     **Premium Feature**: Requires Pro, Premium, or Enterprise subscription.
     """
-    logger.info("Getting intraday prices", symbol=symbol, date=date, 
-               interval=interval, user_id=current_user.id)
+    logger.info(f"Getting intraday prices: symbol={symbol}, date={date}, interval={interval}")
     
     # TODO: Implement intraday price retrieval
     data = {
@@ -105,13 +132,18 @@ async def get_intraday_prices(
         "subscription_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Intraday prices endpoint ready - real-time data feed needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/prices/{symbol}")
+@router.get(
+    "/prices/{symbol}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Symbol prices retrieved successfully"},
+        404: {"description": "Symbol not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_symbol_prices(
     symbol: str = Path(..., description="Stock symbol"),
     session: AsyncSession = Depends(get_db_session),
@@ -119,15 +151,13 @@ async def get_symbol_prices(
     date_to: Optional[date] = Query(None, description="End date"),
     include_technical: bool = Query(False, description="Include technical indicators"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get all price data for a specific symbol.
     
     Enhanced data for authenticated users.
     """
-    logger.info("Getting symbol prices", symbol=symbol, date_from=date_from, 
-               date_to=date_to, include_technical=include_technical,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting symbol prices: symbol={symbol}, date_from={date_from}, date_to={date_to}, include_technical={include_technical}")
     
     enhanced_data = current_user is not None
     premium_features = current_user and current_user.is_premium if current_user else False
@@ -146,25 +176,28 @@ async def get_symbol_prices(
         "premium_features": premium_features,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Symbol prices endpoint ready - price database needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/indices")
+@router.get(
+    "/indices",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Market indices retrieved successfully"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_market_indices(
     session: AsyncSession = Depends(get_db_session),
     index_type: Optional[str] = Query(None, description="Filter by index type"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get market indices data (S&P 500, Dow Jones, NASDAQ, etc.).
     
     Real-time values and performance metrics.
     """
-    logger.info("Getting market indices", index_type=index_type,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting market indices: index_type={index_type}")
     
     enhanced_data = current_user is not None
     
@@ -182,27 +215,47 @@ async def get_market_indices(
         "enhanced_data": enhanced_data,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Market indices endpoint ready - index database needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=50,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["indices"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.get("/indices/{symbol}/history")
+@router.get(
+    "/indices/{symbol}/history",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Index history retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Index not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_index_history(
     symbol: str = Path(..., description="Index symbol (e.g., SPX, DJI)"),
     session: AsyncSession = Depends(get_db_session),
     date_from: Optional[date] = Query(None, description="Start date"),
     date_to: Optional[date] = Query(None, description="End date"),
     current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get historical data for a market index.
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.info("Getting index history", symbol=symbol, date_from=date_from, 
-               date_to=date_to, user_id=current_user.id)
+    logger.info(f"Getting index history: symbol={symbol}, date_from={date_from}, date_to={date_to}")
     
     # TODO: Implement index history retrieval
     data = {
@@ -219,27 +272,32 @@ async def get_index_history(
         },
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Index history endpoint ready - historical data needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/economic-indicators")
+@router.get(
+    "/economic-indicators",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Economic indicators retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient subscription"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_economic_indicators(
     session: AsyncSession = Depends(get_db_session),
     category: Optional[str] = Query(None, description="Filter by category"),
     date_from: Optional[date] = Query(None, description="Start date"),
     date_to: Optional[date] = Query(None, description="End date"),
     current_user: User = Depends(require_subscription(['premium', 'enterprise'])),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Get economic indicators data.
     
     **Premium Feature**: Requires Premium or Enterprise subscription.
     """
-    logger.info("Getting economic indicators", category=category, 
-               date_from=date_from, date_to=date_to, user_id=current_user.id)
+    logger.info(f"Getting economic indicators: category={category}, date_from={date_from}, date_to={date_to}")
     
     # TODO: Implement economic indicators retrieval
     data = {
@@ -254,26 +312,44 @@ async def get_economic_indicators(
         "subscription_tier": current_user.subscription_tier,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Economic indicators endpoint ready - economic data feed needed"}
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=50,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
     )
+    
+    paginated_data = PaginatedResponse(
+        items=data["indicators"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data)
 
 
-@router.get("/treasury-rates")
+@router.get(
+    "/treasury-rates",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Treasury rates retrieved successfully"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_treasury_rates(
     session: AsyncSession = Depends(get_db_session),
     date_from: Optional[date] = Query(None, description="Start date"),
     date_to: Optional[date] = Query(None, description="End date"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get US Treasury rates and yield curve data.
     
     Risk-free rates for portfolio analysis.
     """
-    logger.info("Getting treasury rates", date_from=date_from, date_to=date_to,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Getting treasury rates: date_from={date_from}, date_to={date_to}")
     
     enhanced_data = current_user is not None
     
@@ -289,23 +365,29 @@ async def get_treasury_rates(
         "enhanced_data": enhanced_data,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Treasury rates endpoint ready - treasury data feed needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/data-feeds/status")
+@router.get(
+    "/data-feeds/status",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Data feed status retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient permissions"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_data_feed_status(
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get status of all data feeds and sources.
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Getting data feed status", user_id=current_user.id)
+    logger.info(f"Getting data feed status: user_id={current_user.id}")
     
     # TODO: Implement data feed status monitoring
     data = {
@@ -318,25 +400,32 @@ async def get_data_feed_status(
         "data_quality_score": 95.5,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Data feed status endpoint ready - monitoring system needed"}
-    )
+    return create_response(data=data)
 
 
-@router.post("/data-feeds/{feed_id}/refresh")
+@router.post(
+    "/data-feeds/{feed_id}/refresh",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Data feed refresh initiated successfully"},
+        401: {"description": "Not authenticated"},
+        403: {"description": "Insufficient permissions"},
+        404: {"description": "Data feed not found"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def refresh_data_feed(
     feed_id: int = Path(..., description="Data feed ID"),
     session: AsyncSession = Depends(get_db_session),
     force: bool = Query(False, description="Force refresh even if recently updated"),
     current_user: User = Depends(require_admin()),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Manually trigger a data feed refresh.
     
     **Admin Only**: Requires enterprise subscription (admin privileges).
     """
-    logger.info("Refreshing data feed", feed_id=feed_id, force=force, user_id=current_user.id)
+    logger.info(f"Refreshing data feed: feed_id={feed_id}, force={force}, user_id={current_user.id}")
     
     # TODO: Implement data feed refresh
     data = {
@@ -347,24 +436,28 @@ async def refresh_data_feed(
         "initiated_by": current_user.id,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Data feed refresh initiated successfully"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/market-holidays")
+@router.get(
+    "/market-holidays",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Market holidays retrieved successfully"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def get_market_holidays(
     session: AsyncSession = Depends(get_db_session),
     year: Optional[int] = Query(None, description="Year (defaults to current year)"),
     market: str = Query("NYSE", description="Market (NYSE, NASDAQ, etc.)"),
-) -> JSONResponse:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get market holidays and trading calendar.
     
     Public endpoint for trading calendar information.
     """
-    logger.info("Getting market holidays", year=year, market=market)
+    logger.info(f"Getting market holidays: year={year}, market={market}")
     
     # TODO: Implement market holidays retrieval
     data = {
@@ -376,27 +469,31 @@ async def get_market_holidays(
         "trading_days_remaining": 0,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Market holidays endpoint ready - trading calendar needed"}
-    )
+    return create_response(data=data)
 
 
-@router.get("/search")
+@router.get(
+    "/search",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Securities search completed successfully"},
+        400: {"description": "Invalid search query"},
+        500: {"description": "Internal server error"}
+    }
+)
 async def search_securities(
     session: AsyncSession = Depends(get_db_session),
     query: str = Query(..., min_length=1, description="Search query"),
     limit: int = Query(10, ge=1, le=50, description="Number of results"),
     asset_types: Optional[str] = Query(None, description="Comma-separated asset types"),
     current_user: Optional[User] = Depends(get_current_user_optional),
-) -> JSONResponse:
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
     """
     Search for securities by symbol, name, or description.
     
     Enhanced results for authenticated users.
     """
-    logger.info("Searching securities", query=query, limit=limit, asset_types=asset_types,
-               user_id=current_user.id if current_user else None)
+    logger.info(f"Searching securities: query={query}, limit={limit}, asset_types={asset_types}")
     
     enhanced_data = current_user is not None
     
@@ -416,7 +513,19 @@ async def search_securities(
         "enhanced_data": enhanced_data,
     }
     
-    return success_response(
-        data=data,
-        meta={"message": "Security search endpoint ready - search index needed"}
-    ) 
+    # Create pagination meta
+    pagination_meta = PaginationMeta(
+        page=1,
+        per_page=limit,
+        total=0,
+        pages=1,
+        has_next=False,
+        has_prev=False
+    )
+    
+    paginated_data = PaginatedResponse(
+        items=data["results"],
+        meta=pagination_meta
+    )
+    
+    return create_response(data=paginated_data) 

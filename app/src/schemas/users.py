@@ -12,7 +12,7 @@ from typing import Optional, List, Dict, Any
 from pydantic import Field, field_validator, EmailStr, HttpUrl
 
 from schemas.base import (
-    CapitolScopeBaseModel, IDMixin, UUIDMixin, TimestampMixin,
+    CapitolScopeBaseModel, UUIDMixin, TimestampMixin,
     SubscriptionTier, SubscriptionStatus, SocialPlatform,
     NotificationPreferences
 )
@@ -220,6 +220,10 @@ class SocialConnectionBase(CapitolScopeBaseModel):
     # Platform-specific settings
     settings: Optional[Dict[str, Any]] = Field(None, description="Platform-specific settings")
     
+    model_config = {
+        "arbitrary_types_allowed": True
+    }
+    
     @field_validator('platform')
     @classmethod
     def validate_platform(cls, v):
@@ -243,7 +247,7 @@ class SocialConnectionUpdate(CapitolScopeBaseModel):
     settings: Optional[Dict[str, Any]] = Field(None, description="Platform-specific settings")
 
 
-class SocialConnectionResponse(SocialConnectionBase, IDMixin, TimestampMixin):
+class SocialConnectionResponse(SocialConnectionBase, UUIDMixin, TimestampMixin):
     """Schema for social connection responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
     
@@ -331,7 +335,7 @@ class UserSubscriptionUpdate(CapitolScopeBaseModel):
     features: Optional[Dict[str, Any]] = Field(None, description="Enabled features")
 
 
-class UserSubscriptionResponse(UserSubscriptionBase, IDMixin, TimestampMixin):
+class UserSubscriptionResponse(UserSubscriptionBase, UUIDMixin, TimestampMixin):
     """Schema for user subscription responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
     
@@ -401,7 +405,7 @@ class UserNotificationUpdate(CapitolScopeBaseModel):
     read_at: Optional[datetime] = Field(None, description="Read timestamp")
 
 
-class UserNotificationResponse(UserNotificationBase, IDMixin, TimestampMixin):
+class UserNotificationResponse(UserNotificationBase, UUIDMixin, TimestampMixin):
     """Schema for user notification responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
 
@@ -458,7 +462,7 @@ class UserPreferencesUpdate(CapitolScopeBaseModel):
     custom_settings: Optional[Dict[str, Any]] = Field(None, description="Custom settings")
 
 
-class UserPreferencesResponse(UserPreferencesBase, IDMixin, TimestampMixin):
+class UserPreferencesResponse(UserPreferencesBase, UUIDMixin, TimestampMixin):
     """Schema for user preferences responses."""
     user_id: uuid.UUID = Field(..., description="User ID")
 

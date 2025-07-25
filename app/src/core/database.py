@@ -13,23 +13,23 @@ Connection Details:
 
 import logging
 import time
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator, Optional
+from contextlib import asynccontextmanager, contextmanager
+from typing import AsyncGenerator, Generator, Optional
 
-import structlog
-from sqlalchemy import text
+from sqlalchemy import text, create_engine
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
     AsyncEngine,
 )
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import NullPool
 from sqlalchemy.exc import SQLAlchemyError
 
 from core.config import settings
 
-logger = structlog.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 class DatabaseManager:
     """Async database manager for Supabase PostgreSQL."""
@@ -37,6 +37,8 @@ class DatabaseManager:
     def __init__(self):
         self.engine: Optional[AsyncEngine] = None
         self.session_factory: Optional[async_sessionmaker[AsyncSession]] = None
+        self.sync_engine: Optional[object] = None
+        self.sync_session_factory: Optional[sessionmaker[Session]] = None
         self._initialized = False
     
     async def initialize(self) -> None:
@@ -70,19 +72,33 @@ class DatabaseManager:
                 autocommit=False,
             )
             
+            # Create synchronous engine and session factory for import scripts
+            sync_url = settings.database_url.replace("+asyncpg://", "://")
+            self.sync_engine = create_engine(
+                sync_url,
+                echo=settings.DATABASE_ECHO,
+                pool_pre_ping=True,
+                pool_recycle=3600,
+            )
+            
+            self.sync_session_factory = sessionmaker(
+                bind=self.sync_engine,
+                class_=Session,
+                expire_on_commit=False,
+                autoflush=True,
+                autocommit=False,
+            )
+            
             # Test connection
             await self.test_connection()
             
             self._initialized = True
             logger.info(
-                "Database connection initialized successfully",
-                database_url=settings.database_url.split("@")[1] if "@" in settings.database_url else "***",
-                pool_type="NullPool",
-                echo=settings.DATABASE_ECHO,
+                f"Database connection initialized successfully. URL: {settings.database_url.split('@')[1] if '@' in settings.database_url else '***'}, pool_type=NullPool, echo={settings.DATABASE_ECHO}"
             )
             
         except Exception as e:
-            logger.error("Failed to initialize database connection", error=str(e))
+            logger.error(f"Failed to initialize database connection: {e}")
             raise
     
     async def close(self) -> None:
@@ -90,6 +106,10 @@ class DatabaseManager:
         if self.engine:
             await self.engine.dispose()
             logger.info("Database engine disposed")
+        
+        if self.sync_engine:
+            self.sync_engine.dispose()
+            logger.info("Synchronous database engine disposed")
         
         self._initialized = False
     
@@ -107,7 +127,7 @@ class DatabaseManager:
             return True
             
         except Exception as e:
-            logger.error("Database connection test failed", error=str(e))
+            logger.error(f"Database connection test failed: {e}")
             raise
     
     def get_session(self) -> AsyncSession:
@@ -115,6 +135,12 @@ class DatabaseManager:
         if not self.session_factory:
             raise RuntimeError("Database not initialized. Call initialize() first.")
         return self.session_factory()
+    
+    def get_sync_session(self) -> Session:
+        """Get a new synchronous database session for import scripts."""
+        if not self.sync_session_factory:
+            raise RuntimeError("Database not initialized. Call initialize() first.")
+        return self.sync_session_factory()
     
     @asynccontextmanager
     async def session_scope(self) -> AsyncGenerator[AsyncSession, None]:
@@ -135,6 +161,26 @@ class DatabaseManager:
                 raise
             finally:
                 await session.close()
+    
+    @contextmanager
+    def sync_session_scope(self) -> Generator[Session, None, None]:
+        """
+        Provide a synchronous transactional scope around a series of operations.
+        
+        Usage:
+            with db_manager.sync_session_scope() as session:
+                session.execute(...)
+                # Auto-commit on success, auto-rollback on exception
+        """
+        session = self.get_sync_session()
+        try:
+            yield session
+            session.commit()
+        except Exception:
+            session.rollback()
+            raise
+        finally:
+            session.close()
 
 
 # Global database manager instance
@@ -155,14 +201,16 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
-async def init_database() -> None:
-    """Initialize the database connection."""
-    await db_manager.initialize()
-
-
-async def close_database() -> None:
-    """Close the database connection."""
-    await db_manager.close()
+def get_sync_db_session():
+    """
+    Synchronous dependency function for import scripts.
+    
+    Usage in import scripts:
+        with get_sync_db_session() as session:
+            crud = CongressMemberCRUD(session)
+            crud.create(...)
+    """
+    return db_manager.sync_session_scope()
 
 
 async def execute_sql(sql: str, params: dict = None) -> None:
@@ -172,8 +220,18 @@ async def execute_sql(sql: str, params: dict = None) -> None:
             result = await session.execute(text(sql), params or {})
             return result
     except Exception as e:
-        logger.error("Failed to execute SQL", sql=sql, error=str(e))
+        logger.error(f"Failed to execute SQL: sql={sql}, error={str(e)}")
         raise
+
+
+async def init_database() -> None:
+    """Initialize the database connection."""
+    await db_manager.initialize()
+
+
+async def close_database() -> None:
+    """Close the database connection."""
+    await db_manager.close()
 
 
 # Health check function for the database

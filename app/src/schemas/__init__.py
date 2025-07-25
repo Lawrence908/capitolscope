@@ -3,9 +3,8 @@
 # Base schemas and common utilities
 from .base import (
     CapitolScopeBaseModel,
-    TimestampMixin,
-    IDMixin,
     UUIDMixin,
+    TimestampMixin,
     
     # Enums
     PoliticalParty,
@@ -283,9 +282,8 @@ __all__ = [
     # Base
     "CapitolScopeBaseModel",
     "BaseModel",
-    "TimestampMixin",
-    "IDMixin",
     "UUIDMixin",
+    "TimestampMixin",
     "PoliticalParty",
     "Chamber",
     "TransactionType",

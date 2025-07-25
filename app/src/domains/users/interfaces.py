@@ -23,9 +23,8 @@ from domains.users.schemas import (
     SubscriptionUpdate, SubscriptionInfo, ApiKeyCreate, ApiKeyDetail, ApiKeySummary,
     UserQuery, NotificationQuery, WatchlistItemAction
 )
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

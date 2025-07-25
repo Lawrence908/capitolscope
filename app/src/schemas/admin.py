@@ -12,8 +12,8 @@ from typing import Optional, List, Dict, Any, Union
 from pydantic import Field, field_validator, HttpUrl
 
 from schemas.base import (
-    CapitolScopeBaseModel, IDMixin, UUIDMixin, TimestampMixin,
-    PerformanceMetrics
+    CapitolScopeBaseModel, UUIDMixin, TimestampMixin,
+    SystemStatus, LogLevel, FeatureStatus
 )
 
 
@@ -41,7 +41,7 @@ class SystemMetricsCreate(SystemMetricsBase):
     pass
 
 
-class SystemMetricsResponse(SystemMetricsBase, IDMixin, TimestampMixin):
+class SystemMetricsResponse(SystemMetricsBase, UUIDMixin, TimestampMixin):
     """Schema for system metrics responses."""
     # Status
     status: str = Field("normal", description="Metric status")
@@ -123,7 +123,7 @@ class AuditLogCreate(AuditLogBase):
     pass
 
 
-class AuditLogResponse(AuditLogBase, IDMixin, TimestampMixin):
+class AuditLogResponse(AuditLogBase, UUIDMixin, TimestampMixin):
     """Schema for audit log responses."""
     pass
 
@@ -287,7 +287,7 @@ class ConfigurationUpdate(CapitolScopeBaseModel):
     is_required: Optional[bool] = Field(None, description="Required configuration")
 
 
-class ConfigurationResponse(ConfigurationBase, IDMixin, TimestampMixin):
+class ConfigurationResponse(ConfigurationBase, UUIDMixin, TimestampMixin):
     """Schema for configuration responses."""
     # Hide sensitive values
     @field_validator('value')
@@ -349,7 +349,7 @@ class FeatureFlagUpdate(CapitolScopeBaseModel):
     end_date: Optional[datetime] = Field(None, description="Flag end date")
 
 
-class FeatureFlagResponse(FeatureFlagBase, IDMixin, TimestampMixin):
+class FeatureFlagResponse(FeatureFlagBase, UUIDMixin, TimestampMixin):
     """Schema for feature flag responses."""
     # Usage statistics
     usage_count: int = Field(0, description="Usage count", ge=0)
@@ -567,7 +567,7 @@ class MLModelUpdate(CapitolScopeBaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
 
 
-class MLModelResponse(MLModelBase, IDMixin, TimestampMixin):
+class MLModelResponse(MLModelBase, UUIDMixin, TimestampMixin):
     """Schema for ML model responses."""
     # Usage statistics
     prediction_count: int = Field(0, description="Prediction count", ge=0)
@@ -606,7 +606,7 @@ class MLPredictionCreate(MLPredictionBase):
     pass
 
 
-class MLPredictionResponse(MLPredictionBase, IDMixin, TimestampMixin):
+class MLPredictionResponse(MLPredictionBase, UUIDMixin, TimestampMixin):
     """Schema for ML prediction responses."""
     # Validation
     is_validated: bool = Field(False, description="Prediction validated")

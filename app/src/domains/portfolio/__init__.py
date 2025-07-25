@@ -23,7 +23,7 @@ from .schemas import (
 
 from .services import PortfolioService
 from .crud import PortfolioCRUD
-from .interfaces import PortfolioRepositoryProtocol
+from .interfaces import PortfolioRepositoryInterface
 
 __all__ = [
     # Models
@@ -43,5 +43,5 @@ __all__ = [
     # Services & CRUD
     "PortfolioService",
     "PortfolioCRUD",
-    "PortfolioRepositoryProtocol",
+    "PortfolioRepositoryInterface",
 ] 

@@ -13,9 +13,8 @@ from sqlalchemy import and_, or_, desc, asc
 
 from domains.base.models import CapitolScopeBaseModel
 from domains.base.interfaces import BaseRepository
-from core.logging import get_logger
-
-logger = get_logger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 ModelType = TypeVar("ModelType", bound=CapitolScopeBaseModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)

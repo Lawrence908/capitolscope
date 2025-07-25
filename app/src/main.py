@@ -28,7 +28,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-logger.error("TEST LOGGING - Application starting up, file logging should work now")
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -53,8 +52,6 @@ setup_file_logging()
 
 # Configure structured logging
 configure_logging()
-
-logger.error("TEST LOGGING - After configure_logging, should see this in app.log")
 
 # Configure Sentry for error tracking
 if settings.SENTRY_DSN:

@@ -53,7 +53,6 @@ async def get_members(
     
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.error("TEST LOGGING - this should appear in app.log when /api/v1/members/ is called")
     logger.info(f"Getting congressional members: filters={filters.dict()}")
     
     try:

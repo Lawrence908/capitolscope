@@ -48,7 +48,6 @@ async def get_trades(
     Returns a list of congressional trades with pagination.
     **Authenticated Feature**: Requires user authentication.
     """
-    logger.error("TEST LOGGING - this should appear in app.log when /api/v1/trades is called")
     logger.info(f"Getting congressional trades: filters={filters.dict()}")
     logger.info(f"transaction_types received in endpoint: {filters.transaction_types} (type: {type(filters.transaction_types)})")
     try:

@@ -19,6 +19,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+# ============================================================================
+# BASE SCHEMA CONFIGURATION
+# ============================================================================
+
 class CapitolScopeBaseSchema(BaseModel):
     """Base schema with common configuration for all CapitolScope schemas."""
     
@@ -36,8 +40,13 @@ class CapitolScopeBaseSchema(BaseModel):
             datetime: lambda v: v.isoformat(),
             date: lambda v: v.isoformat(),
             Decimal: lambda v: float(v),
-        }
+        },
+        arbitrary_types_allowed=True
     )
+
+
+# Legacy alias for backward compatibility
+CapitolScopeBaseModel = CapitolScopeBaseSchema
 
 
 class TimestampMixin(BaseModel):
@@ -294,20 +303,115 @@ class NotificationPreferences(CapitolScopeBaseSchema):
 # HEALTH CHECK AND SYSTEM SCHEMAS
 # ============================================================================
 
-class HealthCheckResponse(CapitolScopeBaseSchema):
-    """Health check response."""
+class BasicHealthResponse(CapitolScopeBaseSchema):
+    """Basic health check response."""
     status: str = Field(..., description="Health status")
-    timestamp: float = Field(..., description="Check timestamp")
+    timestamp: float = Field(..., description="Unix timestamp")
     environment: str = Field(..., description="Environment name")
-    version: str = Field(..., description="Application version")
+    version: str = Field(..., description="API version")
     service: str = Field(..., description="Service name")
 
 
-class DetailedHealthCheckResponse(HealthCheckResponse):
-    """Detailed health check with dependency status."""
-    response_time_ms: float = Field(..., description="Response time in milliseconds")
-    checks: Dict[str, Dict[str, Any]] = Field(..., description="Individual health checks")
-    configuration: Dict[str, Any] = Field(..., description="Configuration summary")
+class LivenessResponse(CapitolScopeBaseSchema):
+    """Liveness check response."""
+    status: str = Field(..., description="Liveness status")
+    timestamp: float = Field(..., description="Unix timestamp")
+    service: str = Field(..., description="Service name")
+
+
+class ReadinessResponse(CapitolScopeBaseSchema):
+    """Readiness check response."""
+    status: str = Field(..., description="Readiness status")
+    timestamp: float = Field(..., description="Unix timestamp")
+
+
+class DatabaseHealth(CapitolScopeBaseSchema):
+    """Database health status."""
+    status: str = Field(..., description="Database status")
+    connection_ok: bool = Field(..., description="Connection status")
+    response_time_ms: Optional[float] = Field(None, description="Response time in milliseconds")
+    last_check: datetime = Field(..., description="Last health check")
+    error_message: Optional[str] = Field(None, description="Error message if unhealthy")
+
+
+class RedisHealth(CapitolScopeBaseSchema):
+    """Redis health status."""
+    status: str = Field(..., description="Redis status")
+    connection_ok: bool = Field(..., description="Connection status")
+    response_time_ms: Optional[float] = Field(None, description="Response time in milliseconds")
+    memory_usage: Optional[float] = Field(None, description="Memory usage percentage")
+    error_message: Optional[str] = Field(None, description="Error message if unhealthy")
+
+
+class CongressAPIHealth(CapitolScopeBaseSchema):
+    """Congress.gov API health status."""
+    status: str = Field(..., description="API status")
+    api_key_configured: bool = Field(..., description="API key configured")
+    connectivity: bool = Field(..., description="Connectivity status")
+    authentication: bool = Field(..., description="Authentication status")
+    data_availability: bool = Field(..., description="Data availability")
+    last_successful_sync: Optional[str] = Field(None, description="Last successful sync")
+    error_message: Optional[str] = Field(None, description="Error message if unhealthy")
+    response_time_ms: Optional[float] = Field(None, description="Response time in milliseconds")
+    timestamp: Optional[float] = Field(None, description="Health check timestamp")
+
+
+class ServiceChecks(CapitolScopeBaseSchema):
+    """Service health checks."""
+    database: DatabaseHealth = Field(..., description="Database health")
+    redis: RedisHealth = Field(..., description="Redis health")
+    congress_api: CongressAPIHealth = Field(..., description="Congress API health")
+
+
+class ConfigurationInfo(CapitolScopeBaseSchema):
+    """Configuration information."""
+    debug: bool = Field(..., description="Debug mode enabled")
+    environment: str = Field(..., description="Environment name")
+    congress_api_configured: bool = Field(..., description="Congress API configured")
+
+
+class DetailedHealthResponse(CapitolScopeBaseSchema):
+    """Detailed health check response."""
+    status: str = Field(..., description="Overall health status")
+    timestamp: float = Field(..., description="Unix timestamp")
+    response_time_ms: float = Field(..., description="Health check response time")
+    environment: str = Field(..., description="Environment name")
+    version: str = Field(..., description="API version")
+    service: str = Field(..., description="Service name")
+    checks: ServiceChecks = Field(..., description="Service health checks")
+    configuration: ConfigurationInfo = Field(..., description="Configuration information")
+
+
+class SystemMetrics(CapitolScopeBaseSchema):
+    """System metrics."""
+    cpu_usage: Optional[float] = Field(None, description="CPU usage percentage")
+    memory_usage: Optional[float] = Field(None, description="Memory usage percentage")
+    disk_usage: Optional[float] = Field(None, description="Disk usage percentage")
+    active_connections: Optional[int] = Field(None, description="Active database connections")
+    uptime_seconds: Optional[float] = Field(None, description="Service uptime in seconds")
+
+
+class SystemPerformanceMetrics(CapitolScopeBaseSchema):
+    """System performance metrics."""
+    average_response_time_ms: Optional[float] = Field(None, description="Average response time")
+    requests_per_second: Optional[float] = Field(None, description="Requests per second")
+    error_rate: Optional[float] = Field(None, description="Error rate percentage")
+    cache_hit_rate: Optional[float] = Field(None, description="Cache hit rate")
+
+
+class SystemStatusResponse(CapitolScopeBaseSchema):
+    """System status response."""
+    status: str = Field(..., description="System status")
+    timestamp: float = Field(..., description="Status timestamp")
+    metrics: Optional[SystemMetrics] = Field(None, description="System metrics")
+    performance: Optional[SystemPerformanceMetrics] = Field(None, description="Performance metrics")
+    warnings: List[str] = Field(default_factory=list, description="System warnings")
+    errors: List[str] = Field(default_factory=list, description="System errors")
+
+
+# Legacy aliases for backward compatibility
+HealthCheckResponse = BasicHealthResponse
+DetailedHealthCheckResponse = DetailedHealthResponse
 
 
 # ============================================================================
@@ -375,6 +479,20 @@ __all__ = [
     "SocialMediaLinks",
     "ResearchLinks",
     "NotificationPreferences",
+    # Health check schemas
+    "BasicHealthResponse",
+    "LivenessResponse",
+    "ReadinessResponse",
+    "DatabaseHealth",
+    "RedisHealth",
+    "CongressAPIHealth",
+    "ServiceChecks",
+    "ConfigurationInfo",
+    "DetailedHealthResponse",
+    "SystemMetrics",
+    "SystemPerformanceMetrics",
+    "SystemStatusResponse",
+    # Legacy aliases
     "HealthCheckResponse",
     "DetailedHealthCheckResponse",
     "validate_ticker_symbol",

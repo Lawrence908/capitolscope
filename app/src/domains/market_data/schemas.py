@@ -12,7 +12,7 @@ from decimal import Decimal
 from pydantic import Field, field_validator
 
 from schemas.base import CapitolScopeBaseModel, UUIDMixin, TimestampMixin
-from schemas.securities import SecuritySummary, DailyPriceResponse
+from domains.securities.schemas import SecuritySummary, DailyPriceResponse
 
 
 # ============================================================================

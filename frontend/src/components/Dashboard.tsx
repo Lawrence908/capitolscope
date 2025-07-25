@@ -29,9 +29,9 @@ const Dashboard: React.FC = () => {
           apiClient.getTopTradingMembers(10),
         ]);
 
-        setStats(statsResponse);
+        setStats(statsResponse.data);
         setRecentTrades(tradesResponse.items);
-        setTopMembers(membersResponse);
+        setTopMembers(membersResponse.data);
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard error:', err);

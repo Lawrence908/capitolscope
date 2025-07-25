@@ -189,7 +189,7 @@ async def get_top_trading_members(
             stats = TradingStatistics(
                 member_id=row.id,
                 total_trades=row.trade_count,
-                total_value=row.total_value or 0,
+                total_value=int(row.total_value or 0),
                 purchase_count=0,  # TODO: Calculate from actual data
                 sale_count=0,      # TODO: Calculate from actual data
                 purchase_value=0,   # TODO: Calculate from actual data
@@ -201,7 +201,7 @@ async def get_top_trading_members(
         
     except Exception as e:
         logger.error(f"Error getting top trading members: {e}")
-        return create_response(error="Failed to get top trading members")
+        return create_response(data=[], error="Failed to get top trading members")
 
 
 @router.get(

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   ChartBarIcon,
@@ -6,9 +6,11 @@ import {
   DocumentMagnifyingGlassIcon,
   CogIcon,
   HomeIcon,
+  UserCircleIcon,
+  ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
-import MembersBrowser from './MembersBrowser';
+import { useAuth } from '../contexts/AuthContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,9 +18,11 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
+  const { user, logout } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const navigation = [
-    { name: 'Dashboard', href: '/', icon: HomeIcon },
+    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Trade Browser', href: '/trades', icon: DocumentMagnifyingGlassIcon },
     { name: 'Members', href: '/members', icon: UserGroupIcon },
     { name: 'Analytics', href: '/analytics', icon: ChartBarIcon },
@@ -30,6 +34,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       return location.pathname === '/';
     }
     return location.pathname.startsWith(path);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
   };
 
   return (
@@ -84,6 +93,50 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   Last updated: {new Date().toLocaleDateString()}
                 </div>
                 <DarkModeToggle />
+                
+                {/* User Menu */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                  >
+                    <UserCircleIcon className="h-6 w-6" />
+                    <span className="hidden md:block">
+                      {user?.display_name || user?.email || 'User'}
+                    </span>
+                  </button>
+                  
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 border border-gray-200 dark:border-gray-700">
+                      <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {user?.display_name || user?.email}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {user?.subscription_tier === 'free' ? 'Free Plan' : 'Premium Plan'}
+                        </p>
+                      </div>
+                      
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        onClick={() => setShowUserMenu(false)}
+                      >
+                        Profile Settings
+                      </Link>
+                      
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <div className="flex items-center">
+                          <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2" />
+                          Sign out
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -94,6 +147,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {children}
         </main>
       </div>
+      
+      {/* Overlay to close user menu when clicking outside */}
+      {showUserMenu && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setShowUserMenu(false)}
+        />
+      )}
     </div>
   );
 };

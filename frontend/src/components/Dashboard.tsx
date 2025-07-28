@@ -149,8 +149,8 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {recentTrades.map((trade) => (
-              <div key={trade.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+            {recentTrades.map((trade, index) => (
+              <div key={trade.id || `trade-${index}`} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                     {trade.member_name || 'Unknown'}
@@ -188,8 +188,8 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {topMembers.map((member) => (
-              <div key={member.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+            {topMembers.map((member, index) => (
+              <div key={member.id || `member-${index}`} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                     {member.member_name}

@@ -24,7 +24,8 @@ from core.email import email_service
 from domains.users.models import User, UserStatus, AuthProvider, PasswordResetToken
 from domains.users.schemas import (
     LoginRequest, RegisterRequest, TokenResponse, RefreshTokenRequest,
-    UserResponse, ChangePasswordRequest, ResetPasswordRequest, ResetPasswordConfirmRequest
+    UserResponse, ChangePasswordRequest, ResetPasswordRequest, ResetPasswordConfirmRequest,
+    UpdatePreferencesRequest
 )
 from schemas.base import ResponseEnvelope
 from core.responses import create_response
@@ -435,6 +436,119 @@ async def reset_password_confirm(
         logger.error(f"Password reset error: {str(e)}")
         await session.rollback()
         return create_response(error={"message": "Invalid or expired reset token"})
+
+
+@router.post(
+    "/update-preferences",
+    response_model=ResponseEnvelope[Dict[str, str]],
+    responses={
+        200: {"description": "Preferences updated successfully"},
+        401: {"description": "Invalid token"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def update_preferences(
+    request: UpdatePreferencesRequest,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db_session),
+) -> ResponseEnvelope[Dict[str, str]]:
+    """
+    Update user preferences including notification settings.
+    """
+    logger.info(f"Preferences update attempt: user_id={current_user.id}")
+    
+    try:
+        # Get or create user preferences
+        from domains.users.models import UserPreference
+        result = await session.execute(
+            select(UserPreference).where(UserPreference.user_id == current_user.id)
+        )
+        preferences = result.scalar_one_or_none()
+        
+        if not preferences:
+            preferences = UserPreference(user_id=current_user.id)
+            session.add(preferences)
+        
+        # Update notification preferences
+        if request.email_notifications is not None:
+            preferences.email_notifications = request.email_notifications
+        if request.push_notifications is not None:
+            preferences.push_notifications = request.push_notifications
+        if request.sms_notifications is not None:
+            preferences.sms_notifications = request.sms_notifications
+        if request.trade_alerts is not None:
+            preferences.trade_alerts = request.trade_alerts
+        if request.weekly_summary is not None:
+            preferences.weekly_summary = request.weekly_summary
+        if request.multiple_buyer_alerts is not None:
+            preferences.multiple_buyer_alerts = request.multiple_buyer_alerts
+        if request.high_value_alerts is not None:
+            preferences.high_value_alerts = request.high_value_alerts
+        
+        await session.commit()
+        
+        logger.info(f"Preferences update successful: user_id={current_user.id}")
+        return create_response(data={"message": "Preferences updated successfully"})
+        
+    except Exception as e:
+        logger.error(f"Preferences update failed: {e}")
+        return create_response(error={"message": "Failed to update preferences"})
+
+
+@router.get(
+    "/preferences",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "User preferences retrieved successfully"},
+        401: {"description": "Invalid token"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def get_user_preferences(
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db_session),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Get user preferences including notification settings.
+    """
+    logger.info(f"Preferences request: user_id={current_user.id}")
+    
+    try:
+        # Get user preferences
+        from domains.users.models import UserPreference
+        result = await session.execute(
+            select(UserPreference).where(UserPreference.user_id == current_user.id)
+        )
+        preferences = result.scalar_one_or_none()
+        
+        if not preferences:
+            # Return default preferences if none exist
+            preferences_data = {
+                "email_notifications": True,
+                "push_notifications": True,
+                "sms_notifications": False,
+                "trade_alerts": False,
+                "weekly_summary": False,
+                "multiple_buyer_alerts": False,
+                "high_value_alerts": False,
+            }
+        else:
+            preferences_data = {
+                "email_notifications": preferences.email_notifications,
+                "push_notifications": preferences.push_notifications,
+                "sms_notifications": preferences.sms_notifications,
+                "trade_alerts": preferences.trade_alerts,
+                "weekly_summary": preferences.weekly_summary,
+                "multiple_buyer_alerts": preferences.multiple_buyer_alerts,
+                "high_value_alerts": preferences.high_value_alerts,
+            }
+        
+        logger.info(f"Preferences retrieved successfully: user_id={current_user.id}")
+        return create_response(data=preferences_data)
+        
+    except Exception as e:
+        logger.error(f"Preferences retrieval failed: {e}")
+        return create_response(error={"message": "Failed to retrieve preferences"})
 
 
 

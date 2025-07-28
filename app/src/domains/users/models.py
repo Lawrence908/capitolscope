@@ -70,6 +70,14 @@ class NotificationType(str, PyEnum):
     SUBSCRIPTION_UPDATE = "SUBSCRIPTION_UPDATE"
 
 
+class SubscriptionTier(str, PyEnum):
+    """User subscription tiers."""
+    FREE = "FREE"
+    PRO = "PRO" 
+    PREMIUM = "PREMIUM"
+    ENTERPRISE = "ENTERPRISE"
+
+
 # ============================================================================
 # USER MODELS
 # ============================================================================
@@ -110,7 +118,7 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     show_trading_activity = Column(Boolean, default=True, nullable=False)
     
     # Subscription Information
-    subscription_tier = Column(String(20), nullable=False, default='free')
+    subscription_tier = Column(Enum(SubscriptionTier, name='subscription_tier_enum'), nullable=False, default=SubscriptionTier.FREE)
     subscription_status = Column(String(20), default='active')  # active, canceled, past_due, etc.
     subscription_start_date = Column(Date)
     subscription_end_date = Column(Date)
@@ -149,7 +157,7 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
             name='check_user_role'
         ),
         CheckConstraint(
-            subscription_tier.in_(['free', 'pro', 'premium', 'enterprise']),
+            subscription_tier.in_([t.value for t in SubscriptionTier]),
             name='check_subscription_tier'
         ),
         Index('idx_user_email_provider', 'email', 'auth_provider'),
@@ -176,7 +184,7 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     @property
     def is_premium(self) -> bool:
         """Check if user has premium subscription."""
-        return self.subscription_tier in ['pro', 'premium', 'enterprise']
+        return self.subscription_tier in [SubscriptionTier.PRO, SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE]
 
     @property
     def is_active(self) -> bool:
@@ -237,13 +245,24 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     def can_access_feature(self, feature: str) -> bool:
         """Check if user can access a specific feature based on subscription."""
         feature_tiers = {
-            'advanced_analytics': ['pro', 'premium', 'enterprise'],
-            'api_access': ['pro', 'premium', 'enterprise'],
-            'custom_alerts': ['pro', 'premium', 'enterprise'],
-            'unlimited_watchlists': ['pro', 'premium', 'enterprise'],
-            'export_data': ['pro', 'premium', 'enterprise'],
-            'priority_support': ['enterprise'],
-            'white_label': ['enterprise']
+            # Pro features
+            'trade_alerts': [SubscriptionTier.PRO, SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            'basic_portfolio_analytics': [SubscriptionTier.PRO, SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            'export_csv': [SubscriptionTier.PRO, SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            
+            # Premium features
+            'weekly_summaries': [SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            'multiple_buyer_alerts': [SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            'high_value_trade_alerts': [SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            'advanced_portfolio_analytics': [SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            'tradingview_charts': [SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            'api_access': [SubscriptionTier.PREMIUM, SubscriptionTier.ENTERPRISE],
+            
+            # Enterprise features
+            'custom_alert_configurations': [SubscriptionTier.ENTERPRISE],
+            'advanced_analytics_dashboard': [SubscriptionTier.ENTERPRISE],
+            'priority_support': [SubscriptionTier.ENTERPRISE],
+            'white_label_options': [SubscriptionTier.ENTERPRISE],
         }
         
         required_tiers = feature_tiers.get(feature, [])
@@ -280,6 +299,12 @@ class UserPreference(CapitolScopeBaseModel, TimestampMixin):
     email_notifications = Column(Boolean, default=True)
     push_notifications = Column(Boolean, default=True)
     sms_notifications = Column(Boolean, default=False)
+    
+    # Specific Notification Types
+    trade_alerts = Column(Boolean, default=False)
+    weekly_summary = Column(Boolean, default=False)
+    multiple_buyer_alerts = Column(Boolean, default=False)
+    high_value_alerts = Column(Boolean, default=False)
     
     # Alert Thresholds
     large_trade_threshold = Column(BigInteger, default=100000000)  # $1M in cents

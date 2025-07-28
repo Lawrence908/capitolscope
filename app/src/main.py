@@ -223,11 +223,7 @@ async def root() -> Dict[str, Any]:
 async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
     """Custom HTTP exception handler."""
     logger.warning(
-        "HTTP exception occurred",
-        status_code=exc.status_code,
-        detail=exc.detail,
-        path=request.url.path,
-        method=request.method,
+        f"HTTP exception occurred: status_code={exc.status_code}, detail={exc.detail}, path={request.url.path}, method={request.method}"
     )
     
     return JSONResponse(

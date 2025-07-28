@@ -124,8 +124,17 @@ async def authenticate_user(email: str, password: str, session: AsyncSession) ->
         logger.info(f"User authenticated successfully, email={email}, user_id={user.id}")
         return user
         
+    except ValueError as e:
+        # Handle enum validation errors (case mismatch between DB and Python enum)
+        if "is not among the defined enum values" in str(e):
+            logger.error(f"Enum validation error - database values don't match Python enum. Email={email}, error={str(e)}")
+            # For now, return None to prevent login, but log the issue
+            return None
+        else:
+            logger.error(f"ValueError in authentication, email={email}, error={str(e)}")
+            return None
     except Exception as e:
-        logger.error(f"Authentication error, email={email}", error=str(e))
+        logger.error(f"Authentication error, email={email}, error={str(e)}")
         return None
 
 
@@ -136,8 +145,16 @@ async def get_user_by_id(user_id: str, session: AsyncSession) -> Optional[User]:
             select(User).where(User.id == user_id, User.is_deleted == False)
         )
         return result.scalar_one_or_none()
+    except ValueError as e:
+        # Handle enum validation errors (case mismatch between DB and Python enum)
+        if "is not among the defined enum values" in str(e):
+            logger.error(f"Enum validation error - database values don't match Python enum. User ID={user_id}, error={str(e)}")
+            return None
+        else:
+            logger.error(f"ValueError fetching user, user_id={user_id}, error={str(e)}")
+            return None
     except Exception as e:
-        logger.error(f"Error fetching user, user_id={user_id}", error=str(e))
+        logger.error(f"Error fetching user, user_id={user_id}, error={str(e)}")
         return None
 
 
@@ -169,14 +186,14 @@ async def get_current_user(
         return user
         
     except AuthenticationError as e:
-        logger.warning(f"Authentication failed", error=str(e))
+        logger.warning(f"Authentication failed, error={str(e)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e),
             headers={"WWW-Authenticate": "Bearer"},
         )
     except Exception as e:
-        logger.error(f"Authentication error", error=str(e))
+        logger.error(f"Authentication error, error={str(e)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",

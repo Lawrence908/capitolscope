@@ -29,14 +29,16 @@ const ProfileSettings: React.FC = () => {
 
   const [notifications, setNotifications] = useState({
     email_notifications: true,
-    trade_alerts: true,
-    weekly_summary: false,
-    data_updates: true,
+    trade_alerts: true, // Pro+
+    weekly_summary: false, // Premium+
+    multiple_buyer_alerts: false, // Premium+
+    high_value_alerts: false, // Premium+
   });
 
-  // Check if user has premium subscription
-  const isPremium = user?.subscription_tier === 'premium';
-  const isFree = user?.subscription_tier === 'free';
+           // Check if user has premium subscription
+         const isPremium = user?.subscription_tier === 'premium' || user?.subscription_tier === 'enterprise';
+         const isPro = user?.subscription_tier === 'pro' || isPremium;
+         const isFree = user?.subscription_tier === 'free';
 
   useEffect(() => {
     if (user) {
@@ -102,9 +104,15 @@ const ProfileSettings: React.FC = () => {
 
   const handleNotificationChange = (key: string, value: boolean) => {
     // Check if this is a premium feature
-    const premiumFeatures = ['trade_alerts', 'weekly_summary', 'data_updates'];
+    const proFeatures = ['trade_alerts'];
+    const premiumFeatures = ['weekly_summary', 'multiple_buyer_alerts', 'high_value_alerts'];
+    
     if (premiumFeatures.includes(key) && !isPremium) {
       setMessage({ type: 'error', text: 'This feature requires a Premium subscription. Upgrade to unlock advanced notifications.' });
+      return;
+    }
+    if (proFeatures.includes(key) && !isPro) {
+      setMessage({ type: 'error', text: 'This feature requires a Pro subscription. Upgrade to unlock trade alerts.' });
       return;
     }
 
@@ -150,13 +158,13 @@ const ProfileSettings: React.FC = () => {
         {isFree && (
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              💡 <strong>Upgrade to Premium</strong> to unlock advanced features like trade alerts, weekly summaries, data updates, and enhanced security options.
+              💡 <strong>Upgrade to Pro</strong> to unlock trade alerts, basic portfolio analytics, and data exports. <strong>Premium</strong> includes weekly summaries, multiple buyer alerts, high-value trade alerts, and advanced features.
             </p>
             <Link
               to="/premium"
               className="inline-block mt-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
             >
-              View Premium Plans →
+              View All Plans →
             </Link>
           </div>
         )}
@@ -383,20 +391,42 @@ const ProfileSettings: React.FC = () => {
             </div>
           </PremiumFeatureWrapper>
 
-          <PremiumFeatureWrapper featureName="Data Updates">
+          <PremiumFeatureWrapper featureName="Multiple Buyer Alerts">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Data Updates</h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Get notified when new data is available</p>
+                  <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Multiple Buyer Alerts</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Alerts when 5+ members buy same stock in 3 months</p>
                 </div>
                 {!isPremium && <PremiumBadge />}
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={notifications.data_updates}
-                  onChange={(e) => handleNotificationChange('data_updates', e.target.checked)}
+                  checked={notifications.multiple_buyer_alerts}
+                  onChange={(e) => handleNotificationChange('multiple_buyer_alerts', e.target.checked)}
+                  className="sr-only peer"
+                  disabled={!isPremium}
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+              </label>
+            </div>
+          </PremiumFeatureWrapper>
+
+          <PremiumFeatureWrapper featureName="High-Value Trade Alerts">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">High-Value Trade Alerts</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Alerts for trades over $1M</p>
+                </div>
+                {!isPremium && <PremiumBadge />}
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={notifications.high_value_alerts}
+                  onChange={(e) => handleNotificationChange('high_value_alerts', e.target.checked)}
                   className="sr-only peer"
                   disabled={!isPremium}
                 />

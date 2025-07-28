@@ -12,7 +12,7 @@ import uuid
 from uuid import UUID
 
 from pydantic import BaseModel, Field, ConfigDict, validator, field_validator, EmailStr, HttpUrl
-from pydantic.generics import GenericModel
+from pydantic import BaseModel
 
 T = TypeVar("T")
 
@@ -24,11 +24,11 @@ class PaginationMeta(BaseModel):
     has_next: bool
     has_prev: bool
 
-class PaginatedResponse(GenericModel, Generic[T]):
+class PaginatedResponse(BaseModel, Generic[T]):
     items: List[T]
     meta: PaginationMeta
 
-class ResponseEnvelope(GenericModel, Generic[T]):
+class ResponseEnvelope(BaseModel, Generic[T]):
     data: Optional[T] = None
     meta: Optional[Dict[str, Any]] = None
     error: Optional[str] = None

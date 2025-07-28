@@ -204,6 +204,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // API helpers
   const validateToken = async (token: string): Promise<User | null> => {
     try {
+      console.log('Validating token:', token.substring(0, 20) + '...');
       const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -211,12 +212,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
       });
 
+      console.log('Token validation response:', response.status, response.statusText);
+      
       if (response.ok) {
         const data = await response.json();
-        return data.data.user;
+        console.log('User data from token validation:', data);
+        return data.data; // The user data is directly in data.data, not data.data.user
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Token validation failed:', response.status, errorData);
       }
       return null;
-    } catch {
+    } catch (error) {
+      console.error('Token validation error:', error);
       return null;
     }
   };
@@ -241,6 +249,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         // Store tokens
         setStoredTokens(tokens);
+        
+        console.log('Login successful, user data:', user);
         
         dispatch({
           type: 'LOGIN_SUCCESS',
@@ -277,6 +287,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         // Store tokens
         setStoredTokens(tokens);
+        
+        console.log('Registration successful, user data:', user);
         
         dispatch({
           type: 'LOGIN_SUCCESS',

@@ -8,6 +8,7 @@ import {
   BellIcon,
   ShieldCheckIcon,
   StarIcon,
+  SparklesIcon,
 } from '@heroicons/react/24/outline';
 
 const ProfileSettings: React.FC = () => {
@@ -35,10 +36,11 @@ const ProfileSettings: React.FC = () => {
     high_value_alerts: false, // Premium+
   });
 
-           // Check if user has premium subscription
-         const isPremium = user?.subscription_tier === 'premium' || user?.subscription_tier === 'enterprise';
-         const isPro = user?.subscription_tier === 'pro' || isPremium;
-         const isFree = user?.subscription_tier === 'free';
+           // Check if user has premium subscription (handle both lowercase and uppercase)
+         const subscriptionTier = user?.subscription_tier?.toLowerCase();
+         const isPremium = subscriptionTier === 'premium' || subscriptionTier === 'enterprise';
+         const isPro = subscriptionTier === 'pro' || isPremium;
+         const isFree = subscriptionTier === 'free' || !subscriptionTier;
 
   useEffect(() => {
     if (user) {
@@ -123,7 +125,14 @@ const ProfileSettings: React.FC = () => {
   };
 
   const handlePremiumFeatureClick = (featureName: string) => {
-    setMessage({ type: 'error', text: `${featureName} requires a Premium subscription. Upgrade to unlock this feature.` });
+    // Show upgrade prompt and redirect to premium page
+    setMessage({ 
+      type: 'error', 
+      text: `${featureName} is a premium feature. Redirecting to upgrade page...` 
+    });
+    setTimeout(() => {
+      window.location.href = '/premium';
+    }, 2000);
   };
 
   const PremiumBadge = () => (
@@ -156,16 +165,24 @@ const ProfileSettings: React.FC = () => {
           Manage your account settings and preferences.
         </p>
         {isFree && (
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
-              💡 <strong>Upgrade to Pro</strong> to unlock trade alerts, basic portfolio analytics, and data exports. <strong>Premium</strong> includes weekly summaries, multiple buyer alerts, high-value trade alerts, and advanced features.
-            </p>
-            <Link
-              to="/premium"
-              className="inline-block mt-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-            >
-              View All Plans →
-            </Link>
+          <div className="mt-4 p-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg shadow-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <SparklesIcon className="h-6 w-6 text-white mr-3" />
+                <div>
+                  <h4 className="text-lg font-bold text-white mb-1">Unlock Premium Features</h4>
+                  <p className="text-yellow-100 text-sm">
+                    Get access to Trade Alerts, Weekly Summaries, Multiple Buyer Alerts, and High-Value Trade Alerts
+                  </p>
+                </div>
+              </div>
+              <Link
+                to="/premium"
+                className="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+              >
+                View Plans
+              </Link>
+            </div>
           </div>
         )}
       </div>

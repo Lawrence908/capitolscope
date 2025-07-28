@@ -300,6 +300,12 @@ class UserPreference(CapitolScopeBaseModel, TimestampMixin):
     push_notifications = Column(Boolean, default=True)
     sms_notifications = Column(Boolean, default=False)
     
+    # Specific Notification Types
+    trade_alerts = Column(Boolean, default=False)
+    weekly_summary = Column(Boolean, default=False)
+    multiple_buyer_alerts = Column(Boolean, default=False)
+    high_value_alerts = Column(Boolean, default=False)
+    
     # Alert Thresholds
     large_trade_threshold = Column(BigInteger, default=100000000)  # $1M in cents
     price_movement_threshold = Column(Integer, default=500)  # 5% in basis points

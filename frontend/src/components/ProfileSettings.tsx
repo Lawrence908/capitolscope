@@ -52,6 +52,38 @@ const ProfileSettings: React.FC = () => {
     }
   }, [user]);
 
+  // Load user preferences on component mount
+  useEffect(() => {
+    const loadUserPreferences = async () => {
+      try {
+        const tokens = localStorage.getItem('capitolscope_tokens');
+        const accessToken = tokens ? JSON.parse(tokens).access_token : '';
+        
+        const response = await fetch('http://localhost:8001/api/v1/auth/preferences', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.data) {
+            setNotifications(prev => ({
+              ...prev,
+              ...data.data
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user preferences:', error);
+      }
+    };
+
+    if (user) {
+      loadUserPreferences();
+    }
+  }, [user]);
+
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -104,7 +136,7 @@ const ProfileSettings: React.FC = () => {
     }
   };
 
-  const handleNotificationChange = (key: string, value: boolean) => {
+  const handleNotificationChange = async (key: string, value: boolean) => {
     // Check if this is a premium feature
     const proFeatures = ['trade_alerts'];
     const premiumFeatures = ['weekly_summary', 'multiple_buyer_alerts', 'high_value_alerts'];
@@ -118,10 +150,40 @@ const ProfileSettings: React.FC = () => {
       return;
     }
 
+    // Update local state immediately for responsive UI
     setNotifications(prev => ({
       ...prev,
       [key]: value,
     }));
+    
+    // Auto-save to backend
+    try {
+      const tokens = localStorage.getItem('capitolscope_tokens');
+      const accessToken = tokens ? JSON.parse(tokens).access_token : '';
+      
+      const response = await fetch('http://localhost:8001/api/v1/auth/update-preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          [key]: value
+        }),
+      });
+      
+      if (!response.ok) {
+        console.error('Failed to save notification preference');
+        // Revert the change if save failed
+        setNotifications(prev => ({ ...prev, [key]: !value }));
+        setMessage({ type: 'error', text: 'Failed to save notification preference' });
+      }
+    } catch (error) {
+      console.error('Error saving notification preference:', error);
+      // Revert the change if save failed
+      setNotifications(prev => ({ ...prev, [key]: !value }));
+      setMessage({ type: 'error', text: 'Failed to save notification preference' });
+    }
   };
 
   const handlePremiumFeatureClick = (featureName: string) => {

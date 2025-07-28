@@ -260,6 +260,20 @@ class UserPreferenceUpdate(BaseModel):
     custom_settings: Optional[Dict[str, Any]] = None
 
 
+class UpdatePreferencesRequest(BaseModel):
+    """Update user preferences request schema."""
+    # Basic notification preferences
+    email_notifications: Optional[bool] = None
+    push_notifications: Optional[bool] = None
+    sms_notifications: Optional[bool] = None
+    
+    # Specific notification types
+    trade_alerts: Optional[bool] = None
+    weekly_summary: Optional[bool] = None
+    multiple_buyer_alerts: Optional[bool] = None
+    high_value_alerts: Optional[bool] = None
+
+
 class UserPreferenceResponse(BaseModel):
     """User preference response schema."""
     user_id: int

@@ -180,7 +180,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(BaseModel):
     """User response schema."""
-    id: int
+    id: str  # Changed from int to str to handle UUIDs
     email: str
     username: Optional[str] = None
     first_name: Optional[str] = None

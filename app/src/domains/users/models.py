@@ -640,6 +640,54 @@ class UserApiKey(CapitolScopeBaseModel, TimestampMixin):
         self.usage_count += 1
 
 
+# ============================================================================
+# PASSWORD RESET TOKENS
+# ============================================================================
+
+class PasswordResetToken(CapitolScopeBaseModel, TimestampMixin):
+    """Password reset tokens for secure password recovery."""
+    
+    __tablename__ = 'password_reset_tokens'
+    
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
+    token_hash = Column(String(255), nullable=False, unique=True, index=True)
+    
+    # Token Information
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    used_at = Column(DateTime(timezone=True))
+    is_used = Column(Boolean, default=False, nullable=False)
+    
+    # Security
+    ip_address = Column(String(45))  # IP address where token was requested
+    user_agent = Column(Text)
+    
+    # Relationships
+    user = relationship("User")
+    
+    # Constraints
+    __table_args__ = (
+        Index('ix_password_reset_tokens_user_expires', 'user_id', 'expires_at'),
+        Index('ix_password_reset_tokens_token_hash', 'token_hash'),
+    )
+    
+    def __repr__(self):
+        return f"<PasswordResetToken(user_id={self.user_id}, expires_at={self.expires_at})>"
+    
+    def is_expired(self) -> bool:
+        """Check if token has expired."""
+        return datetime.now(timezone.utc) > self.expires_at
+    
+    def is_valid(self) -> bool:
+        """Check if token is valid and not used."""
+        return not self.is_used and not self.is_expired()
+    
+    def mark_as_used(self):
+        """Mark token as used."""
+        self.is_used = True
+        self.used_at = datetime.now(timezone.utc)
+        return self
+
+
 # Log model creation
 logger.info("Users domain models initialized")
 
@@ -652,6 +700,7 @@ __all__ = [
     "UserNotification",
     "UserSession",
     "UserApiKey",
+    "PasswordResetToken",
     # Enums
     "UserStatus",
     "UserRole",

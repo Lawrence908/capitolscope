@@ -166,10 +166,6 @@ async def get_current_user(
         if user is None:
             raise AuthenticationError("User not found")
         
-        # Update last active timestamp
-        user.update_last_active()
-        await session.commit()
-        
         return user
         
     except AuthenticationError as e:

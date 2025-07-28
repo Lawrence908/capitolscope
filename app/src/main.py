@@ -40,6 +40,7 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from core.config import settings
 from core.database import init_database, close_database
 from core.logging import configure_logging, setup_file_logging
+from core.email import email_service
 from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints
 from api.middleware import (
     RateLimitMiddleware,
@@ -76,6 +77,9 @@ async def lifespan(app: FastAPI):
         # Initialize database connection
         await init_database()
         logger.info("Database connection initialized")
+        
+        # Initialize email service
+        logger.info("Email service initialized")
         
         # Add any other startup tasks here
         logger.info("Application startup completed")

@@ -24,7 +24,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncEngine,
 )
 from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import NullPool, QueuePool
 from sqlalchemy.exc import SQLAlchemyError
 
 from core.config import settings
@@ -59,7 +59,7 @@ class DatabaseManager:
                         "application_name": "capitolscope",
                         "timezone": "UTC",
                     },
-                    "ssl": "require" if not settings.is_development else "prefer",
+                    "ssl": "require" if "supabase.co" in settings.database_url else ("prefer" if settings.is_development else "require"),
                 }
             )
             
@@ -94,7 +94,7 @@ class DatabaseManager:
             
             self._initialized = True
             logger.info(
-                f"Database connection initialized successfully. URL: {settings.database_url.split('@')[1] if '@' in settings.database_url else '***'}, pool_type=NullPool, echo={settings.DATABASE_ECHO}"
+                f"Database connection initialized successfully. Provider: {settings.DATABASE_PROVIDER}, URL: {settings.database_url.split('@')[1] if '@' in settings.database_url else '***'}, pool_type=NullPool, echo={settings.DATABASE_ECHO}"
             )
             
         except Exception as e:

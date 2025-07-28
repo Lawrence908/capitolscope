@@ -180,7 +180,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(BaseModel):
     """User response schema."""
-    id: int
+    id: str  # Changed from int to str to handle UUIDs
     email: str
     username: Optional[str] = None
     first_name: Optional[str] = None
@@ -258,6 +258,20 @@ class UserPreferenceUpdate(BaseModel):
     
     # Custom settings
     custom_settings: Optional[Dict[str, Any]] = None
+
+
+class UpdatePreferencesRequest(BaseModel):
+    """Update user preferences request schema."""
+    # Basic notification preferences
+    email_notifications: Optional[bool] = None
+    push_notifications: Optional[bool] = None
+    sms_notifications: Optional[bool] = None
+    
+    # Specific notification types
+    trade_alerts: Optional[bool] = None
+    weekly_summary: Optional[bool] = None
+    multiple_buyer_alerts: Optional[bool] = None
+    high_value_alerts: Optional[bool] = None
 
 
 class UserPreferenceResponse(BaseModel):

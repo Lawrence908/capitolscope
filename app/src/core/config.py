@@ -50,6 +50,7 @@ class Settings(BaseSettings):
     DATABASE_ECHO: bool = Field(False, description="Enable SQLAlchemy echo")
     DATABASE_POOL_SIZE: int = Field(10, description="Database pool size")
     DATABASE_MAX_OVERFLOW: int = Field(20, description="Database max overflow")
+    DATABASE_PROVIDER: str = Field("supabase", description="Database provider (supabase/local)")
     
     # Supabase Configuration
     SUPABASE_URL: str = Field(..., description="Supabase project URL")
@@ -85,6 +86,11 @@ class Settings(BaseSettings):
     EMAIL_PASSWORD: Optional[SecretStr] = Field(None, description="Email password")
     EMAIL_FROM: Optional[str] = Field(None, description="Email from address")
     EMAIL_USE_TLS: bool = Field(True, description="Email use TLS")
+    
+    # SendGrid Configuration
+    SENDGRID_API_KEY: Optional[SecretStr] = Field(None, description="SendGrid API key")
+    SENDGRID_FROM_EMAIL: Optional[str] = Field("noreply@capitolscope.com", description="SendGrid from email address")
+    SENDGRID_FROM_NAME: Optional[str] = Field("CapitolScope", description="SendGrid from name")
     
     # External APIs
     ALPHA_VANTAGE_API_KEY: Optional[SecretStr] = Field(None, description="Alpha Vantage API key")
@@ -189,30 +195,42 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         """Get the database URL for SQLAlchemy."""
-        # For development, use local database if available
-        if self.is_development and not self.DATABASE_HOST:
-            # Use local PostgreSQL for development
-            return "postgresql+asyncpg://capitolscope:capitolscope@postgres-dev:5432/capitolscope"
-        
-        # Derive database info from Supabase URL if traditional fields not provided
-        if not self.DATABASE_HOST and self.SUPABASE_URL:
+        # Use explicit provider setting
+        if self.DATABASE_PROVIDER.lower() == "supabase" and self.SUPABASE_URL:
             # Extract project reference from Supabase URL
             # https://bigsmydtkhfssokvrvyq.supabase.co -> bigsmydtkhfssokvrvyq
             project_ref = self.SUPABASE_URL.split('//')[1].split('.')[0]
             
-            # Use Supabase connection string format
-            # The hostname should be the project reference with .supabase.co
-            host = f"{project_ref}.supabase.co"
-            user = "postgres"
+            # Use Supabase Session Pooler (better for prepared statements)
+            # Format: postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-ca-central-1.pooler.supabase.com:5432/postgres
+            host = "aws-0-ca-central-1.pooler.supabase.com"
+            user = f"postgres.{project_ref}"  # Correct user format
             database = "postgres"
-            port = 5432
+            port = 5432  # Session pooler port
             password = self.SUPABASE_PASSWORD.get_secret_value() if self.SUPABASE_PASSWORD else ""
-        else:
-            host = self.DATABASE_HOST
-            user = self.DATABASE_USER
-            database = self.DATABASE_NAME
-            port = self.DATABASE_PORT
-            password = self.DATABASE_PASSWORD.get_secret_value() if self.DATABASE_PASSWORD else ""
+            
+            # URL encode the password to handle special characters
+            encoded_password = quote_plus(password)
+            
+            return (
+                f"postgresql+asyncpg://"
+                f"{user}:{encoded_password}@"
+                f"{host}:{port}/"
+                f"{database}"
+            )
+        
+        # Use local database if explicitly set or Supabase not configured
+        if self.DATABASE_PROVIDER.lower() == "local" or not self.SUPABASE_URL:
+            if self.is_development and not self.DATABASE_HOST:
+                # Use local PostgreSQL for development
+                return "postgresql+asyncpg://capitolscope:capitolscope@postgres-dev:5432/capitolscope"
+        
+        # Use traditional database configuration
+        host = self.DATABASE_HOST
+        user = self.DATABASE_USER
+        database = self.DATABASE_NAME
+        port = self.DATABASE_PORT
+        password = self.DATABASE_PASSWORD.get_secret_value() if self.DATABASE_PASSWORD else ""
         
         # URL encode the password to handle special characters
         encoded_password = quote_plus(password)
@@ -227,24 +245,40 @@ class Settings(BaseSettings):
     @property
     def database_url_sync(self) -> str:
         """Get the synchronous database URL for migrations."""
-        # Derive database info from Supabase URL if traditional fields not provided
-        if not self.DATABASE_HOST and self.SUPABASE_URL:
+        # Prioritize Supabase if configured
+        if self.SUPABASE_URL:
             # Extract project reference from Supabase URL
             project_ref = self.SUPABASE_URL.split('//')[1].split('.')[0]
             
-            # Use Supabase connection string format
-            # The hostname should be the project reference with .supabase.co
-            host = f"{project_ref}.supabase.co"
-            user = "postgres"
+            # Use Supabase Session Pooler (better for prepared statements)
+            # Format: postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-ca-central-1.pooler.supabase.com:5432/postgres
+            host = "aws-0-ca-central-1.pooler.supabase.com"
+            user = f"postgres.{project_ref}"  # Correct user format
             database = "postgres"
-            port = 5432
+            port = 5432  # Session pooler port
             password = self.SUPABASE_PASSWORD.get_secret_value() if self.SUPABASE_PASSWORD else ""
-        else:
-            host = self.DATABASE_HOST
-            user = self.DATABASE_USER
-            database = self.DATABASE_NAME
-            port = self.DATABASE_PORT
-            password = self.DATABASE_PASSWORD.get_secret_value() if self.DATABASE_PASSWORD else ""
+            
+            # URL encode the password to handle special characters
+            encoded_password = quote_plus(password)
+            
+            return (
+                f"postgresql+psycopg2://"
+                f"{user}:{encoded_password}@"
+                f"{host}:{port}/"
+                f"{database}"
+            )
+        
+        # Fallback to local database if Supabase not configured
+        if self.is_development and not self.DATABASE_HOST:
+            # Use local PostgreSQL for development
+            return "postgresql://capitolscope:capitolscope@postgres-dev:5432/capitolscope"
+        
+        # Use traditional database configuration
+        host = self.DATABASE_HOST
+        user = self.DATABASE_USER
+        database = self.DATABASE_NAME
+        port = self.DATABASE_PORT
+        password = self.DATABASE_PASSWORD.get_secret_value() if self.DATABASE_PASSWORD else ""
         
         # URL encode the password to handle special characters
         encoded_password = quote_plus(password)

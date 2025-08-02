@@ -174,7 +174,7 @@ Integrate with Congress.gov API to fetch official congressional data and enhance
 
 ---
 
-### **CAP-33: TradingView-Style Stock Charts**
+### **CAP-30: TradingView-Style Stock Charts**
 **Priority:** Medium  
 **Estimate:** 5 days  
 **Labels:** `frontend`, `charts`, `visualization`, `premium-tier`
@@ -552,76 +552,13 @@ Implement comprehensive user authentication and profile management system.
 
 ---
 
-### **CAP-30: Sector/Committee-based Filters**
-**Priority:** Medium  
-**Estimate:** 3 days  
-**Labels:** `frontend`, `backend`, `premium-tier`
 
-**Description:**
-Implement advanced filtering by congressional committees and sectors for Premium tier users.
 
-**Acceptance Criteria:**
-- [ ] Filter by congressional committees
-- [ ] Filter by industry sectors
-- [ ] Combined committee/sector filters
-- [ ] Filter presets and saved filters
-- [ ] Premium tier access controls
 
-**Technical Requirements:**
-- Committee and sector data mapping
-- Advanced filter engine
-- Filter persistence
-- Premium tier feature gating
 
----
 
-### **CAP-31: White-Label Dashboard Options**
-**Priority:** Low  
-**Estimate:** 5 days  
-**Labels:** `frontend`, `backend`, `enterprise-tier`
 
-**Description:**
-Implement white-label dashboard options for Enterprise tier customers.
-
-**Acceptance Criteria:**
-- [ ] Custom branding options
-- [ ] Custom domain support
-- [ ] Branded email templates
-- [ ] Custom color schemes
-- [ ] Enterprise tier access controls
-
-**Technical Requirements:**
-- Dynamic theming system
-- Custom domain handling
-- Branded template engine
-- Enterprise tier feature gating
-
----
-
-### **CAP-32: Team Management System**
-**Priority:** Low  
-**Estimate:** 4 days  
-**Labels:** `frontend`, `backend`, `enterprise-tier`
-
-**Description:**
-Implement team management and admin panel for Enterprise tier customers.
-
-**Acceptance Criteria:**
-- [ ] Team member invitation system
-- [ ] Role-based access controls
-- [ ] Team admin panel
-- [ ] Usage analytics per team member
-- [ ] Enterprise tier access controls
-
-**Technical Requirements:**
-- Team management database schema
-- Role-based permissions
-- Admin dashboard
-- Enterprise tier feature gating
-
----
-
-### **CAP-34: Export to CSV Feature**
+### **CAP-31: Export to CSV Feature**
 **Priority:** Critical  
 **Estimate:** 2 days  
 **Labels:** `frontend`, `export`, `free-tier`
@@ -645,7 +582,7 @@ Implement CSV export functionality for transaction data. This is a key Free tier
 
 ---
 
-### **CAP-35: Saved Portfolios / Watchlists**
+### **CAP-32: Saved Portfolios / Watchlists**
 **Priority:** High  
 **Estimate:** 3 days  
 **Labels:** `frontend`, `backend`, `pro-tier`
@@ -669,7 +606,7 @@ Implement saved portfolios and watchlists functionality for Pro tier users.
 
 ---
 
-### **CAP-36: Sector/Committee-based Filters**
+### **CAP-33: Sector/Committee-based Filters**
 **Priority:** Medium  
 **Estimate:** 3 days  
 **Labels:** `frontend`, `backend`, `premium-tier`
@@ -692,7 +629,7 @@ Implement advanced filtering by congressional committees and sectors for Premium
 
 ---
 
-### **CAP-37: White-Label Dashboard Options**
+### **CAP-34: White-Label Dashboard Options**
 **Priority:** Low  
 **Estimate:** 5 days  
 **Labels:** `frontend`, `backend`, `enterprise-tier`
@@ -715,6 +652,31 @@ Implement white-label dashboard options for Enterprise tier customers.
 
 ---
 
+### **CAP-35: Team Management System**
+**Priority:** Low  
+**Estimate:** 4 days  
+**Labels:** `frontend`, `backend`, `enterprise-tier`
+
+**Description:**
+Implement team management and admin panel for Enterprise tier customers.
+
+**Acceptance Criteria:**
+- [ ] Team member invitation system
+- [ ] Role-based access controls
+- [ ] Team admin panel
+- [ ] Usage analytics per team member
+- [ ] Enterprise tier access controls
+
+**Technical Requirements:**
+- Team management database schema
+- Role-based permissions
+- Admin dashboard
+- Enterprise tier feature gating
+
+
+
+---
+
 ## 📋 **MILESTONE: Free Tier Foundation (Phase 1)**
 **Target Date:** 4 weeks  
 **Total Estimate:** 25 days
@@ -730,7 +692,7 @@ Implement white-label dashboard options for Enterprise tier customers.
 - CAP-20: API Development (4 days)
 - CAP-21: Database Schema Design (3 days)
 - CAP-29: User Authentication & Profile System (4 days)
-- CAP-34: Export to CSV Feature (2 days)
+- CAP-31: Export to CSV Feature (2 days)
 
 ## 📋 **MILESTONE: Pro Tier Features (Phase 2)**
 **Target Date:** 7 weeks  
@@ -739,7 +701,7 @@ Implement white-label dashboard options for Enterprise tier customers.
 **Tickets:**
 - CAP-18: Pro Features Infrastructure (5 days)
 - CAP-14: Email Newsletter Infrastructure (4 days)
-- CAP-35: Saved Portfolios / Watchlists (3 days)
+- CAP-32: Saved Portfolios / Watchlists (3 days)
 - Enhanced Alert System (CAP-15 extension) (3 days)
 
 ## 📋 **MILESTONE: Premium Tier Features (Phase 3)**
@@ -747,9 +709,9 @@ Implement white-label dashboard options for Enterprise tier customers.
 **Total Estimate:** 18 days
 
 **Tickets:**
-- CAP-33: TradingView-Style Stock Charts (5 days)
+- CAP-30: TradingView-Style Stock Charts (5 days)
 - CAP-19: Advanced Analytics Dashboard (7 days)
-- CAP-36: Sector/Committee-based Filters (3 days)
+- CAP-33: Sector/Committee-based Filters (3 days)
 - API Rate Limiting (CAP-20 extension) (3 days)
 
 ## 📋 **MILESTONE: Enterprise Tier Features (Phase 4)**
@@ -757,8 +719,8 @@ Implement white-label dashboard options for Enterprise tier customers.
 **Total Estimate:** 12 days
 
 **Tickets:**
-- CAP-37: White-Label Dashboard Options (5 days)
-- CAP-32: Team Management System (4 days)
+- CAP-34: White-Label Dashboard Options (5 days)
+- CAP-35: Team Management System (4 days)
 - Advanced Analytics Dashboard (CAP-19 extension) (3 days)
 
 ## 📋 **MILESTONE: Production Launch**
@@ -788,23 +750,23 @@ Implement white-label dashboard options for Enterprise tier customers.
 - CAP-20: API Development
 - CAP-21: Database Schema Design
 - CAP-29: User Authentication & Profile System
-- CAP-34: Export to CSV Feature
+- CAP-31: Export to CSV Feature
 
 ### **Pro Tier (High Priority - 2-3 weeks post-launch):**
 - CAP-18: Pro Features Infrastructure
 - CAP-14: Email Newsletter Infrastructure
-- CAP-35: Saved Portfolios / Watchlists
+- CAP-32: Saved Portfolios / Watchlists
 - Enhanced Alert System (CAP-15 extension)
 
 ### **Premium Tier (Medium Priority - 4-6 weeks post-launch):**
-- CAP-33: TradingView-Style Stock Charts
+- CAP-30: TradingView-Style Stock Charts
 - CAP-19: Advanced Analytics Dashboard
-- CAP-36: Sector/Committee-based Filters
+- CAP-33: Sector/Committee-based Filters
 - API Rate Limiting (CAP-20 extension)
 
 ### **Enterprise Tier (Low Priority - 8-10 weeks post-launch):**
-- CAP-37: White-Label Dashboard Options
-- CAP-32: Team Management System
+- CAP-34: White-Label Dashboard Options
+- CAP-35: Team Management System
 - Advanced Analytics Dashboard (CAP-19 extension)
 
 ### **Infrastructure (Ongoing):**

@@ -69,13 +69,6 @@ const App: React.FC = () => {
                 </Layout>
               </ProtectedRoute>
             } />
-            <Route path="/transactions" element={
-              <ProtectedRoute>
-                <Layout>
-                  <TransactionList />
-                </Layout>
-              </ProtectedRoute>
-            } />
             <Route path="/members" element={
               <ProtectedRoute>
                 <Layout>

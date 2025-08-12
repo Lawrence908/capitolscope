@@ -8,6 +8,7 @@ import TradeBrowser from './components/TradeBrowser';
 import MembersBrowser from './components/MembersBrowser';
 import MemberProfile from './components/MemberProfile';
 import DataQuality from './components/DataQuality';
+import Analytics from './components/Analytics';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
@@ -16,14 +17,6 @@ import LandingPage from './components/LandingPage';
 import ProfileSettings from './components/ProfileSettings';
 import PremiumSignup from './components/PremiumSignup';
 import ProtectedRoute from './components/ProtectedRoute';
-
-// Placeholder components for routes we haven't implemented yet
-const Analytics = () => (
-  <div className="card p-6">
-    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Analytics</h2>
-    <p className="text-gray-600 dark:text-gray-400">Advanced analytics and visualizations coming soon...</p>
-  </div>
-);
 
 const App: React.FC = () => {
   return (
@@ -63,6 +56,13 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
             <Route path="/trades" element={
+              <ProtectedRoute>
+                <Layout>
+                  <TradeBrowser />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/transactions" element={
               <ProtectedRoute>
                 <Layout>
                   <TradeBrowser />

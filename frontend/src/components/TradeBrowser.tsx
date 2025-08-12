@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { format } from 'date-fns';
+
 import {
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -71,13 +71,7 @@ const TradeBrowser: React.FC = () => {
     setSearchQuery('');
   };
 
-  // Format currency amounts
-  const formatAmount = (amount: number | string | undefined | null) => {
-    if (amount === undefined || amount === null || amount === '') return 'N/A';
-    const num = typeof amount === 'number' ? amount : parseFloat(amount);
-    if (isNaN(num)) return 'N/A';
-    return `$${num.toLocaleString()}`;
-  };
+
 
   const formatCentsToDollars = (cents?: number | null) => {
     if (cents === undefined || cents === null || cents === 0) return 'N/A';
@@ -91,17 +85,7 @@ const TradeBrowser: React.FC = () => {
     }
   };
 
-  // Get party color
-  const getPartyColor = (party: string) => {
-    switch (party?.toLowerCase()) {
-      case 'republican':
-        return 'text-red-600 bg-red-50';
-      case 'democratic':
-        return 'text-blue-600 bg-blue-50';
-      default:
-        return 'text-gray-600 bg-gray-50';
-    }
-  };
+
 
   // Get transaction type icon and color
   const getTransactionTypeStyle = (type: string) => {

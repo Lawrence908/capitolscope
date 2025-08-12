@@ -10,5 +10,13 @@ export default defineConfig({
     watch: {
       usePolling: true
     }
+  },
+  optimizeDeps: {
+    include: ['chart.js', 'react-chartjs-2']
+  },
+  build: {
+    commonjsOptions: {
+      include: [/chart.js/, /react-chartjs-2/]
+    }
   }
 })

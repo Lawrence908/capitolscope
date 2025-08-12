@@ -6,7 +6,7 @@ import {
   ArrowTrendingUpIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
-import { CongressionalTrade, CongressMember, DataQualityStats } from '../types';
+import type { CongressionalTrade, CongressMember, DataQualityStats } from '../types';
 import apiClient from '../services/api';
 
 const Dashboard: React.FC = () => {
@@ -30,8 +30,8 @@ const Dashboard: React.FC = () => {
         ]);
 
         setStats(statsResponse.data);
-        setRecentTrades(tradesResponse.items);
-        setTopMembers(membersResponse.data);
+        setRecentTrades(tradesResponse.items || []);
+        setTopMembers(membersResponse.data || []);
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard error:', err);
@@ -149,7 +149,7 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {recentTrades.map((trade, index) => (
+            {recentTrades && recentTrades.length > 0 ? recentTrades.map((trade, index) => (
               <div key={trade.id || `trade-${index}`} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
@@ -162,17 +162,23 @@ const Dashboard: React.FC = () => {
                       <span className="text-gray-400 dark:text-gray-500">No ticker</span>
                     )}
                     {' • '}
-                    <span className="capitalize">{trade.type}</span>
+                    <span className="capitalize">{trade.transaction_type || 'Unknown'}</span>
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{trade.amount}</p>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">
+                    {trade.estimated_value ? `$${(trade.estimated_value / 100).toLocaleString()}` : 'N/A'}
+                  </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     {new Date(trade.transaction_date).toLocaleDateString()}
                   </p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                No recent trades available
+              </div>
+            )}
           </div>
         </div>
 
@@ -188,24 +194,28 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {topMembers.map((member, index) => (
+            {topMembers && topMembers.length > 0 ? topMembers.map((member, index) => (
               <div key={member.id || `member-${index}`} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                     {member.member_name}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {member.member_party} • {member.member_state}
+                    {member.party} • {member.state}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-900 dark:text-gray-100">
-                    {member.total_trades || 0} trades
+                    {member.trade_count || 0} trades
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{member.member_chamber}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{member.chamber}</p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                No top members available
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -217,9 +227,9 @@ const Dashboard: React.FC = () => {
             Party Distribution
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {Object.entries(stats.party_distribution).map(([party, count]) => (
+            {stats.party_distribution && Object.entries(stats.party_distribution).map(([party, count]) => (
               <div key={party} className="text-center">
-                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{count}</div>
+                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{count.toString()}</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">{party}</div>
               </div>
             ))}
@@ -228,6 +238,6 @@ const Dashboard: React.FC = () => {
       )}
     </div>
   );
-};
-
+  };
+  
 export default Dashboard; 

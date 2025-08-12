@@ -9,6 +9,7 @@ import {
   UserGroupIcon,
   SparklesIcon,
   BuildingOfficeIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 
 const PremiumSignup: React.FC = () => {
@@ -17,14 +18,16 @@ const PremiumSignup: React.FC = () => {
 
   const plans = {
     monthly: {
-      pro: { price: 9.99, period: 'month', savings: null },
-      premium: { price: 19.99, period: 'month', savings: null },
+      free: { price: 0, period: 'month', savings: null },
+      pro: { price: 5.99, period: 'month', savings: null },
+      premium: { price: 14.99, period: 'month', savings: null },
       enterprise: { price: 49.99, period: 'month', savings: null },
     },
     yearly: {
-      pro: { price: 99, period: 'year', savings: 'Save 17%' },
-      premium: { price: 199, period: 'year', savings: 'Save 17%' },
-      enterprise: { price: 499, period: 'year', savings: 'Save 17%' },
+      free: { price: 0, period: 'year', savings: null },
+      pro: { price: 59.99, period: 'year', savings: 'Save 17%' },
+      premium: { price: 149.99, period: 'year', savings: 'Save 17%' },
+      enterprise: { price: 499.99, period: 'year', savings: 'Save 17%' },
     },
   };
 
@@ -69,7 +72,7 @@ const PremiumSignup: React.FC = () => {
       name: 'Trade Alerts',
       description: 'Get notified of new congressional trades in real-time',
       icon: BellIcon,
-      free: false,
+      free: true,
       pro: true,
       premium: true,
       enterprise: true,
@@ -78,7 +81,7 @@ const PremiumSignup: React.FC = () => {
       name: 'Basic Portfolio Analytics',
       description: 'Basic portfolio performance and analytics',
       icon: ChartBarIcon,
-      free: false,
+      free: true,
       pro: true,
       premium: true,
       enterprise: true,
@@ -86,6 +89,24 @@ const PremiumSignup: React.FC = () => {
     {
       name: 'Export to CSV',
       description: 'Export trading data to CSV format',
+      icon: ChartBarIcon,
+      free: true,
+      pro: true,
+      premium: true,
+      enterprise: true,
+    },
+    {
+      name: 'Limited Historical Data',
+      description: 'Access to 3 months of historical trade data',
+      icon: ExclamationTriangleIcon,
+      free: true,
+      pro: false,
+      premium: false,
+      enterprise: false,
+    },
+    {
+      name: 'Full Historical Data',
+      description: 'Complete access to all historical trading data',
       icon: ChartBarIcon,
       free: false,
       pro: true,
@@ -97,7 +118,7 @@ const PremiumSignup: React.FC = () => {
       description: 'Comprehensive weekly trading activity reports',
       icon: ChartBarIcon,
       free: false,
-      pro: false,
+      pro: true,
       premium: true,
       enterprise: true,
     },
@@ -106,7 +127,7 @@ const PremiumSignup: React.FC = () => {
       description: 'Alerts when 5+ members buy same stock in 3 months',
       icon: BellIcon,
       free: false,
-      pro: false,
+      pro: true,
       premium: true,
       enterprise: true,
     },
@@ -114,6 +135,24 @@ const PremiumSignup: React.FC = () => {
       name: 'High-Value Trade Alerts',
       description: 'Alerts for trades over $1M',
       icon: BellIcon,
+      free: false,
+      pro: true,
+      premium: true,
+      enterprise: true,
+    },
+    {
+      name: 'Saved Portfolios / Watchlists',
+      description: 'Save and track your favorite portfolios',
+      icon: UserGroupIcon,
+      free: false,
+      pro: true,
+      premium: true,
+      enterprise: true,
+    },
+    {
+      name: 'TradingView-Style Charts',
+      description: 'Interactive stock charts with trade overlays',
+      icon: ChartBarIcon,
       free: false,
       pro: false,
       premium: true,
@@ -129,8 +168,8 @@ const PremiumSignup: React.FC = () => {
       enterprise: true,
     },
     {
-      name: 'TradingView-Style Charts',
-      description: 'Interactive stock charts with trade overlays',
+      name: 'Sector/Committee-based Filters',
+      description: 'Filter trades by congressional committees and sectors',
       icon: ChartBarIcon,
       free: false,
       pro: false,
@@ -138,7 +177,7 @@ const PremiumSignup: React.FC = () => {
       enterprise: true,
     },
     {
-      name: 'API Access',
+      name: 'API Access (Rate-limited)',
       description: 'Programmatic access to trading data',
       icon: SparklesIcon,
       free: false,
@@ -152,13 +191,22 @@ const PremiumSignup: React.FC = () => {
       icon: BellIcon,
       free: false,
       pro: false,
-      premium: false,
+      premium: true,
       enterprise: true,
     },
     {
       name: 'Advanced Analytics Dashboard',
       description: 'Advanced analytics and pattern recognition',
       icon: ChartBarIcon,
+      free: false,
+      pro: false,
+      premium: false,
+      enterprise: true,
+    },
+    {
+      name: 'White-Label Dashboard Options',
+      description: 'Custom branding and deployment options',
+      icon: BuildingOfficeIcon,
       free: false,
       pro: false,
       premium: false,
@@ -174,9 +222,18 @@ const PremiumSignup: React.FC = () => {
       enterprise: true,
     },
     {
-      name: 'White-Label Options',
-      description: 'Custom branding and deployment options',
-      icon: BuildingOfficeIcon,
+      name: 'Increased API Limits',
+      description: 'Higher rate limits for API access',
+      icon: SparklesIcon,
+      free: false,
+      pro: false,
+      premium: false,
+      enterprise: true,
+    },
+    {
+      name: 'Team Seats / Admin Panel',
+      description: 'Manage team access and permissions',
+      icon: UserGroupIcon,
       free: false,
       pro: false,
       premium: false,
@@ -272,8 +329,13 @@ const PremiumSignup: React.FC = () => {
                 <span className="text-gray-600 dark:text-gray-400">/month</span>
               </div>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Perfect for getting started
+                Get Started with Transparency
               </p>
+              <div className="mt-2">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                  Better than Capitol Trades
+                </span>
+              </div>
             </div>
 
             <div className="mt-8">
@@ -299,7 +361,14 @@ const PremiumSignup: React.FC = () => {
           </div>
 
           {/* Pro Plan */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-blue-500 relative p-6">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
+                <StarIcon className="h-3 w-3 mr-1" />
+                Most Popular
+              </div>
+            </div>
+
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Pro</h3>
               <div className="mt-4">
@@ -309,7 +378,7 @@ const PremiumSignup: React.FC = () => {
                 <span className="text-gray-600 dark:text-gray-400">/{plans[selectedPlan].pro.period}</span>
               </div>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Essential features for active users
+                Power for Retail Investors
               </p>
             </div>
 
@@ -338,7 +407,7 @@ const PremiumSignup: React.FC = () => {
               <button
                 onClick={() => handleUpgrade('Pro')}
                 disabled={isLoading}
-                className="w-full bg-gray-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? 'Processing...' : 'Upgrade to Pro'}
               </button>
@@ -346,11 +415,11 @@ const PremiumSignup: React.FC = () => {
           </div>
 
           {/* Premium Plan */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-blue-500 relative p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-purple-500 relative p-6">
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
-                <StarIcon className="h-3 w-3 mr-1" />
-                Most Popular
+              <div className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
+                <SparklesIcon className="h-3 w-3 mr-1" />
+                Best Value
               </div>
             </div>
 
@@ -363,7 +432,7 @@ const PremiumSignup: React.FC = () => {
                 <span className="text-gray-600 dark:text-gray-400">/{plans[selectedPlan].premium.period}</span>
               </div>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Advanced features for power users
+                For Analysts and Devs
               </p>
             </div>
 
@@ -392,7 +461,7 @@ const PremiumSignup: React.FC = () => {
               <button
                 onClick={() => handleUpgrade('Premium')}
                 disabled={isLoading}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-purple-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? 'Processing...' : 'Upgrade to Premium'}
               </button>
@@ -400,10 +469,10 @@ const PremiumSignup: React.FC = () => {
           </div>
 
           {/* Enterprise Plan */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-purple-500 relative p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-gray-800 relative p-6">
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
-                <SparklesIcon className="h-3 w-3 mr-1" />
+              <div className="bg-gray-800 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
+                <BuildingOfficeIcon className="h-3 w-3 mr-1" />
                 Enterprise
               </div>
             </div>
@@ -411,13 +480,15 @@ const PremiumSignup: React.FC = () => {
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Enterprise</h3>
               <div className="mt-4">
-                <span className="text-4xl font-bold text-gray-900 dark:text-white">
-                  ${plans[selectedPlan].enterprise.price}
+                <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Contact Sales
                 </span>
-                <span className="text-gray-600 dark:text-gray-400">/{plans[selectedPlan].enterprise.period}</span>
+                <span className="text-gray-600 dark:text-gray-400 block text-sm">
+                  Starts at ~${plans[selectedPlan].enterprise.price}/month
+                </span>
               </div>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Custom solutions for organizations
+                Custom Integrations & Teams
               </p>
             </div>
 
@@ -446,7 +517,7 @@ const PremiumSignup: React.FC = () => {
               <button
                 onClick={() => handleUpgrade('Enterprise')}
                 disabled={isLoading}
-                className="w-full bg-purple-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-gray-800 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? 'Processing...' : 'Contact Sales'}
               </button>
@@ -490,6 +561,14 @@ const PremiumSignup: React.FC = () => {
               </h3>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
                 Our congressional trading data is updated daily from official sources. Premium users get real-time alerts when new trades are reported.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                How does your free tier compare to Capitol Trades?
+              </h3>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                Our free tier includes trade alerts, basic portfolio analytics, and CSV export—features that Capitol Trades reserves for paid users. We believe in transparency and want to give you more value from the start.
               </p>
             </div>
           </div>

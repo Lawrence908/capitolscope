@@ -17,11 +17,18 @@ export default defineConfig({
       'react-dom',
       'react-router-dom',
       'chart.js',
-      'react-chartjs-2'
+      'react-chartjs-2',
+      'axios',
+      'date-fns'
     ],
     force: true
   },
   build: {
+    target: 'es2015',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    minify: 'terser',
     commonjsOptions: {
       include: [/node_modules/],
       transformMixedEsModules: true
@@ -32,7 +39,8 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom'],
           router: ['react-router-dom'],
-          charts: ['chart.js', 'react-chartjs-2']
+          charts: ['chart.js', 'react-chartjs-2'],
+          utils: ['axios', 'date-fns']
         }
       }
     }
@@ -42,5 +50,8 @@ export default defineConfig({
       'react': 'react',
       'react-dom': 'react-dom'
     }
+  },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
   }
 })

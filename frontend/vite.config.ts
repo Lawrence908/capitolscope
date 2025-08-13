@@ -12,11 +12,35 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['chart.js', 'react-chartjs-2']
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'chart.js',
+      'react-chartjs-2'
+    ],
+    force: true
   },
   build: {
     commonjsOptions: {
-      include: [/chart.js/, /react-chartjs-2/]
+      include: [/node_modules/],
+      transformMixedEsModules: true
+    },
+    rollupOptions: {
+      external: [],
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          charts: ['chart.js', 'react-chartjs-2']
+        }
+      }
+    }
+  },
+  resolve: {
+    alias: {
+      'react': 'react',
+      'react-dom': 'react-dom'
     }
   }
 })

@@ -25,14 +25,42 @@ interface PaymentModalProps {
 const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, message, tier }) => {
   if (!isOpen) return null;
 
+  // Feature descriptions based on tier (from PremiumSignup.tsx)
+  const getTierFeatures = (tier: string) => {
+    const features = {
+      pro: [
+        'Full Historical Data',
+        'Weekly Summaries', 
+        'Multiple Buyer Alerts',
+        'High-Value Trade Alerts',
+        'Saved Portfolios / Watchlists'
+      ],
+      premium: [
+        'TradingView-Style Charts',
+        'Advanced Portfolio Analytics',
+        'Sector/Committee-based Filters',
+        'API Access (Rate-limited)',
+        'Custom Alert Configurations'
+      ],
+      enterprise: [
+        'Advanced Analytics Dashboard',
+        'White-Label Dashboard Options',
+        'Priority Support',
+        'Increased API Limits',
+        'Team Seats / Admin Panel'
+      ]
+    };
+    return features[tier as keyof typeof features] || [];
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-        <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+      <div className="flex min-h-full items-center justify-center p-4 text-center">
+        <div className="relative transform overflow-hidden rounded-lg bg-bg-light-primary dark:bg-bg-primary border border-primary-800/20 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
           <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
             <button
               type="button"
-              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="rounded-md bg-bg-light-primary dark:bg-bg-primary text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
@@ -42,31 +70,48 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
           <div className="sm:flex sm:items-start">
             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10">
               {type === 'success' ? (
-                <CheckCircleIcon className="h-6 w-6 text-green-600" />
+                <CheckCircleIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
               ) : (
-                <XCircleIcon className="h-6 w-6 text-red-600" />
+                <XCircleIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
               )}
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="text-base font-semibold leading-6 text-gray-900">
+              <h3 className="text-base font-semibold leading-6 text-neutral-900 dark:text-neutral-100">
                 {type === 'success' ? 'Payment Successful!' : 'Payment Cancelled'}
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
                   {message}
                   {tier && type === 'success' && (
-                    <span className="block mt-1 font-medium text-green-600">
+                    <span className="block mt-1 font-medium text-green-600 dark:text-green-400">
                       Welcome to {tier.charAt(0).toUpperCase() + tier.slice(1)} tier!
                     </span>
                   )}
                 </p>
+                
+                {/* Show unlocked features for successful payments */}
+                {type === 'success' && tier && tier !== 'free' && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">
+                      🎉 You now have access to:
+                    </h4>
+                    <ul className="text-sm text-neutral-600 dark:text-neutral-400 space-y-1">
+                      {getTierFeatures(tier).map((feature, index) => (
+                        <li key={index} className="flex items-center">
+                          <CheckCircleIcon className="h-4 w-4 text-green-600 dark:text-green-400 mr-2 flex-shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           </div>
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
             <button
               type="button"
-              className="inline-flex w-full justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 sm:ml-3 sm:w-auto"
+              className="inline-flex w-full justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:ml-3 sm:w-auto"
               onClick={onClose}
             >
               {type === 'success' ? 'Get Started' : 'OK'}

@@ -204,7 +204,7 @@ const Analytics: React.FC = () => {
     );
   }
 
-  if (!data) {
+  if (!data || (data.topTradingMembers.length === 0 && data.topTradedTickers.length === 0)) {
     return <div className="p-6">No analytics data available.</div>;
   }
 

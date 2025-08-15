@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-bg-primary text-neutral-100">
+    <div className="min-h-screen bg-bg-primary text-neutral-100 flex flex-col">
       {/* Header */}
       <header className="bg-bg-secondary shadow-sm border-b border-primary-800/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,7 +39,7 @@ const LandingPage: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <main>
+      <main className="flex-grow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="text-center">
             {/* Large Logo and Branding */}
@@ -139,6 +139,48 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
       </main>
+      
+      {/* Footer */}
+      <footer className="bg-bg-secondary border-t border-primary-800/20 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center mb-4 md:mb-0">
+              <img 
+                src="/capitol-scope-logo.png" 
+                alt="CapitolScope Logo" 
+                className="h-8 w-8 rounded-lg shadow-glow-primary/20"
+                loading="lazy"
+                width="32"
+                height="32"
+              />
+              <span className="ml-3 text-sm text-neutral-400">
+                © 2025 CapitolScope. All rights reserved.
+              </span>
+            </div>
+            
+            <div className="flex items-center space-x-6">
+              <Link
+                to="/privacy"
+                className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                to="/terms"
+                className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+              >
+                Terms of Service
+              </Link>
+              <a
+                href="mailto:capitolscope@gmail.com"
+                className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+              >
+                Support
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

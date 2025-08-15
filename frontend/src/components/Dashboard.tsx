@@ -12,6 +12,7 @@ import {
 import type { CongressionalTrade, CongressMember, DataQualityStats } from '../types';
 import apiClient from '../services/api';
 import stripeService from '../services/stripeService';
+import AnalyticsDebug from './AnalyticsDebug';
 
 // Payment Modal Component
 interface PaymentModalProps {
@@ -392,6 +393,8 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
+      {/* Analytics Debug (for troubleshooting) */}
+      <AnalyticsDebug />
 
       <PaymentModal
         isOpen={paymentModal.isOpen}

@@ -43,7 +43,7 @@ echo "  capitol-deploy-backend  - Deploy backend to Cloud Run"
 echo "  capitol-update-env      - Update environment variables in Cloud Run"
 echo "  capitol-logs            - Show all container logs"
 echo "  capitol-app-logs        - Show only app logs"
-echo "  capitol-worker-logs     - Show only worker logs
+echo "  capitol-worker-logs     - Show only worker logs"
 echo "  capitol-stop            - Stop all containers"
 echo "  capitol-restart         - Restart main app"
 echo "  capitol-shell           - Open shell in container"

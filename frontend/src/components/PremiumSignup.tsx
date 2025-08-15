@@ -70,6 +70,66 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ isOpen, onClose, title, message
   );
 };
 
+// Payment Modal Component
+interface PaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  type: 'success' | 'cancelled';
+  message: string;
+  tier?: string;
+}
+
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, message, tier }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex min-h-full items-center justify-center p-4 text-center">
+        <div className="relative transform overflow-hidden rounded-lg bg-bg-light-primary dark:bg-bg-primary border border-primary-800/20 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+          <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+            <button
+              type="button"
+              className="rounded-md bg-bg-light-primary dark:bg-bg-primary text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              onClick={onClose}
+            >
+              <span className="sr-only">Close</span>
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="sm:flex sm:items-start">
+            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10">
+              {type === 'success' ? (
+                <CheckIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
+              ) : (
+                <ExclamationTriangleIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
+              )}
+            </div>
+            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 className="text-base font-semibold leading-6 text-neutral-900 dark:text-neutral-100">
+                {type === 'success' ? 'Payment Successful!' : 'Payment Cancelled'}
+              </h3>
+              <div className="mt-2">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  {message}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+            <button
+              type="button"
+              className="inline-flex w-full justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:ml-3 sm:w-auto"
+              onClick={onClose}
+            >
+              {type === 'success' ? 'Get Started' : 'OK'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const PremiumSignup: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
@@ -83,6 +143,17 @@ const PremiumSignup: React.FC = () => {
   }>({
     isOpen: false,
     title: '',
+    message: '',
+  });
+
+  const [paymentModal, setPaymentModal] = useState<{
+    isOpen: boolean;
+    type: 'success' | 'cancelled';
+    message: string;
+    tier?: string;
+  }>({
+    isOpen: false,
+    type: 'success',
     message: '',
   });
   
@@ -329,8 +400,12 @@ const PremiumSignup: React.FC = () => {
     }
     
     if (paymentCancelled.cancelled) {
-      // Show cancellation message
-      alert(paymentCancelled.message);
+      // Show cancellation message in modal
+      setPaymentModal({
+        isOpen: true,
+        type: 'cancelled',
+        message: paymentCancelled.message || 'Payment was cancelled.',
+      });
       // Clean up URL params
       window.history.replaceState({}, document.title, window.location.pathname);
     }
@@ -398,6 +473,10 @@ const PremiumSignup: React.FC = () => {
 
   const closeErrorModal = () => {
     setErrorModal(prev => ({ ...prev, isOpen: false }));
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModal(prev => ({ ...prev, isOpen: false }));
   };
 
   return (
@@ -774,8 +853,8 @@ const PremiumSignup: React.FC = () => {
         <div className="mt-16 text-center">
           <p className="text-neutral-700 dark:text-neutral-300">
             Have questions? Contact us at{' '}
-            <a href="mailto:support@capitolscope.com" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-300">
-              support@capitolscope.com
+            <a href="mailto:capitolscope@gmail.com" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-300">
+              capitolscope@gmail.com
             </a>
           </p>
         </div>
@@ -787,6 +866,15 @@ const PremiumSignup: React.FC = () => {
         onClose={closeErrorModal}
         title={errorModal.title}
         message={errorModal.message}
+      />
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={paymentModal.isOpen}
+        onClose={closePaymentModal}
+        type={paymentModal.type}
+        message={paymentModal.message}
+        tier={paymentModal.tier}
       />
     </div>
   );

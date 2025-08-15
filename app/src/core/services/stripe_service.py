@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from domains.users.models import User, SubscriptionTier
 from domains.users.schemas import SubscriptionResponse
+from core.email import email_service
 
 logger = logging.getLogger(__name__)
 
@@ -128,7 +129,6 @@ class StripeService:
             # Create checkout session
             session = stripe.checkout.Session.create(
                 customer=customer_id,
-                payment_method_types=['card'],
                 line_items=[{
                     'price': price_id,
                     'quantity': 1,
@@ -220,10 +220,21 @@ class StripeService:
     ) -> bool:
         """Update a subscription to a different tier."""
         try:
+            # Get the subscription to find the subscription item ID
+            subscription = stripe.Subscription.retrieve(subscription_id)
+            subscription_dict = subscription.to_dict()
+            
+            # Get the first subscription item ID
+            subscription_item_id = subscription_dict.get('items', {}).get('data', [{}])[0].get('id')
+            
+            if not subscription_item_id:
+                logger.error(f"No subscription items found for subscription {subscription_id}")
+                return False
+            
             stripe.Subscription.modify(
                 subscription_id,
                 items=[{
-                    'id': stripe.Subscription.retrieve(subscription_id)['items']['data'][0].id,
+                    'id': subscription_item_id,
                     'price': new_price_id,
                 }],
                 proration_behavior=proration_behavior
@@ -282,6 +293,7 @@ class StripeService:
         subscription = event['data']['object']
         user_id = subscription['metadata'].get('user_id')
         tier = subscription['metadata'].get('tier', 'free')
+        interval = subscription['metadata'].get('interval', 'monthly')
         
         if not user_id:
             logger.error("No user_id in subscription metadata")
@@ -309,6 +321,14 @@ class StripeService:
         
         await db.commit()
         logger.info(f"Updated user {user_id} subscription to {tier}")
+        
+        # Send subscription confirmation email
+        try:
+            await email_service.send_subscription_confirmation_email(user, tier, interval)
+            logger.info(f"Sent subscription confirmation email to user {user_id}")
+        except Exception as e:
+            logger.error(f"Failed to send subscription confirmation email to user {user_id}: {e}")
+        
         return True
     
     @staticmethod
@@ -379,7 +399,9 @@ class StripeService:
         if subscription_id:
             subscription = StripeService.get_subscription(subscription_id)
             if subscription:
-                user_id = subscription['metadata'].get('user_id')
+                # Convert Stripe subscription object to dict for safe access
+                subscription_dict = subscription.to_dict()
+                user_id = subscription_dict.get('metadata', {}).get('user_id')
                 if user_id:
                     from sqlalchemy import select
                     result = await db.execute(select(User).where(User.id == user_id))
@@ -388,6 +410,19 @@ class StripeService:
                         user.subscription_status = 'active'
                         await db.commit()
                         logger.info(f"Payment succeeded for user {user_id}")
+                        
+                        # Send subscription confirmation email if this is the first payment
+                        # and the subscription was just created
+                        try:
+                            tier = subscription_dict.get('metadata', {}).get('tier', 'free')
+                            interval = subscription_dict.get('metadata', {}).get('interval', 'monthly')
+                            
+                            # Only send confirmation email for paid tiers
+                            if tier.lower() in ['pro', 'premium', 'enterprise']:
+                                await email_service.send_subscription_confirmation_email(user, tier, interval)
+                                logger.info(f"Sent subscription confirmation email to user {user_id} after payment")
+                        except Exception as e:
+                            logger.error(f"Failed to send subscription confirmation email to user {user_id}: {e}")
         
         return True
     
@@ -400,7 +435,9 @@ class StripeService:
         if subscription_id:
             subscription = StripeService.get_subscription(subscription_id)
             if subscription:
-                user_id = subscription['metadata'].get('user_id')
+                # Convert Stripe subscription object to dict for safe access
+                subscription_dict = subscription.to_dict()
+                user_id = subscription_dict.get('metadata', {}).get('user_id')
                 if user_id:
                     from sqlalchemy import select
                     result = await db.execute(select(User).where(User.id == int(user_id)))
@@ -432,10 +469,12 @@ class StripeService:
                     subscriptions = stripe.Subscription.list(customer=user.stripe_customer_id, limit=1)
                     if subscriptions.data:
                         subscription = subscriptions.data[0]
+                        # Convert Stripe subscription object to dict for safe access
+                        subscription_dict = subscription.to_dict()
                         subscription_info.update({
                             'stripe_subscription_id': subscription.id,
-                            'current_period_end': datetime.fromtimestamp(subscription.current_period_end),
-                            'cancel_at_period_end': subscription.cancel_at_period_end
+                            'current_period_end': datetime.fromtimestamp(subscription_dict.get('current_period_end', 0)),
+                            'cancel_at_period_end': subscription_dict.get('cancel_at_period_end', False)
                         })
             except Exception as e:
                 logger.error(f"Error getting Stripe subscription info for user {user.id}: {e}")

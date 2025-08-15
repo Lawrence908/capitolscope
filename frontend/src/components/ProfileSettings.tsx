@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const ProfileSettings: React.FC = () => {
-  const { user, updateUser } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   

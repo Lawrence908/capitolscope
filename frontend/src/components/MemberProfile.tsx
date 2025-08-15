@@ -7,7 +7,7 @@ import type { CongressMember, CongressionalTrade } from '../types';
 const MemberProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [member, setMember] = useState<CongressMember | null>(null);
-  const [recentTrades, setRecentTrades] = useState<CongressionalTrade[]>([]);
+  const [recentTrades] = useState<CongressionalTrade[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

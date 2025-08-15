@@ -14,6 +14,7 @@ services:
       - ./app/data:/app/data
       - ./alembic:/app/alembic
       - ./alembic.ini:/app/alembic.ini
+      - ./static:/app/static
     ports:
       - "8001:8000"
     depends_on:

@@ -111,7 +111,7 @@ async def get_trades(
 )
 async def get_advanced_analytics(
     session: AsyncSession = Depends(get_db_session),
-    current_user: User = Depends(require_subscription(['pro', 'premium', 'enterprise'])),
+    current_user: User = Depends(require_subscription(['PRO', 'PREMIUM', 'ENTERPRISE'])),
 ) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Get advanced trading analytics.

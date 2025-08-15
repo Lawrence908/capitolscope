@@ -16,6 +16,20 @@
   </url>
   
   <url>
+    <loc>https://capitolscope.chrislawrence.ca/privacy</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <url>
+    <loc>https://capitolscope.chrislawrence.ca/terms</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <url>
     <loc>https://capitolscope.chrislawrence.ca/login</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>

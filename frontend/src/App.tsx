@@ -118,11 +118,13 @@ const App: React.FC = () => {
             } />
             <Route path="/data-quality" element={
               <ProtectedRoute>
-                <Layout>
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <DataQuality />
-                  </Suspense>
-                </Layout>
+                <PremiumRoute requiredTier="pro">
+                  <Layout>
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <DataQuality />
+                    </Suspense>
+                  </Layout>
+                </PremiumRoute>
               </ProtectedRoute>
             } />
             <Route path="/profile" element={

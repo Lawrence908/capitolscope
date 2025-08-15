@@ -288,7 +288,7 @@ class StripeService:
             return False
         
         from sqlalchemy import select
-        result = await db.execute(select(User).where(User.id == int(user_id)))
+        result = await db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
         if not user:
             logger.error(f"User {user_id} not found")
@@ -297,8 +297,15 @@ class StripeService:
         # Update user subscription
         user.subscription_tier = SubscriptionTier(tier.upper())
         user.subscription_status = subscription['status']
-        user.subscription_start_date = datetime.fromtimestamp(subscription['current_period_start'])
-        user.subscription_end_date = datetime.fromtimestamp(subscription['current_period_end'])
+        
+        # Handle subscription dates with proper error handling
+        try:
+            if subscription.get('current_period_start'):
+                user.subscription_start_date = datetime.fromtimestamp(subscription['current_period_start'])
+            if subscription.get('current_period_end'):
+                user.subscription_end_date = datetime.fromtimestamp(subscription['current_period_end'])
+        except (KeyError, TypeError, ValueError) as e:
+            logger.warning(f"Could not parse subscription dates for user {user_id}: {e}")
         
         await db.commit()
         logger.info(f"Updated user {user_id} subscription to {tier}")
@@ -314,14 +321,20 @@ class StripeService:
             return False
         
         from sqlalchemy import select
-        result = await db.execute(select(User).where(User.id == int(user_id)))
+        result = await db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
         if not user:
             return False
         
         # Update subscription status
         user.subscription_status = subscription['status']
-        user.subscription_end_date = datetime.fromtimestamp(subscription['current_period_end'])
+        
+        # Handle subscription end date with proper error handling
+        try:
+            if subscription.get('current_period_end'):
+                user.subscription_end_date = datetime.fromtimestamp(subscription['current_period_end'])
+        except (KeyError, TypeError, ValueError) as e:
+            logger.warning(f"Could not parse subscription end date for user {user_id}: {e}")
         
         await db.commit()
         logger.info(f"Updated subscription status for user {user_id}")
@@ -337,7 +350,7 @@ class StripeService:
             return False
         
         from sqlalchemy import select
-        result = await db.execute(select(User).where(User.id == int(user_id)))
+        result = await db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
         if not user:
             return False
@@ -345,7 +358,13 @@ class StripeService:
         # Downgrade to free tier
         user.subscription_tier = SubscriptionTier.FREE
         user.subscription_status = 'canceled'
-        user.subscription_end_date = datetime.fromtimestamp(subscription['canceled_at'])
+        
+        # Handle canceled date with proper error handling
+        try:
+            if subscription.get('canceled_at'):
+                user.subscription_end_date = datetime.fromtimestamp(subscription['canceled_at'])
+        except (KeyError, TypeError, ValueError) as e:
+            logger.warning(f"Could not parse canceled date for user {user_id}: {e}")
         
         await db.commit()
         logger.info(f"Downgraded user {user_id} to free tier")
@@ -363,7 +382,7 @@ class StripeService:
                 user_id = subscription['metadata'].get('user_id')
                 if user_id:
                     from sqlalchemy import select
-                    result = await db.execute(select(User).where(User.id == int(user_id)))
+                    result = await db.execute(select(User).where(User.id == user_id))
                     user = result.scalar_one_or_none()
                     if user:
                         user.subscription_status = 'active'

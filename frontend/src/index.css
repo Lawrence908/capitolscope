@@ -105,7 +105,7 @@
   }
   
   /* Light mode circuit pattern */
-  .light .circuit-bg {
+  .circuit-bg:not(.dark) {
     background-image: 
       radial-gradient(circle at 25% 25%, rgba(19, 196, 195, 0.05) 0%, transparent 50%),
       radial-gradient(circle at 75% 75%, rgba(232, 70, 168, 0.05) 0%, transparent 50%),

@@ -32,10 +32,25 @@ class APIClient {
       (error) => Promise.reject(error)
     );
 
-    // Add response interceptor for error handling
+    // Add response interceptor for error handling with retry logic
     this.client.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
+        const originalRequest = error.config;
+        
+        // Handle 429 Too Many Requests with retry
+        if (error.response?.status === 429 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          
+          const retryAfter = error.response.headers['retry-after'] || 60;
+          console.log(`Rate limited. Retrying after ${retryAfter} seconds...`);
+          
+          await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+          
+          // Retry the request
+          return this.client(originalRequest);
+        }
+        
         if (error.response) {
           const apiError: APIError = {
             detail: error.response.data?.detail || 'An error occurred',

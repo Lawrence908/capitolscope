@@ -22,6 +22,7 @@ export interface User {
   is_active: boolean;
   last_login_at?: string;
   subscription_tier: string;
+  subscription_status?: string;
   is_premium: boolean;
   is_public_profile: boolean;
   show_portfolio: boolean;

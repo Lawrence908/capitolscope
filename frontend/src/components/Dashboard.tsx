@@ -391,6 +391,8 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+
       <PaymentModal
         isOpen={paymentModal.isOpen}
         onClose={closePaymentModal}

@@ -138,14 +138,14 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
   ];
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-4 lg:space-y-6 ${className}`}>
       {/* Header */}
-      <div className="card p-6">
+      <div className="card p-4 lg:p-6">
         <div className="flex items-center gap-3">
-          <InformationCircleIcon className="h-8 w-8 text-blue-600" />
+          <InformationCircleIcon className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Data Quality Dashboard</h2>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">Data Quality Dashboard</h2>
+            <p className="text-sm lg:text-base text-gray-600 dark:text-gray-400 mt-1">
               Monitor data completeness and identify quality issues
             </p>
           </div>
@@ -153,39 +153,39 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+        <div className="card p-4 lg:p-6">
           <div className="flex items-center gap-3">
-            <DocumentTextIcon className="h-8 w-8 text-blue-600" />
+            <DocumentTextIcon className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
             <div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
                 {stats.total_trades?.toLocaleString() || '0'}
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Total Trades</div>
+              <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Total Trades</div>
             </div>
           </div>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-4 lg:p-6">
           <div className="flex items-center gap-3">
-            <UserGroupIcon className="h-8 w-8 text-green-600" />
+            <UserGroupIcon className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
             <div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
                 {stats.unique_members?.toLocaleString() || '0'}
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Unique Members</div>
+              <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Unique Members</div>
             </div>
           </div>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-4 lg:p-6">
           <div className="flex items-center gap-3">
-            <ChartBarIcon className="h-8 w-8 text-purple-600" />
+            <ChartBarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-purple-600" />
             <div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
                 {stats.unique_tickers?.toLocaleString() || '0'}
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Unique Securities</div>
+              <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Unique Securities</div>
             </div>
           </div>
         </div>
@@ -193,29 +193,29 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
 
       {/* Data Quality Metrics */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
           Data Completeness Metrics
         </h3>
         
         {metrics.map((metric, index) => (
-          <div key={index} className={`card p-6 border ${getStatusColor(metric.status)}`}>
-            <div className="flex items-center justify-between">
+          <div key={index} className={`card p-4 lg:p-6 border ${getStatusColor(metric.status)}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-3">
                 {getStatusIcon(metric.status)}
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm lg:text-base">
                     {metric.name}
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
                     {metric.description}
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {metric.percentage.toFixed(1)}%
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
                   {metric.value.toLocaleString()} / {metric.total.toLocaleString()}
                 </div>
               </div>
@@ -238,8 +238,8 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
       </div>
 
       {/* Issues Summary */}
-      <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className="card p-4 lg:p-6">
+        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
           Data Quality Issues
         </h3>
         
@@ -274,12 +274,12 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
       </div>
 
       {/* Recommendations */}
-      <div className="card p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className="card p-4 lg:p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
           Recommendations
         </h3>
         
-        <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+        <div className="space-y-2 text-xs lg:text-sm text-gray-700 dark:text-gray-300">
           <p>• Run SQL audit queries to identify specific data issues</p>
           <p>• Update import scripts to validate data during ingestion</p>
           <p>• Implement data quality monitoring alerts</p>

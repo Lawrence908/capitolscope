@@ -5,9 +5,78 @@ import {
   DocumentTextIcon,
   ArrowTrendingUpIcon,
   ExclamationTriangleIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import type { CongressionalTrade, CongressMember, DataQualityStats } from '../types';
 import apiClient from '../services/api';
+import stripeService from '../services/stripeService';
+
+// Payment Modal Component
+interface PaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  type: 'success' | 'cancelled';
+  message: string;
+  tier?: string;
+}
+
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, message, tier }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+          <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+            <button
+              type="button"
+              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              onClick={onClose}
+            >
+              <span className="sr-only">Close</span>
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="sm:flex sm:items-start">
+            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10">
+              {type === 'success' ? (
+                <CheckCircleIcon className="h-6 w-6 text-green-600" />
+              ) : (
+                <XCircleIcon className="h-6 w-6 text-red-600" />
+              )}
+            </div>
+            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 className="text-base font-semibold leading-6 text-gray-900">
+                {type === 'success' ? 'Payment Successful!' : 'Payment Cancelled'}
+              </h3>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  {message}
+                  {tier && type === 'success' && (
+                    <span className="block mt-1 font-medium text-green-600">
+                      Welcome to {tier.charAt(0).toUpperCase() + tier.slice(1)} tier!
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+            <button
+              type="button"
+              className="inline-flex w-full justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 sm:ml-3 sm:w-auto"
+              onClick={onClose}
+            >
+              {type === 'success' ? 'Get Started' : 'OK'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DataQualityStats | null>(null);
@@ -15,6 +84,16 @@ const Dashboard: React.FC = () => {
   const [topMembers, setTopMembers] = useState<CongressMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [paymentModal, setPaymentModal] = useState<{
+    isOpen: boolean;
+    type: 'success' | 'cancelled';
+    message: string;
+    tier?: string;
+  }>({
+    isOpen: false,
+    type: 'success',
+    message: '',
+  });
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -42,6 +121,37 @@ const Dashboard: React.FC = () => {
 
     fetchDashboardData();
   }, []);
+
+  // Handle payment success/cancellation on component mount
+  useEffect(() => {
+    const paymentSuccess = stripeService.handlePaymentSuccess();
+    const paymentCancelled = stripeService.handlePaymentCancellation();
+    
+    if (paymentSuccess.success) {
+      setPaymentModal({
+        isOpen: true,
+        type: 'success',
+        message: paymentSuccess.message,
+        tier: paymentSuccess.tier,
+      });
+      // Clean up URL params
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    if (paymentCancelled.cancelled) {
+      setPaymentModal({
+        isOpen: true,
+        type: 'cancelled',
+        message: paymentCancelled.message,
+      });
+      // Clean up URL params
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  const closePaymentModal = () => {
+    setPaymentModal(prev => ({ ...prev, isOpen: false }));
+  };
 
   if (loading) {
     return (
@@ -236,6 +346,13 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
+      <PaymentModal
+        isOpen={paymentModal.isOpen}
+        onClose={closePaymentModal}
+        type={paymentModal.type}
+        message={paymentModal.message}
+        tier={paymentModal.tier}
+      />
     </div>
   );
   };

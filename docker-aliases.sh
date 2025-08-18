@@ -13,7 +13,7 @@ alias capitol-deploy-frontend='./scripts/gcloud/deploy_frontend_cloud_run.sh'
 alias capitol-deploy-backend='./scripts/gcloud/deploy_backend_cloud_run.sh'
 
 # Update environment variables in Cloud Run
-alias capitol-update-env='./scripts/gcloud/update_cloud_run_env_simple_final.sh'
+alias capitol-update-env='./scripts/gcloud/update_cloud_run_env.sh'
 
 # Display logs for running containers
 alias capitol-logs='docker compose -p capitolscope logs -f'

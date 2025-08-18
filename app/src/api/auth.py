@@ -24,7 +24,7 @@ from core.email import email_service
 from domains.users.models import User, UserStatus, AuthProvider, PasswordResetToken, SubscriptionTier
 from domains.users.schemas import (
     LoginRequest, RegisterRequest, TokenResponse, RefreshTokenRequest,
-    UserResponse, ChangePasswordRequest, ResetPasswordRequest, ResetPasswordConfirmRequest,
+    UserResponse, UserUpdate, ChangePasswordRequest, ResetPasswordRequest, ResetPasswordConfirmRequest,
     UpdatePreferencesRequest
 )
 from schemas.base import ResponseEnvelope
@@ -56,7 +56,7 @@ async def login(
     # Authenticate user
     user = await authenticate_user(request.email, request.password, session)
     if not user:
-        return create_response(error={"message": "Incorrect email or password"})
+        return create_response(error={"message": "Incorrect email or password"}, status_code=401)
     
     # Update last login
     from sqlalchemy.sql import func
@@ -98,7 +98,7 @@ async def register(
         existing_user = result.scalar_one_or_none()
         
         if existing_user:
-            return create_response(error={"message": "Email already registered"})
+            return create_response(error={"message": "Email already registered"}, status_code=400)
         
         # Create new user
         user = User(
@@ -121,6 +121,14 @@ async def register(
         # Set full name
         if request.first_name and request.last_name:
             user.full_name = f"{request.first_name} {request.last_name}"
+        
+        # Set default display name
+        if request.first_name and request.last_name:
+            user.display_name = f"{request.first_name} {request.last_name}"
+        elif request.username:
+            user.display_name = request.username
+        else:
+            user.display_name = request.email.split('@')[0]
         
         session.add(user)
         await session.commit()
@@ -145,11 +153,11 @@ async def register(
         # Check which constraint was violated
         error_message = str(e)
         if "ix_users_username" in error_message:
-            return create_response(error={"message": "Username is already taken. Please choose a different username."})
+            return create_response(error={"message": "Username is already taken. Please choose a different username."}, status_code=400)
         elif "ix_users_email" in error_message:
-            return create_response(error={"message": "An account with this email already exists. Please sign in instead."})
+            return create_response(error={"message": "An account with this email already exists. Please sign in instead."}, status_code=400)
         else:
-            return create_response(error={"message": "Registration failed. Please try again with different information."})
+            return create_response(error={"message": "Registration failed. Please try again with different information."}, status_code=400)
     except Exception as e:
         await session.rollback()
         logger.error(f"Registration error: {str(e)}")
@@ -551,6 +559,70 @@ async def get_user_preferences(
         return create_response(error={"message": "Failed to retrieve preferences"})
 
 
-
-
- 
+@router.put(
+    "/profile",
+    response_model=ResponseEnvelope[UserResponse],
+    responses={
+        200: {"description": "Profile updated successfully"},
+        400: {"description": "Invalid profile data"},
+        401: {"description": "Invalid token"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def update_user_profile(
+    request: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db_session),
+) -> ResponseEnvelope[UserResponse]:
+    """
+    Update user profile information.
+    
+    Updates the authenticated user's profile information.
+    """
+    logger.info(f"Profile update attempt: user_id={current_user.id}")
+    
+    try:
+        # Import required modules
+        from domains.users.crud import UserRepository
+        from domains.users.services import UserManagementService
+        
+        # Create repository and service instances
+        user_repo = UserRepository(session)
+        user_service = UserManagementService(user_repo, None)  # No preference repo needed for profile updates
+        
+        # Update user profile
+        updated_user = await user_service.update_user_profile(current_user.id, request)
+        
+        # Convert to response format
+        user_data = {
+            "id": str(updated_user.id),
+            "email": updated_user.email,
+            "username": updated_user.username,
+            "first_name": updated_user.first_name,
+            "last_name": updated_user.last_name,
+            "full_name": updated_user.full_name,
+            "display_name": updated_user.display_name,
+            "computed_display_name": updated_user.computed_display_name,
+            "avatar_url": updated_user.avatar_url,
+            "bio": updated_user.bio,
+            "location": updated_user.location,
+            "website_url": updated_user.website_url,
+            "status": updated_user.status,
+            "is_verified": updated_user.is_verified,
+            "is_active": updated_user.is_active,
+            "last_login_at": updated_user.last_login_at,
+            "subscription_tier": updated_user.subscription_tier,
+            "is_premium": updated_user.is_premium,
+            "is_public_profile": updated_user.is_public_profile,
+            "show_portfolio": updated_user.show_portfolio,
+            "show_trading_activity": updated_user.show_trading_activity,
+            "created_at": updated_user.created_at,
+            "updated_at": updated_user.updated_at,
+        }
+        
+        logger.info(f"Profile update successful: user_id={current_user.id}")
+        return create_response(data=user_data)
+        
+    except Exception as e:
+        logger.error(f"Profile update failed: {e}")
+        return create_response(error={"message": "Failed to update profile"})

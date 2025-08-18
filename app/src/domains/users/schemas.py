@@ -169,6 +169,8 @@ class UserUpdate(BaseModel):
     """User update schema."""
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+    display_name: Optional[str] = None
+    username: Optional[str] = None
     bio: Optional[str] = None
     location: Optional[str] = None
     website_url: Optional[str] = None
@@ -186,7 +188,8 @@ class UserResponse(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     full_name: Optional[str] = None
-    display_name: str
+    display_name: Optional[str] = None
+    computed_display_name: str
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
     location: Optional[str] = None

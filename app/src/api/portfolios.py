@@ -394,7 +394,7 @@ async def export_portfolio_data(
             "holdings": include_holdings,
             "performance": include_performance
         },
-        "expires_at": "2024-01-01T00:00:00Z",
+        "expires_at": "2025-01-01T00:00:00Z",
         "user_id": current_user.id,
     }
     

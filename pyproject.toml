@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "capitolscope"
-version = "0.1.0"
+version = "1.0.0"
 description = "Congressional trading transparency and analysis platform"
 authors = [{name = "CapitolScope Team"}]
 readme = "README.md"
@@ -87,7 +87,7 @@ dependencies = [
     "jinja2>=3.1.0",
     
     # Payment Processing  
-    "stripe>=7.0.0",
+    "stripe>=12.4.0",
     
     # Rate Limiting
     "slowapi>=0.1.9",

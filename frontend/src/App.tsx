@@ -11,6 +11,8 @@ import LandingPage from './components/LandingPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import PremiumRoute from './components/PremiumRoute';
 import ColorPaletteShowcase from './components/ColorPaletteShowcase';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
 
 // Lazy load components to reduce initial bundle size
 const Dashboard = React.lazy(() => import('./components/Dashboard'));
@@ -38,6 +40,8 @@ const App: React.FC = () => {
             {/* Public routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/colors" element={<ColorPaletteShowcase />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
             <Route path="/login" element={
               <ProtectedRoute requireAuth={false}>
                 <LoginPage />
@@ -118,11 +122,13 @@ const App: React.FC = () => {
             } />
             <Route path="/data-quality" element={
               <ProtectedRoute>
-                <Layout>
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <DataQuality />
-                  </Suspense>
-                </Layout>
+                <PremiumRoute requiredTier="pro">
+                  <Layout>
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <DataQuality />
+                    </Suspense>
+                  </Layout>
+                </PremiumRoute>
               </ProtectedRoute>
             } />
             <Route path="/profile" element={

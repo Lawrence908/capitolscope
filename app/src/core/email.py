@@ -40,6 +40,7 @@ class EmailService:
     def __init__(self):
         self.settings = get_settings()
         self.sendgrid_client = None
+        self._sent_subscription_confirmations = set()  # Track sent confirmations to prevent duplicates
         
         # Debug logging for email configuration
         logger.info(f"Email configuration - EMAIL_HOST: {self.settings.EMAIL_HOST}")
@@ -92,6 +93,37 @@ class EmailService:
             )
         except Exception as e:
             logger.error(f"Failed to send welcome email to {user.email}: {e}")
+            return False
+    
+    async def send_subscription_confirmation_email(self, user: User, tier: str, interval: str) -> bool:
+        """Send subscription confirmation email to user."""
+        # Create a unique key for this confirmation to prevent duplicates
+        confirmation_key = f"{user.id}_{tier}_{interval}_{datetime.now().strftime('%Y-%m-%d')}"
+        
+        if confirmation_key in self._sent_subscription_confirmations:
+            logger.info(f"Subscription confirmation email already sent to user {user.id} for {tier} {interval}")
+            return True
+        
+        try:
+            subject = f"Welcome to CapitolScope {tier.title()}!"
+            html_content = self._create_subscription_confirmation_html(user, tier, interval)
+            text_content = self._create_subscription_confirmation_text(user, tier, interval)
+            
+            success = await self._send_email(
+                to_email=user.email,
+                to_name=user.display_name or user.first_name or user.email,
+                subject=subject,
+                html_content=html_content,
+                text_content=text_content
+            )
+            
+            if success:
+                self._sent_subscription_confirmations.add(confirmation_key)
+                logger.info(f"Sent subscription confirmation email to user {user.id} for {tier} {interval}")
+            
+            return success
+        except Exception as e:
+            logger.error(f"Failed to send subscription confirmation email to {user.email}: {e}")
             return False
     
     async def _send_email(
@@ -391,6 +423,188 @@ class EmailService:
         
         © 2025 CapitolScope - Empowering transparency in congressional trading
         """
+
+    def _create_subscription_confirmation_html(self, user: User, tier: str, interval: str) -> str:
+        """Create HTML content for subscription confirmation email."""
+        # Define features based on tier
+        features = self._get_tier_features(tier)
+        pricing = self._get_tier_pricing(tier, interval)
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Welcome to CapitolScope {tier.title()}!</title>
+            <style>
+                body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #2d3748; margin: 0; padding: 0; background-color: #f7fafc; }}
+                .container {{ max-width: 600px; margin: 0 auto; background: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }}
+                .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; }}
+                .header h1 {{ margin: 0; font-size: 32px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }}
+                .header p {{ margin: 10px 0 0 0; font-size: 16px; opacity: 0.9; }}
+                .content {{ padding: 40px 30px; }}
+                .welcome-text {{ font-size: 18px; color: #4a5568; margin-bottom: 30px; }}
+                .subscription-details {{ background: #f8fafc; padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #667eea; }}
+                .subscription-details h3 {{ color: #2d3748; margin-top: 0; font-size: 20px; }}
+                .features {{ background: #f8fafc; padding: 25px; border-radius: 8px; margin: 25px 0; }}
+                .features h3 {{ color: #2d3748; margin-top: 0; font-size: 20px; }}
+                .features ul {{ margin: 0; padding-left: 20px; }}
+                .features li {{ margin: 8px 0; color: #4a5568; }}
+                .feature-item {{ display: flex; align-items: center; margin: 12px 0; }}
+                .feature-icon {{ margin-right: 12px; font-size: 18px; }}
+                .cta-section {{ text-align: center; margin: 35px 0; }}
+                .button {{ display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3); transition: transform 0.2s; }}
+                .button:hover {{ transform: translateY(-2px); }}
+                .footer {{ background: #2d3748; color: white; padding: 30px 20px; text-align: center; }}
+                .footer p {{ margin: 5px 0; }}
+                .social-links {{ margin: 20px 0; }}
+                .social-links a {{ color: #a0aec0; text-decoration: none; margin: 0 10px; }}
+                .highlight {{ background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin: 20px 0; }}
+                .tier-badge {{ display: inline-block; background: #667eea; color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-left: 10px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🏛️ CapitolScope</h1>
+                    <p>Your Window into Congressional Trading Activity</p>
+                </div>
+                <div class="content">
+                    <div class="welcome-text">
+                        <h2>Welcome to {tier.title()}, {user.display_name or user.first_name or 'there'}! 🎉</h2>
+                        <p>Your subscription has been successfully activated! You now have access to premium features that will give you deeper insights into congressional trading activity.</p>
+                    </div>
+                    
+                    <div class="subscription-details">
+                        <h3>📋 Subscription Details</h3>
+                        <p><strong>Plan:</strong> {tier.title()} <span class="tier-badge">{tier.upper()}</span></p>
+                        <p><strong>Billing Cycle:</strong> {interval.title()}</p>
+                        <p><strong>Amount:</strong> ${pricing['price']}/{pricing['period']}</p>
+                        {f"<p><strong>Savings:</strong> {pricing['savings']}</p>" if pricing.get('savings') else ""}
+                    </div>
+                    
+                    <div class="features">
+                        <h3>🚀 Your {tier.title()} Benefits</h3>
+                        <ul>
+                            {''.join([f'<li class="feature-item"><span class="feature-icon">{feature["icon"]}</span> <strong>{feature["name"]}:</strong> {feature["description"]}</li>' for feature in features])}
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>💡 Pro Tip:</strong> Make the most of your {tier.title()} subscription by exploring all the advanced features. Start with the dashboard to see your personalized insights!
+                    </div>
+                    
+                    <div class="cta-section">
+                        <a href="https://capitolscope.chrislawrence.ca/dashboard" class="button">🚀 Access Your Dashboard</a>
+                    </div>
+                    
+                    <p style="text-align: center; color: #718096; font-size: 14px;">
+                        Questions about your subscription? Contact us at <a href="mailto:capitolscope@gmail.com" style="color: #667eea;">capitolscope@gmail.com</a>
+                    </p>
+                </div>
+                <div class="footer">
+                    <p><strong>© 2025 CapitolScope</strong></p>
+                    <p>Empowering transparency in congressional trading</p>
+                    <div class="social-links">
+                        <a href="https://twitter.com/capitolscopeusa">Twitter</a> |
+                        <a href="https://capitolscope.chrislawrence.ca">Website</a>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    
+    def _create_subscription_confirmation_text(self, user: User, tier: str, interval: str) -> str:
+        """Create text content for subscription confirmation email."""
+        features = self._get_tier_features(tier)
+        pricing = self._get_tier_pricing(tier, interval)
+        
+        features_text = '\n'.join([f"• {feature['icon']} {feature['name']}: {feature['description']}" for feature in features])
+        
+        return f"""
+        🏛️ Welcome to CapitolScope {tier.title()}!
+        
+        Hello {user.display_name or user.first_name or 'there'},
+        
+        Your subscription has been successfully activated! 🎉
+        
+        📋 Subscription Details:
+        • Plan: {tier.title()}
+        • Billing Cycle: {interval.title()}
+        • Amount: ${pricing['price']}/{pricing['period']}
+        {f"• Savings: {pricing['savings']}" if pricing.get('savings') else ""}
+        
+        🚀 Your {tier.title()} Benefits:
+        {features_text}
+        
+        💡 Pro Tip: Make the most of your {tier.title()} subscription by exploring all the advanced features. Start with the dashboard to see your personalized insights!
+        
+        🚀 Get Started: https://capitolscope.chrislawrence.ca/dashboard
+        
+        Questions about your subscription? Contact us at capitolscope@gmail.com
+        
+        Best regards,
+        The CapitolScope Team
+        
+        © 2025 CapitolScope - Empowering transparency in congressional trading
+        """
+    
+    def _get_tier_features(self, tier: str) -> List[dict]:
+        """Get features for a specific tier based on PremiumSignup component."""
+        all_features = [
+            # Free features (available to all)
+            {"name": "Basic Search & Browse", "description": "Search and filter congressional trading data", "icon": "🔍", "tiers": ["free", "pro", "premium", "enterprise"]},
+            {"name": "Member Profiles", "description": "Detailed profiles of congress members and their trading history", "icon": "👤", "tiers": ["free", "pro", "premium", "enterprise"]},
+            {"name": "Two-Factor Authentication", "description": "Enhanced security for your account", "icon": "🔒", "tiers": ["free", "pro", "premium", "enterprise"]},
+            {"name": "Active Sessions", "description": "Manage your login sessions across devices", "icon": "🖥️", "tiers": ["free", "pro", "premium", "enterprise"]},
+            {"name": "Trade Alerts", "description": "Get notified of new congressional trades in real-time", "icon": "🔔", "tiers": ["free", "pro", "premium", "enterprise"]},
+            {"name": "Basic Portfolio Analytics", "description": "Basic portfolio performance and analytics", "icon": "📊", "tiers": ["free", "pro", "premium", "enterprise"]},
+            {"name": "Export to CSV", "description": "Export trading data to CSV format", "icon": "📄", "tiers": ["free", "pro", "premium", "enterprise"]},
+            
+            # Pro features
+            {"name": "Full Historical Data", "description": "Complete access to all historical trading data", "icon": "📈", "tiers": ["pro", "premium", "enterprise"]},
+            {"name": "Weekly Summaries", "description": "Comprehensive weekly trading activity reports", "icon": "📋", "tiers": ["pro", "premium", "enterprise"]},
+            {"name": "Multiple Buyer Alerts", "description": "Alerts when 5+ members buy same stock in 3 months", "icon": "👥", "tiers": ["pro", "premium", "enterprise"]},
+            {"name": "High-Value Trade Alerts", "description": "Alerts for trades over $1M", "icon": "💰", "tiers": ["pro", "premium", "enterprise"]},
+            {"name": "Saved Portfolios / Watchlists", "description": "Save and track your favorite portfolios", "icon": "⭐", "tiers": ["pro", "premium", "enterprise"]},
+            
+            # Premium features
+            {"name": "TradingView-Style Charts", "description": "Interactive stock charts with trade overlays", "icon": "📊", "tiers": ["premium", "enterprise"]},
+            {"name": "Advanced Portfolio Analytics", "description": "Advanced trading patterns and insights", "icon": "📈", "tiers": ["premium", "enterprise"]},
+            {"name": "Sector/Committee-based Filters", "description": "Filter trades by congressional committees and sectors", "icon": "🏛️", "tiers": ["premium", "enterprise"]},
+            {"name": "API Access (Rate-limited)", "description": "Programmatic access to trading data", "icon": "🔌", "tiers": ["premium", "enterprise"]},
+            {"name": "Custom Alert Configurations", "description": "Create custom alerts for specific criteria", "icon": "⚙️", "tiers": ["premium", "enterprise"]},
+            
+            # Enterprise features
+            {"name": "Advanced Analytics Dashboard", "description": "Advanced analytics and pattern recognition", "icon": "📊", "tiers": ["enterprise"]},
+            {"name": "White-Label Dashboard Options", "description": "Custom branding and deployment options", "icon": "🏢", "tiers": ["enterprise"]},
+            {"name": "Priority Support", "description": "Priority customer support and assistance", "icon": "🎯", "tiers": ["enterprise"]},
+            {"name": "Increased API Limits", "description": "Higher rate limits for API access", "icon": "🚀", "tiers": ["enterprise"]},
+            {"name": "Team Seats / Admin Panel", "description": "Manage team access and permissions", "icon": "👥", "tiers": ["enterprise"]},
+        ]
+        
+        # Filter features for the specific tier
+        return [feature for feature in all_features if tier.lower() in feature["tiers"]]
+    
+    def _get_tier_pricing(self, tier: str, interval: str) -> dict:
+        """Get pricing information for a specific tier and interval."""
+        pricing = {
+            "pro": {
+                "monthly": {"price": 5.99, "period": "month", "savings": None},
+                "yearly": {"price": 59.99, "period": "year", "savings": "Save 17%"}
+            },
+            "premium": {
+                "monthly": {"price": 14.99, "period": "month", "savings": None},
+                "yearly": {"price": 149.99, "period": "year", "savings": "Save 17%"}
+            },
+            "enterprise": {
+                "monthly": {"price": 49.99, "period": "month", "savings": None},
+                "yearly": {"price": 499.99, "period": "year", "savings": "Save 17%"}
+            }
+        }
+        
+        return pricing.get(tier.lower(), {}).get(interval.lower(), {"price": 0, "period": "month", "savings": None})
 
 
 # Global email service instance

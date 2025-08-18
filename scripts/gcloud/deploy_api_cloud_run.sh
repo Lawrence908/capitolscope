@@ -5,12 +5,8 @@ set -euo pipefail
 export PROJECT_ID=capitolscope
 export REGION=us-west1
 
-# Supply your Supabase creds via env (safer; handles special chars). Example:
-# export SUPABASE_URL="https://xxxx.supabase.co"
-# export SUPABASE_KEY="<anon_key>"
-# export SUPABASE_SERVICE_ROLE_KEY="<service_role_key>"
-# export SUPABASE_PASSWORD='<db_password_with_special_chars_ok>'
-# export SUPABASE_JWT_SECRET='<jwt_secret>'
+# Note: Environment variables are managed separately via update_cloud_run_env.sh
+# This script only handles building, pushing, and deploying the container
 gcloud config set project $PROJECT_ID
 gcloud config set run/region $REGION
 gcloud services enable run.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com
@@ -23,9 +19,11 @@ IMG=us-west1-docker.pkg.dev/$PROJECT_ID/capitolscope/capitolscope-api:$(date +%Y
 docker build -f app/Dockerfile -t $IMG .
 docker push $IMG
 
-# Deploy (uses env vars defined above)
+# Deploy (environment variables are managed separately)
 gcloud run deploy capitolscope-api \
   --image $IMG --region $REGION --allow-unauthenticated \
-  --cpu=1 --memory=512Mi --min-instances=0 \
-  --set-env-vars=ENVIRONMENT=production,DEBUG=true,API_V1_PREFIX=/api/v1 \
-  --set-env-vars=SUPABASE_URL=$SUPABASE_URL,SUPABASE_KEY=$SUPABASE_KEY,SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY,SUPABASE_PASSWORD=$SUPABASE_PASSWORD,SUPABASE_JWT_SECRET=$SUPABASE_JWT_SECRET
+  --cpu=1 --memory=512Mi --min-instances=0
+
+echo ""
+echo "✅ Deployment completed successfully!"
+echo "📝 Note: To update environment variables, run: ./scripts/gcloud/update_cloud_run_env.sh"

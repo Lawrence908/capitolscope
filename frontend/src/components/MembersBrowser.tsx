@@ -94,8 +94,8 @@ const MembersBrowser: React.FC = () => {
       <div className="card p-4 lg:p-6">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div>
-            <h2 className="text-lg lg:text-xl font-semibold text-white">Congress Members</h2>
-            <p className="text-xs lg:text-sm text-neutral-400 mt-1">
+            <h2 className="text-lg lg:text-xl font-semibold text-neutral-900 dark:text-white">Congress Members</h2>
+            <p className="text-xs lg:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
               {members?.total ? `${members.total.toLocaleString()} total members` : 'Loading...'}
             </p>
           </div>
@@ -123,7 +123,7 @@ const MembersBrowser: React.FC = () => {
         {/* Filters panel */}
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">Party</label>
+            <label className="block text-xs lg:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Party</label>
             <select
               value={filters.party || ''}
               onChange={(e) => handleFilterChange('party', e.target.value)}
@@ -136,7 +136,7 @@ const MembersBrowser: React.FC = () => {
             </select>
           </div>
           <div>
-            <label className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">State</label>
+            <label className="block text-xs lg:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">State</label>
             <input
               type="text"
               placeholder="e.g., CA, NY"
@@ -147,7 +147,7 @@ const MembersBrowser: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">Chamber</label>
+            <label className="block text-xs lg:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Chamber</label>
             <select
               value={filters.chamber || ''}
               onChange={(e) => handleFilterChange('chamber', e.target.value as any)}
@@ -183,7 +183,7 @@ const MembersBrowser: React.FC = () => {
             <div className="overflow-x-auto">
               {/* Desktop table */}
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 hidden lg:table">
-                <thead className="bg-bg-secondary">
+                <thead className="bg-bg-light-secondary dark:bg-bg-secondary">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">Name</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">Party</th>
@@ -194,11 +194,11 @@ const MembersBrowser: React.FC = () => {
                     <th className="px-6 py-3"></th>
                   </tr>
                 </thead>
-                <tbody className="bg-bg-primary divide-y divide-neutral-700">
+                <tbody className="bg-bg-light-primary dark:bg-bg-primary divide-y divide-neutral-300 dark:divide-neutral-700">
                   {members.items.map((member) => (
-                    <tr key={member.id} className="hover:bg-bg-secondary">
+                    <tr key={member.id} className="hover:bg-bg-light-secondary dark:hover:bg-bg-secondary">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link to={`/members/${member.id}`} className="font-semibold text-primary-400 hover:text-primary-300 hover:underline">
+                                                  <Link to={`/members/${member.id}`} className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:underline">
                           {member.full_name}
                         </Link>
                       </td>
@@ -218,10 +218,10 @@ const MembersBrowser: React.FC = () => {
               {/* Mobile card layout */}
               <div className="lg:hidden space-y-4 p-4">
                 {members.items.map((member) => (
-                  <div key={member.id} className="bg-bg-secondary rounded-lg p-4 border border-neutral-700">
+                  <div key={member.id} className="bg-bg-light-secondary dark:bg-bg-secondary rounded-lg p-4 border border-neutral-300 dark:border-neutral-700">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <Link to={`/members/${member.id}`} className="font-semibold text-primary-400 hover:text-primary-300 text-sm">
+                                                  <Link to={`/members/${member.id}`} className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm">
                           {member.full_name}
                         </Link>
                         <div className="flex flex-wrap gap-1 mt-1">
@@ -241,12 +241,12 @@ const MembersBrowser: React.FC = () => {
                     
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-neutral-400">Total Trades:</span>
-                        <span className="text-neutral-100 font-semibold">{member.trade_count?.toLocaleString() ?? 'N/A'}</span>
+                        <span className="text-neutral-600 dark:text-neutral-400">Total Trades:</span>
+                        <span className="text-neutral-900 dark:text-neutral-100 font-semibold">{member.trade_count?.toLocaleString() ?? 'N/A'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-neutral-400">Total Volume:</span>
-                        <span className="text-neutral-100 font-semibold">
+                        <span className="text-neutral-600 dark:text-neutral-400">Total Volume:</span>
+                        <span className="text-neutral-900 dark:text-neutral-100 font-semibold">
                           {member.total_trade_value ? `$${(member.total_trade_value / 100).toLocaleString()}` : 'N/A'}
                         </span>
                       </div>
@@ -258,7 +258,7 @@ const MembersBrowser: React.FC = () => {
           )}
           {/* Pagination */}
           {members.pages > 1 && (
-            <div className="bg-bg-secondary px-4 py-3 flex items-center justify-between border-t border-neutral-700 sm:px-6">
+            <div className="bg-bg-light-secondary dark:bg-bg-secondary px-4 py-3 flex items-center justify-between border-t border-neutral-300 dark:border-neutral-700 sm:px-6">
               <div className="flex-1 flex justify-between sm:hidden">
                 <button
                   onClick={() => fetchMembers(currentPage - 1)}
@@ -277,7 +277,7 @@ const MembersBrowser: React.FC = () => {
               </div>
               <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm text-neutral-300">
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
                     Showing{' '}
                     <span className="font-medium">{(currentPage - 1) * 20 + 1}</span>{' '}
                     to{' '}
@@ -291,17 +291,17 @@ const MembersBrowser: React.FC = () => {
                     <button
                       onClick={() => fetchMembers(currentPage - 1)}
                       disabled={!members.has_prev}
-                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-neutral-600 bg-bg-secondary text-sm font-medium text-neutral-400 hover:bg-bg-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-neutral-400 dark:border-neutral-600 bg-bg-light-secondary dark:bg-bg-secondary text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:bg-bg-light-tertiary dark:hover:bg-bg-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Previous
                     </button>
-                    <span className="relative inline-flex items-center px-4 py-2 border border-neutral-600 bg-bg-secondary text-sm font-medium text-neutral-300">
+                    <span className="relative inline-flex items-center px-4 py-2 border border-neutral-400 dark:border-neutral-600 bg-bg-light-secondary dark:bg-bg-secondary text-sm font-medium text-neutral-700 dark:text-neutral-300">
                       Page {currentPage} of {members.pages}
                     </span>
                     <button
                       onClick={() => fetchMembers(currentPage + 1)}
                       disabled={!members.has_next}
-                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-neutral-600 bg-bg-secondary text-sm font-medium text-neutral-400 hover:bg-bg-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-neutral-400 dark:border-neutral-600 bg-bg-light-secondary dark:bg-bg-secondary text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:bg-bg-light-tertiary dark:hover:bg-bg-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Next
                     </button>

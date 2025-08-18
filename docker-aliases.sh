@@ -36,6 +36,9 @@ alias capitol-app-logs='docker compose -p capitolscope logs -f capitolscope'
 # View only worker logs  
 alias capitol-worker-logs='docker compose -p capitolscope logs -f worker'
 
+# Stripe webhook forwarding for local development
+alias capitol-stripe-webhook='stripe listen --forward-to localhost:8000/api/v1/stripe/webhook'
+
 echo "CapitolScope Docker aliases loaded:"
 echo "  capitol-build           - Build and run with file watching"
 echo "  capitol-deploy-frontend - Deploy frontend to Cloud Run"
@@ -48,6 +51,7 @@ echo "  capitol-stop            - Stop all containers"
 echo "  capitol-restart         - Restart main app"
 echo "  capitol-shell           - Open shell in container"
 echo "  capitol-migrate         - Run database migrations"
+echo "  capitol-stripe-webhook  - Forward Stripe webhooks to local dev"
 " 
 
 

@@ -14,9 +14,12 @@ import type {
 class APIClient {
   private client: AxiosInstance;
 
-  constructor(baseURL: string = 'http://localhost:8001') {
+  constructor(baseURL?: string) {
+    // Use environment variable for API URL, fallback to localhost for development
+    const apiUrl = baseURL || import.meta.env.VITE_API_URL || 'http://localhost:8001';
+    
     this.client = axios.create({
-      baseURL,
+      baseURL: apiUrl,
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',

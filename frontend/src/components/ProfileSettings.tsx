@@ -64,7 +64,7 @@ const ProfileSettings: React.FC = () => {
         const tokens = localStorage.getItem('capitolscope_tokens');
         const accessToken = tokens ? JSON.parse(tokens).access_token : '';
         
-        const response = await fetch('http://localhost:8001/api/v1/auth/preferences', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/v1/auth/preferences`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },
@@ -166,7 +166,7 @@ const ProfileSettings: React.FC = () => {
       const tokens = localStorage.getItem('capitolscope_tokens');
       const accessToken = tokens ? JSON.parse(tokens).access_token : '';
       
-      const response = await fetch('http://localhost:8001/api/v1/auth/update-preferences', {
+              const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/v1/auth/update-preferences`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

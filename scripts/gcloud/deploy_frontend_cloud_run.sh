@@ -3,7 +3,7 @@ set -euo pipefail
 
 export PROJECT_ID=capitolscope
 export REGION=us-west1
-export API_URL=https://capitolscope-api-k23f5lpvca-uw.a.run.app
+export API_URL=https://capitolscope-api-1074255918859.us-west1.run.app
 export SERVICE_NAME=capitolscope-frontend
 
 echo "Deploying frontend to Cloud Run with SSR..."

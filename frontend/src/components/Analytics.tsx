@@ -51,6 +51,7 @@ const Analytics: React.FC = () => {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [partialLoading, setPartialLoading] = useState(false);
   const [timePeriod, setTimePeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
 
   // Check subscription tier
@@ -65,7 +66,26 @@ const Analytics: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch all analytics data in parallel
+        // Fetch all analytics data with individual error handling
+        const fetchWithRetry = async (fetchFn: () => Promise<any>, retries = 2) => {
+          for (let i = 0; i <= retries; i++) {
+            try {
+              return await fetchFn();
+            } catch (err: any) {
+              if (i === retries) throw err;
+              // If it's a 429, wait before retrying
+              if (err?.response?.status === 429) {
+                const retryAfter = err.response.headers['retry-after'] || 60;
+                await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+              } else {
+                // For other errors, wait a shorter time
+                await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+              }
+            }
+          }
+        };
+
+        // Fetch all analytics data with individual error handling
         const [
           topTradingMembers,
           topTradedTickers,
@@ -73,29 +93,64 @@ const Analytics: React.FC = () => {
           chamberDistribution,
           amountDistribution,
           volumeOverTime
-        ] = await Promise.all([
-          apiClient.getTopTradingMembers(10),
-          apiClient.getTopTradedTickers(10),
-          apiClient.getPartyDistribution(),
-          apiClient.getChamberDistribution(),
-          apiClient.getAmountDistribution(),
-          apiClient.getVolumeOverTime(timePeriod)
+        ] = await Promise.allSettled([
+          fetchWithRetry(() => apiClient.getTopTradingMembers(10)),
+          fetchWithRetry(() => apiClient.getTopTradedTickers(10)),
+          fetchWithRetry(() => apiClient.getPartyDistribution()),
+          fetchWithRetry(() => apiClient.getChamberDistribution()),
+          fetchWithRetry(() => apiClient.getAmountDistribution()),
+          fetchWithRetry(() => apiClient.getVolumeOverTime(timePeriod))
         ]);
 
+        // Check if we have at least some data
+        const successfulRequests = [topTradingMembers, topTradedTickers, partyDistribution, chamberDistribution, amountDistribution, volumeOverTime].filter(
+          result => result.status === 'fulfilled'
+        );
+
+        if (successfulRequests.length === 0) {
+          setError('Failed to load analytics data. Please try again later.');
+          return;
+        }
+
+        // Show partial loading state if some requests are still pending
+        if (successfulRequests.length < 6) {
+          setPartialLoading(true);
+        }
+
+        // Extract data from successful requests, use defaults for failed ones
         const analyticsData: AnalyticsData = {
-          topTradingMembers: topTradingMembers.map(member => ({
-            member_name: member.full_name || member.member_name || 'Unknown',
-            total_trades: member.trade_count || 0,
-            total_value: member.total_value || 0
-          })),
-          topTradedTickers,
-          partyDistribution,
-          chamberDistribution,
-          amountDistribution,
-          volumeOverTime
+          topTradingMembers: topTradingMembers.status === 'fulfilled' 
+            ? topTradingMembers.value.map((member: any) => ({
+                member_name: member.full_name || member.member_name || 'Unknown',
+                total_trades: member.trade_count || 0,
+                total_value: member.total_value || 0
+              }))
+            : [],
+          topTradedTickers: topTradedTickers.status === 'fulfilled' ? topTradedTickers.value : [],
+          partyDistribution: partyDistribution.status === 'fulfilled' ? partyDistribution.value : {},
+          chamberDistribution: chamberDistribution.status === 'fulfilled' ? chamberDistribution.value : {},
+          amountDistribution: amountDistribution.status === 'fulfilled' ? amountDistribution.value : {},
+          volumeOverTime: volumeOverTime.status === 'fulfilled' ? volumeOverTime.value : []
         };
 
         setData(analyticsData);
+
+        // Clear partial loading state if all data is loaded
+        if (successfulRequests.length === 6) {
+          setPartialLoading(false);
+        }
+
+        // Show warning if some requests failed
+        if (successfulRequests.length < 6) {
+          console.warn('Some analytics data failed to load:', {
+            topTradingMembers: topTradingMembers.status,
+            topTradedTickers: topTradedTickers.status,
+            partyDistribution: partyDistribution.status,
+            chamberDistribution: chamberDistribution.status,
+            amountDistribution: amountDistribution.status,
+            volumeOverTime: volumeOverTime.status
+          });
+        }
       } catch (err) {
         setError('Failed to load analytics data');
         console.error('Analytics error:', err);
@@ -136,7 +191,7 @@ const Analytics: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error && !data) {
     return (
       <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
         <div className="flex">
@@ -149,7 +204,7 @@ const Analytics: React.FC = () => {
     );
   }
 
-  if (!data) {
+  if (!data || (data.topTradingMembers.length === 0 && data.topTradedTickers.length === 0)) {
     return <div className="p-6">No analytics data available.</div>;
   }
 
@@ -283,6 +338,23 @@ const Analytics: React.FC = () => {
             >
               View Plans
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Partial Loading Indicator */}
+      {partialLoading && (
+        <div className="card p-4 lg:p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+          <div className="flex items-center">
+            <ExclamationTriangleIcon className="h-5 w-5 text-amber-600 dark:text-amber-400 mr-3" />
+            <div>
+              <h4 className="text-base lg:text-lg font-semibold text-amber-800 dark:text-amber-200">
+                Loading Partial Data
+              </h4>
+              <p className="text-amber-700 dark:text-amber-300 text-sm">
+                Some analytics data is still loading. The page will update automatically when all data is available.
+              </p>
+            </div>
           </div>
         </div>
       )}

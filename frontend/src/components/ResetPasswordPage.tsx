@@ -54,7 +54,7 @@ const ResetPasswordPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:8001/api/v1/auth/reset-password-confirm', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/v1/auth/reset-password-confirm`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

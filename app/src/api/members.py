@@ -56,75 +56,32 @@ async def get_members(
     logger.info(f"Getting congressional members: filters={filters.dict()}")
     
     try:
-        from sqlalchemy import select, func, and_, or_
-        from sqlalchemy.orm import joinedload
+        # Use the service layer instead of direct SQL queries
+        from domains.congressional.crud import CongressMemberRepository, CongressionalTradeRepository
+        from domains.congressional.services import CongressMemberService
         
-        # Build base query
-        query = select(CongressMember)
+        # Create repositories
+        member_repo = CongressMemberRepository(session)
+        trade_repo = CongressionalTradeRepository(session)
         
-        # Apply search filter only (since that's what's in the schema)
-        if filters.search:
-            search_term = f"%{filters.search}%"
-            query = query.filter(
-                or_(
-                    CongressMember.full_name.ilike(search_term),
-                    CongressMember.first_name.ilike(search_term),
-                    CongressMember.last_name.ilike(search_term)
-                )
-            )
+        # Create service
+        member_service = CongressMemberService(member_repo, trade_repo, None, None)
         
-        # Get total count
-        count_query = select(func.count()).select_from(query.subquery())
-        total = await session.scalar(count_query)
-        
-        # Apply sorting
-        if filters.sort_by == "member_name":
-            query = query.order_by(CongressMember.last_name.asc() if filters.sort_order == "asc" else CongressMember.last_name.desc())
-        else:
-            # Default sorting by last_name
-            query = query.order_by(CongressMember.last_name.asc())
-        
-        # Apply pagination
-        offset = (filters.page - 1) * filters.limit
-        query = query.offset(offset).limit(filters.limit)
-        
-        # Execute query
-        result = await session.execute(query)
-        members = result.scalars().unique().all()
+        # Get members with filters
+        members, total = await member_service.get_members_with_filters(filters)
         
         logger.info(f"Found {len(members)} members out of {total} total")
         
         # Convert to response format
         member_items = []
         for member in members:
-            # Map party values - keep the original enum values for the schema
-            party_map = {
-                'D': 'D',
-                'R': 'R', 
-                'I': 'I'
-            }
-            
-            # Calculate trade statistics for this member
-            trade_stats_query = select(
-                func.count(CongressionalTrade.id).label('trade_count'),
-                func.sum(
-                    func.coalesce(
-                        CongressionalTrade.amount_exact,
-                        (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
-                    )
-                ).label('total_value')
-            ).where(CongressionalTrade.member_id == member.id)
-            
-            trade_stats_result = await session.execute(trade_stats_query)
-            trade_stats = trade_stats_result.first()
-            
             member_item = CongressMemberSummary(
                 id=member.id,
                 bioguide_id=member.bioguide_id or "",
                 first_name=member.first_name,
                 last_name=member.last_name,
                 full_name=member.full_name,
-                party=party_map.get(member.party, member.party),
+                party=member.party,
                 state=member.state,
                 district=member.district,
                 chamber=member.chamber,

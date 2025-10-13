@@ -25,6 +25,8 @@ from domains.notifications.schemas import (
     NotificationAnalyticsResponse, NotificationTemplate, SubscriptionPreferences, AlertConfiguration,
     AlertType, DeliveryStatus, NotificationType
 )
+from domains.notifications.models import TradeAlertRule, NotificationDelivery
+from domains.notifications.services import NotificationService
 
 router = APIRouter()
 
@@ -649,4 +651,238 @@ async def get_notification_analytics(
         "subscription_tier": current_user.subscription_tier,
     }
     
-    return create_response(data=data) 
+    return create_response(data=data)
+
+
+# ============================================================================
+# TRADE ALERT ENDPOINTS
+# ============================================================================
+
+@router.post(
+    "/alerts/member/{member_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Member alert created successfully"},
+        400: {"description": "Invalid member ID or alert configuration"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def create_member_alert(
+    member_id: int = Path(..., description="Congress member ID"),
+    alert_data: Dict[str, Any] = Body(..., description="Alert configuration"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Subscribe to alerts for a specific congress member's trades.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Creating member alert: member_id={member_id}, user_id={current_user.id}")
+    
+    try:
+        notification_service = NotificationService(session)
+        data = await notification_service.create_member_alert(current_user.id, member_id, alert_data)
+        return create_response(data=data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating member alert: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create member alert")
+
+
+@router.post(
+    "/alerts/amount",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Amount alert created successfully"},
+        400: {"description": "Invalid threshold or alert configuration"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def create_amount_alert(
+    alert_data: Dict[str, Any] = Body(..., description="Amount alert configuration"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Create an alert for trades above a certain amount threshold.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Creating amount alert: threshold={alert_data.get('threshold')}, user_id={current_user.id}")
+    
+    try:
+        threshold = alert_data.get("threshold")
+        notification_service = NotificationService(session)
+        data = await notification_service.create_amount_alert(current_user.id, threshold, alert_data)
+        return create_response(data=data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating amount alert: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create amount alert")
+
+
+@router.post(
+    "/alerts/ticker/{ticker}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Ticker alert created successfully"},
+        400: {"description": "Invalid ticker or alert configuration"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def create_ticker_alert(
+    ticker: str = Path(..., description="Stock ticker symbol"),
+    alert_data: Dict[str, Any] = Body(..., description="Ticker alert configuration"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Subscribe to alerts for trades involving a specific ticker symbol.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Creating ticker alert: ticker={ticker}, user_id={current_user.id}")
+    
+    try:
+        notification_service = NotificationService(session)
+        data = await notification_service.create_ticker_alert(current_user.id, ticker, alert_data)
+        return create_response(data=data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating ticker alert: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create ticker alert")
+
+
+@router.get(
+    "/alerts/rules",
+    response_model=ResponseEnvelope[PaginatedResponse[Dict[str, Any]]],
+    responses={
+        200: {"description": "Alert rules retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def get_user_alert_rules(
+    alert_type: Optional[str] = Query(None, description="Filter by alert type"),
+    is_active: Optional[bool] = Query(None, description="Filter by active status"),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[PaginatedResponse[Dict[str, Any]]]:
+    """
+    Get user's configured trade alert rules.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Getting alert rules: user_id={current_user.id}, alert_type={alert_type}, "
+               f"is_active={is_active}, skip={skip}, limit={limit}")
+    
+    try:
+        notification_service = NotificationService(session)
+        rule_data, total_count = await notification_service.get_user_alert_rules(
+            current_user.id, alert_type, is_active, skip, limit
+        )
+        
+        # Create pagination meta
+        pagination_meta = PaginationMeta(
+            page=(skip // limit) + 1,
+            per_page=limit,
+            total=total_count,
+            pages=(total_count + limit - 1) // limit,
+            has_next=skip + limit < total_count,
+            has_prev=skip > 0
+        )
+        
+        paginated_data = PaginatedResponse(
+            items=rule_data,
+            meta=pagination_meta
+        )
+        
+        return create_response(data=paginated_data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving alert rules: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve alert rules")
+
+
+@router.put(
+    "/alerts/rules/{rule_id}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Alert rule updated successfully"},
+        400: {"description": "Invalid rule configuration"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Alert rule not found"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def update_alert_rule(
+    rule_id: int = Path(..., description="Alert rule ID"),
+    update_data: Dict[str, Any] = Body(..., description="Updated rule configuration"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Update an existing trade alert rule.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Updating alert rule: rule_id={rule_id}, user_id={current_user.id}")
+    
+    try:
+        notification_service = NotificationService(session)
+        data = await notification_service.update_alert_rule(rule_id, current_user.id, update_data)
+        return create_response(data=data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating alert rule: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update alert rule")
+
+
+@router.delete(
+    "/alerts/rules/{rule_id}",
+    response_model=ResponseEnvelope[Dict[str, bool]],
+    responses={
+        200: {"description": "Alert rule deleted successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Alert rule not found"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def delete_alert_rule(
+    rule_id: int = Path(..., description="Alert rule ID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, bool]]:
+    """
+    Delete a trade alert rule.
+    
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Deleting alert rule: rule_id={rule_id}, user_id={current_user.id}")
+    
+    try:
+        notification_service = NotificationService(session)
+        data = await notification_service.delete_alert_rule(rule_id, current_user.id)
+        return create_response(data=data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting alert rule: {e}")
+        raise HTTPException(status_code=500, detail="Failed to delete alert rule") 

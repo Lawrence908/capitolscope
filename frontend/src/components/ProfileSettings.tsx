@@ -9,15 +9,23 @@ import {
   ShieldCheckIcon,
   StarIcon,
   SparklesIcon,
+  CreditCardIcon,
+  CheckCircleIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/outline';
+import stripeService from '../services/stripeService';
 
 const ProfileSettings: React.FC = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   
   const [profileData, setProfileData] = useState({
     display_name: user?.display_name || '',
+    username: user?.username || '',
+    first_name: user?.first_name || '',
+    last_name: user?.last_name || '',
     email: user?.email || '',
     is_public_profile: user?.is_public_profile || false,
   });
@@ -36,16 +44,19 @@ const ProfileSettings: React.FC = () => {
     high_value_alerts: false, // Premium+
   });
 
-           // Check if user has premium subscription (handle both lowercase and uppercase)
-         const subscriptionTier = user?.subscription_tier?.toLowerCase();
-         const isPremium = subscriptionTier === 'premium' || subscriptionTier === 'enterprise';
-         const isPro = subscriptionTier === 'pro' || isPremium;
-         const isFree = subscriptionTier === 'free' || !subscriptionTier;
+  // Check if user has premium subscription (handle both lowercase and uppercase)
+  const subscriptionTier = user?.subscription_tier?.toLowerCase();
+  const isPremium = subscriptionTier === 'premium' || subscriptionTier === 'enterprise';
+  const isPro = subscriptionTier === 'pro' || isPremium;
+  const isFree = subscriptionTier === 'free' || !subscriptionTier;
 
   useEffect(() => {
     if (user) {
       setProfileData({
-        display_name: user.display_name || '',
+        display_name: user.display_name || user.computed_display_name || '',
+        username: user.username || '',
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
         email: user.email || '',
         is_public_profile: user.is_public_profile || false,
       });
@@ -59,7 +70,7 @@ const ProfileSettings: React.FC = () => {
         const tokens = localStorage.getItem('capitolscope_tokens');
         const accessToken = tokens ? JSON.parse(tokens).access_token : '';
         
-        const response = await fetch('http://localhost:8001/api/v1/auth/preferences', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/v1/auth/preferences`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },
@@ -90,12 +101,36 @@ const ProfileSettings: React.FC = () => {
     setMessage(null);
 
     try {
-      // TODO: Implement API call to update profile
-      // const response = await apiClient.updateProfile(profileData);
-      // updateUser(response.data);
+      const tokens = localStorage.getItem('capitolscope_tokens');
+      const accessToken = tokens ? JSON.parse(tokens).access_token : '';
       
-      setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/v1/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          display_name: profileData.display_name,
+          username: profileData.username,
+          first_name: profileData.first_name,
+          last_name: profileData.last_name,
+          is_public_profile: profileData.is_public_profile,
+        }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.data && updateUser) {
+          updateUser(data.data);
+        }
+        setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      } else {
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: errorData.error?.message || 'Failed to update profile. Please try again.' });
+      }
     } catch (error) {
+      console.error('Profile update error:', error);
       setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
     } finally {
       setIsLoading(false);
@@ -161,7 +196,7 @@ const ProfileSettings: React.FC = () => {
       const tokens = localStorage.getItem('capitolscope_tokens');
       const accessToken = tokens ? JSON.parse(tokens).access_token : '';
       
-      const response = await fetch('http://localhost:8001/api/v1/auth/update-preferences', {
+              const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/v1/auth/update-preferences`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -195,6 +230,69 @@ const ProfileSettings: React.FC = () => {
     setTimeout(() => {
       window.location.href = '/premium';
     }, 2000);
+  };
+
+  const handleCancelSubscription = async () => {
+    if (!confirm('Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your current billing period.')) {
+      return;
+    }
+
+    setIsCancelling(true);
+    setMessage(null);
+
+    try {
+      const result = await stripeService.cancelSubscription(true); // Cancel at period end
+      setMessage({ 
+        type: 'success', 
+        text: `Subscription cancelled successfully. You will have access until the end of your current billing period.` 
+      });
+      
+      // Update user context to reflect cancellation
+      if (updateUser && user) {
+        updateUser({
+          ...user,
+          subscription_status: 'cancelled'
+        });
+      }
+    } catch (error) {
+      console.error('Error cancelling subscription:', error);
+      setMessage({ 
+        type: 'error', 
+        text: 'Failed to cancel subscription. Please try again or contact support.' 
+      });
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await stripeService.createPortalSession(
+        `${window.location.origin}/profile-settings`
+      );
+      
+      if (response.url) {
+        window.location.href = response.url;
+      } else {
+        throw new Error('No portal URL received');
+      }
+    } catch (error) {
+      console.error('Error creating portal session:', error);
+      setMessage({ 
+        type: 'error', 
+        text: 'Unable to open subscription management. Please try again or contact support.' 
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReactivateSubscription = () => {
+    // Redirect to premium page to reactivate
+    window.location.href = '/premium';
   };
 
   const PremiumBadge = () => (
@@ -279,7 +377,7 @@ const ProfileSettings: React.FC = () => {
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div>
               <label htmlFor="display_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
-                Display Name
+                Display Name *
               </label>
               <input
                 type="text"
@@ -289,7 +387,57 @@ const ProfileSettings: React.FC = () => {
                 onChange={(e) => setProfileData(prev => ({ ...prev, display_name: e.target.value }))}
                 className="input-field"
                 placeholder="Enter your display name"
+                required
               />
+              <p className="text-xs text-neutral-400 mt-1">This is how your name will appear throughout the app</p>
+            </div>
+
+            <div>
+              <label htmlFor="username" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={profileData.username}
+                onChange={(e) => setProfileData(prev => ({ ...prev, username: e.target.value }))}
+                className="input-field"
+                placeholder="Enter your username"
+              />
+              <p className="text-xs text-neutral-400 mt-1">Optional: A unique username for your profile</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="first_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="first_name"
+                  name="first_name"
+                  value={profileData.first_name}
+                  onChange={(e) => setProfileData(prev => ({ ...prev, first_name: e.target.value }))}
+                  className="input-field"
+                  placeholder="Enter your first name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="last_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value={profileData.last_name}
+                  onChange={(e) => setProfileData(prev => ({ ...prev, last_name: e.target.value }))}
+                  className="input-field"
+                  placeholder="Enter your last name"
+                />
+              </div>
             </div>
 
             <div>
@@ -303,11 +451,12 @@ const ProfileSettings: React.FC = () => {
                   id="email"
                   name="email"
                   value={profileData.email}
-                  onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                  className="input-field"
+                  className="input-field bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
                   placeholder="Enter your email"
+                  disabled
                 />
               </div>
+              <p className="text-xs text-neutral-400 mt-1">Email cannot be changed. Contact support if needed.</p>
             </div>
 
             <div className="flex items-center">
@@ -513,6 +662,126 @@ const ProfileSettings: React.FC = () => {
               </label>
             </div>
           </PremiumFeatureWrapper>
+        </div>
+      </div>
+
+      {/* Subscription Management */}
+      <div className="card p-4 lg:p-6">
+        <div className="flex items-center mb-4 lg:mb-6">
+          <CreditCardIcon className="h-5 w-5 lg:h-6 lg:w-6 text-primary-600 mr-2 lg:mr-3" />
+          <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
+            Subscription Management
+          </h3>
+        </div>
+
+        <div className="space-y-4">
+          {/* Current Subscription Status */}
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Current Plan</h4>
+              <div className="flex items-center">
+                <span className="text-sm font-medium text-gray-900 dark:text-gray-100 capitalize mr-2">
+                  {subscriptionTier || 'free'}
+                </span>
+                {!isFree && (
+                  <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
+                    <StarIcon className="h-3 w-3 mr-1" />
+                    {isPremium ? 'Premium' : 'Pro'}
+                  </div>
+                )}
+                {user?.subscription_status === 'cancelled' && (
+                  <div className="flex items-center text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-full ml-2">
+                    <XCircleIcon className="h-3 w-3 mr-1" />
+                    Cancelled
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="flex items-center">
+                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
+                <span className="text-gray-600 dark:text-gray-400">Analytics Access</span>
+                <span className={`ml-auto ${isPro ? 'text-green-600' : 'text-red-600'}`}>
+                  {isPro ? '✓' : '✗'}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
+                <span className="text-gray-600 dark:text-gray-400">Data Quality</span>
+                <span className={`ml-auto ${isPro ? 'text-green-600' : 'text-red-600'}`}>
+                  {isPro ? '✓' : '✗'}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
+                <span className="text-gray-600 dark:text-gray-400">Trade Alerts</span>
+                <span className={`ml-auto ${isPro ? 'text-green-600' : 'text-red-600'}`}>
+                  {isPro ? '✓' : '✗'}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
+                <span className="text-gray-600 dark:text-gray-400">Premium Features</span>
+                <span className={`ml-auto ${isPremium ? 'text-green-600' : 'text-red-600'}`}>
+                  {isPremium ? '✓' : '✗'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Subscription Actions */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {isFree ? (
+              <Link
+                to="/premium"
+                className="btn-primary flex-1 text-center"
+              >
+                Upgrade to Pro
+              </Link>
+            ) : user?.subscription_status === 'cancelled' ? (
+              <div className="w-full text-center">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                  Your subscription has been cancelled. You'll have access until the end of your billing period.
+                </p>
+                <button
+                  onClick={handleReactivateSubscription}
+                  className="btn-primary"
+                >
+                  Reactivate Subscription
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={handleManageSubscription}
+                  disabled={isLoading}
+                  className="btn-secondary flex-1 text-center"
+                >
+                  {isLoading ? 'Opening...' : (isPro && !isPremium ? 'Upgrade to Premium' : 'Manage Plan')}
+                </button>
+                <button
+                  onClick={handleCancelSubscription}
+                  disabled={isCancelling}
+                  className="btn-secondary flex-1 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                >
+                  {isCancelling ? 'Cancelling...' : 'Cancel Subscription'}
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Subscription Info */}
+          {!isFree && (
+            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p className="text-blue-800 dark:text-blue-200 text-xs">
+                Need help with your subscription? Contact support at{' '}
+                <a href="mailto:captiolscope@gmail.com" className="underline hover:no-underline">
+                  support@captiolscope.ca
+                </a>
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

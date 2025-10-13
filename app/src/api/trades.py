@@ -512,8 +512,8 @@ async def export_trades_csv(
     # TODO: Implement CSV export
     data = {
         # "user_id": current_user.id,  # Temporarily disabled
-        "export_url": "https://api.capitolscope.com/exports/trades-export-123.csv",
-        "expires_at": "2024-01-01T00:00:00Z",
+        "export_url": "https://capitolscope.chrislawrence.ca/exports/trades-export-123.csv",
+        "expires_at": "2025-01-01T00:00:00Z",
     }
     
     return create_response(data=data)
@@ -797,7 +797,7 @@ async def flag_trade(
     data = {
         "trade_id": trade_id,
         # "flagged_by": current_user.id,  # Temporarily disabled
-        "flagged_at": "2024-01-01T00:00:00Z",
+        "flagged_at": "2025-01-01T00:00:00Z",
     }
     
     return create_response(data=data) 

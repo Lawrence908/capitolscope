@@ -1,0 +1,39 @@
+[Unit]
+Description=CapitolScope Celery Worker
+After=network.target redis.service postgresql.service
+
+[Service]
+Type=simple
+User=capitolscope
+Group=capitolscope
+WorkingDirectory=/opt/capitolscope
+Environment=PYTHONPATH=/opt/capitolscope/app/src
+ExecStart=/opt/capitolscope/.venv/bin/celery -A background.production_celery worker \
+    --loglevel=info \
+    --logfile=/var/log/capitolscope/celery-worker.log \
+    --pidfile=/var/run/capitolscope/celery-worker.pid \
+    --concurrency=4 \
+    --queues=default,notifications,data_ingestion,price_updates,maintenance,health_checks
+ExecStop=/bin/kill -TERM $MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Resource limits
+LimitNOFILE=65536
+MemoryLimit=2G
+CPUQuota=200%
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/capitolscope /var/run/capitolscope /tmp
+
+[Install]
+WantedBy=multi-user.target
+
+
+

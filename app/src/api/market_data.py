@@ -432,7 +432,7 @@ async def refresh_data_feed(
         "feed_id": feed_id,
         "refresh_initiated": True,
         "force": force,
-        "estimated_completion": "2024-01-01T00:05:00Z",
+        "estimated_completion": "2025-01-01T00:05:00Z",
         "initiated_by": current_user.id,
     }
     

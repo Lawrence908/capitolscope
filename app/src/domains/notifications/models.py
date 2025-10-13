@@ -7,7 +7,7 @@ including user subscriptions, alerts, and delivery tracking.
 
 from datetime import datetime
 from typing import Optional, List
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, ForeignKey, JSON, BigInteger, ARRAY
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -52,7 +52,7 @@ class NotificationAlert(CapitolScopeBaseModel):
     """Individual notification alerts."""
     __tablename__ = "notification_alerts"
     
-    subscription_id = Column(Integer, ForeignKey("notification_subscriptions.id"), nullable=False)
+    subscription_id = Column(UUID(as_uuid=True), ForeignKey("notification_subscriptions.id"), nullable=False)
     
     # Alert details
     alert_type = Column(String(50), nullable=False)  # trade_alert, portfolio_update, market_alert
@@ -82,7 +82,7 @@ class NotificationDeliveryLog(CapitolScopeBaseModel):
     """Log of notification delivery attempts."""
     __tablename__ = "notification_delivery_logs"
     
-    alert_id = Column(Integer, ForeignKey("notification_alerts.id"), nullable=False)
+    alert_id = Column(UUID(as_uuid=True), ForeignKey("notification_alerts.id"), nullable=False)
     
     # Delivery details
     delivery_method = Column(String(20), nullable=False)  # email, push, sms
@@ -178,6 +178,63 @@ class NotificationAnalytics(CapitolScopeBaseModel):
 
 
 # ============================================================================
+# TRADE ALERT MODELS
+# ============================================================================
+
+class TradeAlertRule(CapitolScopeBaseModel):
+    """User-defined rules for trade alerts."""
+    __tablename__ = "trade_alert_rules"
+    
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    
+    # Alert rule configuration
+    name = Column(String(100), nullable=False)
+    description = Column(Text)
+    alert_type = Column(String(30), nullable=False, index=True)  # member_trades, amount_threshold, ticker_trades
+    
+    # Target configuration
+    target_id = Column(Integer, index=True)  # member_id for member alerts
+    target_symbol = Column(String(10), index=True)  # ticker symbol for ticker alerts
+    target_name = Column(String(100))  # human-readable target name
+    threshold_value = Column(BigInteger)  # amount threshold in cents
+    conditions = Column(JSON)  # additional conditions
+    
+    # Notification settings
+    notification_channels = Column(ARRAY(Text), default=["email"])
+    is_active = Column(Boolean, default=True, nullable=False, index=True)
+    
+    # Metadata
+    # created_at and updated_at are provided by CapitolScopeBaseModel
+    
+    # Relationships
+    user = relationship("User", back_populates="trade_alert_rules")
+    notification_deliveries = relationship("NotificationDelivery", back_populates="alert_rule")
+
+
+class NotificationDelivery(CapitolScopeBaseModel):
+    """Tracking of notification deliveries for trade alerts."""
+    __tablename__ = "notification_deliveries"
+    
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    trade_id = Column(UUID(as_uuid=True), ForeignKey("congressional_trades.id"), nullable=False, index=True)
+    alert_rule_id = Column(UUID(as_uuid=True), ForeignKey("trade_alert_rules.id"), nullable=False, index=True)
+    
+    # Delivery status
+    delivery_status = Column(String(20), nullable=False, default="pending")  # pending, sent, delivered, failed
+    sent_at = Column(DateTime)
+    delivered_at = Column(DateTime)
+    error_message = Column(Text)
+    
+    # Metadata
+    # created_at is provided by CapitolScopeBaseModel
+    
+    # Relationships
+    user = relationship("User")
+    trade = relationship("CongressionalTrade")
+    alert_rule = relationship("TradeAlertRule", back_populates="notification_deliveries")
+
+
+# ============================================================================
 # MODEL RELATIONSHIPS
 # ============================================================================
 
@@ -197,5 +254,7 @@ __all__ = [
     "NotificationDeliveryLog",
     "NotificationTemplate",
     "NewsletterSubscription",
-    "NotificationAnalytics"
+    "NotificationAnalytics",
+    "TradeAlertRule",
+    "NotificationDelivery"
 ] 

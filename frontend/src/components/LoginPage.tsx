@@ -26,12 +26,16 @@ const LoginPage: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // Clear errors when form data changes
+  // Clear errors when user starts typing
   useEffect(() => {
     if (error) {
-      clearError();
+      const timer = setTimeout(() => {
+        clearError();
+      }, 5000); // Clear error after 5 seconds
+      
+      return () => clearTimeout(timer);
     }
-  }, [formData, clearError]);
+  }, [error, clearError]);
 
   const validateForm = (): boolean => {
     const errors: { email?: string; password?: string } = {};
@@ -58,6 +62,11 @@ const LoginPage: React.FC = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+    
+    // Clear error when user starts typing
+    if (error) {
+      clearError();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -205,11 +214,12 @@ const LoginPage: React.FC = () => {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-error">{error}</p>
+                  <p className="text-sm text-error">Error: {error}</p>
                 </div>
               </div>
             </div>
           )}
+
 
           {/* Submit Button */}
           <div>

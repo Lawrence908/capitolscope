@@ -14,9 +14,12 @@ import type {
 class APIClient {
   private client: AxiosInstance;
 
-  constructor(baseURL: string = 'http://localhost:8001') {
+  constructor(baseURL?: string) {
+    // Use environment variable for API URL, fallback to localhost for development
+    const apiUrl = baseURL || import.meta.env.VITE_API_URL || 'http://localhost:8001';
+    
     this.client = axios.create({
-      baseURL,
+      baseURL: apiUrl,
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
@@ -32,10 +35,25 @@ class APIClient {
       (error) => Promise.reject(error)
     );
 
-    // Add response interceptor for error handling
+    // Add response interceptor for error handling with retry logic
     this.client.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
+        const originalRequest = error.config;
+        
+        // Handle 429 Too Many Requests with retry
+        if (error.response?.status === 429 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          
+          const retryAfter = error.response.headers['retry-after'] || 60;
+          console.log(`Rate limited. Retrying after ${retryAfter} seconds...`);
+          
+          await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+          
+          // Retry the request
+          return this.client(originalRequest);
+        }
+        
         if (error.response) {
           const apiError: APIError = {
             detail: error.response.data?.detail || 'An error occurred',
@@ -211,6 +229,36 @@ class APIClient {
   async getVolumeOverTime(period: 'daily' | 'weekly' | 'monthly' = 'daily'): Promise<Array<{ date: string; count: number; volume: number }>> {
     const response = await this.client.get(`/api/v1/trades/analytics/volume-over-time?period=${period}`);
     return response.data.data;
+  }
+
+  // Notification Alerts
+  async getAlertRules(): Promise<any> {
+    const response = await this.client.get('/api/v1/notifications/alerts/rules');
+    return response.data;
+  }
+
+  async createMemberAlert(memberId: number, alertData: any): Promise<any> {
+    const response = await this.client.post(`/api/v1/notifications/alerts/member/${memberId}`, alertData);
+    return response.data;
+  }
+
+  async createAmountAlert(alertData: any): Promise<any> {
+    const response = await this.client.post('/api/v1/notifications/alerts/amount', alertData);
+    return response.data;
+  }
+
+  async createTickerAlert(symbol: string, alertData: any): Promise<any> {
+    const response = await this.client.post(`/api/v1/notifications/alerts/ticker/${symbol}`, alertData);
+    return response.data;
+  }
+
+  async updateAlertRule(ruleId: string, updates: any): Promise<any> {
+    const response = await this.client.put(`/api/v1/notifications/alerts/rules/${ruleId}`, updates);
+    return response.data;
+  }
+
+  async deleteAlertRule(ruleId: string): Promise<void> {
+    await this.client.delete(`/api/v1/notifications/alerts/rules/${ruleId}`);
   }
 }
 

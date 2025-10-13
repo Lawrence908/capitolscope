@@ -515,6 +515,75 @@ def send_trade_alerts(self, user_id: Optional[int] = None):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def process_new_trade_notifications(self, doc_id: str, member_id: str, transaction_date: str):
+    """
+    Process notifications for a newly inserted trade.
+    
+    Args:
+        doc_id: Trade document ID
+        member_id: Congress member ID (UUID string)
+        transaction_date: Trade transaction date (ISO format)
+    """
+    try:
+        logger.info(f"Processing notifications for trade: doc_id={doc_id}, member_id={member_id}")
+        
+        # Use sync session for Celery tasks
+        with get_sync_db_session() as session:
+            from sqlalchemy import and_
+            from datetime import datetime
+            from domains.congressional.models import CongressionalTrade
+            from domains.congressional.schemas import CongressionalTradeDetail
+            
+            # Find the trade by doc_id, member_id, and transaction_date
+            from uuid import UUID
+            trade_date = datetime.fromisoformat(transaction_date).date()
+            member_uuid = UUID(member_id) if isinstance(member_id, str) else member_id
+            trade = session.query(CongressionalTrade).filter(
+                and_(
+                    CongressionalTrade.doc_id == doc_id,
+                    CongressionalTrade.member_id == member_uuid,
+                    CongressionalTrade.transaction_date == trade_date
+                )
+            ).first()
+            
+            if not trade:
+                logger.warning(f"Trade not found: doc_id={doc_id}, member_id={member_id}")
+                return {"status": "error", "message": "Trade not found"}
+            
+            # Convert to schema object for processing
+            trade_detail = CongressionalTradeDetail.from_orm(trade)
+            
+            # Run async notification processing in sync context
+            import asyncio
+            from sqlalchemy.ext.asyncio import AsyncSession
+            from core.database import db_manager
+            from domains.notifications.trade_detection import TradeDetectionService
+            
+            async def process_notifications():
+                """Process notifications asynchronously."""
+                db_manager_instance = DatabaseManager()
+                await db_manager_instance.initialize()
+                
+                try:
+                    async with db_manager_instance.session_factory() as async_session:
+                        detection_service = TradeDetectionService(async_session)
+                        result = await detection_service.process_new_trade(trade_detail)
+                        return result
+                finally:
+                    await db_manager_instance.close()
+            
+            # Run the async function
+            result = run_async_task(process_notifications())
+            
+            logger.info(f"Trade {doc_id} notifications processed: {result}")
+            return {"status": "success", "result": result}
+            
+    except Exception as exc:
+        logger.error(f"Error processing notifications for trade {doc_id}: {exc}", exc_info=True)
+        raise self.retry(exc=exc, countdown=300, max_retries=3)
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def generate_analytics_report(self, report_type: str = "daily"):
     """
     Generate analytics reports for portfolio performance and trading patterns.
@@ -869,4 +938,175 @@ def enrich_congressional_member_data(self):
         
     except Exception as exc:
         logger.error(f"Congressional member enrichment failed: error={str(exc)}", exc_info=True)
+        raise
+
+
+# ============================================================================
+# NOTIFICATION AND ALERT TASKS
+# ============================================================================
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def process_pending_notifications(self):
+    """Process pending notifications and send alerts."""
+    logger.info("Received pending notifications processing task")
+    return run_async_task(_process_pending_notifications_async())
+
+
+async def _process_pending_notifications_async() -> Dict[str, Any]:
+    """Async implementation of pending notifications processing."""
+    try:
+        logger.info("Starting pending notifications processing")
+        
+        db_manager = DatabaseManager()
+        await db_manager.initialize()
+        
+        notifications_processed = 0
+        errors = []
+        
+        async with db_manager.session_factory() as session:
+            from domains.notifications.trade_detection import TradeDetectionService
+            from datetime import datetime, timedelta
+            
+            # Initialize trade detection service
+            detection_service = TradeDetectionService(session)
+            
+            # Find new trades in the last hour that might need notification processing
+            since_date = datetime.utcnow() - timedelta(hours=1)
+            new_trades = await detection_service.detect_new_trades(since_date)
+            
+            if new_trades:
+                logger.info(f"Found {len(new_trades)} new trades to process for notifications")
+                
+                # Process notifications for new trades
+                result = await detection_service.batch_process_trades(new_trades)
+                notifications_processed = result.get("total_notifications", 0)
+                errors = result.get("errors", [])
+                
+                logger.info(f"Processed {len(new_trades)} trades, sent {notifications_processed} notifications")
+            else:
+                logger.info("No new trades found for notification processing")
+            
+            await session.commit()
+        
+        await db_manager.close()
+        
+        return {
+            "status": "success",
+            "trades_processed": len(new_trades) if new_trades else 0,
+            "notifications_processed": notifications_processed,
+            "errors": errors,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"Pending notifications processing failed: error={str(exc)}", exc_info=True)
+        raise
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def daily_maintenance(self):
+    """Run daily maintenance tasks."""
+    try:
+        logger.info("Starting daily maintenance tasks")
+        
+        # TODO: Implement daily maintenance logic
+        # This would typically involve:
+        # 1. Database optimization and cleanup
+        # 2. Log rotation and cleanup
+        # 3. Cache cleanup
+        # 4. Data validation checks
+        # 5. Performance metrics collection
+        
+        tasks_completed = 0
+        logger.info(f"Daily maintenance completed: tasks_completed={tasks_completed}")
+        
+        return {"status": "success", "tasks_completed": tasks_completed}
+        
+    except Exception as exc:
+        logger.error(f"Daily maintenance failed: error={str(exc)}", exc_info=True)
+        raise self.retry(exc=exc, countdown=600, max_retries=2)
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def system_health_check(self):
+    """Comprehensive system health check."""
+    try:
+        logger.info("Starting system health check")
+        
+        health_status = {
+            "database": "unknown",
+            "redis": "unknown",
+            "external_apis": "unknown",
+            "disk_space": "unknown",
+            "memory_usage": "unknown",
+            "celery_workers": "unknown"
+        }
+        
+        # Check database connectivity
+        try:
+            with get_sync_db_session() as session:
+                session.execute("SELECT 1")
+                health_status["database"] = "healthy"
+                logger.debug("Database health check passed")
+        except Exception as e:
+            health_status["database"] = f"unhealthy: {str(e)}"
+            logger.error(f"Database health check failed: {e}")
+        
+        # Check Redis connectivity
+        try:
+            import redis
+            redis_client = redis.Redis.from_url(settings.CELERY_BROKER_URL)
+            redis_client.ping()
+            health_status["redis"] = "healthy"
+            logger.debug("Redis health check passed")
+        except Exception as e:
+            health_status["redis"] = f"unhealthy: {str(e)}"
+            logger.error(f"Redis health check failed: {e}")
+        
+        # Check disk space
+        try:
+            import shutil
+            total, used, free = shutil.disk_usage("/")
+            free_percentage = (free / total) * 100
+            if free_percentage > 20:
+                health_status["disk_space"] = f"healthy ({free_percentage:.1f}% free)"
+            elif free_percentage > 10:
+                health_status["disk_space"] = f"warning ({free_percentage:.1f}% free)"
+            else:
+                health_status["disk_space"] = f"critical ({free_percentage:.1f}% free)"
+            logger.debug(f"Disk space check: {free_percentage:.1f}% free")
+        except Exception as e:
+            health_status["disk_space"] = f"error: {str(e)}"
+            logger.error(f"Disk space check failed: {e}")
+        
+        # Check memory usage
+        try:
+            import psutil
+            memory = psutil.virtual_memory()
+            if memory.percent < 80:
+                health_status["memory_usage"] = f"healthy ({memory.percent:.1f}% used)"
+            elif memory.percent < 90:
+                health_status["memory_usage"] = f"warning ({memory.percent:.1f}% used)"
+            else:
+                health_status["memory_usage"] = f"critical ({memory.percent:.1f}% used)"
+            logger.debug(f"Memory usage check: {memory.percent:.1f}% used")
+        except Exception as e:
+            health_status["memory_usage"] = f"error: {str(e)}"
+            logger.error(f"Memory usage check failed: {e}")
+        
+        # Overall health determination
+        unhealthy_components = [k for k, v in health_status.items() if "unhealthy" in v or "critical" in v]
+        overall_status = "unhealthy" if unhealthy_components else "healthy"
+        
+        logger.info(f"System health check completed: overall_status={overall_status}, health_status={health_status}")
+        
+        return {
+            "status": "success",
+            "overall_health": overall_status,
+            "components": health_status,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as exc:
+        logger.error(f"System health check failed: error={str(exc)}", exc_info=True)
         raise

@@ -60,7 +60,7 @@ services:
       retries: 5
       start_period: 5s
 
-  # Background Worker for Data Ingestion
+  # Traditional Background Worker for Data Ingestion (Local Development)
   worker:
     build:
       context: .
@@ -84,8 +84,10 @@ services:
       - ENVIRONMENT=development
     command: python -m celery -A background.celery_app worker --loglevel=info --concurrency=2
     restart: unless-stopped
+    profiles:
+      - celery
 
-  # Celery Beat Scheduler
+  # Traditional Celery Beat Scheduler (Local Development)
   scheduler:
     build:
       context: .
@@ -111,6 +113,43 @@ services:
       - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
     command: python -m celery -A background.celery_app beat --loglevel=info
     restart: unless-stopped
+    profiles:
+      - celery
+
+  # Cloud Run Worker (Local Testing)
+  cloud-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: capitolscope-cloud-worker-dev
+    volumes:
+      - ./app/logs:/app/logs
+      - ./app/src:/app/src
+    ports:
+      - "8082:8080"
+    depends_on:
+      - redis-dev
+      - capitolscope
+    env_file:
+      - .env
+    networks:
+      - capitolscope-network
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - PORT=8080
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-devpassword}@redis-dev:6379/0
+    restart: unless-stopped
+    profiles:
+      - cloud-run
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   # Frontend React/Vite Application
   frontend:

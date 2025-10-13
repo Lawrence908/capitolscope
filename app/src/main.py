@@ -18,11 +18,16 @@ from typing import Dict, Any
 import logging
 
 # Force file logging setup before anything else
+import os
+log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'app.log')
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('/app/logs/app.log'),
+        logging.FileHandler(log_file),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -41,7 +46,7 @@ from core.config import settings
 from core.database import init_database, close_database
 from core.logging import configure_logging, setup_file_logging
 from core.email import email_service
-from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints
+from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints, stripe
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
@@ -197,6 +202,7 @@ app.include_router(health.router, prefix="/health", tags=["Health"])
 app.include_router(auth.router, prefix=f"{settings.API_V1_PREFIX}/auth", tags=["Authentication"])
 app.include_router(trades.router, prefix=f"{settings.API_V1_PREFIX}/trades", tags=["Trades"])
 app.include_router(members.router, prefix=f"{settings.API_V1_PREFIX}/members", tags=["Members"])
+app.include_router(stripe.router, prefix=f"{settings.API_V1_PREFIX}", tags=["Stripe"])
 
 # New domain endpoints
 app.include_router(portfolios.router, prefix=f"{settings.API_V1_PREFIX}/portfolios", tags=["Portfolios"])

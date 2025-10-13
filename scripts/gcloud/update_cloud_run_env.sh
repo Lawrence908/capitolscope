@@ -26,18 +26,75 @@ get_env_value() {
 
 echo "📖 Reading environment variables from $ENV_FILE..."
 
-# Get specific environment variables
+# Redis Configuration
+REDIS_HOST=$(get_env_value "REDIS_HOST")
+REDIS_USER=$(get_env_value "REDIS_USER")
+REDIS_PASSWORD=$(get_env_value "REDIS_PASSWORD")
+REDIS_PORT=$(get_env_value "REDIS_PORT")
+REDIS_DB=$(get_env_value "REDIS_DB")
+CELERY_BROKER_URL=$(get_env_value "CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND=$(get_env_value "CELERY_RESULT_BACKEND")
+
+# API Keys
+ALPHA_VANTAGE_API_KEY=$(get_env_value "ALPHA_VANTAGE_API_KEY")
+ALPHA_VANTAGE_BASE_URL=$(get_env_value "ALPHA_VANTAGE_BASE_URL")
+POLYGON_API_KEY=$(get_env_value "POLYGON_API_KEY")
+OPEN_FIGI_API_KEY=$(get_env_value "OPEN_FIGI_API_KEY")
+CONGRESS_GOV_API_KEY=$(get_env_value "CONGRESS_GOV_API_KEY")
+
+# Supabase Configuration
 SUPABASE_URL=$(get_env_value "SUPABASE_URL")
+SUPABASE_PROJECT_REF=$(get_env_value "SUPABASE_PROJECT_REF")
+SUPABASE_PASSWORD=$(get_env_value "SUPABASE_PASSWORD")
 SUPABASE_KEY=$(get_env_value "SUPABASE_KEY")
 SUPABASE_SERVICE_ROLE_KEY=$(get_env_value "SUPABASE_SERVICE_ROLE_KEY")
-SUPABASE_PASSWORD=$(get_env_value "SUPABASE_PASSWORD")
 SUPABASE_JWT_SECRET=$(get_env_value "SUPABASE_JWT_SECRET")
+DATABASE_PROVIDER=$(get_env_value "DATABASE_PROVIDER")
+
+# Application Settings
+ENVIRONMENT=$(get_env_value "ENVIRONMENT")
+DEBUG=$(get_env_value "DEBUG")
+LOG_LEVEL=$(get_env_value "LOG_LEVEL")
+DATABASE_ECHO=$(get_env_value "DATABASE_ECHO")
+DATABASE_POOL_SIZE=$(get_env_value "DATABASE_POOL_SIZE")
+DATABASE_MAX_OVERFLOW=$(get_env_value "DATABASE_MAX_OVERFLOW")
+
+# Email Configuration
 EMAIL_HOST=$(get_env_value "EMAIL_HOST")
 EMAIL_PORT=$(get_env_value "EMAIL_PORT")
 EMAIL_USER=$(get_env_value "EMAIL_USER")
 EMAIL_PASSWORD=$(get_env_value "EMAIL_PASSWORD")
 EMAIL_FROM=$(get_env_value "EMAIL_FROM")
 EMAIL_USE_TLS=$(get_env_value "EMAIL_USE_TLS")
+
+# Stripe Configuration
+STRIPE_PUBLISHABLE_KEY=$(get_env_value "STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY=$(get_env_value "STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET=$(get_env_value "STRIPE_WEBHOOK_SECRET")
+STRIPE_API_VERSION=$(get_env_value "STRIPE_API_VERSION")
+STRIPE_BASE_URL=$(get_env_value "STRIPE_BASE_URL")
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$(get_env_value "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY")
+
+# Stripe Product IDs
+STRIPE_PRODUCT_PRO_MONTHLY=$(get_env_value "STRIPE_PRODUCT_PRO_MONTHLY")
+STRIPE_PRODUCT_PREMIUM_MONTHLY=$(get_env_value "STRIPE_PRODUCT_PREMIUM_MONTHLY")
+STRIPE_PRODUCT_ENTERPRISE_MONTHLY=$(get_env_value "STRIPE_PRODUCT_ENTERPRISE_MONTHLY")
+STRIPE_PRODUCT_PRO_YEARLY=$(get_env_value "STRIPE_PRODUCT_PRO_YEARLY")
+STRIPE_PRODUCT_PREMIUM_YEARLY=$(get_env_value "STRIPE_PRODUCT_PREMIUM_YEARLY")
+STRIPE_PRODUCT_ENTERPRISE_YEARLY=$(get_env_value "STRIPE_PRODUCT_ENTERPRISE_YEARLY")
+
+# Stripe Price IDs
+STRIPE_PRICE_PRO_MONTHLY=$(get_env_value "STRIPE_PRICE_PRO_MONTHLY")
+STRIPE_PRICE_PREMIUM_MONTHLY=$(get_env_value "STRIPE_PRICE_PREMIUM_MONTHLY")
+STRIPE_PRICE_ENTERPRISE_MONTHLY=$(get_env_value "STRIPE_PRICE_ENTERPRISE_MONTHLY")
+STRIPE_PRICE_PRO_YEARLY=$(get_env_value "STRIPE_PRICE_PRO_YEARLY")
+STRIPE_PRICE_PREMIUM_YEARLY=$(get_env_value "STRIPE_PRICE_PREMIUM_YEARLY")
+STRIPE_PRICE_ENTERPRISE_YEARLY=$(get_env_value "STRIPE_PRICE_ENTERPRISE_YEARLY")
+
+# Stripe URLs
+STRIPE_SUCCESS_URL=$(get_env_value "STRIPE_SUCCESS_URL")
+STRIPE_CANCEL_URL=$(get_env_value "STRIPE_CANCEL_URL")
+STRIPE_WEBHOOK_ENDPOINT=$(get_env_value "STRIPE_WEBHOOK_ENDPOINT")
 
 # Check if required variables are set
 if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ] || [ -z "$EMAIL_USER" ]; then
@@ -46,25 +103,71 @@ if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ] || [ -z "$EMAIL_USER" ]; the
     exit 1
 fi
 
-echo "  ✅ SUPABASE_URL"
-echo "  ✅ SUPABASE_KEY"
-echo "  ✅ SUPABASE_SERVICE_ROLE_KEY"
-echo "  ✅ SUPABASE_PASSWORD"
-echo "  ✅ SUPABASE_JWT_SECRET"
-echo "  ✅ EMAIL_HOST"
-echo "  ✅ EMAIL_PORT"
-echo "  ✅ EMAIL_USER"
-echo "  ✅ EMAIL_PASSWORD"
-echo "  ✅ EMAIL_FROM"
-echo "  ✅ EMAIL_USE_TLS"
+echo "  ✅ Redis Configuration"
+echo "  ✅ API Keys"
+echo "  ✅ Supabase Configuration"
+echo "  ✅ Application Settings"
+echo "  ✅ Email Configuration"
+echo "  ✅ Stripe Configuration"
 
 echo ""
 echo "🚀 Updating Cloud Run service..."
 
-# Update the service with the environment variables
+# Update the service with all environment variables
 gcloud run services update "$SERVICE_NAME" \
     --region="$REGION" \
-    --set-env-vars="SUPABASE_URL=$SUPABASE_URL,SUPABASE_KEY=$SUPABASE_KEY,SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY,SUPABASE_PASSWORD=$SUPABASE_PASSWORD,SUPABASE_JWT_SECRET=$SUPABASE_JWT_SECRET,EMAIL_HOST=$EMAIL_HOST,EMAIL_PORT=$EMAIL_PORT,EMAIL_USER=$EMAIL_USER,EMAIL_PASSWORD=$EMAIL_PASSWORD,EMAIL_FROM=$EMAIL_FROM,EMAIL_USE_TLS=$EMAIL_USE_TLS"
+    --set-env-vars="REDIS_HOST=$REDIS_HOST,
+                    REDIS_USER=$REDIS_USER,
+                    REDIS_PASSWORD=$REDIS_PASSWORD,
+                    REDIS_PORT=$REDIS_PORT,
+                    REDIS_DB=$REDIS_DB,
+                    CELERY_BROKER_URL=$CELERY_BROKER_URL,
+                    CELERY_RESULT_BACKEND=$CELERY_RESULT_BACKEND,
+                    ALPHA_VANTAGE_API_KEY=$ALPHA_VANTAGE_API_KEY,
+                    ALPHA_VANTAGE_BASE_URL=$ALPHA_VANTAGE_BASE_URL,
+                    POLYGON_API_KEY=$POLYGON_API_KEY,
+                    OPEN_FIGI_API_KEY=$OPEN_FIGI_API_KEY,
+                    CONGRESS_GOV_API_KEY=$CONGRESS_GOV_API_KEY,
+                    SUPABASE_URL=$SUPABASE_URL,
+                    SUPABASE_PROJECT_REF=$SUPABASE_PROJECT_REF,
+                    SUPABASE_PASSWORD=$SUPABASE_PASSWORD,
+                    SUPABASE_KEY=$SUPABASE_KEY,
+                    SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY,
+                    SUPABASE_JWT_SECRET=$SUPABASE_JWT_SECRET,
+                    DATABASE_PROVIDER=$DATABASE_PROVIDER,
+                    ENVIRONMENT=$ENVIRONMENT,
+                    DEBUG=$DEBUG,
+                    LOG_LEVEL=$LOG_LEVEL,
+                    DATABASE_ECHO=$DATABASE_ECHO,
+                    DATABASE_POOL_SIZE=$DATABASE_POOL_SIZE,
+                    DATABASE_MAX_OVERFLOW=$DATABASE_MAX_OVERFLOW,
+                    EMAIL_HOST=$EMAIL_HOST,
+                    MAIL_PORT=$EMAIL_PORT,
+                    EMAIL_USER=$EMAIL_USER,
+                    EMAIL_PASSWORD=$EMAIL_PASSWORD,
+                    EMAIL_FROM=$EMAIL_FROM,
+                    EMAIL_USE_TLS=$EMAIL_USE_TLS,
+                    STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY,
+                    STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY,
+                    STRIPE_WEBHOOK_SECRET=$STRIPE_WEBHOOK_SECRET,
+                    STRIPE_API_VERSION=$STRIPE_API_VERSION,
+                    STRIPE_BASE_URL=$STRIPE_BASE_URL,
+                    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+                    STRIPE_PRODUCT_PRO_MONTHLY=$STRIPE_PRODUCT_PRO_MONTHLY,
+                    STRIPE_PRODUCT_PREMIUM_MONTHLY=$STRIPE_PRODUCT_PREMIUM_MONTHLY,
+                    STRIPE_PRODUCT_ENTERPRISE_MONTHLY=$STRIPE_PRODUCT_ENTERPRISE_MONTHLY,
+                    STRIPE_PRODUCT_PRO_YEARLY=$STRIPE_PRODUCT_PRO_YEARLY,
+                    STRIPE_PRODUCT_PREMIUM_YEARLY=$STRIPE_PRODUCT_PREMIUM_YEARLY,
+                    STRIPE_PRODUCT_ENTERPRISE_YEARLY=$STRIPE_PRODUCT_ENTERPRISE_YEARLY,
+                    STRIPE_PRICE_PRO_MONTHLY=$STRIPE_PRICE_PRO_MONTHLY,
+                    STRIPE_PRICE_PREMIUM_MONTHLY=$STRIPE_PRICE_PREMIUM_MONTHLY,
+                    STRIPE_PRICE_ENTERPRISE_MONTHLY=$STRIPE_PRICE_ENTERPRISE_MONTHLY,
+                    STRIPE_PRICE_PRO_YEARLY=$STRIPE_PRICE_PRO_YEARLY,
+                    STRIPE_PRICE_PREMIUM_YEARLY=$STRIPE_PRICE_PREMIUM_YEARLY,
+                    STRIPE_PRICE_ENTERPRISE_YEARLY=$STRIPE_PRICE_ENTERPRISE_YEARLY,
+                    STRIPE_SUCCESS_URL=$STRIPE_SUCCESS_URL,
+                    STRIPE_CANCEL_URL=$STRIPE_CANCEL_URL,
+                    STRIPE_WEBHOOK_ENDPOINT=$STRIPE_WEBHOOK_ENDPOINT"
 
 echo ""
 echo "✅ Environment variables updated successfully!"

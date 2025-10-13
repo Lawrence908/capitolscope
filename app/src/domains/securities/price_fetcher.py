@@ -458,13 +458,13 @@ async def main():
     fetcher = PriceDataFetcher()
     
     # Fetch single price
-    price_data = await fetcher.fetch_price_data("AAPL", date(2024, 1, 15))
+    price_data = await fetcher.fetch_price_data("AAPL", date(2025, 1, 15))
     if price_data:
         print(f"AAPL on {price_data.date}: ${price_data.close_price}")
     
     # Fetch batch prices
     tickers = ["AAPL", "MSFT", "GOOGL"]
-    batch_data = await fetcher.fetch_batch_prices(tickers, date(2024, 1, 15))
+    batch_data = await fetcher.fetch_batch_prices(tickers, date(2025, 1, 15))
     print(f"Fetched data for {len(batch_data)} tickers")
 
 

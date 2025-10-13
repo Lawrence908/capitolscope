@@ -13,7 +13,7 @@ alias capitol-deploy-frontend='./scripts/gcloud/deploy_frontend_cloud_run.sh'
 alias capitol-deploy-backend='./scripts/gcloud/deploy_backend_cloud_run.sh'
 
 # Update environment variables in Cloud Run
-alias capitol-update-env='./scripts/gcloud/update_cloud_run_env_simple_final.sh'
+alias capitol-update-env='./scripts/gcloud/update_cloud_run_env.sh'
 
 # Display logs for running containers
 alias capitol-logs='docker compose -p capitolscope logs -f'
@@ -36,6 +36,9 @@ alias capitol-app-logs='docker compose -p capitolscope logs -f capitolscope'
 # View only worker logs  
 alias capitol-worker-logs='docker compose -p capitolscope logs -f worker'
 
+# Stripe webhook forwarding for local development
+alias capitol-stripe-webhook='stripe listen --forward-to localhost:8000/api/v1/stripe/webhook'
+
 echo "CapitolScope Docker aliases loaded:"
 echo "  capitol-build           - Build and run with file watching"
 echo "  capitol-deploy-frontend - Deploy frontend to Cloud Run"
@@ -43,11 +46,12 @@ echo "  capitol-deploy-backend  - Deploy backend to Cloud Run"
 echo "  capitol-update-env      - Update environment variables in Cloud Run"
 echo "  capitol-logs            - Show all container logs"
 echo "  capitol-app-logs        - Show only app logs"
-echo "  capitol-worker-logs     - Show only worker logs
+echo "  capitol-worker-logs     - Show only worker logs"
 echo "  capitol-stop            - Stop all containers"
 echo "  capitol-restart         - Restart main app"
 echo "  capitol-shell           - Open shell in container"
 echo "  capitol-migrate         - Run database migrations"
+echo "  capitol-stripe-webhook  - Forward Stripe webhooks to local dev"
 " 
 
 

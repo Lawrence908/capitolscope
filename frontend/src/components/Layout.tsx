@@ -11,6 +11,8 @@ import {
   SparklesIcon,
   Bars3Icon,
   XMarkIcon,
+  StarIcon,
+  BellIcon,
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
 import { useAuth } from '../contexts/AuthContext';
@@ -31,6 +33,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isPro = subscriptionTier === 'pro' || isPremium;
   const isFree = subscriptionTier === 'free' || !subscriptionTier;
   
+  // Helper function to check if user can access a specific tier
+  const canAccessTier = (requiredTier: string) => {
+    switch (requiredTier) {
+      case 'free':
+        return true;
+      case 'pro':
+        return isPro;
+      case 'premium':
+        return isPremium;
+      case 'enterprise':
+        return subscriptionTier === 'enterprise';
+      default:
+        return false;
+    }
+  };
+  
   // Debug logging
   console.log('User data:', {
     user: user,
@@ -42,11 +60,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   });
 
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-    { name: 'Trade Browser', href: '/trades', icon: DocumentMagnifyingGlassIcon },
-    { name: 'Members', href: '/members', icon: UserGroupIcon },
-    { name: 'Analytics', href: '/analytics', icon: ChartBarIcon },
-    { name: 'Data Quality', href: '/data-quality', icon: CogIcon },
+    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, tier: 'free' },
+    { name: 'Trade Browser', href: '/trades', icon: DocumentMagnifyingGlassIcon, tier: 'free' },
+    { name: 'Members', href: '/members', icon: UserGroupIcon, tier: 'free' },
+    { name: 'Trade Alerts', href: '/alerts', icon: BellIcon, tier: 'free' },
+    { name: 'Analytics', href: '/analytics', icon: ChartBarIcon, tier: 'pro' },
+    { name: 'Data Quality', href: '/data-quality', icon: CogIcon, tier: 'free' },
   ];
 
   const isActive = (path: string) => {
@@ -67,7 +86,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-primary text-neutral-100 transition-colors duration-300">
+    <div className="min-h-screen bg-bg-primary text-neutral-100 transition-colors duration-300 flex flex-col">
       {/* Mobile menu overlay */}
       {showMobileMenu && (
         <div className="fixed inset-0 z-50 lg:hidden">
@@ -97,19 +116,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ul className="space-y-2">
                 {navigation.map((item) => {
                   const Icon = item.icon;
+                  const canAccess = canAccessTier(item.tier);
                   return (
                     <li key={item.name}>
                       <Link
                         to={item.href}
                         onClick={closeMobileMenu}
-                        className={`flex items-center px-4 py-3 text-sm font-medium rounded-md transition-all ${
+                        className={`flex items-center justify-between px-4 py-3 text-sm font-medium rounded-md transition-all ${
                           isActive(item.href)
                             ? 'bg-primary-900/20 text-primary-400 shadow-glow-primary/20'
-                            : 'text-neutral-300 hover:text-primary-400 hover:bg-bg-tertiary'
+                            : canAccess 
+                              ? 'text-neutral-300 hover:text-primary-400 hover:bg-bg-tertiary'
+                              : 'text-neutral-500 hover:text-neutral-400 hover:bg-bg-tertiary opacity-60'
                         }`}
                       >
-                        <Icon className="mr-3 h-5 w-5" />
-                        {item.name}
+                        <div className="flex items-center">
+                          <Icon className="mr-3 h-5 w-5" />
+                          {item.name}
+                        </div>
+                        {!canAccess && item.tier !== 'free' && (
+                          <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
+                            <StarIcon className="h-3 w-3 mr-1" />
+                            {item.tier === 'pro' ? 'Pro' : item.tier === 'premium' ? 'Premium' : 'Enterprise'}
+                          </div>
+                        )}
                       </Link>
                     </li>
                   );
@@ -162,18 +192,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <ul className="space-y-2">
             {navigation.map((item) => {
               const Icon = item.icon;
+              const canAccess = canAccessTier(item.tier);
               return (
                 <li key={item.name}>
                   <Link
                     to={item.href}
-                    className={`flex items-center px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                    className={`flex items-center justify-between px-4 py-2 text-sm font-medium rounded-md transition-all ${
                       isActive(item.href)
                         ? 'bg-primary-900/20 text-primary-400 shadow-glow-primary/20'
-                        : 'text-neutral-300 hover:text-primary-400 hover:bg-bg-tertiary'
+                        : canAccess 
+                          ? 'text-neutral-300 hover:text-primary-400 hover:bg-bg-tertiary'
+                          : 'text-neutral-500 hover:text-neutral-400 hover:bg-bg-tertiary opacity-60'
                     }`}
                   >
-                    <Icon className="mr-3 h-5 w-5" />
-                    {item.name}
+                    <div className="flex items-center">
+                      <Icon className="mr-3 h-5 w-5" />
+                      {item.name}
+                    </div>
+                    {!canAccess && item.tier !== 'free' && (
+                      <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
+                        <StarIcon className="h-3 w-3 mr-1" />
+                        {item.tier === 'pro' ? 'Pro' : item.tier === 'premium' ? 'Premium' : 'Enterprise'}
+                      </div>
+                    )}
                   </Link>
                 </li>
               );
@@ -253,7 +294,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   >
                     <UserCircleIcon className="h-6 w-6" />
                     <span className="hidden md:block">
-                      {user?.display_name || user?.email || 'User'}
+                      {user?.computed_display_name || user?.email || 'User'}
                     </span>
                   </button>
                   
@@ -261,7 +302,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <div className="absolute right-0 mt-2 w-48 bg-bg-secondary rounded-md shadow-lg py-1 z-50 border border-primary-800/20">
                       <div className="px-4 py-2 border-b border-primary-800/20">
                         <p className="text-sm font-medium text-neutral-100">
-                          {user?.display_name || user?.email}
+                          {user?.computed_display_name || user?.email}
                         </p>
                         <p className="text-xs text-neutral-400">
                           {isFree ? 'Free Plan' : isPremium ? 'Premium Plan' : isPro ? 'Pro Plan' : 'Enterprise Plan'}
@@ -294,9 +335,51 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
 
         {/* Page content */}
-        <main className="p-4 lg:p-6">
+        <main className="p-4 lg:p-6 flex-grow">
           {children}
         </main>
+        
+        {/* Footer */}
+        <footer className="bg-bg-secondary border-t border-primary-800/20 mt-auto">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="flex items-center mb-4 md:mb-0">
+                <img 
+                  src="/capitol-scope-logo.png" 
+                  alt="CapitolScope Logo" 
+                  className="h-8 w-8 rounded-lg shadow-glow-primary/20"
+                  loading="lazy"
+                  width="32"
+                  height="32"
+                />
+                <span className="ml-3 text-sm text-neutral-400">
+                  © 2025 CapitolScope. All rights reserved.
+                </span>
+              </div>
+              
+              <div className="flex items-center space-x-6">
+                <Link
+                  to="/privacy"
+                  className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/terms"
+                  className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+                >
+                  Terms of Service
+                </Link>
+                <a
+                  href="mailto:capitolscope@gmail.com"
+                  className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+                >
+                  Support
+                </a>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
       
       {/* Overlay to close user menu when clicking outside */}

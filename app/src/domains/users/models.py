@@ -93,6 +93,7 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     first_name = Column(String(100))
     last_name = Column(String(100))
     full_name = Column(String(200))
+    display_name = Column(String(200))  # Custom display name for users
     
     # Authentication
     password_hash = Column(String(255))  # Null for OAuth users
@@ -141,6 +142,7 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     sessions = relationship("UserSession", back_populates="user", cascade="all, delete-orphan")
     notification_subscriptions = relationship("NotificationSubscription", back_populates="user", cascade="all, delete-orphan")
     newsletter_subscriptions = relationship("NewsletterSubscription", back_populates="user", cascade="all, delete-orphan")
+    trade_alert_rules = relationship("TradeAlertRule", back_populates="user", cascade="all, delete-orphan")
     
     # Indexes and constraints
     __table_args__ = (
@@ -170,14 +172,16 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
         return f"<User(email={self.email}, status={self.status.value})>"
     
     @property
-    def display_name(self) -> str:
+    def computed_display_name(self) -> str:
         """Return the best display name for the user."""
-        if self.full_name:
+        if self.display_name:
+            return self.display_name
+        elif self.username:
+            return self.username
+        elif self.full_name:
             return self.full_name
         elif self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name}"
-        elif self.username:
-            return self.username
         else:
             return self.email.split('@')[0]
     

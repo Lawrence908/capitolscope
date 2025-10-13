@@ -23,6 +23,9 @@ const ProfileSettings: React.FC = () => {
   
   const [profileData, setProfileData] = useState({
     display_name: user?.display_name || '',
+    username: user?.username || '',
+    first_name: user?.first_name || '',
+    last_name: user?.last_name || '',
     email: user?.email || '',
     is_public_profile: user?.is_public_profile || false,
   });
@@ -50,7 +53,10 @@ const ProfileSettings: React.FC = () => {
   useEffect(() => {
     if (user) {
       setProfileData({
-        display_name: user.display_name || '',
+        display_name: user.display_name || user.computed_display_name || '',
+        username: user.username || '',
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
         email: user.email || '',
         is_public_profile: user.is_public_profile || false,
       });
@@ -95,12 +101,36 @@ const ProfileSettings: React.FC = () => {
     setMessage(null);
 
     try {
-      // TODO: Implement API call to update profile
-      // const response = await apiClient.updateProfile(profileData);
-      // updateUser(response.data);
+      const tokens = localStorage.getItem('capitolscope_tokens');
+      const accessToken = tokens ? JSON.parse(tokens).access_token : '';
       
-      setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/v1/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          display_name: profileData.display_name,
+          username: profileData.username,
+          first_name: profileData.first_name,
+          last_name: profileData.last_name,
+          is_public_profile: profileData.is_public_profile,
+        }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.data && updateUser) {
+          updateUser(data.data);
+        }
+        setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      } else {
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: errorData.error?.message || 'Failed to update profile. Please try again.' });
+      }
     } catch (error) {
+      console.error('Profile update error:', error);
       setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
     } finally {
       setIsLoading(false);
@@ -347,7 +377,7 @@ const ProfileSettings: React.FC = () => {
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div>
               <label htmlFor="display_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
-                Display Name
+                Display Name *
               </label>
               <input
                 type="text"
@@ -357,7 +387,57 @@ const ProfileSettings: React.FC = () => {
                 onChange={(e) => setProfileData(prev => ({ ...prev, display_name: e.target.value }))}
                 className="input-field"
                 placeholder="Enter your display name"
+                required
               />
+              <p className="text-xs text-neutral-400 mt-1">This is how your name will appear throughout the app</p>
+            </div>
+
+            <div>
+              <label htmlFor="username" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={profileData.username}
+                onChange={(e) => setProfileData(prev => ({ ...prev, username: e.target.value }))}
+                className="input-field"
+                placeholder="Enter your username"
+              />
+              <p className="text-xs text-neutral-400 mt-1">Optional: A unique username for your profile</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="first_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="first_name"
+                  name="first_name"
+                  value={profileData.first_name}
+                  onChange={(e) => setProfileData(prev => ({ ...prev, first_name: e.target.value }))}
+                  className="input-field"
+                  placeholder="Enter your first name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="last_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value={profileData.last_name}
+                  onChange={(e) => setProfileData(prev => ({ ...prev, last_name: e.target.value }))}
+                  className="input-field"
+                  placeholder="Enter your last name"
+                />
+              </div>
             </div>
 
             <div>
@@ -371,11 +451,12 @@ const ProfileSettings: React.FC = () => {
                   id="email"
                   name="email"
                   value={profileData.email}
-                  onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                  className="input-field"
+                  className="input-field bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
                   placeholder="Enter your email"
+                  disabled
                 />
               </div>
+              <p className="text-xs text-neutral-400 mt-1">Email cannot be changed. Contact support if needed.</p>
             </div>
 
             <div className="flex items-center">

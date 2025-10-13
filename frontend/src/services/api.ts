@@ -230,6 +230,36 @@ class APIClient {
     const response = await this.client.get(`/api/v1/trades/analytics/volume-over-time?period=${period}`);
     return response.data.data;
   }
+
+  // Notification Alerts
+  async getAlertRules(): Promise<any> {
+    const response = await this.client.get('/api/v1/notifications/alerts/rules');
+    return response.data;
+  }
+
+  async createMemberAlert(memberId: number, alertData: any): Promise<any> {
+    const response = await this.client.post(`/api/v1/notifications/alerts/member/${memberId}`, alertData);
+    return response.data;
+  }
+
+  async createAmountAlert(alertData: any): Promise<any> {
+    const response = await this.client.post('/api/v1/notifications/alerts/amount', alertData);
+    return response.data;
+  }
+
+  async createTickerAlert(symbol: string, alertData: any): Promise<any> {
+    const response = await this.client.post(`/api/v1/notifications/alerts/ticker/${symbol}`, alertData);
+    return response.data;
+  }
+
+  async updateAlertRule(ruleId: string, updates: any): Promise<any> {
+    const response = await this.client.put(`/api/v1/notifications/alerts/rules/${ruleId}`, updates);
+    return response.data;
+  }
+
+  async deleteAlertRule(ruleId: string): Promise<void> {
+    await this.client.delete(`/api/v1/notifications/alerts/rules/${ruleId}`);
+  }
 }
 
 // Create and export a singleton instance

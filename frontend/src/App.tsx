@@ -23,6 +23,7 @@ const DataQuality = React.lazy(() => import('./components/DataQuality'));
 const Analytics = React.lazy(() => import('./components/Analytics'));
 const ProfileSettings = React.lazy(() => import('./components/ProfileSettings'));
 const PremiumSignup = React.lazy(() => import('./components/PremiumSignup'));
+const AlertDashboard = React.lazy(() => import('./pages/alerts/AlertDashboard'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -145,6 +146,15 @@ const App: React.FC = () => {
                 <Suspense fallback={<LoadingSpinner />}>
                   <PremiumSignup />
                 </Suspense>
+              </ProtectedRoute>
+            } />
+            <Route path="/alerts" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <AlertDashboard />
+                  </Suspense>
+                </Layout>
               </ProtectedRoute>
             } />
             

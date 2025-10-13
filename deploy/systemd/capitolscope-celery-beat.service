@@ -1,0 +1,35 @@
+[Unit]
+Description=CapitolScope Celery Beat Scheduler
+After=network.target redis.service postgresql.service
+
+[Service]
+Type=simple
+User=capitolscope
+Group=capitolscope
+WorkingDirectory=/opt/capitolscope
+Environment=PYTHONPATH=/opt/capitolscope/app/src
+ExecStart=/opt/capitolscope/.venv/bin/celery -A background.production_celery beat \
+    --loglevel=info \
+    --logfile=/var/log/capitolscope/celery-beat.log \
+    --pidfile=/var/run/capitolscope/celery-beat.pid \
+    --schedule=/var/lib/capitolscope/celerybeat-schedule
+ExecStop=/bin/kill -TERM $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Resource limits
+MemoryLimit=512M
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/capitolscope /var/run/capitolscope /var/lib/capitolscope
+
+[Install]
+WantedBy=multi-user.target
+
+
+

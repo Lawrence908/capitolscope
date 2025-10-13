@@ -11,7 +11,9 @@ from .models import (
     NotificationDeliveryLog,
     NotificationTemplate,
     NewsletterSubscription,
-    NotificationAnalytics
+    NotificationAnalytics,
+    TradeAlertRule,
+    NotificationDelivery
 )
 
 from .schemas import (
@@ -41,6 +43,8 @@ __all__ = [
     "NotificationTemplate",
     "NewsletterSubscription",
     "NotificationAnalytics",
+    "TradeAlertRule",
+    "NotificationDelivery",
     
     # Schemas
     "UserSubscriptionResponse",

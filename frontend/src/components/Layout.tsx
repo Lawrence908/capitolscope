@@ -12,6 +12,7 @@ import {
   Bars3Icon,
   XMarkIcon,
   StarIcon,
+  BellIcon,
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
 import { useAuth } from '../contexts/AuthContext';
@@ -62,6 +63,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, tier: 'free' },
     { name: 'Trade Browser', href: '/trades', icon: DocumentMagnifyingGlassIcon, tier: 'free' },
     { name: 'Members', href: '/members', icon: UserGroupIcon, tier: 'free' },
+    { name: 'Trade Alerts', href: '/alerts', icon: BellIcon, tier: 'free' },
     { name: 'Analytics', href: '/analytics', icon: ChartBarIcon, tier: 'pro' },
     { name: 'Data Quality', href: '/data-quality', icon: CogIcon, tier: 'free' },
   ];
@@ -292,7 +294,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   >
                     <UserCircleIcon className="h-6 w-6" />
                     <span className="hidden md:block">
-                      {user?.display_name || user?.email || 'User'}
+                      {user?.computed_display_name || user?.email || 'User'}
                     </span>
                   </button>
                   
@@ -300,7 +302,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <div className="absolute right-0 mt-2 w-48 bg-bg-secondary rounded-md shadow-lg py-1 z-50 border border-primary-800/20">
                       <div className="px-4 py-2 border-b border-primary-800/20">
                         <p className="text-sm font-medium text-neutral-100">
-                          {user?.display_name || user?.email}
+                          {user?.computed_display_name || user?.email}
                         </p>
                         <p className="text-xs text-neutral-400">
                           {isFree ? 'Free Plan' : isPremium ? 'Premium Plan' : isPro ? 'Pro Plan' : 'Enterprise Plan'}

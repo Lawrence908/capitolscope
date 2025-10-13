@@ -12,7 +12,8 @@ export interface User {
   first_name?: string;
   last_name?: string;
   full_name?: string;
-  display_name: string;
+  display_name?: string;
+  computed_display_name: string;
   avatar_url?: string;
   bio?: string;
   location?: string;

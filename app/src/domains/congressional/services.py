@@ -211,6 +211,29 @@ class CongressMemberService(CongressMemberServiceInterface):
         
         # Remove the member themselves
         return [m for m in similar_members if m.id != member_id][:limit]
+    
+    async def get_members_with_filters(self, filters) -> Tuple[List[CongressMemberSummary], int]:
+        """Get members with filtering and pagination."""
+        try:
+            from domains.congressional.schemas import MemberQuery
+            
+            # Convert API filters to repository query
+            query = MemberQuery(
+                search=filters.search,
+                sort_by=filters.sort_by,
+                sort_order=filters.sort_order,
+                page=filters.page,
+                limit=filters.limit
+            )
+            
+            # Get members from repository
+            members, total_count = await self.member_repo.list_members(query)
+            
+            return members, total_count
+            
+        except Exception as e:
+            logger.error(f"Error retrieving members with filters: {e}")
+            raise
 
 
 # ============================================================================

@@ -125,6 +125,36 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  # Frontend React/Vite Application
+  capitolscope-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: capitolscope-frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "8121:5173"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://localhost:8120
+    networks:
+      - web
+    depends_on:
+      - capitolscope
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    security_opt:
+      - no-new-privileges:true
+
 networks:
   web:
     external: true

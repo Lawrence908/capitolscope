@@ -174,7 +174,7 @@ app.openapi = custom_openapi
 # Add security middleware
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["localhost", "127.0.0.1", "*.capitolscope.com"] + 
+    allowed_hosts=["localhost", "127.0.0.1", "192.168.50.70", "*.capitolscope.com, chrislawrence.ca"] + 
                   (["*"] if settings.DEBUG else [])
 )
 

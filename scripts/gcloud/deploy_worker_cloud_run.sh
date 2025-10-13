@@ -68,3 +68,6 @@ echo "📝 Next steps:"
 echo "1. Update environment variables: ./scripts/gcloud/update_worker_env.sh"
 echo "2. Set up Cloud Scheduler jobs: ./scripts/gcloud/setup_cloud_scheduler.sh"
 echo "3. Test worker endpoints: curl $SERVICE_URL/health/detailed"
+
+
+

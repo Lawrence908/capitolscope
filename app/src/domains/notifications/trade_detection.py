@@ -99,3 +99,6 @@ class TradeDetectionService:
         
         logger.info(f"Batch processing completed: {results}")
         return results
+
+
+

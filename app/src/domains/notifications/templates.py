@@ -140,3 +140,6 @@ class TradeAlertEmailTemplate:
             return f"alerts for {alert_rule.target_symbol} trades"
         else:
             return "trade alerts"
+
+
+

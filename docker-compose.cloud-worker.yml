@@ -1,0 +1,61 @@
+# Simplified docker-compose for testing Cloud Run worker locally
+# Usage: docker-compose -f docker-compose.cloud-worker.yml up --build
+
+services:
+  # Redis for task queuing
+  redis:
+    image: redis:7-alpine
+    container_name: worker-test-redis
+    command: redis-server --requirepass devpassword --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: devpassword
+    networks:
+      - worker-test
+
+  # Cloud Run Worker (Local Testing)
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: worker-test-cloud-worker
+    ports:
+      - "8082:8080"
+    depends_on:
+      - redis
+    environment:
+      - PYTHONPATH=/app/src
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - PORT=8080
+      - CELERY_BROKER_URL=redis://:devpassword@redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://:devpassword@redis:6379/0
+      # Add your other environment variables here
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - DATABASE_PROVIDER=${DATABASE_PROVIDER}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+      - CONGRESS_GOV_API_KEY=${CONGRESS_GOV_API_KEY}
+    networks:
+      - worker-test
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  worker-test:
+    name: worker-test
+    driver: bridge
+
+
+

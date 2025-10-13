@@ -161,3 +161,6 @@ Unsubscribe: https://capitolscope.chrislawrence.ca/unsubscribe
             
         except Exception as e:
             logger.error(f"Error tracking delivery: {e}")
+
+
+

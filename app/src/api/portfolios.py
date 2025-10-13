@@ -388,7 +388,7 @@ async def export_portfolio_data(
     # TODO: Implement portfolio export
     data = {
         "portfolio_id": portfolio_id,
-        "export_url": f"https://api.capitolscope.com/exports/portfolio-{portfolio_id}-export-123.{format}",
+        "export_url": f"https://capitolscope.chrislawrence.ca/exports/portfolio-{portfolio_id}-export-123.{format}",
         "format": format,
         "includes": {
             "holdings": include_holdings,

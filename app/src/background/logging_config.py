@@ -275,3 +275,6 @@ def configure_celery_logging():
 # Configure logging when module is imported
 if os.getenv('CELERY_PRODUCTION', 'false').lower() == 'true':
     configure_celery_logging()
+
+
+

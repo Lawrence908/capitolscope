@@ -110,3 +110,6 @@ fi
 echo ""
 echo "📊 Current environment variables:"
 gcloud run services describe "$SERVICE_NAME" --region="$REGION" --format="value(spec.template.spec.containers[0].env[].name)" | tr ';' '\n' | sort
+
+
+

@@ -217,3 +217,6 @@ gcloud scheduler jobs run health-checks --location=$REGION || echo "Test trigger
 echo ""
 echo "✅ Cloud Scheduler setup complete!"
 echo "🌐 Monitor jobs at: https://console.cloud.google.com/cloudscheduler?project=$PROJECT_ID"
+
+
+

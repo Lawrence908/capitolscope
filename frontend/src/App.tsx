@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
@@ -34,10 +35,11 @@ const LoadingSpinner = () => (
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <Routes>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
+            <Routes>
             {/* Public routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/colors" element={<ColorPaletteShowcase />} />
@@ -160,10 +162,11 @@ const App: React.FC = () => {
             
             {/* Catch all route - redirect to landing page */}
             <Route path="*" element={<LandingPage />} />
-          </Routes>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 

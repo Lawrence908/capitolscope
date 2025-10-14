@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
+import { logger, LogComponent } from '../core/logging';
 import type {
   CongressMember,
   CongressionalTrade,
@@ -29,15 +30,31 @@ class APIClient {
     // Add request interceptor for logging
     this.client.interceptors.request.use(
       (config) => {
-        console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+        logger.apiRequest(
+          config.method?.toUpperCase() || 'UNKNOWN',
+          config.url || '',
+          config.data
+        );
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => {
+        logger.error(LogComponent.API, 'Request interceptor error', { error });
+        return Promise.reject(error);
+      }
     );
 
     // Add response interceptor for error handling with retry logic
     this.client.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        // Log successful responses
+        logger.apiResponse(
+          response.config.method?.toUpperCase() || 'UNKNOWN',
+          response.config.url || '',
+          response.status,
+          response.data
+        );
+        return response;
+      },
       async (error) => {
         const originalRequest = error.config;
         
@@ -46,7 +63,10 @@ class APIClient {
           originalRequest._retry = true;
           
           const retryAfter = error.response.headers['retry-after'] || 60;
-          console.log(`Rate limited. Retrying after ${retryAfter} seconds...`);
+          logger.warning(LogComponent.API, `Rate limited. Retrying after ${retryAfter} seconds...`, {
+            url: originalRequest.url,
+            retryAfter,
+          });
           
           await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
           
@@ -59,10 +79,18 @@ class APIClient {
             detail: error.response.data?.detail || 'An error occurred',
             status_code: error.response.status,
           };
-          console.error('API Error:', apiError);
+          logger.apiError(
+            originalRequest.method?.toUpperCase() || 'UNKNOWN',
+            originalRequest.url || '',
+            apiError
+          );
           return Promise.reject(apiError);
         }
-        console.error('Network Error:', error.message);
+        
+        logger.error(LogComponent.API, 'Network Error', {
+          message: error.message,
+          url: originalRequest.url,
+        });
         return Promise.reject(error);
       }
     );

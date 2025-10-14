@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { logger, LogComponent } from '../core/logging';
 
 // API Configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001';
@@ -175,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         }
       } catch (error) {
-        console.error('Auth check failed:', error);
+        logger.error(LogComponent.AUTH, 'Auth check failed', { error });
         clearStoredTokens();
       } finally {
         dispatch({ type: 'SET_LOADING', payload: false });
@@ -206,7 +207,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // API helpers
   const validateToken = async (token: string): Promise<User | null> => {
     try {
-      console.log('Validating token:', token.substring(0, 20) + '...');
+      logger.debug(LogComponent.AUTH, 'Validating token', { tokenPrefix: token.substring(0, 20) + '...' });
       const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -214,19 +215,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
       });
 
-      console.log('Token validation response:', response.status, response.statusText);
+      logger.debug(LogComponent.AUTH, 'Token validation response', { 
+        status: response.status, 
+        statusText: response.statusText 
+      });
       
       if (response.ok) {
         const data = await response.json();
-        console.log('User data from token validation:', data);
+        logger.debug(LogComponent.AUTH, 'User data from token validation', { data });
         return data.data; // The user data is directly in data.data, not data.data.user
       } else {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Token validation failed:', response.status, errorData);
+        logger.error(LogComponent.AUTH, 'Token validation failed', { 
+          status: response.status, 
+          errorData 
+        });
       }
       return null;
     } catch (error) {
-      console.error('Token validation error:', error);
+      logger.error(LogComponent.AUTH, 'Token validation error', { error });
       return null;
     }
   };
@@ -252,7 +259,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Store tokens
         setStoredTokens(tokens);
         
-        console.log('Login successful, user data:', user);
+        logger.info(LogComponent.AUTH, 'Login successful', { userId: user.id, email: user.email });
         
         dispatch({
           type: 'LOGIN_SUCCESS',
@@ -260,9 +267,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
       } else {
         const errorMessage = data.error?.message || data.error || 'Login failed';
+        logger.error(LogComponent.AUTH, 'Login failed', { error: errorMessage });
         dispatch({ type: 'LOGIN_FAILURE', payload: errorMessage });
       }
     } catch (error) {
+      logger.error(LogComponent.AUTH, 'Login network error', { error });
       dispatch({
         type: 'LOGIN_FAILURE',
         payload: 'Network error. Please try again.',
@@ -290,7 +299,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Store tokens
         setStoredTokens(tokens);
         
-        console.log('Registration successful, user data:', user);
+        logger.info(LogComponent.AUTH, 'Registration successful', { userId: user.id, email: user.email });
         
         dispatch({
           type: 'LOGIN_SUCCESS',
@@ -298,9 +307,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
       } else {
         const errorMessage = responseData.error?.message || responseData.error || 'Registration failed';
+        logger.error(LogComponent.AUTH, 'Registration failed', { error: errorMessage });
         dispatch({ type: 'LOGIN_FAILURE', payload: errorMessage });
       }
     } catch (error) {
+      logger.error(LogComponent.AUTH, 'Registration network error', { error });
       dispatch({
         type: 'LOGIN_FAILURE',
         payload: 'Network error. Please try again.',
@@ -309,6 +320,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
+    logger.info(LogComponent.AUTH, 'User logout');
     clearStoredTokens();
     dispatch({ type: 'LOGOUT' });
   };

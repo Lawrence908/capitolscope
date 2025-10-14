@@ -24,8 +24,6 @@ services:
     working_dir: /app/src
     environment:
       - PYTHONPATH=/app/src
-      - DEBUG=false
-      - ENVIRONMENT=production
     command: python -m uvicorn main:app --host 0.0.0.0 --port 8000
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
@@ -134,13 +132,15 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+      - ./frontend/logs:/app/logs
     ports:
       - "8121:5173"
     environment:
       - NODE_ENV=production
-      - VITE_API_URL=http://localhost:8120
+      - VITE_API_URL=http://192.168.50.70:8120
     networks:
       - web
+      - capitolscope-internal
     depends_on:
       - capitolscope
     restart: unless-stopped

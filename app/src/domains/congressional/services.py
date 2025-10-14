@@ -54,6 +54,37 @@ class CongressMemberService(CongressMemberServiceInterface):
         self.portfolio_repo = portfolio_repo
         self.performance_repo = performance_repo
     
+    # Implement required abstract methods from BaseService
+    async def create(self, obj_in) -> CongressMemberDetail:
+        """Create a new congress member."""
+        return await self.create_member(obj_in)
+    
+    async def get(self, id: int) -> Optional[CongressMemberDetail]:
+        """Get a congress member by ID."""
+        return await self.member_repo.get_by_id(id)
+    
+    async def get_multi(
+        self, 
+        skip: int = 0, 
+        limit: int = 100,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[CongressMemberDetail]:
+        """Get multiple congress members."""
+        from domains.congressional.schemas import MemberQuery
+        query = MemberQuery(page=skip//limit + 1, limit=limit)
+        members, _ = await self.member_repo.list_members(query)
+        return members
+    
+    async def update(self, id: int, obj_in) -> CongressMemberDetail:
+        """Update a congress member."""
+        return await self.update_member(id, obj_in)
+    
+    async def delete(self, id: int) -> bool:
+        """Delete a congress member."""
+        # This would need to be implemented in the repository
+        # For now, return False as deletion is not typically allowed
+        return False
+    
     async def create_member(self, member_data: CongressMemberCreate) -> CongressMemberDetail:
         """Create a new congress member with validation."""
         logger.error("TEST LOGGING - this should appear in app.log when a member is created")

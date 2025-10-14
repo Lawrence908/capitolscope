@@ -57,15 +57,17 @@ async def get_members(
     
     try:
         # Use the service layer instead of direct SQL queries
-        from domains.congressional.crud import CongressMemberRepository, CongressionalTradeRepository
+        from domains.congressional.crud import CongressMemberRepository, CongressionalTradeRepository, MemberPortfolioRepository, MemberPortfolioPerformanceRepository
         from domains.congressional.services import CongressMemberService
         
         # Create repositories
         member_repo = CongressMemberRepository(session)
         trade_repo = CongressionalTradeRepository(session)
+        portfolio_repo = MemberPortfolioRepository(session)
+        performance_repo = MemberPortfolioPerformanceRepository(session)
         
         # Create service
-        member_service = CongressMemberService(member_repo, trade_repo, None, None)
+        member_service = CongressMemberService(member_repo, trade_repo, portfolio_repo, performance_repo)
         
         # Get members with filters
         members, total = await member_service.get_members_with_filters(filters)
@@ -75,6 +77,9 @@ async def get_members(
         # Convert to response format
         member_items = []
         for member in members:
+            # Get trade statistics for this member
+            trade_stats = await member_service.member_repo.get_trading_statistics(member.id)
+            
             member_item = CongressMemberSummary(
                 id=member.id,
                 bioguide_id=member.bioguide_id or "",
@@ -94,7 +99,7 @@ async def get_members(
                 youtube_account=None,
                 in_office=getattr(member, 'is_active', True),
                 next_election=getattr(member, 'next_election', None),
-                trade_count=trade_stats.trade_count if trade_stats else 0,
+                trade_count=trade_stats.total_trades if trade_stats else 0,
                 total_trade_value=int(trade_stats.total_value or 0),
                 created_at=member.created_at.isoformat() if member.created_at else None,
                 updated_at=member.updated_at.isoformat() if member.updated_at else None,

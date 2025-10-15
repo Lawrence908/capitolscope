@@ -158,6 +158,7 @@ services:
 networks:
   web:
     external: true
+    name: homelab-web
   capitolscope-internal:
     driver: bridge
 

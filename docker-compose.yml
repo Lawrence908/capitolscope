@@ -164,9 +164,10 @@ services:
       - "5173:5173"
     environment:
       - NODE_ENV=development
-      - VITE_API_URL=http://localhost:8001
+      - VITE_API_URL=http://192.168.50.70:8120
     networks:
       - capitolscope-network
+      - hephaestus-homelab_web
     depends_on:
       - capitolscope
     restart: unless-stopped
@@ -186,4 +187,7 @@ volumes:
 networks:
   capitolscope-network:
     name: capitolscope-dev
-    driver: bridge 
+    driver: bridge
+  hephaestus-homelab_web:
+    external: true
+    name: hephaestus-homelab_web 

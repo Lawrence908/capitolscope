@@ -86,27 +86,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-primary text-neutral-100 transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-bg-light-primary dark:bg-bg-primary text-neutral-900 dark:text-neutral-100 transition-colors duration-300 flex flex-col">
       {/* Mobile menu overlay */}
       {showMobileMenu && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="fixed inset-0 bg-black bg-opacity-50" onClick={closeMobileMenu} />
-          <div className="fixed inset-y-0 left-0 w-64 bg-bg-secondary shadow-lg transition-colors duration-300 border-r border-primary-800/20">
-            <div className="flex h-16 items-center justify-between px-4 border-b border-primary-800/20">
+          <div className="fixed inset-y-0 left-0 w-64 sidebar shadow-lg transition-colors duration-300">
+            <div className="flex h-16 items-center justify-between px-4 border-b border-neutral-200 dark:border-neutral-700">
               <div className="flex items-center space-x-3">
                 <img 
                   src="/favicon-64x64.png" 
                   alt="CapitolScope Logo" 
-                  className="h-8 w-8 rounded-full shadow-glow-primary/20"
+                  className="h-8 w-8 rounded-lg"
                   loading="lazy"
                   width="32"
                   height="32"
                 />
-                <h1 className="text-lg font-bold text-primary-400">CapitolScope</h1>
+                <h1 className="text-lg font-bold text-primary-600 dark:text-primary-400">CapitolScope</h1>
               </div>
               <button
                 onClick={closeMobileMenu}
-                className="text-neutral-400 hover:text-neutral-100"
+                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
               >
                 <XMarkIcon className="h-6 w-6" />
               </button>
@@ -122,12 +122,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       <Link
                         to={item.href}
                         onClick={closeMobileMenu}
-                        className={`flex items-center justify-between px-4 py-3 text-sm font-medium rounded-md transition-all ${
+                        className={`flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                           isActive(item.href)
-                            ? 'bg-primary-900/20 text-primary-400 shadow-glow-primary/20'
+                            ? 'nav-link-active'
                             : canAccess 
-                              ? 'text-neutral-300 hover:text-primary-400 hover:bg-bg-tertiary'
-                              : 'text-neutral-500 hover:text-neutral-400 hover:bg-bg-tertiary opacity-60'
+                              ? 'nav-link hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                              : 'text-neutral-400 dark:text-neutral-500 hover:text-neutral-500 dark:hover:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 opacity-60'
                         }`}
                       >
                         <div className="flex items-center">
@@ -135,7 +135,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                           {item.name}
                         </div>
                         {!canAccess && item.tier !== 'free' && (
-                          <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
+                          <div className="flex items-center text-xs text-warning bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 rounded-full">
                             <StarIcon className="h-3 w-3 mr-1" />
                             {item.tier === 'pro' ? 'Pro' : item.tier === 'premium' ? 'Premium' : 'Enterprise'}
                           </div>
@@ -148,19 +148,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               {/* Premium Upgrade Section for Free Users */}
               {isFree && (
-                <div className="mt-6 pt-4 border-t border-primary-800/20">
-                  <div className="bg-neon-gradient p-4 rounded-lg shadow-glow-primary">
+                <div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                  <div className="card-elevated p-4">
                     <div className="flex items-center mb-2">
-                      <SparklesIcon className="h-5 w-5 text-bg-primary mr-2" />
-                      <span className="text-bg-primary text-sm font-semibold">Upgrade to Pro</span>
+                      <SparklesIcon className="h-5 w-5 text-primary-600 dark:text-primary-400 mr-2" />
+                      <span className="text-primary-600 dark:text-primary-400 text-sm font-semibold">Upgrade to Pro</span>
                     </div>
-                    <p className="text-bg-primary/80 text-xs mb-3">
+                    <p className="text-muted text-xs mb-3">
                       Unlock trade alerts, analytics, and more
                     </p>
                     <Link
                       to="/premium"
                       onClick={closeMobileMenu}
-                      className="block w-full bg-bg-primary text-primary-400 text-xs font-semibold py-2 px-3 rounded text-center hover:bg-bg-tertiary transition-colors duration-200"
+                      className="btn-primary text-xs py-2 px-3 text-center block w-full"
                     >
                       View Plans
                     </Link>
@@ -173,18 +173,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block fixed inset-y-0 left-0 z-50 w-64 bg-bg-secondary shadow-lg transition-colors duration-300 border-r border-primary-800/20">
-        <div className="flex h-16 items-center justify-center border-b border-primary-800/20">
+      <div className="hidden lg:block fixed inset-y-0 left-0 z-50 w-64 sidebar shadow-lg transition-colors duration-300">
+        <div className="flex h-16 items-center justify-center border-b border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center space-x-3">
             <img 
               src="/favicon-64x64.png" 
               alt="CapitolScope Logo" 
-              className="h-10 w-10 rounded-full shadow-glow-primary/20"
+              className="h-10 w-10 rounded-lg"
               loading="lazy"
               width="40"
               height="40"
             />
-            <h1 className="text-xl font-bold text-primary-400">CapitolScope</h1>
+            <h1 className="text-xl font-bold text-primary-600 dark:text-primary-400">CapitolScope</h1>
           </div>
         </div>
         
@@ -197,12 +197,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li key={item.name}>
                   <Link
                     to={item.href}
-                    className={`flex items-center justify-between px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                    className={`flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                       isActive(item.href)
-                        ? 'bg-primary-900/20 text-primary-400 shadow-glow-primary/20'
+                        ? 'nav-link-active'
                         : canAccess 
-                          ? 'text-neutral-300 hover:text-primary-400 hover:bg-bg-tertiary'
-                          : 'text-neutral-500 hover:text-neutral-400 hover:bg-bg-tertiary opacity-60'
+                          ? 'nav-link hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                          : 'text-neutral-400 dark:text-neutral-500 hover:text-neutral-500 dark:hover:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 opacity-60'
                     }`}
                   >
                     <div className="flex items-center">
@@ -210,7 +210,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       {item.name}
                     </div>
                     {!canAccess && item.tier !== 'free' && (
-                      <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
+                      <div className="flex items-center text-xs text-warning bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 rounded-full">
                         <StarIcon className="h-3 w-3 mr-1" />
                         {item.tier === 'pro' ? 'Pro' : item.tier === 'premium' ? 'Premium' : 'Enterprise'}
                       </div>
@@ -223,18 +223,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           
           {/* Premium Upgrade Section for Free Users */}
           {isFree && (
-            <div className="mt-8 pt-6 border-t border-primary-800/20">
-              <div className="bg-neon-gradient p-4 rounded-lg shadow-glow-primary">
+            <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-700">
+              <div className="card-elevated p-4">
                 <div className="flex items-center mb-2">
-                  <SparklesIcon className="h-5 w-5 text-bg-primary mr-2" />
-                  <span className="text-bg-primary text-sm font-semibold">Upgrade to Pro</span>
+                  <SparklesIcon className="h-5 w-5 text-primary-600 dark:text-primary-400 mr-2" />
+                  <span className="text-primary-600 dark:text-primary-400 text-sm font-semibold">Upgrade to Pro</span>
                 </div>
-                <p className="text-bg-primary/80 text-xs mb-3">
+                <p className="text-muted text-xs mb-3">
                   Unlock trade alerts, analytics, and more
                 </p>
                 <Link
                   to="/premium"
-                  className="block w-full bg-bg-primary text-primary-400 text-xs font-semibold py-2 px-3 rounded text-center hover:bg-bg-tertiary transition-colors duration-200"
+                  className="btn-primary text-xs py-2 px-3 text-center block w-full"
                 >
                   View Plans
                 </Link>
@@ -247,22 +247,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main content */}
       <div className="lg:ml-64">
         {/* Header */}
-        <header className="bg-bg-secondary shadow-sm border-b border-primary-800/20 transition-colors duration-300">
+        <header className="header shadow-sm transition-colors duration-300">
           <div className="px-4 lg:px-6 py-4">
             <div className="flex items-center justify-between">
               {/* Mobile menu button and title */}
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setShowMobileMenu(true)}
-                  className="lg:hidden text-neutral-400 hover:text-neutral-100"
+                  className="lg:hidden text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
                 >
                   <Bars3Icon className="h-6 w-6" />
                 </button>
                 <div>
-                  <h1 className="text-xl lg:text-2xl font-semibold text-neutral-100">
+                  <h1 className="text-xl lg:text-2xl font-semibold text-heading">
                     {navigation.find(item => isActive(item.href))?.name || 'CapitolScope'}
                   </h1>
-                  <p className="text-xs lg:text-sm text-neutral-400 mt-1 hidden sm:block">
+                  <p className="text-xs lg:text-sm text-muted mt-1 hidden sm:block">
                     Congressional trading transparency platform
                   </p>
                 </div>
@@ -273,7 +273,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 {isFree && (
                   <Link
                     to="/premium"
-                    className="hidden sm:inline-flex items-center px-3 lg:px-4 py-2 bg-neon-gradient text-bg-primary text-xs lg:text-sm font-medium rounded-lg transition-all duration-200 shadow-glow-primary hover:shadow-glow-primary/70 transform hover:scale-105"
+                    className="hidden sm:inline-flex items-center px-3 lg:px-4 py-2 btn-primary text-xs lg:text-sm font-medium transition-all duration-200"
                   >
                     <SparklesIcon className="h-4 w-4 mr-1 lg:mr-2" />
                     <span className="hidden lg:inline">Upgrade to Pro</span>
@@ -281,7 +281,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </Link>
                 )}
                 
-                <div className="hidden lg:block text-sm text-neutral-400">
+                <div className="hidden lg:block text-sm text-muted">
                   Last updated: {new Date().toLocaleDateString()}
                 </div>
                 <DarkModeToggle />
@@ -290,7 +290,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center space-x-2 text-sm text-neutral-300 hover:text-neutral-100 transition-colors"
+                    className="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
                   >
                     <UserCircleIcon className="h-6 w-6" />
                     <span className="hidden md:block">
@@ -299,19 +299,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </button>
                   
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-bg-secondary rounded-md shadow-lg py-1 z-50 border border-primary-800/20">
-                      <div className="px-4 py-2 border-b border-primary-800/20">
-                        <p className="text-sm font-medium text-neutral-100">
+                    <div className="absolute right-0 mt-2 w-48 card-elevated shadow-lg py-1 z-50">
+                      <div className="px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
+                        <p className="text-sm font-medium text-heading">
                           {user?.computed_display_name || user?.email}
                         </p>
-                        <p className="text-xs text-neutral-400">
+                        <p className="text-xs text-muted">
                           {isFree ? 'Free Plan' : isPremium ? 'Premium Plan' : isPro ? 'Pro Plan' : 'Enterprise Plan'}
                         </p>
                       </div>
                       
                       <Link
                         to="/profile"
-                        className="block px-4 py-2 text-sm text-neutral-300 hover:bg-bg-tertiary"
+                        className="block px-4 py-2 text-sm text-body hover:bg-neutral-100 dark:hover:bg-neutral-800"
                         onClick={() => setShowUserMenu(false)}
                       >
                         Profile Settings
@@ -319,7 +319,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-neutral-300 hover:bg-bg-tertiary"
+                        className="block w-full text-left px-4 py-2 text-sm text-body hover:bg-neutral-100 dark:hover:bg-neutral-800"
                       >
                         <div className="flex items-center">
                           <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2" />
@@ -335,24 +335,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
 
         {/* Page content */}
-        <main className="p-4 lg:p-6 flex-grow">
+        <main className="content-area p-4 lg:p-6 flex-grow">
           {children}
         </main>
         
         {/* Footer */}
-        <footer className="bg-bg-secondary border-t border-primary-800/20 mt-auto">
+        <footer className="sidebar border-t border-neutral-200 dark:border-neutral-700 mt-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="flex items-center mb-4 md:mb-0">
                 <img 
                   src="/capitol-scope-logo.png" 
                   alt="CapitolScope Logo" 
-                  className="h-8 w-8 rounded-lg shadow-glow-primary/20"
+                  className="h-8 w-8 rounded-lg"
                   loading="lazy"
                   width="32"
                   height="32"
                 />
-                <span className="ml-3 text-sm text-neutral-400">
+                <span className="ml-3 text-sm text-muted">
                   © 2025 CapitolScope. All rights reserved.
                 </span>
               </div>
@@ -360,19 +360,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="flex items-center space-x-6">
                 <Link
                   to="/privacy"
-                  className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+                  className="text-sm text-muted hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                 >
                   Privacy Policy
                 </Link>
                 <Link
                   to="/terms"
-                  className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+                  className="text-sm text-muted hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                 >
                   Terms of Service
                 </Link>
                 <a
                   href="mailto:capitolscope@gmail.com"
-                  className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+                  className="text-sm text-muted hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                 >
                   Support
                 </a>

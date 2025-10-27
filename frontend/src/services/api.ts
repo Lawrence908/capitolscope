@@ -16,8 +16,16 @@ class APIClient {
   private client: AxiosInstance;
 
   constructor(baseURL?: string) {
-    // Use environment variable for API URL, fallback to localhost for development
-    const apiUrl = baseURL || import.meta.env.VITE_API_URL || 'http://localhost:8001';
+    // Resolve a safe base URL:
+    // - In production, default to same-origin (empty string) to avoid mixed-content
+    // - Prefer explicitly provided baseURL, then VITE_API_URL, then localhost for dev
+    const resolvedEnvUrl = import.meta.env.VITE_API_URL as string | undefined;
+    const isProd = !!import.meta.env.PROD;
+    const defaultProdUrl = '';
+    const defaultDevUrl = 'http://localhost:8001';
+    const apiUrl =
+      baseURL ??
+      (resolvedEnvUrl !== undefined ? resolvedEnvUrl : (isProd ? defaultProdUrl : defaultDevUrl));
     
     this.client = axios.create({
       baseURL: apiUrl,

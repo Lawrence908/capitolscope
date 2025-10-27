@@ -3,7 +3,9 @@ import type { ReactNode } from 'react';
 import { logger, LogComponent } from '../core/logging';
 
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+// In production, default to same-origin to avoid mixed content behind HTTPS proxy
+const isProd = !!import.meta.env.PROD;
+const API_BASE_URL: string = (import.meta.env.VITE_API_URL as string | undefined) ?? (isProd ? '' : 'http://localhost:8001');
 
 // Types
 export interface User {

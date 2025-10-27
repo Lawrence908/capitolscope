@@ -137,7 +137,7 @@ services:
       - "8121:5173"
     environment:
       - NODE_ENV=production
-      - VITE_API_URL=https://capitolscope.chrislawrence.ca
+      - VITE_API_URL=
     networks:
       - web
       - capitolscope-internal

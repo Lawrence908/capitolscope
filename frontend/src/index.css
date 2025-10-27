@@ -2,11 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles */
+/* Minimalist black and white theme inspired by Supabase/Tailscale */
 @layer base {
   body {
     @apply bg-bg-light-primary text-neutral-900 transition-colors duration-300;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
   
   /* Dark mode overrides */
@@ -14,9 +15,9 @@
     @apply bg-bg-primary text-neutral-100;
   }
   
-  /* Custom scrollbar */
+  /* Clean scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   
   ::-webkit-scrollbar-track {
@@ -24,91 +25,130 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary-500 rounded-full;
+    @apply bg-neutral-400 dark:bg-neutral-600 rounded-full;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary-400;
+    @apply bg-neutral-500 dark:bg-neutral-500;
   }
 }
 
 @layer components {
-  /* Cyberpunk Button Styles */
+  /* Minimalist Button Styles */
   .btn-primary {
-    @apply bg-primary-400 hover:bg-primary-300 text-bg-primary px-6 py-3 rounded-md font-semibold transition-all duration-300 shadow-glow-primary hover:shadow-glow-primary/70 transform hover:scale-105;
+    @apply bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md;
   }
   
   .btn-secondary {
-    @apply bg-secondary-400 hover:bg-secondary-300 text-bg-primary px-6 py-3 rounded-md font-semibold transition-all duration-300 shadow-glow-secondary hover:shadow-glow-secondary/70 transform hover:scale-105;
+    @apply bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-neutral-100 px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md;
   }
   
   .btn-outline {
-    @apply border-2 border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-bg-primary px-6 py-3 rounded-md font-semibold transition-all duration-300 shadow-glow-primary/30 hover:shadow-glow-primary;
+    @apply border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 px-4 py-2 rounded-lg font-medium transition-all duration-200;
   }
   
-  /* Cyberpunk Card Styles */
+  .btn-ghost {
+    @apply text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  }
+  
+  /* Minimalist Card Styles */
   .card {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-lg border border-primary-800/20 dark:border-primary-800/20 transition-all duration-300 hover:shadow-glow-primary/20 backdrop-blur-sm;
-  }
-  
-  .card-glow {
-    @apply bg-bg-light-tertiary dark:bg-bg-tertiary rounded-lg shadow-glow-primary/30 border border-primary-400/30 transition-all duration-300 hover:shadow-glow-primary/50;
+    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 transition-all duration-200 hover:shadow-md;
   }
   
   .card-elevated {
-    @apply bg-bg-light-tertiary dark:bg-bg-tertiary rounded-lg shadow-lg border border-primary-600/20 transition-all duration-300 hover:shadow-glow-primary/30;
+    @apply bg-bg-light-tertiary dark:bg-bg-tertiary rounded-lg shadow-md border border-neutral-200 dark:border-neutral-700 transition-all duration-200 hover:shadow-lg;
   }
   
-  /* Cyberpunk Input Styles */
+  .card-interactive {
+    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 transition-all duration-200 hover:shadow-md hover:border-primary-300 dark:hover:border-primary-600 cursor-pointer;
+  }
+  
+  /* Minimalist Input Styles */
   .input-field {
-    @apply w-full px-4 py-3 border border-primary-600 rounded-md bg-bg-light-secondary dark:bg-bg-secondary text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 shadow-glow-primary/20;
+    @apply w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-bg-light-primary dark:bg-bg-primary text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 dark:placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200;
   }
   
-  /* Cyberpunk Text Styles */
-  .text-glow-primary {
-    @apply text-primary-400 drop-shadow-[0_0_10px_rgba(19,196,195,0.5)];
+  .input-field-error {
+    @apply border-error focus:ring-error focus:border-error;
   }
   
-  .text-glow-secondary {
-    @apply text-secondary-400 drop-shadow-[0_0_10px_rgba(232,70,168,0.5)];
-  }
-  
-  /* Cyberpunk Navigation */
+  /* Minimalist Navigation */
   .nav-link {
-    @apply text-neutral-700 dark:text-neutral-300 hover:text-primary-400 transition-colors duration-300 relative;
+    @apply text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors duration-200 relative;
   }
   
-  .nav-link::after {
-    content: '';
-    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary-400 transition-all duration-300;
+  .nav-link-active {
+    @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20;
   }
   
-  .nav-link:hover::after {
-    @apply w-full;
+  /* Clean Typography */
+  .text-heading {
+    @apply text-neutral-900 dark:text-neutral-100 font-semibold;
+  }
+  
+  .text-subheading {
+    @apply text-neutral-700 dark:text-neutral-300 font-medium;
+  }
+  
+  .text-body {
+    @apply text-neutral-600 dark:text-neutral-400;
+  }
+  
+  .text-muted {
+    @apply text-neutral-500 dark:text-neutral-500;
+  }
+  
+  /* Status Indicators */
+  .status-success {
+    @apply text-secondary-600 dark:text-secondary-400 bg-secondary-50 dark:bg-secondary-900/20;
+  }
+  
+  .status-warning {
+    @apply text-warning dark:text-warning bg-yellow-50 dark:bg-yellow-900/20;
+  }
+  
+  .status-error {
+    @apply text-error dark:text-error bg-red-50 dark:bg-red-900/20;
+  }
+  
+  .status-info {
+    @apply text-info dark:text-info bg-blue-50 dark:bg-blue-900/20;
   }
   
   /* Data Visualization Styles */
   .chart-bar {
-    @apply bg-gradient-to-t from-primary-600 to-primary-400 shadow-glow-primary/30;
+    @apply bg-primary-500;
   }
   
   .chart-line {
-    @apply bg-gradient-to-r from-secondary-400 to-secondary-300 shadow-glow-secondary/30;
+    @apply bg-secondary-500;
   }
   
-  /* Circuit Pattern Background */
-  .circuit-bg {
-    background-image: 
-      radial-gradient(circle at 25% 25%, rgba(19, 196, 195, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, rgba(232, 70, 168, 0.1) 0%, transparent 50%),
-      linear-gradient(45deg, transparent 40%, rgba(19, 196, 195, 0.05) 50%, transparent 60%);
+  /* Clean Layout Components */
+  .sidebar {
+    @apply bg-bg-light-secondary dark:bg-bg-secondary border-r border-neutral-200 dark:border-neutral-700;
   }
   
-  /* Light mode circuit pattern */
-  .circuit-bg:not(.dark) {
-    background-image: 
-      radial-gradient(circle at 25% 25%, rgba(19, 196, 195, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, rgba(232, 70, 168, 0.05) 0%, transparent 50%),
-      linear-gradient(45deg, transparent 40%, rgba(19, 196, 195, 0.02) 50%, transparent 60%);
+  .header {
+    @apply bg-bg-light-primary dark:bg-bg-primary border-b border-neutral-200 dark:border-neutral-700;
+  }
+  
+  .content-area {
+    @apply bg-bg-light-primary dark:bg-bg-primary;
+  }
+  
+  /* Minimalist Animations */
+  .fade-in {
+    @apply animate-in fade-in duration-300;
+  }
+  
+  .slide-in {
+    @apply animate-in slide-in-from-bottom-4 duration-300;
+  }
+  
+  /* Focus States */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900;
   }
 }

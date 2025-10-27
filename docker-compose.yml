@@ -23,6 +23,7 @@ services:
       - .env
     networks:
       - capitolscope-network
+      - web
     environment:
       - PYTHONPATH=/app/src
       - DEBUG=true
@@ -164,10 +165,10 @@ services:
       - "5173:5173"
     environment:
       - NODE_ENV=development
-      - VITE_API_URL=http://192.168.50.70:8120
+      - VITE_API_URL=https://capitolscope.chrislawrence.ca
     networks:
       - capitolscope-network
-      - hephaestus-homelab_web
+      - web
     depends_on:
       - capitolscope
     restart: unless-stopped
@@ -188,6 +189,6 @@ networks:
   capitolscope-network:
     name: capitolscope-dev
     driver: bridge
-  hephaestus-homelab_web:
+  web:
     external: true
-    name: hephaestus-homelab_web 
+    name: homelab-web 

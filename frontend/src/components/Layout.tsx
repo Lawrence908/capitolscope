@@ -245,7 +245,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="lg:ml-64">
+      <div className="lg:ml-64 flex min-h-screen flex-col">
         {/* Header */}
         <header className="header shadow-sm transition-colors duration-300">
           <div className="px-4 lg:px-6 py-4">

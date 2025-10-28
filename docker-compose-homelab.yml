@@ -16,6 +16,8 @@ services:
     volumes:
       - ./app/logs:/app/logs
       - ./app/data:/app/data
+      - ./app/src:/app/src
+      - ./legacy:/app/legacy
     depends_on:
       capitolscope-redis:
         condition: service_healthy
@@ -24,7 +26,9 @@ services:
     working_dir: /app/src
     environment:
       - PYTHONPATH=/app/src
-    command: python -m uvicorn main:app --host 0.0.0.0 --port 8000
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
+    command: python -m uvicorn main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips="*"
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     security_opt:
@@ -85,11 +89,18 @@ services:
       - ENVIRONMENT=production
       - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
       - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
-    command: ["python", "-m", "celery", "-A", "background.celery_app", "worker", "--loglevel=info", "--concurrency=1"]
+    command: >
+      sh -lc "python -c 'import asyncio; from core.database import init_database; asyncio.run(init_database()); print(\"DB init ok (worker)\")' &&
+              python -m celery -A background.celery_app worker -P solo --loglevel=info --concurrency=1"
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     security_opt:
       - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 5s
+      retries: 1
 
   capitolscope-scheduler:
     build:
@@ -117,11 +128,18 @@ services:
       - ENVIRONMENT=production
       - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
       - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
-    command: ["sh", "-c", "mkdir -p /app/celery && python -m celery -A background.celery_app beat --loglevel=info --schedule=/app/celery/celerybeat-schedule"]
+    command: >
+      sh -lc "python -c 'import asyncio; from core.database import init_database; asyncio.run(init_database()); print(\"DB init ok (beat)\")' &&
+              python -m celery -A background.celery_app beat --loglevel=info --schedule=/app/celery/celerybeat-schedule"
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     security_opt:
       - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 5s
+      retries: 1
 
   # Frontend React/Vite Application
   capitolscope-frontend:
@@ -137,7 +155,7 @@ services:
       - "8121:5173"
     environment:
       - NODE_ENV=production
-      - VITE_API_URL=
+      - VITE_API_URL=https://capitolscope.chrislawrence.ca
     networks:
       - web
       - capitolscope-internal

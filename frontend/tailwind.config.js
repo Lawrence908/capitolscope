@@ -8,17 +8,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Minimalist black and white palette inspired by Supabase/Tailscale
+        // Supabase-inspired palette
         bg: {
-          primary: '#0a0a0a',      // Pure black background
-          secondary: '#1a1a1a',    // Dark gray for cards/sections
-          tertiary: '#2a2a2a',     // Lighter gray for elevated elements
+          primary: '#0d1117',      // GitHub dark background
+          secondary: '#161b22',   // Slightly lighter for cards/sections
+          tertiary: '#21262d',    // Even lighter for elevated elements
         },
-        // Light mode backgrounds
+        // Light mode backgrounds - matching landing page style
         'bg-light': {
           primary: '#ffffff',      // Pure white background
-          secondary: '#f8f9fa',    // Light gray for cards
-          tertiary: '#f1f3f4',     // Slightly darker for elevated elements
+          secondary: '#f9fafb',   // Light gray for cards (matching landing page)
+          tertiary: '#f3f4f6',    // Slightly darker for elevated elements
         },
         // Primary accent - subtle blue for interactive elements
         primary: {
@@ -46,28 +46,29 @@ export default {
           800: '#166534',
           900: '#14532d',
         },
-        // Neutral grays - clean and minimal
+        // Neutral grays - matching landing page style
         neutral: {
-          50: '#ffffff',
-          100: '#fafafa',
-          200: '#f5f5f5',
-          300: '#e5e5e5',
-          400: '#d4d4d4',
-          500: '#a3a3a3',
-          600: '#737373',
-          700: '#525252',
-          800: '#404040',
-          900: '#171717',
+          50: '#ffffff',      // Pure white
+          100: '#f9fafb',     // Light background gray
+          200: '#f3f4f6',     // Card background
+          300: '#e5e7eb',     // Light border
+          400: '#d1d5db',     // Muted text
+          500: '#9ca3af',     // Medium gray
+          600: '#6b7280',     // Light gray text
+          700: '#374151',     // Dark gray text
+          800: '#1f2937',     // Very dark gray
+          900: '#111827',     // Almost black
         },
         // Semantic colors - minimal and clean
         success: '#22c55e',
         warning: '#f59e0b',
         error: '#ef4444',
         info: '#3b82f6',
-        // Border colors
+        // Border colors - matching landing page style
         border: {
-          light: '#e5e5e5',
-          dark: '#404040',
+          light: '#e5e7eb',      // Light gray border (matching landing page)
+          dark: '#30363d',       // Dark mode border
+          muted: '#d1d5db',      // Muted border for light mode
         }
       },
       // Clean shadows - subtle and minimal

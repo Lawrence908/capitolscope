@@ -31,3 +31,27 @@ MAILTO=admin@capitolscope.chrislawrence.ca
 
 
 
+
+
+# ==========================
+# CapitolScope data refresh
+# ==========================
+
+# Twice daily: fetch latest Clerk CSV zip and extract into /app/data/congress/csv inside container
+5 3,15 * * * capitolscope cd /home/chris/apps/capitolscope && docker compose -f docker-compose-homelab.yml exec -T capitolscope sh -lc 'set -e; mkdir -p /app/data/congress/csv; python - <<PY
+import io, zipfile, urllib.request, datetime
+YEAR = str(datetime.datetime.utcnow().year)
+url = f"https://disclosures-clerk.house.gov/public_disc/financial-pdfs/{YEAR}FD.zip"
+data = urllib.request.urlopen(url, timeout=60).read()
+zipfile.ZipFile(io.BytesIO(data)).extractall("/app/data/congress/csv")
+print("Fetched and extracted", YEAR)
+PY' >> /var/log/capitolscope/cron_fetch_csv.log 2>&1
+
+# Twice daily: import trades from CSVs into database
+10 3,15 * * * capitolscope cd /home/chris/apps/capitolscope && docker compose -f docker-compose-homelab.yml exec -T capitolscope python /app/src/scripts/import_congressional_data.py --csvs --skip-enrichment >> /var/log/capitolscope/cron_import_csvs.log 2>&1
+
+# Nightly: member directory sync from Congress.gov
+15 2 * * * capitolscope cd /home/chris/apps/capitolscope && docker compose -f docker-compose-homelab.yml exec -T capitolscope python /app/src/scripts/sync_congress_members.py --action sync-all >> /var/log/capitolscope/cron_sync_members.log 2>&1
+
+# Nightly: refresh recent prices for traded securities
+0 4 * * * capitolscope cd /home/chris/apps/capitolscope && docker compose -f docker-compose-homelab.yml exec -T capitolscope python /app/src/scripts/fetch_stock_data.py --recent >> /var/log/capitolscope/cron_prices.log 2>&1

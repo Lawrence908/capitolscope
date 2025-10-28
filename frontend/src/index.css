@@ -53,20 +53,20 @@
   
   /* Minimalist Card Styles */
   .card {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 transition-all duration-200 hover:shadow-md;
+    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-border-light dark:border-border-dark transition-all duration-200 hover:shadow-md;
   }
   
   .card-elevated {
-    @apply bg-bg-light-tertiary dark:bg-bg-tertiary rounded-lg shadow-md border border-neutral-200 dark:border-neutral-700 transition-all duration-200 hover:shadow-lg;
+    @apply bg-bg-light-tertiary dark:bg-bg-tertiary rounded-lg shadow-md border border-border-light dark:border-border-dark transition-all duration-200 hover:shadow-lg;
   }
   
   .card-interactive {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 transition-all duration-200 hover:shadow-md hover:border-primary-300 dark:hover:border-primary-600 cursor-pointer;
+    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-border-light dark:border-border-dark transition-all duration-200 hover:shadow-md hover:border-border-muted dark:hover:border-border-dark cursor-pointer;
   }
   
   /* Minimalist Input Styles */
   .input-field {
-    @apply w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-bg-light-primary dark:bg-bg-primary text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 dark:placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200;
+    @apply w-full px-3 py-2 border border-border-light dark:border-border-dark rounded-lg bg-bg-light-primary dark:bg-bg-primary text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 dark:placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200;
   }
   
   .input-field-error {
@@ -79,7 +79,7 @@
   }
   
   .nav-link-active {
-    @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20;
+    @apply text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-800;
   }
   
   /* Clean Typography */
@@ -127,11 +127,11 @@
   
   /* Clean Layout Components */
   .sidebar {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary border-r border-neutral-200 dark:border-neutral-700;
+    @apply bg-bg-light-secondary dark:bg-bg-secondary border-r border-border-light dark:border-border-dark;
   }
   
   .header {
-    @apply bg-bg-light-primary dark:bg-bg-primary border-b border-neutral-200 dark:border-neutral-700;
+    @apply bg-bg-light-primary dark:bg-bg-primary border-b border-border-light dark:border-border-dark;
   }
   
   .content-area {

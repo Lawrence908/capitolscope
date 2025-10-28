@@ -17,15 +17,20 @@ class APIClient {
 
   constructor(baseURL?: string) {
     // Resolve a safe base URL:
-    // - In production, default to same-origin (empty string) to avoid mixed-content
-    // - Prefer explicitly provided baseURL, then VITE_API_URL, then localhost for dev
+    // - In production, use HTTPS to avoid mixed-content issues
+    // - Prefer explicitly provided baseURL, then VITE_API_URL, then HTTPS for prod, localhost for dev
     const resolvedEnvUrl = import.meta.env.VITE_API_URL as string | undefined;
     const isProd = !!import.meta.env.PROD;
-    const defaultProdUrl = '';
+    const defaultProdUrl = 'https://capitolscope.chrislawrence.ca';
     const defaultDevUrl = 'http://localhost:8001';
-    const apiUrl =
-      baseURL ??
-      (resolvedEnvUrl !== undefined ? resolvedEnvUrl : (isProd ? defaultProdUrl : defaultDevUrl));
+    
+    // Force HTTPS in production to prevent mixed content issues
+    let apiUrl = baseURL ?? (resolvedEnvUrl !== undefined ? resolvedEnvUrl : (isProd ? defaultProdUrl : defaultDevUrl));
+    
+    // Ensure HTTPS in production
+    if (isProd && apiUrl.startsWith('http://')) {
+      apiUrl = apiUrl.replace('http://', 'https://');
+    }
     
     this.client = axios.create({
       baseURL: apiUrl,

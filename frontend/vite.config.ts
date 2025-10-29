@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
       host: '0.0.0.0',
       port: 5173,
-      allowedHosts: ['capitolscope.chrislawrence.ca'],
+      allowedHosts: ['capitolscope.chrislawrence.ca', 'hephaestus.tailaa3ef2.ts.net'],
       watch: {
         usePolling: true
       }

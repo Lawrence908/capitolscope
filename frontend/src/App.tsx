@@ -9,6 +9,7 @@ import RegisterPage from './components/RegisterPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ResetPasswordPage from './components/ResetPasswordPage';
 import LandingPage from './components/LandingPage';
+import PublicDashboard from './components/PublicDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import PremiumRoute from './components/PremiumRoute';
 import ColorPaletteShowcase from './components/ColorPaletteShowcase';
@@ -41,7 +42,8 @@ const App: React.FC = () => {
           <Router>
             <Routes>
             {/* Public routes */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<PublicDashboard />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/colors" element={<ColorPaletteShowcase />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
@@ -160,8 +162,8 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
             
-            {/* Catch all route - redirect to landing page */}
-            <Route path="*" element={<LandingPage />} />
+            {/* Catch all route - redirect to public dashboard */}
+            <Route path="*" element={<PublicDashboard />} />
             </Routes>
           </Router>
         </AuthProvider>

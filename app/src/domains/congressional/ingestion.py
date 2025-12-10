@@ -339,6 +339,14 @@ class CongressionalDataIngestion:
                     transaction_date = notification_date
                     date_notes.append('transaction_date_inferred_from_notification_date')
                 else:
+                    # Try extracting a date from description text as last resort
+                    description_text = row.get('Description', '') or row.get('comment', '') or ''
+                    inferred_date = self._parse_date(description_text)
+                    if inferred_date:
+                        transaction_date = inferred_date
+                        date_notes.append('transaction_date_inferred_from_description')
+                # If still no valid transaction date, record error
+                if not transaction_date:
                     self.record_error('invalid_date', doc_id, member_name, f"Invalid or missing transaction date: {transaction_date_str}", row)
                     return None
             if not all([doc_id, member_name, raw_asset, transaction_type, transaction_date]):
@@ -366,26 +374,91 @@ class CongressionalDataIngestion:
             return None
     
     def _parse_date(self, date_str: str) -> Optional[date]:
-        """Parse date string with multiple format support."""
+        """Parse date string with multiple format support and sanitization.
+
+        Handles placeholders like 'S', '[ST]', words leaking into the field,
+        and scans arbitrary text to extract a date token if needed.
+        """
         if not date_str:
             return None
-            
-        # Common date formats
+        
+        # Normalize input to string
+        raw = str(date_str).strip()
+        if not raw:
+            return None
+        
+        # Fast reject common non-dates/placeholders
+        placeholders = {"S", "[ST]", "ST", "N/A", "NA", "NONE", "-"}
+        if raw.upper() in placeholders:
+            return None
+        
+        # If the string is clearly just a year with 2 or 4 digits, try to coerce
+        if raw.isdigit():
+            if len(raw) == 4:
+                # Year-only -> choose Jan 1 of that year
+                try:
+                    return date(int(raw), 1, 1)
+                except ValueError:
+                    pass
+            elif len(raw) == 2:
+                # Two-digit year, assume 20xx for 00-30 else 19xx
+                try:
+                    yy = int(raw)
+                    century = 2000 if yy <= 30 else 1900
+                    return date(century + yy, 1, 1)
+                except ValueError:
+                    pass
+        
+        # Try structured formats first
         formats = [
             '%Y-%m-%d',
+            '%Y-%m-%d %H:%M:%S',
             '%m/%d/%Y',
             '%d/%m/%Y',
-            '%Y-%m-%d %H:%M:%S',
-            '%m/%d/%Y %H:%M:%S'
+            '%m/%d/%Y %H:%M:%S',
         ]
-        
         for fmt in formats:
             try:
-                return datetime.strptime(date_str.strip(), fmt).date()
+                return datetime.strptime(raw, fmt).date()
             except ValueError:
                 continue
-                
-        logger.warning(f"Could not parse date: {date_str}")
+        
+        # Handle two-digit year in slash format (e.g., 2/18/22)
+        try:
+            mdy = datetime.strptime(raw, '%m/%d/%y').date()
+            # Normalize 2-digit year into 19xx/20xx similar to above assumption
+            yy = int(raw.split('/')[-1])
+            century = 2000 if yy <= 30 else 1900
+            return date(century + mdy.year % 100, mdy.month, mdy.day)
+        except ValueError:
+            pass
+        
+        # As a last resort, scan the string for a date token using regex
+        # - ISO: YYYY-MM-DD
+        # - M/D/YY(YY)
+        iso_match = re.search(r"\b(\d{4})-(\d{2})-(\d{2})\b", raw)
+        if iso_match:
+            try:
+                y, m, d = map(int, iso_match.groups())
+                return date(y, m, d)
+            except ValueError:
+                pass
+        mdy_match = re.search(r"\b(\d{1,2})/(\d{1,2})/(\d{2,4})\b", raw)
+        if mdy_match:
+            try:
+                m, d, y = mdy_match.groups()
+                m = int(m)
+                d = int(d)
+                if len(y) == 2:
+                    yy = int(y)
+                    y = 2000 + yy if yy <= 30 else 1900 + yy
+                else:
+                    y = int(y)
+                return date(y, m, d)
+            except ValueError:
+                pass
+        
+        logger.warning(f"Could not parse date: {raw}")
         return None
     
     def _process_batch(self, batch: List[TradeRecord]):

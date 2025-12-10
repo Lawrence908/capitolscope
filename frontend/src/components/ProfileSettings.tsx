@@ -777,7 +777,7 @@ const ProfileSettings: React.FC = () => {
               <p className="text-blue-800 dark:text-blue-200 text-xs">
                 Need help with your subscription? Contact support at{' '}
                 <a href="mailto:captiolscope@gmail.com" className="underline hover:no-underline">
-                  support@captiolscope.ca
+                  capitolscope@gmail.com
                 </a>
               </p>
             </div>

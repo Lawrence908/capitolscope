@@ -208,12 +208,12 @@ const Analytics: React.FC = () => {
     return <div className="p-6">No analytics data available.</div>;
   }
 
-  // Prepare chart data
+  // Prepare chart data with defensive checks
   const topMembersChartData = {
-    labels: data.topTradingMembers.map(member => member.member_name),
+    labels: data.topTradingMembers?.map(member => member.member_name) || [],
     datasets: [{
       label: 'Total Trades',
-      data: data.topTradingMembers.map(member => member.total_trades),
+      data: data.topTradingMembers?.map(member => member.total_trades) || [],
       backgroundColor: 'rgba(59, 130, 246, 0.8)',
       borderColor: 'rgba(59, 130, 246, 1)',
       borderWidth: 1,
@@ -221,10 +221,10 @@ const Analytics: React.FC = () => {
   };
 
   const topTickersChartData = {
-    labels: data.topTradedTickers.map(ticker => ticker.ticker),
+    labels: data.topTradedTickers?.map(ticker => ticker.ticker) || [],
     datasets: [{
       label: 'Trade Count',
-      data: data.topTradedTickers.map(ticker => ticker.count),
+      data: data.topTradedTickers?.map(ticker => ticker.count) || [],
       backgroundColor: 'rgba(16, 185, 129, 0.8)',
       borderColor: 'rgba(16, 185, 129, 1)',
       borderWidth: 1,
@@ -232,10 +232,10 @@ const Analytics: React.FC = () => {
   };
 
   const partyChartData = {
-    labels: Object.keys(data.partyDistribution),
+    labels: Object.keys(data.partyDistribution || {}),
     datasets: [{
       label: 'Trades by Party',
-      data: Object.values(data.partyDistribution),
+      data: Object.values(data.partyDistribution || {}),
       backgroundColor: [
         'rgba(59, 130, 246, 0.8)',   // Blue for Democratic
         'rgba(239, 68, 68, 0.8)',    // Red for Republican
@@ -251,10 +251,10 @@ const Analytics: React.FC = () => {
   };
 
   const chamberChartData = {
-    labels: Object.keys(data.chamberDistribution),
+    labels: Object.keys(data.chamberDistribution || {}),
     datasets: [{
       label: 'Trades by Chamber',
-      data: Object.values(data.chamberDistribution),
+      data: Object.values(data.chamberDistribution || {}),
       backgroundColor: [
         'rgba(147, 51, 234, 0.8)',   // Purple for Senate
         'rgba(34, 197, 94, 0.8)',    // Green for House
@@ -270,10 +270,10 @@ const Analytics: React.FC = () => {
   };
 
   const amountChartData = {
-    labels: Object.keys(data.amountDistribution),
+    labels: Object.keys(data.amountDistribution || {}),
     datasets: [{
       label: 'Number of Trades',
-      data: Object.values(data.amountDistribution),
+      data: Object.values(data.amountDistribution || {}),
       backgroundColor: 'rgba(245, 158, 11, 0.8)',
       borderColor: 'rgba(245, 158, 11, 1)',
       borderWidth: 1,
@@ -281,10 +281,10 @@ const Analytics: React.FC = () => {
   };
 
   const volumeChartData = {
-    labels: data.volumeOverTime.map(item => formatDate(item.date)),
+    labels: data.volumeOverTime?.map(item => formatDate(item.date)) || [],
     datasets: [{
       label: 'Trade Volume',
-      data: data.volumeOverTime.map(item => item.volume / 100), // Convert cents to dollars
+      data: data.volumeOverTime?.map(item => item.volume / 100) || [], // Convert cents to dollars
       borderColor: 'rgba(59, 130, 246, 1)',
       backgroundColor: 'rgba(59, 130, 246, 0.1)',
       borderWidth: 2,

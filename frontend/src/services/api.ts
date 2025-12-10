@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
+import { logger, LogComponent } from '../core/logging';
 import type {
   CongressMember,
   CongressionalTrade,
@@ -15,8 +16,21 @@ class APIClient {
   private client: AxiosInstance;
 
   constructor(baseURL?: string) {
-    // Use environment variable for API URL, fallback to localhost for development
-    const apiUrl = baseURL || import.meta.env.VITE_API_URL || 'http://localhost:8001';
+    // Resolve a safe base URL:
+    // - In production, use HTTPS to avoid mixed-content issues
+    // - Prefer explicitly provided baseURL, then VITE_API_URL, then HTTPS for prod, localhost for dev
+    const resolvedEnvUrl = import.meta.env.VITE_API_URL as string | undefined;
+    const isProd = !!import.meta.env.PROD;
+    const defaultProdUrl = 'https://capitolscope.chrislawrence.ca';
+    const defaultDevUrl = 'http://localhost:8001';
+    
+    // Force HTTPS in production to prevent mixed content issues
+    let apiUrl = baseURL ?? (resolvedEnvUrl !== undefined ? resolvedEnvUrl : (isProd ? defaultProdUrl : defaultDevUrl));
+    
+    // Ensure HTTPS in production
+    if (isProd && apiUrl.startsWith('http://')) {
+      apiUrl = apiUrl.replace('http://', 'https://');
+    }
     
     this.client = axios.create({
       baseURL: apiUrl,
@@ -29,15 +43,31 @@ class APIClient {
     // Add request interceptor for logging
     this.client.interceptors.request.use(
       (config) => {
-        console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+        logger.apiRequest(
+          config.method?.toUpperCase() || 'UNKNOWN',
+          config.url || '',
+          config.data
+        );
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => {
+        logger.error(LogComponent.API, 'Request interceptor error', { error });
+        return Promise.reject(error);
+      }
     );
 
     // Add response interceptor for error handling with retry logic
     this.client.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        // Log successful responses
+        logger.apiResponse(
+          response.config.method?.toUpperCase() || 'UNKNOWN',
+          response.config.url || '',
+          response.status,
+          response.data
+        );
+        return response;
+      },
       async (error) => {
         const originalRequest = error.config;
         
@@ -46,7 +76,10 @@ class APIClient {
           originalRequest._retry = true;
           
           const retryAfter = error.response.headers['retry-after'] || 60;
-          console.log(`Rate limited. Retrying after ${retryAfter} seconds...`);
+          logger.warning(LogComponent.API, `Rate limited. Retrying after ${retryAfter} seconds...`, {
+            url: originalRequest.url,
+            retryAfter,
+          });
           
           await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
           
@@ -59,10 +92,18 @@ class APIClient {
             detail: error.response.data?.detail || 'An error occurred',
             status_code: error.response.status,
           };
-          console.error('API Error:', apiError);
+          logger.apiError(
+            originalRequest.method?.toUpperCase() || 'UNKNOWN',
+            originalRequest.url || '',
+            apiError
+          );
           return Promise.reject(apiError);
         }
-        console.error('Network Error:', error.message);
+        
+        logger.error(LogComponent.API, 'Network Error', {
+          message: error.message,
+          url: originalRequest.url,
+        });
         return Promise.reject(error);
       }
     );

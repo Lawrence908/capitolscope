@@ -375,10 +375,10 @@ Dr.	Douglass	Eugene Farley Dr		C	NC02	2025	5/3/2025	10067240
 	Duensing	Skylar		C	IL06	2025	10/19/2025	10072686
 Mr.	Duffin	Michael Christian		X	VA08	2025	10/16/2025	9115693
 Hon.	Duncan	Jeff		T	SC03	2025	1/22/2025	10063270
-"Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	3/10/2025	20027895"
-"Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	4/3/2025	20029068"
-"Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	8/13/2025	20030735"
-"Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	10/1/2025	20032191"
+Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	3/10/2025	20027895
+Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	4/3/2025	20029068
+Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	8/13/2025	20030735
+Hon.	Dunn	Neal Patrick MD, Facs		P	FL02	2025	10/1/2025	20032191
 	Dunung	Sanjyot		C	IL08	2025	9/8/2025	10072380
 	Dunung	Sanjyot		X	IL08	2025	6/12/2025	8221146
 	Durant	Tara Anne		X	VA07	2025	8/5/2025	30025341
@@ -425,9 +425,9 @@ Dr.	Fisher	Thomas		X	IL07	2025	9/3/2025	30025404
 	Fitzgerald	Edward O'Donnell		C	OH07	2025	9/22/2025	10072270
 	Fitzgerald	Edward O'Donnell		D	OH07	2025	9/22/2025	9115659
 	Fitzgerald	Edward O'Donnell		D	OH07	2025	9/23/2025	40004846
-"Hon.	Fleischmann	Charles J. ""Chuck""		P	TN03	2025	2/10/2025	8220753"
-"Hon.	Fleischmann	Charles J. ""Chuck""		P	TN03	2025	5/13/2025	8220902"
-"Hon.	Fleischmann	Charles J. ""Chuck""		P	TN03	2025	8/15/2025	9115670"
+Hon.	Fleischmann	Charles J. "Chuck"		P	TN03	2025	2/10/2025	8220753
+Hon.	Fleischmann	Charles J. "Chuck"		P	TN03	2025	5/13/2025	8220902
+Hon.	Fleischmann	Charles J. "Chuck"		P	TN03	2025	8/15/2025	9115670
 	Flores	Eric		X	TX34	2025	8/12/2025	30025361
 Hon.	Flores	Mayra Nohemi		C	TX28	2025	8/13/2025	10069128
 Hon.	Flores	Mayra Nohemi		X	TX28	2025	5/22/2025	30023937
@@ -1382,7 +1382,7 @@ Hon.	Whitesides	George		X	CA27	2025	5/9/2025	8220881
 	Wied	Tony		P	WI08	2025	5/13/2025	8220903
 	Wied	Tony		P	WI08	2025	7/9/2025	8221177
 	Wied	Tony		P	WI08	2025	8/6/2025	9115665
-"	Wiedenfeld-Needham	Boris ""Bo""		C	OR04	2025	9/13/2025	10072437"
+	Wiedenfeld-Needham	Boris "Bo"		C	OR04	2025	9/13/2025	10072437
 	Wiener	Scott		X	CA11	2025	8/1/2025	30025332
 Hon.	Wild	Susan		T	PA07	2025	5/15/2025	10063269
 Hon.	Wild	Susan		X	PA07	2025	1/15/2025	30022473

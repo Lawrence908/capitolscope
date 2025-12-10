@@ -54,6 +54,37 @@ class CongressMemberService(CongressMemberServiceInterface):
         self.portfolio_repo = portfolio_repo
         self.performance_repo = performance_repo
     
+    # Implement required abstract methods from BaseService
+    async def create(self, obj_in) -> CongressMemberDetail:
+        """Create a new congress member."""
+        return await self.create_member(obj_in)
+    
+    async def get(self, id: int) -> Optional[CongressMemberDetail]:
+        """Get a congress member by ID."""
+        return await self.member_repo.get_by_id(id)
+    
+    async def get_multi(
+        self, 
+        skip: int = 0, 
+        limit: int = 100,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[CongressMemberDetail]:
+        """Get multiple congress members."""
+        from domains.congressional.schemas import MemberQuery
+        query = MemberQuery(page=skip//limit + 1, limit=limit)
+        members, _ = await self.member_repo.list_members(query)
+        return members
+    
+    async def update(self, id: int, obj_in) -> CongressMemberDetail:
+        """Update a congress member."""
+        return await self.update_member(id, obj_in)
+    
+    async def delete(self, id: int) -> bool:
+        """Delete a congress member."""
+        # This would need to be implemented in the repository
+        # For now, return False as deletion is not typically allowed
+        return False
+    
     async def create_member(self, member_data: CongressMemberCreate) -> CongressMemberDetail:
         """Create a new congress member with validation."""
         logger.error("TEST LOGGING - this should appear in app.log when a member is created")
@@ -893,8 +924,8 @@ class CongressAPIService:
                 # Get the most recent term
                 latest_term = terms_list[-1] if terms_list else {}
                 
-                member_info["term_start"] = self._parse_api_date(latest_term.get("startYear"))
-                member_info["term_end"] = self._parse_api_date(latest_term.get("endYear"))
+                member_info["term_start"] = self._parse_api_date(latest_term.get("startYear"), field="term_start")
+                member_info["term_end"] = self._parse_api_date(latest_term.get("endYear"), field="term_end")
                 
                 # Extract congress number
                 if "congress" in latest_term:
@@ -928,7 +959,7 @@ class CongressAPIService:
         
         return member_info
     
-    def _parse_api_date(self, date_str: Optional[str]) -> Optional[date]:
+    def _parse_api_date(self, date_str: Optional[str], field: str = "unknown") -> Optional[date]:
         """
         Parse date string from API.
         
@@ -938,20 +969,23 @@ class CongressAPIService:
         Returns:
             Parsed date object or None.
         """
-        if not date_str:
+        if date_str is None:
             return None
         try:
-            # Handle year-only dates
+            # Normalize to string and strip whitespace; API sometimes returns ints for years
+            date_str = str(date_str).strip()
+
+            # Handle year-only dates (e.g., "2025")
             if len(date_str) == 4 and date_str.isdigit():
                 logger.debug(f"Parsed year-only date: {date_str}")
                 return date(int(date_str), 1, 1)
-            # Handle full ISO dates
+            # Handle full ISO dates with time component
             if "T" in date_str:
                 return datetime.fromisoformat(date_str.replace("Z", "+00:00")).date()
-            # Handle date-only strings
+            # Handle date-only strings (YYYY-MM-DD)
             return datetime.strptime(date_str, "%Y-%m-%d").date()
         except (ValueError, TypeError):
-            logger.warning(f"Failed to parse date: {date_str}")
+            logger.warning(f"Failed to parse date for {field}: {date_str}")
             return None
     
     def _member_needs_update(self, existing_member: CongressMemberDetail, api_member_info: Dict[str, Any]) -> bool:

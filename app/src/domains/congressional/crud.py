@@ -241,52 +241,47 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
         
         return [CongressMemberSummary.from_orm(member) for member in db_members]
     
-    def get_trading_statistics(self, member_id: int) -> TradingStatistics:
+    async def get_trading_statistics(self, member_id: int) -> TradingStatistics:
         """Get trading statistics for a member."""
-        # Query trade statistics
-        trade_stats = (
-            self.db.query(
-                func.count(CongressionalTrade.id).label('total_trades'),
-                func.sum(
-                    func.coalesce(
-                        CongressionalTrade.amount_exact,
-                        (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
-                    )
-                ).label('total_value'),
-                func.count(func.nullif(CongressionalTrade.transaction_type != 'P', True)).label('purchase_count'),
-                func.count(func.nullif(CongressionalTrade.transaction_type != 'S', True)).label('sale_count'),
-                func.avg(
-                    CongressionalTrade.notification_date - CongressionalTrade.transaction_date
-                ).label('avg_days_to_disclosure')
-            )
-            .filter(CongressionalTrade.member_id == member_id)
-            .first()
-        )
-        
-        # Get most traded assets
-        most_traded = (
-            self.db.query(
-                CongressionalTrade.ticker,
-                CongressionalTrade.asset_name,
-                func.count(CongressionalTrade.id).label('trade_count'),
-                func.sum(
-                    func.coalesce(
-                        CongressionalTrade.amount_exact,
-                        (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
-                    )
-                ).label('total_value')
-            )
-            .filter(
-                and_(
-                    CongressionalTrade.member_id == member_id,
-                    CongressionalTrade.ticker.isnot(None)
+        # Query trade statistics using SQLAlchemy 2.x syntax
+        stmt = select(
+            func.count(CongressionalTrade.id).label('total_trades'),
+            func.sum(
+                func.coalesce(
+                    CongressionalTrade.amount_exact,
+                    (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
                 )
+            ).label('total_value'),
+            func.count(func.nullif(CongressionalTrade.transaction_type != 'P', True)).label('purchase_count'),
+            func.count(func.nullif(CongressionalTrade.transaction_type != 'S', True)).label('sale_count'),
+            func.avg(
+                CongressionalTrade.notification_date - CongressionalTrade.transaction_date
+            ).label('avg_days_to_disclosure')
+        ).where(CongressionalTrade.member_id == member_id)
+        
+        result = await self.db.execute(stmt)
+        trade_stats = result.first()
+        
+        # Get most traded assets using SQLAlchemy 2.x syntax
+        most_traded_stmt = select(
+            CongressionalTrade.ticker,
+            CongressionalTrade.asset_name,
+            func.count(CongressionalTrade.id).label('trade_count'),
+            func.sum(
+                func.coalesce(
+                    CongressionalTrade.amount_exact,
+                    (CongressionalTrade.amount_min + CongressionalTrade.amount_max) / 2
+                )
+            ).label('total_value')
+        ).where(
+            and_(
+                CongressionalTrade.member_id == member_id,
+                CongressionalTrade.ticker.isnot(None)
             )
-            .group_by(CongressionalTrade.ticker, CongressionalTrade.asset_name)
-            .order_by(desc('trade_count'))
-            .limit(10)
-            .all()
-        )
+        ).group_by(CongressionalTrade.ticker, CongressionalTrade.asset_name).order_by(desc('trade_count')).limit(10)
+        
+        most_traded_result = await self.db.execute(most_traded_stmt)
+        most_traded = most_traded_result.all()
         
         most_traded_assets = [
             {

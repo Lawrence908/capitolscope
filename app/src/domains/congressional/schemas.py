@@ -121,6 +121,16 @@ class CongressMemberUpdate(CapitolScopeBaseSchema):
 class CongressMemberSummary(CongressMemberBase, TimestampMixin):
     """Summary congress member schema for list views."""
     id: UUID
+    bioguide_id: Optional[str] = None
+    phone: Optional[str] = None
+    url: Optional[str] = None
+    website_url: Optional[str] = None
+    image_url: Optional[str] = None
+    twitter_account: Optional[str] = None
+    facebook_account: Optional[str] = None
+    youtube_account: Optional[str] = None
+    in_office: Optional[bool] = None
+    next_election: Optional[str] = None
     age: Optional[int] = None
     profession: Optional[str] = None
     
@@ -444,6 +454,12 @@ class MemberQuery(CapitolScopeBaseSchema):
     sort_order: SortOrder = SortOrder.ASC
     page: PositiveInt = 1
     limit: int = Field(50, ge=1, le=1000)
+    
+    # Filter fields
+    parties: Optional[List[PoliticalParty]] = None
+    chambers: Optional[List[Chamber]] = None
+    states: Optional[List[str]] = None
+    congress_numbers: Optional[List[int]] = None
     
     # Include computed fields
     include_trade_stats: bool = False

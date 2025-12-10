@@ -23,6 +23,7 @@ import argparse
 import logging
 from pathlib import Path
 from typing import Dict, Any
+import os
 
 # Add the app/src directory to Python path so we can import modules
 script_dir = Path(__file__).parent.resolve()
@@ -47,6 +48,12 @@ script_log_handler.setLevel(logging.DEBUG)
 script_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 script_log_handler.setFormatter(script_formatter)
 logging.getLogger().addHandler(script_log_handler)
+
+# Also log to console so messages appear in exec output and can be piped to main logs
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setLevel(logging.DEBUG)
+console_handler.setFormatter(script_formatter)
+logging.getLogger().addHandler(console_handler)
 
 
 def resolve_data_path(input_path: str) -> Path:
@@ -97,6 +104,7 @@ async def fetch_live_data(years: list = None) -> Dict[str, Any]:
     
     if years is None:
         years = list(range(2014, 2026))  # 2014-2025
+    logger.debug(f"Live fetch requested for years: {years}")
     
     db_manager = DatabaseManager()
     await db_manager.initialize()
@@ -108,10 +116,25 @@ async def fetch_live_data(years: list = None) -> Dict[str, Any]:
         try:
             # Use the Congress API service to fetch latest data
             from domains.congressional.services import CongressAPIService
-            from domains.congressional.crud import CongressMemberRepository
+            from domains.congressional.crud import (
+                CongressMemberRepository,
+                CongressionalTradeRepository,
+                MemberPortfolioRepository,
+                MemberPortfolioPerformanceRepository,
+            )
             
             member_repo = CongressMemberRepository(session)
-            api_service = CongressAPIService(member_repo)
+            trade_repo = CongressionalTradeRepository(session)
+            portfolio_repo = MemberPortfolioRepository(session)
+            performance_repo = MemberPortfolioPerformanceRepository(session)
+            
+            logger.debug("Initializing CongressAPIService with repos: member, trade, portfolio, performance")
+            api_service = CongressAPIService(
+                member_repo=member_repo,
+                trade_repo=trade_repo,
+                portfolio_repo=portfolio_repo,
+                performance_repo=performance_repo,
+            )
             
             # Fetch members from Congress.gov API
             results = await api_service.sync_all_members()
@@ -220,6 +243,14 @@ async def main():
     import logging
     log_level = getattr(logging, args.log_level.upper())
     logging.getLogger().setLevel(log_level)
+    
+    # Early diagnostics for environment
+    api_key_present = bool(os.getenv("CONGRESS_GOV_API_KEY"))
+    logger.info(
+        "Env check: CONGRESS_GOV_API_KEY present: %s",
+        "YES" if api_key_present else "NO",
+    )
+    print(f"🔐 CONGRESS_GOV_API_KEY present: {'YES' if api_key_present else 'NO'}")
     
     try:
         # Show what we're about to do

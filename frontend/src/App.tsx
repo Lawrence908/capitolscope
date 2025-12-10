@@ -2,12 +2,14 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ResetPasswordPage from './components/ResetPasswordPage';
 import LandingPage from './components/LandingPage';
+import PublicDashboard from './components/PublicDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import PremiumRoute from './components/PremiumRoute';
 import ColorPaletteShowcase from './components/ColorPaletteShowcase';
@@ -34,12 +36,14 @@ const LoadingSpinner = () => (
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <Routes>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
+            <Routes>
             {/* Public routes */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<PublicDashboard />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/colors" element={<ColorPaletteShowcase />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
@@ -158,12 +162,13 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
             
-            {/* Catch all route - redirect to landing page */}
-            <Route path="*" element={<LandingPage />} />
-          </Routes>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+            {/* Catch all route - redirect to public dashboard */}
+            <Route path="*" element={<PublicDashboard />} />
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 

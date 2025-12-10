@@ -8,84 +8,97 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Background colors
+        // Supabase-inspired palette
         bg: {
-          primary: '#101626',    // Very dark blue/black
-          secondary: '#1a2332',  // Lighter dark blue for better readability
-          tertiary: '#2a3441',   // Even lighter for elevated cards
+          primary: '#0d1117',      // GitHub dark background
+          secondary: '#161b22',   // Slightly lighter for cards/sections
+          tertiary: '#21262d',    // Even lighter for elevated elements
         },
-        // Light mode background colors
+        // Light mode backgrounds - matching landing page style
         'bg-light': {
-          primary: '#f8fafc',    // Very light gray/blue
-          secondary: '#f1f5f9',  // Light gray for cards
-          tertiary: '#e2e8f0',   // Slightly darker for elevated cards
+          primary: '#ffffff',      // Pure white background
+          secondary: '#f9fafb',   // Light gray for cards (matching landing page)
+          tertiary: '#f3f4f6',    // Slightly darker for elevated elements
         },
-        // Primary accent colors (Teal/Cyan)
+        // Primary accent - subtle blue for interactive elements
         primary: {
-          50: '#e6f7f8',
-          100: '#b3e8ea',
-          200: '#80d9dc',
-          300: '#4dcace',
-          400: '#13c4c3',    // Main neon accent
-          500: '#1a6b9f',    // Primary UI
-          600: '#1a5a8f',
-          700: '#1a497f',
-          800: '#1a386f',
-          900: '#1a275f',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',    // Main accent blue
+          600: '#0284c7',
+          700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
         },
-        // Secondary accent colors (Fuchsia/Magenta)
+        // Secondary accent - subtle green for success states
         secondary: {
-          50: '#fce6f3',
-          100: '#f7b3d9',
-          200: '#f280bf',
-          300: '#ed4da5',
-          400: '#e846a8',    // Data viz accent
-          500: '#d633a8',
-          600: '#c63398',
-          700: '#b63388',
-          800: '#a63378',
-          900: '#963368',
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',    // Success green
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
         },
-        // Neutral colors
+        // Neutral grays - matching landing page style
         neutral: {
-          50: '#ffffff',
-          100: '#f8f9fa',
-          200: '#e9ecef',
-          300: '#dee2e6',
-          400: '#ced4da',
-          500: '#adb5bd',
-          600: '#6c757d',
-          700: '#495057',
-          800: '#343a40',
-          900: '#212529',
+          50: '#ffffff',      // Pure white
+          100: '#f9fafb',     // Light background gray
+          200: '#f3f4f6',     // Card background
+          300: '#e5e7eb',     // Light border
+          400: '#d1d5db',     // Muted text
+          500: '#9ca3af',     // Medium gray
+          600: '#6b7280',     // Light gray text
+          700: '#374151',     // Dark gray text
+          800: '#1f2937',     // Very dark gray
+          900: '#111827',     // Almost black
         },
-        // Semantic colors
-        success: '#00ff88',
-        warning: '#ffaa00',
-        error: '#ff0040',
-        info: '#13c4c3',
-        // Special effects colors
-        glow: {
-          primary: '#13c4c3',
-          secondary: '#e846a8',
-          white: '#ffffff',
-        },
-        shadow: {
-          primary: '#1a6b9f',
-          secondary: '#d633a8',
+        // Semantic colors - minimal and clean
+        success: '#22c55e',
+        warning: '#f59e0b',
+        error: '#ef4444',
+        info: '#3b82f6',
+        // Border colors - matching landing page style
+        border: {
+          light: '#e5e7eb',      // Light gray border (matching landing page)
+          dark: '#30363d',       // Dark mode border
+          muted: '#d1d5db',      // Muted border for light mode
         }
       },
-      // Custom glow effects
+      // Clean shadows - subtle and minimal
       boxShadow: {
-        'glow-primary': '0 0 20px rgba(19, 196, 195, 0.5)',
-        'glow-secondary': '0 0 20px rgba(232, 70, 168, 0.5)',
-        'glow-white': '0 0 20px rgba(255, 255, 255, 0.3)',
+        'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       },
-      // Custom gradients
+      // Clean gradients
       backgroundImage: {
-        'cyberpunk-gradient': 'linear-gradient(135deg, #101626 0%, #222a7f 50%, #362350 100%)',
-        'neon-gradient': 'linear-gradient(135deg, #13c4c3 0%, #e846a8 100%)',
-        'light-gradient': 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%)',
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
+      // Typography
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
+      },
+      // Spacing for clean layouts
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem',
+      },
+      // Border radius for clean, modern look
+      borderRadius: {
+        'xl': '0.75rem',
+        '2xl': '1rem',
+        '3xl': '1.5rem',
       }
     },
   },

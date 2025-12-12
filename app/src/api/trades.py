@@ -29,7 +29,7 @@ router = APIRouter()
 
 # TODO: Update frontend TradeFilters to match CongressionalTradeQuery model
 @router.get(
-    "/",
+    "",
     response_model=ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]],
     responses={
         200: {"description": "Congressional trades retrieved successfully"},

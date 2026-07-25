@@ -100,6 +100,38 @@ def compute_member_analytics(self, min_trades: int = 10, top_n: int = 25):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def enrich_security_sectors(self):
+    """Weekly: backfill GICS sector for traded securities still missing one
+    (needed by the conflict engine)."""
+    _ensure_db()
+    from domains.securities.sector_enrichment import enrich_missing_sectors_sync
+    with get_sync_db_session() as session:
+        result = enrich_missing_sectors_sync(session)
+    logger.info("enrich_security_sectors done: %s", result)
+    return {"status": "success", "result": result, "timestamp": datetime.utcnow().isoformat()}
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def detect_committee_conflicts(self, min_conflicts: int = 3, top_n: int = 50):
+    """Weekly: flag committee x sector conflicts (member trades a company in a
+    sector their committee oversees) and rank members by conflicted notional."""
+    _ensure_db()
+    from domains.analytics.conflicts import detect_committee_conflicts as _detect
+    with get_sync_db_session() as session:
+        result = _detect(session, min_conflicts=min_conflicts)
+    for m in result["leaderboard"][:5]:
+        logger.info(
+            "conflict: %s (%s) %d trades, notional=%s, sectors=%s",
+            m["member"], m["party"], m["conflict_trades"],
+            m["conflicted_notional"], m["top_sectors"],
+        )
+    result["leaderboard"] = result["leaderboard"][:top_n]
+    result["status"] = "success"
+    result["timestamp"] = datetime.utcnow().isoformat()
+    return result
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def detect_trade_clusters(self, window_days: int = 14, min_members: int = 3, top_n: int = 50):
     """Weekly: detect cluster events (N members trading the same ticker + side in
     a rolling window). Returns the ranked clusters; logs the head."""

@@ -65,6 +65,14 @@ celery_app.conf.beat_schedule = {
         'task': 'background.analytics_tasks.detect_trade_clusters',
         'schedule': 604800.0,  # Weekly; "N members did the same thing" events
     },
+    'enrich-security-sectors': {
+        'task': 'background.analytics_tasks.enrich_security_sectors',
+        'schedule': 604800.0,  # Weekly; sector backfill for the conflict engine
+    },
+    'detect-committee-conflicts': {
+        'task': 'background.analytics_tasks.detect_committee_conflicts',
+        'schedule': 604800.0,  # Weekly; committee x sector overlap
+    },
 }
 
 if __name__ == '__main__':

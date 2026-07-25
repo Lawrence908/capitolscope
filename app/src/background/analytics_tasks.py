@@ -100,6 +100,24 @@ def compute_member_analytics(self, min_trades: int = 10, top_n: int = 25):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def compute_scrutiny_scores(self, min_trades: int = 10, top_n: int = 50):
+    """Weekly: blend alpha, conflict, cluster involvement, and disclosure lag
+    into one ranked, explainable per-member Scrutiny Score."""
+    _ensure_db()
+    from domains.analytics.scrutiny_score import compute_scrutiny_scores as _score
+    with get_sync_db_session() as session:
+        scores = _score(session, min_trades=min_trades)
+    for r in scores[:5]:
+        logger.info("scrutiny: %s (%s) score=%.1f", r["member"], r["party"], r["scrutiny_score"])
+    return {
+        "status": "success",
+        "members_scored": len(scores),
+        "scores": scores[:top_n],
+        "timestamp": datetime.utcnow().isoformat(),
+    }
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def enrich_security_sectors(self):
     """Weekly: backfill GICS sector for traded securities still missing one
     (needed by the conflict engine)."""

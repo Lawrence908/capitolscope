@@ -73,6 +73,10 @@ celery_app.conf.beat_schedule = {
         'task': 'background.analytics_tasks.detect_committee_conflicts',
         'schedule': 604800.0,  # Weekly; committee x sector overlap
     },
+    'compute-scrutiny-scores': {
+        'task': 'background.analytics_tasks.compute_scrutiny_scores',
+        'schedule': 604800.0,  # Weekly; composite score across all signals
+    },
 }
 
 if __name__ == '__main__':

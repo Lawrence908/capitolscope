@@ -90,6 +90,11 @@ class CongressionalDataIngestion:
     """Enhanced congressional data ingestion with quality processing."""
     
     def __init__(self, batch_size: int = 50, session: Optional[Session] = None):  # Reduced from 100 to 50
+        # Backward-compat guard: some callers historically passed the DB session
+        # positionally as the first argument. If that happens, recover safely.
+        if isinstance(batch_size, Session) and session is None:
+            session = batch_size
+            batch_size = 50
         self.batch_size = batch_size
         self.data_quality = DataQualityEnhancer()
         self.statistics = ImportStatistics()
@@ -252,11 +257,21 @@ class CongressionalDataIngestion:
         
         try:
             with open(csv_path, 'r', encoding='utf-8') as file:
-                # Detect CSV format
-                dialect = pycsv.Sniffer().sniff(file.read(1024))
+                # Detect CSV format. Constrain the sniffer to the only two
+                # delimiters these congressional files ever use (comma or tab):
+                # unconstrained, Sniffer mis-guesses a garbage delimiter on the
+                # long free-text Description in the first row (e.g. 'k'), which
+                # collapses every column and drops the whole file. Fall back to
+                # header inspection if the sniffer still fails.
+                sample = file.read(2048)
                 file.seek(0)
-                
-                reader = pycsv.DictReader(file, dialect=dialect)
+                try:
+                    dialect = pycsv.Sniffer().sniff(sample, delimiters=',\t')
+                    delimiter = dialect.delimiter
+                except pycsv.Error:
+                    delimiter = '\t' if '\t' in sample.splitlines()[0] else ','
+
+                reader = pycsv.DictReader(file, delimiter=delimiter)
                 
                 # Process in batches
                 with db_manager.sync_session_scope() as session:  # Use sync session scope
@@ -1007,8 +1022,14 @@ class CongressionalDataIngestion:
         if not csv_dir.exists():
             raise FileNotFoundError(f"CSV directory not found: {csv_directory}")
         
-        # Find all main CSV files (e.g., 2014FD.csv, 2015FD.csv, etc.)
-        csv_files = [f for f in csv_dir.glob("[0-9][0-9][0-9][0-9]FD.csv") if f.is_file()]
+        # Find all main CSV files (e.g., 2014FD.csv, 2015FD.csv, etc.) plus
+        # Senate files (e.g., 2026SFD.csv) written by the Senate eFD fetcher.
+        csv_files = [
+            f
+            for pattern in ("[0-9][0-9][0-9][0-9]FD.csv", "[0-9][0-9][0-9][0-9]SFD.csv")
+            for f in csv_dir.glob(pattern)
+            if f.is_file()
+        ]
         if not csv_files:
             logger.warning(f"No main CSV files found in directory: {csv_directory}")
             return {"status": "no_files", "files_processed": 0}

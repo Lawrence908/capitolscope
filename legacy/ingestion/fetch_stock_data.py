@@ -56,6 +56,7 @@
 
 import os
 import asyncio
+import logging
 import aiohttp
 import requests
 import datetime
@@ -65,43 +66,74 @@ from dotenv import load_dotenv
 
 import yfinance as yf
 
+logger = logging.getLogger(__name__)
+
 # Load environment variables
 load_dotenv()
 ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 BASE_URL = os.getenv("ALPHA_VANTAGE_BASE_URL")
 
+# Wikipedia returns HTTP 403 to requests that don't send a browser-like
+# User-Agent, which made soup.find('table', ...) return None and crash the
+# ticker scrape. Send a UA on every Wikipedia request.
+WIKI_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+    )
+}
+
 def get_tickers(SP500: bool = True, NASDAQ: bool = True, DowJones: bool = True) -> list:
     
+    # Each index source is scraped independently and is allowed to fail without
+    # bringing down the whole run: Wikipedia periodically restructures these
+    # pages (table ids, column order) and the NASDAQ-100 page no longer exposes
+    # a symbol table at all. A partial ticker universe (S&P 500 alone is 500+
+    # names) is still useful for enrichment/matching, so we degrade gracefully.
+
     # Get S&P 500 tickers
-    url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    table = soup.find('table', {'id': 'constituents'})
     tickers500 = []
-    for row in table.find_all('tr')[1:]:
-        ticker = row.find('td').text.strip()
-        tickers500.append(ticker)
-    
+    try:
+        url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+        response = requests.get(url, headers=WIKI_HEADERS, timeout=30)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        table = soup.find('table', {'id': 'constituents'})
+        for row in table.find_all('tr')[1:]:
+            ticker = row.find('td').text.strip()
+            tickers500.append(ticker)
+    except Exception as exc:
+        logger.warning("get_tickers: S&P 500 scrape failed: %s", exc)
+
     # Get NASDAQ tickers
-    url = 'https://en.wikipedia.org/wiki/NASDAQ-100'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    table = soup.find('table', {'id': 'constituents'})
     tickers100 = []
-    for row in table.find_all('tr')[1:]:
-        ticker = row.find_all('td')[1].text.strip()
-        tickers100.append(ticker) 
-        
+    try:
+        url = 'https://en.wikipedia.org/wiki/NASDAQ-100'
+        response = requests.get(url, headers=WIKI_HEADERS, timeout=30)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        table = soup.find('table', {'id': 'constituents'})
+        for row in table.find_all('tr')[1:]:
+            ticker = row.find_all('td')[1].text.strip()
+            tickers100.append(ticker)
+    except Exception as exc:
+        logger.warning("get_tickers: NASDAQ-100 scrape failed: %s", exc)
+
     # Get Dow Jones tickers
-    url = 'https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    table = soup.find('table', {'class': 'wikitable'})
     tickers30 = []
-    for row in table.find_all('tr')[1:]:
-        ticker = row.find_all('td')[2].text.strip()
-        tickers30.append(ticker)
-        
+    try:
+        url = 'https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average'
+        response = requests.get(url, headers=WIKI_HEADERS, timeout=30)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        # The Dow components table is now id='constituents' and the symbol moved
+        # to column index 1 (col 0 is the exchange).
+        table = soup.find('table', {'id': 'constituents'})
+        for row in table.find_all('tr')[1:]:
+            cells = row.find_all('td')
+            if len(cells) < 2:
+                continue
+            tickers30.append(cells[1].text.strip())
+    except Exception as exc:
+        logger.warning("get_tickers: Dow Jones scrape failed: %s", exc)
+
     if SP500 and NASDAQ and DowJones:
         tickers = list(set(tickers500 + tickers100 + tickers30))
     elif SP500 and NASDAQ:
@@ -122,41 +154,57 @@ def get_tickers(SP500: bool = True, NASDAQ: bool = True, DowJones: bool = True) 
     return tickers
 
 def get_tickers_company_dict() -> dict:
+    # Each source is scraped independently and is allowed to fail without
+    # aborting the run (see get_tickers for the full rationale: Wikipedia 403s
+    # without a UA, restructures table ids/columns, and the NASDAQ-100 page no
+    # longer exposes a symbol table).
+
     # Get S&P 500 tickers
-    url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    table = soup.find('table', {'id': 'constituents'})
     tickers500 = {}
-    for row in table.find_all('tr')[1:]:
-        ticker = row.find('td').text.strip()
-        company = row.find_all('td')[1].text.strip()
-        tickers500[ticker] = company
-    
+    try:
+        url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+        response = requests.get(url, headers=WIKI_HEADERS, timeout=30)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        table = soup.find('table', {'id': 'constituents'})
+        for row in table.find_all('tr')[1:]:
+            ticker = row.find('td').text.strip()
+            company = row.find_all('td')[1].text.strip()
+            tickers500[ticker] = company
+    except Exception as exc:
+        logger.warning("get_tickers_company_dict: S&P 500 scrape failed: %s", exc)
+
     # Get NASDAQ tickers
-    url = 'https://en.wikipedia.org/wiki/NASDAQ-100'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    table = soup.find('table', {'id': 'constituents'})
     tickers100 = {}
-    for row in table.find_all('tr')[1:]:
-        ticker = row.find_all('td')[1].text.strip()
-        company = row.find_all('td')[0].text.strip()
-        tickers100[ticker] = company
-        
+    try:
+        url = 'https://en.wikipedia.org/wiki/NASDAQ-100'
+        response = requests.get(url, headers=WIKI_HEADERS, timeout=30)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        table = soup.find('table', {'id': 'constituents'})
+        for row in table.find_all('tr')[1:]:
+            ticker = row.find_all('td')[1].text.strip()
+            company = row.find_all('td')[0].text.strip()
+            tickers100[ticker] = company
+    except Exception as exc:
+        logger.warning("get_tickers_company_dict: NASDAQ-100 scrape failed: %s", exc)
+
     # Get Dow Jones tickers
-    url = 'https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    table = soup.find('table', {'class': 'wikitable'})
     tickers30 = {}
-    for row in table.find_all('tr')[1:]:
-        ticker = row.find_all('td')[2].text.strip()
-        company = row.find_all('td')[0].text.strip()
-        tickers30[ticker] = company
-    
+    try:
+        url = 'https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average'
+        response = requests.get(url, headers=WIKI_HEADERS, timeout=30)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        # Dow components table is now id='constituents'; symbol in col 1.
+        table = soup.find('table', {'id': 'constituents'})
+        for row in table.find_all('tr')[1:]:
+            cells = row.find_all('td')
+            if len(cells) < 2:
+                continue
+            tickers30[cells[1].text.strip()] = cells[0].text.strip()
+    except Exception as exc:
+        logger.warning("get_tickers_company_dict: Dow Jones scrape failed: %s", exc)
+
     tickers = {**tickers500, **tickers100, **tickers30}
-    
+
     return tickers
 
 def fetch_time_series(symbol: str, interval: str = "daily", output_size: str = "compact") -> pd.DataFrame:

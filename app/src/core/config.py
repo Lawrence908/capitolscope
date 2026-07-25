@@ -86,7 +86,13 @@ class Settings(BaseSettings):
     EMAIL_PASSWORD: Optional[SecretStr] = Field(None, description="Email password")
     EMAIL_FROM: Optional[str] = Field(None, description="Email from address")
     EMAIL_USE_TLS: bool = Field(True, description="Email use TLS")
-    
+
+    # Operational alerting (ingestion/orchestration failures)
+    INGESTION_ALERT_EMAIL: Optional[str] = Field(
+        None,
+        description="Address to notify when a congressional ingestion run fails or degrades. If unset, failures are logged only.",
+    )
+
     # SendGrid Configuration
     SENDGRID_API_KEY: Optional[SecretStr] = Field(None, description="SendGrid API key")
     SENDGRID_FROM_EMAIL: Optional[str] = Field("noreply@capitolscope.com", description="SendGrid from email address")

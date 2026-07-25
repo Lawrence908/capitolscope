@@ -726,15 +726,22 @@ class CongressTrades:
         transaction_date = clean_date(record.transaction_date)
         notification_date = clean_date(record.notification_date)
         
-        # Clean and validate amount - be very strict
+        # Clean and validate amount. House PTR amounts are almost always a
+        # RANGE ("$1,001 - $15,000"); the old strict single-value regex
+        # (^\$[\d,]+$) rejected every range and emptied the Amount column,
+        # which then failed downstream import validation ("Missing amount
+        # information"). Accept a range first, then fall back to a lone value.
         def clean_amount(amount_str: str) -> str:
             if not amount_str or amount_str.strip() == '':
                 return ""
-            
-            # Only accept proper dollar amount format
-            amount_match = re.match(r'^\$[\d,]+$', amount_str.strip())
-            if amount_match:
-                return amount_match.group(0)
+
+            s = amount_str.strip()
+            range_match = re.search(r'\$[\d,]+\s*-\s*\$[\d,]+', s)
+            if range_match:
+                return re.sub(r'\s*-\s*', ' - ', range_match.group(0))
+            single_match = re.search(r'\$[\d,]+', s)
+            if single_match:
+                return single_match.group(0)
             return ""
         
         amount = clean_amount(record.amount)

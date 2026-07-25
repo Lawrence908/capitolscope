@@ -1,0 +1,47 @@
+# Keep the Docker build context small and fast. The backend build context is
+# the repo root (see compose.yaml: context: .), but app/Dockerfile only needs
+# pyproject.toml, README.md, app/, alembic.ini and alembic/. Everything below
+# is either provided at runtime via bind-mounts (data/) or is pure build/dev
+# cruft that must never end up in an image layer. legacy/ is left in the
+# context: it is bind-mounted at runtime but small, so excluding it buys little.
+
+# Version control / IDE
+.git
+.gitignore
+.github
+.vscode
+.idea
+
+# Python virtualenv & caches
+.venv
+venv
+**/__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+.ruff_cache
+*.egg-info
+
+# Runtime data & logs (data/ and legacy/ are bind-mounted at runtime;
+# app/logs and app/data are never part of the image)
+data/
+app/data/
+app/logs/
+logs/
+*.log
+*.db
+*.sqlite3
+
+# Frontend has its own build (context: ./frontend); not needed for the backend image
+frontend/
+node_modules/
+**/node_modules/
+
+# Tests, docs and local env are not needed to build the runtime image
+tests/
+docs/
+*.md
+!README.md
+.env
+.env.*

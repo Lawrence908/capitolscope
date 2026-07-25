@@ -61,6 +61,10 @@ celery_app.conf.beat_schedule = {
         'task': 'background.analytics_tasks.compute_member_analytics',
         'schedule': 604800.0,  # Weekly; alpha leaderboard + disclosure-lag
     },
+    'detect-trade-clusters': {
+        'task': 'background.analytics_tasks.detect_trade_clusters',
+        'schedule': 604800.0,  # Weekly; "N members did the same thing" events
+    },
 }
 
 if __name__ == '__main__':

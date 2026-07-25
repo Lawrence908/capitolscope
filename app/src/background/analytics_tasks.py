@@ -100,6 +100,31 @@ def compute_member_analytics(self, min_trades: int = 10, top_n: int = 25):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def detect_trade_clusters(self, window_days: int = 14, min_members: int = 3, top_n: int = 50):
+    """Weekly: detect cluster events (N members trading the same ticker + side in
+    a rolling window). Returns the ranked clusters; logs the head."""
+    _ensure_db()
+    from domains.analytics.clustering import detect_cluster_events
+    with get_sync_db_session() as session:
+        clusters = detect_cluster_events(session, window_days=window_days, min_members=min_members)
+
+    for c in clusters[:5]:
+        logger.info(
+            "cluster: %d members %s %s in %dd (%s..%s) ret30=%s parties=%s lead=%s",
+            c["member_count"], c["direction"], c["ticker"], c["span_days"],
+            c["window_start"], c["window_end"], c["avg_return_30d"],
+            c["party_breakdown"], c["lead_member"],
+        )
+    return {
+        "status": "success",
+        "clusters_found": len(clusters),
+        "clusters": clusters[:top_n],
+        "params": {"window_days": window_days, "min_members": min_members},
+        "timestamp": datetime.utcnow().isoformat(),
+    }
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def refresh_daily_prices(self, lookback_days: int = 10):
     """Daily: pull recent daily bars for tracked securities (existing dates are
     skipped), then chain into the returns refresh."""

@@ -745,11 +745,18 @@ class CongressionalDataIngestion:
         if not trade.owner:
             errors.append("Missing owner information")
             
-        # Date validation
+        # Date ordering is a data-quality signal, NOT a reason to discard an
+        # otherwise-valid trade. Congressional filers legitimately (and
+        # sometimes erroneously, e.g. a transaction dated in the future) report
+        # a notification date before the transaction date; the House PTR PDFs
+        # are transcribed faithfully. Flag it as a note and keep the trade
+        # rather than dropping real disclosures.
         if trade.notification_date and trade.transaction_date:
             if trade.notification_date < trade.transaction_date:
-                errors.append("Notification date cannot be before transaction date")
-                
+                trade.parsing_notes.append(
+                    "notification_date_before_transaction_date"
+                )
+
         trade.validation_errors = errors
         trade.is_valid = len(errors) == 0
     

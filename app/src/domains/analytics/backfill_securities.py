@@ -96,7 +96,13 @@ def backfill_security_matching_sync(session: Session, batch_size: int = 2000) ->
             if trade.ticker:
                 tk = trade.ticker.strip().upper()
                 if not _FUND_RE.match(tk):
+                    # The ticker was junk, so any security_id derived from it is a
+                    # wrong match (e.g. "AstraZeneca PLC" mapped to Park Lawn via
+                    # the PLC suffix). Clear both, not just the ticker.
                     trade.ticker = None
+                    if trade.security_id is not None:
+                        trade.security_id = None
+                        stats["security_id_cleared"] = stats.get("security_id_cleared", 0) + 1
                     stats["ticker_cleared_as_junk"] += 1
 
         if i % batch_size == 0:

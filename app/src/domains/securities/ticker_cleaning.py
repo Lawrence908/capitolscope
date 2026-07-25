@@ -27,6 +27,17 @@ ASSET_TYPE_CODES = {
     "MF", "OT", "CT", "FA", "BA", "ST.", "OI.",
 }
 
+# Legal-form suffixes the parser sometimes lifts off a company name ("AstraZeneca
+# PLC", "X GmbH") and mistakes for a ticker. Several collide with a real but
+# obscure/delisted listing (PLC -> Park Lawn), producing wrong matches. These are
+# essentially never the intended US ticker, so reject them outright. (AG, SA, U
+# are deliberately NOT here: they are real, actively-traded tickers even though
+# they also appear as suffixes, so disambiguating them needs name matching.)
+CORPORATE_FORM_SUFFIXES = {
+    "PLC", "ADR", "NV", "GMBH", "LTD", "LP", "AB", "ASA", "OYJ", "SPA",
+    "BV", "AS", "OY", "KK", "PT", "TBK", "SAB", "AE",
+}
+
 _TICKER_RE = re.compile(r"^[A-Z][A-Z0-9.\-]{0,6}$")
 _PAREN_TICKER_RE = re.compile(r"\(([A-Z]{1,6}(?:[.\-][A-Z]{1,3})?)\)")
 
@@ -36,7 +47,7 @@ def looks_like_ticker(token: str) -> bool:
     if not token:
         return False
     t = token.strip().upper()
-    if t in ASSET_TYPE_CODES:
+    if t in ASSET_TYPE_CODES or t in CORPORATE_FORM_SUFFIXES:
         return False
     return bool(_TICKER_RE.match(t))
 
@@ -64,7 +75,7 @@ def resolve_ticker(
     which is how GROUP / CLASS / SPDR / asset-type codes get filtered.
     """
     paren = extract_paren_ticker(raw_asset or "")
-    if paren and paren in universe:
+    if paren and paren in universe and paren not in CORPORATE_FORM_SUFFIXES:
         return paren
 
     if raw_ticker:

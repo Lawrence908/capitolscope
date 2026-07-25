@@ -45,7 +45,8 @@ def _notional(amin, amax, aexact) -> Optional[float]:
     return float(amin or amax) if (amin or amax) else None
 
 
-def _finalise(rows: List[dict], window_days: int, min_members: int) -> Optional[Dict[str, Any]]:
+def _finalise(rows: List[dict], window_days: int, min_members: int,
+              popularity: Dict[str, int]) -> Optional[Dict[str, Any]]:
     members = {r["member_id"]: r["member"] for r in rows}
     if len(members) < min_members:
         return None
@@ -61,8 +62,18 @@ def _finalise(rows: List[dict], window_days: int, min_members: int) -> Optional[
     ]
     parties = Counter(r["party"] for r in rows if r["party"])
 
+    # Base-popularity weighting: a cluster on a name that few members ever touch
+    # is far more notable than the same headcount on a universally-held megacap.
+    # popularity = distinct members who ever traded this ticker (either side);
+    # concentration = share of that base captured in this window;
+    # notability = member_count * concentration (= member_count^2 / popularity).
+    ticker = rows[0]["ticker"]
+    pop = popularity.get(ticker, len(members))
+    concentration = len(members) / pop if pop else 1.0
+    notability = round(len(members) * concentration, 3)
+
     return {
-        "ticker": rows[0]["ticker"],
+        "ticker": ticker,
         "direction": rows[0]["direction"],
         "window_start": min(dates).isoformat(),
         "window_end": max(dates).isoformat(),
@@ -76,6 +87,9 @@ def _finalise(rows: List[dict], window_days: int, min_members: int) -> Optional[
         "lead_member": lead["member"],
         "lead_date": lead["date"].isoformat(),
         "window_days": window_days,
+        "ticker_popularity": pop,
+        "concentration": round(concentration, 3),
+        "notability_score": notability,
     }
 
 
@@ -83,8 +97,23 @@ def detect_cluster_events(
     session: Session,
     window_days: int = 14,
     min_members: int = 3,
+    rank_by: str = "notability_score",
 ) -> List[Dict[str, Any]]:
-    """Return cluster events, ranked by member_count then notional (desc)."""
+    """Return cluster events, ranked by ``rank_by`` (default the
+    base-popularity-adjusted notability score; "member_count" for the raw
+    headcount view) then notional, descending."""
+    # All-time distinct-member popularity per ticker, for weighting.
+    popularity = {
+        r[0]: r[1] for r in session.execute(text(
+            """
+            SELECT ticker, COUNT(DISTINCT member_id)
+            FROM congressional_trades
+            WHERE ticker IS NOT NULL AND ticker <> '' AND transaction_type IN ('P','S')
+            GROUP BY ticker
+            """
+        )).fetchall()
+    }
+
     rows = session.execute(text(
         """
         SELECT t.ticker, t.transaction_type, t.transaction_date,
@@ -105,7 +134,7 @@ def detect_cluster_events(
 
     def flush():
         if current:
-            c = _finalise(current, window_days, min_members)
+            c = _finalise(current, window_days, min_members, popularity)
             if c:
                 clusters.append(c)
 
@@ -127,5 +156,6 @@ def detect_cluster_events(
             current, anchor = [rec], tdate
     flush()
 
-    clusters.sort(key=lambda c: (c["member_count"], c["total_notional"] or 0), reverse=True)
+    key = rank_by if rank_by in ("notability_score", "member_count") else "notability_score"
+    clusters.sort(key=lambda c: (c[key], c["total_notional"] or 0), reverse=True)
     return clusters

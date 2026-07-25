@@ -66,6 +66,40 @@ def refresh_trade_returns(self, recent_days: int = 45):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def compute_member_analytics(self, min_trades: int = 10, top_n: int = 25):
+    """Weekly: compute the benchmark-adjusted alpha leaderboard and the
+    disclosure-lag summary. Returns the ranked results (also stored in the
+    Celery result backend); logs the head of each list."""
+    _ensure_db()
+    from domains.analytics.returns_analytics import (
+        compute_member_performance,
+        compute_disclosure_lag_stats,
+    )
+    with get_sync_db_session() as session:
+        performance = compute_member_performance(session, min_trades=min_trades)
+        lag = compute_disclosure_lag_stats(session)
+
+    for r in performance[:5]:
+        logger.info(
+            "alpha leaderboard: %s (%s) n=%d alpha30=%.1f%% t=%.2f hit=%.2f late_pct=%s",
+            r["member"], r["party"], r["trades"], r["avg_alpha_30d"] * 100,
+            r["t_stat"], r["hit_rate"], r["late_pct"],
+        )
+    logger.info(
+        "disclosure lag: avg=%sd median=%sd late=%d (%.1f%%)",
+        lag["avg_lag_days"], lag["median_lag_days"], lag["late_filings"],
+        (lag["late_pct"] or 0) * 100,
+    )
+    return {
+        "status": "success",
+        "member_performance": performance[:top_n],
+        "members_ranked": len(performance),
+        "disclosure_lag": lag,
+        "timestamp": datetime.utcnow().isoformat(),
+    }
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def refresh_daily_prices(self, lookback_days: int = 10):
     """Daily: pull recent daily bars for tracked securities (existing dates are
     skipped), then chain into the returns refresh."""

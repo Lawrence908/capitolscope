@@ -57,6 +57,10 @@ celery_app.conf.beat_schedule = {
         'task': 'background.analytics_tasks.refresh_security_matching',
         'schedule': 604800.0,  # Weekly; catches newly-added securities
     },
+    'compute-member-analytics': {
+        'task': 'background.analytics_tasks.compute_member_analytics',
+        'schedule': 604800.0,  # Weekly; alpha leaderboard + disclosure-lag
+    },
 }
 
 if __name__ == '__main__':

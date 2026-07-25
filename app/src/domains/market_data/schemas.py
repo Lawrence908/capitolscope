@@ -6,6 +6,10 @@ indices, economic indicators, and data feeds.
 """
 
 from datetime import date, datetime
+# A field literally named ``date`` shadows the ``date`` type within a pydantic
+# model body, which breaks annotation resolution ("unevaluable-type-annotation").
+# Use this alias for those fields.
+from datetime import date as DateType
 from typing import Optional, List, Dict, Any
 from decimal import Decimal
 
@@ -58,7 +62,7 @@ class SymbolPriceResponse(CapitolScopeBaseModel):
 class IntradayPriceResponse(CapitolScopeBaseModel):
     """Intraday price response."""
     symbol: str = Field(..., description="Stock symbol")
-    date: date = Field(..., description="Trading date")
+    date: DateType = Field(..., description="Trading date")
     interval: str = Field(..., description="Time interval")
     prices: List[IntradayPrice] = Field(default_factory=list, description="Intraday prices")
     total: int = Field(0, description="Total price points")
@@ -95,7 +99,7 @@ class MarketIndex(CapitolScopeBaseModel):
 
 class IndexHistoryItem(CapitolScopeBaseModel):
     """Index history item."""
-    date: date = Field(..., description="History date")
+    date: DateType = Field(..., description="History date")
     open_value: float = Field(..., description="Opening value")
     high_value: float = Field(..., description="High value")
     low_value: float = Field(..., description="Low value")
@@ -134,7 +138,7 @@ class EconomicIndicator(CapitolScopeBaseModel):
     change: Optional[float] = Field(None, description="Value change")
     change_percent: Optional[float] = Field(None, description="Percentage change")
     unit: str = Field(..., description="Value unit")
-    date: date = Field(..., description="Indicator date")
+    date: DateType = Field(..., description="Indicator date")
     frequency: str = Field(..., description="Update frequency")
     source: str = Field(..., description="Data source")
 
@@ -158,12 +162,12 @@ class TreasuryRate(CapitolScopeBaseModel):
     rate: float = Field(..., description="Interest rate")
     previous_rate: Optional[float] = Field(None, description="Previous rate")
     change: Optional[float] = Field(None, description="Rate change")
-    date: date = Field(..., description="Rate date")
+    date: DateType = Field(..., description="Rate date")
 
 
 class YieldCurve(CapitolScopeBaseModel):
     """Yield curve data."""
-    date: date = Field(..., description="Curve date")
+    date: DateType = Field(..., description="Curve date")
     maturities: List[str] = Field(default_factory=list, description="Maturity periods")
     rates: List[float] = Field(default_factory=list, description="Interest rates")
     curve_type: str = Field(..., description="Curve type")
@@ -221,7 +225,7 @@ class DataFeedStatusResponse(CapitolScopeBaseModel):
 
 class MarketHoliday(CapitolScopeBaseModel):
     """Market holiday data."""
-    date: date = Field(..., description="Holiday date")
+    date: DateType = Field(..., description="Holiday date")
     name: str = Field(..., description="Holiday name")
     market: str = Field(..., description="Market name")
     is_holiday: bool = Field(..., description="Is trading holiday")

@@ -19,7 +19,7 @@ import bisect
 import logging
 from datetime import timedelta
 from decimal import Decimal
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -41,16 +41,37 @@ def _forward_at(dates: List, series: List, target) -> Any:
     return series[i] if i < len(dates) else None
 
 
-def backfill_trade_returns_sync(session: Session, batch_commit: int = 25) -> Dict[str, Any]:
-    # Securities that have both trades and price history.
+def backfill_trade_returns_sync(
+    session: Session,
+    batch_commit: int = 25,
+    recent_days: Optional[int] = None,
+) -> Dict[str, Any]:
+    """Populate price_at_trade and forward returns for matched trades.
+
+    ``recent_days``: if set, only (re)price trades whose transaction_date is
+    within the last N days OR that are still missing a 30d return. This keeps
+    the scheduled daily refresh cheap while filling forward windows as they
+    mature; ``None`` reprices everything (full backfill).
+    """
+    trade_filter = ""
+    params: Dict[str, Any] = {}
+    if recent_days is not None:
+        trade_filter = (
+            " AND (t.transaction_date >= (CURRENT_DATE - CAST(:rd AS INTEGER)) "
+            "OR t.price_change_30d IS NULL)"
+        )
+        params["rd"] = recent_days
+
+    # Securities that have both in-scope trades and price history.
     sec_ids = [r[0] for r in session.execute(text(
-        """
+        f"""
         SELECT DISTINCT t.security_id
         FROM congressional_trades t
         WHERE t.security_id IS NOT NULL
           AND EXISTS (SELECT 1 FROM daily_prices dp WHERE dp.security_id = t.security_id)
+          {trade_filter}
         """
-    )).fetchall()]
+    ), params).fetchall()]
 
     stats = {"securities": len(sec_ids), "trades_priced": 0, "returns_set": 0,
              "no_price_on_date": 0, "returns_skipped_outlier": 0}
@@ -69,8 +90,9 @@ def backfill_trade_returns_sync(session: Session, batch_commit: int = 25) -> Dic
         adj = [float(p[2]) if p[2] is not None else float(p[1]) for p in prices]
 
         trades = session.execute(text(
-            "SELECT id, transaction_date FROM congressional_trades WHERE security_id = :sid"
-        ), {"sid": sid}).fetchall()
+            f"SELECT id, transaction_date FROM congressional_trades t "
+            f"WHERE security_id = :sid {trade_filter}"
+        ), {"sid": sid, **params}).fetchall()
 
         for trade_id, txn_date in trades:
             base_raw = _forward_at(dates, closes, txn_date)

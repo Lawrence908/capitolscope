@@ -40,6 +40,24 @@ class APIClient {
       },
     });
 
+    // Attach JWT for protected routes (stored by AuthContext on login)
+    this.client.interceptors.request.use((config) => {
+      try {
+        if (typeof localStorage !== 'undefined') {
+          const raw = localStorage.getItem('capitolscope_tokens');
+          if (raw) {
+            const tokens = JSON.parse(raw) as { access_token?: string };
+            if (tokens?.access_token) {
+              config.headers.Authorization = `Bearer ${tokens.access_token}`;
+            }
+          }
+        }
+      } catch {
+        /* ignore invalid token JSON */
+      }
+      return config;
+    });
+
     // Add request interceptor for logging
     this.client.interceptors.request.use(
       (config) => {
@@ -123,18 +141,51 @@ class APIClient {
   ): Promise<PaginatedResponse<CongressMember>> {
     const params = new URLSearchParams({
       page: page.toString(),
-      per_page: perPage.toString(),
+      limit: perPage.toString(),
     });
 
-    // Add filters to params
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params.append(key, value.toString());
-      }
-    });
+    const partyToCode: Record<string, string> = {
+      Democratic: 'D',
+      Republican: 'R',
+      Independent: 'I',
+    };
+    if (filters.party && partyToCode[filters.party]) {
+      params.append('parties', partyToCode[filters.party]);
+    }
+    if (filters.state) {
+      params.append('states', filters.state);
+    }
+    if (filters.chamber) {
+      params.append('chambers', filters.chamber);
+    }
+    if (filters.search) {
+      params.append('search', filters.search);
+    }
 
     const response = await this.client.get(`/api/v1/members/?${params}`);
-    return response.data.data;
+    const raw = response.data?.data;
+    const empty: PaginatedResponse<CongressMember> = {
+      items: [],
+      total: 0,
+      page,
+      per_page: perPage,
+      pages: 0,
+      has_next: false,
+      has_prev: false,
+    };
+    if (!raw) {
+      return empty;
+    }
+    const meta = raw.meta ?? {};
+    return {
+      items: raw.items ?? [],
+      total: meta.total ?? 0,
+      page: meta.page ?? page,
+      per_page: meta.per_page ?? perPage,
+      pages: meta.pages ?? 0,
+      has_next: Boolean(meta.has_next),
+      has_prev: Boolean(meta.has_prev),
+    };
   }
 
   async getMember(id: string): Promise<CongressMember> {
@@ -273,18 +324,31 @@ class APIClient {
   }
 
   // Notification Alerts
-  async getAlertRules(): Promise<any> {
-    const response = await this.client.get('/api/v1/notifications/alerts/rules');
+  async getAlertRules(limit: number = 100): Promise<{ items: unknown[] }> {
+    const response = await this.client.get(
+      `/api/v1/notifications/alerts/rules?limit=${encodeURIComponent(String(limit))}`
+    );
+    const inner = response.data?.data;
+    return { items: inner?.items ?? [] };
+  }
+
+  async createMemberAlert(
+    memberId: string,
+    alertData: Record<string, unknown>
+  ): Promise<unknown> {
+    const response = await this.client.post(
+      `/api/v1/notifications/alerts/member/${encodeURIComponent(memberId)}`,
+      alertData
+    );
     return response.data;
   }
 
-  async createMemberAlert(memberId: number, alertData: any): Promise<any> {
-    const response = await this.client.post(`/api/v1/notifications/alerts/member/${memberId}`, alertData);
-    return response.data;
-  }
-
-  async createAmountAlert(alertData: any): Promise<any> {
-    const response = await this.client.post('/api/v1/notifications/alerts/amount', alertData);
+  async createAmountAlert(payload: {
+    name?: string;
+    threshold: number;
+    description?: string;
+  }): Promise<unknown> {
+    const response = await this.client.post('/api/v1/notifications/alerts/amount', payload);
     return response.data;
   }
 
@@ -300,6 +364,38 @@ class APIClient {
 
   async deleteAlertRule(ruleId: string): Promise<void> {
     await this.client.delete(`/api/v1/notifications/alerts/rules/${ruleId}`);
+  }
+
+  // ---- Scrutiny analytics ----
+  async getScrutinyScores(minTrades = 10, limit = 100): Promise<import('../types/scrutiny').ScrutinyResponse> {
+    const res = await this.client.get(`/api/v1/analytics/scrutiny?min_trades=${minTrades}&limit=${limit}`);
+    return res.data?.data;
+  }
+
+  async getClusters(params: { windowDays?: number; minMembers?: number; limit?: number; rankBy?: string } = {}) {
+    const q = new URLSearchParams({
+      window_days: String(params.windowDays ?? 14),
+      min_members: String(params.minMembers ?? 3),
+      limit: String(params.limit ?? 60),
+      rank_by: params.rankBy ?? 'notability_score',
+    });
+    const res = await this.client.get(`/api/v1/analytics/clusters?${q}`);
+    return res.data?.data as { clusters_found: number; clusters: import('../types/scrutiny').ClusterEvent[] };
+  }
+
+  async getConflicts(minConflicts = 3, limit = 60) {
+    const res = await this.client.get(`/api/v1/analytics/conflicts?min_conflicts=${minConflicts}&limit=${limit}`);
+    return res.data?.data as {
+      total_conflict_trades: number;
+      members_flagged: number;
+      leaderboard: import('../types/scrutiny').ConflictMember[];
+      top_conflicts: import('../types/scrutiny').TopConflict[];
+    };
+  }
+
+  async getDisclosureLag(): Promise<import('../types/scrutiny').DisclosureLag> {
+    const res = await this.client.get(`/api/v1/analytics/disclosure-lag`);
+    return res.data?.data;
   }
 }
 

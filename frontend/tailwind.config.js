@@ -87,6 +87,43 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
+        // Scrutiny design system
+        display: ['Newsreader', 'Iowan Old Style', 'Georgia', 'serif'],
+        ui: ['Public Sans', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        data: ['IBM Plex Mono', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
+      // Scrutiny / oversight-dossier palette (namespaced, additive)
+      colors: {
+        ink: {
+          950: '#0b110f',
+          900: '#0f1613',
+          850: '#131c18',
+          800: '#17211d',
+          700: '#1e2b26',
+          600: '#24322d',
+        },
+        fog: {
+          500: '#90a29d',
+          400: '#a8b7b2',
+          300: '#c3cec9',
+          200: '#e7eeec',
+        },
+        verdigris: {
+          400: '#5cc0af',
+          500: '#43a897',
+          600: '#2f8676',
+          wash: '#16302b',
+        },
+        brass: {
+          400: '#d8b969',
+          500: '#cca85a',
+          wash: '#2b2616',
+        },
+        sev: {
+          info: '#7aa8d6',
+          watch: '#d6a24e',
+          flag: '#d6707b',
+        },
       },
       // Spacing for clean layouts
       spacing: {

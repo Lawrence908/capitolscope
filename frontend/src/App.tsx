@@ -26,6 +26,7 @@ const Analytics = React.lazy(() => import('./components/Analytics'));
 const ProfileSettings = React.lazy(() => import('./components/ProfileSettings'));
 const PremiumSignup = React.lazy(() => import('./components/PremiumSignup'));
 const AlertDashboard = React.lazy(() => import('./pages/alerts/AlertDashboard'));
+const ScrutinyCommand = React.lazy(() => import('./pages/scrutiny/ScrutinyCommand'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -123,6 +124,14 @@ const App: React.FC = () => {
                     </Suspense>
                   </Layout>
                 </PremiumRoute>
+              </ProtectedRoute>
+            } />
+            {/* Scrutiny command center: its own full-bleed design shell, no Layout chrome */}
+            <Route path="/scrutiny" element={
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <ScrutinyCommand />
+                </Suspense>
               </ProtectedRoute>
             } />
             <Route path="/data-quality" element={

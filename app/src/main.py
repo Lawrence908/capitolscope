@@ -46,7 +46,7 @@ from core.config import settings
 from core.database import init_database, close_database
 from core.logging import configure_logging, setup_file_logging
 from core.email import email_service
-from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints, stripe
+from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints, stripe, analytics
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
@@ -208,6 +208,7 @@ app.include_router(stripe.router, prefix=f"{settings.API_V1_PREFIX}", tags=["Str
 app.include_router(portfolios.router, prefix=f"{settings.API_V1_PREFIX}/portfolios", tags=["Portfolios"])
 app.include_router(market_data.router, prefix=f"{settings.API_V1_PREFIX}/market-data", tags=["Market Data"])
 app.include_router(notifications.router, prefix=f"{settings.API_V1_PREFIX}/notifications", tags=["Notifications"])
+app.include_router(analytics.router, prefix=f"{settings.API_V1_PREFIX}/analytics", tags=["Analytics"])
 
 # Development endpoints (disabled - using real database endpoints)
 # app.include_router(dev_endpoints.router, prefix=f"{settings.API_V1_PREFIX}/congressional", tags=["Development"])

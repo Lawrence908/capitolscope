@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ScrutinyMember } from '../../types/scrutiny';
-import { FactorBar, PartyTag, FACTOR_COLORS, FACTOR_LABELS, FACTOR_ORDER } from './primitives';
+import { FactorBar, PartyTag, FACTOR_COLORS, FACTOR_LABELS, FACTOR_ORDER } from '../ui';
 
 const scoreTier = (s: number) => {
   if (s >= 80) return '#d6707b'; // flag
@@ -14,7 +14,7 @@ export const Leaderboard: React.FC<{
   onSelect: (m: ScrutinyMember) => void;
 }> = ({ members, selected, onSelect }) => {
   return (
-    <div className="divide-y divide-ink-600">
+    <div className="divide-y divide-line">
       {members.map((m, i) => {
         const contributions = {
           edge: m.factors.edge.contribution,
@@ -30,22 +30,22 @@ export const Leaderboard: React.FC<{
             key={m.member}
             onClick={() => onSelect(m)}
             className={`group grid w-full grid-cols-[2.2rem_1fr_auto] items-center gap-4 px-4 py-3 text-left transition-colors ${
-              active ? 'bg-ink-800' : 'hover:bg-ink-850'
+              active ? 'bg-surface-inset' : 'hover:bg-surface-inset'
             }`}
           >
             {/* rank */}
-            <span className="font-data text-xs tabular-nums text-fog-500">
+            <span className="font-data text-xs tabular-nums text-content-faint">
               {String(i + 1).padStart(2, '0')}
             </span>
 
             {/* member + fingerprint */}
             <div className="min-w-0">
               <div className="flex items-center gap-2.5">
-                <span className="truncate font-ui font-600 text-fog-200 group-hover:text-white">
+                <span className="truncate font-ui font-600 text-content group-hover:text-accent">
                   {m.member}
                 </span>
                 <PartyTag party={m.party} />
-                <span className="font-data text-[10px] tracking-wide text-fog-500 tabular-nums">
+                <span className="font-data text-[10px] tracking-wide text-content-faint tabular-nums">
                   {m.trades} trades
                 </span>
               </div>
@@ -71,14 +71,14 @@ export const Leaderboard: React.FC<{
 };
 
 export const LegendRow: React.FC = () => (
-  <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 px-4 py-2.5 border-b border-ink-600 bg-ink-900">
+  <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 px-4 py-2.5 border-b border-line bg-surface-raised">
     {FACTOR_ORDER.map((k) => (
-      <span key={k} className="flex items-center gap-1.5 font-data text-[10px] uppercase tracking-[0.12em] text-fog-500">
+      <span key={k} className="flex items-center gap-1.5 font-data text-[10px] uppercase tracking-[0.12em] text-content-faint">
         <span className="h-2 w-2 rounded-[2px]" style={{ background: FACTOR_COLORS[k] }} />
         {FACTOR_LABELS[k]}
       </span>
     ))}
-    <span className="ml-auto font-data text-[10px] uppercase tracking-[0.12em] text-fog-500">
+    <span className="ml-auto font-data text-[10px] uppercase tracking-[0.12em] text-content-faint">
       Composite score →
     </span>
   </div>

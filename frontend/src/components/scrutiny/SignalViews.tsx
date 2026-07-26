@@ -6,7 +6,7 @@ import type {
   DisclosureLag,
   DossierOrigin,
 } from '../../types/scrutiny';
-import { fmtMoney, fmtSigned, PartyTag, Eyebrow, partyMeta, NameButton, TickerButton } from './primitives';
+import { fmtMoney, fmtSigned, PartyTag, Eyebrow, partyMeta, NameButton, TickerButton } from '../ui';
 
 const retColor = (r: number | null) =>
   r == null ? '#90a29d' : r >= 0 ? '#43a897' : '#d6707b';
@@ -38,14 +38,14 @@ export const ClusterFeed: React.FC<{
     {clusters.map((c, i) => (
       <div
         key={`${c.ticker}-${c.direction}-${c.window_start}-${i}`}
-        className="rounded-md border border-ink-600 bg-ink-850 p-4 transition-colors hover:border-verdigris-600"
+        className="rounded-md border border-line bg-surface-inset p-4 transition-colors hover:border-verdigris-600"
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
             <TickerButton
               ticker={c.ticker}
               onClick={onSelectTicker}
-              className="font-data text-lg font-600 tracking-tight text-fog-200"
+              className="font-data text-lg font-600 tracking-tight text-content"
             />
             <span
               className="font-data text-[10px] tracking-[0.1em] px-1.5 py-0.5 rounded-sm"
@@ -58,7 +58,7 @@ export const ClusterFeed: React.FC<{
             </span>
           </div>
           <span
-            className="font-data text-xs tabular-nums text-fog-500"
+            className="font-data text-xs tabular-nums text-content-faint"
             title="base-popularity-weighted notability"
           >
             ★ {c.notability_score.toFixed(2)}
@@ -66,29 +66,29 @@ export const ClusterFeed: React.FC<{
         </div>
 
         <div className="mt-3 flex items-end gap-1.5">
-          <span className="font-data text-3xl font-500 tabular-nums leading-none text-fog-200">
+          <span className="font-data text-3xl font-500 tabular-nums leading-none text-content">
             {c.member_count}
           </span>
-          <span className="pb-0.5 font-ui text-xs text-fog-500">
+          <span className="pb-0.5 font-ui text-xs text-content-faint">
             of {c.ticker_popularity} who trade it
           </span>
         </div>
 
-        <div className="mt-3 flex items-center justify-between font-data text-[11px] text-fog-500">
+        <div className="mt-3 flex items-center justify-between font-data text-[11px] text-content-faint">
           <span className="tabular-nums">
             {c.window_start} → {c.window_end.slice(5)}
           </span>
           <PartyMix mix={c.party_breakdown} />
         </div>
 
-        <div className="mt-3 flex items-center justify-between border-t border-ink-700 pt-3">
-          <span className="truncate font-ui text-[11px] text-fog-500">
+        <div className="mt-3 flex items-center justify-between border-t border-surface-inset pt-3">
+          <span className="truncate font-ui text-[11px] text-content-faint">
             led by{' '}
             <NameButton
               name={c.lead_member}
               onClick={onSelectMember}
               origin={{ tab: 'clusters', label: `the ${c.ticker} ${c.direction} cluster` }}
-              className="text-fog-300"
+              className="text-content-muted"
             />
           </span>
           <span className="font-data text-sm tabular-nums" style={{ color: retColor(c.avg_return_30d) }}>
@@ -110,7 +110,7 @@ export const ConflictsView: React.FC<{
   <div className="grid grid-cols-1 gap-6 p-4 lg:grid-cols-[1.1fr_1fr]">
     <div>
       <Eyebrow>Flagged members · by conflicted notional</Eyebrow>
-      <div className="mt-3 divide-y divide-ink-600 rounded-md border border-ink-600 bg-ink-850">
+      <div className="mt-3 divide-y divide-line rounded-md border border-line bg-surface-inset">
         {leaderboard.map((m) => (
           <div key={m.member} className="flex items-center gap-3 px-4 py-3">
             <div className="min-w-0 flex-1">
@@ -119,11 +119,11 @@ export const ConflictsView: React.FC<{
                   name={m.member}
                   onClick={onSelectMember}
                   origin={{ tab: 'conflicts', label: 'the conflicts view' }}
-                  className="truncate font-ui font-600 text-fog-200"
+                  className="truncate font-ui font-600 text-content"
                 />
                 <PartyTag party={m.party} />
               </div>
-              <div className="mt-1 font-data text-[11px] text-fog-500">
+              <div className="mt-1 font-data text-[11px] text-content-faint">
                 {m.top_sectors.join(' · ')}
               </div>
             </div>
@@ -131,7 +131,7 @@ export const ConflictsView: React.FC<{
               <div className="font-data text-sm tabular-nums text-brass-500">
                 {fmtMoney(m.conflicted_notional)}
               </div>
-              <div className="font-data text-[10px] tabular-nums text-fog-500">
+              <div className="font-data text-[10px] tabular-nums text-content-faint">
                 {m.conflict_trades} trades
               </div>
             </div>
@@ -142,7 +142,7 @@ export const ConflictsView: React.FC<{
 
     <div>
       <Eyebrow>Notable individual conflicts</Eyebrow>
-      <div className="mt-3 divide-y divide-ink-600 rounded-md border border-ink-600 bg-ink-850">
+      <div className="mt-3 divide-y divide-line rounded-md border border-line bg-surface-inset">
         {topConflicts.slice(0, 14).map((c, i) => (
           <div key={i} className="flex items-center gap-3 px-4 py-2.5">
             <span
@@ -157,16 +157,16 @@ export const ConflictsView: React.FC<{
             <TickerButton
               ticker={c.ticker}
               onClick={onSelectTicker}
-              className="font-data font-600 text-fog-200 w-14 text-left"
+              className="font-data font-600 text-content w-14 text-left"
             />
             <div className="min-w-0 flex-1">
               <NameButton
                 name={c.member}
                 onClick={onSelectMember}
                 origin={{ tab: 'conflicts', label: `the ${c.ticker} conflict` }}
-                className="block truncate font-ui text-[13px] text-fog-300"
+                className="block truncate font-ui text-[13px] text-content-muted"
               />
-              <div className="truncate font-data text-[10px] text-fog-500">
+              <div className="truncate font-data text-[10px] text-content-faint">
                 {c.sector} · {c.committee}
               </div>
             </div>
@@ -193,8 +193,8 @@ export const LagView: React.FC<{ lag: DisclosureLag; onSelectMember?: SelectFn }
           { k: 'Late filings', v: lag.late_filings.toLocaleString(), c: '#d6707b' },
           { k: 'Late share', v: lag.late_pct == null ? '—' : `${(lag.late_pct * 100).toFixed(1)}%`, c: '#d6a24e' },
         ].map((s) => (
-          <div key={s.k} className="rounded-md border border-ink-600 bg-ink-850 p-4">
-            <div className="font-data text-[10px] uppercase tracking-[0.12em] text-fog-500">{s.k}</div>
+          <div key={s.k} className="rounded-md border border-line bg-surface-inset p-4">
+            <div className="font-data text-[10px] uppercase tracking-[0.12em] text-content-faint">{s.k}</div>
             <div className="mt-2 font-data text-2xl font-500 tabular-nums" style={{ color: s.c }}>
               {s.v}
             </div>
@@ -212,14 +212,14 @@ export const LagView: React.FC<{ lag: DisclosureLag; onSelectMember?: SelectFn }
                   name={f.member}
                   onClick={onSelectMember}
                   origin={{ tab: 'lag', label: 'the disclosure-lag view' }}
-                  className="font-ui text-[13px] text-fog-200"
+                  className="font-ui text-[13px] text-content"
                 />{' '}
                 <PartyTag party={f.party} />
               </div>
-              <div className="relative h-5 flex-1 rounded-sm bg-ink-800">
+              <div className="relative h-5 flex-1 rounded-sm bg-surface-inset">
                 {/* 45-day limit marker */}
                 <div
-                  className="absolute top-0 bottom-0 w-px bg-fog-500/50"
+                  className="absolute top-0 bottom-0 w-px bg-content-faint/50"
                   style={{ left: `${(lag.stock_act_limit_days / maxLag) * 100}%` }}
                   title={`${lag.stock_act_limit_days}-day limit`}
                 />
@@ -231,7 +231,7 @@ export const LagView: React.FC<{ lag: DisclosureLag; onSelectMember?: SelectFn }
                   }}
                 />
               </div>
-              <span className="w-24 shrink-0 text-right font-data text-[11px] tabular-nums text-fog-400">
+              <span className="w-24 shrink-0 text-right font-data text-[11px] tabular-nums text-content-muted">
                 {f.avg_lag_days}d · {f.late}/{f.total}
               </span>
             </div>

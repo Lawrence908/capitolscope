@@ -8,7 +8,7 @@ import {
   fmtSigned,
   fmtMoney,
   FACTOR_COLORS,
-} from './primitives';
+} from '../ui';
 
 const Row: React.FC<{
   factorKey: 'edge' | 'event' | 'conflict' | 'cluster' | 'lag' | 'size';
@@ -18,23 +18,23 @@ const Row: React.FC<{
   contribution: number;
   detail: React.ReactNode;
 }> = ({ factorKey, title, percentile, weight, contribution, detail }) => (
-  <div className="py-4 border-b border-ink-600 last:border-b-0">
+  <div className="py-4 border-b border-line last:border-b-0">
     <div className="flex items-baseline justify-between">
       <div className="flex items-center gap-2">
         <span className="h-2.5 w-2.5 rounded-[2px]" style={{ background: FACTOR_COLORS[factorKey] }} />
-        <span className="font-ui font-600 text-fog-200">{title}</span>
-        <span className="font-data text-[10px] text-fog-500 tracking-wide">
+        <span className="font-ui font-600 text-content">{title}</span>
+        <span className="font-data text-[10px] text-content-faint tracking-wide">
           w{(weight * 100).toFixed(0)}
         </span>
       </div>
-      <span className="font-data text-sm tabular-nums text-fog-300">
+      <span className="font-data text-sm tabular-nums text-content-muted">
         +{contribution.toFixed(1)}
-        <span className="text-fog-500 text-[10px]"> pts</span>
+        <span className="text-content-faint text-[10px]"> pts</span>
       </span>
     </div>
     <div className="mt-2">
       <Meter value={percentile} color={FACTOR_COLORS[factorKey]} />
-      <div className="mt-1.5 flex items-center justify-between font-data text-[11px] text-fog-500">
+      <div className="mt-1.5 flex items-center justify-between font-data text-[11px] text-content-faint">
         <span>{detail}</span>
         <span className="tabular-nums">{(percentile * 100).toFixed(0)}th pctile</span>
       </div>
@@ -73,21 +73,21 @@ export const MemberDossier: React.FC<{
         )}
         {missingName ? (
           <>
-            <div className="font-display text-lg text-fog-200">{missingName}</div>
+            <div className="font-display text-lg text-content">{missingName}</div>
             <div className="font-data text-[11px] uppercase tracking-[0.16em] text-sev-watch">
               Not in the scored cohort
             </div>
-            <p className="font-ui text-sm text-fog-500 max-w-[26ch]">
+            <p className="font-ui text-sm text-content-faint max-w-[26ch]">
               This member has fewer than 10 price-matched trades, so the composite score is not yet
               computed. Their activity still appears in the signal views.
             </p>
           </>
         ) : (
           <>
-            <div className="font-data text-[11px] uppercase tracking-[0.2em] text-fog-500">
+            <div className="font-data text-[11px] uppercase tracking-[0.2em] text-content-faint">
               Select a subject
             </div>
-            <p className="font-ui text-sm text-fog-500 max-w-[22ch]">
+            <p className="font-ui text-sm text-content-faint max-w-[22ch]">
               Every score decomposes into named, sourced factors. Pick a member to open the dossier.
             </p>
           </>
@@ -99,11 +99,11 @@ export const MemberDossier: React.FC<{
   return (
     <div className="flex h-full flex-col">
       {/* header */}
-      <div className="border-b border-ink-600 px-6 pb-5 pt-6">
+      <div className="border-b border-line px-6 pb-5 pt-6">
         <BackLink origin={origin} onBack={onBack} />
         <Eyebrow>Dossier</Eyebrow>
-        <h2 className="mt-2 font-display text-2xl leading-tight text-fog-200">{member.member}</h2>
-        <div className="mt-2 flex items-center gap-2.5 font-data text-[11px] text-fog-500">
+        <h2 className="mt-2 font-display text-2xl leading-tight text-content">{member.member}</h2>
+        <div className="mt-2 flex items-center gap-2.5 font-data text-[11px] text-content-faint">
           <PartyTag party={member.party} />
           <span>{member.chamber || '—'}</span>
           <span>·</span>
@@ -113,7 +113,7 @@ export const MemberDossier: React.FC<{
           <span className="font-data text-5xl font-500 tabular-nums leading-none text-brass-500">
             {member.scrutiny_score.toFixed(1)}
           </span>
-          <span className="pb-1 font-data text-[10px] uppercase tracking-[0.16em] text-fog-500">
+          <span className="pb-1 font-data text-[10px] uppercase tracking-[0.16em] text-content-faint">
             Scrutiny<br />score
           </span>
         </div>
@@ -176,8 +176,8 @@ export const MemberDossier: React.FC<{
         />
       </div>
 
-      <div className="border-t border-ink-600 px-6 py-3">
-        <p className="font-ui text-[11px] leading-relaxed text-fog-500">
+      <div className="border-t border-line px-6 py-3">
+        <p className="font-ui text-[11px] leading-relaxed text-content-faint">
           A lead for scrutiny, not a verdict. Score is percentile-ranked within the scored cohort;
           edge is benchmark-adjusted and significance-weighted.
         </p>

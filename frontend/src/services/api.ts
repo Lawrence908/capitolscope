@@ -10,6 +10,8 @@ import type {
   DataQualityStats,
   MemberProfile,
   APIError,
+  MirrorPortfolio,
+  MirrorHoldingsResult,
 } from '../types';
 
 class APIClient {
@@ -354,12 +356,12 @@ class APIClient {
     return response.data;
   }
 
-  async createTickerAlert(symbol: string, alertData: any): Promise<any> {
+  async createTickerAlert(symbol: string, alertData: Record<string, unknown>): Promise<unknown> {
     const response = await this.client.post(`/api/v1/notifications/alerts/ticker/${symbol}`, alertData);
     return response.data;
   }
 
-  async updateAlertRule(ruleId: string, updates: any): Promise<any> {
+  async updateAlertRule(ruleId: string, updates: Record<string, unknown>): Promise<unknown> {
     const response = await this.client.put(`/api/v1/notifications/alerts/rules/${ruleId}`, updates);
     return response.data;
   }
@@ -395,6 +397,42 @@ class APIClient {
       `/api/v1/notifications/alerts/notifications${qs ? `?${qs}` : ''}`
     );
     return (response.data?.data as unknown[]) ?? [];
+  }
+
+  // ---- Mirror portfolios (Pro+) ----
+  async getMirrorPortfolios(): Promise<MirrorPortfolio[]> {
+    const response = await this.client.get('/api/v1/portfolios/mirror');
+    return (response.data?.data as MirrorPortfolio[]) ?? [];
+  }
+
+  async createMirrorPortfolio(payload: {
+    name: string;
+    description?: string;
+    member_ids: string[];
+  }): Promise<MirrorPortfolio> {
+    const response = await this.client.post('/api/v1/portfolios/mirror', payload);
+    return response.data?.data as MirrorPortfolio;
+  }
+
+  async getMirrorPortfolio(id: string): Promise<MirrorPortfolio> {
+    const response = await this.client.get(`/api/v1/portfolios/mirror/${id}`);
+    return response.data?.data as MirrorPortfolio;
+  }
+
+  async setMirrorMembers(id: string, memberIds: string[]): Promise<MirrorPortfolio> {
+    const response = await this.client.put(`/api/v1/portfolios/mirror/${id}/members`, {
+      member_ids: memberIds,
+    });
+    return response.data?.data as MirrorPortfolio;
+  }
+
+  async deleteMirrorPortfolio(id: string): Promise<void> {
+    await this.client.delete(`/api/v1/portfolios/mirror/${id}`);
+  }
+
+  async getMirrorHoldings(id: string): Promise<MirrorHoldingsResult> {
+    const response = await this.client.get(`/api/v1/portfolios/mirror/${id}/holdings`);
+    return response.data?.data as MirrorHoldingsResult;
   }
 
   // ---- Scrutiny analytics ----

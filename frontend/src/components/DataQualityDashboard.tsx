@@ -6,7 +6,6 @@ import {
   InformationCircleIcon,
   DocumentTextIcon,
   UserGroupIcon,
-  CurrencyDollarIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline';
 import type { DataQualityStats } from '../types';
@@ -57,40 +56,40 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
   const getStatusIcon = (status: 'good' | 'warning' | 'error') => {
     switch (status) {
       case 'good':
-        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+        return <CheckCircleIcon className="h-5 w-5 text-accent" />;
       case 'warning':
-        return <ExclamationTriangleIcon className="h-5 w-5 text-yellow-500" />;
+        return <ExclamationTriangleIcon className="h-5 w-5 text-sev-watch" />;
       case 'error':
-        return <XCircleIcon className="h-5 w-5 text-red-500" />;
+        return <XCircleIcon className="h-5 w-5 text-sev-flag" />;
     }
   };
 
   const getStatusColor = (status: 'good' | 'warning' | 'error') => {
     switch (status) {
       case 'good':
-        return 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800';
+        return 'bg-accent/10 dark:bg-accent/10 border-accent/30 dark:border-accent/30';
       case 'warning':
-        return 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800';
+        return 'bg-sev-watch/10 dark:bg-sev-watch/10 border-sev-watch/30 dark:border-sev-watch/30';
       case 'error':
-        return 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800';
+        return 'bg-sev-flag/10 dark:bg-sev-flag/10 border-sev-flag/30 dark:border-sev-flag/30';
     }
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
+      <div className="bg-sev-flag/10 dark:bg-sev-flag/10 border border-sev-flag/30 dark:border-sev-flag/30 rounded-md p-4">
         <div className="flex">
-          <XCircleIcon className="h-5 w-5 text-red-400" />
+          <XCircleIcon className="h-5 w-5 text-sev-flag" />
           <div className="ml-3">
-            <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <p className="text-sm text-sev-flag dark:text-sev-flag">{error}</p>
           </div>
         </div>
       </div>
@@ -142,10 +141,10 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
       {/* Header */}
       <div className="card p-4 lg:p-6">
         <div className="flex items-center gap-3">
-          <InformationCircleIcon className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
+          <InformationCircleIcon className="h-6 w-6 lg:h-8 lg:w-8 text-sev-info" />
           <div>
-            <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">Data Quality Dashboard</h2>
-            <p className="text-sm lg:text-base text-gray-600 dark:text-gray-400 mt-1">
+            <h2 className="text-xl lg:text-2xl font-bold text-content">Data Quality Dashboard</h2>
+            <p className="text-sm lg:text-base text-content-muted mt-1">
               Monitor data completeness and identify quality issues
             </p>
           </div>
@@ -156,36 +155,36 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
         <div className="card p-4 lg:p-6">
           <div className="flex items-center gap-3">
-            <DocumentTextIcon className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
+            <DocumentTextIcon className="h-6 w-6 lg:h-8 lg:w-8 text-sev-info" />
             <div>
-              <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-xl lg:text-2xl font-bold text-content">
                 {stats.total_trades?.toLocaleString() || '0'}
               </div>
-              <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Total Trades</div>
+              <div className="text-xs lg:text-sm text-content-muted">Total Trades</div>
             </div>
           </div>
         </div>
 
         <div className="card p-4 lg:p-6">
           <div className="flex items-center gap-3">
-            <UserGroupIcon className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
+            <UserGroupIcon className="h-6 w-6 lg:h-8 lg:w-8 text-accent" />
             <div>
-              <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-xl lg:text-2xl font-bold text-content">
                 {stats.unique_members?.toLocaleString() || '0'}
               </div>
-              <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Unique Members</div>
+              <div className="text-xs lg:text-sm text-content-muted">Unique Members</div>
             </div>
           </div>
         </div>
 
         <div className="card p-4 lg:p-6">
           <div className="flex items-center gap-3">
-            <ChartBarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-purple-600" />
+            <ChartBarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-accent-2" />
             <div>
-              <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-xl lg:text-2xl font-bold text-content">
                 {stats.unique_tickers?.toLocaleString() || '0'}
               </div>
-              <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">Unique Securities</div>
+              <div className="text-xs lg:text-sm text-content-muted">Unique Securities</div>
             </div>
           </div>
         </div>
@@ -193,7 +192,7 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
 
       {/* Data Quality Metrics */}
       <div className="space-y-4">
-        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <h3 className="text-base lg:text-lg font-semibold text-content">
           Data Completeness Metrics
         </h3>
         
@@ -203,19 +202,19 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
               <div className="flex items-center gap-3">
                 {getStatusIcon(metric.status)}
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm lg:text-base">
+                  <h4 className="font-semibold text-content text-sm lg:text-base">
                     {metric.name}
                   </h4>
-                  <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-xs lg:text-sm text-content-muted">
                     {metric.description}
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <div className="text-xl lg:text-2xl font-bold text-content">
                   {metric.percentage.toFixed(1)}%
                 </div>
-                <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-xs lg:text-sm text-content-muted">
                   {metric.value.toLocaleString()} / {metric.total.toLocaleString()}
                 </div>
               </div>
@@ -223,11 +222,11 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
             
             {/* Progress bar */}
             <div className="mt-4">
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="w-full bg-surface-inset dark:bg-surface-inset rounded-full h-2">
                 <div 
                   className={`h-2 rounded-full ${
-                    metric.status === 'good' ? 'bg-green-500' :
-                    metric.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
+                    metric.status === 'good' ? 'bg-accent/100' :
+                    metric.status === 'warning' ? 'bg-sev-watch/100' : 'bg-sev-flag/100'
                   }`}
                   style={{ width: `${Math.min(metric.percentage, 100)}%` }}
                 ></div>
@@ -239,15 +238,15 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
 
       {/* Issues Summary */}
       <div className="card p-4 lg:p-6">
-        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <h3 className="text-base lg:text-lg font-semibold text-content mb-4">
           Data Quality Issues
         </h3>
         
         <div className="space-y-3">
           {stats.trades_without_ticker > 0 && (
             <div className="flex items-center gap-2 text-sm">
-              <XCircleIcon className="h-4 w-4 text-red-500" />
-              <span className="text-gray-700 dark:text-gray-300">
+              <XCircleIcon className="h-4 w-4 text-sev-flag" />
+              <span className="text-content-muted">
                 {stats.trades_without_ticker.toLocaleString()} trades missing ticker data ({stats.null_ticker_percentage.toFixed(1)}%)
               </span>
             </div>
@@ -255,8 +254,8 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
           
           {stats.trades_with_ticker > 0 && (
             <div className="flex items-center gap-2 text-sm">
-              <CheckCircleIcon className="h-4 w-4 text-green-500" />
-              <span className="text-gray-700 dark:text-gray-300">
+              <CheckCircleIcon className="h-4 w-4 text-accent" />
+              <span className="text-content-muted">
                 {stats.trades_with_ticker.toLocaleString()} trades have ticker data ({(100 - stats.null_ticker_percentage).toFixed(1)}%)
               </span>
             </div>
@@ -264,8 +263,8 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
           
           {stats.trades_without_ticker === 0 && (
             <div className="flex items-center gap-2 text-sm">
-              <CheckCircleIcon className="h-4 w-4 text-green-500" />
-              <span className="text-gray-700 dark:text-gray-300">
+              <CheckCircleIcon className="h-4 w-4 text-accent" />
+              <span className="text-content-muted">
                 All trades have ticker data - excellent data quality!
               </span>
             </div>
@@ -274,12 +273,12 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
       </div>
 
       {/* Recommendations */}
-      <div className="card p-4 lg:p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className="card p-4 lg:p-6 bg-sev-info/10 dark:bg-sev-info/10 border border-sev-info/30 dark:border-sev-info/30">
+        <h3 className="text-base lg:text-lg font-semibold text-content mb-4">
           Recommendations
         </h3>
         
-        <div className="space-y-2 text-xs lg:text-sm text-gray-700 dark:text-gray-300">
+        <div className="space-y-2 text-xs lg:text-sm text-content-muted">
           <p>• Run SQL audit queries to identify specific data issues</p>
           <p>• Update import scripts to validate data during ingestion</p>
           <p>• Implement data quality monitoring alerts</p>

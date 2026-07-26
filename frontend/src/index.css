@@ -17,8 +17,8 @@
   --content: #1a201e;         /* primary text / headings */
   --content-muted: #4c554f;   /* body text */
   --content-faint: #737b76;   /* labels, captions */
-  --accent: #2f8676;          /* verdigris-600 — darkened for light contrast */
-  --accent-strong: #43a897;   /* hover */
+  --accent: #1f9e88;          /* vivid verdigris — punchier on light */
+  --accent-strong: #38b39c;   /* hover */
   --accent-2: #9a7b32;        /* brass, darkened for light contrast */
 }
 

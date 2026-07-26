@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../services/api';
 import type { TickerDetail } from '../../types/scrutiny';
-import { fmtMoney, fmtSigned, PartyTag, NameButton } from './primitives';
+import { fmtMoney, fmtSigned, PartyTag, NameButton } from '../ui';
 
 const retColor = (r: number | null) =>
   r == null ? '#90a29d' : r >= 0 ? '#43a897' : '#d6707b';
@@ -48,18 +48,18 @@ export const TickerDrawer: React.FC<{
         onClick={onClose}
       />
       {/* panel */}
-      <aside className="relative flex h-full w-full max-w-xl flex-col border-l border-ink-600 bg-ink-900 shadow-2xl animate-[slideIn_0.2s_ease]">
-        <header className="border-b border-ink-600 px-6 pb-5 pt-6">
+      <aside className="relative flex h-full w-full max-w-xl flex-col border-l border-line bg-surface-raised shadow-2xl animate-[slideIn_0.2s_ease]">
+        <header className="border-b border-line px-6 pb-5 pt-6">
           <div className="flex items-start justify-between">
             <div>
               <span className="font-data text-[11px] uppercase tracking-[0.18em] text-verdigris-500">
                 Ticker · congressional flow
               </span>
-              <h2 className="mt-1.5 font-data text-3xl font-600 tracking-tight text-fog-200">
+              <h2 className="mt-1.5 font-data text-3xl font-600 tracking-tight text-content">
                 {ticker}
               </h2>
               {data?.security_name && (
-                <p className="mt-1 font-ui text-sm text-fog-500">
+                <p className="mt-1 font-ui text-sm text-content-faint">
                   {data.security_name}
                   {data.sector ? ` · ${data.sector}` : ''}
                 </p>
@@ -67,7 +67,7 @@ export const TickerDrawer: React.FC<{
             </div>
             <button
               onClick={onClose}
-              className="font-data text-xs text-fog-500 hover:text-fog-200"
+              className="font-data text-xs text-content-faint hover:text-content"
               aria-label="Close"
             >
               ESC ✕
@@ -83,7 +83,7 @@ export const TickerDrawer: React.FC<{
                 { k: 'Avg 30d', v: fmtSigned(data.avg_return_30d), c: retColor(data.avg_return_30d) },
               ].map((s) => (
                 <div key={s.k}>
-                  <div className="font-data text-[9px] uppercase tracking-[0.1em] text-fog-500">
+                  <div className="font-data text-[9px] uppercase tracking-[0.1em] text-content-faint">
                     {s.k}
                   </div>
                   <div className="mt-1 font-data text-lg font-500 tabular-nums" style={{ color: s.c }}>
@@ -98,14 +98,14 @@ export const TickerDrawer: React.FC<{
         <div className="flex-1 overflow-y-auto">
           {loading && (
             <div className="flex h-40 items-center justify-center">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-ink-600 border-t-verdigris-500" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-line border-t-verdigris-500" />
             </div>
           )}
           {error && <div className="px-6 py-4 font-ui text-sm text-sev-flag">{error}</div>}
           {data && (
             <table className="w-full">
-              <thead className="sticky top-0 bg-ink-900">
-                <tr className="border-b border-ink-600 font-data text-[10px] uppercase tracking-[0.1em] text-fog-500">
+              <thead className="sticky top-0 bg-surface-raised">
+                <tr className="border-b border-line font-data text-[10px] uppercase tracking-[0.1em] text-content-faint">
                   <th className="px-6 py-2 text-left font-500">Date</th>
                   <th className="py-2 text-left font-500">Member</th>
                   <th className="py-2 text-left font-500">Side</th>
@@ -115,15 +115,15 @@ export const TickerDrawer: React.FC<{
               </thead>
               <tbody>
                 {data.trades.map((t, i) => (
-                  <tr key={i} className="border-b border-ink-700/60 hover:bg-ink-850">
-                    <td className="px-6 py-2 font-data text-[11px] tabular-nums text-fog-500">
+                  <tr key={i} className="border-b border-surface-inset/60 hover:bg-surface-inset">
+                    <td className="px-6 py-2 font-data text-[11px] tabular-nums text-content-faint">
                       {t.date}
                     </td>
                     <td className="py-2">
                       <NameButton
                         name={t.member}
                         onClick={onSelectMember}
-                        className="font-ui text-[13px] text-fog-300"
+                        className="font-ui text-[13px] text-content-muted"
                       />{' '}
                       <PartyTag party={t.party} />
                     </td>
@@ -151,8 +151,8 @@ export const TickerDrawer: React.FC<{
           )}
         </div>
 
-        <footer className="border-t border-ink-600 px-6 py-3">
-          <p className="font-data text-[10px] leading-relaxed text-fog-500">
+        <footer className="border-t border-line px-6 py-3">
+          <p className="font-data text-[10px] leading-relaxed text-content-faint">
             30d is direction-aware (a well-timed sale precedes a drop). Amounts are disclosed-range
             midpoints.
           </p>

@@ -61,13 +61,13 @@ export const AlertHistory: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'sent':
-        return 'text-green-600 bg-green-100';
+        return 'text-accent bg-accent/10';
       case 'failed':
-        return 'text-red-600 bg-red-100';
+        return 'text-sev-flag bg-sev-flag/10';
       case 'pending':
-        return 'text-yellow-600 bg-yellow-100';
+        return 'text-sev-watch bg-sev-watch/10';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-content-muted bg-surface-inset';
     }
   };
 
@@ -93,8 +93,8 @@ export const AlertHistory: React.FC = () => {
   if (loading) {
     return (
       <div className="p-8 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
-        <p className="text-gray-600 mt-2">Loading notification history...</p>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto"></div>
+        <p className="text-content-muted mt-2">Loading notification history...</p>
       </div>
     );
   }
@@ -103,15 +103,15 @@ export const AlertHistory: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Alert History</h3>
-          <p className="text-gray-600">View your notification delivery history and status</p>
+          <h3 className="text-lg font-semibold text-content">Alert History</h3>
+          <p className="text-content-muted">View your notification delivery history and status</p>
         </div>
         
         <div className="flex space-x-4">
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="border border-line rounded-lg px-3 py-2 text-sm"
           >
             <option value="1d">Last 24 hours</option>
             <option value="7d">Last 7 days</option>
@@ -122,7 +122,7 @@ export const AlertHistory: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="border border-line rounded-lg px-3 py-2 text-sm"
           >
             <option value="all">All Status</option>
             <option value="sent">Delivered</option>
@@ -134,9 +134,9 @@ export const AlertHistory: React.FC = () => {
 
       {notifications.length === 0 ? (
         <div className="text-center py-12">
-          <div className="text-gray-400 text-6xl mb-4">📬</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No notifications found</h3>
-          <p className="text-gray-600">
+          <div className="text-content-faint text-6xl mb-4">📬</div>
+          <h3 className="text-lg font-medium text-content mb-2">No notifications found</h3>
+          <p className="text-content-muted">
             No notifications have been sent in the selected time period.
           </p>
         </div>
@@ -145,7 +145,7 @@ export const AlertHistory: React.FC = () => {
           {notifications.map((notification) => (
             <div
               key={notification.id}
-              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+              className="bg-surface-raised border border-line rounded-lg p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -153,7 +153,7 @@ export const AlertHistory: React.FC = () => {
                     <span className="text-lg">
                       {getStatusIcon(notification.delivery_status)}
                     </span>
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-content">
                       {notification.alert_name}
                     </h4>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(notification.delivery_status)}`}>
@@ -161,7 +161,7 @@ export const AlertHistory: React.FC = () => {
                     </span>
                   </div>
                   
-                  <div className="text-gray-700 mb-3">
+                  <div className="text-content-muted mb-3">
                     <strong>{notification.trade_details.member_name}</strong> made a{' '}
                     {notification.trade_details.transaction_type?.toLowerCase()} of{' '}
                     {notification.trade_details.ticker && (
@@ -172,14 +172,14 @@ export const AlertHistory: React.FC = () => {
                     )}
                   </div>
                   
-                  <div className="flex items-center text-sm text-gray-500 space-x-4">
+                  <div className="flex items-center text-sm text-content-faint space-x-4">
                     <span>📅 {formatDate(notification.triggered_at)}</span>
                     <span>📧 Email notification</span>
                   </div>
                   
                   {notification.error_message && (
-                    <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-sm text-red-700">
+                    <div className="mt-3 p-3 bg-sev-flag/10 border border-sev-flag/30 rounded-lg">
+                      <p className="text-sm text-sev-flag">
                         <strong>Error:</strong> {notification.error_message}
                       </p>
                     </div>
@@ -188,11 +188,11 @@ export const AlertHistory: React.FC = () => {
                 
                 <div className="flex space-x-2">
                   {notification.delivery_status === 'failed' && (
-                    <button className="px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded">
+                    <button className="px-3 py-1 text-xs font-medium text-sev-info bg-sev-info/10 hover:bg-sev-info/10 rounded">
                       Retry
                     </button>
                   )}
-                  <button className="px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded">
+                  <button className="px-3 py-1 text-xs font-medium text-content-muted bg-surface-inset hover:bg-surface-inset rounded">
                     View Details
                   </button>
                 </div>

@@ -73,28 +73,28 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
     <div className="space-y-6">
       {/* Member Selection */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-content-muted mb-2">
           Select Congress Member
         </label>
         
         {selectedMember ? (
-          <div className="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg bg-gray-50">
-            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-lg font-bold text-gray-600">
+          <div className="flex items-center space-x-4 p-4 border border-line rounded-lg bg-surface-inset">
+            <div className="w-12 h-12 bg-surface-inset rounded-full flex items-center justify-center">
+              <span className="text-lg font-bold text-content-muted">
                 {selectedMember.first_name[0]}{selectedMember.last_name[0]}
               </span>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-content">
                 {selectedMember.first_name} {selectedMember.last_name}
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-content-muted">
                 {selectedMember.party} - {selectedMember.state}
               </p>
             </div>
             <button
               onClick={() => setSelectedMember(null)}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-content-faint hover:text-content-muted"
             >
               ✕
             </button>
@@ -106,33 +106,33 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for a congress member..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
             />
             
             {isSearching && (
               <div className="absolute right-3 top-2.5">
-                <div className="animate-spin h-5 w-5 border-2 border-primary-500 border-t-transparent rounded-full"></div>
+                <div className="animate-spin h-5 w-5 border-2 border-accent border-t-transparent rounded-full"></div>
               </div>
             )}
             
             {searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 max-h-64 overflow-y-auto z-10 shadow-lg">
+              <div className="absolute top-full left-0 right-0 bg-surface-raised border border-line rounded-lg mt-1 max-h-64 overflow-y-auto z-10 shadow-lg">
                 {searchResults.map((member) => (
                   <button
                     key={member.id}
                     onClick={() => handleMemberSelect(member)}
-                    className="w-full flex items-center space-x-3 p-3 hover:bg-gray-50 text-left"
+                    className="w-full flex items-center space-x-3 p-3 hover:bg-surface-inset text-left"
                   >
-                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-bold text-gray-600">
+                    <div className="w-10 h-10 bg-surface-inset rounded-full flex items-center justify-center">
+                      <span className="text-sm font-bold text-content-muted">
                         {member.first_name[0]}{member.last_name[0]}
                       </span>
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-content">
                         {member.first_name} {member.last_name}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-content-muted">
                         {member.party} - {member.state}
                       </div>
                     </div>
@@ -146,7 +146,7 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
 
       {/* Alert Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-content-muted mb-2">
           Alert Name
         </label>
         <input
@@ -154,18 +154,18 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
           value={alertName}
           onChange={(e) => setAlertName(e.target.value)}
           placeholder="Enter a name for this alert"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
         />
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-content-faint mt-1">
           Give your alert a descriptive name so you can easily identify it
         </p>
       </div>
 
       {/* Preview */}
       {selectedMember && alertName && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-medium text-blue-900 mb-2">Alert Preview</h4>
-          <p className="text-blue-800">
+        <div className="bg-sev-info/10 border border-sev-info/30 rounded-lg p-4">
+          <h4 className="font-medium text-sev-info mb-2">Alert Preview</h4>
+          <p className="text-sev-info">
             You will receive notifications whenever{' '}
             <span className="font-semibold">
               {selectedMember.first_name} {selectedMember.last_name}

@@ -62,7 +62,7 @@ export const AmountAlertForm: React.FC<AmountAlertFormProps> = ({ onDataChange }
     <div className="space-y-6">
       {/* Threshold Selection */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">
+        <label className="block text-sm font-medium text-content-muted mb-3">
           Amount Threshold
         </label>
         
@@ -73,21 +73,21 @@ export const AmountAlertForm: React.FC<AmountAlertFormProps> = ({ onDataChange }
               onClick={() => handleThresholdSelect(threshold.value, threshold.label)}
               className={`w-full flex items-center justify-between p-4 border rounded-lg text-left transition-colors ${
                 selectedThreshold === threshold.value.toString()
-                  ? 'border-primary-500 bg-primary-50'
-                  : 'border-gray-300 hover:border-gray-400'
+                  ? 'border-accent bg-accent/10'
+                  : 'border-line hover:border-line'
               }`}
             >
               <div>
-                <div className="font-semibold text-gray-900">{threshold.label}</div>
-                <div className="text-sm text-gray-600">{threshold.description}</div>
+                <div className="font-semibold text-content">{threshold.label}</div>
+                <div className="text-sm text-content-muted">{threshold.description}</div>
               </div>
               <div className={`w-5 h-5 rounded-full border-2 ${
                 selectedThreshold === threshold.value.toString()
-                  ? 'border-primary-500 bg-primary-500'
-                  : 'border-gray-300'
+                  ? 'border-accent bg-accent'
+                  : 'border-line'
               }`}>
                 {selectedThreshold === threshold.value.toString() && (
-                  <div className="w-full h-full rounded-full bg-white scale-50"></div>
+                  <div className="w-full h-full rounded-full bg-surface-raised scale-50"></div>
                 )}
               </div>
             </button>
@@ -95,28 +95,28 @@ export const AmountAlertForm: React.FC<AmountAlertFormProps> = ({ onDataChange }
           
           {/* Custom Amount */}
           <div className={`border rounded-lg p-4 ${
-            selectedThreshold === 'custom' ? 'border-primary-500 bg-primary-50' : 'border-gray-300'
+            selectedThreshold === 'custom' ? 'border-accent bg-accent/10' : 'border-line'
           }`}>
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setSelectedThreshold('custom')}
                 className={`w-5 h-5 rounded-full border-2 ${
                   selectedThreshold === 'custom'
-                    ? 'border-primary-500 bg-primary-500'
-                    : 'border-gray-300'
+                    ? 'border-accent bg-accent'
+                    : 'border-line'
                 }`}
               >
                 {selectedThreshold === 'custom' && (
-                  <div className="w-full h-full rounded-full bg-white scale-50"></div>
+                  <div className="w-full h-full rounded-full bg-surface-raised scale-50"></div>
                 )}
               </button>
               <div className="flex-1">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-content mb-2">
                   Custom Amount
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 sm:text-sm">$</span>
+                    <span className="text-content-faint sm:text-sm">$</span>
                   </div>
                   <input
                     type="text"
@@ -124,7 +124,7 @@ export const AmountAlertForm: React.FC<AmountAlertFormProps> = ({ onDataChange }
                       ? thresholdAmount.toLocaleString() : ''}
                     onChange={(e) => handleCustomAmountChange(e.target.value)}
                     placeholder="Enter amount"
-                    className="block w-full pl-7 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="block w-full pl-7 pr-12 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                   />
                 </div>
               </div>
@@ -135,7 +135,7 @@ export const AmountAlertForm: React.FC<AmountAlertFormProps> = ({ onDataChange }
 
       {/* Alert Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-content-muted mb-2">
           Alert Name
         </label>
         <input
@@ -143,18 +143,18 @@ export const AmountAlertForm: React.FC<AmountAlertFormProps> = ({ onDataChange }
           value={alertName}
           onChange={(e) => setAlertName(e.target.value)}
           placeholder="Enter a name for this alert"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
         />
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-content-faint mt-1">
           Give your alert a descriptive name so you can easily identify it
         </p>
       </div>
 
       {/* Preview */}
       {thresholdAmount && alertName && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h4 className="font-medium text-green-900 mb-2">Alert Preview</h4>
-          <p className="text-green-800">
+        <div className="bg-accent/10 border border-accent/30 rounded-lg p-4">
+          <h4 className="font-medium text-accent mb-2">Alert Preview</h4>
+          <p className="text-accent">
             You will receive notifications whenever any congress member files a trade disclosure 
             for <span className="font-semibold">{formatCurrency(Number(thresholdAmount))} or more</span>.
           </p>

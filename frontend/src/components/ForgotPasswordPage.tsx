@@ -48,7 +48,7 @@ const ForgotPasswordPage: React.FC = () => {
       } else {
         setError(data.error?.message || 'Failed to send reset email. Please try again.');
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -56,28 +56,28 @@ const ForgotPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg-primary py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="mx-auto mb-6">
             <img 
               src="/capitol-scope-logo.png" 
               alt="CapitolScope Logo" 
-              className="h-70 w-70 mx-auto rounded-full shadow-glow-primary/30"
+              className="h-70 w-70 mx-auto rounded-full"
             />
           </div>
-          <h2 className="text-center text-3xl font-extrabold text-neutral-100">
+          <h2 className="text-center font-display text-3xl font-medium tracking-[-0.01em] text-content">
             Reset your password
           </h2>
-          <p className="mt-2 text-center text-sm text-neutral-400">
+          <p className="mt-2 text-center text-sm text-content-faint">
             Enter your email address and we'll send you a link to reset your password.
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="card mt-8 space-y-6 p-6 sm:p-8" onSubmit={handleSubmit}>
           {/* Email Field */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-neutral-300">
+            <label htmlFor="email" className="block text-sm font-medium text-content-muted">
               Email address
             </label>
             <div className="mt-1">
@@ -159,11 +159,11 @@ const ForgotPasswordPage: React.FC = () => {
 
           {/* Back to Login Link */}
           <div className="text-center">
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-content-faint">
               Remember your password?{' '}
               <Link
                 to="/login"
-                className="font-medium text-primary-400 hover:text-primary-300"
+                className="font-medium text-accent hover:text-accent-strong"
               >
                 Sign in
               </Link>
@@ -173,10 +173,10 @@ const ForgotPasswordPage: React.FC = () => {
 
         {/* Help Text */}
         <div className="mt-8 card p-4">
-          <h3 className="text-sm font-medium text-primary-400 mb-2">
+          <h3 className="text-sm font-medium text-accent mb-2">
             💡 Need help?
           </h3>
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-content-faint">
             If you don't receive an email within a few minutes, check your spam folder. The reset link will expire in 24 hours.
           </p>
         </div>

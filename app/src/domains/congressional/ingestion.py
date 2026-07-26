@@ -88,7 +88,13 @@ class ProcessedTrade:
 
 class CongressionalDataIngestion:
     """Enhanced congressional data ingestion with quality processing."""
-    
+
+    # Plausibility floor for any transaction/notification date. Electronic
+    # disclosure predates the STOCK Act (2012) only marginally; anything before
+    # this is a parsing/OCR artifact, not a real filing. The upper bound is
+    # computed dynamically as date.today() in _bounded_date (no future trades).
+    MIN_TRADE_DATE = date(2008, 1, 1)
+
     def __init__(self, batch_size: int = 50, session: Optional[Session] = None):  # Reduced from 100 to 50
         # Backward-compat guard: some callers historically passed the DB session
         # positionally as the first argument. If that happens, recover safely.
@@ -388,31 +394,61 @@ class CongressionalDataIngestion:
             logger.error(f"Error parsing row {row_num}: {e}")
             return None
     
+    def _bounded_date(self, candidate: Optional[date], raw: str) -> Optional[date]:
+        """Reject dates outside the plausible range for a congressional filing.
+
+        A syntactically valid date can still be garbage: OCR/transcription
+        errors produce far-future years (e.g. 4/29/3031, 4/6/2220, 9/18/2202)
+        and filings can carry future transaction dates (e.g. 12/25/2026) that
+        cannot represent a disclosed trade. We hard-cap the upper bound at
+        *today* (no trade can be disclosed before it happens) and floor at
+        MIN_TRADE_DATE. Out-of-range candidates are dropped (returns None) so
+        the caller falls back to inference or records an ``invalid_date`` error
+        rather than persisting a bogus date.
+        """
+        if candidate is None:
+            return None
+        today = date.today()
+        if candidate > today:
+            logger.warning(
+                f"Rejecting future date (> {today.isoformat()}): {raw!r} -> {candidate.isoformat()}"
+            )
+            return None
+        if candidate < self.MIN_TRADE_DATE:
+            logger.warning(
+                f"Rejecting implausibly old date (< {self.MIN_TRADE_DATE.isoformat()}): "
+                f"{raw!r} -> {candidate.isoformat()}"
+            )
+            return None
+        return candidate
+
     def _parse_date(self, date_str: str) -> Optional[date]:
         """Parse date string with multiple format support and sanitization.
 
         Handles placeholders like 'S', '[ST]', words leaking into the field,
-        and scans arbitrary text to extract a date token if needed.
+        and scans arbitrary text to extract a date token if needed. Every
+        successfully parsed candidate is run through :meth:`_bounded_date` so
+        that future-dated or garbage-year values never reach the database.
         """
         if not date_str:
             return None
-        
+
         # Normalize input to string
         raw = str(date_str).strip()
         if not raw:
             return None
-        
+
         # Fast reject common non-dates/placeholders
         placeholders = {"S", "[ST]", "ST", "N/A", "NA", "NONE", "-"}
         if raw.upper() in placeholders:
             return None
-        
+
         # If the string is clearly just a year with 2 or 4 digits, try to coerce
         if raw.isdigit():
             if len(raw) == 4:
                 # Year-only -> choose Jan 1 of that year
                 try:
-                    return date(int(raw), 1, 1)
+                    return self._bounded_date(date(int(raw), 1, 1), raw)
                 except ValueError:
                     pass
             elif len(raw) == 2:
@@ -420,10 +456,10 @@ class CongressionalDataIngestion:
                 try:
                     yy = int(raw)
                     century = 2000 if yy <= 30 else 1900
-                    return date(century + yy, 1, 1)
+                    return self._bounded_date(date(century + yy, 1, 1), raw)
                 except ValueError:
                     pass
-        
+
         # Try structured formats first
         formats = [
             '%Y-%m-%d',
@@ -434,20 +470,20 @@ class CongressionalDataIngestion:
         ]
         for fmt in formats:
             try:
-                return datetime.strptime(raw, fmt).date()
+                return self._bounded_date(datetime.strptime(raw, fmt).date(), raw)
             except ValueError:
                 continue
-        
+
         # Handle two-digit year in slash format (e.g., 2/18/22)
         try:
             mdy = datetime.strptime(raw, '%m/%d/%y').date()
             # Normalize 2-digit year into 19xx/20xx similar to above assumption
             yy = int(raw.split('/')[-1])
             century = 2000 if yy <= 30 else 1900
-            return date(century + mdy.year % 100, mdy.month, mdy.day)
+            return self._bounded_date(date(century + mdy.year % 100, mdy.month, mdy.day), raw)
         except ValueError:
             pass
-        
+
         # As a last resort, scan the string for a date token using regex
         # - ISO: YYYY-MM-DD
         # - M/D/YY(YY)
@@ -455,7 +491,7 @@ class CongressionalDataIngestion:
         if iso_match:
             try:
                 y, m, d = map(int, iso_match.groups())
-                return date(y, m, d)
+                return self._bounded_date(date(y, m, d), raw)
             except ValueError:
                 pass
         mdy_match = re.search(r"\b(\d{1,2})/(\d{1,2})/(\d{2,4})\b", raw)
@@ -469,10 +505,10 @@ class CongressionalDataIngestion:
                     y = 2000 + yy if yy <= 30 else 1900 + yy
                 else:
                     y = int(y)
-                return date(y, m, d)
+                return self._bounded_date(date(y, m, d), raw)
             except ValueError:
                 pass
-        
+
         logger.warning(f"Could not parse date: {raw}")
         return None
     

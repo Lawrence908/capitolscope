@@ -30,15 +30,56 @@ router = APIRouter()
 _CACHE: Dict[str, Tuple[float, Any]] = {}
 _TTL_SECONDS = 1800  # 30 minutes
 
+# Each signal engine runs several aggregate queries and takes ~10s cold; a burst
+# of visitors hitting an expired key would otherwise each launch its own compute
+# and contend for CPU + the sync DB pool, ballooning every one of them past the
+# frontend's 30s timeout. A per-key lock collapses concurrent cold requests into
+# a single compute; the _REFRESHING set does the same for background refreshes.
+_LOCKS: Dict[str, asyncio.Lock] = {}
+_REFRESHING: set[str] = set()
+
+
+def _store(key: str, data: Any) -> None:
+    _CACHE[key] = (time.time() + _TTL_SECONDS, data)
+
+
+def _refresh_in_background(key: str, fn) -> None:
+    """Recompute an expired key without blocking the caller (single-flight)."""
+    if key in _REFRESHING:
+        return
+    _REFRESHING.add(key)
+
+    async def _run():
+        try:
+            _store(key, await asyncio.to_thread(fn))
+        except Exception:
+            logger.exception("background refresh failed for analytics key %s", key)
+        finally:
+            _REFRESHING.discard(key)
+
+    asyncio.create_task(_run())
+
 
 async def _cached(key: str, fn) -> Any:
-    now = time.time()
     hit = _CACHE.get(key)
-    if hit and hit[0] > now:
+    if hit and hit[0] > time.time():
+        return hit[1]  # fresh
+    if hit:
+        # Stale-while-revalidate: serve the stale payload instantly and refresh
+        # in the background so nobody waits on the recompute after the first warm.
+        _refresh_in_background(key, fn)
         return hit[1]
-    data = await asyncio.to_thread(fn)
-    _CACHE[key] = (now + _TTL_SECONDS, data)
-    return data
+
+    # Cold (no cached value yet): compute under a per-key lock so concurrent
+    # callers share the single in-flight compute instead of stampeding.
+    lock = _LOCKS.setdefault(key, asyncio.Lock())
+    async with lock:
+        hit = _CACHE.get(key)
+        if hit and hit[0] > time.time():
+            return hit[1]  # filled while we waited on the lock
+        data = await asyncio.to_thread(fn)
+        _store(key, data)
+        return data
 
 
 @router.get("/scrutiny", summary="Composite Scrutiny Score leaderboard")
@@ -197,3 +238,53 @@ async def get_disclosure_lag():
 
     result = await _cached("disclosure_lag", compute)
     return success_response(data=result, meta={})
+
+
+# --------------------------------------------------------------- cache warming
+
+def _warm_scrutiny(min_trades: int = 10):
+    from domains.analytics.scrutiny_score import compute_scrutiny_scores, WEIGHTS
+    with get_sync_db_session() as session:
+        return {"weights": WEIGHTS, "scores": compute_scrutiny_scores(session, min_trades=min_trades)}
+
+
+def _warm_clusters():
+    from domains.analytics.clustering import detect_cluster_events
+    with get_sync_db_session() as session:
+        return detect_cluster_events(session, window_days=14, min_members=3, rank_by="notability_score")
+
+
+def _warm_conflicts(min_conflicts: int = 3):
+    from domains.analytics.conflicts import detect_committee_conflicts
+    with get_sync_db_session() as session:
+        return detect_committee_conflicts(session, min_conflicts=min_conflicts)
+
+
+def _warm_lag():
+    from domains.analytics.returns_analytics import compute_disclosure_lag_stats
+    with get_sync_db_session() as session:
+        return compute_disclosure_lag_stats(session)
+
+
+async def warm_caches() -> None:
+    """Pre-populate the Scrutiny dashboard's heavy caches (matching the keys the
+    frontend requests) so no visitor ever waits on a cold compute. Best-effort;
+    never raises. Keys mirror the defaults in useScrutiny.ts."""
+    warmers = {
+        "scrutiny:10": _warm_scrutiny,
+        "clusters:14:3:notability_score": _warm_clusters,
+        "conflicts:3": _warm_conflicts,
+        "disclosure_lag": _warm_lag,
+    }
+    for key, fn in warmers.items():
+        try:
+            await _cached(key, fn)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("analytics cache warm failed for %s: %s", key, exc)
+
+
+async def cache_warmer_loop(interval: int = 1500) -> None:
+    """Refresh the dashboard caches a little before the 30-minute TTL expires."""
+    while True:
+        await warm_caches()
+        await asyncio.sleep(interval)

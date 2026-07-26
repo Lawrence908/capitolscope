@@ -93,6 +93,12 @@ async def lifespan(app: FastAPI):
         _asyncio.create_task(cache_warmer_loop())
         logger.info("Signals cache warmer started")
 
+        # Warm the Scrutiny dashboard caches too so the landing view is instant
+        # and never hits the 30-min cold-compute cliff that timed the page out.
+        from api.analytics import cache_warmer_loop as analytics_cache_warmer_loop
+        _asyncio.create_task(analytics_cache_warmer_loop())
+        logger.info("Analytics cache warmer started")
+
         logger.info("Application startup completed")
 
         yield

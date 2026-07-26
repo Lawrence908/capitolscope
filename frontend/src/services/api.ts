@@ -34,7 +34,9 @@ class APIClient {
     
     this.client = axios.create({
       baseURL: apiUrl,
-      timeout: 30000,
+      // 60s so a rare cold analytics compute (single-flight, ~16s) can't trip
+      // the timeout even under load; warm hits still return in tens of ms.
+      timeout: 60000,
       headers: {
         'Content-Type': 'application/json',
       },

@@ -44,6 +44,7 @@ never hit a cold 60-second compute.
 | Endpoint | Purpose | Key params |
 |----------|---------|-----------|
 | `GET /digest` | One-call research brief: active tickers, notable recent trades, sector flow, herding clusters, most-active members. Best single call for a daily digest. | `days` (1-90, default 7) |
+| `GET /context-pack` | One-call **LLM-ready synthesis feed**: the window's activity plus **week-over-week deltas and trend labels** (sector rotation `accelerating_inflow`/`cooling_outflow`, newly-active tickers, member-count deltas), notable clusters/trades, and top scrutiny movers. Feed to a model to connect trading shifts to world events. | `days` (1-45, default 7) |
 | `GET /active-tickers` | Tickers ranked by recent activity: members, buy/sell split, `net_direction` (accumulating/distributing), notional. What Congress is buying vs selling. | `days` (default 90), `limit` |
 | `GET /recent-trades` | Filterable trade feed with sector and 30d return. | `days`, `ticker`, `party`, `direction` (buy/sell), `min_amount`, `limit` |
 | `GET /sector-flow` | Net congressional dollar flow by GICS sector (rotation signal). | `days` (default 90) |
@@ -66,6 +67,7 @@ Zeus has five MCP tools that wrap these endpoints (`~/zeus/zeus/mcp/tools.py`,
 registered in `server.py`):
 
 - `capitolscope_digest(days=7)`
+- `capitolscope_context_pack(days=7)` (LLM-ready synthesis feed with WoW deltas)
 - `capitolscope_active_tickers(days=90, limit=25)`
 - `capitolscope_ticker(ticker, days=180, limit=60)` (uses `/recent-trades?ticker=`)
 - `capitolscope_sector_flow(days=90)`

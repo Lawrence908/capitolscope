@@ -18,7 +18,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional, Tuple
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
@@ -231,6 +231,118 @@ def _most_active_members(days: int, limit: int):
     } for r in rows]
 
 
+def _window_ticker_agg(days_back_start: int, days_back_end: int) -> Dict[str, Dict[str, Any]]:
+    """Per-ticker aggregate for the window (today - start, today - end]."""
+    from sqlalchemy import text
+    with get_sync_db_session() as s:
+        rows = s.execute(text(
+            f"""
+            SELECT se.ticker, MAX(sec.name) AS sector,
+                   COUNT(DISTINCT t.member_id) AS members,
+                   COUNT(*) FILTER (WHERE t.transaction_type='P') AS buys,
+                   COUNT(*) FILTER (WHERE t.transaction_type='S') AS sells,
+                   SUM({_NOTIONAL_SQL}) AS notional
+            FROM congressional_trades t
+            JOIN securities se ON se.id = t.security_id
+            LEFT JOIN sectors sec ON sec.gics_code = se.sector_gics_code
+            WHERE t.transaction_type IN ('P','S')
+              AND t.transaction_date >  (CURRENT_DATE - CAST(:a AS INTEGER))
+              AND t.transaction_date <= (CURRENT_DATE - CAST(:b AS INTEGER))
+            GROUP BY se.ticker
+            """
+        ), {"a": days_back_start, "b": days_back_end}).fetchall()
+    return {r[0]: {"sector": r[1], "members": r[2], "buys": r[3], "sells": r[4],
+                   "notional": float(r[5] or 0)} for r in rows}
+
+
+def _window_sector_agg(days_back_start: int, days_back_end: int) -> Dict[str, float]:
+    """Net notional by sector for the window (today - start, today - end]."""
+    from sqlalchemy import text
+    with get_sync_db_session() as s:
+        rows = s.execute(text(
+            f"""
+            SELECT sec.name,
+                   SUM({_NOTIONAL_SQL}) FILTER (WHERE t.transaction_type='P') AS buy,
+                   SUM({_NOTIONAL_SQL}) FILTER (WHERE t.transaction_type='S') AS sell,
+                   COUNT(*) AS trades, COUNT(DISTINCT t.member_id) AS members
+            FROM congressional_trades t
+            JOIN securities se ON se.id = t.security_id
+            JOIN sectors sec ON sec.gics_code = se.sector_gics_code
+            WHERE t.transaction_type IN ('P','S')
+              AND t.transaction_date >  (CURRENT_DATE - CAST(:a AS INTEGER))
+              AND t.transaction_date <= (CURRENT_DATE - CAST(:b AS INTEGER))
+            GROUP BY sec.name
+            """
+        ), {"a": days_back_start, "b": days_back_end}).fetchall()
+    return {r[0]: {"net": float(r[1] or 0) - float(r[2] or 0), "trades": r[3], "members": r[4]}
+            for r in rows}
+
+
+def _sector_trend(net: float, prior: float) -> str:
+    delta = net - prior
+    if net > 0:
+        return "accelerating_inflow" if delta > 0 else "cooling_inflow"
+    if net < 0:
+        return "accelerating_outflow" if delta < 0 else "cooling_outflow"
+    return "flat"
+
+
+def _build_context_pack(days: int) -> Dict[str, Any]:
+    """One-call, LLM-ready feed: the week's activity plus week-over-week deltas
+    and trend labels, so a downstream model can connect shifts to world events."""
+    today = datetime.now(timezone.utc).date()
+    this_t = _window_ticker_agg(days, 0)
+    prior_t = _window_ticker_agg(2 * days, days)
+    this_s = _window_sector_agg(days, 0)
+    prior_s = _window_sector_agg(2 * days, days)
+
+    # headline
+    buys = sum(v["buys"] for v in this_t.values())
+    sells = sum(v["sells"] for v in this_t.values())
+    notional = sum(v["notional"] for v in this_t.values())
+    bias = "net_buying" if buys > sells * 1.15 else "net_selling" if sells > buys * 1.15 else "balanced"
+
+    # active tickers with WoW member delta
+    active = []
+    for tk, v in sorted(this_t.items(), key=lambda kv: (kv[1]["members"], kv[1]["notional"]), reverse=True)[:14]:
+        pm = prior_t.get(tk, {}).get("members", 0)
+        active.append({
+            "ticker": tk, "sector": v["sector"], "members": v["members"],
+            "buys": v["buys"], "sells": v["sells"],
+            "net_direction": "accumulating" if v["buys"] > v["sells"] else "distributing" if v["sells"] > v["buys"] else "mixed",
+            "notional": round(v["notional"], 0),
+            "members_prior": pm, "member_delta": v["members"] - pm,
+            "new_this_week": pm == 0,
+        })
+
+    # sector rotation with deltas
+    rotation = []
+    for sec, v in sorted(this_s.items(), key=lambda kv: kv[1]["net"], reverse=True):
+        prior_net = prior_s.get(sec, {}).get("net", 0.0)
+        rotation.append({
+            "sector": sec, "net_notional": round(v["net"], 0), "members": v["members"],
+            "prior_net_notional": round(prior_net, 0), "delta": round(v["net"] - prior_net, 0),
+            "trend": _sector_trend(v["net"], prior_net),
+        })
+
+    return {
+        "this_week": {"start": (today - timedelta(days=days)).isoformat(), "end": today.isoformat()},
+        "prior_week": {"start": (today - timedelta(days=2 * days)).isoformat(),
+                       "end": (today - timedelta(days=days)).isoformat()},
+        "headline": {
+            "tickers_active": len(this_t), "buys": buys, "sells": sells,
+            "notional": round(notional, 0), "net_bias": bias,
+            "new_tickers_vs_prior": sum(1 for a in active if a["new_this_week"]),
+        },
+        "sector_rotation": rotation,
+        "active_tickers": active,
+        "notable_clusters": _recent_clusters(days=max(days * 2, 21), limit=8),
+        "notable_trades": _recent_trades(days=days, limit=12, ticker=None, party=None,
+                                         direction=None, min_amount=50000),
+        "scrutiny_movers": _leaderboard_full()[:10],
+    }
+
+
 def _leaderboard_full():
     """Full composite Scrutiny Score leaderboard (the one heavy compute).
     Cached under a single key regardless of the caller's limit, and warmed in
@@ -267,6 +379,7 @@ async def warm_caches() -> None:
     try:
         await _cached("leaderboard_full", _leaderboard_full)
         await _cached("digest:7", lambda: _build_digest(7))
+        await _cached("context-pack:7", lambda: _build_context_pack(7))
     except Exception as exc:  # noqa: BLE001
         logger.warning("signals cache warm failed: %s", exc)
 
@@ -336,5 +449,22 @@ async def digest(days: int = Query(7, ge=1, le=90)):
         "generated_at": _now_iso(),
         "window_days": days,
         "note": "Public STOCK Act disclosures. Signals for research, not investment advice.",
+        **data,
+    })
+
+
+@router.get("/context-pack", dependencies=[Depends(require_api_key)])
+async def context_pack(days: int = Query(7, ge=1, le=45)):
+    """One-call, LLM-ready feed for synthesis: the week's activity plus
+    week-over-week deltas and trend labels (sector rotation, newly-active
+    tickers, member-count changes), the notable clusters/trades, and the top
+    scrutiny movers. Designed so a downstream model can connect shifts to world
+    events in a single prompt."""
+    data = await _cached(f"context-pack:{days}", lambda: _build_context_pack(days))
+    return success_response(data={
+        "generated_at": _now_iso(),
+        "window_days": days,
+        "note": "Public STOCK Act disclosures. Deltas are this-window vs the "
+                "prior equal window. Signals for research, not investment advice.",
         **data,
     })

@@ -334,6 +334,129 @@ async def reconstruct_holdings(session: AsyncSession, member_ids: List) -> Dict[
     return result
 
 
+def _month_starts(start: date, end: date) -> List[date]:
+    """Month-start valuation dates from ``start`` to ``end``, plus ``end`` itself."""
+    dates: List[date] = []
+    y, m = start.year, start.month
+    while (y, m) <= (end.year, end.month):
+        dates.append(date(y, m, 1))
+        m += 1
+        if m > 12:
+            m = 1
+            y += 1
+    if not dates or dates[-1] != end:
+        dates.append(end)
+    return dates
+
+
+def compute_equity_series(trades, pricebook: PriceBook, spy_sid, valuation_dates: List[date]) -> List[Dict[str, Any]]:
+    """Portfolio value over time vs the same cash flows invested in SPY.
+
+    Advances through ``valuation_dates`` in order, applying each trade once as its
+    date passes (incremental replay), and values the open positions + the mirrored
+    SPY position at every date. Each purchase also buys ``midpoint`` dollars of SPY
+    on the trade date; each sale removes the proportional SPY exposure.
+    """
+    positions: Dict[Any, Dict[str, float]] = {}
+    spy_shares = 0.0
+    ordered = sorted(trades, key=lambda t: t.transaction_date or date.min)
+    ti = 0
+    series: List[Dict[str, Any]] = []
+
+    for d in valuation_dates:
+        while ti < len(ordered) and (ordered[ti].transaction_date or date.min) <= d:
+            t = ordered[ti]
+            ti += 1
+            price = pricebook.price_on_or_before(t.security_id, t.transaction_date)
+            if not price or price <= 0:
+                continue
+            dollars = midpoint_dollars(t)
+            if dollars <= 0:
+                continue
+            shares = dollars / price
+            pos = positions.setdefault(t.security_id, {"shares": 0.0, "cost": 0.0})
+            ttype = (t.transaction_type or "").upper()
+            spy_price = pricebook.price_on_or_before(spy_sid, t.transaction_date) if spy_sid else None
+
+            if ttype == "P":
+                pos["shares"] += shares
+                pos["cost"] += dollars
+                if spy_price and spy_price > 0:
+                    spy_shares += dollars / spy_price
+            elif ttype == "S" and pos["shares"] > 0:
+                sold = min(shares, pos["shares"])
+                avg = pos["cost"] / pos["shares"]
+                pos["cost"] -= avg * sold
+                pos["shares"] -= sold
+                if spy_price and spy_price > 0 and spy_shares > 0:
+                    spy_shares -= min(dollars / spy_price, spy_shares)
+
+        pv = 0.0
+        for sid, pos in positions.items():
+            if pos["shares"] <= _SHARE_EPSILON:
+                continue
+            p = pricebook.price_on_or_before(sid, d)
+            if p:
+                pv += pos["shares"] * p
+        spy_p = pricebook.price_on_or_before(spy_sid, d) if spy_sid else None
+        series.append({
+            "date": d.isoformat(),
+            "portfolio_value": round(pv, 2),
+            "spy_value": round(spy_shares * spy_p, 2) if spy_p else None,
+        })
+
+    return series
+
+
+async def compute_equity_curve(session: AsyncSession, member_ids: List) -> Dict[str, Any]:
+    """Monthly equity curve for a set of members, benchmarked against SPY."""
+    from domains.congressional.models import CongressionalTrade
+    from domains.securities.models import Security, DailyPrice
+
+    empty = {"series": [], "summary": {}}
+    if not member_ids:
+        return empty
+
+    trades = (await session.execute(
+        select(CongressionalTrade).where(and_(
+            CongressionalTrade.member_id.in_(member_ids),
+            CongressionalTrade.security_id.isnot(None),
+        ))
+    )).scalars().all()
+    trades = [t for t in trades if t.transaction_date]
+    if not trades:
+        return empty
+
+    security_ids = list({t.security_id for t in trades})
+
+    spy_sid = (await session.execute(
+        select(Security.id).where(Security.ticker == "SPY")
+    )).scalar_one_or_none()
+    price_ids = security_ids + ([spy_sid] if spy_sid else [])
+
+    price_rows = (await session.execute(
+        select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
+        .where(DailyPrice.security_id.in_(price_ids))
+    )).all()
+    pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+
+    start = min(t.transaction_date for t in trades)
+    end = max((r.price_date for r in price_rows), default=start)
+    dates = _month_starts(start, end)
+
+    series = compute_equity_series(trades, pricebook, spy_sid, dates)
+
+    summary: Dict[str, Any] = {"start_date": start.isoformat(), "end_date": end.isoformat(),
+                               "has_benchmark": spy_sid is not None}
+    if series:
+        pv = series[-1]["portfolio_value"]
+        sv = series[-1]["spy_value"]
+        summary["portfolio_value"] = pv
+        summary["spy_value"] = sv
+        summary["vs_spy_pct"] = round((pv / sv - 1) * 100, 2) if sv else None
+    return {"series": series, "summary": summary}
+
+
 async def compare_member_holdings(session: AsyncSession, member_ids: List) -> Dict[str, Any]:
     """Reconstruct each member's portfolio and surface cross-member overlap.
 

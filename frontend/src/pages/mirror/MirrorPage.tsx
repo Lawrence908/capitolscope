@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../../services/api';
-import type { CongressMember, MirrorPortfolio, MirrorHoldingsResult } from '../../types';
+import type {
+  CongressMember, MirrorPortfolio, MirrorHoldingsResult, EquityCurveResult,
+} from '../../types';
 import { PageHeader, Panel, Spinner } from '../../components/ui/scaffold';
 import { fmtMoney } from '../../components/ui/format';
 import { MemberPicker, MemberChip } from '../../components/members/MemberPicker';
+import LineChart from '../../components/charts/LineChart';
 
 /** Format an already-percentage number (e.g. 68.85 -> "+68.9%"). */
 const pct = (n: number | null | undefined, signed = false): string => {
@@ -22,6 +25,7 @@ const MirrorPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [holdings, setHoldings] = useState<MirrorHoldingsResult | null>(null);
   const [loadingHoldings, setLoadingHoldings] = useState(false);
+  const [performance, setPerformance] = useState<EquityCurveResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // create form
@@ -60,9 +64,21 @@ const MirrorPage: React.FC = () => {
     }
   }, []);
 
+  const loadPerformance = useCallback(async (id: string) => {
+    setPerformance(null);
+    try {
+      setPerformance(await apiClient.getMirrorPerformance(id));
+    } catch {
+      /* performance is non-critical; leave it null */
+    }
+  }, []);
+
   useEffect(() => {
-    if (selectedId) void loadHoldings(selectedId);
-  }, [selectedId, loadHoldings]);
+    if (selectedId) {
+      void loadHoldings(selectedId);
+      void loadPerformance(selectedId);
+    }
+  }, [selectedId, loadHoldings, loadPerformance]);
 
   const createMirror = async () => {
     if (!newName.trim() || newMembers.length === 0) return;
@@ -244,6 +260,50 @@ const MirrorPage: React.FC = () => {
                 </div>
                 <MemberPicker excludeIds={new Set(selected.member_ids)} onAdd={addMemberToSelected} />
               </Panel>
+
+              {performance && performance.series.length > 1 && (
+                <Panel
+                  title="Performance vs SPY"
+                  right={
+                    performance.summary.vs_spy_pct != null ? (
+                      <span
+                        className={`font-data text-[11px] uppercase tracking-[0.12em] ${
+                          performance.summary.vs_spy_pct >= 0 ? 'text-accent' : 'text-sev-flag'
+                        }`}
+                      >
+                        {pct(performance.summary.vs_spy_pct, true)} vs SPY
+                      </span>
+                    ) : undefined
+                  }
+                  bodyClassName="p-4"
+                >
+                  <LineChart
+                    height={320}
+                    data={{
+                      labels: performance.series.map((p) => p.date.slice(0, 7)),
+                      datasets: [
+                        {
+                          label: 'Mirror',
+                          data: performance.series.map((p) => p.portfolio_value),
+                          borderColor: '#1f9e88',
+                          backgroundColor: 'rgba(31,158,136,0.12)',
+                          borderWidth: 2,
+                          fill: true,
+                          tension: 0.25,
+                        },
+                        {
+                          label: 'SPY (same cash flows)',
+                          data: performance.series.map((p) => p.spy_value ?? Number.NaN),
+                          borderColor: '#9aa5b1',
+                          borderWidth: 1.5,
+                          fill: false,
+                          tension: 0.25,
+                        },
+                      ],
+                    }}
+                  />
+                </Panel>
+              )}
 
               <Panel
                 title="Combined holdings"

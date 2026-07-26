@@ -406,8 +406,23 @@ async def export_portfolio_data(
 
 from pydantic import BaseModel, Field  # noqa: E402
 from domains.portfolio.mirror_service import (  # noqa: E402
-    MirrorPortfolioService, reconstruct_holdings, compare_member_holdings,
+    MirrorPortfolioService, reconstruct_holdings, compare_member_holdings, compute_equity_curve,
 )
+
+
+@router.get(
+    "/member/{member_id}/performance",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={200: {"description": "OK"}, 401: {"description": "Not authenticated"}},
+)
+async def get_member_performance(
+    member_id: str = Path(..., description="Congress member UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Monthly equity curve for a member's reconstructed portfolio, benchmarked vs SPY."""
+    data = await compute_equity_curve(session, [member_id])
+    return create_response(data=data)
 
 _MIRROR_TIERS = ['PRO', 'PREMIUM', 'ENTERPRISE']
 
@@ -648,3 +663,19 @@ async def get_mirror_holdings(
     result = await service.compute_holdings(member_ids)
     result["mirror"] = _serialize_mirror(mirror)
     return create_response(data=result)
+
+
+@router.get("/mirror/{mirror_id}/performance", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_mirror_performance(
+    mirror_id: str = Path(..., description="Mirror portfolio UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Monthly equity curve for a mirror portfolio, benchmarked vs SPY. **Pro+**."""
+    service = MirrorPortfolioService(session)
+    mirror = await service.get(mirror_id, current_user.id)
+    if not mirror:
+        raise HTTPException(status_code=404, detail="Mirror portfolio not found")
+    member_ids = [m.member_id for m in mirror.members]
+    data = await compute_equity_curve(session, member_ids)
+    return create_response(data=data)

@@ -261,3 +261,22 @@ export interface NotificationSubscription {
   email_frequency: 'instant' | 'daily' | 'weekly';
   alert_threshold: number;
 }
+
+// ---- Equity curve (Mirror/member performance vs SPY) ----
+export interface EquityPoint {
+  date: string;
+  portfolio_value: number;
+  spy_value: number | null;
+}
+
+export interface EquityCurveResult {
+  series: EquityPoint[];
+  summary: {
+    start_date?: string;
+    end_date?: string;
+    has_benchmark?: boolean;
+    portfolio_value?: number;
+    spy_value?: number | null;
+    vs_spy_pct?: number | null;
+  };
+}

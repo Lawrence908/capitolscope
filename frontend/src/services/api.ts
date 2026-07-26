@@ -15,6 +15,7 @@ import type {
   MemberComparisonResult,
   InboxResult,
   NotificationSubscription,
+  EquityCurveResult,
 } from '../types';
 
 class APIClient {
@@ -436,6 +437,18 @@ class APIClient {
   async getMirrorHoldings(id: string): Promise<MirrorHoldingsResult> {
     const response = await this.client.get(`/api/v1/portfolios/mirror/${id}/holdings`);
     return response.data?.data as MirrorHoldingsResult;
+  }
+
+  async getMirrorPerformance(id: string): Promise<EquityCurveResult> {
+    const response = await this.client.get(`/api/v1/portfolios/mirror/${id}/performance`);
+    return response.data?.data as EquityCurveResult;
+  }
+
+  async getMemberPerformance(memberId: string): Promise<EquityCurveResult> {
+    const response = await this.client.get(
+      `/api/v1/portfolios/member/${encodeURIComponent(memberId)}/performance`
+    );
+    return response.data?.data as EquityCurveResult;
   }
 
   async getMemberPortfolio(memberId: string): Promise<MirrorHoldingsResult> {

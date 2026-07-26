@@ -14,6 +14,7 @@ import pytest
 import schemas  # noqa: F401  (resolve circular-import ordering)
 from domains.portfolio.mirror_service import (
     PriceBook, midpoint_dollars, replay_positions, build_holdings,
+    compute_equity_series, _month_starts,
 )
 
 pytestmark = pytest.mark.unit
@@ -207,3 +208,45 @@ class TestReplayAndValue:
         assert t["return_pct"] == pytest.approx(50.0)
         # sorted by market value desc -> the 2x security first
         assert result["holdings"][0]["ticker"] == "A"
+
+
+class TestEquityCurve:
+    def test_month_starts_includes_end(self):
+        dates = _month_starts(date(2020, 1, 15), date(2020, 3, 20))
+        assert dates[0] == date(2020, 1, 1)
+        assert dates[-1] == date(2020, 3, 20)  # explicit end point appended
+
+    def test_portfolio_and_spy_driven_by_same_cashflow(self):
+        s1 = uuid.uuid4()
+        spy = uuid.uuid4()
+        pb = PriceBook([
+            (s1, date(2020, 1, 1), 100), (s1, date(2021, 1, 1), 200),   # 2x
+            (spy, date(2020, 1, 1), 50), (spy, date(2021, 1, 1), 100),  # 2x
+        ])
+        # Buy $10k of s1 -> 100 shares; the same $10k buys 200 SPY shares.
+        trades = [_trade(s1, "P", date(2020, 1, 1), exact=10_000_00)]
+        series = compute_equity_series(trades, pb, spy, [date(2020, 1, 1), date(2021, 1, 1)])
+        assert series[0]["portfolio_value"] == pytest.approx(10_000)
+        assert series[0]["spy_value"] == pytest.approx(10_000)
+        assert series[-1]["portfolio_value"] == pytest.approx(20_000)
+        assert series[-1]["spy_value"] == pytest.approx(20_000)
+
+    def test_outperformance_when_holding_beats_spy(self):
+        s1 = uuid.uuid4()
+        spy = uuid.uuid4()
+        pb = PriceBook([
+            (s1, date(2020, 1, 1), 100), (s1, date(2021, 1, 1), 400),   # 4x
+            (spy, date(2020, 1, 1), 100), (spy, date(2021, 1, 1), 200),  # 2x
+        ])
+        trades = [_trade(s1, "P", date(2020, 1, 1), exact=10_000_00)]
+        series = compute_equity_series(trades, pb, spy, [date(2020, 1, 1), date(2021, 1, 1)])
+        assert series[-1]["portfolio_value"] == pytest.approx(40_000)
+        assert series[-1]["spy_value"] == pytest.approx(20_000)
+
+    def test_no_spy_yields_none_benchmark(self):
+        s1 = uuid.uuid4()
+        pb = PriceBook([(s1, date(2020, 1, 1), 100), (s1, date(2021, 1, 1), 200)])
+        trades = [_trade(s1, "P", date(2020, 1, 1), exact=10_000_00)]
+        series = compute_equity_series(trades, pb, None, [date(2021, 1, 1)])
+        assert series[-1]["portfolio_value"] == pytest.approx(20_000)
+        assert series[-1]["spy_value"] is None

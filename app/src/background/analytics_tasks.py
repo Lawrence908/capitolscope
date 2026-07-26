@@ -118,6 +118,18 @@ def compute_scrutiny_scores(self, min_trades: int = 10, top_n: int = 50):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def backfill_earnings_events(self):
+    """Weekly: refresh historical earnings dates for traded securities (feeds
+    the pre-earnings proximity factor)."""
+    _ensure_db()
+    from domains.analytics.earnings_events import backfill_earnings_dates_sync
+    with get_sync_db_session() as session:
+        result = backfill_earnings_dates_sync(session)
+    logger.info("backfill_earnings_events done: %s", result)
+    return {"status": "success", "result": result, "timestamp": datetime.utcnow().isoformat()}
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def enrich_security_sectors(self):
     """Weekly: backfill GICS sector for traded securities still missing one
     (needed by the conflict engine)."""

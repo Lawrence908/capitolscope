@@ -21,6 +21,7 @@ export interface ScrutinyMember {
   trades: number;
   factors: {
     edge: ScrutinyFactor & { avg_alpha_30d: number; t_stat: number };
+    event: ScrutinyFactor & { pre_earnings_rate: number; pre_earnings_trades: number };
     conflict: ScrutinyFactor & { conflict_rate: number; conflict_trades: number };
     cluster: ScrutinyFactor & { cluster_involvement: number };
     lag: ScrutinyFactor & { late_pct: number | null; avg_lag_days: number | null };

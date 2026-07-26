@@ -44,6 +44,7 @@ export const PartyTag: React.FC<{ party: string | null | undefined }> = ({ party
 // ---- factor fingerprint bar (stacked contributions out of 100) ----
 export const FACTOR_COLORS: Record<string, string> = {
   edge: '#43a897', // verdigris — trading edge / alpha
+  event: '#e0906a', // coral — pre-earnings positioning
   conflict: '#d6707b', // oxblood — committee conflict
   cluster: '#7aa8d6', // steel — herding involvement
   lag: '#cca85a', // brass — disclosure lag
@@ -52,13 +53,14 @@ export const FACTOR_COLORS: Record<string, string> = {
 
 export const FACTOR_LABELS: Record<string, string> = {
   edge: 'Edge',
+  event: 'Pre-earnings',
   conflict: 'Conflict',
   cluster: 'Cluster',
   lag: 'Lag',
   size: 'Size',
 };
 
-export const FACTOR_ORDER = ['edge', 'conflict', 'cluster', 'lag', 'size'];
+export const FACTOR_ORDER = ['edge', 'event', 'conflict', 'cluster', 'lag', 'size'];
 
 export const FactorBar: React.FC<{
   contributions: Record<string, number>;

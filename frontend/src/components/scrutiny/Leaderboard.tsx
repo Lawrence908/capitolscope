@@ -18,6 +18,7 @@ export const Leaderboard: React.FC<{
       {members.map((m, i) => {
         const contributions = {
           edge: m.factors.edge.contribution,
+          event: m.factors.event.contribution,
           conflict: m.factors.conflict.contribution,
           cluster: m.factors.cluster.contribution,
           lag: m.factors.lag.contribution,

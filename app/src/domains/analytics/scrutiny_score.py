@@ -9,17 +9,18 @@ back to a named factor with its underlying value.
 Factors (each percentile-ranked across the eligible member cohort, higher =
 more scrutiny-worthy), and their weights:
 
-  edge      0.31  benchmark-adjusted alpha, damped by statistical significance
+  edge      0.25  benchmark-adjusted alpha, damped by statistical significance
                   (a big edge that is not significant counts for less)
-  conflict  0.22  share of trades that are committee x sector conflicts
-  cluster   0.19  involvement in notable herding events (sum of cluster
+  event     0.20  share of trades placed just before an earnings release
+  conflict  0.18  share of trades that are committee x sector conflicts
+  cluster   0.15  involvement in notable herding events (sum of cluster
                   notability, which is already base-popularity weighted)
-  lag       0.15  share of filings past the 45-day STOCK Act clock
-  size      0.13  trade-size anomaly vs the member's own book (90th-pctile
+  lag       0.12  share of filings past the 45-day STOCK Act clock
+  size      0.10  trade-size anomaly vs the member's own book (90th-pctile
                   z-score of log notionals)
 
-Weights are the roadmap rubric renormalised to the signals we currently have
-(event/earnings proximity is a later phase). Score is 0-100.
+Weights are the full roadmap rubric (legislation proximity is folded into the
+event factor as a future refinement). Score is 0-100.
 """
 
 from __future__ import annotations
@@ -32,6 +33,7 @@ from sqlalchemy.orm import Session
 
 from domains.analytics.clustering import detect_cluster_events
 from domains.analytics.conflicts import detect_committee_conflicts
+from domains.analytics.earnings_events import compute_member_event_proximity
 from domains.analytics.returns_analytics import (
     compute_member_performance,
     compute_member_size_anomaly,
@@ -39,7 +41,10 @@ from domains.analytics.returns_analytics import (
 
 logger = logging.getLogger(__name__)
 
-WEIGHTS = {"edge": 0.31, "conflict": 0.22, "cluster": 0.19, "lag": 0.15, "size": 0.13}
+WEIGHTS = {
+    "edge": 0.25, "event": 0.20, "conflict": 0.18,
+    "cluster": 0.15, "lag": 0.12, "size": 0.10,
+}
 
 
 def _percentiles(values: List[float]) -> Dict[int, float]:
@@ -72,6 +77,7 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
     conflicts = {c["member"]: c for c in detect_committee_conflicts(session, min_conflicts=1)["leaderboard"]}
     clusters = detect_cluster_events(session)
     sizes = compute_member_size_anomaly(session)
+    events = compute_member_event_proximity(session)
 
     cluster_involvement: Dict[str, float] = defaultdict(float)
     for cl in clusters:
@@ -84,10 +90,13 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
         name, trades = p["member"], p["trades"]
         conf = conflicts.get(name)
         size = sizes.get(name)
+        evt = events.get(name)
         raw.append({
             "member": name, "party": p["party"], "chamber": p["chamber"], "trades": trades,
             "edge_raw": p["avg_alpha_30d"], "t_stat": p["t_stat"],
             "edge_signal": p["avg_alpha_30d"] * _significance_factor(p["t_stat"]),
+            "event_raw": evt["pre_earnings_rate"] if evt else 0.0,
+            "event_trades": evt["pre_earnings_trades"] if evt else 0,
             "conflict_rate": (conf["conflict_trades"] / trades) if (conf and trades) else 0.0,
             "conflict_trades": conf["conflict_trades"] if conf else 0,
             "cluster_raw": cluster_involvement.get(name, 0.0),
@@ -105,6 +114,7 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
     # Percentile-normalise each factor across the cohort.
     pct = {
         "edge": _percentiles([r["edge_signal"] for r in raw]),
+        "event": _percentiles([r["event_raw"] for r in raw]),
         "conflict": _percentiles([r["conflict_rate"] for r in raw]),
         "cluster": _percentiles([r["cluster_raw"] for r in raw]),
         "lag": _percentiles([r["lag_raw"] for r in raw]),
@@ -123,6 +133,9 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
                 "edge": {"weight": WEIGHTS["edge"], "percentile": round(pct["edge"][i], 3),
                          "contribution": round(100 * contributions["edge"], 1),
                          "avg_alpha_30d": r["avg_alpha_30d"], "t_stat": r["t_stat"]},
+                "event": {"weight": WEIGHTS["event"], "percentile": round(pct["event"][i], 3),
+                          "contribution": round(100 * contributions["event"], 1),
+                          "pre_earnings_rate": r["event_raw"], "pre_earnings_trades": r["event_trades"]},
                 "conflict": {"weight": WEIGHTS["conflict"], "percentile": round(pct["conflict"][i], 3),
                              "contribution": round(100 * contributions["conflict"], 1),
                              "conflict_rate": round(r["conflict_rate"], 3),

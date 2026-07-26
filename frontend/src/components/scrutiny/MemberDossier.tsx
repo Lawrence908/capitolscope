@@ -11,7 +11,7 @@ import {
 } from './primitives';
 
 const Row: React.FC<{
-  factorKey: 'edge' | 'conflict' | 'cluster' | 'lag' | 'size';
+  factorKey: 'edge' | 'event' | 'conflict' | 'cluster' | 'lag' | 'size';
   title: string;
   percentile: number;
   weight: number;
@@ -128,6 +128,17 @@ export const MemberDossier: React.FC<{
           weight={f.edge.weight}
           contribution={f.edge.contribution}
           detail={`α ${fmtSigned(f.edge.avg_alpha_30d)} · t=${f.edge.t_stat}`}
+        />
+        <Row
+          factorKey="event"
+          title="Pre-earnings positioning"
+          percentile={f.event.percentile}
+          weight={f.event.weight}
+          contribution={f.event.contribution}
+          detail={`${f.event.pre_earnings_trades} trades · ${fmtPct(
+            f.event.pre_earnings_rate,
+            0,
+          )} within 10d of a print`}
         />
         <Row
           factorKey="conflict"

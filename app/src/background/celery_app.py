@@ -69,6 +69,10 @@ celery_app.conf.beat_schedule = {
         'task': 'background.analytics_tasks.enrich_security_sectors',
         'schedule': 604800.0,  # Weekly; sector backfill for the conflict engine
     },
+    'backfill-earnings-events': {
+        'task': 'background.analytics_tasks.backfill_earnings_events',
+        'schedule': 604800.0,  # Weekly; earnings dates for pre-earnings factor
+    },
     'detect-committee-conflicts': {
         'task': 'background.analytics_tasks.detect_committee_conflicts',
         'schedule': 604800.0,  # Weekly; committee x sector overlap

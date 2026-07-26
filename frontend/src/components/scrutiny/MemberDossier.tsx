@@ -6,11 +6,12 @@ import {
   Eyebrow,
   fmtPct,
   fmtSigned,
+  fmtMoney,
   FACTOR_COLORS,
 } from './primitives';
 
 const Row: React.FC<{
-  factorKey: 'edge' | 'conflict' | 'cluster' | 'lag';
+  factorKey: 'edge' | 'conflict' | 'cluster' | 'lag' | 'size';
   title: string;
   percentile: number;
   weight: number;
@@ -151,6 +152,16 @@ export const MemberDossier: React.FC<{
           weight={f.lag.weight}
           contribution={f.lag.contribution}
           detail={`${fmtPct(f.lag.late_pct, 0)} late · ${f.lag.avg_lag_days ?? '—'}d avg`}
+        />
+        <Row
+          factorKey="size"
+          title="Size anomaly"
+          percentile={f.size.percentile}
+          weight={f.size.weight}
+          contribution={f.size.contribution}
+          detail={`z=${f.size.size_z} · ${fmtMoney(f.size.biggest)} vs ${fmtMoney(
+            f.size.median_notional,
+          )} median`}
         />
       </div>
 

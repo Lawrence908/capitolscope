@@ -47,6 +47,7 @@ export const FACTOR_COLORS: Record<string, string> = {
   conflict: '#d6707b', // oxblood — committee conflict
   cluster: '#7aa8d6', // steel — herding involvement
   lag: '#cca85a', // brass — disclosure lag
+  size: '#9d8bc4', // amethyst — trade-size anomaly
 };
 
 export const FACTOR_LABELS: Record<string, string> = {
@@ -54,13 +55,16 @@ export const FACTOR_LABELS: Record<string, string> = {
   conflict: 'Conflict',
   cluster: 'Cluster',
   lag: 'Lag',
+  size: 'Size',
 };
+
+export const FACTOR_ORDER = ['edge', 'conflict', 'cluster', 'lag', 'size'];
 
 export const FactorBar: React.FC<{
   contributions: Record<string, number>;
   height?: number;
 }> = ({ contributions, height = 8 }) => {
-  const order = ['edge', 'conflict', 'cluster', 'lag'];
+  const order = FACTOR_ORDER;
   return (
     <div
       className="flex w-full overflow-hidden rounded-[3px] bg-ink-700"

@@ -9,15 +9,17 @@ back to a named factor with its underlying value.
 Factors (each percentile-ranked across the eligible member cohort, higher =
 more scrutiny-worthy), and their weights:
 
-  edge      0.35  benchmark-adjusted alpha, damped by statistical significance
+  edge      0.31  benchmark-adjusted alpha, damped by statistical significance
                   (a big edge that is not significant counts for less)
-  conflict  0.25  share of trades that are committee x sector conflicts
-  cluster   0.20  involvement in notable herding events (sum of cluster
+  conflict  0.22  share of trades that are committee x sector conflicts
+  cluster   0.19  involvement in notable herding events (sum of cluster
                   notability, which is already base-popularity weighted)
-  lag       0.20  share of filings past the 45-day STOCK Act clock
+  lag       0.15  share of filings past the 45-day STOCK Act clock
+  size      0.13  trade-size anomaly vs the member's own book (90th-pctile
+                  z-score of log notionals)
 
 Weights are the roadmap rubric renormalised to the signals we currently have
-(event/earnings proximity and size anomaly are later phases). Score is 0-100.
+(event/earnings proximity is a later phase). Score is 0-100.
 """
 
 from __future__ import annotations
@@ -30,11 +32,14 @@ from sqlalchemy.orm import Session
 
 from domains.analytics.clustering import detect_cluster_events
 from domains.analytics.conflicts import detect_committee_conflicts
-from domains.analytics.returns_analytics import compute_member_performance
+from domains.analytics.returns_analytics import (
+    compute_member_performance,
+    compute_member_size_anomaly,
+)
 
 logger = logging.getLogger(__name__)
 
-WEIGHTS = {"edge": 0.35, "conflict": 0.25, "cluster": 0.20, "lag": 0.20}
+WEIGHTS = {"edge": 0.31, "conflict": 0.22, "cluster": 0.19, "lag": 0.15, "size": 0.13}
 
 
 def _percentiles(values: List[float]) -> Dict[int, float]:
@@ -66,6 +71,7 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
     perf = compute_member_performance(session, min_trades=min_trades)
     conflicts = {c["member"]: c for c in detect_committee_conflicts(session, min_conflicts=1)["leaderboard"]}
     clusters = detect_cluster_events(session)
+    sizes = compute_member_size_anomaly(session)
 
     cluster_involvement: Dict[str, float] = defaultdict(float)
     for cl in clusters:
@@ -77,6 +83,7 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
     for p in perf:
         name, trades = p["member"], p["trades"]
         conf = conflicts.get(name)
+        size = sizes.get(name)
         raw.append({
             "member": name, "party": p["party"], "chamber": p["chamber"], "trades": trades,
             "edge_raw": p["avg_alpha_30d"], "t_stat": p["t_stat"],
@@ -85,6 +92,9 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
             "conflict_trades": conf["conflict_trades"] if conf else 0,
             "cluster_raw": cluster_involvement.get(name, 0.0),
             "lag_raw": p["late_pct"] or 0.0,
+            "size_raw": size["size_z"] if size else 0.0,
+            "size_biggest": size["biggest"] if size else None,
+            "size_median": size["median_notional"] if size else None,
             "avg_alpha_30d": p["avg_alpha_30d"], "hit_rate": p["hit_rate"],
             "avg_lag_days": p["avg_lag_days"], "late_pct": p["late_pct"],
         })
@@ -98,6 +108,7 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
         "conflict": _percentiles([r["conflict_rate"] for r in raw]),
         "cluster": _percentiles([r["cluster_raw"] for r in raw]),
         "lag": _percentiles([r["lag_raw"] for r in raw]),
+        "size": _percentiles([r["size_raw"] for r in raw]),
     }
 
     out: List[Dict[str, Any]] = []
@@ -122,6 +133,10 @@ def compute_scrutiny_scores(session: Session, min_trades: int = 10) -> List[Dict
                 "lag": {"weight": WEIGHTS["lag"], "percentile": round(pct["lag"][i], 3),
                         "contribution": round(100 * contributions["lag"], 1),
                         "late_pct": r["late_pct"], "avg_lag_days": r["avg_lag_days"]},
+                "size": {"weight": WEIGHTS["size"], "percentile": round(pct["size"][i], 3),
+                         "contribution": round(100 * contributions["size"], 1),
+                         "size_z": r["size_raw"], "biggest": r["size_biggest"],
+                         "median_notional": r["size_median"]},
             },
         })
 

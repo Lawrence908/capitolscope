@@ -165,6 +165,55 @@ def compute_member_performance(session: Session, min_trades: int = 10) -> List[D
     return out
 
 
+def compute_member_size_anomaly(session: Session, min_trades: int = 8) -> Dict[str, Dict[str, Any]]:
+    """Per-member trade-size anomaly, measured against the member's *own* book.
+
+    Sizes are log-transformed (disclosed amounts span orders of magnitude), and
+    the signal is the 90th-percentile z-score of a member's trades: how far into
+    the tail their upper-decile bets sit relative to their normal size. A member
+    who occasionally places a bet far larger than usual scores high; a member
+    who always trades the same size scores ~0.
+
+    Returns {member_name: {size_z, biggest, median_notional, trades}}.
+    """
+    rows = session.execute(text(
+        """
+        SELECT m.full_name, t.amount_min, t.amount_max, t.amount_exact
+        FROM congressional_trades t
+        JOIN congress_members m ON m.id = t.member_id
+        WHERE t.transaction_type IN ('P', 'S')
+        """
+    )).fetchall()
+
+    from collections import defaultdict
+    by_member: Dict[str, List[float]] = defaultdict(list)
+    for name, amin, amax, aexact in rows:
+        n = _notional(amin, amax, aexact)
+        if n and n > 0:
+            by_member[name].append(n)
+
+    out: Dict[str, Dict[str, Any]] = {}
+    for name, notionals in by_member.items():
+        if len(notionals) < min_trades:
+            continue
+        logs = sorted(math.log(n) for n in notionals)
+        mu = mean(logs)
+        sd = pstdev(logs)
+        if sd > 0:
+            zs = sorted((l - mu) / sd for l in logs)
+            idx = min(len(zs) - 1, int(round(0.9 * (len(zs) - 1))))
+            size_z = max(0.0, zs[idx])
+        else:
+            size_z = 0.0
+        out[name] = {
+            "size_z": round(size_z, 3),
+            "biggest": round(max(notionals), 0),
+            "median_notional": round(median(notionals), 0),
+            "trades": len(notionals),
+        }
+    return out
+
+
 def compute_disclosure_lag_stats(session: Session) -> Dict[str, Any]:
     """Overall filing-timeliness picture plus the worst late filers."""
     lags = [r[0] for r in session.execute(text(

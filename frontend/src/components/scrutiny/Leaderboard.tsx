@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ScrutinyMember } from '../../types/scrutiny';
-import { FactorBar, PartyTag, FACTOR_COLORS, FACTOR_LABELS } from './primitives';
+import { FactorBar, PartyTag, FACTOR_COLORS, FACTOR_LABELS, FACTOR_ORDER } from './primitives';
 
 const scoreTier = (s: number) => {
   if (s >= 80) return '#d6707b'; // flag
@@ -21,6 +21,7 @@ export const Leaderboard: React.FC<{
           conflict: m.factors.conflict.contribution,
           cluster: m.factors.cluster.contribution,
           lag: m.factors.lag.contribution,
+          size: m.factors.size.contribution,
         };
         const active = selected === m.member;
         return (
@@ -70,7 +71,7 @@ export const Leaderboard: React.FC<{
 
 export const LegendRow: React.FC = () => (
   <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 px-4 py-2.5 border-b border-ink-600 bg-ink-900">
-    {(['edge', 'conflict', 'cluster', 'lag'] as const).map((k) => (
+    {FACTOR_ORDER.map((k) => (
       <span key={k} className="flex items-center gap-1.5 font-data text-[10px] uppercase tracking-[0.12em] text-fog-500">
         <span className="h-2 w-2 rounded-[2px]" style={{ background: FACTOR_COLORS[k] }} />
         {FACTOR_LABELS[k]}

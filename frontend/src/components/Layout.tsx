@@ -14,6 +14,7 @@ import {
   StarIcon,
   BellIcon,
   Squares2X2Icon,
+  ScaleIcon,
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
 import { Eyebrow } from './ui';
@@ -55,6 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, tier: 'free' },
     { name: 'Trade Browser', href: '/trades', icon: DocumentMagnifyingGlassIcon, tier: 'free' },
     { name: 'Members', href: '/members', icon: UserGroupIcon, tier: 'free' },
+    { name: 'Compare', href: '/compare', icon: ScaleIcon, tier: 'free' },
     { name: 'Scrutiny', href: '/scrutiny', icon: SparklesIcon, tier: 'free' },
     { name: 'Trade Alerts', href: '/alerts', icon: BellIcon, tier: 'free' },
     { name: 'Analytics', href: '/analytics', icon: ChartBarIcon, tier: 'pro' },

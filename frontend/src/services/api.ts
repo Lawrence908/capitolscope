@@ -12,6 +12,7 @@ import type {
   APIError,
   MirrorPortfolio,
   MirrorHoldingsResult,
+  MemberComparisonResult,
 } from '../types';
 
 class APIClient {
@@ -433,6 +434,20 @@ class APIClient {
   async getMirrorHoldings(id: string): Promise<MirrorHoldingsResult> {
     const response = await this.client.get(`/api/v1/portfolios/mirror/${id}/holdings`);
     return response.data?.data as MirrorHoldingsResult;
+  }
+
+  async getMemberPortfolio(memberId: string): Promise<MirrorHoldingsResult> {
+    const response = await this.client.get(
+      `/api/v1/portfolios/member/${encodeURIComponent(memberId)}/holdings`
+    );
+    return response.data?.data as MirrorHoldingsResult;
+  }
+
+  async compareMemberPortfolios(memberIds: string[]): Promise<MemberComparisonResult> {
+    const response = await this.client.get(
+      `/api/v1/portfolios/members/compare?member_ids=${encodeURIComponent(memberIds.join(','))}`
+    );
+    return response.data?.data as MemberComparisonResult;
   }
 
   // ---- Scrutiny analytics ----

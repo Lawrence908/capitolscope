@@ -122,6 +122,71 @@ class TestReplayAndValue:
         trades = [_trade(sid, "P", date(2020, 1, 1), exact=10_000_00)]
         assert replay_positions(trades, pb) == {}
 
+    def test_sector_allocation_weights(self):
+        s1, s2 = uuid.uuid4(), uuid.uuid4()
+        pb = PriceBook([
+            (s1, date(2020, 1, 1), 100), (s1, date(2021, 1, 1), 100),  # $10k flat
+            (s2, date(2020, 1, 1), 100), (s2, date(2021, 1, 1), 100),  # $30k flat
+        ])
+        trades = [
+            _trade(s1, "P", date(2020, 1, 1), exact=10_000_00),
+            _trade(s2, "P", date(2020, 1, 1), exact=30_000_00),
+        ]
+        meta = {
+            s1: {"ticker": "A", "name": "A", "sector": "Technology"},
+            s2: {"ticker": "B", "name": "B", "sector": "Financials"},
+        }
+        result = build_holdings(replay_positions(trades, pb), pb, meta)
+        alloc = {a["sector"]: a["weight_pct"] for a in result["sector_allocation"]}
+        assert alloc == {"Financials": 75.0, "Technology": 25.0}
+        # largest sector first
+        assert result["sector_allocation"][0]["sector"] == "Financials"
+
+    @pytest.mark.asyncio
+    async def test_compare_surfaces_overlap(self, monkeypatch):
+        from domains.portfolio import mirror_service as ms
+
+        canned = {
+            "id1": {
+                "holdings": [
+                    {"security_id": "s1", "ticker": "AAPL", "name": "Apple", "market_value": 100.0},
+                    {"security_id": "s2", "ticker": "MSFT", "name": "MS", "market_value": 50.0},
+                ],
+                "totals": {"market_value": 150.0, "holdings_count": 2},
+                "sector_allocation": [],
+            },
+            "id2": {
+                "holdings": [
+                    {"security_id": "s2", "ticker": "MSFT", "name": "MS", "market_value": 80.0},
+                    {"security_id": "s3", "ticker": "NVDA", "name": "NV", "market_value": 30.0},
+                ],
+                "totals": {"market_value": 110.0, "holdings_count": 2},
+                "sector_allocation": [],
+            },
+        }
+
+        async def fake_reconstruct(session, ids):
+            return canned[ids[0]]
+
+        monkeypatch.setattr(ms, "reconstruct_holdings", fake_reconstruct)
+        result = await ms.compare_member_holdings(None, ["id1", "id2"])
+
+        assert len(result["members"]) == 2
+        # Only MSFT (s2) is held by both.
+        assert result["overlap"]["count"] == 1
+        common = result["overlap"]["common_securities"][0]
+        assert common["ticker"] == "MSFT"
+        assert sorted(common["held_by"]) == ["id1", "id2"]
+        assert common["combined_value"] == 130.0
+
+    def test_missing_sector_defaults_to_unknown(self):
+        sid = uuid.uuid4()
+        pb = PriceBook([(sid, date(2020, 1, 1), 100), (sid, date(2021, 1, 1), 100)])
+        trades = [_trade(sid, "P", date(2020, 1, 1), exact=10_000_00)]
+        result = build_holdings(replay_positions(trades, pb), pb, {})  # no meta
+        assert result["holdings"][0]["sector"] == "Unknown"
+        assert result["sector_allocation"][0]["sector"] == "Unknown"
+
     def test_two_securities_roll_up_totals(self):
         s1, s2 = uuid.uuid4(), uuid.uuid4()
         pb = PriceBook([

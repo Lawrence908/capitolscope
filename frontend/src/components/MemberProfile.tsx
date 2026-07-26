@@ -2,8 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeftIcon, DocumentTextIcon, ChartBarIcon, UserIcon } from '@heroicons/react/24/outline';
 import { apiClient } from '../services/api';
-import type { CongressMember, CongressionalTrade } from '../types';
+import type { CongressMember, CongressionalTrade, MirrorHoldingsResult } from '../types';
 import { Panel, Spinner, StatTile, PartyTag, fmtMoney } from './ui';
+
+/** Format an already-percentage number (e.g. 142.9 -> "+142.9%"). */
+const pct = (n: number | null | undefined, signed = false): string => {
+  if (n == null) return '—';
+  const s = `${n.toFixed(1)}%`;
+  return signed && n >= 0 ? `+${s}` : s;
+};
+const returnTone = (n: number | null | undefined): string =>
+  n == null ? 'text-content' : n >= 0 ? 'text-accent' : 'text-sev-flag';
 
 const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="rounded-sm bg-surface-inset px-2 py-0.5 font-data text-[11px] uppercase tracking-[0.1em] text-content-muted">
@@ -15,6 +24,8 @@ const MemberProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [member, setMember] = useState<CongressMember | null>(null);
   const [recentTrades] = useState<CongressionalTrade[]>([]);
+  const [portfolio, setPortfolio] = useState<MirrorHoldingsResult | null>(null);
+  const [portfolioLoading, setPortfolioLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,6 +47,27 @@ const MemberProfile: React.FC = () => {
     };
 
     fetchMemberData();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    setPortfolioLoading(true);
+    apiClient
+      .getMemberPortfolio(id)
+      .then((data) => {
+        if (!cancelled) setPortfolio(data);
+      })
+      .catch((err) => {
+        console.error('Error fetching member portfolio:', err);
+        if (!cancelled) setPortfolio(null);
+      })
+      .finally(() => {
+        if (!cancelled) setPortfolioLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   if (loading) {
@@ -143,6 +175,106 @@ const MemberProfile: React.FC = () => {
             <div className="px-4 py-10 text-center">
               <ChartBarIcon className="mx-auto mb-3 h-10 w-10 text-content-faint" />
               <p className="font-ui text-sm text-content-faint">No recent trades found</p>
+            </div>
+          )}
+        </Panel>
+      </div>
+
+      {/* Reconstructed portfolio */}
+      <div className="mt-6">
+        <Panel
+          title="Reconstructed Portfolio"
+          right={
+            portfolio?.meta ? (
+              <span className="font-data text-[11px] uppercase tracking-[0.1em] text-content-faint">
+                {portfolio.meta.priced_trades} priced trades
+              </span>
+            ) : undefined
+          }
+        >
+          {portfolioLoading ? (
+            <Spinner label="Reconstructing positions" />
+          ) : !portfolio || portfolio.holdings.length === 0 ? (
+            <div className="px-4 py-10 text-center">
+              <ChartBarIcon className="mx-auto mb-3 h-10 w-10 text-content-faint" />
+              <p className="font-ui text-sm text-content-faint">
+                No priced holdings to reconstruct for this member.
+              </p>
+            </div>
+          ) : (
+            <div className="p-4">
+              <div className="mb-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <StatTile label="Market Value" value={fmtMoney(portfolio.totals.market_value)} />
+                <StatTile
+                  label="Total Return"
+                  value={pct(portfolio.totals.return_pct, true)}
+                  tone={(portfolio.totals.return_pct ?? 0) >= 0 ? 'accent' : 'flag'}
+                />
+                <StatTile label="Cost Basis" value={fmtMoney(portfolio.totals.cost_basis)} />
+                <StatTile label="Holdings" value={String(portfolio.totals.holdings_count)} />
+              </div>
+
+              {/* Sector allocation */}
+              {portfolio.sector_allocation && portfolio.sector_allocation.length > 0 && (
+                <div className="mb-6">
+                  <div className="mb-2 font-data text-[10px] uppercase tracking-[0.14em] text-content-faint">
+                    Sector allocation
+                  </div>
+                  <div className="space-y-1.5">
+                    {portfolio.sector_allocation.slice(0, 6).map((s) => (
+                      <div key={s.sector} className="flex items-center gap-3">
+                        <span className="w-32 shrink-0 truncate font-ui text-xs text-content-muted">
+                          {s.sector}
+                        </span>
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-inset">
+                          <div
+                            className="h-full rounded-full bg-accent"
+                            style={{ width: `${Math.min(100, s.weight_pct ?? 0)}%` }}
+                          />
+                        </div>
+                        <span className="w-12 shrink-0 text-right font-data text-[11px] tabular-nums text-content-faint">
+                          {s.weight_pct != null ? `${s.weight_pct.toFixed(0)}%` : '—'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Top holdings */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="border-b border-line font-data text-[10px] uppercase tracking-[0.14em] text-content-faint">
+                      <th className="px-2 py-2">Ticker</th>
+                      <th className="px-2 py-2 text-right">Market value</th>
+                      <th className="px-2 py-2 text-right">Return</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-line">
+                    {portfolio.holdings.slice(0, 10).map((h) => (
+                      <tr key={h.security_id}>
+                        <td className="px-2 py-2">
+                          <span className="font-data text-sm text-content">{h.ticker || '—'}</span>
+                          {h.name && (
+                            <span className="ml-2 font-ui text-xs text-content-faint">{h.name}</span>
+                          )}
+                        </td>
+                        <td className="px-2 py-2 text-right font-data text-sm tabular-nums text-content">
+                          {fmtMoney(h.market_value)}
+                        </td>
+                        <td className={`px-2 py-2 text-right font-data text-sm tabular-nums ${returnTone(h.return_pct)}`}>
+                          {pct(h.return_pct, true)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3 font-ui text-[11px] leading-relaxed text-content-faint">
+                Reconstructed from disclosed trades (dollar ranges, no share counts) and valued at the
+                latest close — an approximation, not an exact portfolio.
+              </p>
             </div>
           )}
         </Panel>

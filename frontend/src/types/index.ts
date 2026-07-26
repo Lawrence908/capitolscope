@@ -170,12 +170,19 @@ export interface MirrorHolding {
   security_id: string;
   ticker?: string | null;
   name?: string | null;
+  sector?: string | null;
   shares: number;
   cost_basis: number;
   current_price: number;
   market_value: number;
   unrealized_gain: number;
   return_pct: number | null;
+}
+
+export interface SectorAllocation {
+  sector: string;
+  market_value: number;
+  weight_pct: number | null;
 }
 
 export interface MirrorHoldingsTotals {
@@ -187,9 +194,39 @@ export interface MirrorHoldingsTotals {
   holdings_count: number;
 }
 
+export interface MemberComparisonEntry {
+  member_id: string;
+  member?: { id: string; name?: string | null; party?: string | null; state?: string | null; chamber?: string | null };
+  totals: MirrorHoldingsTotals;
+  sector_allocation: SectorAllocation[];
+  top_holdings: MirrorHolding[];
+}
+
+export interface MemberComparisonResult {
+  members: MemberComparisonEntry[];
+  overlap: {
+    count: number;
+    common_securities: {
+      security_id: string;
+      ticker?: string | null;
+      name?: string | null;
+      held_by: string[];
+      combined_value: number;
+    }[];
+  };
+}
+
 export interface MirrorHoldingsResult {
   holdings: MirrorHolding[];
+  sector_allocation?: SectorAllocation[];
   totals: MirrorHoldingsTotals;
   meta?: { member_count: number; priced_trades: number };
   mirror?: MirrorPortfolio;
+  member?: {
+    id: string;
+    name?: string | null;
+    party?: string | null;
+    state?: string | null;
+    chamber?: string | null;
+  };
 }

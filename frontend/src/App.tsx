@@ -28,6 +28,8 @@ const PremiumSignup = React.lazy(() => import('./components/PremiumSignup'));
 const AlertDashboard = React.lazy(() => import('./pages/alerts/AlertDashboard'));
 const ScrutinyCommand = React.lazy(() => import('./pages/scrutiny/ScrutinyCommand'));
 const MirrorPage = React.lazy(() => import('./pages/mirror/MirrorPage'));
+const AssetPage = React.lazy(() => import('./pages/asset/AssetPage'));
+const ComparePage = React.lazy(() => import('./pages/compare/ComparePage'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -98,6 +100,15 @@ const App: React.FC = () => {
                 </Layout>
               </ProtectedRoute>
             } />
+            <Route path="/assets/:ticker" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <AssetPage />
+                  </Suspense>
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/members" element={
               <ProtectedRoute>
                 <Layout>
@@ -146,6 +157,15 @@ const App: React.FC = () => {
                     </Suspense>
                   </Layout>
                 </PremiumRoute>
+              </ProtectedRoute>
+            } />
+            <Route path="/compare" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <ComparePage />
+                  </Suspense>
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/data-quality" element={

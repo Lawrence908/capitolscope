@@ -137,9 +137,10 @@ def build_holdings(
 ) -> Dict[str, Any]:
     """Value open positions at the latest price and roll up portfolio totals.
 
-    ``security_meta`` maps security_id -> {"ticker", "name"}.
+    ``security_meta`` maps security_id -> {"ticker", "name", "sector"}.
     """
     holdings: List[Dict[str, Any]] = []
+    sector_mv: Dict[str, float] = {}
     total_mv = 0.0
     total_cost = 0.0
     total_realized = 0.0
@@ -156,10 +157,12 @@ def build_holdings(
         unrealized = market_value - cost_basis
         return_pct = (unrealized / cost_basis * 100.0) if cost_basis > 0 else None
         meta = security_meta.get(sid, {})
+        sector = meta.get("sector") or "Unknown"
         holdings.append({
             "security_id": str(sid),
             "ticker": meta.get("ticker"),
             "name": meta.get("name"),
+            "sector": sector,
             "shares": round(pos["shares"], 4),
             "cost_basis": round(cost_basis, 2),
             "current_price": round(last, 2),
@@ -167,6 +170,7 @@ def build_holdings(
             "unrealized_gain": round(unrealized, 2),
             "return_pct": round(return_pct, 2) if return_pct is not None else None,
         })
+        sector_mv[sector] = sector_mv.get(sector, 0.0) + market_value
         total_mv += market_value
         total_cost += cost_basis
 
@@ -174,8 +178,19 @@ def build_holdings(
     total_unrealized = total_mv - total_cost
     total_return = (total_unrealized / total_cost * 100.0) if total_cost > 0 else None
 
+    # Sector allocation as a share of market value (largest first).
+    sector_allocation = [
+        {
+            "sector": sec,
+            "market_value": round(mv, 2),
+            "weight_pct": round(mv / total_mv * 100.0, 2) if total_mv > 0 else None,
+        }
+        for sec, mv in sorted(sector_mv.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+
     return {
         "holdings": holdings,
+        "sector_allocation": sector_allocation,
         "totals": {
             "market_value": round(total_mv, 2),
             "cost_basis": round(total_cost, 2),
@@ -265,43 +280,104 @@ class MirrorPortfolioService:
 
     async def compute_holdings(self, member_ids: List) -> Dict[str, Any]:
         """Load the members' priced trades and reconstruct combined holdings."""
-        from domains.congressional.models import CongressionalTrade
-        from domains.securities.models import Security, DailyPrice
+        return await reconstruct_holdings(self.session, member_ids)
 
-        if not member_ids:
-            return build_holdings({}, PriceBook([]), {})
 
-        trades = (await self.session.execute(
-            select(CongressionalTrade).where(
-                and_(
-                    CongressionalTrade.member_id.in_(member_ids),
-                    CongressionalTrade.security_id.isnot(None),
-                )
+async def reconstruct_holdings(session: AsyncSession, member_ids: List) -> Dict[str, Any]:
+    """Reconstruct combined holdings + returns for a set of members.
+
+    Shared by mirror portfolios (many members) and the member-portfolio view
+    (one member). Loads the members' priced trades, the relevant price series,
+    and security/sector metadata, then replays and values the positions.
+    """
+    from domains.congressional.models import CongressionalTrade
+    from domains.securities.models import Security, DailyPrice, Sector
+
+    if not member_ids:
+        return build_holdings({}, PriceBook([]), {})
+
+    trades = (await session.execute(
+        select(CongressionalTrade).where(
+            and_(
+                CongressionalTrade.member_id.in_(member_ids),
+                CongressionalTrade.security_id.isnot(None),
             )
-        )).scalars().all()
-        if not trades:
-            return build_holdings({}, PriceBook([]), {})
+        )
+    )).scalars().all()
+    if not trades:
+        return build_holdings({}, PriceBook([]), {})
 
-        security_ids = list({t.security_id for t in trades})
+    security_ids = list({t.security_id for t in trades})
 
-        price_rows = (await self.session.execute(
-            select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
-            .where(DailyPrice.security_id.in_(security_ids))
-        )).all()
-        pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+    price_rows = (await session.execute(
+        select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
+        .where(DailyPrice.security_id.in_(security_ids))
+    )).all()
+    pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
 
-        sec_rows = (await self.session.execute(
-            select(Security.id, Security.ticker, Security.name).where(Security.id.in_(security_ids))
-        )).all()
-        security_meta = {r.id: {"ticker": r.ticker, "name": r.name} for r in sec_rows}
+    sec_rows = (await session.execute(
+        select(Security.id, Security.ticker, Security.name, Sector.name.label("sector"))
+        .select_from(Security)
+        .join(Sector, Security.sector_gics_code == Sector.gics_code, isouter=True)
+        .where(Security.id.in_(security_ids))
+    )).all()
+    security_meta = {
+        r.id: {"ticker": r.ticker, "name": r.name, "sector": r.sector} for r in sec_rows
+    }
 
-        positions = replay_positions(trades, pricebook)
-        result = build_holdings(positions, pricebook, security_meta)
-        result["meta"] = {
-            "member_count": len(set(member_ids)),
-            "priced_trades": len(trades),
+    positions = replay_positions(trades, pricebook)
+    result = build_holdings(positions, pricebook, security_meta)
+    result["meta"] = {
+        "member_count": len(set(member_ids)),
+        "priced_trades": len(trades),
+    }
+    return result
+
+
+async def compare_member_holdings(session: AsyncSession, member_ids: List) -> Dict[str, Any]:
+    """Reconstruct each member's portfolio and surface cross-member overlap.
+
+    Returns a per-member summary (totals + top holdings + sector allocation) plus
+    the set of securities held by more than one member (the most useful signal
+    when comparing members). Intended for a small number of members (2-5).
+    """
+    members_out: List[Dict[str, Any]] = []
+    # security_id -> {ticker, name, holders: {member_id: market_value}}
+    overlap_index: Dict[str, Dict[str, Any]] = {}
+
+    for mid in _dedupe(member_ids):
+        result = await reconstruct_holdings(session, [mid])
+        holdings = result["holdings"]
+        members_out.append({
+            "member_id": str(mid),
+            "totals": result["totals"],
+            "sector_allocation": result.get("sector_allocation", [])[:6],
+            "top_holdings": holdings[:5],
+        })
+        for h in holdings:
+            entry = overlap_index.setdefault(
+                h["security_id"],
+                {"security_id": h["security_id"], "ticker": h["ticker"], "name": h["name"], "holders": {}},
+            )
+            entry["holders"][str(mid)] = h["market_value"]
+
+    common = [
+        {
+            "security_id": e["security_id"],
+            "ticker": e["ticker"],
+            "name": e["name"],
+            "held_by": list(e["holders"].keys()),
+            "combined_value": round(sum(e["holders"].values()), 2),
         }
-        return result
+        for e in overlap_index.values()
+        if len(e["holders"]) > 1
+    ]
+    common.sort(key=lambda c: c["combined_value"], reverse=True)
+
+    return {
+        "members": members_out,
+        "overlap": {"common_securities": common, "count": len(common)},
+    }
 
 
 def _dedupe(seq: List) -> List:

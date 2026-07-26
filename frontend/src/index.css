@@ -152,3 +152,17 @@
     @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900;
   }
 }
+
+/* Scrutiny ticker drawer transitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideIn {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[fadeIn_0\.15s_ease\],
+  .animate-\[slideIn_0\.2s_ease\] { animation: none !important; }
+}

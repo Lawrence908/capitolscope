@@ -111,6 +111,81 @@ async def get_conflicts(
     )
 
 
+@router.get("/ticker/{ticker}", summary="Congressional trades for one ticker")
+async def get_ticker_trades(ticker: str, limit: int = Query(300, ge=1, le=1000)):
+    """All congressional trades for a ticker (member, party, direction, amount,
+    30d return), with a summary — powers the ticker drawer."""
+    sym = ticker.strip().upper()
+
+    def compute():
+        from sqlalchemy import text as _t
+        with get_sync_db_session() as session:
+            rows = session.execute(_t(
+                """
+                SELECT t.transaction_date, t.notification_date, t.transaction_type,
+                       t.owner, t.amount_min, t.amount_max, t.amount_exact,
+                       t.price_change_30d, m.full_name, m.party,
+                       sec.name AS sector, se.name AS security_name
+                FROM congressional_trades t
+                JOIN congress_members m ON m.id = t.member_id
+                JOIN securities se ON se.id = t.security_id
+                LEFT JOIN sectors sec ON sec.gics_code = se.sector_gics_code
+                WHERE upper(se.ticker) = :sym
+                ORDER BY t.transaction_date DESC
+                """
+            ), {"sym": sym}).fetchall()
+
+        trades = []
+        buys = sells = 0
+        rets = []
+        members = set()
+        notional = 0.0
+        sector = None
+        security_name = None
+        for (tdate, ndate, ttype, owner, amin, amax, aexact, ret30,
+             name, party, sec_name, sec_secname) in rows:
+            sector = sector or sec_name
+            security_name = security_name or sec_secname
+            members.add(name)
+            if ttype == "P":
+                buys += 1
+            elif ttype == "S":
+                sells += 1
+            n = (float(aexact) if aexact
+                 else (float(amin) + float(amax)) / 2.0 if (amin and amax)
+                 else float(amin or amax) if (amin or amax) else 0.0)
+            notional += n
+            signed = None
+            if ret30 is not None and ttype in ("P", "S"):
+                signed = (1 if ttype == "P" else -1) * float(ret30)
+                rets.append(signed)
+            lag = (ndate - tdate).days if (ndate and tdate and ndate >= tdate) else None
+            trades.append({
+                "date": tdate.isoformat(),
+                "member": name, "party": party,
+                "direction": "BUY" if ttype == "P" else "SELL" if ttype == "S" else ttype,
+                "owner": owner, "amount": round(n, 0),
+                "signed_return_30d": round(signed, 4) if signed is not None else None,
+                "lag_days": lag,
+            })
+
+        return {
+            "ticker": sym,
+            "security_name": security_name,
+            "sector": sector,
+            "trade_count": len(trades),
+            "member_count": len(members),
+            "buys": buys, "sells": sells,
+            "total_notional": round(notional, 0),
+            "avg_return_30d": round(sum(rets) / len(rets), 4) if rets else None,
+            "trades": trades,
+        }
+
+    data = await _cached(f"ticker:{sym}", compute)
+    limited = {**data, "trades": data["trades"][:limit]}
+    return success_response(data=limited, meta={"ticker": sym})
+
+
 @router.get("/disclosure-lag", summary="Filing timeliness vs the STOCK Act clock")
 async def get_disclosure_lag():
     """Overall filing-timeliness stats against the 45-day STOCK Act limit, plus

@@ -5,6 +5,7 @@ import { Leaderboard, LegendRow } from '../../components/scrutiny/Leaderboard';
 import { MemberDossier } from '../../components/scrutiny/MemberDossier';
 import { ClusterFeed, ConflictsView, LagView } from '../../components/scrutiny/SignalViews';
 import { Eyebrow } from '../../components/scrutiny/primitives';
+import { TickerDrawer } from '../../components/scrutiny/TickerDrawer';
 import type { DossierOrigin } from '../../types/scrutiny';
 
 type Tab = 'leaderboard' | 'clusters' | 'conflicts' | 'lag';
@@ -29,6 +30,7 @@ const ScrutinyCommand: React.FC = () => {
   const [selected, setSelected] = useState<ScrutinyMember | null>(null);
   const [missingName, setMissingName] = useState<string | null>(null);
   const [origin, setOrigin] = useState<DossierOrigin | null>(null);
+  const [openTicker, setOpenTicker] = useState<string | null>(null);
 
   // lazy-load a section the first time its tab is opened
   useEffect(() => {
@@ -186,7 +188,11 @@ const ScrutinyCommand: React.FC = () => {
                   N members trading the same ticker &amp; side within 14 days
                 </span>
               </div>
-              <ClusterFeed clusters={data.clusters.clusters} onSelectMember={selectByName} />
+              <ClusterFeed
+                clusters={data.clusters.clusters}
+                onSelectMember={selectByName}
+                onSelectTicker={setOpenTicker}
+              />
             </section>
           ))}
 
@@ -205,6 +211,7 @@ const ScrutinyCommand: React.FC = () => {
                 leaderboard={data.conflicts.leaderboard}
                 topConflicts={data.conflicts.top_conflicts}
                 onSelectMember={selectByName}
+                onSelectTicker={setOpenTicker}
               />
             </section>
           ))}
@@ -218,6 +225,15 @@ const ScrutinyCommand: React.FC = () => {
             </section>
           ))}
       </main>
+
+      <TickerDrawer
+        ticker={openTicker}
+        onClose={() => setOpenTicker(null)}
+        onSelectMember={(name) => {
+          setOpenTicker(null);
+          selectByName(name);
+        }}
+      />
 
       <footer className="mx-auto max-w-[1400px] px-6 pb-10 pt-4">
         <p className="font-data text-[10px] leading-relaxed text-fog-500">

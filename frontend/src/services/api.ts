@@ -397,6 +397,11 @@ class APIClient {
     const res = await this.client.get(`/api/v1/analytics/disclosure-lag`);
     return res.data?.data;
   }
+
+  async getTickerTrades(ticker: string): Promise<import('../types/scrutiny').TickerDetail> {
+    const res = await this.client.get(`/api/v1/analytics/ticker/${encodeURIComponent(ticker)}`);
+    return res.data?.data;
+  }
 }
 
 // Create and export a singleton instance

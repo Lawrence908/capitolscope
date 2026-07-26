@@ -115,6 +115,28 @@ export const NameButton: React.FC<{
     <span className={className}>{name}</span>
   );
 
+// ---- clickable ticker (opens the ticker drawer) ----
+export const TickerButton: React.FC<{
+  ticker: string;
+  onClick?: (ticker: string) => void;
+  className?: string;
+}> = ({ ticker, onClick, className = '' }) =>
+  onClick ? (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick(ticker);
+      }}
+      className={`transition-colors hover:text-verdigris-400 ${className}`}
+      title={`${ticker} congressional flow`}
+    >
+      {ticker}
+    </button>
+  ) : (
+    <span className={className}>{ticker}</span>
+  );
+
 // ---- small mono label ----
 export const Eyebrow: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,

@@ -6,12 +6,13 @@ import type {
   DisclosureLag,
   DossierOrigin,
 } from '../../types/scrutiny';
-import { fmtMoney, fmtSigned, PartyTag, Eyebrow, partyMeta, NameButton } from './primitives';
+import { fmtMoney, fmtSigned, PartyTag, Eyebrow, partyMeta, NameButton, TickerButton } from './primitives';
 
 const retColor = (r: number | null) =>
   r == null ? '#90a29d' : r >= 0 ? '#43a897' : '#d6707b';
 
 type SelectFn = (name: string, origin?: DossierOrigin) => void;
+type TickerFn = (ticker: string) => void;
 
 // ---------- Clusters ----------
 const PartyMix: React.FC<{ mix: Record<string, number> }> = ({ mix }) => (
@@ -28,10 +29,11 @@ const PartyMix: React.FC<{ mix: Record<string, number> }> = ({ mix }) => (
   </div>
 );
 
-export const ClusterFeed: React.FC<{ clusters: ClusterEvent[]; onSelectMember?: SelectFn }> = ({
-  clusters,
-  onSelectMember,
-}) => (
+export const ClusterFeed: React.FC<{
+  clusters: ClusterEvent[];
+  onSelectMember?: SelectFn;
+  onSelectTicker?: TickerFn;
+}> = ({ clusters, onSelectMember, onSelectTicker }) => (
   <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 xl:grid-cols-3">
     {clusters.map((c, i) => (
       <div
@@ -40,7 +42,11 @@ export const ClusterFeed: React.FC<{ clusters: ClusterEvent[]; onSelectMember?: 
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-data text-lg font-600 tracking-tight text-fog-200">{c.ticker}</span>
+            <TickerButton
+              ticker={c.ticker}
+              onClick={onSelectTicker}
+              className="font-data text-lg font-600 tracking-tight text-fog-200"
+            />
             <span
               className="font-data text-[10px] tracking-[0.1em] px-1.5 py-0.5 rounded-sm"
               style={{
@@ -99,7 +105,8 @@ export const ConflictsView: React.FC<{
   leaderboard: ConflictMember[];
   topConflicts: TopConflict[];
   onSelectMember?: SelectFn;
-}> = ({ leaderboard, topConflicts, onSelectMember }) => (
+  onSelectTicker?: TickerFn;
+}> = ({ leaderboard, topConflicts, onSelectMember, onSelectTicker }) => (
   <div className="grid grid-cols-1 gap-6 p-4 lg:grid-cols-[1.1fr_1fr]">
     <div>
       <Eyebrow>Flagged members · by conflicted notional</Eyebrow>
@@ -147,7 +154,11 @@ export const ConflictsView: React.FC<{
             >
               {c.direction.charAt(0)}
             </span>
-            <span className="font-data font-600 text-fog-200 w-14">{c.ticker}</span>
+            <TickerButton
+              ticker={c.ticker}
+              onClick={onSelectTicker}
+              className="font-data font-600 text-fog-200 w-14 text-left"
+            />
             <div className="min-w-0 flex-1">
               <NameButton
                 name={c.member}

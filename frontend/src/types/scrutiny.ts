@@ -82,6 +82,30 @@ export interface LagFiler {
   avg_lag_days: number;
 }
 
+export interface TickerTrade {
+  date: string;
+  member: string;
+  party: string | null;
+  direction: 'BUY' | 'SELL' | string;
+  owner: string | null;
+  amount: number;
+  signed_return_30d: number | null;
+  lag_days: number | null;
+}
+
+export interface TickerDetail {
+  ticker: string;
+  security_name: string | null;
+  sector: string | null;
+  trade_count: number;
+  member_count: number;
+  buys: number;
+  sells: number;
+  total_notional: number;
+  avg_return_30d: number | null;
+  trades: TickerTrade[];
+}
+
 export interface DisclosureLag {
   trades_with_lag: number;
   avg_lag_days: number | null;

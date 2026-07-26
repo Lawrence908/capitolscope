@@ -33,7 +33,7 @@ router = APIRouter()
 
 @router.get(
     "/subscriptions",
-    response_model=ResponseEnvelope[UserSubscriptionResponse],
+    response_model=ResponseEnvelope[Dict[str, Any]],
     responses={
         200: {"description": "User subscriptions retrieved successfully"},
         401: {"description": "Not authenticated"},
@@ -43,38 +43,22 @@ router = APIRouter()
 async def get_user_subscriptions(
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
-) -> ResponseEnvelope[UserSubscriptionResponse]:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
-    Get user's notification subscriptions and preferences.
-    
+    Get the user's notification preferences (channels + digest cadence).
+
     **Authenticated Feature**: Requires user authentication.
     """
     logger.info(f"Getting user subscriptions: user_id={current_user.id}")
-    
-    # TODO: Implement subscription retrieval
-    
-    preferences = SubscriptionPreferences(
-        email_frequency="daily",
-        trade_alerts=True,
-        portfolio_updates=True,
-        market_alerts=False,
-        newsletter=True
-    )
-    
-    data = UserSubscriptionResponse(
-        user_id=current_user.id,
-        subscriptions=[],
-        preferences=preferences,
-        total_subscriptions=0,
-        last_updated=datetime.utcnow()
-    )
-    
-    return create_response(data=data)
+    from domains.notifications.subscription_service import SubscriptionService, serialize_subscription
+
+    sub = await SubscriptionService(session).get_or_create(current_user.id)
+    return create_response(data=serialize_subscription(sub))
 
 
 @router.put(
     "/subscriptions",
-    response_model=ResponseEnvelope[SubscriptionUpdateResponse],
+    response_model=ResponseEnvelope[Dict[str, Any]],
     responses={
         200: {"description": "Subscription preferences updated successfully"},
         400: {"description": "Invalid preferences"},
@@ -86,31 +70,18 @@ async def update_user_subscriptions(
     session: AsyncSession = Depends(get_db_session),
     preferences: Dict[str, Any] = Body(..., description="Notification preferences"),
     current_user: User = Depends(get_current_active_user),
-) -> ResponseEnvelope[SubscriptionUpdateResponse]:
+) -> ResponseEnvelope[Dict[str, Any]]:
     """
-    Update user's notification preferences.
-    
+    Update the user's notification preferences. ``email_frequency`` accepts
+    instant / daily / weekly (the digest cadence).
+
     **Authenticated Feature**: Requires user authentication.
     """
     logger.info(f"Updating user subscriptions: user_id={current_user.id}, preferences={preferences}")
-    
-    # TODO: Implement subscription update
-    
-    updated_preferences = SubscriptionPreferences(
-        email_frequency=preferences.get("email_frequency", "daily"),
-        trade_alerts=preferences.get("trade_alerts", True),
-        portfolio_updates=preferences.get("portfolio_updates", True),
-        market_alerts=preferences.get("market_alerts", False),
-        newsletter=preferences.get("newsletter", True)
-    )
-    
-    data = SubscriptionUpdateResponse(
-        user_id=current_user.id,
-        updated_preferences=updated_preferences,
-        updated_at=datetime.utcnow()
-    )
-    
-    return create_response(data=data)
+    from domains.notifications.subscription_service import SubscriptionService, serialize_subscription
+
+    sub = await SubscriptionService(session).update(current_user.id, dict(preferences))
+    return create_response(data=serialize_subscription(sub))
 
 
 @router.get(
@@ -652,6 +623,111 @@ async def get_notification_analytics(
     }
     
     return create_response(data=data)
+
+
+# ============================================================================
+# WEB PUSH SUBSCRIPTIONS (device registration)
+# ============================================================================
+
+@router.get("/push/vapid-key", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_vapid_public_key(
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Public VAPID key the browser needs to subscribe (null if push isn't configured)."""
+    from core.config import settings as _settings
+    return create_response(data={"public_key": _settings.VAPID_PUBLIC_KEY})
+
+
+@router.post("/push/subscribe", response_model=ResponseEnvelope[Dict[str, Any]])
+async def register_push(
+    body: Dict[str, Any] = Body(..., description="Push subscription: endpoint, keys.p256dh, keys.auth"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Register a browser Web Push subscription for the current user."""
+    from domains.notifications.channels import register_push_subscription
+
+    endpoint = body.get("endpoint")
+    keys = body.get("keys") or {}
+    if not endpoint or not keys.get("p256dh") or not keys.get("auth"):
+        raise HTTPException(status_code=400, detail="endpoint and keys.p256dh/keys.auth are required")
+
+    await register_push_subscription(
+        session, current_user.id, endpoint, keys["p256dh"], keys["auth"], body.get("user_agent")
+    )
+    return create_response(data={"registered": True})
+
+
+@router.post("/push/unsubscribe", response_model=ResponseEnvelope[Dict[str, Any]])
+async def unregister_push(
+    body: Dict[str, Any] = Body(..., description="{ endpoint }"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Deactivate a Web Push subscription for the current user."""
+    from domains.notifications.channels import unregister_push_subscription
+
+    endpoint = body.get("endpoint")
+    if not endpoint:
+        raise HTTPException(status_code=400, detail="endpoint is required")
+    ok = await unregister_push_subscription(session, current_user.id, endpoint)
+    return create_response(data={"unregistered": ok})
+
+
+# ============================================================================
+# IN-APP NOTIFICATION INBOX (the "bell")
+# ============================================================================
+
+@router.get("/inbox", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_inbox(
+    unread_only: bool = Query(False, description="Only return unread notifications"),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """List the user's in-app notifications with the unread count."""
+    from domains.notifications.inapp_service import InAppNotificationService
+    data = await InAppNotificationService(session).list(
+        current_user.id, unread_only=unread_only, skip=skip, limit=limit
+    )
+    return create_response(data=data)
+
+
+@router.get("/inbox/unread-count", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_inbox_unread_count(
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Unread in-app notification count (for the bell badge)."""
+    from domains.notifications.inapp_service import InAppNotificationService
+    unread = await InAppNotificationService(session).unread_count(current_user.id)
+    return create_response(data={"unread": unread})
+
+
+@router.post("/inbox/read-all", response_model=ResponseEnvelope[Dict[str, Any]])
+async def mark_inbox_all_read(
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Mark all of the user's in-app notifications as read."""
+    from domains.notifications.inapp_service import InAppNotificationService
+    count = await InAppNotificationService(session).mark_all_read(current_user.id)
+    return create_response(data={"marked_read": count})
+
+
+@router.post("/inbox/{notification_id}/read", response_model=ResponseEnvelope[Dict[str, Any]])
+async def mark_inbox_read(
+    notification_id: str = Path(..., description="Notification UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Mark a single in-app notification as read (owner only)."""
+    from domains.notifications.inapp_service import InAppNotificationService
+    ok = await InAppNotificationService(session).mark_read(current_user.id, notification_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    return create_response(data={"marked_read": True, "id": notification_id})
 
 
 # ============================================================================

@@ -17,6 +17,7 @@ import {
   ScaleIcon,
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
+import NotificationBell from './notifications/NotificationBell';
 import { Eyebrow } from './ui';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -233,6 +234,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="hidden font-data text-[11px] uppercase tracking-[0.1em] text-content-faint lg:block">
                   Updated {new Date().toLocaleDateString()}
                 </div>
+                <NotificationBell />
                 <DarkModeToggle />
 
                 {/* User Menu */}

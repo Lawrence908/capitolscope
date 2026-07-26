@@ -230,3 +230,34 @@ export interface MirrorHoldingsResult {
     chamber?: string | null;
   };
 }
+
+// ---- In-app notifications (bell) ----
+export interface InboxNotification {
+  id: string;
+  title: string;
+  message: string;
+  type: string | null;
+  priority: string;
+  is_read: boolean;
+  read_at?: string | null;
+  created_at?: string | null;
+  extra_data: Record<string, unknown>;
+}
+
+export interface InboxResult {
+  items: InboxNotification[];
+  total: number;
+  unread: number;
+}
+
+export interface NotificationSubscription {
+  email_enabled: boolean;
+  push_enabled: boolean;
+  sms_enabled: boolean;
+  trade_alerts: boolean;
+  portfolio_updates: boolean;
+  market_alerts: boolean;
+  newsletter: boolean;
+  email_frequency: 'instant' | 'daily' | 'weekly';
+  alert_threshold: number;
+}

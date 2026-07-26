@@ -3,6 +3,7 @@ Celery application configuration for CapitolScope background tasks.
 """
 
 from celery import Celery
+from celery.schedules import crontab
 from core.config import get_settings
 
 settings = get_settings()
@@ -46,7 +47,18 @@ celery_app.conf.beat_schedule = {
     },
     'process-pending-trade-alerts': {
         'task': 'background.tasks.process_pending_trade_alerts',
-        'schedule': 600.0,  # Every 10 min; batched digest, deduped via NotificationDelivery
+        'schedule': 600.0,  # Every 10 min; instant subscribers only
+        'kwargs': {'lookback_hours': 4, 'cadences': ['instant']},
+    },
+    'process-daily-trade-alerts': {
+        'task': 'background.tasks.process_pending_trade_alerts',
+        'schedule': crontab(hour=13, minute=0),  # Daily 13:00 UTC; daily-digest subscribers
+        'kwargs': {'lookback_hours': 30, 'cadences': ['daily']},
+    },
+    'process-weekly-trade-alerts': {
+        'task': 'background.tasks.process_pending_trade_alerts',
+        'schedule': crontab(hour=13, minute=0, day_of_week=1),  # Mondays 13:00 UTC
+        'kwargs': {'lookback_hours': 24 * 8, 'cadences': ['weekly']},
     },
     # Analytics data-readiness refreshes (Phase 0 backfills).
     'refresh-daily-prices': {

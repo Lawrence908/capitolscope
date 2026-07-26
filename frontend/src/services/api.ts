@@ -13,6 +13,8 @@ import type {
   MirrorPortfolio,
   MirrorHoldingsResult,
   MemberComparisonResult,
+  InboxResult,
+  NotificationSubscription,
 } from '../types';
 
 class APIClient {
@@ -448,6 +450,43 @@ class APIClient {
       `/api/v1/portfolios/members/compare?member_ids=${encodeURIComponent(memberIds.join(','))}`
     );
     return response.data?.data as MemberComparisonResult;
+  }
+
+  // ---- In-app notification inbox (bell) ----
+  async getInbox(params?: { unreadOnly?: boolean; limit?: number; skip?: number }): Promise<InboxResult> {
+    const q = new URLSearchParams();
+    if (params?.unreadOnly) q.set('unread_only', 'true');
+    if (params?.limit != null) q.set('limit', String(params.limit));
+    if (params?.skip != null) q.set('skip', String(params.skip));
+    const qs = q.toString();
+    const response = await this.client.get(`/api/v1/notifications/inbox${qs ? `?${qs}` : ''}`);
+    return (response.data?.data as InboxResult) ?? { items: [], total: 0, unread: 0 };
+  }
+
+  async getInboxUnreadCount(): Promise<number> {
+    const response = await this.client.get('/api/v1/notifications/inbox/unread-count');
+    return (response.data?.data?.unread as number) ?? 0;
+  }
+
+  async markInboxRead(id: string): Promise<void> {
+    await this.client.post(`/api/v1/notifications/inbox/${encodeURIComponent(id)}/read`);
+  }
+
+  async markInboxAllRead(): Promise<void> {
+    await this.client.post('/api/v1/notifications/inbox/read-all');
+  }
+
+  // ---- Notification subscription / preferences ----
+  async getSubscriptions(): Promise<NotificationSubscription> {
+    const response = await this.client.get('/api/v1/notifications/subscriptions');
+    return response.data?.data as NotificationSubscription;
+  }
+
+  async updateSubscriptions(
+    data: Partial<NotificationSubscription>
+  ): Promise<NotificationSubscription> {
+    const response = await this.client.put('/api/v1/notifications/subscriptions', data);
+    return response.data?.data as NotificationSubscription;
   }
 
   // ---- Scrutiny analytics ----

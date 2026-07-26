@@ -212,6 +212,20 @@ class TradeAlertRule(CapitolScopeBaseModel):
     notification_deliveries = relationship("NotificationDelivery", back_populates="alert_rule")
 
 
+class PushSubscription(CapitolScopeBaseModel):
+    """A browser Web Push subscription registered by a user's device."""
+    __tablename__ = "push_subscriptions"
+
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    endpoint = Column(Text, nullable=False, unique=True)  # push service URL (unique per device)
+    p256dh_key = Column(Text, nullable=False)  # client public key
+    auth_key = Column(Text, nullable=False)    # client auth secret
+    user_agent = Column(String(300))
+    is_active = Column(Boolean, default=True, nullable=False)
+
+    user = relationship("User")
+
+
 class NotificationDelivery(CapitolScopeBaseModel):
     """Tracking of notification deliveries for trade alerts."""
     __tablename__ = "notification_deliveries"
@@ -257,5 +271,6 @@ __all__ = [
     "NewsletterSubscription",
     "NotificationAnalytics",
     "TradeAlertRule",
-    "NotificationDelivery"
-] 
+    "NotificationDelivery",
+    "PushSubscription",
+]

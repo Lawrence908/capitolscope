@@ -99,11 +99,59 @@ class NotificationService:
         # Only record deliveries on success so a failed digest is retried on the
         # next run rather than being permanently suppressed by the dedup filter.
         if success:
-            await self._bulk_track_delivery(user.id, matches)
+            title, message, members, tickers = self._digest_summary(items)
+            await self._create_inapp_notification(user.id, title, message, len(items), members, tickers)
+            await self._bulk_track_delivery(user.id, matches)      # commits in-app + deliveries
+            await self._dispatch_extra_channels(user, title, message)  # push / SMS (Pro+)
             logger.info(f"Digest with {len(items)} trades sent to {user.email}")
         else:
             logger.error(f"Failed to send digest to {user.email}; will retry next run")
         return success
+
+    @staticmethod
+    def _digest_summary(items: List[Dict[str, Any]]) -> tuple:
+        """Build the short title/message shared by in-app, push, and SMS."""
+        members = list(dict.fromkeys(it["member_name"] for it in items))  # ordered-unique
+        tickers = [it["ticker"] for it in items if it.get("ticker")]
+        member_summary = ", ".join(members[:3]) + ("…" if len(members) > 3 else "")
+        title = f"{len(items)} new congressional trade(s) matched your alerts"
+        message = f"{len(members)} member(s) you follow: {member_summary}"
+        return title, message, members, tickers
+
+    async def _create_inapp_notification(
+        self, user_id, title: str, message: str, count: int, members: List[str], tickers: List[str]
+    ) -> None:
+        """Add an in-app (bell) notification, batched into the delivery commit."""
+        try:
+            from domains.notifications.inapp_service import InAppNotificationService
+
+            await InAppNotificationService(self.session).create(
+                user_id,
+                title=title,
+                message=message,
+                notification_type="TRADE_ALERT",
+                priority="high" if count >= 10 else "normal",
+                extra_data={"count": count, "members": members, "tickers": tickers[:20]},
+                commit=False,
+            )
+        except Exception as e:
+            logger.error(f"Failed to create in-app notification for {user_id}: {e}")
+
+    async def _dispatch_extra_channels(self, user, title: str, message: str) -> None:
+        """Fan out to web push / SMS for Pro+ users who enabled them (no-op otherwise)."""
+        try:
+            from sqlalchemy import select
+            from domains.notifications.models import NotificationSubscription
+            from domains.notifications.channels import ChannelDispatcher
+
+            sub = (await self.session.execute(
+                select(NotificationSubscription).where(NotificationSubscription.user_id == user.id)
+            )).scalar_one_or_none()
+            if sub is None:
+                return  # no subscription -> no extra channels enabled
+            await ChannelDispatcher(self.session).dispatch(user, sub, title, message)
+        except Exception as e:
+            logger.error(f"Extra-channel dispatch failed for {user.id}: {e}")
 
     def _build_digest_item(self, trade, rule) -> Dict[str, Any]:
         """Build a template row dict from an ORM trade + the rule that matched it."""

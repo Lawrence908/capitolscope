@@ -399,3 +399,136 @@ async def export_portfolio_data(
     }
     
     return create_response(data=data) 
+
+# ============================================================================
+# MIRROR PORTFOLIOS (Pro+): user-defined portfolios that combine members
+# ============================================================================
+
+from pydantic import BaseModel, Field  # noqa: E402
+from domains.portfolio.mirror_service import MirrorPortfolioService  # noqa: E402
+
+_MIRROR_TIERS = ['PRO', 'PREMIUM', 'ENTERPRISE']
+
+
+class MirrorCreateRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=255)
+    description: Optional[str] = Field(None, max_length=2000)
+    member_ids: List[str] = Field(default_factory=list, description="Congress member UUIDs to mirror")
+
+
+class MirrorMembersRequest(BaseModel):
+    member_ids: List[str] = Field(..., description="Full replacement set of congress member UUIDs")
+
+
+def _serialize_mirror(mirror) -> Dict[str, Any]:
+    links = getattr(mirror, "members", [])
+    members = []
+    for link in links:
+        cm = getattr(link, "member", None)
+        members.append({
+            "member_id": str(link.member_id),
+            "name": getattr(cm, "display_name", None) or getattr(cm, "full_name", None),
+            "party": getattr(cm, "party", None),
+            "state": getattr(cm, "state", None),
+        })
+    member_ids = [m["member_id"] for m in members]
+    return {
+        "id": str(mirror.id),
+        "name": mirror.name,
+        "description": mirror.description,
+        "is_active": mirror.is_active,
+        "member_ids": member_ids,
+        "members": members,
+        "member_count": len(member_ids),
+        "created_at": mirror.created_at.isoformat() if mirror.created_at else None,
+        "updated_at": mirror.updated_at.isoformat() if mirror.updated_at else None,
+    }
+
+
+@router.post("/mirror", response_model=ResponseEnvelope[Dict[str, Any]])
+async def create_mirror_portfolio(
+    body: MirrorCreateRequest,
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Create a mirror portfolio that combines one or more members' trades. **Pro+**."""
+    logger.info(f"Creating mirror portfolio for user {current_user.id} ({len(body.member_ids)} members)")
+    try:
+        service = MirrorPortfolioService(session)
+        mirror = await service.create(current_user.id, body.name, body.description, body.member_ids)
+        full = await service.get(mirror.id, current_user.id)
+        return create_response(data=_serialize_mirror(full))
+    except Exception as e:
+        logger.error(f"Error creating mirror portfolio: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create mirror portfolio")
+
+
+@router.get("/mirror", response_model=ResponseEnvelope[List[Dict[str, Any]]])
+async def list_mirror_portfolios(
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[List[Dict[str, Any]]]:
+    """List the current user's mirror portfolios. **Pro+**."""
+    service = MirrorPortfolioService(session)
+    mirrors = await service.list_for_user(current_user.id)
+    return create_response(data=[_serialize_mirror(m) for m in mirrors])
+
+
+@router.get("/mirror/{mirror_id}", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_mirror_portfolio(
+    mirror_id: str = Path(..., description="Mirror portfolio UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Get a single mirror portfolio and its members. **Pro+**."""
+    service = MirrorPortfolioService(session)
+    mirror = await service.get(mirror_id, current_user.id)
+    if not mirror:
+        raise HTTPException(status_code=404, detail="Mirror portfolio not found")
+    return create_response(data=_serialize_mirror(mirror))
+
+
+@router.put("/mirror/{mirror_id}/members", response_model=ResponseEnvelope[Dict[str, Any]])
+async def set_mirror_members(
+    body: MirrorMembersRequest,
+    mirror_id: str = Path(..., description="Mirror portfolio UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Replace the set of members a mirror portfolio tracks. **Pro+**."""
+    service = MirrorPortfolioService(session)
+    mirror = await service.set_members(mirror_id, current_user.id, body.member_ids)
+    if not mirror:
+        raise HTTPException(status_code=404, detail="Mirror portfolio not found")
+    return create_response(data=_serialize_mirror(mirror))
+
+
+@router.delete("/mirror/{mirror_id}", response_model=ResponseEnvelope[Dict[str, Any]])
+async def delete_mirror_portfolio(
+    mirror_id: str = Path(..., description="Mirror portfolio UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Delete a mirror portfolio. **Pro+**."""
+    service = MirrorPortfolioService(session)
+    deleted = await service.delete(mirror_id, current_user.id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Mirror portfolio not found")
+    return create_response(data={"deleted": True, "id": mirror_id})
+
+
+@router.get("/mirror/{mirror_id}/holdings", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_mirror_holdings(
+    mirror_id: str = Path(..., description="Mirror portfolio UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Combined holdings + returns, reconstructed from the members' trades. **Pro+**."""
+    service = MirrorPortfolioService(session)
+    mirror = await service.get(mirror_id, current_user.id)
+    if not mirror:
+        raise HTTPException(status_code=404, detail="Mirror portfolio not found")
+    member_ids = [m.member_id for m in mirror.members]
+    result = await service.compute_holdings(member_ids)
+    result["mirror"] = _serialize_mirror(mirror)
+    return create_response(data=result)

@@ -46,7 +46,7 @@ from core.config import settings
 from core.database import init_database, close_database
 from core.logging import configure_logging, setup_file_logging
 from core.email import email_service
-from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints, stripe, analytics
+from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints, stripe, analytics, signals
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
@@ -86,9 +86,15 @@ async def lifespan(app: FastAPI):
         # Initialize email service
         logger.info("Email service initialized")
         
-        # Add any other startup tasks here
+        # Warm the machine-facing Signals caches in the background so external
+        # consumers (canary, Zeus) never hit a cold heavy compute.
+        import asyncio as _asyncio
+        from api.signals import cache_warmer_loop
+        _asyncio.create_task(cache_warmer_loop())
+        logger.info("Signals cache warmer started")
+
         logger.info("Application startup completed")
-        
+
         yield
         
     finally:
@@ -209,6 +215,7 @@ app.include_router(portfolios.router, prefix=f"{settings.API_V1_PREFIX}/portfoli
 app.include_router(market_data.router, prefix=f"{settings.API_V1_PREFIX}/market-data", tags=["Market Data"])
 app.include_router(notifications.router, prefix=f"{settings.API_V1_PREFIX}/notifications", tags=["Notifications"])
 app.include_router(analytics.router, prefix=f"{settings.API_V1_PREFIX}/analytics", tags=["Analytics"])
+app.include_router(signals.router, prefix=f"{settings.API_V1_PREFIX}/signals", tags=["Signals"])
 
 # Development endpoints (disabled - using real database endpoints)
 # app.include_router(dev_endpoints.router, prefix=f"{settings.API_V1_PREFIX}/congressional", tags=["Development"])

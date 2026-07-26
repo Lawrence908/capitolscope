@@ -93,6 +93,13 @@ class Settings(BaseSettings):
         description="Address to notify when a congressional ingestion run fails or degrades. If unset, failures are logged only.",
     )
 
+    # Machine-facing Signals API (consumed by external systems: canary, Zeus).
+    # When unset the /signals endpoints refuse all requests (503) rather than
+    # serving without auth.
+    SIGNALS_API_KEY: Optional[SecretStr] = Field(
+        None, description="Shared key required in the X-API-Key header for /api/v1/signals/*"
+    )
+
     # SendGrid Configuration
     SENDGRID_API_KEY: Optional[SecretStr] = Field(None, description="SendGrid API key")
     SENDGRID_FROM_EMAIL: Optional[str] = Field("noreply@capitolscope.com", description="SendGrid from email address")

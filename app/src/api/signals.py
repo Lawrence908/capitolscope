@@ -84,6 +84,7 @@ def _active_tickers(days: int, limit: int):
             WHERE t.security_id IS NOT NULL
               AND t.transaction_type IN ('P', 'S')
               AND t.transaction_date >= (CURRENT_DATE - CAST(:days AS INTEGER))
+              AND t.transaction_date <= CURRENT_DATE
             GROUP BY se.ticker
             ORDER BY members DESC, notional DESC
             LIMIT :lim
@@ -107,8 +108,11 @@ def _active_tickers(days: int, limit: int):
 def _recent_trades(days: int, limit: int, ticker: Optional[str], party: Optional[str],
                    direction: Optional[str], min_amount: Optional[float]):
     from sqlalchemy import text
-    clauses = ["t.transaction_date >= (CURRENT_DATE - CAST(:days AS INTEGER))",
-               "t.transaction_type IN ('P','S')"]
+    clauses = [
+        "t.transaction_date >= (CURRENT_DATE - CAST(:days AS INTEGER)) "
+        "AND t.transaction_date <= CURRENT_DATE",
+        "t.transaction_type IN ('P','S')",
+    ]
     params: Dict[str, Any] = {"days": days, "lim": limit}
     if ticker:
         clauses.append("upper(se.ticker) = :ticker")
@@ -169,6 +173,7 @@ def _sector_flow(days: int):
             JOIN sectors sec ON sec.gics_code = se.sector_gics_code
             WHERE t.transaction_type IN ('P','S')
               AND t.transaction_date >= (CURRENT_DATE - CAST(:days AS INTEGER))
+              AND t.transaction_date <= CURRENT_DATE
             GROUP BY sec.name
             ORDER BY (COALESCE(SUM({_NOTIONAL_SQL}) FILTER (WHERE t.transaction_type='P'),0)
                      - COALESCE(SUM({_NOTIONAL_SQL}) FILTER (WHERE t.transaction_type='S'),0)) DESC
@@ -213,6 +218,7 @@ def _most_active_members(days: int, limit: int):
             LEFT JOIN securities se ON se.id = t.security_id
             WHERE t.transaction_type IN ('P','S')
               AND t.transaction_date >= (CURRENT_DATE - CAST(:days AS INTEGER))
+              AND t.transaction_date <= CURRENT_DATE
             GROUP BY m.full_name, m.party
             ORDER BY trades DESC, notional DESC
             LIMIT :lim

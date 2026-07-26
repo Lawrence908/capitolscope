@@ -606,7 +606,7 @@ def process_pending_trade_alerts(self, lookback_hours: int = 48):
 
         async def _run():
             from collections import defaultdict
-            from datetime import datetime, timedelta
+            from datetime import datetime, timedelta, timezone
             from sqlalchemy import select
             from sqlalchemy.orm import joinedload
 
@@ -620,7 +620,8 @@ def process_pending_trade_alerts(self, lookback_hours: int = 48):
             await manager.initialize()
             try:
                 async with manager.session_factory() as session:
-                    cutoff = datetime.utcnow() - timedelta(hours=lookback_hours)
+                    # created_at is timezone-aware (timestamptz); use an aware UTC bound.
+                    cutoff = datetime.now(timezone.utc) - timedelta(hours=lookback_hours)
                     trades = (
                         await session.execute(
                             select(CongressionalTrade)

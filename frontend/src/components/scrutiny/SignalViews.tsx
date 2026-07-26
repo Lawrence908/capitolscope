@@ -45,7 +45,7 @@ export const ClusterFeed: React.FC<{
             <TickerButton
               ticker={c.ticker}
               onClick={onSelectTicker}
-              className="font-data text-lg font-600 tracking-tight text-content"
+              className="font-data text-lg font-semibold tracking-tight text-content"
             />
             <span
               className="font-data text-[10px] tracking-[0.1em] px-1.5 py-0.5 rounded-sm"
@@ -66,7 +66,7 @@ export const ClusterFeed: React.FC<{
         </div>
 
         <div className="mt-3 flex items-end gap-1.5">
-          <span className="font-data text-3xl font-500 tabular-nums leading-none text-content">
+          <span className="font-data text-3xl font-medium tabular-nums leading-none text-content">
             {c.member_count}
           </span>
           <span className="pb-0.5 font-ui text-xs text-content-faint">
@@ -119,7 +119,7 @@ export const ConflictsView: React.FC<{
                   name={m.member}
                   onClick={onSelectMember}
                   origin={{ tab: 'conflicts', label: 'the conflicts view' }}
-                  className="truncate font-ui font-600 text-content"
+                  className="truncate font-ui font-semibold text-content"
                 />
                 <PartyTag party={m.party} />
               </div>
@@ -157,7 +157,7 @@ export const ConflictsView: React.FC<{
             <TickerButton
               ticker={c.ticker}
               onClick={onSelectTicker}
-              className="font-data font-600 text-content w-14 text-left"
+              className="font-data font-semibold text-content w-14 text-left"
             />
             <div className="min-w-0 flex-1">
               <NameButton
@@ -195,7 +195,7 @@ export const LagView: React.FC<{ lag: DisclosureLag; onSelectMember?: SelectFn }
         ].map((s) => (
           <div key={s.k} className="rounded-md border border-line bg-surface-inset p-4">
             <div className="font-data text-[10px] uppercase tracking-[0.12em] text-content-faint">{s.k}</div>
-            <div className="mt-2 font-data text-2xl font-500 tabular-nums" style={{ color: s.c }}>
+            <div className="mt-2 font-data text-2xl font-medium tabular-nums" style={{ color: s.c }}>
               {s.v}
             </div>
           </div>

@@ -272,11 +272,12 @@ class NotificationDeliveryCRUD:
         API layer can render trade details without N+1 queries.
         """
         try:
-            from datetime import datetime, timedelta
+            from datetime import datetime, timedelta, timezone
             # Imported lazily to avoid a circular import at module load time
             # (congressional.models -> ... -> notifications.crud).
             from domains.congressional.models import CongressionalTrade
-            since_date = datetime.utcnow() - timedelta(days=days)
+            # created_at is timezone-aware (timestamptz); use an aware UTC bound.
+            since_date = datetime.now(timezone.utc) - timedelta(days=days)
 
             conditions = [
                 NotificationDelivery.user_id == user_id,

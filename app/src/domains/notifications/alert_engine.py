@@ -71,7 +71,7 @@ class AlertRuleEngine:
         """Find users with amount-based alerts that should trigger."""
         try:
             # Get trade amount (use max amount if range)
-            trade_amount = trade.amount_max or trade.amount_exact or 0
+            trade_amount = trade.amount_max or trade.amount_exact or trade.amount_min or 0
             
             query = select(TradeAlertRule).where(
                 and_(
@@ -152,7 +152,7 @@ class AlertRuleEngine:
                 for rule in ticker_rules.get(trade.ticker.upper(), ()):
                     matches.append((trade, rule))
 
-            trade_amount = trade.amount_max or trade.amount_exact or 0  # amount alerts
+            trade_amount = trade.amount_max or trade.amount_exact or trade.amount_min or 0  # amount alerts
             for rule in amount_rules:
                 if rule.threshold_value <= trade_amount:
                     matches.append((trade, rule))

@@ -97,12 +97,13 @@ class TestMemberAlertMatching:
         assert result == [rule]
 
 
-def _trade(member_id, ticker=None, amount_max=None, amount_exact=None):
+def _trade(member_id, ticker=None, amount_max=None, amount_exact=None, amount_min=None):
     return SimpleNamespace(
         member_id=member_id,
         ticker=ticker,
         amount_max=amount_max,
         amount_exact=amount_exact,
+        amount_min=amount_min,
     )
 
 
@@ -132,6 +133,18 @@ class TestBatchMatching:
         assert len(matches) == 3
         # The rules query is issued exactly once regardless of trade count.
         assert session.execute.call_count == 1
+
+    @pytest.mark.asyncio
+    async def test_amount_falls_back_to_amount_min_when_only_min_set(self):
+        # A trade disclosing only a lower bound must still clear a threshold at
+        # or below that bound (regression: amount_min was previously ignored).
+        user = uuid.uuid4()
+        rules = [_rule(user_id=user, alert_type="amount_threshold", threshold_value=1_000_00)]
+        session, _ = _mock_session_returning(rules)
+        engine = AlertRuleEngine(session)
+        trades = [_trade(uuid.uuid4(), amount_min=5_000_00, amount_max=None, amount_exact=None)]
+        matches = await engine.match_trades_batch(trades)
+        assert len(matches) == 1
 
     @pytest.mark.asyncio
     async def test_inactive_rules_excluded_by_query(self):

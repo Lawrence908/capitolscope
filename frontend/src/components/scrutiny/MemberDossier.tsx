@@ -22,7 +22,7 @@ const Row: React.FC<{
     <div className="flex items-baseline justify-between">
       <div className="flex items-center gap-2">
         <span className="h-2.5 w-2.5 rounded-[2px]" style={{ background: FACTOR_COLORS[factorKey] }} />
-        <span className="font-ui font-600 text-content">{title}</span>
+        <span className="font-ui font-semibold text-content">{title}</span>
         <span className="font-data text-[10px] text-content-faint tracking-wide">
           w{(weight * 100).toFixed(0)}
         </span>
@@ -110,7 +110,7 @@ export const MemberDossier: React.FC<{
           <span className="tabular-nums">{member.trades} scored trades</span>
         </div>
         <div className="mt-4 flex items-end gap-3">
-          <span className="font-data text-5xl font-500 tabular-nums leading-none text-brass-500">
+          <span className="font-data text-5xl font-medium tabular-nums leading-none text-brass-500">
             {member.scrutiny_score.toFixed(1)}
           </span>
           <span className="pb-1 font-data text-[10px] uppercase tracking-[0.16em] text-content-faint">

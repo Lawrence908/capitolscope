@@ -41,7 +41,7 @@ export const Leaderboard: React.FC<{
             {/* member + fingerprint */}
             <div className="min-w-0">
               <div className="flex items-center gap-2.5">
-                <span className="truncate font-ui font-600 text-content group-hover:text-accent">
+                <span className="truncate font-ui font-semibold text-content group-hover:text-accent">
                   {m.member}
                 </span>
                 <PartyTag party={m.party} />
@@ -57,7 +57,7 @@ export const Leaderboard: React.FC<{
             {/* score */}
             <div className="text-right">
               <span
-                className="font-data text-2xl font-500 tabular-nums leading-none"
+                className="font-data text-2xl font-medium tabular-nums leading-none"
                 style={{ color: scoreTier(m.scrutiny_score) }}
               >
                 {m.scrutiny_score.toFixed(1)}

@@ -55,7 +55,7 @@ export const TickerDrawer: React.FC<{
               <span className="font-data text-[11px] uppercase tracking-[0.18em] text-verdigris-500">
                 Ticker · congressional flow
               </span>
-              <h2 className="mt-1.5 font-data text-3xl font-600 tracking-tight text-content">
+              <h2 className="mt-1.5 font-data text-3xl font-semibold tracking-tight text-content">
                 {ticker}
               </h2>
               {data?.security_name && (
@@ -86,7 +86,7 @@ export const TickerDrawer: React.FC<{
                   <div className="font-data text-[9px] uppercase tracking-[0.1em] text-content-faint">
                     {s.k}
                   </div>
-                  <div className="mt-1 font-data text-lg font-500 tabular-nums" style={{ color: s.c }}>
+                  <div className="mt-1 font-data text-lg font-medium tabular-nums" style={{ color: s.c }}>
                     {s.v}
                   </div>
                 </div>
@@ -106,11 +106,11 @@ export const TickerDrawer: React.FC<{
             <table className="w-full">
               <thead className="sticky top-0 bg-surface-raised">
                 <tr className="border-b border-line font-data text-[10px] uppercase tracking-[0.1em] text-content-faint">
-                  <th className="px-6 py-2 text-left font-500">Date</th>
-                  <th className="py-2 text-left font-500">Member</th>
-                  <th className="py-2 text-left font-500">Side</th>
-                  <th className="py-2 text-right font-500">Amount</th>
-                  <th className="px-6 py-2 text-right font-500">30d</th>
+                  <th className="px-6 py-2 text-left font-medium">Date</th>
+                  <th className="py-2 text-left font-medium">Member</th>
+                  <th className="py-2 text-left font-medium">Side</th>
+                  <th className="py-2 text-right font-medium">Amount</th>
+                  <th className="px-6 py-2 text-right font-medium">30d</th>
                 </tr>
               </thead>
               <tbody>

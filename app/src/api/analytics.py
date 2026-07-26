@@ -165,7 +165,7 @@ async def get_ticker_trades(ticker: str, limit: int = Query(300, ge=1, le=1000))
                 """
                 SELECT t.transaction_date, t.notification_date, t.transaction_type,
                        t.owner, t.amount_min, t.amount_max, t.amount_exact,
-                       t.price_change_30d, m.full_name, m.party,
+                       t.price_change_30d, m.full_name, m.party, m.id AS member_id,
                        sec.name AS sector, se.name AS security_name
                 FROM congressional_trades t
                 JOIN congress_members m ON m.id = t.member_id
@@ -184,7 +184,7 @@ async def get_ticker_trades(ticker: str, limit: int = Query(300, ge=1, le=1000))
         sector = None
         security_name = None
         for (tdate, ndate, ttype, owner, amin, amax, aexact, ret30,
-             name, party, sec_name, sec_secname) in rows:
+             name, party, member_id, sec_name, sec_secname) in rows:
             sector = sector or sec_name
             security_name = security_name or sec_secname
             members.add(name)
@@ -203,7 +203,8 @@ async def get_ticker_trades(ticker: str, limit: int = Query(300, ge=1, le=1000))
             lag = (ndate - tdate).days if (ndate and tdate and ndate >= tdate) else None
             trades.append({
                 "date": tdate.isoformat(),
-                "member": name, "party": party,
+                "member": name, "member_id": str(member_id) if member_id is not None else None,
+                "party": party,
                 "direction": "BUY" if ttype == "P" else "SELL" if ttype == "S" else ttype,
                 "owner": owner, "amount": round(n, 0),
                 "signed_return_30d": round(signed, 4) if signed is not None else None,

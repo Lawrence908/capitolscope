@@ -91,6 +91,7 @@ export interface LagFiler {
 export interface TickerTrade {
   date: string;
   member: string;
+  member_id?: string | null;
   party: string | null;
   direction: 'BUY' | 'SELL' | string;
   owner: string | null;

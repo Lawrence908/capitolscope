@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   MagnifyingGlassIcon,
@@ -419,7 +420,16 @@ const TradeBrowser: React.FC = () => {
                       <tr key={trade.id} className="transition-colors hover:bg-surface-inset">
                         <td className="whitespace-nowrap px-6 py-4">
                           <div className="flex flex-col">
-                            <span className="font-ui font-medium text-content">{trade.member_name || 'Unknown'}</span>
+                            {trade.member_id ? (
+                              <Link
+                                to={`/members/${trade.member_id}`}
+                                className="font-ui font-medium text-content transition-colors hover:text-accent hover:underline"
+                              >
+                                {trade.member_name || 'Unknown'}
+                              </Link>
+                            ) : (
+                              <span className="font-ui font-medium text-content">{trade.member_name || 'Unknown'}</span>
+                            )}
                             <div className="mt-1 flex items-center gap-1.5">
                               <PartyTag party={trade.member_party} />
                               {trade.member_chamber && <Pill>{trade.member_chamber}</Pill>}
@@ -428,9 +438,16 @@ const TradeBrowser: React.FC = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="font-data text-sm font-medium text-content">
-                            {trade.ticker ? trade.ticker : <span className="text-content-faint">No ticker</span>}
-                          </div>
+                          {trade.ticker ? (
+                            <Link
+                              to={`/assets/${encodeURIComponent(trade.ticker)}`}
+                              className="font-data text-sm font-medium text-content transition-colors hover:text-accent hover:underline"
+                            >
+                              {trade.ticker}
+                            </Link>
+                          ) : (
+                            <div className="font-data text-sm font-medium text-content-faint">No ticker</div>
+                          )}
                           <div className="max-w-xs truncate font-ui text-sm text-content-faint">{trade.asset_name}</div>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
@@ -462,7 +479,16 @@ const TradeBrowser: React.FC = () => {
                     <div key={trade.id} className="rounded-md border border-line bg-surface-inset p-4">
                       <div className="mb-3 flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="font-ui text-sm font-medium text-content">{trade.member_name || 'Unknown'}</h3>
+                          {trade.member_id ? (
+                            <Link
+                              to={`/members/${trade.member_id}`}
+                              className="font-ui text-sm font-medium text-content transition-colors hover:text-accent hover:underline"
+                            >
+                              {trade.member_name || 'Unknown'}
+                            </Link>
+                          ) : (
+                            <h3 className="font-ui text-sm font-medium text-content">{trade.member_name || 'Unknown'}</h3>
+                          )}
                           <div className="mt-1 flex flex-wrap items-center gap-1.5">
                             <PartyTag party={trade.member_party} />
                             {trade.member_chamber && <Pill>{trade.member_chamber}</Pill>}
@@ -480,7 +506,16 @@ const TradeBrowser: React.FC = () => {
                           <span className="text-content-faint">Asset</span>
                           <div className="text-right">
                             <div className="font-data font-medium text-content">
-                              {trade.ticker ? trade.ticker : <span className="text-content-faint">No ticker</span>}
+                              {trade.ticker ? (
+                                <Link
+                                  to={`/assets/${encodeURIComponent(trade.ticker)}`}
+                                  className="transition-colors hover:text-accent hover:underline"
+                                >
+                                  {trade.ticker}
+                                </Link>
+                              ) : (
+                                <span className="text-content-faint">No ticker</span>
+                              )}
                             </div>
                             {trade.asset_name && (
                               <div className="max-w-40 truncate font-ui text-xs text-content-faint">{trade.asset_name}</div>

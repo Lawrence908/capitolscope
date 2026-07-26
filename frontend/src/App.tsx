@@ -26,6 +26,8 @@ const Analytics = React.lazy(() => import('./components/Analytics'));
 const ProfileSettings = React.lazy(() => import('./components/ProfileSettings'));
 const PremiumSignup = React.lazy(() => import('./components/PremiumSignup'));
 const AlertDashboard = React.lazy(() => import('./pages/alerts/AlertDashboard'));
+const ScrutinyCommand = React.lazy(() => import('./pages/scrutiny/ScrutinyCommand'));
+const MirrorPage = React.lazy(() => import('./pages/mirror/MirrorPage'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -120,6 +122,27 @@ const App: React.FC = () => {
                   <Layout>
                     <Suspense fallback={<LoadingSpinner />}>
                       <Analytics />
+                    </Suspense>
+                  </Layout>
+                </PremiumRoute>
+              </ProtectedRoute>
+            } />
+            {/* Scrutiny command center — now inside the shared shell */}
+            <Route path="/scrutiny" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <ScrutinyCommand />
+                  </Suspense>
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/mirror" element={
+              <ProtectedRoute>
+                <PremiumRoute requiredTier="pro">
+                  <Layout>
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <MirrorPage />
                     </Suspense>
                   </Layout>
                 </PremiumRoute>

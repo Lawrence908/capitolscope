@@ -146,3 +146,50 @@ export interface APIError {
   detail: string;
   status_code: number;
 } 
+// ---- Mirror portfolios (Pro+) ----
+export interface MirrorMemberRef {
+  member_id: string;
+  name?: string | null;
+  party?: string | null;
+  state?: string | null;
+}
+
+export interface MirrorPortfolio {
+  id: string;
+  name: string;
+  description?: string | null;
+  is_active: boolean;
+  member_ids: string[];
+  members: MirrorMemberRef[];
+  member_count: number;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface MirrorHolding {
+  security_id: string;
+  ticker?: string | null;
+  name?: string | null;
+  shares: number;
+  cost_basis: number;
+  current_price: number;
+  market_value: number;
+  unrealized_gain: number;
+  return_pct: number | null;
+}
+
+export interface MirrorHoldingsTotals {
+  market_value: number;
+  cost_basis: number;
+  unrealized_gain: number;
+  realized_gain: number;
+  return_pct: number | null;
+  holdings_count: number;
+}
+
+export interface MirrorHoldingsResult {
+  holdings: MirrorHolding[];
+  totals: MirrorHoldingsTotals;
+  meta?: { member_count: number; priced_trades: number };
+  mirror?: MirrorPortfolio;
+}

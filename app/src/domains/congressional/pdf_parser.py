@@ -10,7 +10,7 @@ import pandas as pd
 import pdfplumber
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, date
 import logging
 
 logger = logging.getLogger(__name__)
@@ -131,12 +131,25 @@ class PDFParsingValidator:
             
         return {"errors": errors, "warnings": warnings}
     
+    # Plausibility floor for a disclosed trade date; upper bound is today
+    # (no trade can be reported before it happens). Guards against OCR garbage
+    # years (e.g. 3031, 2220, 2202) that still match the date regexes.
+    MIN_TRADE_DATE = date(2008, 1, 1)
+
     def _is_valid_date(self, date_str: str) -> bool:
-        """Check if date string matches expected patterns."""
-        for pattern in self.date_patterns:
-            if re.match(pattern, date_str):
-                return True
-        return False
+        """Check if date string matches expected patterns and is plausible."""
+        matched = any(re.match(pattern, date_str) for pattern in self.date_patterns)
+        if not matched:
+            return False
+        # Range guard: reject future or garbage-year dates that pass the regex.
+        for fmt in ("%m/%d/%Y", "%Y-%m-%d", "%m/%d/%y"):
+            try:
+                parsed = datetime.strptime(date_str.strip(), fmt).date()
+            except ValueError:
+                continue
+            return self.MIN_TRADE_DATE <= parsed <= date.today()
+        # Matched a pattern but no parseable format: leave as valid (format-only).
+        return True
     
     def _is_valid_amount(self, amount_str: str) -> bool:
         """Check if amount string matches expected patterns."""

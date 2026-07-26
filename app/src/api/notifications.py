@@ -669,7 +669,7 @@ async def get_notification_analytics(
     }
 )
 async def create_member_alert(
-    member_id: int = Path(..., description="Congress member ID"),
+    member_id: str = Path(..., description="Congress member UUID"),
     alert_data: Dict[str, Any] = Body(..., description="Alert configuration"),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
@@ -816,6 +816,74 @@ async def get_user_alert_rules(
     except Exception as e:
         logger.error(f"Error retrieving alert rules: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve alert rules")
+
+
+@router.get(
+    "/alerts/stats",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Alert stats retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def get_alert_stats(
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Dashboard stats for the user's alerts: active alerts, notifications sent
+    today, total notifications triggered, and delivery rate.
+
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Getting alert stats: user_id={current_user.id}")
+    try:
+        notification_service = NotificationService(session)
+        data = await notification_service.get_alert_stats(current_user.id)
+        return create_response(data=data)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving alert stats: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve alert stats")
+
+
+@router.get(
+    "/alerts/notifications",
+    response_model=ResponseEnvelope[List[Dict[str, Any]]],
+    responses={
+        200: {"description": "Alert notifications retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def get_alert_notifications(
+    days: int = Query(7, ge=1, le=90, description="Number of days of history"),
+    status: Optional[str] = Query(None, description="Filter: sent, failed, pending, or all"),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[List[Dict[str, Any]]]:
+    """
+    Delivery history for the user's alerts, with the triggering trade's details.
+
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Getting alert notifications: user_id={current_user.id}, days={days}, "
+               f"status={status}, skip={skip}, limit={limit}")
+    try:
+        notification_service = NotificationService(session)
+        data = await notification_service.get_alert_notifications(
+            current_user.id, days, status, skip, limit
+        )
+        return create_response(data=data)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving alert notifications: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve alert notifications")
 
 
 @router.put(

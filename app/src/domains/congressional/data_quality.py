@@ -10,6 +10,8 @@ This module provides advanced data quality processing for congressional trade da
 
 import re
 import json
+import os
+import urllib.request
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Set, Any, NamedTuple
 from dataclasses import dataclass, field
@@ -111,6 +113,68 @@ class ImportStatistics:
         return 0.0
 
 
+class LocalTickerResolver:
+    """Optional local-LLM resolver for ambiguous ticker candidates."""
+
+    def __init__(self):
+        self.enabled = os.environ.get("CAPITOLSCOPE_TICKER_LLM_ENABLED", "false").lower() in {
+            "1", "true", "yes", "on"
+        }
+        self.endpoint = os.environ.get("CAPITOLSCOPE_TICKER_LLM_ENDPOINT", "http://localhost:11434/api/generate")
+        self.model = os.environ.get("CAPITOLSCOPE_TICKER_LLM_MODEL", "llama3.1:8b")
+        self.timeout_seconds = int(os.environ.get("CAPITOLSCOPE_TICKER_LLM_TIMEOUT_SECONDS", "8"))
+
+    def resolve(self, asset_description: str, candidates: List[str]) -> Optional[Tuple[str, Decimal, str]]:
+        if not self.enabled or not candidates:
+            return None
+
+        deduped_candidates = []
+        for candidate in candidates:
+            if candidate and candidate not in deduped_candidates:
+                deduped_candidates.append(candidate)
+
+        if not deduped_candidates:
+            return None
+
+        prompt = (
+            "You are selecting the most likely stock ticker from a strict candidate list.\n"
+            "Choose exactly one ticker from the provided candidates, or choose NONE if uncertain.\n"
+            "Return strict JSON with keys: choice, confidence, reason.\n\n"
+            f"Asset description: {asset_description}\n"
+            f"Candidates: {', '.join(deduped_candidates)}"
+        )
+        payload = {
+            "model": self.model,
+            "stream": False,
+            "format": "json",
+            "prompt": prompt,
+        }
+
+        try:
+            req = urllib.request.Request(
+                self.endpoint,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=self.timeout_seconds) as resp:
+                raw_response = json.loads(resp.read().decode("utf-8"))
+            llm_response = raw_response.get("response", "{}")
+            parsed = json.loads(llm_response) if isinstance(llm_response, str) else llm_response
+            choice = str(parsed.get("choice", "")).strip().upper()
+            reason = str(parsed.get("reason", "")).strip()
+            confidence = Decimal(str(parsed.get("confidence", 0)))
+            if choice == "NONE":
+                return None
+            if choice not in deduped_candidates:
+                return None
+            confidence = max(Decimal("0.0"), min(Decimal("1.0"), confidence))
+            return (choice, confidence, reason)
+        except Exception as exc:
+            logger.debug(f"Local ticker resolver skipped due to error: {exc}")
+            return None
+
+
 class DataQualityEnhancer:
     """Enhanced data quality processor for congressional trades."""
     
@@ -119,6 +183,7 @@ class DataQualityEnhancer:
         self._init_amount_patterns()
         self._init_owner_patterns()
         self._init_asset_type_patterns()
+        self.local_ticker_resolver = LocalTickerResolver()
         
     def _init_ticker_patterns(self):
         """Initialize ticker extraction patterns."""
@@ -639,6 +704,22 @@ class DataQualityEnhancer:
             # Extract asset name and type
             asset_name = self._extract_asset_name(original_description, best_ticker)
             asset_type = self._detect_asset_type(normalized_description)
+
+            # Optional local LLM reranker for ambiguous/low-confidence cases.
+            unique_candidates = list(dict.fromkeys([match[0] for match in sorted_matches]))
+            if len(unique_candidates) > 1 or confidence < Decimal("0.75"):
+                llm_choice = self.local_ticker_resolver.resolve(
+                    asset_description=original_description,
+                    candidates=unique_candidates[:8],
+                )
+                if llm_choice:
+                    llm_ticker, llm_confidence, llm_reason = llm_choice
+                    best_ticker = llm_ticker
+                    best_method = "local_llm_rerank"
+                    confidence = max(confidence, llm_confidence)
+                    notes.append(f"Local LLM rerank selected {llm_ticker}")
+                    if llm_reason:
+                        notes.append(f"LLM reason: {llm_reason[:160]}")
             
             notes.append(f"Extracted using {best_method}")
             if len(all_matches) > 1:

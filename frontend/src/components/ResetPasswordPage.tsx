@@ -76,7 +76,7 @@ const ResetPasswordPage: React.FC = () => {
       } else {
         setError(data.error?.message || 'Failed to reset password. Please try again.');
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -85,7 +85,7 @@ const ResetPasswordPage: React.FC = () => {
 
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-primary py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
             <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-error/20">
@@ -93,10 +93,10 @@ const ResetPasswordPage: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
             </div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-neutral-100">
+            <h2 className="mt-6 text-center font-display text-3xl font-medium tracking-[-0.01em] text-content">
               Invalid Reset Link
             </h2>
-            <p className="mt-2 text-center text-sm text-neutral-400">
+            <p className="mt-2 text-center text-sm text-content-faint">
               This password reset link is invalid or has expired.
             </p>
           </div>
@@ -104,7 +104,7 @@ const ResetPasswordPage: React.FC = () => {
           <div className="text-center">
             <Link
               to="/forgot-password"
-              className="font-medium text-primary-400 hover:text-primary-300"
+              className="font-medium text-accent hover:text-accent-strong"
             >
               Request a new password reset
             </Link>
@@ -115,28 +115,28 @@ const ResetPasswordPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg-primary py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="mx-auto mb-6">
             <img 
               src="/capitol-scope-logo.png" 
               alt="CapitolScope Logo" 
-              className="h-70 w-70 mx-auto rounded-full shadow-glow-primary/30"
+              className="h-70 w-70 mx-auto rounded-full"
             />
           </div>
-          <h2 className="text-center text-3xl font-extrabold text-neutral-100">
+          <h2 className="text-center font-display text-3xl font-medium tracking-[-0.01em] text-content">
             Set new password
           </h2>
-          <p className="mt-2 text-center text-sm text-neutral-400">
+          <p className="mt-2 text-center text-sm text-content-faint">
             Enter your new password below.
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="card mt-8 space-y-6 p-6 sm:p-8" onSubmit={handleSubmit}>
           {/* Password Field */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-neutral-300">
+            <label htmlFor="password" className="block text-sm font-medium text-content-muted">
               New password
             </label>
             <div className="mt-1">
@@ -163,7 +163,7 @@ const ResetPasswordPage: React.FC = () => {
 
           {/* Confirm Password Field */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-300">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-content-muted">
               Confirm new password
             </label>
             <div className="mt-1">
@@ -245,11 +245,11 @@ const ResetPasswordPage: React.FC = () => {
 
           {/* Back to Login Link */}
           <div className="text-center">
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-content-faint">
               Remember your password?{' '}
               <Link
                 to="/login"
-                className="font-medium text-primary-400 hover:text-primary-300"
+                className="font-medium text-accent hover:text-accent-strong"
               >
                 Sign in
               </Link>

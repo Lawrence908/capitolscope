@@ -193,7 +193,8 @@ class TradeAlertRule(CapitolScopeBaseModel):
     alert_type = Column(String(30), nullable=False, index=True)  # member_trades, amount_threshold, ticker_trades
     
     # Target configuration
-    target_id = Column(Integer, index=True)  # member_id for member alerts
+    target_id = Column(Integer, index=True)  # legacy integer member_id (unused; members are UUIDs)
+    target_member_id = Column(UUID(as_uuid=True), index=True)  # congress member UUID for member_trades alerts
     target_symbol = Column(String(10), index=True)  # ticker symbol for ticker alerts
     target_name = Column(String(100))  # human-readable target name
     threshold_value = Column(BigInteger)  # amount threshold in cents

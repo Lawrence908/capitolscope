@@ -239,3 +239,57 @@ class PortfolioSnapshot(CapitolScopeBaseModel, TimestampMixin):
     
     def __repr__(self):
         return f"<PortfolioSnapshot(id={self.id}, portfolio_id={self.portfolio_id}, date={self.snapshot_date}, value={self.total_value})>" 
+
+class MirrorPortfolio(CapitolScopeBaseModel):
+    """A user-defined "mirror" portfolio combining one or more congress members.
+
+    Unlike ``Portfolio`` (which belongs to a congress member), a mirror portfolio
+    belongs to a *user* and tracks a chosen set of members. Combined holdings and
+    returns are computed on the fly from those members' congressional trades, so
+    only the definition is persisted here.
+    """
+    __tablename__ = "mirror_portfolios"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(Text)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+
+    # Relationships
+    user = relationship("User", back_populates="mirror_portfolios")
+    members: Mapped[List["MirrorPortfolioMember"]] = relationship(
+        "MirrorPortfolioMember", back_populates="mirror_portfolio", cascade="all, delete-orphan"
+    )
+
+    __table_args__ = (
+        Index("idx_mirror_portfolios_user_id", "user_id"),
+        Index("idx_mirror_portfolios_active", "is_active"),
+    )
+
+    def __repr__(self):
+        return f"<MirrorPortfolio(id={self.id}, user_id={self.user_id}, name='{self.name}')>"
+
+
+class MirrorPortfolioMember(CapitolScopeBaseModel):
+    """Join row: which congress members a mirror portfolio tracks."""
+    __tablename__ = "mirror_portfolio_members"
+
+    mirror_portfolio_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("mirror_portfolios.id", ondelete="CASCADE"), nullable=False
+    )
+    member_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("congress_members.id"), nullable=False
+    )
+
+    # Relationships
+    mirror_portfolio = relationship("MirrorPortfolio", back_populates="members")
+    member = relationship("CongressMember")
+
+    __table_args__ = (
+        Index("idx_mirror_portfolio_members_portfolio", "mirror_portfolio_id"),
+        Index("idx_mirror_portfolio_members_member", "member_id"),
+        UniqueConstraint("mirror_portfolio_id", "member_id", name="uq_mirror_portfolio_member"),
+    )
+
+    def __repr__(self):
+        return f"<MirrorPortfolioMember(portfolio={self.mirror_portfolio_id}, member={self.member_id})>"

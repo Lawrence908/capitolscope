@@ -19,6 +19,7 @@ from domains.congressional.crud import (
     MemberPortfolioRepository, MemberPortfolioPerformanceRepository
 )
 from domains.congressional.ingestion import CongressionalDataIngestion
+from domains.congressional.fetch import DisclosureSyncOrchestrator
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
     ingest_price_data_for_all_securities
@@ -374,15 +375,22 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
             date_from = (datetime.utcnow() - timedelta(days=1)).isoformat()
             logger.debug(f"No date_from specified, using yesterday: date_from={date_from}")
         
-        # TODO: Implement actual data synchronization logic
-        # This would typically involve:
-        # 1. Fetching data from external APIs (House/Senate disclosure sites)
-        # 2. Parsing PDF files or structured data
-        # 3. Normalizing and validating the data
-        # 4. Storing in database with proper conflict resolution
-        
-        logger.info(f"Congressional trades sync completed: date_from={date_from}, records_processed=0")
-        return {"status": "success", "date_from": date_from, "records_processed": 0}
+        orchestrator = DisclosureSyncOrchestrator()
+        fetch_result = orchestrator.run(date_from=date_from)
+
+        csv_directory = str(orchestrator.csv_dir)
+        logger.info("Starting import after fetch orchestration: csv_directory=%s", csv_directory)
+        import_result = import_congressional_data_csvs.run(csv_directory)
+
+        response = {
+            "status": "success",
+            "date_from": date_from,
+            "fetch": fetch_result,
+            "import": import_result,
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+        logger.info("Congressional trades sync completed: response=%s", response)
+        return response
         
     except Exception as exc:
         logger.error(f"Congressional trades sync failed: date_from={date_from}, error={str(exc)}", exc_info=True)
@@ -581,6 +589,110 @@ def process_new_trade_notifications(self, doc_id: str, member_id: str, transacti
     except Exception as exc:
         logger.error(f"Error processing notifications for trade {doc_id}: {exc}", exc_info=True)
         raise self.retry(exc=exc, countdown=300, max_retries=3)
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def process_pending_trade_alerts(self, lookback_hours: int = 48):
+    """Batched trade-alert digest sender.
+
+    Scans trades inserted in the last ``lookback_hours``, matches them against
+    all active alert rules in one pass, groups new matches per user, and sends a
+    single digest email per user. Dedup is enforced via NotificationDelivery so
+    a match is only ever emailed once even though this runs on a schedule and is
+    also nudged by ingestion. Safe to run repeatedly.
+    """
+    try:
+        logger.info(f"Processing pending trade alerts (lookback={lookback_hours}h)")
+
+        async def _run():
+            from collections import defaultdict
+            from datetime import datetime, timedelta, timezone
+            from sqlalchemy import select
+            from sqlalchemy.orm import joinedload
+
+            from domains.congressional.models import CongressionalTrade
+            from domains.notifications.models import NotificationDelivery
+            from domains.notifications.alert_engine import AlertRuleEngine
+            from domains.notifications.notification_service import NotificationService
+            from domains.users.models import User
+
+            manager = DatabaseManager()
+            await manager.initialize()
+            try:
+                async with manager.session_factory() as session:
+                    # created_at is timezone-aware (timestamptz); use an aware UTC bound.
+                    cutoff = datetime.now(timezone.utc) - timedelta(hours=lookback_hours)
+                    trades = (
+                        await session.execute(
+                            select(CongressionalTrade)
+                            .options(joinedload(CongressionalTrade.member))
+                            .where(CongressionalTrade.created_at >= cutoff)
+                        )
+                    ).scalars().all()
+                    if not trades:
+                        return {"status": "success", "trades": 0, "digests_sent": 0}
+
+                    engine = AlertRuleEngine(session)
+                    matches = await engine.match_trades_batch(trades)
+                    if not matches:
+                        return {"status": "success", "trades": len(trades), "matches": 0, "digests_sent": 0}
+
+                    # Skip (user, trade, rule) tuples already delivered on a prior run.
+                    trade_ids = list({trade.id for trade, _ in matches})
+                    existing_rows = (
+                        await session.execute(
+                            select(
+                                NotificationDelivery.user_id,
+                                NotificationDelivery.trade_id,
+                                NotificationDelivery.alert_rule_id,
+                            ).where(NotificationDelivery.trade_id.in_(trade_ids))
+                        )
+                    ).all()
+                    seen = {(r.user_id, r.trade_id, r.alert_rule_id) for r in existing_rows}
+
+                    per_user = defaultdict(list)
+                    for trade, rule in matches:
+                        key = (rule.user_id, trade.id, rule.id)
+                        if key in seen:
+                            continue
+                        seen.add(key)  # guard against intra-batch duplicates
+                        per_user[rule.user_id].append((trade, rule))
+
+                    if not per_user:
+                        return {"status": "success", "trades": len(trades), "matches": len(matches), "digests_sent": 0}
+
+                    users = (
+                        await session.execute(select(User).where(User.id.in_(list(per_user.keys()))))
+                    ).scalars().all()
+                    user_by_id = {u.id: u for u in users}
+
+                    service = NotificationService(session)
+                    digests_sent = 0
+                    for user_id, user_matches in per_user.items():
+                        user = user_by_id.get(user_id)
+                        if not user or not user.email:
+                            logger.warning(f"Skipping digest for missing/emailless user {user_id}")
+                            continue
+                        if await service.send_trade_alert_digest(user, user_matches):
+                            digests_sent += 1
+
+                    return {
+                        "status": "success",
+                        "trades": len(trades),
+                        "matches": len(matches),
+                        "users_notified": len(per_user),
+                        "digests_sent": digests_sent,
+                    }
+            finally:
+                await manager.close()
+
+        result = run_async_task(_run())
+        logger.info(f"Pending trade alerts processed: {result}")
+        return result
+
+    except Exception as exc:
+        logger.error(f"Error processing pending trade alerts: {exc}", exc_info=True)
+        raise self.retry(exc=exc, countdown=300, max_retries=2)
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
@@ -896,10 +1008,13 @@ def import_congressional_data_csvs(self, csv_directory: str):
     """
     try:
         logger.info(f"Starting congressional data import from CSVs: csv_directory={csv_directory}")
-        
+        if not db_manager._initialized:
+            logger.info("Database manager not initialized for CSV import, initializing now")
+            run_async_task(db_manager.initialize())
+
         with get_sync_db_session() as session:
             logger.debug("Creating CongressionalDataIngestion")
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             logger.debug("Starting CSV import")
             result = ingester.import_congressional_data_from_csvs_sync(csv_directory)
         
@@ -925,7 +1040,7 @@ def enrich_congressional_member_data(self):
         
         with get_sync_db_session() as session:
             logger.debug("Creating CongressionalDataIngestion for enrichment")
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             logger.debug("Starting member data enrichment")
             result = ingester.enrich_member_data_sync()
         

@@ -2,141 +2,192 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Minimalist black and white theme inspired by Supabase/Tailscale */
+/* ------------------------------------------------------------------ *
+ * Design-system tokens — the "Scrutiny" oversight-dossier language.
+ * Semantic variables, themed once here; components consume them via the
+ * Tailwind color utilities (bg-surface, text-content-muted, border-line,
+ * text-accent, ...) so a single value change re-skins both themes.
+ * ------------------------------------------------------------------ */
+:root {
+  /* Light "paper" theme */
+  --surface: #f6f5f1;         /* page background */
+  --surface-raised: #ffffff;  /* cards, panels */
+  --surface-inset: #e9e7e0;   /* bar/meter tracks, table stripes */
+  --line: #e0ded5;            /* borders, dividers */
+  --content: #1a201e;         /* primary text / headings */
+  --content-muted: #4c554f;   /* body text */
+  --content-faint: #737b76;   /* labels, captions */
+  --accent: #1f9e88;          /* vivid verdigris — punchier on light */
+  --accent-strong: #38b39c;   /* hover */
+  --accent-2: #9a7b32;        /* brass, darkened for light contrast */
+}
+
+.dark {
+  /* Dark "ink" theme — the original Scrutiny palette */
+  --surface: #0b110f;         /* ink-950 */
+  --surface-raised: #0f1613;  /* ink-900 */
+  --surface-inset: #1e2b26;   /* ink-700 */
+  --line: #24322d;            /* ink-600 */
+  --content: #e7eeec;         /* fog-200 */
+  --content-muted: #c3cec9;   /* fog-300 */
+  --content-faint: #90a29d;   /* fog-500 */
+  --accent: #43a897;          /* verdigris-500 */
+  --accent-strong: #5cc0af;   /* verdigris-400 */
+  --accent-2: #cca85a;        /* brass-500 */
+}
+
 @layer base {
   body {
-    @apply bg-bg-light-primary text-neutral-900 transition-colors duration-300;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    @apply bg-surface text-content font-ui transition-colors duration-300;
+    font-feature-settings: 'ss01', 'cv02', 'cv03', 'cv04', 'cv11';
   }
-  
-  /* Dark mode overrides */
-  .dark body {
-    @apply bg-bg-primary text-neutral-100;
-  }
-  
+
+  /* Mono numerics line up in tables and stat tiles */
+  .tabular-nums { font-variant-numeric: tabular-nums; }
+
   /* Clean scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
+    height: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary;
+    background: var(--surface-inset);
   }
-  
+
   ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-400 dark:bg-neutral-600 rounded-full;
+    background: var(--line);
+    border-radius: 9999px;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-500 dark:bg-neutral-500;
+    background: var(--accent);
   }
 }
 
 @layer components {
-  /* Minimalist Button Styles */
+  /* Buttons */
   .btn-primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200;
+    background: var(--accent);
+    color: #071310;
   }
-  
+  .btn-primary:hover { background: var(--accent-strong); }
+
   .btn-secondary {
-    @apply bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-neutral-100 px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200 border;
+    background: var(--surface-inset);
+    color: var(--content);
+    border-color: var(--line);
   }
-  
+  .btn-secondary:hover { border-color: var(--accent); }
+
   .btn-outline {
-    @apply border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 px-4 py-2 rounded-lg font-medium transition-all duration-200;
+    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200 border;
+    border-color: var(--line);
+    color: var(--content-muted);
   }
-  
+  .btn-outline:hover { background: var(--surface-inset); color: var(--content); }
+
   .btn-ghost {
-    @apply text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 px-4 py-2 rounded-lg font-medium transition-all duration-200;
+    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200;
+    color: var(--content-muted);
   }
-  
-  /* Minimalist Card Styles */
+  .btn-ghost:hover { background: var(--surface-inset); color: var(--content); }
+
+  /* Cards / panels */
   .card {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-border-light dark:border-border-dark transition-all duration-200 hover:shadow-md;
+    @apply rounded-md border transition-colors duration-200;
+    background: var(--surface-raised);
+    border-color: var(--line);
   }
-  
+
   .card-elevated {
-    @apply bg-bg-light-tertiary dark:bg-bg-tertiary rounded-lg shadow-md border border-border-light dark:border-border-dark transition-all duration-200 hover:shadow-lg;
+    @apply rounded-md border shadow-sm transition-colors duration-200;
+    background: var(--surface-raised);
+    border-color: var(--line);
   }
-  
+
   .card-interactive {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary rounded-lg shadow-sm border border-border-light dark:border-border-dark transition-all duration-200 hover:shadow-md hover:border-border-muted dark:hover:border-border-dark cursor-pointer;
+    @apply rounded-md border transition-colors duration-200 cursor-pointer;
+    background: var(--surface-raised);
+    border-color: var(--line);
   }
-  
-  /* Minimalist Input Styles */
+  .card-interactive:hover { border-color: var(--accent); }
+
+  /* Inputs */
   .input-field {
-    @apply w-full px-3 py-2 border border-border-light dark:border-border-dark rounded-lg bg-bg-light-primary dark:bg-bg-primary text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 dark:placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200;
+    @apply w-full px-3 py-2 rounded-md border font-ui transition-all duration-200 focus:outline-none focus:ring-2;
+    background: var(--surface-raised);
+    border-color: var(--line);
+    color: var(--content);
+    --tw-ring-color: var(--accent);
   }
-  
+  .input-field::placeholder { color: var(--content-faint); }
+  .input-field:focus { border-color: var(--accent); }
+
   .input-field-error {
     @apply border-error focus:ring-error focus:border-error;
   }
-  
-  /* Minimalist Navigation */
+
+  /* Navigation */
   .nav-link {
-    @apply text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors duration-200 relative;
+    @apply transition-colors duration-200 relative;
+    color: var(--content-faint);
   }
-  
+  .nav-link:hover { color: var(--content); }
+
   .nav-link-active {
-    @apply text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-800;
+    color: var(--content);
+    background: var(--surface-inset);
+    box-shadow: inset 2px 0 0 var(--accent);
   }
-  
-  /* Clean Typography */
+
+  /* Typography */
   .text-heading {
-    @apply text-neutral-900 dark:text-neutral-100 font-semibold;
+    @apply font-display font-medium;
+    color: var(--content);
   }
-  
+
   .text-subheading {
-    @apply text-neutral-700 dark:text-neutral-300 font-medium;
+    @apply font-ui font-medium;
+    color: var(--content-muted);
   }
-  
-  .text-body {
-    @apply text-neutral-600 dark:text-neutral-400;
+
+  .text-body { color: var(--content-muted); }
+
+  .text-muted { color: var(--content-faint); }
+
+  /* Mono eyebrow / caption label */
+  .eyebrow {
+    @apply font-data uppercase;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
   }
-  
-  .text-muted {
-    @apply text-neutral-500 dark:text-neutral-500;
-  }
-  
-  /* Status Indicators */
-  .status-success {
-    @apply text-secondary-600 dark:text-secondary-400 bg-secondary-50 dark:bg-secondary-900/20;
-  }
-  
-  .status-warning {
-    @apply text-warning dark:text-warning bg-yellow-50 dark:bg-yellow-900/20;
-  }
-  
-  .status-error {
-    @apply text-error dark:text-error bg-red-50 dark:bg-red-900/20;
-  }
-  
-  .status-info {
-    @apply text-info dark:text-info bg-blue-50 dark:bg-blue-900/20;
-  }
-  
-  /* Data Visualization Styles */
-  .chart-bar {
-    @apply bg-primary-500;
-  }
-  
-  .chart-line {
-    @apply bg-secondary-500;
-  }
-  
-  /* Clean Layout Components */
+
+  /* Status indicators (severity-coded) */
+  .status-success { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+  .status-warning { color: theme('colors.sev.watch'); background: color-mix(in srgb, theme('colors.sev.watch') 14%, transparent); }
+  .status-error   { color: theme('colors.sev.flag');  background: color-mix(in srgb, theme('colors.sev.flag') 14%, transparent); }
+  .status-info    { color: theme('colors.sev.info');  background: color-mix(in srgb, theme('colors.sev.info') 14%, transparent); }
+
+  /* Data viz */
+  .chart-bar { background: var(--accent); }
+  .chart-line { background: var(--accent-2); }
+
+  /* Layout chrome */
   .sidebar {
-    @apply bg-bg-light-secondary dark:bg-bg-secondary border-r border-border-light dark:border-border-dark;
+    background: var(--surface-raised);
+    border-color: var(--line);
   }
-  
+
   .header {
-    @apply bg-bg-light-primary dark:bg-bg-primary border-b border-border-light dark:border-border-dark;
+    background: var(--surface);
+    border-color: var(--line);
   }
-  
-  .content-area {
-    @apply bg-bg-light-primary dark:bg-bg-primary;
-  }
+
+  .content-area { background: var(--surface); }
   
   /* Minimalist Animations */
   .fade-in {
@@ -151,4 +202,18 @@
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900;
   }
+}
+
+/* Scrutiny ticker drawer transitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideIn {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[fadeIn_0\.15s_ease\],
+  .animate-\[slideIn_0\.2s_ease\] { animation: none !important; }
 }

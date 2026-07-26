@@ -13,6 +13,16 @@ import type { CongressionalTrade, CongressMember, DataQualityStats } from '../ty
 import apiClient from '../services/api';
 import stripeService from '../services/stripeService';
 import AnalyticsDebug from './AnalyticsDebug';
+import {
+  PageHeader,
+  Panel,
+  Spinner,
+  Meter,
+  PartyTag,
+  fmtMoney,
+  partyMeta,
+  type Tone,
+} from './ui';
 
 // Payment Modal Component
 interface PaymentModalProps {
@@ -31,37 +41,38 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
     const features = {
       pro: [
         'Full Historical Data',
-        'Weekly Summaries', 
+        'Weekly Summaries',
         'Multiple Buyer Alerts',
         'High-Value Trade Alerts',
-        'Saved Portfolios / Watchlists'
+        'Saved Portfolios / Watchlists',
       ],
       premium: [
         'TradingView-Style Charts',
         'Advanced Portfolio Analytics',
         'Sector/Committee-based Filters',
         'API Access (Rate-limited)',
-        'Custom Alert Configurations'
+        'Custom Alert Configurations',
       ],
       enterprise: [
         'Advanced Analytics Dashboard',
         'White-Label Dashboard Options',
         'Priority Support',
         'Increased API Limits',
-        'Team Seats / Admin Panel'
-      ]
+        'Team Seats / Admin Panel',
+      ],
     };
     return features[tier as keyof typeof features] || [];
   };
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="fixed inset-0 bg-black/60" onClick={onClose} />
       <div className="flex min-h-full items-center justify-center p-4 text-center">
-        <div className="relative transform overflow-hidden rounded-lg card-elevated px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+        <div className="card-elevated relative w-full max-w-lg transform overflow-hidden px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:p-6">
           <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
             <button
               type="button"
-              className="rounded-md bg-bg-light-primary dark:bg-bg-primary text-neutral-400 hover:text-muted focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="rounded-md text-content-faint transition-colors hover:text-content focus:outline-none"
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
@@ -71,35 +82,35 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
           <div className="sm:flex sm:items-start">
             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10">
               {type === 'success' ? (
-                <CheckCircleIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
+                <CheckCircleIcon className="h-6 w-6 text-accent" />
               ) : (
-                <XCircleIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
+                <XCircleIcon className="h-6 w-6 text-sev-flag" />
               )}
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="text-base font-semibold leading-6 text-heading">
-                {type === 'success' ? 'Payment Successful!' : 'Payment Cancelled'}
+              <h3 className="font-display text-lg font-medium leading-6 text-content">
+                {type === 'success' ? 'Payment Successful' : 'Payment Cancelled'}
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-body">
+                <p className="font-ui text-sm text-content-muted">
                   {message}
                   {tier && type === 'success' && (
-                    <span className="block mt-1 font-medium text-green-600 dark:text-green-400">
-                      Welcome to {tier.charAt(0).toUpperCase() + tier.slice(1)} tier!
+                    <span className="mt-1 block font-medium text-accent">
+                      Welcome to {tier.charAt(0).toUpperCase() + tier.slice(1)} tier.
                     </span>
                   )}
                 </p>
-                
+
                 {/* Show unlocked features for successful payments */}
                 {type === 'success' && tier && tier !== 'free' && (
                   <div className="mt-4">
-                    <h4 className="text-sm font-medium text-heading mb-2">
-                      🎉 You now have access to:
+                    <h4 className="mb-2 font-data text-[11px] uppercase tracking-[0.14em] text-content-faint">
+                      You now have access to
                     </h4>
-                    <ul className="text-sm text-body space-y-1">
+                    <ul className="space-y-1 font-ui text-sm text-content-muted">
                       {getTierFeatures(tier).map((feature, index) => (
                         <li key={index} className="flex items-center">
-                          <CheckCircleIcon className="h-4 w-4 text-green-600 dark:text-green-400 mr-2 flex-shrink-0" />
+                          <CheckCircleIcon className="mr-2 h-4 w-4 flex-shrink-0 text-accent" />
                           {feature}
                         </li>
                       ))}
@@ -110,11 +121,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
             </div>
           </div>
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-            <button
-              type="button"
-              className="inline-flex w-full justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:ml-3 sm:w-auto"
-              onClick={onClose}
-            >
+            <button type="button" className="btn-primary w-full px-3 py-2 text-sm sm:ml-3 sm:w-auto" onClick={onClose}>
               {type === 'success' ? 'Get Started' : 'OK'}
             </button>
           </div>
@@ -172,7 +179,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const paymentSuccess = stripeService.handlePaymentSuccess();
     const paymentCancelled = stripeService.handlePaymentCancellation();
-    
+
     if (paymentSuccess.success) {
       setPaymentModal({
         isOpen: true,
@@ -183,7 +190,7 @@ const Dashboard: React.FC = () => {
       // Clean up URL params
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-    
+
     if (paymentCancelled.cancelled) {
       setPaymentModal({
         isOpen: true,
@@ -196,95 +203,89 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const closePaymentModal = () => {
-    setPaymentModal(prev => ({ ...prev, isOpen: false }));
+    setPaymentModal((prev) => ({ ...prev, isOpen: false }));
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-      </div>
-    );
+    return <Spinner label="Loading dashboard" />;
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-md p-4">
-        <div className="flex">
-          <ExclamationTriangleIcon className="h-5 w-5 text-red-400" />
-          <div className="ml-3">
-            <p className="text-sm text-red-800">{error}</p>
-          </div>
-        </div>
+      <div className="flex items-center gap-3 rounded-md border border-sev-flag/40 px-4 py-3 status-error">
+        <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0" />
+        <p className="font-ui text-sm">{error}</p>
       </div>
     );
   }
 
-  const statCards = [
+  const statCards: { title: string; value: string; icon: typeof DocumentTextIcon; tone: Tone; link: string }[] = [
     {
       title: 'Total Trades',
       value: stats?.total_trades?.toLocaleString() || '0',
       icon: DocumentTextIcon,
-      color: 'bg-primary-500',
+      tone: 'accent',
       link: '/trades',
     },
     {
       title: 'Congress Members',
       value: stats?.unique_members?.toLocaleString() || '0',
       icon: UserGroupIcon,
-      color: 'bg-secondary-500',
+      tone: 'steel',
       link: '/members',
     },
     {
       title: 'Unique Tickers',
       value: stats?.unique_tickers?.toLocaleString() || '0',
       icon: ArrowTrendingUpIcon,
-      color: 'bg-neutral-500',
+      tone: 'brass',
       link: '/trades',
     },
     {
       title: 'Missing Tickers',
       value: `${stats?.null_ticker_percentage?.toFixed(1) || '0'}%`,
       icon: ExclamationTriangleIcon,
-      color: 'bg-warning',
+      tone: 'flag',
       link: '/data-quality',
     },
   ];
 
-  return (
-    <div className="space-y-4 lg:space-y-6">
-      {/* Welcome header */}
-      <div className="card p-4 lg:p-6">
-        <h2 className="text-xl lg:text-2xl font-bold text-heading mb-2">
-          Welcome to CapitolScope
-        </h2>
-        <p className="text-sm lg:text-base text-body">
-          Explore congressional trading data with powerful filtering and analytics tools.
-        </p>
-      </div>
+  const toneText: Record<Tone, string> = {
+    default: 'text-content',
+    accent: 'text-accent',
+    brass: 'text-accent-2',
+    flag: 'text-sev-flag',
+    steel: 'text-sev-info',
+    coral: 'text-sev-watch',
+  };
 
-      {/* Stats cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+  const partyEntries = Object.entries(stats?.party_distribution || {});
+  const partyTotal = partyEntries.reduce((sum, [, count]) => sum + Number(count), 0);
+
+  return (
+    <div>
+      <PageHeader
+        eyebrow="CapitolScope · Overview"
+        title="Dashboard"
+        subtitle="Congressional trading at a glance — disclosure volume, the most active members, and the latest filings, drawn from public STOCK Act data."
+      />
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Link
-              key={stat.title}
-              to={stat.link}
-              className="card-interactive p-4 lg:p-6 transition-all duration-200"
-            >
-              <div className="flex items-center">
-                <div className={`p-2 lg:p-3 rounded-lg ${stat.color}`}>
-                  <Icon className="h-5 w-5 lg:h-6 lg:w-6 text-white" />
-                </div>
-                <div className="ml-3 lg:ml-4">
-                  <p className="text-xs lg:text-sm font-medium text-body">
+            <Link key={stat.title} to={stat.link} className="card-interactive group p-5">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="font-data text-[10px] uppercase tracking-[0.14em] text-content-faint">
                     {stat.title}
-                  </p>
-                  <p className="text-lg lg:text-2xl font-semibold text-heading">
+                  </div>
+                  <div className={`mt-2 font-data text-3xl font-medium tabular-nums ${toneText[stat.tone]}`}>
                     {stat.value}
-                  </p>
+                  </div>
                 </div>
+                <Icon className={`h-5 w-5 ${toneText[stat.tone]}`} />
               </div>
             </Link>
           );
@@ -292,109 +293,116 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Recent trades and top members */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-        {/* Recent trades */}
-        <div className="card p-4 lg:p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base lg:text-lg font-semibold text-heading">Recent Trades</h3>
-            <Link
-              to="/trades"
-              className="text-xs lg:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
-            >
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Panel
+          title="Recent Trades"
+          right={
+            <Link to="/trades" className="font-data text-[11px] uppercase tracking-[0.1em] text-accent hover:text-accent-strong">
               View all →
             </Link>
-          </div>
-          <div className="space-y-3 lg:space-y-4">
-            {recentTrades && recentTrades.length > 0 ? recentTrades.map((trade, index) => (
-              <div key={trade.id || `trade-${index}`} className="flex items-center justify-between py-2 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs lg:text-sm font-medium text-heading truncate">
-                    {trade.member_name || 'Unknown'}
-                  </p>
-                  <p className="text-xs lg:text-sm text-body">
-                    {trade.ticker ? (
-                      <span className="font-mono">{trade.ticker}</span>
-                    ) : (
-                      <span className="text-muted">No ticker</span>
-                    )}
-                    {' • '}
-                    <span className="capitalize">{trade.transaction_type || 'Unknown'}</span>
-                  </p>
+          }
+        >
+          <div className="divide-y divide-line">
+            {recentTrades && recentTrades.length > 0 ? (
+              recentTrades.map((trade, index) => (
+                <div key={trade.id || `trade-${index}`} className="flex items-center justify-between gap-3 px-4 py-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-ui text-sm font-medium text-content">
+                      {trade.member_name || 'Unknown'}
+                    </p>
+                    <p className="mt-0.5 font-ui text-xs text-content-faint">
+                      {trade.ticker ? (
+                        <span className="font-data text-content-muted">{trade.ticker}</span>
+                      ) : (
+                        <span>No ticker</span>
+                      )}
+                      {' · '}
+                      <span className="capitalize">{trade.transaction_type || 'Unknown'}</span>
+                    </p>
+                  </div>
+                  <div className="ml-2 text-right">
+                    <p className="font-data text-sm tabular-nums text-content">
+                      {trade.estimated_value ? fmtMoney(trade.estimated_value / 100) : '—'}
+                    </p>
+                    <p className="font-data text-[11px] tabular-nums text-content-faint">
+                      {new Date(trade.transaction_date).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-right ml-2">
-                  <p className="text-xs lg:text-sm text-heading">
-                    {trade.estimated_value ? `$${(trade.estimated_value / 100).toLocaleString()}` : 'N/A'}
-                  </p>
-                  <p className="text-xs text-body">
-                    {new Date(trade.transaction_date).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            )) : (
-              <div className="text-center py-4 text-body">
-                <p className="text-sm">No recent trades available</p>
+              ))
+            ) : (
+              <div className="px-4 py-6 text-center font-ui text-sm text-content-faint">
+                No recent trades available
               </div>
             )}
           </div>
-        </div>
+        </Panel>
 
-        {/* Top trading members */}
-        <div className="card p-4 lg:p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base lg:text-lg font-semibold text-heading">Top Trading Members</h3>
-            <Link
-              to="/members"
-              className="text-xs lg:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
-            >
+        <Panel
+          title="Top Trading Members"
+          right={
+            <Link to="/members" className="font-data text-[11px] uppercase tracking-[0.1em] text-accent hover:text-accent-strong">
               View all →
             </Link>
-          </div>
-          <div className="space-y-3 lg:space-y-4">
-            {topMembers && topMembers.length > 0 ? topMembers.map((member, index) => (
-              <div key={member.id || `member-${index}`} className="flex items-center justify-between py-2 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs lg:text-sm font-medium text-heading truncate">
-                    {member.member_name}
-                  </p>
-                  <p className="text-xs lg:text-sm text-body">
-                    {member.party} • {member.state}
-                  </p>
+          }
+        >
+          <div className="divide-y divide-line">
+            {topMembers && topMembers.length > 0 ? (
+              topMembers.map((member, index) => (
+                <div key={member.id || `member-${index}`} className="flex items-center justify-between gap-3 px-4 py-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="truncate font-ui text-sm font-medium text-content">{member.member_name}</p>
+                      <PartyTag party={member.party} />
+                    </div>
+                    <p className="mt-0.5 font-ui text-xs text-content-faint">{member.state}</p>
+                  </div>
+                  <div className="ml-2 text-right">
+                    <p className="font-data text-sm tabular-nums text-content">{member.trade_count || 0} trades</p>
+                    <p className="font-data text-[11px] uppercase tracking-[0.08em] text-content-faint">{member.chamber}</p>
+                  </div>
                 </div>
-                <div className="text-right ml-2">
-                  <p className="text-xs lg:text-sm text-heading">
-                    {member.trade_count || 0} trades
-                  </p>
-                  <p className="text-xs text-body">{member.chamber}</p>
-                </div>
-              </div>
-            )) : (
-              <div className="text-center py-4 text-body">
-                <p className="text-sm">No top members available</p>
-              </div>
+              ))
+            ) : (
+              <div className="px-4 py-6 text-center font-ui text-sm text-content-faint">No top members available</div>
             )}
           </div>
-        </div>
+        </Panel>
       </div>
 
-      {/* Party distribution */}
-      {stats && (
-        <div className="card p-4 lg:p-6">
-          <h3 className="text-base lg:text-lg font-semibold text-heading mb-4">
-            Party Distribution
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {stats.party_distribution && Object.entries(stats.party_distribution).map(([party, count]) => (
-              <div key={party} className="text-center">
-                <div className="text-xl lg:text-2xl font-bold text-heading">{count.toString()}</div>
-                <div className="text-xs lg:text-sm text-body">{party}</div>
-              </div>
-            ))}
-          </div>
+      {/* Party distribution — proportion bars */}
+      {partyEntries.length > 0 && (
+        <div className="mt-6">
+          <Panel title="Party Distribution">
+            <div className="space-y-4 p-4">
+              {partyEntries.map(([party, count]) => {
+                const meta = partyMeta(party);
+                const frac = partyTotal ? Number(count) / partyTotal : 0;
+                return (
+                  <div key={party}>
+                    <div className="mb-1.5 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <PartyTag party={party} />
+                        <span className="font-ui text-sm text-content-muted">{party}</span>
+                      </div>
+                      <span className="font-data text-sm tabular-nums text-content">
+                        {Number(count).toLocaleString()}
+                        <span className="ml-2 text-content-faint">{(frac * 100).toFixed(1)}%</span>
+                      </span>
+                    </div>
+                    <Meter value={frac} color={meta.color} height={8} />
+                  </div>
+                );
+              })}
+            </div>
+          </Panel>
         </div>
       )}
 
       {/* Analytics Debug (for troubleshooting) */}
-      <AnalyticsDebug />
+      <div className="mt-6">
+        <AnalyticsDebug />
+      </div>
 
       <PaymentModal
         isOpen={paymentModal.isOpen}
@@ -405,6 +413,6 @@ const Dashboard: React.FC = () => {
       />
     </div>
   );
-  };
-  
-export default Dashboard; 
+};
+
+export default Dashboard;

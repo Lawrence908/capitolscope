@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { logger } from '../core/logging';
+import { Eyebrow } from './ui';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -94,41 +95,45 @@ const LoginPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-primary">
+      <div className="min-h-screen flex items-center justify-center bg-surface">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-400 mx-auto"></div>
-          <p className="mt-4 text-neutral-400">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
+          <p className="mt-4 text-content-faint">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg-primary py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
+      {/* atmosphere: subtle verdigris glow from the top */}
+      <div
+        className="pointer-events-none fixed inset-x-0 top-0 h-64"
+        style={{ background: 'radial-gradient(120% 60% at 50% 0%, rgba(67,168,151,0.08), transparent 70%)' }}
+      />
+      <div className="relative max-w-md w-full">
         {/* Header */}
         <div className="text-center">
-          <div className="mx-auto mb-6">
-            <img 
-              src="/capitol-scope-logo.png" 
-              alt="CapitolScope Logo" 
-              className="h-70 w-70 mx-auto rounded-full shadow-glow-primary/30"
-            />
-          </div>
-          <h2 className="text-3xl font-extrabold text-neutral-100">
-            Welcome to CapitolScope
+          <img
+            src="/capitol-scope-logo.png"
+            alt="CapitolScope Logo"
+            className="mx-auto mb-5 h-14 w-14 rounded-full"
+          />
+          <Eyebrow>CapitolScope · Oversight</Eyebrow>
+          <h2 className="mt-2 font-display text-3xl font-medium tracking-[-0.01em] text-content">
+            Welcome back
           </h2>
-          <p className="mt-2 text-sm text-neutral-400">
+          <p className="mt-2 font-ui text-sm text-content-faint">
             Sign in to your account to continue
           </p>
         </div>
 
         {/* Login Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="card mt-8 space-y-6 p-6 sm:p-8" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-300">
+              <label htmlFor="email" className="block text-sm font-medium text-content-muted">
                 Email address
               </label>
               <input
@@ -156,7 +161,7 @@ const LoginPage: React.FC = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-neutral-300">
+              <label htmlFor="password" className="block text-sm font-medium text-content-muted">
                 Password
               </label>
               <input
@@ -192,9 +197,9 @@ const LoginPage: React.FC = () => {
                 type="checkbox"
                 checked={formData.remember_me}
                 onChange={handleInputChange}
-                className="h-4 w-4 text-primary-400 focus:ring-primary-400 border-primary-600 rounded"
+                className="h-4 w-4 text-accent focus:ring-accent border-accent rounded"
               />
-              <label htmlFor="remember_me" className="ml-2 block text-sm text-neutral-300">
+              <label htmlFor="remember_me" className="ml-2 block text-sm text-content-muted">
                 Remember me
               </label>
             </div>
@@ -202,7 +207,7 @@ const LoginPage: React.FC = () => {
             <div className="text-sm">
               <Link
                 to="/forgot-password"
-                className="font-medium text-primary-400 hover:text-primary-300"
+                className="font-medium text-accent hover:text-accent-strong"
               >
                 Forgot your password?
               </Link>
@@ -251,11 +256,11 @@ const LoginPage: React.FC = () => {
 
           {/* Sign Up Link */}
           <div className="text-center">
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-content-faint">
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="font-medium text-primary-400 hover:text-primary-300"
+                className="font-medium text-accent hover:text-accent-strong"
               >
                 Sign up for free
               </Link>
@@ -265,10 +270,10 @@ const LoginPage: React.FC = () => {
 
         {/* Demo Account Info */}
         <div className="mt-8 card p-4">
-          <h3 className="text-sm font-medium text-primary-400 mb-2">
+          <h3 className="text-sm font-medium text-accent mb-2">
             🚀 Beta Testing
           </h3>
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-content-faint">
             CapitolScope is currently in beta. Sign up to get early access to congressional trading insights and help us improve the platform.
           </p>
         </div>

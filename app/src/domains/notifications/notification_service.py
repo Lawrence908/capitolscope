@@ -63,8 +63,121 @@ class NotificationService:
             await self._track_delivery(user.id, trade.id, alert_rule.id, False, str(e))
             return False
     
+    async def send_trade_alert_digest(
+        self,
+        user: User,
+        matches: List[tuple],
+    ) -> bool:
+        """Send a single digest email to a user for many (trade, rule) matches.
+
+        Records one NotificationDelivery per (trade, rule) so the same match is
+        never emailed twice on a later run. ``matches`` is a list of
+        ``(trade, rule)`` tuples where ``trade`` is an ORM row (with ``member``
+        loaded) and ``rule`` is a TradeAlertRule.
+        """
+        if not matches:
+            return True
+
+        items = [self._build_digest_item(trade, rule) for trade, rule in matches]
+        subject = f"🚨 {len(items)} new congressional trade(s) matched your alerts"
+        html_content = self.email_template.generate_trade_alert_digest_email(user, items)
+        text_content = self._generate_digest_text(items)
+
+        success = False
+        try:
+            success = await self.email_service._send_email(
+                to_email=user.email,
+                to_name=user.first_name or user.email,
+                subject=subject,
+                html_content=html_content,
+                text_content=text_content,
+            )
+        except Exception as e:
+            logger.error(f"Error sending digest to {user.email}: {e}")
+            success = False
+
+        # Only record deliveries on success so a failed digest is retried on the
+        # next run rather than being permanently suppressed by the dedup filter.
+        if success:
+            await self._bulk_track_delivery(user.id, matches)
+            logger.info(f"Digest with {len(items)} trades sent to {user.email}")
+        else:
+            logger.error(f"Failed to send digest to {user.email}; will retry next run")
+        return success
+
+    def _build_digest_item(self, trade, rule) -> Dict[str, Any]:
+        """Build a template row dict from an ORM trade + the rule that matched it."""
+        action_emoji, action_text = self._action(trade)
+        member = getattr(trade, "member", None)
+        member_name = (
+            getattr(member, "display_name", None)
+            or getattr(member, "full_name", None)
+            or f"Member {trade.member_id}"
+        )
+        return {
+            "member_name": member_name,
+            "ticker": trade.ticker,
+            "asset_name": trade.asset_name,
+            "action_emoji": action_emoji,
+            "action_text": action_text,
+            "amount_str": self._format_orm_amount(trade),
+            "transaction_date": trade.transaction_date,
+            "trade_id": str(trade.id),
+            "reason": rule.name,
+        }
+
+    @staticmethod
+    def _action(trade) -> tuple:
+        """Map the single-char transaction_type (P/S/E) to (emoji, label)."""
+        mapping = {
+            "P": ("🟢", "Purchase"),
+            "S": ("🔴", "Sale"),
+            "E": ("🔄", "Exchange"),
+        }
+        return mapping.get((trade.transaction_type or "").upper(), ("⚪", trade.transaction_type or "Trade"))
+
+    @staticmethod
+    def _format_orm_amount(trade) -> str:
+        """Format an ORM trade's amount (cents) for display."""
+        if trade.amount_exact:
+            return f"${trade.amount_exact / 100:,.0f}"
+        if trade.amount_min and trade.amount_max:
+            return f"${trade.amount_min / 100:,.0f} - ${trade.amount_max / 100:,.0f}"
+        return "Amount not specified"
+
+    def _generate_digest_text(self, items: List[Dict[str, Any]]) -> str:
+        """Plain-text fallback for the digest email."""
+        lines = ["New congressional trades matched your alerts:", ""]
+        for it in items:
+            sym = it["ticker"] or it["asset_name"] or "Unknown"
+            lines.append(
+                f"- {it['member_name']}: {it['action_text']} {sym} "
+                f"({it['amount_str']}) on {it['transaction_date'] or 'Unknown'}"
+            )
+        lines += ["", "Manage alerts: https://capitolscope.chrislawrence.ca/alerts"]
+        return "\n".join(lines)
+
+    async def _bulk_track_delivery(self, user_id, matches: List[tuple]) -> None:
+        """Record one sent NotificationDelivery per (trade, rule) in a single commit."""
+        try:
+            now = datetime.utcnow()
+            for trade, rule in matches:
+                self.session.add(
+                    NotificationDelivery(
+                        user_id=user_id,
+                        trade_id=trade.id,
+                        alert_rule_id=rule.id,
+                        delivery_status="sent",
+                        sent_at=now,
+                    )
+                )
+            await self.session.commit()
+        except Exception as e:
+            await self.session.rollback()
+            logger.error(f"Error bulk-tracking {len(matches)} deliveries: {e}")
+
     async def send_bulk_alerts(
-        self, 
+        self,
         notifications: List[Dict[str, Any]]
     ) -> Dict[str, int]:
         """Send multiple notifications efficiently."""

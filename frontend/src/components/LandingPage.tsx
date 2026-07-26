@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-bg-light-primary dark:bg-bg-primary text-neutral-900 dark:text-heading flex flex-col">
+    <div className="min-h-screen bg-surface text-content dark:text-heading flex flex-col">
       {/* Header */}
       <header className="header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,13 +17,15 @@ const LandingPage: React.FC = () => {
                 width="40"
                 height="40"
               />
-              <h1 className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold text-primary-600 dark:text-primary-600 dark:text-primary-400">CapitolScope</h1>
+              <h1 className="ml-2 font-display text-lg font-medium tracking-tight text-content sm:ml-3 sm:text-xl">
+                Capitol<span className="text-accent">Scope</span>
+              </h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Hide "Sign in" text on mobile, show on larger screens */}
               <Link
                 to="/login"
-                className="hidden sm:block text-neutral-300 hover:text-heading text-sm"
+                className="hidden sm:block text-content-muted hover:text-heading text-sm"
               >
                 Sign in
               </Link>
@@ -52,9 +54,9 @@ const LandingPage: React.FC = () => {
                 width="128"
                 height="128"
               />
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-heading sm:text-5xl md:text-6xl">
+              <h1 className="font-display text-4xl font-medium leading-[1.02] tracking-[-0.01em] text-content sm:text-5xl md:text-6xl">
                 Congressional Trading
-                <span className="text-primary-600 dark:text-primary-600 dark:text-primary-400"> Transparency</span>
+                <span className="text-accent"> Transparency</span>
               </h1>
             </div>
             
@@ -82,8 +84,8 @@ const LandingPage: React.FC = () => {
           {/* Features */}
           <div className="mt-16 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12">
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-primary-50 dark:bg-primary-900/20 rounded-lg flex items-center justify-center">
-                <svg className="h-6 w-6 text-primary-600 dark:text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mx-auto h-12 w-12 bg-accent/10 dark:bg-accent/10 rounded-lg flex items-center justify-center">
+                <svg className="h-6 w-6 text-accent dark:text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
@@ -94,8 +96,8 @@ const LandingPage: React.FC = () => {
             </div>
 
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-primary-50 dark:bg-primary-900/20 rounded-lg flex items-center justify-center">
-                <svg className="h-6 w-6 text-primary-600 dark:text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mx-auto h-12 w-12 bg-accent/10 dark:bg-accent/10 rounded-lg flex items-center justify-center">
+                <svg className="h-6 w-6 text-accent dark:text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
               </div>
@@ -106,8 +108,8 @@ const LandingPage: React.FC = () => {
             </div>
 
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-primary-50 dark:bg-primary-900/20 rounded-lg flex items-center justify-center">
-                <svg className="h-6 w-6 text-primary-600 dark:text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mx-auto h-12 w-12 bg-accent/10 dark:bg-accent/10 rounded-lg flex items-center justify-center">
+                <svg className="h-6 w-6 text-accent dark:text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
@@ -121,7 +123,7 @@ const LandingPage: React.FC = () => {
           {/* Beta Notice */}
           <div className="mt-16 card p-6 sm:p-8">
             <div className="text-center">
-              <h3 className="text-lg font-medium text-primary-600 dark:text-primary-600 dark:text-primary-400">
+              <h3 className="text-lg font-medium text-accent dark:text-accent">
                 🚀 Currently in Beta
               </h3>
               <p className="mt-2 text-body">
@@ -141,14 +143,14 @@ const LandingPage: React.FC = () => {
       </main>
       
       {/* Footer */}
-      <footer className="sidebar border-t border-neutral-200 dark:border-neutral-700 mt-auto">
+      <footer className="sidebar border-t border-line mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
               <img 
                 src="/capitol-scope-logo.png" 
                 alt="CapitolScope Logo" 
-                className="h-8 w-8 rounded-lg shadow-glow-primary/20"
+                className="h-8 w-8 rounded-lg"
                 loading="lazy"
                 width="32"
                 height="32"
@@ -161,19 +163,19 @@ const LandingPage: React.FC = () => {
             <div className="flex items-center space-x-6">
               <Link
                 to="/privacy"
-                className="text-sm text-body hover:text-neutral-300 transition-colors"
+                className="text-sm text-body hover:text-content-muted transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 to="/terms"
-                className="text-sm text-body hover:text-neutral-300 transition-colors"
+                className="text-sm text-body hover:text-content-muted transition-colors"
               >
                 Terms of Service
               </Link>
               <a
                 href="mailto:capitolscope@gmail.com"
-                className="text-sm text-body hover:text-neutral-300 transition-colors"
+                className="text-sm text-body hover:text-content-muted transition-colors"
               >
                 Support
               </a>

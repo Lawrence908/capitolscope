@@ -8,34 +8,27 @@ import DataQualityDashboard from './DataQualityDashboard';
 const DataQuality: React.FC = () => {
   const { user } = useAuth();
   
-  // Check subscription tier
+  // Check subscription tier (free users see the upgrade banner)
   const subscriptionTier = user?.subscription_tier?.toLowerCase();
-  const isPremium = subscriptionTier === 'premium' || subscriptionTier === 'enterprise';
-  const isPro = subscriptionTier === 'pro' || isPremium;
   const isFree = subscriptionTier === 'free' || !subscriptionTier;
 
   return (
     <div className="space-y-4 lg:space-y-6">
       {/* Premium Upgrade Banner for Free Users */}
       {isFree && (
-        <div className="card p-4 lg:p-6 bg-neon-gradient rounded-lg shadow-glow-primary">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center">
-              <SparklesIcon className="h-5 w-5 lg:h-6 lg:w-6 text-bg-primary mr-2 lg:mr-3" />
-              <div>
-                <h4 className="text-base lg:text-lg font-bold text-bg-primary mb-1">Unlock Data Quality Insights</h4>
-                <p className="text-bg-primary/80 text-xs lg:text-sm">
-                  Get access to comprehensive data quality metrics and validation tools
-                </p>
-              </div>
+        <div className="flex flex-col gap-4 rounded-md border border-accent/40 bg-accent/10 p-4 sm:flex-row sm:items-center sm:justify-between lg:p-6">
+          <div className="flex items-center">
+            <SparklesIcon className="mr-3 h-6 w-6 flex-shrink-0 text-accent" />
+            <div>
+              <h4 className="font-display text-lg font-medium text-content">Unlock Data Quality Insights</h4>
+              <p className="font-ui text-sm text-content-muted">
+                Comprehensive data quality metrics and validation tools.
+              </p>
             </div>
-            <Link
-              to="/premium"
-              className="bg-bg-primary text-primary-400 px-3 lg:px-4 py-2 rounded-lg font-semibold hover:bg-bg-tertiary transition-colors duration-200 shadow-md hover:shadow-lg transform hover:scale-105 text-sm lg:text-base"
-            >
-              View Plans
-            </Link>
           </div>
+          <Link to="/premium" className="btn-primary whitespace-nowrap px-4 py-2 text-sm">
+            View Plans
+          </Link>
         </div>
       )}
 

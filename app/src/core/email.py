@@ -12,9 +12,16 @@ import hashlib
 import base64
 
 from core.config import get_settings
+from core.email_templates import (
+    render_email, email_button, email_heading, email_panel, p,
+    BODY, INK, FAINT, ACCENT_DK, BRASS, SANS, MONO,
+)
 from domains.users.models import User
 
 logger = logging.getLogger(__name__)
+
+# Frontend base URL for links in emails (prod site).
+FRONTEND_URL = "https://capitolscope.chrislawrence.ca"
 
 try:
     from sendgrid import SendGridAPIClient
@@ -60,7 +67,7 @@ class EmailService:
     async def send_password_reset_email(self, user: User, reset_token: str) -> bool:
         """Send password reset email to user."""
         try:
-            reset_url = f"http://localhost:5173/reset-password?token={reset_token}"
+            reset_url = f"{FRONTEND_URL}/reset-password?token={reset_token}"
             
             subject = "Reset Your CapitolScope Password"
             html_content = self._create_password_reset_html(user, reset_url)
@@ -181,7 +188,10 @@ class EmailService:
         try:
             msg = MIMEMultipart('alternative')
             msg['Subject'] = subject
-            msg['From'] = self.settings.SENDGRID_FROM_EMAIL
+            # Gmail (and SPF/DKIM alignment) requires the From to be the
+            # authenticated sending address, so prefer EMAIL_FROM over the
+            # SendGrid default which points at an unowned domain.
+            msg['From'] = self.settings.EMAIL_FROM or self.settings.SENDGRID_FROM_EMAIL
             msg['To'] = to_email
             
             # Attach both text and HTML parts
@@ -211,46 +221,21 @@ class EmailService:
     
     def _create_password_reset_html(self, user: User, reset_url: str) -> str:
         """Create HTML content for password reset email."""
-        return f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <title>Reset Your Password</title>
-            <style>
-                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-                .header {{ background: #1f2937; color: white; padding: 20px; text-align: center; }}
-                .content {{ padding: 20px; background: #f9fafb; }}
-                .button {{ display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }}
-                .footer {{ text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>CapitolScope</h1>
-                    <p>Congressional Trading Transparency Platform</p>
-                </div>
-                <div class="content">
-                    <h2>Reset Your Password</h2>
-                    <p>Hello {user.display_name or user.first_name or 'there'},</p>
-                    <p>We received a request to reset your password for your CapitolScope account.</p>
-                    <p>Click the button below to reset your password:</p>
-                    <p style="text-align: center;">
-                        <a href="{reset_url}" class="button">Reset Password</a>
-                    </p>
-                    <p>If you didn't request this password reset, you can safely ignore this email.</p>
-                    <p>This link will expire in 24 hours for security reasons.</p>
-                </div>
-                <div class="footer">
-                    <p>© 2025 CapitolScope. All rights reserved.</p>
-                    <p>If you have any questions, please contact our support team.</p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
+        name = user.display_name or user.first_name or "there"
+        body = (
+            email_heading("Reset your password")
+            + p(f"Hello {name},")
+            + p("We received a request to reset the password for your CapitolScope account.")
+            + email_button(reset_url, "Reset Password")
+            + p("If you didn't request this, you can safely ignore this email — your password won't change.")
+            + p("For your security, this link expires in 24 hours.")
+        )
+        return render_email(
+            title="Reset Your Password",
+            body_html=body,
+            preheader="Reset your CapitolScope password",
+            footer_note="You received this because a password reset was requested for your account.",
+        )
     
     def _create_password_reset_text(self, user: User, reset_url: str) -> str:
         """Create text content for password reset email."""
@@ -278,113 +263,56 @@ class EmailService:
         # Using emoji approach instead which works everywhere
         return ""
 
+    def _stat_row(self, items: List[tuple]) -> str:
+        """A 3-up row of mono figures + labels (matches the app's StatTile)."""
+        cells = "".join(
+            f'<td align="center" style="padding:8px 10px;">'
+            f'<div style="font-family:{MONO};font-size:22px;font-weight:600;color:{ACCENT_DK};">{value}</div>'
+            f'<div style="font-family:{MONO};font-size:10px;letter-spacing:0.12em;text-transform:uppercase;'
+            f'color:{FAINT};margin-top:4px;">{label}</div></td>'
+            for value, label in items
+        )
+        return (
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
+            f'style="margin:24px 0;border-top:1px solid {INK}11;border-bottom:1px solid {INK}11;">'
+            f"<tr>{cells}</tr></table>"
+        )
+
     def _create_welcome_html(self, user: User) -> str:
         """Create HTML content for welcome email."""
-        logo_data_url = self._get_logo_base64()
-        return f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <title>Welcome to CapitolScope</title>
-            <style>
-                body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #2d3748; margin: 0; padding: 0; background-color: #f7fafc; }}
-                .container {{ max-width: 600px; margin: 0 auto; background: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }}
-                .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; }}
-                .header h1 {{ margin: 0; font-size: 32px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }}
-                .header h1 img {{ width: 40px; height: 40px; }}
-                .header p {{ margin: 10px 0 0 0; font-size: 16px; opacity: 0.9; }}
-                .content {{ padding: 40px 30px; }}
-                .welcome-text {{ font-size: 18px; color: #4a5568; margin-bottom: 30px; }}
-                .features {{ background: #f8fafc; padding: 25px; border-radius: 8px; margin: 25px 0; }}
-                .features h3 {{ color: #2d3748; margin-top: 0; font-size: 20px; }}
-                .features ul {{ margin: 0; padding-left: 20px; }}
-                .features li {{ margin: 8px 0; color: #4a5568; }}
-                .cta-section {{ text-align: center; margin: 35px 0; }}
-                .button {{ display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3); transition: transform 0.2s; }}
-                .button:hover {{ transform: translateY(-2px); }}
-                .stats {{ display: flex; justify-content: space-around; margin: 30px 0; text-align: center; }}
-                .stat {{ flex: 1; padding: 20px; }}
-                .stat-number {{ font-size: 24px; font-weight: 700; color: #667eea; }}
-                .stat-label {{ font-size: 14px; color: #718096; margin-top: 5px; }}
-                .footer {{ background: #2d3748; color: white; padding: 30px 20px; text-align: center; }}
-                .footer p {{ margin: 5px 0; }}
-                .social-links {{ margin: 20px 0; }}
-                .social-links a {{ color: #a0aec0; text-decoration: none; margin: 0 10px; }}
-                .highlight {{ background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin: 20px 0; }}
-                .coming-soon {{ text-decoration: line-through; color: #a0aec0; }}
-                .coming-soon-label {{ background: #f7fafc; color: #718096; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>🏛️ CapitolScope</h1>
-                    <p>Your Window into Congressional Trading Activity</p>
-                </div>
-                <div class="content">
-                    <div class="welcome-text">
-                        <h2>Welcome aboard, {user.display_name or user.first_name or 'there'}! 👋</h2>
-                        <p>You've just joined the most comprehensive platform for tracking congressional trading activity. Get ready to discover insights that could transform your investment strategy.</p>
-                    </div>
-                    
-                    <div class="highlight">
-                        <strong>🎯 What you can do right now:</strong>
-                        <ul>
-                            <li>Browse real-time congressional trading data</li>
-                            <li>Search trades by member, company, or amount</li>
-                            <li style="text-decoration: line-through; color: #a0aec0;">Set up alerts for specific congress members <span style="background: #f7fafc; color: #718096; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Coming Soon</span></li>
-                            <li style="text-decoration: line-through; color: #a0aec0;">Analyze trading patterns and trends <span style="background: #f7fafc; color: #718096; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Coming Soon</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="features">
-                        <h3>🚀 Key Features Available to You</h3>
-                        <ul>
-                            <li><strong>Real-time Tracking:</strong> Monitor congressional trades as they happen</li>
-                            <li><strong>Advanced Search:</strong> Filter by member, ticker, date range, and transaction type</li>
-                            <li style="text-decoration: line-through; color: #a0aec0;"><strong>Portfolio Analysis:</strong> Compare congressional portfolios and performance <span style="background: #f7fafc; color: #718096; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Coming Soon</span></li>
-                            <li style="text-decoration: line-through; color: #a0aec0;"><strong>Market Insights:</strong> Understand the impact of congressional activity on markets <span style="background: #f7fafc; color: #718096; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Coming Soon</span></li>
-                            <li style="text-decoration: line-through; color: #a0aec0;"><strong>Custom Alerts:</strong> Get notified when specific members make trades <span style="background: #f7fafc; color: #718096; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Coming Soon</span></li>
-                            <li style="text-decoration: line-through; color: #a0aec0;"><strong>Data Export:</strong> Download trade data for your own analysis <span style="background: #f7fafc; color: #718096; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Coming Soon</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="stats">
-                        <div class="stat">
-                            <div class="stat-number">500+</div>
-                            <div class="stat-label">Congress Members</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-number">23K+</div>
-                            <div class="stat-label">Trades Tracked</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-number">$2B+</div>
-                            <div class="stat-label">Total Volume</div>
-                        </div>
-                    </div>
-                    
-                    <div class="cta-section">
-                        <a href="https://capitolscope.chrislawrence.ca/dashboard" class="button">🚀 Start Exploring Now</a>
-                    </div>
-                    
-                    <p style="text-align: center; color: #718096; font-size: 14px;">
-                        Questions? Reach out to us at <a href="mailto:capitolscope@gmail.com" style="color: #667eea;">capitolscope@gmail.com</a>
-                    </p>
-                </div>
-                <div class="footer">
-                    <p><strong>© 2025 CapitolScope</strong></p>
-                    <p>Empowering transparency in congressional trading</p>
-                    <div class="social-links">
-                        <a href="https://twitter.com/capitolscopeusa">Twitter</a> |
-                        <a href="https://capitolscope.chrislawrence.ca">Website</a>
-                    </div>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
+        name = user.display_name or user.first_name or "there"
+        now_items = [
+            "Browse real-time congressional trading disclosures",
+            "Search trades by member, company, or amount",
+            "Set up trade alerts by member, ticker, or dollar threshold",
+            "Open the Scrutiny leaderboard for who's worth a closer look",
+        ]
+        li = "".join(f'<li style="margin:6px 0;color:{BODY};">{x}</li>' for x in now_items)
+        panel = email_panel(
+            f'<div style="font-family:{SANS};font-weight:600;color:{INK};margin-bottom:8px;">Where to start</div>'
+            f'<ul style="margin:0;padding-left:18px;font-family:{SANS};font-size:14px;line-height:1.7;">{li}</ul>',
+            accent=True,
+        )
+        body = (
+            email_heading(f"Welcome aboard, {name}")
+            + p(
+                "You've joined the most comprehensive platform for tracking congressional "
+                "trading disclosures. Here's where to begin."
+            )
+            + panel
+            + self._stat_row([("500+", "Congress members"), ("23K+", "Trades tracked"), ("$2B+", "Total volume")])
+            + email_button(f"{FRONTEND_URL}/dashboard", "Start Exploring")
+            + p(
+                f'Questions? Reach out at '
+                f'<a href="mailto:capitolscope@gmail.com" style="color:{ACCENT_DK};">capitolscope@gmail.com</a>.'
+            )
+        )
+        return render_email(
+            title="Welcome to CapitolScope",
+            body_html=body,
+            preheader="Welcome to CapitolScope — start exploring congressional trades",
+            footer_links=[("Website", FRONTEND_URL), ("Support", "mailto:capitolscope@gmail.com")],
+        )
     
     def _create_welcome_text(self, user: User) -> str:
         """Create text content for welcome email."""
@@ -430,90 +358,51 @@ class EmailService:
         features = self._get_tier_features(tier)
         pricing = self._get_tier_pricing(tier, interval)
         
-        return f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <title>Welcome to CapitolScope {tier.title()}!</title>
-            <style>
-                body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #2d3748; margin: 0; padding: 0; background-color: #f7fafc; }}
-                .container {{ max-width: 600px; margin: 0 auto; background: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }}
-                .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; }}
-                .header h1 {{ margin: 0; font-size: 32px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }}
-                .header p {{ margin: 10px 0 0 0; font-size: 16px; opacity: 0.9; }}
-                .content {{ padding: 40px 30px; }}
-                .welcome-text {{ font-size: 18px; color: #4a5568; margin-bottom: 30px; }}
-                .subscription-details {{ background: #f8fafc; padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #667eea; }}
-                .subscription-details h3 {{ color: #2d3748; margin-top: 0; font-size: 20px; }}
-                .features {{ background: #f8fafc; padding: 25px; border-radius: 8px; margin: 25px 0; }}
-                .features h3 {{ color: #2d3748; margin-top: 0; font-size: 20px; }}
-                .features ul {{ margin: 0; padding-left: 20px; }}
-                .features li {{ margin: 8px 0; color: #4a5568; }}
-                .feature-item {{ display: flex; align-items: center; margin: 12px 0; }}
-                .feature-icon {{ margin-right: 12px; font-size: 18px; }}
-                .cta-section {{ text-align: center; margin: 35px 0; }}
-                .button {{ display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3); transition: transform 0.2s; }}
-                .button:hover {{ transform: translateY(-2px); }}
-                .footer {{ background: #2d3748; color: white; padding: 30px 20px; text-align: center; }}
-                .footer p {{ margin: 5px 0; }}
-                .social-links {{ margin: 20px 0; }}
-                .social-links a {{ color: #a0aec0; text-decoration: none; margin: 0 10px; }}
-                .highlight {{ background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin: 20px 0; }}
-                .tier-badge {{ display: inline-block; background: #667eea; color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-left: 10px; }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>🏛️ CapitolScope</h1>
-                    <p>Your Window into Congressional Trading Activity</p>
-                </div>
-                <div class="content">
-                    <div class="welcome-text">
-                        <h2>Welcome to {tier.title()}, {user.display_name or user.first_name or 'there'}! 🎉</h2>
-                        <p>Your subscription has been successfully activated! You now have access to premium features that will give you deeper insights into congressional trading activity.</p>
-                    </div>
-                    
-                    <div class="subscription-details">
-                        <h3>📋 Subscription Details</h3>
-                        <p><strong>Plan:</strong> {tier.title()} <span class="tier-badge">{tier.upper()}</span></p>
-                        <p><strong>Billing Cycle:</strong> {interval.title()}</p>
-                        <p><strong>Amount:</strong> ${pricing['price']}/{pricing['period']}</p>
-                        {f"<p><strong>Savings:</strong> {pricing['savings']}</p>" if pricing.get('savings') else ""}
-                    </div>
-                    
-                    <div class="features">
-                        <h3>🚀 Your {tier.title()} Benefits</h3>
-                        <ul>
-                            {''.join([f'<li class="feature-item"><span class="feature-icon">{feature["icon"]}</span> <strong>{feature["name"]}:</strong> {feature["description"]}</li>' for feature in features])}
-                        </ul>
-                    </div>
-                    
-                    <div class="highlight">
-                        <strong>💡 Pro Tip:</strong> Make the most of your {tier.title()} subscription by exploring all the advanced features. Start with the dashboard to see your personalized insights!
-                    </div>
-                    
-                    <div class="cta-section">
-                        <a href="https://capitolscope.chrislawrence.ca/dashboard" class="button">🚀 Access Your Dashboard</a>
-                    </div>
-                    
-                    <p style="text-align: center; color: #718096; font-size: 14px;">
-                        Questions about your subscription? Contact us at <a href="mailto:capitolscope@gmail.com" style="color: #667eea;">capitolscope@gmail.com</a>
-                    </p>
-                </div>
-                <div class="footer">
-                    <p><strong>© 2025 CapitolScope</strong></p>
-                    <p>Empowering transparency in congressional trading</p>
-                    <div class="social-links">
-                        <a href="https://twitter.com/capitolscopeusa">Twitter</a> |
-                        <a href="https://capitolscope.chrislawrence.ca">Website</a>
-                    </div>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
+        name = user.display_name or user.first_name or "there"
+        savings_row = (
+            f'<div style="margin:4px 0;"><strong style="color:{INK};">Savings:</strong> {pricing["savings"]}</div>'
+            if pricing.get("savings")
+            else ""
+        )
+        details = email_panel(
+            f'<div style="font-family:{SANS};font-weight:600;color:{INK};margin-bottom:10px;">Subscription details</div>'
+            f'<div style="margin:4px 0;"><strong style="color:{INK};">Plan:</strong> {tier.title()} '
+            f'<span style="font-family:{MONO};font-size:11px;letter-spacing:0.1em;color:{BRASS};">[{tier.upper()}]</span></div>'
+            f'<div style="margin:4px 0;"><strong style="color:{INK};">Billing:</strong> {interval.title()}</div>'
+            f'<div style="margin:4px 0;"><strong style="color:{INK};">Amount:</strong> '
+            f'<span style="font-family:{MONO};">${pricing["price"]}/{pricing["period"]}</span></div>'
+            f"{savings_row}",
+            accent=True,
+        )
+        feats = "".join(
+            f'<li style="margin:8px 0;color:{BODY};"><span style="margin-right:8px;">{f["icon"]}</span>'
+            f'<strong style="color:{INK};">{f["name"]}:</strong> {f["description"]}</li>'
+            for f in features
+        )
+        benefits = email_panel(
+            f'<div style="font-family:{SANS};font-weight:600;color:{INK};margin-bottom:8px;">Your {tier.title()} benefits</div>'
+            f'<ul style="margin:0;padding-left:18px;font-family:{SANS};font-size:14px;line-height:1.6;">{feats}</ul>'
+        )
+        body = (
+            email_heading(f"Welcome to {tier.title()}, {name}")
+            + p(
+                "Your subscription is active. You now have access to the premium features that "
+                "give you a deeper read on congressional trading activity."
+            )
+            + details
+            + benefits
+            + email_button(f"{FRONTEND_URL}/dashboard", "Access Your Dashboard")
+            + p(
+                f'Questions about your subscription? Contact us at '
+                f'<a href="mailto:capitolscope@gmail.com" style="color:{ACCENT_DK};">capitolscope@gmail.com</a>.'
+            )
+        )
+        return render_email(
+            title=f"Welcome to CapitolScope {tier.title()}",
+            body_html=body,
+            preheader=f"Your CapitolScope {tier.title()} subscription is active",
+            footer_links=[("Website", FRONTEND_URL), ("Support", "mailto:capitolscope@gmail.com")],
+        )
     
     def _create_subscription_confirmation_text(self, user: User, tier: str, interval: str) -> str:
         """Create text content for subscription confirmation email."""

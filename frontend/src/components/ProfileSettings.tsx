@@ -164,7 +164,7 @@ const ProfileSettings: React.FC = () => {
       });
       
       setMessage({ type: 'success', text: 'Password changed successfully!' });
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Failed to change password. Please check your current password.' });
     } finally {
       setIsLoading(false);
@@ -241,7 +241,7 @@ const ProfileSettings: React.FC = () => {
     setMessage(null);
 
     try {
-      const result = await stripeService.cancelSubscription(true); // Cancel at period end
+      await stripeService.cancelSubscription(true); // Cancel at period end
       setMessage({ 
         type: 'success', 
         text: `Subscription cancelled successfully. You will have access until the end of your current billing period.` 
@@ -296,7 +296,7 @@ const ProfileSettings: React.FC = () => {
   };
 
   const PremiumBadge = () => (
-    <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
+    <div className="flex items-center text-xs text-sev-watch dark:text-sev-watch bg-sev-watch/10 dark:bg-sev-watch/10 px-2 py-1 rounded-full">
       <StarIcon className="h-3 w-3 mr-1" />
       Premium
     </div>
@@ -318,31 +318,29 @@ const ProfileSettings: React.FC = () => {
     <div className="space-y-4 lg:space-y-6">
       {/* Header */}
       <div className="card p-4 lg:p-6">
-        <h2 className="text-xl lg:text-2xl font-bold text-neutral-100 mb-2">
+        <h2 className="text-xl lg:text-2xl font-bold text-content mb-2">
           Profile Settings
         </h2>
-        <p className="text-sm lg:text-base text-neutral-400">
+        <p className="text-sm lg:text-base text-content-faint">
           Manage your account settings and preferences.
         </p>
         {isFree && (
-          <div className="mt-4 p-3 lg:p-4 bg-neon-gradient rounded-lg shadow-glow-primary">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center">
-                <SparklesIcon className="h-5 w-5 lg:h-6 lg:w-6 text-bg-primary mr-2 lg:mr-3" />
-                <div>
-                  <h4 className="text-base lg:text-lg font-bold text-bg-primary mb-1">Unlock Premium Features</h4>
-                  <p className="text-bg-primary/80 text-xs lg:text-sm">
-                    Get access to Trade Alerts, Weekly Summaries, Multiple Buyer Alerts, and High-Value Trade Alerts
-                  </p>
-                </div>
+          <div className="mt-4 flex flex-col gap-4 rounded-md border border-accent/40 bg-accent/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center">
+              <SparklesIcon className="mr-3 h-6 w-6 flex-shrink-0 text-accent" />
+              <div>
+                <h4 className="font-display text-lg font-medium text-content">Unlock Premium Features</h4>
+                <p className="font-ui text-sm text-content-muted">
+                  Trade Alerts, Weekly Summaries, Multiple Buyer Alerts, and High-Value Trade Alerts.
+                </p>
               </div>
-              <Link
-                to="/premium"
-                className="bg-bg-primary text-primary-400 px-3 lg:px-4 py-2 rounded-lg font-semibold hover:bg-bg-tertiary transition-colors duration-200 shadow-md hover:shadow-lg transform hover:scale-105 text-sm lg:text-base"
-              >
-                View Plans
-              </Link>
             </div>
+            <Link
+              to="/premium"
+              className="btn-primary whitespace-nowrap px-4 py-2 text-sm"
+            >
+              View Plans
+            </Link>
           </div>
         )}
       </div>
@@ -351,13 +349,13 @@ const ProfileSettings: React.FC = () => {
       {message && (
         <div className={`card p-4 ${
           message.type === 'success' 
-            ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' 
-            : 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800'
+            ? 'bg-accent/10 border-accent/30 dark:bg-accent/10 dark:border-accent/30' 
+            : 'bg-sev-flag/10 border-sev-flag/30 dark:bg-sev-flag/10 dark:border-sev-flag/30'
         }`}>
           <p className={`text-sm ${
             message.type === 'success' 
-              ? 'text-green-800 dark:text-green-200' 
-              : 'text-red-800 dark:text-red-200'
+              ? 'text-accent dark:text-accent' 
+              : 'text-sev-flag dark:text-sev-flag'
           }`}>
             {message.text}
           </p>
@@ -368,15 +366,15 @@ const ProfileSettings: React.FC = () => {
         {/* Profile Information */}
         <div className="card p-4 lg:p-6">
           <div className="flex items-center mb-4 lg:mb-6">
-            <UserCircleIcon className="h-5 w-5 lg:h-6 lg:w-6 text-primary-400 mr-2 lg:mr-3" />
-            <h3 className="text-base lg:text-lg font-semibold text-neutral-100">
+            <UserCircleIcon className="h-5 w-5 lg:h-6 lg:w-6 text-accent mr-2 lg:mr-3" />
+            <h3 className="text-base lg:text-lg font-semibold text-content">
               Profile Information
             </h3>
           </div>
 
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div>
-              <label htmlFor="display_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+              <label htmlFor="display_name" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                 Display Name *
               </label>
               <input
@@ -389,11 +387,11 @@ const ProfileSettings: React.FC = () => {
                 placeholder="Enter your display name"
                 required
               />
-              <p className="text-xs text-neutral-400 mt-1">This is how your name will appear throughout the app</p>
+              <p className="text-xs text-content-faint mt-1">This is how your name will appear throughout the app</p>
             </div>
 
             <div>
-              <label htmlFor="username" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+              <label htmlFor="username" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                 Username
               </label>
               <input
@@ -405,12 +403,12 @@ const ProfileSettings: React.FC = () => {
                 className="input-field"
                 placeholder="Enter your username"
               />
-              <p className="text-xs text-neutral-400 mt-1">Optional: A unique username for your profile</p>
+              <p className="text-xs text-content-faint mt-1">Optional: A unique username for your profile</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="first_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                <label htmlFor="first_name" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                   First Name
                 </label>
                 <input
@@ -425,7 +423,7 @@ const ProfileSettings: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="last_name" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+                <label htmlFor="last_name" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                   Last Name
                 </label>
                 <input
@@ -441,22 +439,22 @@ const ProfileSettings: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-xs lg:text-sm font-medium text-neutral-300 mb-1">
+              <label htmlFor="email" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                 Email Address
               </label>
               <div className="flex items-center">
-                <EnvelopeIcon className="h-4 w-4 lg:h-5 lg:w-5 text-neutral-400 mr-2" />
+                <EnvelopeIcon className="h-4 w-4 lg:h-5 lg:w-5 text-content-faint mr-2" />
                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={profileData.email}
-                  className="input-field bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                  className="input-field bg-surface-inset dark:bg-surface-inset cursor-not-allowed"
                   placeholder="Enter your email"
                   disabled
                 />
               </div>
-              <p className="text-xs text-neutral-400 mt-1">Email cannot be changed. Contact support if needed.</p>
+              <p className="text-xs text-content-faint mt-1">Email cannot be changed. Contact support if needed.</p>
             </div>
 
             <div className="flex items-center">
@@ -466,9 +464,9 @@ const ProfileSettings: React.FC = () => {
                 name="is_public_profile"
                 checked={profileData.is_public_profile}
                 onChange={(e) => setProfileData(prev => ({ ...prev, is_public_profile: e.target.checked }))}
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-4 w-4 text-accent focus:ring-accent border-line rounded"
               />
-              <label htmlFor="is_public_profile" className="ml-2 block text-xs lg:text-sm text-gray-700 dark:text-gray-300">
+              <label htmlFor="is_public_profile" className="ml-2 block text-xs lg:text-sm text-content-muted">
                 Make my profile public
               </label>
             </div>
@@ -486,15 +484,15 @@ const ProfileSettings: React.FC = () => {
         {/* Change Password */}
         <div className="card p-4 lg:p-6">
           <div className="flex items-center mb-4 lg:mb-6">
-            <KeyIcon className="h-5 w-5 lg:h-6 lg:w-6 text-primary-600 mr-2 lg:mr-3" />
-            <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <KeyIcon className="h-5 w-5 lg:h-6 lg:w-6 text-accent mr-2 lg:mr-3" />
+            <h3 className="text-base lg:text-lg font-semibold text-content">
               Change Password
             </h3>
           </div>
 
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
-              <label htmlFor="current_password" className="block text-xs lg:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="current_password" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                 Current Password
               </label>
               <input
@@ -509,7 +507,7 @@ const ProfileSettings: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="new_password" className="block text-xs lg:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="new_password" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                 New Password
               </label>
               <input
@@ -524,7 +522,7 @@ const ProfileSettings: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="confirm_password" className="block text-xs lg:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="confirm_password" className="block text-xs lg:text-sm font-medium text-content-muted mb-1">
                 Confirm New Password
               </label>
               <input
@@ -552,8 +550,8 @@ const ProfileSettings: React.FC = () => {
       {/* Notification Settings */}
       <div className="card p-4 lg:p-6">
         <div className="flex items-center mb-4 lg:mb-6">
-          <BellIcon className="h-5 w-5 lg:h-6 lg:w-6 text-primary-600 mr-2 lg:mr-3" />
-          <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <BellIcon className="h-5 w-5 lg:h-6 lg:w-6 text-accent mr-2 lg:mr-3" />
+          <h3 className="text-base lg:text-lg font-semibold text-content">
             Notification Settings
           </h3>
         </div>
@@ -561,8 +559,8 @@ const ProfileSettings: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">Email Notifications</h4>
-              <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Receive notifications via email</p>
+              <h4 className="text-xs lg:text-sm font-medium text-content">Email Notifications</h4>
+              <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Receive notifications via email</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -571,7 +569,7 @@ const ProfileSettings: React.FC = () => {
                 onChange={(e) => handleNotificationChange('email_notifications', e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+              <div className="w-11 h-6 bg-surface-inset peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/40 dark:peer-focus:ring-accent/30 rounded-full peer dark:bg-surface-inset peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-raised after:border-line after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-line peer-checked:bg-accent"></div>
             </label>
           </div>
 
@@ -579,8 +577,8 @@ const ProfileSettings: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div>
-                  <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">Trade Alerts</h4>
-                  <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Get notified of new congressional trades</p>
+                  <h4 className="text-xs lg:text-sm font-medium text-content">Trade Alerts</h4>
+                  <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Get notified of new congressional trades</p>
                 </div>
                 {!isPremium && <PremiumBadge />}
               </div>
@@ -592,7 +590,7 @@ const ProfileSettings: React.FC = () => {
                   className="sr-only peer"
                   disabled={!isPremium}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+                <div className="w-11 h-6 bg-surface-inset peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/40 dark:peer-focus:ring-accent/30 rounded-full peer dark:bg-surface-inset peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-raised after:border-line after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-line peer-checked:bg-accent"></div>
               </label>
             </div>
           </PremiumFeatureWrapper>
@@ -601,8 +599,8 @@ const ProfileSettings: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div>
-                  <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">Weekly Summary</h4>
-                  <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Receive weekly trading activity summaries</p>
+                  <h4 className="text-xs lg:text-sm font-medium text-content">Weekly Summary</h4>
+                  <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Receive weekly trading activity summaries</p>
                 </div>
                 {!isPremium && <PremiumBadge />}
               </div>
@@ -614,7 +612,7 @@ const ProfileSettings: React.FC = () => {
                   className="sr-only peer"
                   disabled={!isPremium}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+                <div className="w-11 h-6 bg-surface-inset peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/40 dark:peer-focus:ring-accent/30 rounded-full peer dark:bg-surface-inset peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-raised after:border-line after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-line peer-checked:bg-accent"></div>
               </label>
             </div>
           </PremiumFeatureWrapper>
@@ -623,8 +621,8 @@ const ProfileSettings: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div>
-                  <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">Multiple Buyer Alerts</h4>
-                  <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Alerts when 5+ members buy same stock in 3 months</p>
+                  <h4 className="text-xs lg:text-sm font-medium text-content">Multiple Buyer Alerts</h4>
+                  <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Alerts when 5+ members buy same stock in 3 months</p>
                 </div>
                 {!isPremium && <PremiumBadge />}
               </div>
@@ -636,7 +634,7 @@ const ProfileSettings: React.FC = () => {
                   className="sr-only peer"
                   disabled={!isPremium}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+                <div className="w-11 h-6 bg-surface-inset peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/40 dark:peer-focus:ring-accent/30 rounded-full peer dark:bg-surface-inset peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-raised after:border-line after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-line peer-checked:bg-accent"></div>
               </label>
             </div>
           </PremiumFeatureWrapper>
@@ -645,8 +643,8 @@ const ProfileSettings: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div>
-                  <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">High-Value Trade Alerts</h4>
-                  <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Alerts for trades over $1M</p>
+                  <h4 className="text-xs lg:text-sm font-medium text-content">High-Value Trade Alerts</h4>
+                  <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Alerts for trades over $1M</p>
                 </div>
                 {!isPremium && <PremiumBadge />}
               </div>
@@ -658,7 +656,7 @@ const ProfileSettings: React.FC = () => {
                   className="sr-only peer"
                   disabled={!isPremium}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+                <div className="w-11 h-6 bg-surface-inset peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/40 dark:peer-focus:ring-accent/30 rounded-full peer dark:bg-surface-inset peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-raised after:border-line after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-line peer-checked:bg-accent"></div>
               </label>
             </div>
           </PremiumFeatureWrapper>
@@ -668,29 +666,29 @@ const ProfileSettings: React.FC = () => {
       {/* Subscription Management */}
       <div className="card p-4 lg:p-6">
         <div className="flex items-center mb-4 lg:mb-6">
-          <CreditCardIcon className="h-5 w-5 lg:h-6 lg:w-6 text-primary-600 mr-2 lg:mr-3" />
-          <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <CreditCardIcon className="h-5 w-5 lg:h-6 lg:w-6 text-accent mr-2 lg:mr-3" />
+          <h3 className="text-base lg:text-lg font-semibold text-content">
             Subscription Management
           </h3>
         </div>
 
         <div className="space-y-4">
           {/* Current Subscription Status */}
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div className="p-4 bg-surface-inset rounded-lg">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Current Plan</h4>
+              <h4 className="text-sm font-medium text-content">Current Plan</h4>
               <div className="flex items-center">
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100 capitalize mr-2">
+                <span className="text-sm font-medium text-content capitalize mr-2">
                   {subscriptionTier || 'free'}
                 </span>
                 {!isFree && (
-                  <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
+                  <div className="flex items-center text-xs text-sev-watch dark:text-sev-watch bg-sev-watch/10 dark:bg-sev-watch/10 px-2 py-1 rounded-full">
                     <StarIcon className="h-3 w-3 mr-1" />
                     {isPremium ? 'Premium' : 'Pro'}
                   </div>
                 )}
                 {user?.subscription_status === 'cancelled' && (
-                  <div className="flex items-center text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-full ml-2">
+                  <div className="flex items-center text-xs text-sev-flag dark:text-sev-flag bg-sev-flag/10 dark:bg-sev-flag/10 px-2 py-1 rounded-full ml-2">
                     <XCircleIcon className="h-3 w-3 mr-1" />
                     Cancelled
                   </div>
@@ -700,30 +698,30 @@ const ProfileSettings: React.FC = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="flex items-center">
-                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
-                <span className="text-gray-600 dark:text-gray-400">Analytics Access</span>
-                <span className={`ml-auto ${isPro ? 'text-green-600' : 'text-red-600'}`}>
+                <CheckCircleIcon className="h-4 w-4 text-accent mr-2" />
+                <span className="text-content-muted">Analytics Access</span>
+                <span className={`ml-auto ${isPro ? 'text-accent' : 'text-sev-flag'}`}>
                   {isPro ? '✓' : '✗'}
                 </span>
               </div>
               <div className="flex items-center">
-                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
-                <span className="text-gray-600 dark:text-gray-400">Data Quality</span>
-                <span className={`ml-auto ${isPro ? 'text-green-600' : 'text-red-600'}`}>
+                <CheckCircleIcon className="h-4 w-4 text-accent mr-2" />
+                <span className="text-content-muted">Data Quality</span>
+                <span className={`ml-auto ${isPro ? 'text-accent' : 'text-sev-flag'}`}>
                   {isPro ? '✓' : '✗'}
                 </span>
               </div>
               <div className="flex items-center">
-                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
-                <span className="text-gray-600 dark:text-gray-400">Trade Alerts</span>
-                <span className={`ml-auto ${isPro ? 'text-green-600' : 'text-red-600'}`}>
+                <CheckCircleIcon className="h-4 w-4 text-accent mr-2" />
+                <span className="text-content-muted">Trade Alerts</span>
+                <span className={`ml-auto ${isPro ? 'text-accent' : 'text-sev-flag'}`}>
                   {isPro ? '✓' : '✗'}
                 </span>
               </div>
               <div className="flex items-center">
-                <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
-                <span className="text-gray-600 dark:text-gray-400">Premium Features</span>
-                <span className={`ml-auto ${isPremium ? 'text-green-600' : 'text-red-600'}`}>
+                <CheckCircleIcon className="h-4 w-4 text-accent mr-2" />
+                <span className="text-content-muted">Premium Features</span>
+                <span className={`ml-auto ${isPremium ? 'text-accent' : 'text-sev-flag'}`}>
                   {isPremium ? '✓' : '✗'}
                 </span>
               </div>
@@ -741,7 +739,7 @@ const ProfileSettings: React.FC = () => {
               </Link>
             ) : user?.subscription_status === 'cancelled' ? (
               <div className="w-full text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                <p className="text-sm text-content-muted mb-3">
                   Your subscription has been cancelled. You'll have access until the end of your billing period.
                 </p>
                 <button
@@ -763,7 +761,7 @@ const ProfileSettings: React.FC = () => {
                 <button
                   onClick={handleCancelSubscription}
                   disabled={isCancelling}
-                  className="btn-secondary flex-1 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                  className="btn-secondary flex-1 text-sev-flag hover:text-sev-flag dark:text-sev-flag dark:hover:text-sev-flag"
                 >
                   {isCancelling ? 'Cancelling...' : 'Cancel Subscription'}
                 </button>
@@ -773,8 +771,8 @@ const ProfileSettings: React.FC = () => {
 
           {/* Subscription Info */}
           {!isFree && (
-            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <p className="text-blue-800 dark:text-blue-200 text-xs">
+            <div className="p-3 bg-sev-info/10 dark:bg-sev-info/10 border border-sev-info/30 dark:border-sev-info/30 rounded-lg">
+              <p className="text-sev-info dark:text-sev-info text-xs">
                 Need help with your subscription? Contact support at{' '}
                 <a href="mailto:captiolscope@gmail.com" className="underline hover:no-underline">
                   capitolscope@gmail.com
@@ -788,17 +786,17 @@ const ProfileSettings: React.FC = () => {
       {/* Account Security */}
       <div className="card p-4 lg:p-6">
         <div className="flex items-center mb-4 lg:mb-6">
-          <ShieldCheckIcon className="h-5 w-5 lg:h-6 lg:w-6 text-primary-600 mr-2 lg:mr-3" />
-          <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <ShieldCheckIcon className="h-5 w-5 lg:h-6 lg:w-6 text-accent mr-2 lg:mr-3" />
+          <h3 className="text-base lg:text-lg font-semibold text-content">
             Account Security
           </h3>
         </div>
 
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-3 lg:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div className="flex items-center justify-between p-3 lg:p-4 bg-surface-inset rounded-lg">
             <div>
-              <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">Two-Factor Authentication</h4>
-              <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Add an extra layer of security to your account</p>
+              <h4 className="text-xs lg:text-sm font-medium text-content">Two-Factor Authentication</h4>
+              <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Add an extra layer of security to your account</p>
             </div>
             <button 
               className="btn-secondary btn-sm"
@@ -811,10 +809,10 @@ const ProfileSettings: React.FC = () => {
             </button>
           </div>
 
-          <div className="flex items-center justify-between p-3 lg:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div className="flex items-center justify-between p-3 lg:p-4 bg-surface-inset rounded-lg">
             <div>
-              <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">Active Sessions</h4>
-              <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Manage your active login sessions</p>
+              <h4 className="text-xs lg:text-sm font-medium text-content">Active Sessions</h4>
+              <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Manage your active login sessions</p>
             </div>
             <button 
               className="btn-secondary btn-sm"
@@ -827,13 +825,13 @@ const ProfileSettings: React.FC = () => {
             </button>
           </div>
 
-          <div className="flex items-center justify-between p-3 lg:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div className="flex items-center justify-between p-3 lg:p-4 bg-surface-inset rounded-lg">
             <div>
-              <h4 className="text-xs lg:text-sm font-medium text-gray-900 dark:text-gray-100">Delete Account</h4>
-              <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Permanently delete your account and all data</p>
+              <h4 className="text-xs lg:text-sm font-medium text-content">Delete Account</h4>
+              <p className="text-xs lg:text-sm text-content-faint dark:text-content-faint">Permanently delete your account and all data</p>
             </div>
             <button 
-              className="btn-secondary btn-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+              className="btn-secondary btn-sm text-sev-flag hover:text-sev-flag dark:text-sev-flag dark:hover:text-sev-flag"
               onClick={() => {
                 if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
                   // TODO: Implement account deletion

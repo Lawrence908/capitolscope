@@ -139,17 +139,17 @@ const RegisterPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-primary">
+      <div className="min-h-screen flex items-center justify-center bg-surface">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-400 mx-auto"></div>
-          <p className="mt-4 text-neutral-400">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
+          <p className="mt-4 text-content-faint">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg-primary py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
@@ -157,23 +157,23 @@ const RegisterPage: React.FC = () => {
             <img 
               src="/capitol-scope-logo.png" 
               alt="CapitolScope Logo" 
-              className="h-70 w-70 mx-auto rounded-full shadow-glow-primary/30"
+              className="h-70 w-70 mx-auto rounded-full"
             />
           </div>
-          <h2 className="text-3xl font-extrabold text-neutral-100">
+          <h2 className="font-display text-3xl font-medium tracking-[-0.01em] text-content">
             Join CapitolScope
           </h2>
-          <p className="mt-2 text-sm text-neutral-400">
+          <p className="mt-2 text-sm text-content-faint">
             Create your account to get started
           </p>
         </div>
 
         {/* Registration Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="card mt-8 space-y-6 p-6 sm:p-8" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-300">
+              <label htmlFor="email" className="block text-sm font-medium text-content-muted">
                 Email address *
               </label>
               <input
@@ -202,7 +202,7 @@ const RegisterPage: React.FC = () => {
             {/* Name Fields */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="first_name" className="block text-sm font-medium text-neutral-300">
+                <label htmlFor="first_name" className="block text-sm font-medium text-content-muted">
                   First name
                 </label>
                 <input
@@ -228,7 +228,7 @@ const RegisterPage: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="last_name" className="block text-sm font-medium text-neutral-300">
+                <label htmlFor="last_name" className="block text-sm font-medium text-content-muted">
                   Last name
                 </label>
                 <input
@@ -256,7 +256,7 @@ const RegisterPage: React.FC = () => {
 
             {/* Username Field */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-neutral-300">
+              <label htmlFor="username" className="block text-sm font-medium text-content-muted">
                 Username (optional)
               </label>
               <input
@@ -283,7 +283,7 @@ const RegisterPage: React.FC = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-neutral-300">
+              <label htmlFor="password" className="block text-sm font-medium text-content-muted">
                 Password *
               </label>
               <input
@@ -311,7 +311,7 @@ const RegisterPage: React.FC = () => {
 
             {/* Confirm Password Field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-300">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-content-muted">
                 Confirm password *
               </label>
               <input
@@ -346,21 +346,21 @@ const RegisterPage: React.FC = () => {
               type="checkbox"
               checked={formData.terms_accepted}
               onChange={handleInputChange}
-              className="h-4 w-4 text-primary-400 focus:ring-primary-400 border-primary-600 rounded"
+              className="h-4 w-4 text-accent focus:ring-accent border-accent rounded"
               aria-describedby={validationErrors.terms_accepted ? "terms-error" : undefined}
             />
-            <label htmlFor="terms_accepted" className="ml-2 block text-sm text-neutral-300">
+            <label htmlFor="terms_accepted" className="ml-2 block text-sm text-content-muted">
               I agree to the{' '}
               <Link
                 to="/terms"
-                className="font-medium text-primary-400 hover:text-primary-300"
+                className="font-medium text-accent hover:text-accent-strong"
               >
                 Terms of Service
               </Link>{' '}
               and{' '}
               <Link
                 to="/privacy"
-                className="font-medium text-primary-400 hover:text-primary-300"
+                className="font-medium text-accent hover:text-accent-strong"
               >
                 Privacy Policy
               </Link>
@@ -413,11 +413,11 @@ const RegisterPage: React.FC = () => {
 
           {/* Sign In Link */}
           <div className="text-center">
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-content-faint">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="font-medium text-primary-400 hover:text-primary-300"
+                className="font-medium text-accent hover:text-accent-strong"
               >
                 Sign in
               </Link>
@@ -427,17 +427,17 @@ const RegisterPage: React.FC = () => {
 
         {/* Subscription Tiers Info */}
         <div className="mt-8 card p-4">
-          <h3 className="text-sm font-medium text-primary-400 mb-2">
+          <h3 className="text-sm font-medium text-accent mb-2">
             🎯 Free Tier Features
           </h3>
-          <ul className="text-xs text-neutral-400 space-y-1">
+          <ul className="text-xs text-content-faint space-y-1">
             <li>• Access to congressional trading data</li>
             <li>• Basic search and filtering</li>
             <li>• Member profiles and trade history</li>
             <li>• Email notifications for major trades</li>
             <li>• Community discussions</li>
           </ul>
-          <p className="text-xs text-neutral-400 mt-2">
+          <p className="text-xs text-content-faint mt-2">
             Premium features coming soon: Advanced analytics, real-time alerts, portfolio tracking, and more.
           </p>
         </div>

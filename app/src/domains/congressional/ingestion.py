@@ -88,8 +88,19 @@ class ProcessedTrade:
 
 class CongressionalDataIngestion:
     """Enhanced congressional data ingestion with quality processing."""
-    
+
+    # Plausibility floor for any transaction/notification date. Electronic
+    # disclosure predates the STOCK Act (2012) only marginally; anything before
+    # this is a parsing/OCR artifact, not a real filing. The upper bound is
+    # computed dynamically as date.today() in _bounded_date (no future trades).
+    MIN_TRADE_DATE = date(2008, 1, 1)
+
     def __init__(self, batch_size: int = 50, session: Optional[Session] = None):  # Reduced from 100 to 50
+        # Backward-compat guard: some callers historically passed the DB session
+        # positionally as the first argument. If that happens, recover safely.
+        if isinstance(batch_size, Session) and session is None:
+            session = batch_size
+            batch_size = 50
         self.batch_size = batch_size
         self.data_quality = DataQualityEnhancer()
         self.statistics = ImportStatistics()
@@ -252,11 +263,21 @@ class CongressionalDataIngestion:
         
         try:
             with open(csv_path, 'r', encoding='utf-8') as file:
-                # Detect CSV format
-                dialect = pycsv.Sniffer().sniff(file.read(1024))
+                # Detect CSV format. Constrain the sniffer to the only two
+                # delimiters these congressional files ever use (comma or tab):
+                # unconstrained, Sniffer mis-guesses a garbage delimiter on the
+                # long free-text Description in the first row (e.g. 'k'), which
+                # collapses every column and drops the whole file. Fall back to
+                # header inspection if the sniffer still fails.
+                sample = file.read(2048)
                 file.seek(0)
-                
-                reader = pycsv.DictReader(file, dialect=dialect)
+                try:
+                    dialect = pycsv.Sniffer().sniff(sample, delimiters=',\t')
+                    delimiter = dialect.delimiter
+                except pycsv.Error:
+                    delimiter = '\t' if '\t' in sample.splitlines()[0] else ','
+
+                reader = pycsv.DictReader(file, delimiter=delimiter)
                 
                 # Process in batches
                 with db_manager.sync_session_scope() as session:  # Use sync session scope
@@ -373,31 +394,61 @@ class CongressionalDataIngestion:
             logger.error(f"Error parsing row {row_num}: {e}")
             return None
     
+    def _bounded_date(self, candidate: Optional[date], raw: str) -> Optional[date]:
+        """Reject dates outside the plausible range for a congressional filing.
+
+        A syntactically valid date can still be garbage: OCR/transcription
+        errors produce far-future years (e.g. 4/29/3031, 4/6/2220, 9/18/2202)
+        and filings can carry future transaction dates (e.g. 12/25/2026) that
+        cannot represent a disclosed trade. We hard-cap the upper bound at
+        *today* (no trade can be disclosed before it happens) and floor at
+        MIN_TRADE_DATE. Out-of-range candidates are dropped (returns None) so
+        the caller falls back to inference or records an ``invalid_date`` error
+        rather than persisting a bogus date.
+        """
+        if candidate is None:
+            return None
+        today = date.today()
+        if candidate > today:
+            logger.warning(
+                f"Rejecting future date (> {today.isoformat()}): {raw!r} -> {candidate.isoformat()}"
+            )
+            return None
+        if candidate < self.MIN_TRADE_DATE:
+            logger.warning(
+                f"Rejecting implausibly old date (< {self.MIN_TRADE_DATE.isoformat()}): "
+                f"{raw!r} -> {candidate.isoformat()}"
+            )
+            return None
+        return candidate
+
     def _parse_date(self, date_str: str) -> Optional[date]:
         """Parse date string with multiple format support and sanitization.
 
         Handles placeholders like 'S', '[ST]', words leaking into the field,
-        and scans arbitrary text to extract a date token if needed.
+        and scans arbitrary text to extract a date token if needed. Every
+        successfully parsed candidate is run through :meth:`_bounded_date` so
+        that future-dated or garbage-year values never reach the database.
         """
         if not date_str:
             return None
-        
+
         # Normalize input to string
         raw = str(date_str).strip()
         if not raw:
             return None
-        
+
         # Fast reject common non-dates/placeholders
         placeholders = {"S", "[ST]", "ST", "N/A", "NA", "NONE", "-"}
         if raw.upper() in placeholders:
             return None
-        
+
         # If the string is clearly just a year with 2 or 4 digits, try to coerce
         if raw.isdigit():
             if len(raw) == 4:
                 # Year-only -> choose Jan 1 of that year
                 try:
-                    return date(int(raw), 1, 1)
+                    return self._bounded_date(date(int(raw), 1, 1), raw)
                 except ValueError:
                     pass
             elif len(raw) == 2:
@@ -405,10 +456,10 @@ class CongressionalDataIngestion:
                 try:
                     yy = int(raw)
                     century = 2000 if yy <= 30 else 1900
-                    return date(century + yy, 1, 1)
+                    return self._bounded_date(date(century + yy, 1, 1), raw)
                 except ValueError:
                     pass
-        
+
         # Try structured formats first
         formats = [
             '%Y-%m-%d',
@@ -419,20 +470,20 @@ class CongressionalDataIngestion:
         ]
         for fmt in formats:
             try:
-                return datetime.strptime(raw, fmt).date()
+                return self._bounded_date(datetime.strptime(raw, fmt).date(), raw)
             except ValueError:
                 continue
-        
+
         # Handle two-digit year in slash format (e.g., 2/18/22)
         try:
             mdy = datetime.strptime(raw, '%m/%d/%y').date()
             # Normalize 2-digit year into 19xx/20xx similar to above assumption
             yy = int(raw.split('/')[-1])
             century = 2000 if yy <= 30 else 1900
-            return date(century + mdy.year % 100, mdy.month, mdy.day)
+            return self._bounded_date(date(century + mdy.year % 100, mdy.month, mdy.day), raw)
         except ValueError:
             pass
-        
+
         # As a last resort, scan the string for a date token using regex
         # - ISO: YYYY-MM-DD
         # - M/D/YY(YY)
@@ -440,7 +491,7 @@ class CongressionalDataIngestion:
         if iso_match:
             try:
                 y, m, d = map(int, iso_match.groups())
-                return date(y, m, d)
+                return self._bounded_date(date(y, m, d), raw)
             except ValueError:
                 pass
         mdy_match = re.search(r"\b(\d{1,2})/(\d{1,2})/(\d{2,4})\b", raw)
@@ -454,10 +505,10 @@ class CongressionalDataIngestion:
                     y = 2000 + yy if yy <= 30 else 1900 + yy
                 else:
                     y = int(y)
-                return date(y, m, d)
+                return self._bounded_date(date(y, m, d), raw)
             except ValueError:
                 pass
-        
+
         logger.warning(f"Could not parse date: {raw}")
         return None
     
@@ -730,11 +781,18 @@ class CongressionalDataIngestion:
         if not trade.owner:
             errors.append("Missing owner information")
             
-        # Date validation
+        # Date ordering is a data-quality signal, NOT a reason to discard an
+        # otherwise-valid trade. Congressional filers legitimately (and
+        # sometimes erroneously, e.g. a transaction dated in the future) report
+        # a notification date before the transaction date; the House PTR PDFs
+        # are transcribed faithfully. Flag it as a note and keep the trade
+        # rather than dropping real disclosures.
         if trade.notification_date and trade.transaction_date:
             if trade.notification_date < trade.transaction_date:
-                errors.append("Notification date cannot be before transaction date")
-                
+                trade.parsing_notes.append(
+                    "notification_date_before_transaction_date"
+                )
+
         trade.validation_errors = errors
         trade.is_valid = len(errors) == 0
     
@@ -800,26 +858,21 @@ class CongressionalDataIngestion:
         logger.info(f"Inserted {inserted} trades")
     
     def _trigger_trade_notifications(self, trades: List[ProcessedTrade]):
-        """Trigger notification processing for newly inserted trades."""
+        """Nudge the batched trade-alert digest after new trades are inserted.
+
+        We enqueue a single ``process_pending_trade_alerts`` run rather than one
+        task per trade: a filing can insert dozens of trades at once, and the
+        digest task batches all matches into one email per user. The periodic
+        beat job runs the same task, and NotificationDelivery dedup makes both
+        paths idempotent, so this is just a "process now" hint.
+        """
         try:
             # Import here to avoid circular imports
-            from background.tasks import process_new_trade_notifications
-            
-            for trade in trades:
-                try:
-                    # Schedule background task for each new trade
-                    # We pass the doc_id and member_id to find the trade later
-                    process_new_trade_notifications.delay(
-                        doc_id=trade.doc_id,
-                        member_id=str(trade.member_id),
-                        transaction_date=trade.transaction_date.isoformat()
-                    )
-                    logger.debug(f"Scheduled notification task for trade {trade.doc_id}")
-                except Exception as e:
-                    logger.error(f"Failed to schedule notification for trade {trade.doc_id}: {e}")
-            
-            logger.info(f"Triggered notification processing for {len(trades)} new trades")
-            
+            from background.tasks import process_pending_trade_alerts
+
+            process_pending_trade_alerts.delay()
+            logger.info(f"Nudged trade-alert digest after inserting {len(trades)} new trades")
+
         except Exception as e:
             logger.error(f"Error triggering trade notifications: {e}")
             # Don't raise - notifications failing shouldn't break ingestion
@@ -1007,8 +1060,14 @@ class CongressionalDataIngestion:
         if not csv_dir.exists():
             raise FileNotFoundError(f"CSV directory not found: {csv_directory}")
         
-        # Find all main CSV files (e.g., 2014FD.csv, 2015FD.csv, etc.)
-        csv_files = [f for f in csv_dir.glob("[0-9][0-9][0-9][0-9]FD.csv") if f.is_file()]
+        # Find all main CSV files (e.g., 2014FD.csv, 2015FD.csv, etc.) plus
+        # Senate files (e.g., 2026SFD.csv) written by the Senate eFD fetcher.
+        csv_files = [
+            f
+            for pattern in ("[0-9][0-9][0-9][0-9]FD.csv", "[0-9][0-9][0-9][0-9]SFD.csv")
+            for f in csv_dir.glob(pattern)
+            if f.is_file()
+        ]
         if not csv_files:
             logger.warning(f"No main CSV files found in directory: {csv_directory}")
             return {"status": "no_files", "files_processed": 0}

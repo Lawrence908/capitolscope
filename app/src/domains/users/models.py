@@ -143,6 +143,7 @@ class User(CapitolScopeBaseModel, TimestampMixin, SoftDeleteMixin, AuditMixin):
     notification_subscriptions = relationship("NotificationSubscription", back_populates="user", cascade="all, delete-orphan")
     newsletter_subscriptions = relationship("NewsletterSubscription", back_populates="user", cascade="all, delete-orphan")
     trade_alert_rules = relationship("TradeAlertRule", back_populates="user", cascade="all, delete-orphan")
+    mirror_portfolios = relationship("MirrorPortfolio", back_populates="user", cascade="all, delete-orphan")
     
     # Indexes and constraints
     __table_args__ = (

@@ -46,20 +46,20 @@ const PublicDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-light-primary dark:bg-bg-primary flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-bg-light-primary dark:bg-bg-primary flex items-center justify-center p-4">
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 max-w-md">
+      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+        <div className="bg-sev-flag/10 dark:bg-sev-flag/10 border border-sev-flag/30 dark:border-sev-flag/30 rounded-md p-4 max-w-md">
           <div className="flex">
-            <ExclamationTriangleIcon className="h-5 w-5 text-red-400" />
+            <ExclamationTriangleIcon className="h-5 w-5 text-sev-flag" />
             <div className="ml-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+              <p className="text-sm text-sev-flag dark:text-sev-flag">{error}</p>
             </div>
           </div>
         </div>
@@ -72,19 +72,19 @@ const PublicDashboard: React.FC = () => {
       title: 'Total Trades',
       value: stats?.total_trades?.toLocaleString() || '0',
       icon: DocumentTextIcon,
-      color: 'bg-primary-500',
+      color: 'bg-accent',
     },
     {
       title: 'Congress Members',
       value: stats?.unique_members?.toLocaleString() || '0',
       icon: UserGroupIcon,
-      color: 'bg-secondary-500',
+      color: 'bg-accent',
     },
     {
       title: 'Unique Tickers',
       value: stats?.unique_tickers?.toLocaleString() || '0',
       icon: ArrowTrendingUpIcon,
-      color: 'bg-neutral-500',
+      color: 'bg-surface-inset',
     },
     {
       title: 'Missing Tickers',
@@ -95,9 +95,9 @@ const PublicDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-bg-light-primary dark:bg-bg-primary">
+    <div className="min-h-screen bg-surface">
       {/* Header with Sign In/Sign Up */}
-      <header className="border-b border-neutral-200 dark:border-neutral-700 bg-bg-light-primary dark:bg-bg-primary sticky top-0 z-10">
+      <header className="border-b border-line bg-surface sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
@@ -109,12 +109,12 @@ const PublicDashboard: React.FC = () => {
                 width="40"
                 height="40"
               />
-              <h1 className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold text-primary-600 dark:text-primary-400">CapitolScope</h1>
+              <h1 className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold text-accent dark:text-accent">CapitolScope</h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Link
                 to="/login"
-                className="hidden sm:block text-neutral-300 dark:text-neutral-400 hover:text-heading text-sm transition-colors"
+                className="hidden sm:block text-content-muted dark:text-content-faint hover:text-heading text-sm transition-colors"
               >
                 Sign in
               </Link>
@@ -194,14 +194,14 @@ const PublicDashboard: React.FC = () => {
               <h3 className="text-base lg:text-lg font-semibold text-heading">Recent Trades</h3>
               <Link
                 to="/register"
-                className="text-xs lg:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
+                className="text-xs lg:text-sm text-accent dark:text-accent hover:text-accent-strong dark:hover:text-accent"
               >
                 Sign up to view all →
               </Link>
             </div>
             <div className="space-y-3 lg:space-y-4">
               {recentTrades && recentTrades.length > 0 ? recentTrades.slice(0, 5).map((trade, index) => (
-                <div key={trade.id || `trade-${index}`} className="flex items-center justify-between py-2 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
+                <div key={trade.id || `trade-${index}`} className="flex items-center justify-between py-2 border-b border-line last:border-b-0">
                   <div className="flex-1 min-w-0">
                     <p className="text-xs lg:text-sm font-medium text-heading truncate">
                       {trade.member_name || 'Unknown'}
@@ -232,10 +232,10 @@ const PublicDashboard: React.FC = () => {
               )}
             </div>
             {recentTrades && recentTrades.length > 5 && (
-              <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <div className="mt-4 pt-4 border-t border-line">
                 <Link
                   to="/register"
-                  className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-center block"
+                  className="text-sm text-accent dark:text-accent hover:text-accent-strong dark:hover:text-accent text-center block"
                 >
                   Sign up to see all {recentTrades.length} recent trades →
                 </Link>
@@ -249,14 +249,14 @@ const PublicDashboard: React.FC = () => {
               <h3 className="text-base lg:text-lg font-semibold text-heading">Top Trading Members</h3>
               <Link
                 to="/register"
-                className="text-xs lg:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
+                className="text-xs lg:text-sm text-accent dark:text-accent hover:text-accent-strong dark:hover:text-accent"
               >
                 Sign up to view all →
               </Link>
             </div>
             <div className="space-y-3 lg:space-y-4">
               {topMembers && topMembers.length > 0 ? topMembers.slice(0, 5).map((member, index) => (
-                <div key={member.id || `member-${index}`} className="flex items-center justify-between py-2 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
+                <div key={member.id || `member-${index}`} className="flex items-center justify-between py-2 border-b border-line last:border-b-0">
                   <div className="flex-1 min-w-0">
                     <p className="text-xs lg:text-sm font-medium text-heading truncate">
                       {member.member_name}
@@ -279,10 +279,10 @@ const PublicDashboard: React.FC = () => {
               )}
             </div>
             {topMembers && topMembers.length > 5 && (
-              <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <div className="mt-4 pt-4 border-t border-line">
                 <Link
                   to="/register"
-                  className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-center block"
+                  className="text-sm text-accent dark:text-accent hover:text-accent-strong dark:hover:text-accent text-center block"
                 >
                   Sign up to see all {topMembers.length} top members →
                 </Link>
@@ -309,7 +309,7 @@ const PublicDashboard: React.FC = () => {
         )}
 
         {/* CTA Section */}
-        <div className="card p-6 lg:p-8 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20">
+        <div className="card p-6 lg:p-8 bg-gradient-to-r from-accent/10 to-accent/10 dark:from-accent/10 dark:to-accent/10">
           <div className="text-center">
             <h3 className="text-xl lg:text-2xl font-bold text-heading mb-2">
               Ready to dive deeper?
@@ -337,14 +337,14 @@ const PublicDashboard: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-200 dark:border-neutral-700 mt-12">
+      <footer className="border-t border-line mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
               <img 
                 src="/capitol-scope-logo.png" 
                 alt="CapitolScope Logo" 
-                className="h-8 w-8 rounded-lg shadow-glow-primary/20"
+                className="h-8 w-8 rounded-lg"
                 loading="lazy"
                 width="32"
                 height="32"
@@ -357,19 +357,19 @@ const PublicDashboard: React.FC = () => {
             <div className="flex items-center space-x-6">
               <Link
                 to="/privacy"
-                className="text-sm text-body hover:text-neutral-300 transition-colors"
+                className="text-sm text-body hover:text-content-muted transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 to="/terms"
-                className="text-sm text-body hover:text-neutral-300 transition-colors"
+                className="text-sm text-body hover:text-content-muted transition-colors"
               >
                 Terms of Service
               </Link>
               <a
                 href="mailto:capitolscope@gmail.com"
-                className="text-sm text-body hover:text-neutral-300 transition-colors"
+                className="text-sm text-body hover:text-content-muted transition-colors"
               >
                 Support
               </a>

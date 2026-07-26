@@ -245,7 +245,23 @@ class ImprovedPDFParser:
                 
         # Merge main data with additional data
         merged_data = {**parsed_data, **additional_data}
-        
+
+        # Complete wrapped amount ranges that spill onto the next physical line,
+        # e.g. main line "... $15,001 -" followed by "[ST] $50,000". Without
+        # this the amount stays a dangling "$15,001 -" and fails downstream.
+        amt = merged_data.get('amount', '').strip()
+        if amt.endswith('-') or re.search(r'\$[\d,]+\s*-\s*$', amt):
+            for j in range(1, min(len(lines), 4)):
+                nxt = lines[j].strip()
+                if self._is_trade_line_start(nxt):
+                    break
+                tail = re.search(r'\$[\d,]+', nxt)
+                if tail:
+                    merged_data['amount'] = amt.rstrip(' -') + ' - ' + tail.group(0)
+                    if j >= lines_consumed:
+                        lines_consumed = j + 1
+                    break
+
         # Create trade record
         record = TradeRecord(
             member=member,
@@ -317,9 +333,11 @@ class ImprovedPDFParser:
         # Dates: MM/DD/YYYY format
         # Amount: $X,XXX - $X,XXX format
         
-        # Regex pattern to match the trailing fields
-        pattern = r'^(.+?)\s+([PSE])\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s+(.+)$'
-        
+        # Regex pattern to match the trailing fields. The transaction type may
+        # carry a "(partial)" / "(full)" qualifier (e.g. "S (partial)"); it is
+        # consumed here so it can't shift the date/amount columns.
+        pattern = r'^(.+?)\s+([PSE])(?:\s*\((?:partial|full)\))?\s+(\d{1,2}/\d{1,2}/\d{4})\s+(\d{1,2}/\d{1,2}/\d{4})\s+(.+)$'
+
         match = re.match(pattern, line, re.IGNORECASE)
         if match:
             asset_with_owner = match.group(1).strip()
@@ -362,8 +380,9 @@ class ImprovedPDFParser:
             }
         
         # Fallback: Try a more flexible pattern for malformed data
-        # Look for any single letter followed by dates
-        flexible_pattern = r'^(.+?)\s+([PSEpse])\s+(\d{1,2}/\d{1,2}/\d{4})(?:\s+(\d{1,2}/\d{1,2}/\d{4}))?(?:\s+(.+))?$'
+        # Look for any single letter followed by dates (also tolerating the
+        # "(partial)"/"(full)" qualifier after the transaction type).
+        flexible_pattern = r'^(.+?)\s+([PSEpse])(?:\s*\((?:partial|full)\))?\s+(\d{1,2}/\d{1,2}/\d{4})(?:\s+(\d{1,2}/\d{1,2}/\d{4}))?(?:\s+(.+))?$'
         
         flexible_match = re.match(flexible_pattern, line, re.IGNORECASE)
         if flexible_match:

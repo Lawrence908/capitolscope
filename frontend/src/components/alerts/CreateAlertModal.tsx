@@ -77,15 +77,15 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Create New Trade Alert</h2>
+      <div className="bg-surface-raised rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-line">
+          <h2 className="text-xl font-semibold text-content">Create New Trade Alert</h2>
         </div>
         
         <div className="p-6">
           {!selectedType ? (
             <div className="space-y-4">
-              <p className="text-gray-600 text-center mb-6">
+              <p className="text-content-muted text-center mb-6">
                 Choose the type of trade alert you want to create
               </p>
               
@@ -93,18 +93,18 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
                 <button
                   key={type.id}
                   onClick={() => setSelectedType(type.id)}
-                  className="w-full p-6 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors text-left"
+                  className="w-full p-6 border border-line rounded-lg hover:border-accent hover:bg-accent/10 transition-colors text-left"
                 >
                   <div className="flex items-start space-x-4">
                     <div className="text-2xl">{type.icon}</div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                      <h3 className="font-semibold text-lg text-content mb-2">
                         {type.name}
                       </h3>
-                      <p className="text-gray-600 mb-2">
+                      <p className="text-content-muted mb-2">
                         {type.description}
                       </p>
-                      <p className="text-sm text-primary-600 font-medium">
+                      <p className="text-sm text-accent font-medium">
                         Example: {type.example}
                       </p>
                     </div>
@@ -117,7 +117,7 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setSelectedType('')}
-                  className="text-gray-500 hover:text-gray-700 text-sm"
+                  className="text-content-faint hover:text-content-muted text-sm"
                 >
                   ← Back
                 </button>
@@ -131,10 +131,10 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
           )}
         </div>
         
-        <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+        <div className="p-6 border-t border-line flex justify-end space-x-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="px-4 py-2 text-content-muted border border-line rounded-lg hover:bg-surface-inset"
           >
             Cancel
           </button>
@@ -142,7 +142,7 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
             <button
               onClick={handleSubmit}
               disabled={isSubmitting || !formData || Object.keys(formData).length === 0}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-strong disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Creating...' : 'Create Alert'}
             </button>

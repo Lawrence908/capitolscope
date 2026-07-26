@@ -8,9 +8,21 @@ from typing import Optional
 from domains.congressional.schemas import CongressionalTradeDetail
 from domains.notifications.models import TradeAlertRule
 from domains.users.models import User
+from core.email_templates import (
+    render_email, email_button, email_heading, email_panel, p,
+    INK, FAINT, LINE, MONO, SANS,
+)
 
 import logging
 logger = logging.getLogger(__name__)
+
+FRONTEND_URL = "https://capitolscope.chrislawrence.ca"
+BUY_COLOR = "#217a6b"   # verdigris (readable on white)
+SELL_COLOR = "#c0555f"  # oxblood (readable on white)
+
+
+def _dir_color(action_text: Optional[str]) -> str:
+    return BUY_COLOR if (action_text or "").lower().startswith("buy") else SELL_COLOR
 
 
 class TradeAlertEmailTemplate:
@@ -30,97 +42,102 @@ class TradeAlertEmailTemplate:
         action_emoji = "🟢" if trade.transaction_type == "buy" else "🔴"
         action_text = trade.transaction_type.title() if trade.transaction_type else "Unknown"
         
-        # Generate HTML
-        html = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Alert - CapitolScope</title>
-    <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-        .header {{ background: #1a365d; color: white; padding: 20px; text-align: center; }}
-        .content {{ padding: 20px; background: #f8f9fa; }}
-        .trade-details {{ background: white; padding: 20px; margin: 20px 0; border-radius: 8px; }}
-        .trade-row {{ display: flex; justify-content: space-between; margin: 10px 0; }}
-        .trade-label {{ font-weight: bold; color: #666; }}
-        .trade-value {{ color: #333; }}
-        .cta-button {{ display: inline-block; background: #3182ce; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }}
-        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 14px; }}
-        .unsubscribe {{ color: #999; text-decoration: none; }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🚨 CapitolScope Trade Alert</h1>
-        </div>
-        
-        <div class="content">
-            <h2>New Congressional Trade Detected</h2>
-            
-            <div class="trade-details">
-                <div class="trade-row">
-                    <span class="trade-label">Congress Member:</span>
-                    <span class="trade-value">{member_name}</span>
-                </div>
-                
-                <div class="trade-row">
-                    <span class="trade-label">Stock:</span>
-                    <span class="trade-value">{trade.ticker or 'Unknown'} - {trade.asset_name or 'Unknown Asset'}</span>
-                </div>
-                
-                <div class="trade-row">
-                    <span class="trade-label">Action:</span>
-                    <span class="trade-value">{action_emoji} {action_text}</span>
-                </div>
-                
-                <div class="trade-row">
-                    <span class="trade-label">Amount:</span>
-                    <span class="trade-value">{amount_str}</span>
-                </div>
-                
-                <div class="trade-row">
-                    <span class="trade-label">Trade Date:</span>
-                    <span class="trade-value">{trade.transaction_date or 'Unknown'}</span>
-                </div>
-                
-                <div class="trade-row">
-                    <span class="trade-label">Filing Date:</span>
-                    <span class="trade-value">{trade.notification_date or 'Unknown'}</span>
-                </div>
-            </div>
-            
-            <a href="https://capitolscope.chrislawrence.ca/trade/{trade.id}" class="cta-button">
-                View Full Trade Details
-            </a>
-            
-            <a href="https://capitolscope.chrislawrence.ca/member/{trade.member_id}" class="cta-button">
-                View {member_name}'s Portfolio
-            </a>
-        </div>
-        
-        <div class="footer">
-            <p>You received this alert because you're subscribed to {self._get_alert_description(alert_rule)}</p>
-            <p>
-                <a href="https://capitolscope.chrislawrence.ca/alerts/manage" class="unsubscribe">
-                    Manage Alert Preferences
-                </a> | 
-                <a href="https://capitolscope.chrislawrence.ca/unsubscribe?email={user.email}" class="unsubscribe">
-                    Unsubscribe
-                </a>
-            </p>
-            <p>&copy; 2025 CapitolScope. All rights reserved.</p>
-        </div>
-    </div>
-</body>
-</html>
-        """
-        
-        return html
+        color = _dir_color(action_text)
+
+        def row(label, value):
+            return (
+                f'<tr><td style="padding:8px 0;font-family:{SANS};font-size:13px;color:{FAINT};">{label}</td>'
+                f'<td style="padding:8px 0;font-family:{MONO};font-size:14px;color:{INK};text-align:right;">{value}</td></tr>'
+            )
+
+        details = email_panel(
+            f'<div style="font-family:{SANS};font-size:15px;font-weight:600;color:{color};margin-bottom:8px;">'
+            f'{action_emoji} {action_text} · {trade.ticker or "—"}</div>'
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
+            + row("Member", member_name)
+            + row("Asset", trade.asset_name or "Unknown asset")
+            + row("Amount", amount_str)
+            + row("Trade date", trade.transaction_date or "—")
+            + row("Filing date", trade.notification_date or "—")
+            + "</table>",
+            accent=True,
+        )
+
+        body = (
+            email_heading("New congressional trade detected")
+            + p("A trade matching one of your alerts was just disclosed.")
+            + details
+            + email_button(f"{FRONTEND_URL}/trades", "View Full Trade Details")
+            + p(
+                f'You received this alert because you\'re subscribed to '
+                f'{self._get_alert_description(alert_rule)}.'
+            )
+        )
+        return render_email(
+            title="Trade Alert · CapitolScope",
+            body_html=body,
+            preheader=f"{action_text} {trade.ticker or ''} · {member_name}",
+            footer_links=[
+                ("Manage Alerts", f"{FRONTEND_URL}/alerts"),
+                ("Unsubscribe", f"{FRONTEND_URL}/unsubscribe?email={user.email}"),
+            ],
+        )
     
+    def generate_trade_alert_digest_email(self, user: User, items: list) -> str:
+        """Generate a single HTML digest email summarizing many matched trades.
+
+        ``items`` is a list of dicts with keys: member_name, ticker, asset_name,
+        action_emoji, action_text, amount_str, transaction_date, trade_id, reason.
+        Trades are grouped by member for readability.
+        """
+        greeting_name = user.first_name or "there"
+
+        # Group rows by member so a member's trades render together.
+        by_member: dict = {}
+        for item in items:
+            by_member.setdefault(item["member_name"], []).append(item)
+
+        member_blocks = []
+        for member_name, rows in by_member.items():
+            trade_rows = "".join(
+                f'<tr>'
+                f'<td style="padding:8px 0;border-bottom:1px solid {LINE};font-family:{SANS};font-size:13px;color:{INK};">'
+                f'<span style="color:{_dir_color(r["action_text"])};font-weight:600;">{r["action_emoji"]} {r["action_text"]}</span> '
+                f'<span style="font-family:{MONO};">{r["ticker"] or r["asset_name"] or "Unknown"}</span></td>'
+                f'<td style="padding:8px 0;border-bottom:1px solid {LINE};font-family:{MONO};font-size:13px;color:{INK};text-align:right;">{r["amount_str"]}</td>'
+                f'<td style="padding:8px 0;border-bottom:1px solid {LINE};font-family:{MONO};font-size:12px;color:{FAINT};text-align:right;">{r["transaction_date"] or ""}</td>'
+                f'</tr>'
+                for r in rows
+            )
+            member_blocks.append(
+                email_panel(
+                    f'<div style="font-family:{SANS};font-weight:600;color:{INK};margin-bottom:6px;">{member_name} '
+                    f'<span style="font-family:{MONO};font-size:12px;color:{FAINT};">· {len(rows)} trade(s)</span></div>'
+                    f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">{trade_rows}</table>'
+                )
+            )
+
+        total = len(items)
+        members_count = len(by_member)
+        blocks_html = "".join(member_blocks)
+
+        body = (
+            email_heading(f"{total} new trade(s) matched your alerts")
+            + p(f"Hi {greeting_name}, across {members_count} member(s) you follow — here's the summary.")
+            + blocks_html
+            + email_button(f"{FRONTEND_URL}/alerts", "View in CapitolScope")
+        )
+        return render_email(
+            title="Trade Alert Digest · CapitolScope",
+            body_html=body,
+            preheader=f"{total} new congressional trade(s) matched your alerts",
+            footer_note="You received this because you set up trade alerts on CapitolScope.",
+            footer_links=[
+                ("Manage Alerts", f"{FRONTEND_URL}/alerts"),
+                ("Unsubscribe", f"{FRONTEND_URL}/unsubscribe?email={user.email}"),
+            ],
+        )
+
     def _format_amount(self, trade: CongressionalTradeDetail) -> str:
         """Format trade amount for display."""
         if trade.amount_exact:

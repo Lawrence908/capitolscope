@@ -4,8 +4,9 @@ Alert Rule Engine for Congressional Trade Notifications.
 This engine evaluates alert rules against new trades to determine which users should be notified.
 """
 
+from collections import defaultdict
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_
 
@@ -51,7 +52,7 @@ class AlertRuleEngine:
             query = select(TradeAlertRule).where(
                 and_(
                     TradeAlertRule.alert_type == "member_trades",
-                    TradeAlertRule.target_id == trade.member_id,
+                    TradeAlertRule.target_member_id == trade.member_id,
                     TradeAlertRule.is_active == True
                 )
             )
@@ -114,13 +115,67 @@ class AlertRuleEngine:
             logger.error(f"Error evaluating ticker alerts: {e}")
             return []
     
+    async def match_trades_batch(self, trades: List[Any]) -> List[Tuple[Any, TradeAlertRule]]:
+        """Match a batch of trades against all active rules in memory.
+
+        Loads every active rule once and indexes rules by target, then matches
+        each trade locally. This avoids the 3-queries-per-trade fan-out of
+        ``evaluate_all_alerts`` when a single ingestion run inserts hundreds of
+        trades. ``trades`` may be ORM rows or schema objects; each must expose
+        ``member_id``, ``ticker``, ``amount_max``, ``amount_exact``.
+
+        Returns a list of ``(trade, rule)`` matches (a trade can match several
+        rules, and the same rule can match several trades).
+        """
+        result = await self.session.execute(
+            select(TradeAlertRule).where(TradeAlertRule.is_active == True)
+        )
+        rules = result.scalars().all()
+
+        member_rules: Dict[Any, List[TradeAlertRule]] = defaultdict(list)
+        ticker_rules: Dict[str, List[TradeAlertRule]] = defaultdict(list)
+        amount_rules: List[TradeAlertRule] = []
+        for rule in rules:
+            if rule.alert_type == "member_trades" and rule.target_member_id is not None:
+                member_rules[rule.target_member_id].append(rule)
+            elif rule.alert_type == "ticker_trades" and rule.target_symbol:
+                ticker_rules[rule.target_symbol.upper()].append(rule)
+            elif rule.alert_type == "amount_threshold" and rule.threshold_value is not None:
+                amount_rules.append(rule)
+
+        matches: List[Tuple[Any, TradeAlertRule]] = []
+        for trade in trades:
+            for rule in member_rules.get(trade.member_id, ()):  # member alerts
+                matches.append((trade, rule))
+
+            if trade.ticker:  # ticker alerts
+                for rule in ticker_rules.get(trade.ticker.upper(), ()):
+                    matches.append((trade, rule))
+
+            trade_amount = trade.amount_max or trade.amount_exact or 0  # amount alerts
+            for rule in amount_rules:
+                if rule.threshold_value <= trade_amount:
+                    matches.append((trade, rule))
+
+        logger.info(
+            f"Batch match: {len(trades)} trades x {len(rules)} active rules "
+            f"-> {len(matches)} (trade, rule) matches"
+        )
+        return matches
+
     def _deduplicate_alerts(self, alerts: List[TradeAlertRule]) -> List[TradeAlertRule]:
         """Remove duplicate alerts for the same user and alert type."""
         seen = set()
         unique_alerts = []
         
         for alert in alerts:
-            key = (alert.user_id, alert.alert_type, alert.target_id)
+            key = (
+                alert.user_id,
+                alert.alert_type,
+                alert.target_member_id,
+                alert.target_symbol,
+                alert.threshold_value,
+            )
             if key not in seen:
                 seen.add(key)
                 unique_alerts.append(alert)

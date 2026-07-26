@@ -592,6 +592,109 @@ def process_new_trade_notifications(self, doc_id: str, member_id: str, transacti
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def process_pending_trade_alerts(self, lookback_hours: int = 48):
+    """Batched trade-alert digest sender.
+
+    Scans trades inserted in the last ``lookback_hours``, matches them against
+    all active alert rules in one pass, groups new matches per user, and sends a
+    single digest email per user. Dedup is enforced via NotificationDelivery so
+    a match is only ever emailed once even though this runs on a schedule and is
+    also nudged by ingestion. Safe to run repeatedly.
+    """
+    try:
+        logger.info(f"Processing pending trade alerts (lookback={lookback_hours}h)")
+
+        async def _run():
+            from collections import defaultdict
+            from datetime import datetime, timedelta
+            from sqlalchemy import select
+            from sqlalchemy.orm import joinedload
+
+            from domains.congressional.models import CongressionalTrade
+            from domains.notifications.models import NotificationDelivery
+            from domains.notifications.alert_engine import AlertRuleEngine
+            from domains.notifications.notification_service import NotificationService
+            from domains.users.models import User
+
+            manager = DatabaseManager()
+            await manager.initialize()
+            try:
+                async with manager.session_factory() as session:
+                    cutoff = datetime.utcnow() - timedelta(hours=lookback_hours)
+                    trades = (
+                        await session.execute(
+                            select(CongressionalTrade)
+                            .options(joinedload(CongressionalTrade.member))
+                            .where(CongressionalTrade.created_at >= cutoff)
+                        )
+                    ).scalars().all()
+                    if not trades:
+                        return {"status": "success", "trades": 0, "digests_sent": 0}
+
+                    engine = AlertRuleEngine(session)
+                    matches = await engine.match_trades_batch(trades)
+                    if not matches:
+                        return {"status": "success", "trades": len(trades), "matches": 0, "digests_sent": 0}
+
+                    # Skip (user, trade, rule) tuples already delivered on a prior run.
+                    trade_ids = list({trade.id for trade, _ in matches})
+                    existing_rows = (
+                        await session.execute(
+                            select(
+                                NotificationDelivery.user_id,
+                                NotificationDelivery.trade_id,
+                                NotificationDelivery.alert_rule_id,
+                            ).where(NotificationDelivery.trade_id.in_(trade_ids))
+                        )
+                    ).all()
+                    seen = {(r.user_id, r.trade_id, r.alert_rule_id) for r in existing_rows}
+
+                    per_user = defaultdict(list)
+                    for trade, rule in matches:
+                        key = (rule.user_id, trade.id, rule.id)
+                        if key in seen:
+                            continue
+                        seen.add(key)  # guard against intra-batch duplicates
+                        per_user[rule.user_id].append((trade, rule))
+
+                    if not per_user:
+                        return {"status": "success", "trades": len(trades), "matches": len(matches), "digests_sent": 0}
+
+                    users = (
+                        await session.execute(select(User).where(User.id.in_(list(per_user.keys()))))
+                    ).scalars().all()
+                    user_by_id = {u.id: u for u in users}
+
+                    service = NotificationService(session)
+                    digests_sent = 0
+                    for user_id, user_matches in per_user.items():
+                        user = user_by_id.get(user_id)
+                        if not user or not user.email:
+                            logger.warning(f"Skipping digest for missing/emailless user {user_id}")
+                            continue
+                        if await service.send_trade_alert_digest(user, user_matches):
+                            digests_sent += 1
+
+                    return {
+                        "status": "success",
+                        "trades": len(trades),
+                        "matches": len(matches),
+                        "users_notified": len(per_user),
+                        "digests_sent": digests_sent,
+                    }
+            finally:
+                await manager.close()
+
+        result = run_async_task(_run())
+        logger.info(f"Pending trade alerts processed: {result}")
+        return result
+
+    except Exception as exc:
+        logger.error(f"Error processing pending trade alerts: {exc}", exc_info=True)
+        raise self.retry(exc=exc, countdown=300, max_retries=2)
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def generate_analytics_report(self, report_type: str = "daily"):
     """
     Generate analytics reports for portfolio performance and trading patterns.

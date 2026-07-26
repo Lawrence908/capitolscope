@@ -121,6 +121,89 @@ class TradeAlertEmailTemplate:
         
         return html
     
+    def generate_trade_alert_digest_email(self, user: User, items: list) -> str:
+        """Generate a single HTML digest email summarizing many matched trades.
+
+        ``items`` is a list of dicts with keys: member_name, ticker, asset_name,
+        action_emoji, action_text, amount_str, transaction_date, trade_id, reason.
+        Trades are grouped by member for readability.
+        """
+        greeting_name = user.first_name or "there"
+
+        # Group rows by member so a member's trades render together.
+        by_member: dict = {}
+        for item in items:
+            by_member.setdefault(item["member_name"], []).append(item)
+
+        member_blocks = []
+        for member_name, rows in by_member.items():
+            trade_rows = "".join(
+                f"""
+                <tr>
+                    <td style="padding:8px 12px;border-bottom:1px solid #eee;">
+                        {r['action_emoji']} <strong>{r['action_text']}</strong>
+                        {r['ticker'] or r['asset_name'] or 'Unknown'}
+                    </td>
+                    <td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right;">{r['amount_str']}</td>
+                    <td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right;color:#666;">{r['transaction_date'] or ''}</td>
+                </tr>"""
+                for r in rows
+            )
+            member_blocks.append(
+                f"""
+            <div class="trade-details">
+                <h3 style="margin:0 0 8px 0;">{member_name} &middot; {len(rows)} trade(s)</h3>
+                <table style="width:100%;border-collapse:collapse;">{trade_rows}</table>
+            </div>"""
+            )
+
+        total = len(items)
+        members_count = len(by_member)
+        blocks_html = "".join(member_blocks)
+
+        return f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Alert Digest - CapitolScope</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: #1a365d; color: white; padding: 20px; text-align: center; }}
+        .content {{ padding: 20px; background: #f8f9fa; }}
+        .trade-details {{ background: white; padding: 20px; margin: 16px 0; border-radius: 8px; }}
+        .cta-button {{ display: inline-block; background: #3182ce; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }}
+        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 14px; }}
+        .unsubscribe {{ color: #999; text-decoration: none; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 CapitolScope Trade Alerts</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {greeting_name}, {total} new trade(s) matched your alerts</h2>
+            <p>Across {members_count} member(s) you follow. Here's the summary:</p>
+            {blocks_html}
+            <a href="https://capitolscope.chrislawrence.ca/alerts" class="cta-button">
+                View in CapitolScope
+            </a>
+        </div>
+        <div class="footer">
+            <p>You received this because you set up trade alerts on CapitolScope.</p>
+            <p>
+                <a href="https://capitolscope.chrislawrence.ca/alerts/manage" class="unsubscribe">Manage Alert Preferences</a> |
+                <a href="https://capitolscope.chrislawrence.ca/unsubscribe?email={user.email}" class="unsubscribe">Unsubscribe</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+        """.strip()
+
     def _format_amount(self, trade: CongressionalTradeDetail) -> str:
         """Format trade amount for display."""
         if trade.amount_exact:

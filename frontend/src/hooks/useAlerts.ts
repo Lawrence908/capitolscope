@@ -91,14 +91,22 @@ export const useAlerts = () => {
 
   const fetchStats = useCallback(async () => {
     try {
+      const s = await apiClient.getAlertStats();
+      setStats({
+        activeAlerts: s.active_alerts,
+        notificationsToday: s.notifications_today,
+        totalTriggered: s.total_triggered,
+        deliveryRate: s.delivery_rate,
+      });
+    } catch (err) {
+      console.error('Failed to fetch stats:', err);
+      // Fall back to a local approximation of active alerts if the endpoint fails.
       setStats({
         activeAlerts: alerts.filter((a) => a.is_active).length,
         notificationsToday: 0,
         totalTriggered: 0,
-        deliveryRate: 95,
+        deliveryRate: 0,
       });
-    } catch (err) {
-      console.error('Failed to fetch stats:', err);
     }
   }, [alerts]);
 

@@ -62,6 +62,7 @@ class TradeAlertRuleCRUD:
                 description=rule_data.get("description"),
                 alert_type=rule_data.get("alert_type"),
                 target_id=rule_data.get("target_id"),
+                target_member_id=rule_data.get("target_member_id"),
                 target_symbol=rule_data.get("target_symbol"),
                 target_name=rule_data.get("target_name"),
                 threshold_value=rule_data.get("threshold_value"),
@@ -89,6 +90,7 @@ class TradeAlertRuleCRUD:
             "description": alert_data.get("description", "Get notified when this member makes trades"),
             "alert_type": "member_trades",
             "target_id": None,
+            "target_member_id": member_id,
             "target_name": alert_data.get("member_name"),
             "conditions": {"member_uuid": member_id},
             "notification_channels": alert_data.get("notification_channels", ["email"]),
@@ -228,9 +230,25 @@ class TradeAlertRuleCRUD:
             result = await self.session.execute(query)
             count = len(result.scalars().all())
             return count
-            
+
         except Exception as e:
             logger.error(f"Error counting alert rules: {e}")
+            return 0
+
+    async def count_active_alert_rules(self, user_id: str) -> int:
+        """Count active alert rules for a user."""
+        try:
+            from sqlalchemy import func
+            query = select(func.count()).select_from(TradeAlertRule).where(
+                and_(
+                    TradeAlertRule.user_id == user_id,
+                    TradeAlertRule.is_active == True,
+                )
+            )
+            result = await self.session.execute(query)
+            return int(result.scalar() or 0)
+        except Exception as e:
+            logger.error(f"Error counting active alert rules: {e}")
             return 0
 
 
@@ -244,28 +262,84 @@ class NotificationDeliveryCRUD:
         self,
         user_id: str,
         days: int = 7,
+        status: Optional[str] = None,
         skip: int = 0,
         limit: int = 50
     ) -> List[NotificationDelivery]:
-        """Get notification delivery history for a user."""
+        """Get notification delivery history for a user.
+
+        Eager-loads the related trade (and its member) and the alert rule so the
+        API layer can render trade details without N+1 queries.
+        """
         try:
-            # Calculate date threshold
             from datetime import datetime, timedelta
+            # Imported lazily to avoid a circular import at module load time
+            # (congressional.models -> ... -> notifications.crud).
+            from domains.congressional.models import CongressionalTrade
             since_date = datetime.utcnow() - timedelta(days=days)
-            
-            query = select(NotificationDelivery).where(
-                and_(
-                    NotificationDelivery.user_id == user_id,
-                    NotificationDelivery.created_at >= since_date
+
+            conditions = [
+                NotificationDelivery.user_id == user_id,
+                NotificationDelivery.created_at >= since_date,
+            ]
+            if status and status != "all":
+                conditions.append(NotificationDelivery.delivery_status == status)
+
+            query = (
+                select(NotificationDelivery)
+                .where(and_(*conditions))
+                .options(
+                    selectinload(NotificationDelivery.trade).selectinload(CongressionalTrade.member),
+                    selectinload(NotificationDelivery.alert_rule),
                 )
-            ).order_by(desc(NotificationDelivery.created_at)).offset(skip).limit(limit)
-            
+                .order_by(desc(NotificationDelivery.created_at))
+                .offset(skip)
+                .limit(limit)
+            )
+
             result = await self.session.execute(query)
             deliveries = result.scalars().all()
-            
+
             logger.debug(f"Retrieved {len(deliveries)} delivery records for user {user_id}")
             return deliveries
-            
+
         except Exception as e:
             logger.error(f"Error retrieving delivery history: {e}")
             raise
+
+    async def get_delivery_stats(self, user_id: str) -> Dict[str, int]:
+        """Aggregate delivery counts for a user: today, total, sent, failed."""
+        try:
+            from datetime import datetime, timezone
+            from sqlalchemy import func
+
+            start_of_today = datetime.now(timezone.utc).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+
+            row = (
+                await self.session.execute(
+                    select(
+                        func.count().label("total"),
+                        func.count()
+                        .filter(NotificationDelivery.created_at >= start_of_today)
+                        .label("today"),
+                        func.count()
+                        .filter(NotificationDelivery.delivery_status == "sent")
+                        .label("sent"),
+                        func.count()
+                        .filter(NotificationDelivery.delivery_status == "failed")
+                        .label("failed"),
+                    ).where(NotificationDelivery.user_id == user_id)
+                )
+            ).one()
+
+            return {
+                "total": int(row.total or 0),
+                "today": int(row.today or 0),
+                "sent": int(row.sent or 0),
+                "failed": int(row.failed or 0),
+            }
+        except Exception as e:
+            logger.error(f"Error retrieving delivery stats: {e}")
+            return {"total": 0, "today": 0, "sent": 0, "failed": 0}

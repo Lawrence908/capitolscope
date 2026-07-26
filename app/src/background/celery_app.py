@@ -44,6 +44,10 @@ celery_app.conf.beat_schedule = {
         'task': 'background.tasks.cleanup_old_data',
         'schedule': 86400.0,  # Daily
     },
+    'process-pending-trade-alerts': {
+        'task': 'background.tasks.process_pending_trade_alerts',
+        'schedule': 600.0,  # Every 10 min; batched digest, deduped via NotificationDelivery
+    },
     # Analytics data-readiness refreshes (Phase 0 backfills).
     'refresh-daily-prices': {
         'task': 'background.analytics_tasks.refresh_daily_prices',

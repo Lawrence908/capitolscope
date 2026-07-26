@@ -858,26 +858,21 @@ class CongressionalDataIngestion:
         logger.info(f"Inserted {inserted} trades")
     
     def _trigger_trade_notifications(self, trades: List[ProcessedTrade]):
-        """Trigger notification processing for newly inserted trades."""
+        """Nudge the batched trade-alert digest after new trades are inserted.
+
+        We enqueue a single ``process_pending_trade_alerts`` run rather than one
+        task per trade: a filing can insert dozens of trades at once, and the
+        digest task batches all matches into one email per user. The periodic
+        beat job runs the same task, and NotificationDelivery dedup makes both
+        paths idempotent, so this is just a "process now" hint.
+        """
         try:
             # Import here to avoid circular imports
-            from background.tasks import process_new_trade_notifications
-            
-            for trade in trades:
-                try:
-                    # Schedule background task for each new trade
-                    # We pass the doc_id and member_id to find the trade later
-                    process_new_trade_notifications.delay(
-                        doc_id=trade.doc_id,
-                        member_id=str(trade.member_id),
-                        transaction_date=trade.transaction_date.isoformat()
-                    )
-                    logger.debug(f"Scheduled notification task for trade {trade.doc_id}")
-                except Exception as e:
-                    logger.error(f"Failed to schedule notification for trade {trade.doc_id}: {e}")
-            
-            logger.info(f"Triggered notification processing for {len(trades)} new trades")
-            
+            from background.tasks import process_pending_trade_alerts
+
+            process_pending_trade_alerts.delay()
+            logger.info(f"Nudged trade-alert digest after inserting {len(trades)} new trades")
+
         except Exception as e:
             logger.error(f"Error triggering trade notifications: {e}")
             # Don't raise - notifications failing shouldn't break ingestion

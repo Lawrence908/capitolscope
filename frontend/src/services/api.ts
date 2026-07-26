@@ -368,6 +368,35 @@ class APIClient {
     await this.client.delete(`/api/v1/notifications/alerts/rules/${ruleId}`);
   }
 
+  async getAlertStats(): Promise<{
+    active_alerts: number;
+    notifications_today: number;
+    total_triggered: number;
+    delivery_rate: number;
+  }> {
+    const response = await this.client.get('/api/v1/notifications/alerts/stats');
+    return response.data?.data ?? {
+      active_alerts: 0,
+      notifications_today: 0,
+      total_triggered: 0,
+      delivery_rate: 0,
+    };
+  }
+
+  async getAlertNotifications(params?: {
+    days?: number;
+    status?: string;
+  }): Promise<unknown[]> {
+    const query = new URLSearchParams();
+    if (params?.days != null) query.set('days', String(params.days));
+    if (params?.status && params.status !== 'all') query.set('status', params.status);
+    const qs = query.toString();
+    const response = await this.client.get(
+      `/api/v1/notifications/alerts/notifications${qs ? `?${qs}` : ''}`
+    );
+    return (response.data?.data as unknown[]) ?? [];
+  }
+
   // ---- Scrutiny analytics ----
   async getScrutinyScores(minTrades = 10, limit = 100): Promise<import('../types/scrutiny').ScrutinyResponse> {
     const res = await this.client.get(`/api/v1/analytics/scrutiny?min_trades=${minTrades}&limit=${limit}`);

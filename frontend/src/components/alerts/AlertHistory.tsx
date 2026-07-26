@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { apiClient } from '../../services/api';
 
 interface AlertNotification {
   id: string;
@@ -23,73 +24,26 @@ export const AlertHistory: React.FC = () => {
   const [dateRange, setDateRange] = useState('7d');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  // Mock data for demonstration
-  const mockNotifications: AlertNotification[] = [
-    {
-      id: '1',
-      alert_id: 'alert-1',
-      alert_name: 'MTG Trade Alert',
-      alert_type: 'member_trades',
-      triggered_at: '2024-01-15T14:30:00Z',
-      trade_details: {
-        member_name: 'Marjorie Taylor Greene',
-        ticker: 'TSLA',
-        amount: 15000,
-        transaction_type: 'Purchase',
-      },
-      delivery_status: 'sent',
-      delivery_method: 'email',
-    },
-    {
-      id: '2',
-      alert_id: 'alert-2',
-      alert_name: 'Large Trades $100K+',
-      alert_type: 'amount_threshold',
-      triggered_at: '2024-01-14T09:15:00Z',
-      trade_details: {
-        member_name: 'Nancy Pelosi',
-        ticker: 'NVDA',
-        amount: 250000,
-        transaction_type: 'Sale',
-      },
-      delivery_status: 'sent',
-      delivery_method: 'email',
-    },
-    {
-      id: '3',
-      alert_id: 'alert-3',
-      alert_name: 'AAPL Trade Alert',
-      alert_type: 'ticker_trades',
-      triggered_at: '2024-01-13T16:45:00Z',
-      trade_details: {
-        member_name: 'John Doe',
-        ticker: 'AAPL',
-        amount: 50000,
-        transaction_type: 'Purchase',
-      },
-      delivery_status: 'failed',
-      delivery_method: 'email',
-      error_message: 'Invalid email address',
-    },
-  ];
+  const loadNotifications = useCallback(async () => {
+    setLoading(true);
+    try {
+      const days = Number(dateRange.replace('d', '')) || 7;
+      const data = (await apiClient.getAlertNotifications({
+        days,
+        status: statusFilter,
+      })) as AlertNotification[];
+      setNotifications(data);
+    } catch (error) {
+      console.error('Failed to load notifications:', error);
+      setNotifications([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [dateRange, statusFilter]);
 
   useEffect(() => {
-    // Load notifications from API
-    const loadNotifications = async () => {
-      setLoading(true);
-      try {
-        // await apiClient.getAlertNotifications({ date_range: dateRange, status: statusFilter });
-        // For now, use mock data
-        setNotifications(mockNotifications);
-      } catch (error) {
-        console.error('Failed to load notifications:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadNotifications();
-  }, [dateRange, statusFilter, mockNotifications]);
+    void loadNotifications();
+  }, [loadNotifications]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

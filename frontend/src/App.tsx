@@ -31,8 +31,8 @@ const MirrorPage = React.lazy(() => import('./pages/mirror/MirrorPage'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center h-64">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+  <div className="flex min-h-[16rem] items-center justify-center bg-surface">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-accent" />
   </div>
 );
 

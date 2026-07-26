@@ -169,8 +169,8 @@ const PublicDashboard: React.FC = () => {
                 className="card-interactive p-4 lg:p-6 transition-all duration-200"
               >
                 <div className="flex items-center">
-                  <div className={`p-2 lg:p-3 rounded-lg ${stat.color}`}>
-                    <Icon className="h-5 w-5 lg:h-6 lg:w-6 text-white" />
+                  <div className="rounded-md bg-accent/10 p-2 lg:p-3">
+                    <Icon className="h-5 w-5 lg:h-6 lg:w-6 text-accent" />
                   </div>
                   <div className="ml-3 lg:ml-4">
                     <p className="text-xs lg:text-sm font-medium text-body">

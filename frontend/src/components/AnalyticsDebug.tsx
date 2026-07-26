@@ -7,7 +7,7 @@ const AnalyticsDebug: React.FC = () => {
   if (isLoading) {
     return (
       <div className="card p-4">
-        <p className="text-neutral-400">Loading user data...</p>
+        <p className="text-content-faint">Loading user data...</p>
       </div>
     );
   }
@@ -15,7 +15,7 @@ const AnalyticsDebug: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="card p-4">
-        <p className="text-red-400">Not authenticated</p>
+        <p className="text-sev-flag">Not authenticated</p>
       </div>
     );
   }
@@ -23,7 +23,7 @@ const AnalyticsDebug: React.FC = () => {
   if (!user) {
     return (
       <div className="card p-4">
-        <p className="text-red-400">No user data available</p>
+        <p className="text-sev-flag">No user data available</p>
       </div>
     );
   }
@@ -35,64 +35,64 @@ const AnalyticsDebug: React.FC = () => {
 
   return (
     <div className="card p-4 lg:p-6">
-      <h3 className="text-lg font-semibold text-neutral-100 mb-4">Analytics Access Debug</h3>
+      <h3 className="text-lg font-semibold text-content mb-4">Analytics Access Debug</h3>
       
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-neutral-400">User ID:</span>
-          <span className="text-neutral-100 font-mono text-sm">{user.id}</span>
+          <span className="text-content-faint">User ID:</span>
+          <span className="text-content font-mono text-sm">{user.id}</span>
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-neutral-400">Email:</span>
-          <span className="text-neutral-100">{user.email}</span>
+          <span className="text-content-faint">Email:</span>
+          <span className="text-content">{user.email}</span>
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-neutral-400">Subscription Tier:</span>
-          <span className="text-neutral-100 font-medium capitalize">{subscriptionTier || 'free'}</span>
+          <span className="text-content-faint">Subscription Tier:</span>
+          <span className="text-content font-medium capitalize">{subscriptionTier || 'free'}</span>
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-neutral-400">Is Free:</span>
-          <span className={isFree ? 'text-red-400' : 'text-green-400'}>
+          <span className="text-content-faint">Is Free:</span>
+          <span className={isFree ? 'text-sev-flag' : 'text-accent'}>
             {isFree ? 'Yes' : 'No'}
           </span>
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-neutral-400">Is Pro:</span>
-          <span className={isPro ? 'text-green-400' : 'text-red-400'}>
+          <span className="text-content-faint">Is Pro:</span>
+          <span className={isPro ? 'text-accent' : 'text-sev-flag'}>
             {isPro ? 'Yes' : 'No'}
           </span>
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-neutral-400">Is Premium:</span>
-          <span className={isPremium ? 'text-green-400' : 'text-red-400'}>
+          <span className="text-content-faint">Is Premium:</span>
+          <span className={isPremium ? 'text-accent' : 'text-sev-flag'}>
             {isPremium ? 'Yes' : 'No'}
           </span>
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-neutral-400">Can Access Analytics:</span>
-          <span className={isPro ? 'text-green-400' : 'text-red-400'}>
+          <span className="text-content-faint">Can Access Analytics:</span>
+          <span className={isPro ? 'text-accent' : 'text-sev-flag'}>
             {isPro ? 'Yes' : 'No'}
           </span>
         </div>
       </div>
       
       {isFree && (
-        <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-          <p className="text-amber-800 dark:text-amber-200 text-sm">
+        <div className="mt-4 p-3 bg-sev-watch/10 dark:bg-sev-watch/10 border border-sev-watch/30 dark:border-sev-watch/30 rounded-lg">
+          <p className="text-sev-watch dark:text-sev-watch text-sm">
             You're on the free tier. You need Pro or higher to access Analytics.
           </p>
         </div>
       )}
       
       {isPro && (
-        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-green-800 dark:text-green-200 text-sm">
+        <div className="mt-4 p-3 bg-accent/10 dark:bg-accent/10 border border-accent/30 dark:border-accent/30 rounded-lg">
+          <p className="text-accent dark:text-accent text-sm">
             You should be able to access Analytics. If you can't see it, there might be a technical issue.
           </p>
         </div>

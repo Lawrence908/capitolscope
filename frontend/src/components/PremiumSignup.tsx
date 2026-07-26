@@ -57,7 +57,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ isOpen, onClose, title, message
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
             <button
               type="button"
-              className="inline-flex w-full justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:ml-3 sm:w-auto"
+              className="inline-flex w-full justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold text-[#071310] shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:ml-3 sm:w-auto"
               onClick={onClose}
             >
               OK
@@ -117,7 +117,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
             <button
               type="button"
-              className="inline-flex w-full justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:ml-3 sm:w-auto"
+              className="inline-flex w-full justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold text-[#071310] shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:ml-3 sm:w-auto"
               onClick={onClose}
             >
               {type === 'success' ? 'Get Started' : 'OK'}

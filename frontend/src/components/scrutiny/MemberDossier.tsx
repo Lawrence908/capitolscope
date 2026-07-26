@@ -41,16 +41,34 @@ const Row: React.FC<{
   </div>
 );
 
-export const MemberDossier: React.FC<{ member: ScrutinyMember | null }> = ({ member }) => {
+export const MemberDossier: React.FC<{
+  member: ScrutinyMember | null;
+  missingName?: string | null;
+}> = ({ member, missingName }) => {
   if (!member) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center">
-        <div className="font-data text-[11px] uppercase tracking-[0.2em] text-fog-500">
-          Select a subject
-        </div>
-        <p className="font-ui text-sm text-fog-500 max-w-[22ch]">
-          Every score decomposes into named, sourced factors. Pick a member to open the dossier.
-        </p>
+        {missingName ? (
+          <>
+            <div className="font-display text-lg text-fog-200">{missingName}</div>
+            <div className="font-data text-[11px] uppercase tracking-[0.16em] text-sev-watch">
+              Not in the scored cohort
+            </div>
+            <p className="font-ui text-sm text-fog-500 max-w-[26ch]">
+              This member has fewer than 10 price-matched trades, so the composite score is not yet
+              computed. Their activity still appears in the signal views.
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="font-data text-[11px] uppercase tracking-[0.2em] text-fog-500">
+              Select a subject
+            </div>
+            <p className="font-ui text-sm text-fog-500 max-w-[22ch]">
+              Every score decomposes into named, sourced factors. Pick a member to open the dossier.
+            </p>
+          </>
+        )}
       </div>
     );
   }

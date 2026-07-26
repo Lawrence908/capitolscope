@@ -91,6 +91,28 @@ export const Meter: React.FC<{ value: number; color: string }> = ({ value, color
   </div>
 );
 
+// ---- clickable member name (deep-link to dossier) ----
+export const NameButton: React.FC<{
+  name: string;
+  onClick?: (name: string) => void;
+  className?: string;
+}> = ({ name, onClick, className = '' }) =>
+  onClick ? (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick(name);
+      }}
+      className={`text-left transition-colors hover:text-verdigris-400 hover:underline decoration-verdigris-500/50 underline-offset-2 ${className}`}
+      title={`Open ${name}'s dossier`}
+    >
+      {name}
+    </button>
+  ) : (
+    <span className={className}>{name}</span>
+  );
+
 // ---- small mono label ----
 export const Eyebrow: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,

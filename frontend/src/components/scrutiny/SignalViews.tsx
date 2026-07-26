@@ -5,10 +5,12 @@ import type {
   TopConflict,
   DisclosureLag,
 } from '../../types/scrutiny';
-import { fmtMoney, fmtSigned, PartyTag, Eyebrow, partyMeta } from './primitives';
+import { fmtMoney, fmtSigned, PartyTag, Eyebrow, partyMeta, NameButton } from './primitives';
 
 const retColor = (r: number | null) =>
   r == null ? '#90a29d' : r >= 0 ? '#43a897' : '#d6707b';
+
+type SelectFn = (name: string) => void;
 
 // ---------- Clusters ----------
 const PartyMix: React.FC<{ mix: Record<string, number> }> = ({ mix }) => (
@@ -25,7 +27,10 @@ const PartyMix: React.FC<{ mix: Record<string, number> }> = ({ mix }) => (
   </div>
 );
 
-export const ClusterFeed: React.FC<{ clusters: ClusterEvent[] }> = ({ clusters }) => (
+export const ClusterFeed: React.FC<{ clusters: ClusterEvent[]; onSelectMember?: SelectFn }> = ({
+  clusters,
+  onSelectMember,
+}) => (
   <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 xl:grid-cols-3">
     {clusters.map((c, i) => (
       <div
@@ -71,7 +76,8 @@ export const ClusterFeed: React.FC<{ clusters: ClusterEvent[] }> = ({ clusters }
 
         <div className="mt-3 flex items-center justify-between border-t border-ink-700 pt-3">
           <span className="truncate font-ui text-[11px] text-fog-500">
-            led by <span className="text-fog-300">{c.lead_member}</span>
+            led by{' '}
+            <NameButton name={c.lead_member} onClick={onSelectMember} className="text-fog-300" />
           </span>
           <span className="font-data text-sm tabular-nums" style={{ color: retColor(c.avg_return_30d) }}>
             {fmtSigned(c.avg_return_30d)}
@@ -86,7 +92,8 @@ export const ClusterFeed: React.FC<{ clusters: ClusterEvent[] }> = ({ clusters }
 export const ConflictsView: React.FC<{
   leaderboard: ConflictMember[];
   topConflicts: TopConflict[];
-}> = ({ leaderboard, topConflicts }) => (
+  onSelectMember?: SelectFn;
+}> = ({ leaderboard, topConflicts, onSelectMember }) => (
   <div className="grid grid-cols-1 gap-6 p-4 lg:grid-cols-[1.1fr_1fr]">
     <div>
       <Eyebrow>Flagged members · by conflicted notional</Eyebrow>
@@ -95,7 +102,11 @@ export const ConflictsView: React.FC<{
           <div key={m.member} className="flex items-center gap-3 px-4 py-3">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <span className="truncate font-ui font-600 text-fog-200">{m.member}</span>
+                <NameButton
+                  name={m.member}
+                  onClick={onSelectMember}
+                  className="truncate font-ui font-600 text-fog-200"
+                />
                 <PartyTag party={m.party} />
               </div>
               <div className="mt-1 font-data text-[11px] text-fog-500">
@@ -131,7 +142,11 @@ export const ConflictsView: React.FC<{
             </span>
             <span className="font-data font-600 text-fog-200 w-14">{c.ticker}</span>
             <div className="min-w-0 flex-1">
-              <div className="truncate font-ui text-[13px] text-fog-300">{c.member}</div>
+              <NameButton
+                name={c.member}
+                onClick={onSelectMember}
+                className="block truncate font-ui text-[13px] text-fog-300"
+              />
               <div className="truncate font-data text-[10px] text-fog-500">
                 {c.sector} · {c.committee}
               </div>
@@ -145,7 +160,10 @@ export const ConflictsView: React.FC<{
 );
 
 // ---------- Disclosure lag ----------
-export const LagView: React.FC<{ lag: DisclosureLag }> = ({ lag }) => {
+export const LagView: React.FC<{ lag: DisclosureLag; onSelectMember?: SelectFn }> = ({
+  lag,
+  onSelectMember,
+}) => {
   const maxLag = Math.max(...lag.worst_late_filers.map((f) => f.avg_lag_days), lag.stock_act_limit_days);
   return (
     <div className="p-4">
@@ -171,7 +189,11 @@ export const LagView: React.FC<{ lag: DisclosureLag }> = ({ lag }) => {
           {lag.worst_late_filers.map((f) => (
             <div key={f.member} className="flex items-center gap-3">
               <div className="w-48 shrink-0 truncate">
-                <span className="font-ui text-[13px] text-fog-200">{f.member}</span>{' '}
+                <NameButton
+                  name={f.member}
+                  onClick={onSelectMember}
+                  className="font-ui text-[13px] text-fog-200"
+                />{' '}
                 <PartyTag party={f.party} />
               </div>
               <div className="relative h-5 flex-1 rounded-sm bg-ink-800">

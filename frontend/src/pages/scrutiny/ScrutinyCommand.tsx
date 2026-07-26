@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useScrutiny } from '../../hooks/useScrutiny';
 import type { ScrutinyMember } from '../../types/scrutiny';
 import { Leaderboard, LegendRow } from '../../components/scrutiny/Leaderboard';
@@ -26,6 +26,7 @@ const ScrutinyCommand: React.FC = () => {
   const { data, loading, error, load } = useScrutiny();
   const [tab, setTab] = useState<Tab>('leaderboard');
   const [selected, setSelected] = useState<ScrutinyMember | null>(null);
+  const [missingName, setMissingName] = useState<string | null>(null);
 
   // lazy-load a section the first time its tab is opened
   useEffect(() => {
@@ -38,8 +39,25 @@ const ScrutinyCommand: React.FC = () => {
 
   const scores = data.scrutiny?.scores || [];
   useEffect(() => {
-    if (!selected && scores.length) setSelected(scores[0]);
-  }, [scores, selected]);
+    if (!selected && !missingName && scores.length) setSelected(scores[0]);
+  }, [scores, selected, missingName]);
+
+  // Deep-link from any signal view into a member's dossier.
+  const selectByName = useCallback(
+    (name: string) => {
+      const match = scores.find((s) => s.member === name);
+      if (match) {
+        setSelected(match);
+        setMissingName(null);
+      } else {
+        setSelected(null);
+        setMissingName(name);
+      }
+      setTab('leaderboard');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    [scores],
+  );
 
   const summary = useMemo(() => {
     const n = data.scrutiny?.members_scored ?? 0;
@@ -127,11 +145,18 @@ const ScrutinyCommand: React.FC = () => {
               <section className="overflow-hidden rounded-md border border-ink-600 bg-ink-900">
                 <LegendRow />
                 <div className="max-h-[72vh] overflow-y-auto">
-                  <Leaderboard members={scores} selected={selected?.member} onSelect={setSelected} />
+                  <Leaderboard
+                    members={scores}
+                    selected={selected?.member}
+                    onSelect={(m) => {
+                      setSelected(m);
+                      setMissingName(null);
+                    }}
+                  />
                 </div>
               </section>
               <aside className="lg:sticky lg:top-6 h-fit rounded-md border border-ink-600 bg-ink-900 lg:min-h-[60vh]">
-                <MemberDossier member={selected} />
+                <MemberDossier member={selected} missingName={missingName} />
               </aside>
             </div>
           ))}
@@ -147,7 +172,7 @@ const ScrutinyCommand: React.FC = () => {
                   N members trading the same ticker &amp; side within 14 days
                 </span>
               </div>
-              <ClusterFeed clusters={data.clusters.clusters} />
+              <ClusterFeed clusters={data.clusters.clusters} onSelectMember={selectByName} />
             </section>
           ))}
 
@@ -165,6 +190,7 @@ const ScrutinyCommand: React.FC = () => {
               <ConflictsView
                 leaderboard={data.conflicts.leaderboard}
                 topConflicts={data.conflicts.top_conflicts}
+                onSelectMember={selectByName}
               />
             </section>
           ))}
@@ -174,7 +200,7 @@ const ScrutinyCommand: React.FC = () => {
             <Spinner label="Reading the clock" />
           ) : (
             <section className="overflow-hidden rounded-md border border-ink-600 bg-ink-900">
-              <LagView lag={data.lag} />
+              <LagView lag={data.lag} onSelectMember={selectByName} />
             </section>
           ))}
       </main>

@@ -208,16 +208,16 @@ class CongressionalTradeBase(CapitolScopeBaseSchema):
     transaction_type: TransactionType
     transaction_date: Optional[date] = None
     notification_date: Optional[date] = None
-    
+
+
+class CongressionalTradeCreate(CongressionalTradeBase):
+    """Schema for creating a congressional trade."""
+
     @validator('notification_date')
     def validate_notification_date(cls, v, values):
         if v and 'transaction_date' in values and values['transaction_date'] and v < values['transaction_date']:
             raise ValueError('Notification date cannot be before transaction date')
         return v
-
-
-class CongressionalTradeCreate(CongressionalTradeBase):
-    """Schema for creating a congressional trade."""
     security_id: Optional[UUID] = None
     document_url: Optional[str] = Field(None, max_length=500)
     owner: Optional[TradeOwner] = None

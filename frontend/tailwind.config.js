@@ -69,31 +69,8 @@ export default {
           light: '#e5e7eb',      // Light gray border (matching landing page)
           dark: '#30363d',       // Dark mode border
           muted: '#d1d5db',      // Muted border for light mode
-        }
-      },
-      // Clean shadows - subtle and minimal
-      boxShadow: {
-        'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-      },
-      // Clean gradients
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
-      // Typography
-      fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
-        // Scrutiny design system
-        display: ['Newsreader', 'Iowan Old Style', 'Georgia', 'serif'],
-        ui: ['Public Sans', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
-        data: ['IBM Plex Mono', 'JetBrains Mono', 'ui-monospace', 'monospace'],
-      },
-      // Scrutiny / oversight-dossier palette (namespaced, additive)
-      colors: {
+        },
+        // Scrutiny / oversight-dossier palette (namespaced, additive)
         ink: {
           950: '#0b110f',
           900: '#0f1613',
@@ -124,6 +101,27 @@ export default {
           watch: '#d6a24e',
           flag: '#d6707b',
         },
+      },
+      // Clean shadows - subtle and minimal
+      boxShadow: {
+        'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+      },
+      // Clean gradients
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
+      // Typography
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
+        // Scrutiny design system
+        display: ['Newsreader', 'Iowan Old Style', 'Georgia', 'serif'],
+        ui: ['Public Sans', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        data: ['IBM Plex Mono', 'JetBrains Mono', 'ui-monospace', 'monospace'],
       },
       // Spacing for clean layouts
       spacing: {

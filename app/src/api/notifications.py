@@ -669,7 +669,7 @@ async def get_notification_analytics(
     }
 )
 async def create_member_alert(
-    member_id: int = Path(..., description="Congress member ID"),
+    member_id: str = Path(..., description="Congress member UUID"),
     alert_data: Dict[str, Any] = Body(..., description="Alert configuration"),
     session: AsyncSession = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),

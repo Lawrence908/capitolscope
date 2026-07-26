@@ -8,6 +8,25 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Semantic design-system tokens (themed via CSS vars in index.css).
+        // Use these everywhere: bg-surface, bg-surface-raised, bg-surface-inset,
+        // border-line, text-content / -muted / -faint, text-accent / bg-accent.
+        surface: {
+          DEFAULT: 'var(--surface)',
+          raised: 'var(--surface-raised)',
+          inset: 'var(--surface-inset)',
+        },
+        line: 'var(--line)',
+        content: {
+          DEFAULT: 'var(--content)',
+          muted: 'var(--content-muted)',
+          faint: 'var(--content-faint)',
+        },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          strong: 'var(--accent-strong)',
+          2: 'var(--accent-2)',
+        },
         // Supabase-inspired palette
         bg: {
           primary: '#0d1117',      // GitHub dark background

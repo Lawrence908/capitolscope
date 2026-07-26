@@ -19,6 +19,7 @@ from domains.congressional.crud import (
     MemberPortfolioRepository, MemberPortfolioPerformanceRepository
 )
 from domains.congressional.ingestion import CongressionalDataIngestion
+from domains.congressional.fetch import DisclosureSyncOrchestrator
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
     ingest_price_data_for_all_securities
@@ -374,15 +375,22 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
             date_from = (datetime.utcnow() - timedelta(days=1)).isoformat()
             logger.debug(f"No date_from specified, using yesterday: date_from={date_from}")
         
-        # TODO: Implement actual data synchronization logic
-        # This would typically involve:
-        # 1. Fetching data from external APIs (House/Senate disclosure sites)
-        # 2. Parsing PDF files or structured data
-        # 3. Normalizing and validating the data
-        # 4. Storing in database with proper conflict resolution
-        
-        logger.info(f"Congressional trades sync completed: date_from={date_from}, records_processed=0")
-        return {"status": "success", "date_from": date_from, "records_processed": 0}
+        orchestrator = DisclosureSyncOrchestrator()
+        fetch_result = orchestrator.run(date_from=date_from)
+
+        csv_directory = str(orchestrator.csv_dir)
+        logger.info("Starting import after fetch orchestration: csv_directory=%s", csv_directory)
+        import_result = import_congressional_data_csvs.run(csv_directory)
+
+        response = {
+            "status": "success",
+            "date_from": date_from,
+            "fetch": fetch_result,
+            "import": import_result,
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+        logger.info("Congressional trades sync completed: response=%s", response)
+        return response
         
     except Exception as exc:
         logger.error(f"Congressional trades sync failed: date_from={date_from}, error={str(exc)}", exc_info=True)
@@ -896,10 +904,13 @@ def import_congressional_data_csvs(self, csv_directory: str):
     """
     try:
         logger.info(f"Starting congressional data import from CSVs: csv_directory={csv_directory}")
-        
+        if not db_manager._initialized:
+            logger.info("Database manager not initialized for CSV import, initializing now")
+            run_async_task(db_manager.initialize())
+
         with get_sync_db_session() as session:
             logger.debug("Creating CongressionalDataIngestion")
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             logger.debug("Starting CSV import")
             result = ingester.import_congressional_data_from_csvs_sync(csv_directory)
         
@@ -925,7 +936,7 @@ def enrich_congressional_member_data(self):
         
         with get_sync_db_session() as session:
             logger.debug("Creating CongressionalDataIngestion for enrichment")
-            ingester = CongressionalDataIngestion(session)
+            ingester = CongressionalDataIngestion(session=session)
             logger.debug("Starting member data enrichment")
             result = ingester.enrich_member_data_sync()
         

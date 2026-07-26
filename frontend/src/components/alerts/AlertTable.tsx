@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import { TradeAlert, useAlerts } from '../../hooks/useAlerts';
+import type { TradeAlert } from '../../hooks/useAlerts';
 
 interface AlertTableProps {
   alerts: TradeAlert[];
   loading: boolean;
   onRefetch: () => void;
+  onToggleAlert: (alertId: string, isActive: boolean) => Promise<void>;
+  onDeleteAlert: (alertId: string) => Promise<void>;
 }
 
-export const AlertTable: React.FC<AlertTableProps> = ({ alerts, loading, onRefetch }) => {
+export const AlertTable: React.FC<AlertTableProps> = ({
+  alerts,
+  loading,
+  onRefetch: _onRefetch,
+  onToggleAlert,
+  onDeleteAlert,
+}) => {
   const [sortField, setSortField] = useState<keyof TradeAlert>('created_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [filterType, setFilterType] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  
-  const { deleteAlert, toggleAlert } = useAlerts();
 
   const getAlertTypeLabel = (type: string) => {
     switch (type) {
@@ -60,7 +66,7 @@ export const AlertTable: React.FC<AlertTableProps> = ({ alerts, loading, onRefet
 
   const handleToggleAlert = async (alert: TradeAlert) => {
     try {
-      await toggleAlert(alert.id, !alert.is_active);
+      await onToggleAlert(alert.id, !alert.is_active);
     } catch (error) {
       console.error('Failed to toggle alert:', error);
     }
@@ -69,7 +75,7 @@ export const AlertTable: React.FC<AlertTableProps> = ({ alerts, loading, onRefet
   const handleDeleteAlert = async (alert: TradeAlert) => {
     if (window.confirm(`Are you sure you want to delete "${alert.name}"?`)) {
       try {
-        await deleteAlert(alert.id);
+        await onDeleteAlert(alert.id);
       } catch (error) {
         console.error('Failed to delete alert:', error);
       }

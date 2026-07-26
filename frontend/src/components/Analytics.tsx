@@ -121,8 +121,8 @@ const Analytics: React.FC = () => {
         const analyticsData: AnalyticsData = {
           topTradingMembers: topTradingMembers.status === 'fulfilled' 
             ? topTradingMembers.value.map((member: any) => ({
-                member_name: member.full_name || member.member_name || 'Unknown',
-                total_trades: member.trade_count || 0,
+                member_name: member.member_name || member.full_name || 'Unknown',
+                total_trades: member.total_trades ?? member.trade_count ?? 0,
                 total_value: member.total_value || 0
               }))
             : [],

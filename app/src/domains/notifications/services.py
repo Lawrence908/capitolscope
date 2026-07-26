@@ -22,20 +22,24 @@ class NotificationService:
         self.alert_crud = TradeAlertRuleCRUD(session)
         self.delivery_crud = NotificationDeliveryCRUD(session)
     
-    async def create_member_alert(self, user_id: str, member_id: int, alert_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a member-specific trade alert with validation."""
+    async def create_member_alert(self, user_id: str, member_id: str, alert_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a member-specific trade alert with validation (member_id = UUID string)."""
         try:
-            # Validate member_id
-            if not member_id or member_id <= 0:
+            from uuid import UUID
+            if not member_id or not str(member_id).strip():
                 raise HTTPException(status_code=400, detail="Valid member ID is required")
-            
-            # Create the alert rule
-            alert_rule = await self.alert_crud.create_member_alert(user_id, member_id, alert_data)
-            
-            # Return formatted response
+            try:
+                UUID(str(member_id).strip())
+            except ValueError:
+                raise HTTPException(status_code=400, detail="Member ID must be a valid UUID")
+
+            alert_rule = await self.alert_crud.create_member_alert(
+                user_id, str(member_id).strip(), alert_data
+            )
+
             return {
                 "alert_rule_id": alert_rule.id,
-                "member_id": member_id,
+                "member_id": str(member_id).strip(),
                 "alert_type": "member_trades",
                 "created_at": alert_rule.created_at.isoformat(),
                 "is_active": alert_rule.is_active
@@ -119,12 +123,15 @@ class NotificationService:
             # Convert to response format
             rule_data = []
             for rule in alert_rules:
+                cond = rule.conditions if isinstance(rule.conditions, dict) else {}
+                mem_uuid = cond.get("member_uuid")
                 rule_dict = {
                     "id": rule.id,
                     "name": rule.name,
                     "description": rule.description,
                     "alert_type": rule.alert_type,
                     "target_id": rule.target_id,
+                    "target_member_id": mem_uuid,
                     "target_symbol": rule.target_symbol,
                     "target_name": rule.target_name,
                     "threshold_value": rule.threshold_value / 100 if rule.threshold_value else None,

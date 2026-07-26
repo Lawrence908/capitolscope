@@ -15,7 +15,7 @@ services:
       - "8120:8000"
     volumes:
       - ./app/logs:/app/logs
-      - ./app/data:/app/data
+      - ./data:/app/data
       - ./app/src:/app/src
       - ./legacy:/app/legacy
     depends_on:
@@ -26,11 +26,12 @@ services:
     working_dir: /app/src
     environment:
       - PYTHONPATH=/app/src
+      - CAPITOLSCOPE_DATA_DIR=/app/data/congress
+      - CAPITOLSCOPE_CSV_IMPORT_DIR=/app/data/congress/csv
+      - CAPITOLSCOPE_PDF_DIR=/app/data/congress/pdf
       - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
       - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
     command: python -m uvicorn main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips="*"
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     security_opt:
       - no-new-privileges:true
     healthcheck:
@@ -75,6 +76,7 @@ services:
     volumes:
       - ./app/logs:/app/logs
       - ./data:/app/data
+      - ./legacy:/app/legacy
     depends_on:
       capitolscope-redis:
         condition: service_healthy
@@ -87,13 +89,14 @@ services:
       - PYTHONPATH=/app/src
       - DEBUG=false
       - ENVIRONMENT=production
+      - CAPITOLSCOPE_DATA_DIR=/app/data/congress
+      - CAPITOLSCOPE_CSV_IMPORT_DIR=/app/data/congress/csv
+      - CAPITOLSCOPE_PDF_DIR=/app/data/congress/pdf
       - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
       - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
     command: >
       sh -lc "python -c 'import asyncio; from core.database import init_database; asyncio.run(init_database()); print(\"DB init ok (worker)\")' &&
               python -m celery -A background.celery_app worker -P solo --loglevel=info --concurrency=1"
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     security_opt:
       - no-new-privileges:true
     healthcheck:
@@ -114,6 +117,7 @@ services:
       - ./app/logs:/app/logs
       - ./data:/app/data
       - ./app/celery:/app/celery
+      - ./legacy:/app/legacy
     depends_on:
       capitolscope-redis:
         condition: service_healthy
@@ -126,13 +130,14 @@ services:
       - PYTHONPATH=/app/src
       - DEBUG=false
       - ENVIRONMENT=production
+      - CAPITOLSCOPE_DATA_DIR=/app/data/congress
+      - CAPITOLSCOPE_CSV_IMPORT_DIR=/app/data/congress/csv
+      - CAPITOLSCOPE_PDF_DIR=/app/data/congress/pdf
       - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
       - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-prodpassword}@capitolscope-redis:6379/0
     command: >
       sh -lc "python -c 'import asyncio; from core.database import init_database; asyncio.run(init_database()); print(\"DB init ok (beat)\")' &&
               python -m celery -A background.celery_app beat --loglevel=info --schedule=/app/celery/celerybeat-schedule"
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     security_opt:
       - no-new-privileges:true
     healthcheck:
@@ -168,8 +173,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     security_opt:
       - no-new-privileges:true
 

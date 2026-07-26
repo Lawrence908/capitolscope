@@ -82,14 +82,15 @@ class TradeAlertRuleCRUD:
             logger.error(f"Error creating alert rule: {e}")
             raise
     
-    async def create_member_alert(self, user_id: str, member_id: int, alert_data: Dict[str, Any]) -> TradeAlertRule:
-        """Create a member-specific trade alert rule."""
+    async def create_member_alert(self, user_id: str, member_id: str, alert_data: Dict[str, Any]) -> TradeAlertRule:
+        """Create a member-specific trade alert rule (member_id is congress member UUID string)."""
         rule_data = {
-            "name": alert_data.get("name", f"Member {member_id} Trade Alerts"),
-            "description": alert_data.get("description", f"Get notified when Member {member_id} makes trades"),
+            "name": alert_data.get("name", "Member trade alerts"),
+            "description": alert_data.get("description", "Get notified when this member makes trades"),
             "alert_type": "member_trades",
-            "target_id": member_id,
+            "target_id": None,
             "target_name": alert_data.get("member_name"),
+            "conditions": {"member_uuid": member_id},
             "notification_channels": alert_data.get("notification_channels", ["email"]),
             "is_active": alert_data.get("is_active", True)
         }

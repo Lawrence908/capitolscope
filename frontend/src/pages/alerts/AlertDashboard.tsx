@@ -8,7 +8,16 @@ import { NotificationPreferences } from '../../components/alerts/NotificationPre
 export const AlertDashboard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState('alerts');
-  const { alerts, stats, loading, error, refetch, createAlert } = useAlerts();
+  const {
+    alerts,
+    stats,
+    loading,
+    error,
+    refetch,
+    createAlert,
+    toggleAlert,
+    deleteAlert,
+  } = useAlerts();
 
   const handleCreateAlert = async (alertData: CreateAlertData) => {
     try {
@@ -130,10 +139,12 @@ export const AlertDashboard: React.FC = () => {
         {/* Tab Content */}
         <div className="bg-white rounded-lg shadow">
           {selectedTab === 'alerts' && (
-            <AlertTable 
-              alerts={alerts} 
-              loading={loading} 
+            <AlertTable
+              alerts={alerts}
+              loading={loading}
               onRefetch={refetch}
+              onToggleAlert={toggleAlert}
+              onDeleteAlert={deleteAlert}
             />
           )}
           {selectedTab === 'history' && (

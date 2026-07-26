@@ -263,7 +263,7 @@ async def get_top_traded_tickers(
         
     except Exception as e:
         logger.error(f"Error getting top traded tickers: {e}")
-        return create_response(error="Failed to get top traded tickers")
+        return create_response(data=None, error="Failed to get top traded tickers")
 
 
 @router.get(
@@ -308,7 +308,7 @@ async def get_party_distribution(
         
     except Exception as e:
         logger.error(f"Error getting party distribution: {e}")
-        return create_response(error="Failed to get party distribution")
+        return create_response(data=None, error="Failed to get party distribution")
 
 
 @router.get(
@@ -353,7 +353,7 @@ async def get_chamber_distribution(
         
     except Exception as e:
         logger.error(f"Error getting chamber distribution: {e}")
-        return create_response(error="Failed to get chamber distribution")
+        return create_response(data=None, error="Failed to get chamber distribution")
 
 
 @router.get(
@@ -423,7 +423,7 @@ async def get_amount_distribution(
         
     except Exception as e:
         logger.error(f"Error getting amount distribution: {e}")
-        return create_response(error="Failed to get amount distribution")
+        return create_response(data=None, error="Failed to get amount distribution")
 
 
 @router.get(
@@ -486,7 +486,7 @@ async def get_volume_over_time(
         
     except Exception as e:
         logger.error(f"Error getting volume over time: {e}")
-        return create_response(error="Failed to get volume over time")
+        return create_response(data=None, error="Failed to get volume over time")
 
 
 @router.get(
@@ -649,7 +649,7 @@ async def get_data_quality_stats(
         
     except Exception as e:
         logger.error(f"Error getting data quality stats: {e}")
-        return create_response(error="Failed to get data quality stats")
+        return create_response(data=None, error="Failed to get data quality stats")
 
 
 @router.get(
@@ -686,7 +686,7 @@ async def test_trades(
         
     except Exception as e:
         logger.error(f"Test failed: {e}", exc_info=True)
-        return create_response(error=str(e))
+        return create_response(data=None, error=str(e))
 
 
 @router.get(
@@ -768,7 +768,7 @@ async def get_trade(
     
     # TODO: Implement actual trade retrieval from database
     # For now, return a placeholder
-    return create_response(error="Trade detail endpoint ready - database models needed")
+    return create_response(data=None, error="Trade detail endpoint ready - database models needed")
 
 
 @router.post(

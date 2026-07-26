@@ -4,7 +4,7 @@ import type { CongressMember } from '../../types';
 
 interface MemberAlertFormData {
   name: string;
-  target_id: number;
+  target_member_id: string;
   target_name: string;
 }
 
@@ -27,7 +27,7 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
 
     setIsSearching(true);
     try {
-      const response = await apiClient.searchMembers(query, 1, 10);
+      const response = await apiClient.getMembers({ search: query }, 1, 10);
       setSearchResults(response.items);
     } catch (error) {
       console.error('Failed to search members:', error);
@@ -49,7 +49,7 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
     if (selectedMember && alertName) {
       onDataChange({
         name: alertName,
-        target_id: selectedMember.id,
+        target_member_id: String(selectedMember.id),
         target_name: `${selectedMember.first_name} ${selectedMember.last_name}`,
       });
     } else {

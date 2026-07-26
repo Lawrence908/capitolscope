@@ -71,14 +71,18 @@ def ticker_extractor():
 
 
 @pytest.fixture
-def make_settings():
+def make_settings(monkeypatch):
     """
     Factory that builds an isolated Settings instance.
 
-    ``_env_file=None`` disables reading the repo's real ``.env`` so tests are
-    deterministic; required Supabase fields are pre-filled and any keyword
-    overrides win. Use this instead of the module-level ``settings`` singleton
-    whenever a test needs specific configuration values.
+    Values are applied through the *environment* (via monkeypatch, auto-undone
+    per test) rather than init kwargs. This matters: ``SECRET_KEY`` declares
+    ``AliasChoices(..., "SUPABASE_JWT_SECRET")``, and passing both that field
+    and its alias as init kwargs trips an intermittent KeyError deep in
+    pydantic-settings. The env source resolves alias choices correctly. Any
+    pre-existing ``SECRET_KEY`` is cleared so tests that don't set it exercise
+    the JWT-secret fallback deterministically. ``_env_file=None`` keeps the
+    repo's real ``.env`` out of the picture.
     """
     from core.config import Settings
 
@@ -91,6 +95,10 @@ def make_settings():
             "SUPABASE_JWT_SECRET": "test-jwt-secret",
         }
         base.update(overrides)
-        return Settings(_env_file=None, **base)
+        monkeypatch.delenv("SECRET_KEY", raising=False)
+        monkeypatch.delenv("JWT_SECRET_KEY", raising=False)
+        for key, value in base.items():
+            monkeypatch.setenv(key, str(value))
+        return Settings(_env_file=None)
 
     return _make

@@ -5,6 +5,7 @@ import { Leaderboard, LegendRow } from '../../components/scrutiny/Leaderboard';
 import { MemberDossier } from '../../components/scrutiny/MemberDossier';
 import { ClusterFeed, ConflictsView, LagView } from '../../components/scrutiny/SignalViews';
 import { Eyebrow } from '../../components/scrutiny/primitives';
+import type { DossierOrigin } from '../../types/scrutiny';
 
 type Tab = 'leaderboard' | 'clusters' | 'conflicts' | 'lag';
 
@@ -27,6 +28,7 @@ const ScrutinyCommand: React.FC = () => {
   const [tab, setTab] = useState<Tab>('leaderboard');
   const [selected, setSelected] = useState<ScrutinyMember | null>(null);
   const [missingName, setMissingName] = useState<string | null>(null);
+  const [origin, setOrigin] = useState<DossierOrigin | null>(null);
 
   // lazy-load a section the first time its tab is opened
   useEffect(() => {
@@ -44,7 +46,7 @@ const ScrutinyCommand: React.FC = () => {
 
   // Deep-link from any signal view into a member's dossier.
   const selectByName = useCallback(
-    (name: string) => {
+    (name: string, from?: DossierOrigin) => {
       const match = scores.find((s) => s.member === name);
       if (match) {
         setSelected(match);
@@ -53,11 +55,17 @@ const ScrutinyCommand: React.FC = () => {
         setSelected(null);
         setMissingName(name);
       }
+      setOrigin(from ?? null);
       setTab('leaderboard');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     [scores],
   );
+
+  const goBack = useCallback(() => {
+    if (origin) setTab(origin.tab);
+    setOrigin(null);
+  }, [origin]);
 
   const summary = useMemo(() => {
     const n = data.scrutiny?.members_scored ?? 0;
@@ -151,12 +159,18 @@ const ScrutinyCommand: React.FC = () => {
                     onSelect={(m) => {
                       setSelected(m);
                       setMissingName(null);
+                      setOrigin(null);
                     }}
                   />
                 </div>
               </section>
               <aside className="lg:sticky lg:top-6 h-fit rounded-md border border-ink-600 bg-ink-900 lg:min-h-[60vh]">
-                <MemberDossier member={selected} missingName={missingName} />
+                <MemberDossier
+                  member={selected}
+                  missingName={missingName}
+                  origin={origin}
+                  onBack={goBack}
+                />
               </aside>
             </div>
           ))}

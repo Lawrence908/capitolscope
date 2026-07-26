@@ -1,5 +1,11 @@
 // Types for the Scrutiny analytics surface.
 
+// Where a dossier deep-link originated, so the dossier can offer a back-link.
+export interface DossierOrigin {
+  tab: 'clusters' | 'conflicts' | 'lag';
+  label: string;
+}
+
 export interface ScrutinyFactor {
   weight: number;
   percentile: number;

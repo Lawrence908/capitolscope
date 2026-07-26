@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ScrutinyMember } from '../../types/scrutiny';
+import type { ScrutinyMember, DossierOrigin } from '../../types/scrutiny';
 import {
   Meter,
   PartyTag,
@@ -41,13 +41,35 @@ const Row: React.FC<{
   </div>
 );
 
+const BackLink: React.FC<{ origin?: DossierOrigin | null; onBack?: () => void }> = ({
+  origin,
+  onBack,
+}) =>
+  origin && onBack ? (
+    <button
+      type="button"
+      onClick={onBack}
+      className="group mb-3 flex items-center gap-1.5 font-data text-[11px] tracking-wide text-verdigris-500 transition-colors hover:text-verdigris-400"
+    >
+      <span className="transition-transform group-hover:-translate-x-0.5">←</span>
+      Back to {origin.label}
+    </button>
+  ) : null;
+
 export const MemberDossier: React.FC<{
   member: ScrutinyMember | null;
   missingName?: string | null;
-}> = ({ member, missingName }) => {
+  origin?: DossierOrigin | null;
+  onBack?: () => void;
+}> = ({ member, missingName, origin, onBack }) => {
   if (!member) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center">
+        {origin && onBack && (
+          <div className="w-full text-left">
+            <BackLink origin={origin} onBack={onBack} />
+          </div>
+        )}
         {missingName ? (
           <>
             <div className="font-display text-lg text-fog-200">{missingName}</div>
@@ -77,6 +99,7 @@ export const MemberDossier: React.FC<{
     <div className="flex h-full flex-col">
       {/* header */}
       <div className="border-b border-ink-600 px-6 pb-5 pt-6">
+        <BackLink origin={origin} onBack={onBack} />
         <Eyebrow>Dossier</Eyebrow>
         <h2 className="mt-2 font-display text-2xl leading-tight text-fog-200">{member.member}</h2>
         <div className="mt-2 flex items-center gap-2.5 font-data text-[11px] text-fog-500">

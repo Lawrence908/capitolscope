@@ -1,4 +1,5 @@
 import React from 'react';
+import type { DossierOrigin } from '../../types/scrutiny';
 
 // ---- formatters ----
 export const fmtMoney = (n: number | null | undefined): string => {
@@ -94,15 +95,16 @@ export const Meter: React.FC<{ value: number; color: string }> = ({ value, color
 // ---- clickable member name (deep-link to dossier) ----
 export const NameButton: React.FC<{
   name: string;
-  onClick?: (name: string) => void;
+  onClick?: (name: string, origin?: DossierOrigin) => void;
+  origin?: DossierOrigin;
   className?: string;
-}> = ({ name, onClick, className = '' }) =>
+}> = ({ name, onClick, origin, className = '' }) =>
   onClick ? (
     <button
       type="button"
       onClick={(e) => {
         e.stopPropagation();
-        onClick(name);
+        onClick(name, origin);
       }}
       className={`text-left transition-colors hover:text-verdigris-400 hover:underline decoration-verdigris-500/50 underline-offset-2 ${className}`}
       title={`Open ${name}'s dossier`}

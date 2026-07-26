@@ -4,13 +4,14 @@ import type {
   ConflictMember,
   TopConflict,
   DisclosureLag,
+  DossierOrigin,
 } from '../../types/scrutiny';
 import { fmtMoney, fmtSigned, PartyTag, Eyebrow, partyMeta, NameButton } from './primitives';
 
 const retColor = (r: number | null) =>
   r == null ? '#90a29d' : r >= 0 ? '#43a897' : '#d6707b';
 
-type SelectFn = (name: string) => void;
+type SelectFn = (name: string, origin?: DossierOrigin) => void;
 
 // ---------- Clusters ----------
 const PartyMix: React.FC<{ mix: Record<string, number> }> = ({ mix }) => (
@@ -77,7 +78,12 @@ export const ClusterFeed: React.FC<{ clusters: ClusterEvent[]; onSelectMember?: 
         <div className="mt-3 flex items-center justify-between border-t border-ink-700 pt-3">
           <span className="truncate font-ui text-[11px] text-fog-500">
             led by{' '}
-            <NameButton name={c.lead_member} onClick={onSelectMember} className="text-fog-300" />
+            <NameButton
+              name={c.lead_member}
+              onClick={onSelectMember}
+              origin={{ tab: 'clusters', label: `the ${c.ticker} ${c.direction} cluster` }}
+              className="text-fog-300"
+            />
           </span>
           <span className="font-data text-sm tabular-nums" style={{ color: retColor(c.avg_return_30d) }}>
             {fmtSigned(c.avg_return_30d)}
@@ -105,6 +111,7 @@ export const ConflictsView: React.FC<{
                 <NameButton
                   name={m.member}
                   onClick={onSelectMember}
+                  origin={{ tab: 'conflicts', label: 'the conflicts view' }}
                   className="truncate font-ui font-600 text-fog-200"
                 />
                 <PartyTag party={m.party} />
@@ -145,6 +152,7 @@ export const ConflictsView: React.FC<{
               <NameButton
                 name={c.member}
                 onClick={onSelectMember}
+                origin={{ tab: 'conflicts', label: `the ${c.ticker} conflict` }}
                 className="block truncate font-ui text-[13px] text-fog-300"
               />
               <div className="truncate font-data text-[10px] text-fog-500">
@@ -192,6 +200,7 @@ export const LagView: React.FC<{ lag: DisclosureLag; onSelectMember?: SelectFn }
                 <NameButton
                   name={f.member}
                   onClick={onSelectMember}
+                  origin={{ tab: 'lag', label: 'the disclosure-lag view' }}
                   className="font-ui text-[13px] text-fog-200"
                 />{' '}
                 <PartyTag party={f.party} />

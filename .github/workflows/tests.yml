@@ -1,0 +1,56 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend tests + coverage gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system deps (libpq for psycopg2)
+        run: sudo apt-get update && sudo apt-get install -y libpq-dev
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv pip install --system -e ".[dev]"
+
+      # conftest.py injects dummy SUPABASE_*/env, so no real database or secrets
+      # are needed. The -m "not db" selection skips tests requiring a live DB; the
+      # offline Alembic drift guard still runs. --cov-fail-under is the coverage
+      # floor (ratchet it up as coverage grows; see pyproject.toml).
+      - name: Run tests with coverage gate
+        run: pytest -m "not db" --cov-fail-under=30
+
+  frontend:
+    name: Frontend typecheck + lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      # The root tsconfig is references-only ("files": []), so a bare `tsc
+      # --noEmit` checks nothing — point at the app project explicitly.
+      - name: Typecheck
+        run: node_modules/.bin/tsc -p tsconfig.app.json --noEmit
+
+      # 0 errors (2 exhaustive-deps warnings remain and do not fail the run).
+      - name: Lint
+        run: node_modules/.bin/eslint .

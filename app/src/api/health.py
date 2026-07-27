@@ -19,6 +19,22 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+async def check_redis_health() -> Dict[str, Any]:
+    """Ping Redis (the Celery broker/result backend) with a short timeout."""
+    try:
+        import redis.asyncio as aioredis
+
+        client = aioredis.from_url(settings.redis_url, socket_connect_timeout=2, socket_timeout=2)
+        try:
+            await client.ping()
+            return {"status": "healthy"}
+        finally:
+            await client.aclose()
+    except Exception as e:
+        logger.warning(f"Redis health check failed: {e}")
+        return {"status": "unhealthy", "error": str(e)}
+
+
 @router.get(
     "/",
     response_model=ResponseEnvelope[Dict[str, Any]],
@@ -64,10 +80,9 @@ async def detailed_health_check() -> ResponseEnvelope[Dict[str, Any]]:
     # Check database health
     database_health = await check_database_health()
     
-    # Check Redis health (if configured)
-    redis_health = {"status": "not_configured"}
-    # TODO: Add Redis health check when implemented
-    
+    # Check Redis health
+    redis_health = await check_redis_health()
+
     # Check Congress.gov API health
     congress_api_health = await check_congress_api_health()
     
@@ -77,6 +92,8 @@ async def detailed_health_check() -> ResponseEnvelope[Dict[str, Any]]:
     # Determine overall status
     overall_status = "healthy"
     if database_health["status"] != "healthy":
+        overall_status = "degraded"
+    if redis_health["status"] not in ("healthy", "not_configured"):
         overall_status = "degraded"
     if congress_api_health["status"] != "healthy":
         overall_status = "degraded"

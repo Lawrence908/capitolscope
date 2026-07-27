@@ -208,10 +208,18 @@ app.add_middleware(
 )
 
 # Add custom middleware
+from core.metrics import PrometheusMiddleware, metrics_response
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(ErrorHandlingMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(RateLimitMiddleware)
+app.add_middleware(PrometheusMiddleware)
+
+
+@app.get("/metrics", include_in_schema=False)
+async def metrics():
+    """Prometheus scrape endpoint. Restrict to internal scrapers at the proxy."""
+    return metrics_response()
 
 # Include API routers
 app.include_router(health.router, prefix="/health", tags=["Health"])

@@ -4,7 +4,7 @@ Congressional trades API endpoints.
 
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Security, Path
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_
 from sqlalchemy.orm import joinedload
@@ -491,32 +491,74 @@ async def get_volume_over_time(
 
 @router.get(
     "/export/csv",
-    response_model=ResponseEnvelope[Dict[str, Any]],
-    responses={
-        200: {"description": "CSV export URL generated successfully"},
-        401: {"description": "Not authenticated"},
-        500: {"description": "Internal server error"}
-    }
+    responses={200: {"content": {"text/csv": {}}, "description": "CSV stream of trades"}},
 )
 async def export_trades_csv(
+    member_id: Optional[str] = Query(None, description="Filter by congress member UUID"),
+    ticker: Optional[str] = Query(None, description="Filter by ticker"),
+    limit: int = Query(5000, ge=1, le=50000, description="Max rows to export"),
     session: AsyncSession = Depends(get_db_session),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> ResponseEnvelope[Dict[str, Any]]:
-    """
-    Export trades data to CSV format.
-    
-    **Authenticated Feature**: Requires user authentication.
-    """
-    logger.info("Exporting trades to CSV")  # Removed user_id for now
-    
-    # TODO: Implement CSV export
-    data = {
-        # "user_id": current_user.id,  # Temporarily disabled
-        "export_url": "https://capitolscope.chrislawrence.ca/exports/trades-export-123.csv",
-        "expires_at": "2025-01-01T00:00:00Z",
-    }
-    
-    return create_response(data=data)
+    current_user: User = Depends(require_subscription(['PRO', 'PREMIUM', 'ENTERPRISE'])),
+):
+    """Stream congressional trades as a CSV download. **Pro+**."""
+    import csv
+    import io
+    from datetime import date as _date
+    from uuid import UUID as _UUID
+    from sqlalchemy import select
+    from sqlalchemy.orm import selectinload
+    from domains.congressional.models import CongressionalTrade
+
+    logger.info(f"Exporting trades CSV: user={current_user.id} member={member_id} ticker={ticker} limit={limit}")
+
+    q = (
+        select(CongressionalTrade)
+        .options(selectinload(CongressionalTrade.member))
+        .order_by(CongressionalTrade.transaction_date.desc())
+    )
+    if member_id:
+        try:
+            _UUID(member_id)
+        except (ValueError, TypeError):
+            raise HTTPException(status_code=400, detail="member_id must be a valid UUID")
+        q = q.where(CongressionalTrade.member_id == member_id)
+    if ticker:
+        q = q.where(CongressionalTrade.ticker == ticker.upper())
+
+    rows = (await session.execute(q.limit(limit))).scalars().all()
+
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow([
+        "transaction_date", "notification_date", "member", "party", "chamber", "state",
+        "ticker", "asset_name", "asset_type", "transaction_type", "owner",
+        "amount_min_usd", "amount_max_usd", "amount_exact_usd",
+    ])
+    for t in rows:
+        m = getattr(t, "member", None)
+        writer.writerow([
+            t.transaction_date.isoformat() if t.transaction_date else "",
+            t.notification_date.isoformat() if t.notification_date else "",
+            getattr(m, "display_name", None) or getattr(m, "full_name", "") or "",
+            getattr(m, "party", "") or "",
+            getattr(m, "chamber", "") or "",
+            getattr(m, "state", "") or "",
+            t.ticker or "",
+            t.asset_name or "",
+            t.asset_type or "",
+            t.transaction_type or "",
+            t.owner or "",
+            t.amount_min / 100 if t.amount_min else "",
+            t.amount_max / 100 if t.amount_max else "",
+            t.amount_exact / 100 if t.amount_exact else "",
+        ])
+
+    filename = f"capitolscope-trades-{_date.today().isoformat()}.csv"
+    return StreamingResponse(
+        iter([buf.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @router.delete(

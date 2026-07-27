@@ -584,6 +584,8 @@ async def create_mirror_portfolio(
 ) -> ResponseEnvelope[Dict[str, Any]]:
     """Create a mirror portfolio that combines one or more members' trades. **Pro+**."""
     logger.info(f"Creating mirror portfolio for user {current_user.id} ({len(body.member_ids)} members)")
+    from core.quotas import enforce_quota
+    await enforce_quota(session, current_user, "mirror_portfolios")  # before try: propagate 403
     try:
         service = MirrorPortfolioService(session)
         mirror = await service.create(current_user.id, body.name, body.description, body.member_ids)

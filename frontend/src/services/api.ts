@@ -544,6 +544,11 @@ class APIClient {
     const res = await this.client.get(`/api/v1/analytics/ticker/${encodeURIComponent(ticker)}`);
     return res.data?.data;
   }
+
+  async getTickerMarket(ticker: string): Promise<import('../types/scrutiny').TickerMarket> {
+    const res = await this.client.get(`/api/v1/analytics/ticker/${encodeURIComponent(ticker)}/market`);
+    return res.data?.data;
+  }
 }
 
 // Create and export a singleton instance

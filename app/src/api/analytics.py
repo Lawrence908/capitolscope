@@ -228,6 +228,103 @@ async def get_ticker_trades(ticker: str, limit: int = Query(300, ge=1, le=1000))
     return success_response(data=limited, meta={"ticker": sym})
 
 
+@router.get("/ticker/{ticker}/market", summary="Latest price + basics for one ticker")
+async def get_ticker_market(ticker: str):
+    """Market snapshot for a ticker, served entirely from the locally-ingested
+    ``daily_prices`` history (no live external calls): latest close, day change
+    vs the prior close, volume, 52-week range, ~1y of closes for a sparkline,
+    plus company basics and a Yahoo Finance link.
+
+    NOTE: prices in ``daily_prices`` are stored as whole-dollar integers, so
+    values here are US dollars (whole-dollar precision), not cents.
+    """
+    sym = ticker.strip().upper()
+
+    def compute():
+        from sqlalchemy import text as _t
+        with get_sync_db_session() as session:
+            meta = session.execute(_t(
+                """
+                SELECT se.id, se.name AS security_name, se.currency,
+                       sec.name AS sector, ex.name AS exchange
+                FROM securities se
+                LEFT JOIN sectors sec ON sec.gics_code = se.sector_gics_code
+                LEFT JOIN exchanges ex ON ex.code = se.exchange_code
+                WHERE upper(se.ticker) = :sym
+                ORDER BY (SELECT count(*) FROM daily_prices dp WHERE dp.security_id = se.id) DESC
+                LIMIT 1
+                """
+            ), {"sym": sym}).fetchone()
+
+            history = []
+            if meta is not None:
+                # ~1 trading year, oldest-first, for a sparkline + 52w range.
+                rows = session.execute(_t(
+                    """
+                    SELECT price_date, close_price
+                    FROM daily_prices
+                    WHERE security_id = :sid
+                    ORDER BY price_date DESC
+                    LIMIT 260
+                    """
+                ), {"sid": meta.id}).fetchall()
+                history = [
+                    {"date": d.isoformat(), "close": int(c)}
+                    for d, c in reversed(rows) if c is not None
+                ]
+
+        yahoo_url = f"https://finance.yahoo.com/quote/{sym}"
+        if meta is None or not history:
+            return {
+                "ticker": sym,
+                "security_name": meta.security_name if meta else None,
+                "sector": meta.sector if meta else None,
+                "exchange": meta.exchange if meta else None,
+                "currency": (meta.currency if meta else None) or "USD",
+                "as_of": None,
+                "last_close": None,
+                "prev_close": None,
+                "day_change": None,
+                "day_change_pct": None,
+                "week52_high": None,
+                "week52_low": None,
+                "history": [],
+                "yahoo_url": yahoo_url,
+                "has_prices": False,
+            }
+
+        last = history[-1]
+        prev_close = history[-2]["close"] if len(history) >= 2 else None
+        last_close = last["close"]
+        day_change = (last_close - prev_close) if prev_close is not None else None
+        day_change_pct = (
+            round(day_change / prev_close * 100, 2)
+            if (day_change is not None and prev_close) else None
+        )
+        closes = [h["close"] for h in history]
+
+        return {
+            "ticker": sym,
+            "security_name": meta.security_name,
+            "sector": meta.sector,
+            "exchange": meta.exchange,
+            "currency": meta.currency or "USD",
+            "as_of": last["date"],
+            "last_close": last_close,
+            "prev_close": prev_close,
+            "day_change": day_change,
+            "day_change_pct": day_change_pct,
+            "week52_high": max(closes),
+            "week52_low": min(closes),
+            "history": history,
+            "yahoo_url": yahoo_url,
+            "has_prices": True,
+        }
+
+    data = await _cached(f"ticker_market:{sym}", compute)
+    return success_response(data=data, meta={"ticker": sym})
+
+
 @router.get("/disclosure-lag", summary="Filing timeliness vs the STOCK Act clock")
 async def get_disclosure_lag():
     """Overall filing-timeliness stats against the 45-day STOCK Act limit, plus

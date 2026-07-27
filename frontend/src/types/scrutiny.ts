@@ -113,6 +113,24 @@ export interface TickerDetail {
   trades: TickerTrade[];
 }
 
+export interface TickerMarket {
+  ticker: string;
+  security_name: string | null;
+  sector: string | null;
+  exchange: string | null;
+  currency: string;
+  as_of: string | null;
+  last_close: number | null;
+  prev_close: number | null;
+  day_change: number | null;
+  day_change_pct: number | null;
+  week52_high: number | null;
+  week52_low: number | null;
+  history: { date: string; close: number }[];
+  yahoo_url: string;
+  has_prices: boolean;
+}
+
 export interface DisclosureLag {
   trades_with_lag: number;
   avg_lag_days: number | null;

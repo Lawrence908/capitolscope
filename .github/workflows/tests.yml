@@ -20,15 +20,19 @@ jobs:
         with:
           python-version: "3.12"
 
+      # A uv-managed venv (not --system): the runner's /usr Python is externally
+      # managed (PEP 668), so --system is refused.
       - name: Install dependencies
-        run: uv pip install --system -e ".[dev]"
+        run: |
+          uv venv
+          uv pip install -e ".[dev]"
 
       # conftest.py injects dummy SUPABASE_*/env, so no real database or secrets
       # are needed. The -m "not db" selection skips tests requiring a live DB; the
       # offline Alembic drift guard still runs. --cov-fail-under is the coverage
       # floor (ratchet it up as coverage grows; see pyproject.toml).
       - name: Run tests with coverage gate
-        run: pytest -m "not db" --cov-fail-under=30
+        run: uv run pytest -m "not db" --cov-fail-under=30
 
   frontend:
     name: Frontend typecheck + lint

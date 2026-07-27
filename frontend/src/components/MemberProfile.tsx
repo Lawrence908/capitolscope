@@ -162,7 +162,7 @@ const MemberProfile: React.FC = () => {
                       <span className="font-ui text-xs capitalize text-content-faint">{trade.transaction_type}</span>
                     </div>
                     <div className="mt-0.5 font-data text-[11px] tabular-nums text-content-faint">
-                      {new Date(trade.transaction_date).toLocaleDateString()}
+                      {trade.transaction_date ? new Date(trade.transaction_date).toLocaleDateString() : "—"}
                     </div>
                   </div>
                   <div className="ml-2 text-right font-data text-sm tabular-nums text-content">

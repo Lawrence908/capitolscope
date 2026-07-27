@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import PremiumFeatureWrapper from './PremiumFeatureWrapper';
 import DataQualityDashboard from './DataQualityDashboard';
+import SecurityCoveragePanel from './data/SecurityCoveragePanel';
 
 const DataQuality: React.FC = () => {
   const { user } = useAuth();
@@ -31,6 +32,8 @@ const DataQuality: React.FC = () => {
           </Link>
         </div>
       )}
+
+      <SecurityCoveragePanel />
 
       <PremiumFeatureWrapper featureName="Data Quality Dashboard" requiredTier="pro" showBadge={false}>
         <DataQualityDashboard />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MemberAlertForm } from './MemberAlertForm';
 import { AmountAlertForm } from './AmountAlertForm';
 import { TickerAlertForm } from './TickerAlertForm';
-import { CreateAlertData } from '../../hooks/useAlerts';
+import type { CreateAlertData } from '../../hooks/useAlerts';
 
 interface CreateAlertModalProps {
   isOpen: boolean;
@@ -51,7 +51,7 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
       await onSubmit({
         alert_type: selectedType as 'member_trades' | 'amount_threshold' | 'ticker_trades',
         ...formData,
-      });
+      } as CreateAlertData);
       // Reset form
       setSelectedType('');
       setFormData({});

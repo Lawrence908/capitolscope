@@ -16,6 +16,7 @@ import type {
   InboxResult,
   NotificationSubscription,
   EquityCurveResult,
+  TopTradingMember,
 } from '../types';
 
 class APIClient {
@@ -267,6 +268,11 @@ class APIClient {
   }
 
   // Data Quality
+  async getSecurityCoverage(): Promise<import('../types').SecurityCoverage> {
+    const response = await this.client.get('/api/v1/trades/data-quality/coverage');
+    return response.data?.data as import('../types').SecurityCoverage;
+  }
+
   async getDataQualityStats(): Promise<DataQualityStats> {
     const response = await this.client.get('/api/v1/trades/data-quality/stats');
     return response.data;
@@ -296,7 +302,7 @@ class APIClient {
   }
 
   // Analytics
-  async getTopTradingMembers(limit: number = 10): Promise<CongressMember[]> {
+  async getTopTradingMembers(limit: number = 10): Promise<TopTradingMember[]> {
     const response = await this.client.get(`/api/v1/trades/analytics/top-trading-members?limit=${limit}`);
     return response.data.data;
   }

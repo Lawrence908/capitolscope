@@ -35,7 +35,7 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
         setLoading(true);
         setError(null);
         const response = await apiClient.getDataQualityStats();
-        setStats(response.data);
+        setStats(response);
       } catch (err) {
         setError('Failed to load data quality stats');
         console.error('Data quality error:', err);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { logger } from '../core/logging';
+import { logger, LogComponent } from '../core/logging';
 import { Eyebrow } from './ui';
 
 const LoginPage: React.FC = () => {
@@ -75,18 +75,18 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     
     if (!validateForm()) {
-      logger.warn('Login form validation failed', { formData });
+      logger.warning(LogComponent.AUTH, 'Login form validation failed', { formData });
       return;
     }
 
     setIsSubmitting(true);
-    logger.info('Login attempt started', { email: formData.email });
-    
+    logger.info(LogComponent.AUTH, 'Login attempt started', { email: formData.email });
+
     try {
       await login(formData);
-      logger.info('Login successful', { email: formData.email });
+      logger.info(LogComponent.AUTH, 'Login successful', { email: formData.email });
     } catch (error) {
-      logger.error('Login error', { error, email: formData.email });
+      logger.error(LogComponent.AUTH, 'Login error', { error, email: formData.email });
       console.error('Login error:', error);
     } finally {
       setIsSubmitting(false);

@@ -653,6 +653,76 @@ async def get_data_quality_stats(
 
 
 @router.get(
+    "/data-quality/coverage",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Security-matching coverage retrieved successfully"},
+        500: {"description": "Internal server error"},
+    },
+)
+async def get_security_coverage(
+    session: AsyncSession = Depends(get_db_session),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Security-matching coverage: how many trades are linked to a priced security
+    (the ceiling on portfolio/mirror/signal accuracy), broken down by asset type.
+    """
+    try:
+        from sqlalchemy import select, func
+
+        total = await session.scalar(select(func.count(CongressionalTrade.id))) or 0
+        matched = await session.scalar(
+            select(func.count(CongressionalTrade.id)).where(CongressionalTrade.security_id.isnot(None))
+        ) or 0
+        untickered = await session.scalar(
+            select(func.count(CongressionalTrade.id)).where(
+                (CongressionalTrade.ticker.is_(None)) | (CongressionalTrade.ticker == "")
+            )
+        ) or 0
+
+        # Per asset-type totals and matched counts.
+        rows = (await session.execute(
+            select(
+                func.coalesce(CongressionalTrade.asset_type, "Unknown").label("asset_type"),
+                func.count(CongressionalTrade.id).label("total"),
+                func.count(CongressionalTrade.security_id).label("matched"),
+            ).group_by(CongressionalTrade.asset_type)
+        )).all()
+        by_asset_type = sorted(
+            [
+                {
+                    "asset_type": r.asset_type,
+                    "total": int(r.total),
+                    "matched": int(r.matched),
+                    "match_rate": round(r.matched / r.total * 100, 1) if r.total else None,
+                }
+                for r in rows
+            ],
+            key=lambda x: x["total"],
+            reverse=True,
+        )
+
+        from domains.securities.models import Security, DailyPrice
+        securities_total = await session.scalar(select(func.count(Security.id))) or 0
+        securities_priced = await session.scalar(
+            select(func.count(func.distinct(DailyPrice.security_id)))
+        ) or 0
+
+        return create_response(data={
+            "total_trades": int(total),
+            "matched_trades": int(matched),
+            "match_rate": round(matched / total * 100, 1) if total else 0.0,
+            "untickered_trades": int(untickered),
+            "securities_total": int(securities_total),
+            "securities_priced": int(securities_priced),
+            "by_asset_type": by_asset_type,
+        })
+    except Exception as e:
+        logger.error(f"Error getting security coverage: {e}")
+        return create_response(data=None, error="Failed to get security coverage")
+
+
+@router.get(
     "/test",
     response_model=ResponseEnvelope[Dict[str, Any]],
     responses={

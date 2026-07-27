@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 import { logger, LogComponent } from '../core/logging';
 
 interface Props {
@@ -132,6 +133,7 @@ export class ErrorBoundary extends Component<Props, State> {
 /**
  * Higher-order component for wrapping components with error boundary
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
   fallback?: ReactNode,
@@ -151,8 +153,9 @@ export const withErrorBoundary = <P extends object>(
 /**
  * Hook for manually logging errors in functional components
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useErrorLogger = () => {
-  const logError = (error: Error, context?: string, additionalData?: Record<string, any>) => {
+  const logError = (error: Error, context?: string, additionalData?: Record<string, unknown>) => {
     logger.error(LogComponent.ERRORS, `Error in ${context || 'component'}`, {
       error: {
         name: error.name,
@@ -164,7 +167,7 @@ export const useErrorLogger = () => {
     });
   };
 
-  const logAsyncError = (error: Error, operation: string, additionalData?: Record<string, any>) => {
+  const logAsyncError = (error: Error, operation: string, additionalData?: Record<string, unknown>) => {
     logger.error(LogComponent.ERRORS, `Async operation failed: ${operation}`, {
       error: {
         name: error.name,

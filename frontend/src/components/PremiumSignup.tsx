@@ -13,6 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
 import stripeService from '../services/stripeService';
+import type { SubscriptionInfo } from '../services/stripeService';
 
 // Error Modal Component
 interface ErrorModalProps {
@@ -132,7 +133,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
 const PremiumSignup: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
-  const [subscriptionInfo, setSubscriptionInfo] = useState<Record<string, unknown> | null>(null);
+  const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo | null>(null);
   const location = useLocation();
   const [errorModal, setErrorModal] = useState<{
     isOpen: boolean;

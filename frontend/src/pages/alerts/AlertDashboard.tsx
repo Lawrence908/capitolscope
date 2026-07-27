@@ -33,7 +33,7 @@ export const AlertDashboard: React.FC = () => {
       <div className="rounded-md border border-sev-flag/40 p-6 status-error">
         <h2 className="mb-2 font-display text-lg text-content">Error Loading Alerts</h2>
         <p className="font-ui text-sm">{error}</p>
-        <button onClick={refetch} className="btn-primary mt-4 text-sm">
+        <button onClick={() => refetch()} className="btn-primary mt-4 text-sm">
           Try Again
         </button>
       </div>

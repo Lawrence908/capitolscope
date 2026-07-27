@@ -280,3 +280,31 @@ export interface EquityCurveResult {
     vs_spy_pct?: number | null;
   };
 }
+
+// ---- Security-matching coverage (data quality) ----
+export interface AssetTypeCoverage {
+  asset_type: string;
+  total: number;
+  matched: number;
+  match_rate: number | null;
+}
+
+export interface SecurityCoverage {
+  total_trades: number;
+  matched_trades: number;
+  match_rate: number;
+  untickered_trades: number;
+  securities_total: number;
+  securities_priced: number;
+  by_asset_type: AssetTypeCoverage[];
+}
+
+// Shape returned by /trades/analytics/top-trading-members (member analytics, not CongressMember).
+export interface TopTradingMember {
+  id?: string;
+  member_name?: string;
+  party?: string | null;
+  state?: string | null;
+  chamber?: string | null;
+  trade_count?: number;
+}

@@ -5,41 +5,35 @@
  * observability and debugging in both development and production.
  */
 
-export enum LogLevel {
-  DEBUG = 'DEBUG',
-  INFO = 'INFO',
-  WARNING = 'WARNING',
-  ERROR = 'ERROR',
-  CRITICAL = 'CRITICAL',
-}
+// const-object "enums" (erasable — TS enums are disallowed by erasableSyntaxOnly).
+export const LogLevel = {
+  DEBUG: 'DEBUG',
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  ERROR: 'ERROR',
+  CRITICAL: 'CRITICAL',
+} as const;
+export type LogLevel = (typeof LogLevel)[keyof typeof LogLevel];
 
-export enum LogComponent {
-  /** API requests and responses */
-  API = 'api',
-  /** Authentication and user management */
-  AUTH = 'auth',
-  /** Component lifecycle and rendering */
-  COMPONENTS = 'components',
-  /** Data fetching and state management */
-  DATA = 'data',
-  /** User interactions and events */
-  INTERACTIONS = 'interactions',
-  /** Navigation and routing */
-  NAVIGATION = 'navigation',
-  /** Performance monitoring */
-  PERFORMANCE = 'performance',
-  /** Error boundaries and error handling */
-  ERRORS = 'errors',
-  /** General application logging */
-  GENERAL = 'general',
-}
+export const LogComponent = {
+  API: 'api',
+  AUTH: 'auth',
+  COMPONENTS: 'components',
+  DATA: 'data',
+  INTERACTIONS: 'interactions',
+  NAVIGATION: 'navigation',
+  PERFORMANCE: 'performance',
+  ERRORS: 'errors',
+  GENERAL: 'general',
+} as const;
+export type LogComponent = (typeof LogComponent)[keyof typeof LogComponent];
 
 export interface LogEntry {
   timestamp: string;
   level: LogLevel;
   component: LogComponent;
   message: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   userId?: string;
   sessionId?: string;
   userAgent?: string;
@@ -99,8 +93,11 @@ class Logger {
   }
 
   private shouldLog(component: LogComponent, level: LogLevel): boolean {
-    const envConfig = LOGGING_CONFIG[this.environment as keyof typeof LOGGING_CONFIG];
-    const componentLevel = envConfig?.[component] || LOGGING_CONFIG[component];
+    const envConfig = LOGGING_CONFIG[this.environment as keyof typeof LOGGING_CONFIG] as
+      | Partial<Record<LogComponent, LogLevel>>
+      | undefined;
+    const componentLevel: LogLevel =
+      envConfig?.[component] || (LOGGING_CONFIG as Record<LogComponent, LogLevel>)[component];
     
     const levelPriority = {
       [LogLevel.DEBUG]: 0,
@@ -117,7 +114,7 @@ class Logger {
     level: LogLevel,
     component: LogComponent,
     message: string,
-    data?: Record<string, any>
+    data?: Record<string, unknown>
   ): LogEntry {
     return {
       timestamp: new Date().toISOString(),
@@ -132,7 +129,7 @@ class Logger {
     };
   }
 
-  private log(level: LogLevel, component: LogComponent, message: string, data?: Record<string, any>): void {
+  private log(level: LogLevel, component: LogComponent, message: string, data?: Record<string, unknown>): void {
     if (!this.shouldLog(component, level)) {
       return;
     }
@@ -198,44 +195,44 @@ class Logger {
   }
 
   // Public logging methods
-  debug(component: LogComponent, message: string, data?: Record<string, any>): void {
+  debug(component: LogComponent, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.DEBUG, component, message, data);
   }
 
-  info(component: LogComponent, message: string, data?: Record<string, any>): void {
+  info(component: LogComponent, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.INFO, component, message, data);
   }
 
-  warning(component: LogComponent, message: string, data?: Record<string, any>): void {
+  warning(component: LogComponent, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.WARNING, component, message, data);
   }
 
-  error(component: LogComponent, message: string, data?: Record<string, any>): void {
+  error(component: LogComponent, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.ERROR, component, message, data);
   }
 
-  critical(component: LogComponent, message: string, data?: Record<string, any>): void {
+  critical(component: LogComponent, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.CRITICAL, component, message, data);
   }
 
   // Convenience methods for common logging patterns
-  apiRequest(method: string, url: string, data?: any): void {
+  apiRequest(method: string, url: string, data?: unknown): void {
     this.info(LogComponent.API, `API Request: ${method.toUpperCase()} ${url}`, { data });
   }
 
-  apiResponse(method: string, url: string, status: number, data?: any): void {
+  apiResponse(method: string, url: string, status: number, data?: unknown): void {
     this.info(LogComponent.API, `API Response: ${method.toUpperCase()} ${url} - ${status}`, { data });
   }
 
-  apiError(method: string, url: string, error: any): void {
+  apiError(method: string, url: string, error: unknown): void {
     this.error(LogComponent.API, `API Error: ${method.toUpperCase()} ${url}`, { error });
   }
 
-  userAction(action: string, component: string, data?: any): void {
+  userAction(action: string, component: string, data?: Record<string, unknown>): void {
     this.info(LogComponent.INTERACTIONS, `User Action: ${action}`, { component, ...data });
   }
 
-  componentMount(componentName: string, props?: any): void {
+  componentMount(componentName: string, props?: unknown): void {
     this.debug(LogComponent.COMPONENTS, `Component Mounted: ${componentName}`, { props });
   }
 
@@ -274,23 +271,23 @@ export const logger = new Logger();
 
 // Export convenience functions
 export const log = {
-  debug: (component: LogComponent, message: string, data?: Record<string, any>) => 
+  debug: (component: LogComponent, message: string, data?: Record<string, unknown>) => 
     logger.debug(component, message, data),
-  info: (component: LogComponent, message: string, data?: Record<string, any>) => 
+  info: (component: LogComponent, message: string, data?: Record<string, unknown>) => 
     logger.info(component, message, data),
-  warning: (component: LogComponent, message: string, data?: Record<string, any>) => 
+  warning: (component: LogComponent, message: string, data?: Record<string, unknown>) => 
     logger.warning(component, message, data),
-  error: (component: LogComponent, message: string, data?: Record<string, any>) => 
+  error: (component: LogComponent, message: string, data?: Record<string, unknown>) => 
     logger.error(component, message, data),
-  critical: (component: LogComponent, message: string, data?: Record<string, any>) => 
+  critical: (component: LogComponent, message: string, data?: Record<string, unknown>) => 
     logger.critical(component, message, data),
 };
 
 // Export component-specific loggers for convenience
 export const apiLogger = {
-  request: (method: string, url: string, data?: any) => logger.apiRequest(method, url, data),
-  response: (method: string, url: string, status: number, data?: any) => logger.apiResponse(method, url, status, data),
-  error: (method: string, url: string, error: any) => logger.apiError(method, url, error),
+  request: (method: string, url: string, data?: unknown) => logger.apiRequest(method, url, data),
+  response: (method: string, url: string, status: number, data?: unknown) => logger.apiResponse(method, url, status, data),
+  error: (method: string, url: string, error: unknown) => logger.apiError(method, url, error),
 };
 
 export const authLogger = {
@@ -301,9 +298,9 @@ export const authLogger = {
 };
 
 export const componentLogger = {
-  mount: (componentName: string, props?: any) => logger.componentMount(componentName, props),
+  mount: (componentName: string, props?: unknown) => logger.componentMount(componentName, props),
   unmount: (componentName: string) => logger.componentUnmount(componentName),
-  render: (componentName: string, props?: any) => logger.debug(LogComponent.COMPONENTS, `Component Render: ${componentName}`, { props }),
+  render: (componentName: string, props?: unknown) => logger.debug(LogComponent.COMPONENTS, `Component Render: ${componentName}`, { props }),
 };
 
 export const navigationLogger = {

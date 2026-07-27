@@ -75,7 +75,16 @@ class Settings(BaseSettings):
     LOG_FORMAT: str = Field("%(asctime)s - %(name)s - %(levelname)s - %(message)s", description="Log format")
     
     # CORS Configuration
-    CORS_ORIGINS: List[str] = Field(["*"], description="CORS allowed origins")
+    CORS_ORIGINS: List[str] = Field(
+        default=[
+            "https://capitolscope.chrislawrence.ca",
+            "http://localhost:8121",
+            "http://localhost:5173",
+            "http://localhost:3000",
+        ],
+        description="CORS allowed origins. Explicit allowlist by design: '*' with "
+        "allow_credentials reflects ANY origin, which is unsafe. Override via env.",
+    )
     CORS_METHODS: List[str] = Field(["GET", "POST", "PUT", "DELETE", "OPTIONS"], description="CORS allowed methods")
     CORS_HEADERS: List[str] = Field(["*"], description="CORS allowed headers")
     

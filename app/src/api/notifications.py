@@ -730,6 +730,18 @@ async def mark_inbox_read(
     return create_response(data={"marked_read": True, "id": notification_id})
 
 
+@router.get("/quota", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_usage_quota(
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Per-resource usage vs tier limit ({used, limit}; limit -1 = unlimited)."""
+    from core.quotas import usage_summary
+    data = await usage_summary(session, current_user)
+    data["tier"] = getattr(current_user.subscription_tier, "value", str(current_user.subscription_tier))
+    return create_response(data=data)
+
+
 # ============================================================================
 # TRADE ALERT ENDPOINTS
 # ============================================================================
@@ -758,6 +770,8 @@ async def create_member_alert(
     logger.info(f"Creating member alert: member_id={member_id}, user_id={current_user.id}")
     
     try:
+        from core.quotas import enforce_quota
+        await enforce_quota(session, current_user, "alert_rules")
         notification_service = NotificationService(session)
         data = await notification_service.create_member_alert(current_user.id, member_id, alert_data)
         return create_response(data=data)
@@ -793,6 +807,8 @@ async def create_amount_alert(
     
     try:
         threshold = alert_data.get("threshold")
+        from core.quotas import enforce_quota
+        await enforce_quota(session, current_user, "alert_rules")
         notification_service = NotificationService(session)
         data = await notification_service.create_amount_alert(current_user.id, threshold, alert_data)
         return create_response(data=data)
@@ -828,6 +844,8 @@ async def create_ticker_alert(
     logger.info(f"Creating ticker alert: ticker={ticker}, user_id={current_user.id}")
     
     try:
+        from core.quotas import enforce_quota
+        await enforce_quota(session, current_user, "alert_rules")
         notification_service = NotificationService(session)
         data = await notification_service.create_ticker_alert(current_user.id, ticker, alert_data)
         return create_response(data=data)

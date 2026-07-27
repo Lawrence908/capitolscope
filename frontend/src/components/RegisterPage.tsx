@@ -40,7 +40,7 @@ const RegisterPage: React.FC = () => {
     if (error) {
       clearError();
     }
-  }, [formData, clearError]);
+  }, [formData, clearError, error]);
 
   const validateForm = (): boolean => {
     const errors: typeof validationErrors = {};

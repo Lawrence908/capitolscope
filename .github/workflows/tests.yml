@@ -57,4 +57,4 @@ jobs:
 
       # 0 errors (2 exhaustive-deps warnings remain and do not fail the run).
       - name: Lint
-        run: node_modules/.bin/eslint .
+        run: node_modules/.bin/eslint . --max-warnings 0

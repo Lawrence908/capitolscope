@@ -50,7 +50,8 @@ from api import trades, members, auth, health, portfolios, market_data, notifica
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
-    ErrorHandlingMiddleware
+    ErrorHandlingMiddleware,
+    SecurityHeadersMiddleware,
 )
 
 # Set up file logging first (before Uvicorn starts)
@@ -191,8 +192,10 @@ app.openapi = custom_openapi
 # Add security middleware
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["localhost", "127.0.0.1", "192.168.50.128", "*.capitolscope.com, chrislawrence.ca"] + 
-                  (["*"] if settings.DEBUG else [])
+    allowed_hosts=[
+        "localhost", "127.0.0.1", "192.168.50.128",
+        "capitolscope.chrislawrence.ca", "*.chrislawrence.ca", "*.capitolscope.com",
+    ] + (["*"] if settings.DEBUG else [])
 )
 
 # Add CORS middleware
@@ -205,9 +208,18 @@ app.add_middleware(
 )
 
 # Add custom middleware
+from core.metrics import PrometheusMiddleware, metrics_response
+app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(ErrorHandlingMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(RateLimitMiddleware)
+app.add_middleware(PrometheusMiddleware)
+
+
+@app.get("/metrics", include_in_schema=False)
+async def metrics():
+    """Prometheus scrape endpoint. Restrict to internal scrapers at the proxy."""
+    return metrics_response()
 
 # Include API routers
 app.include_router(health.router, prefix="/health", tags=["Health"])

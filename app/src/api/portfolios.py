@@ -421,7 +421,12 @@ async def get_member_performance(
     current_user: User = Depends(get_current_active_user),
 ) -> ResponseEnvelope[Dict[str, Any]]:
     """Monthly equity curve for a member's reconstructed portfolio, benchmarked vs SPY."""
-    data = await compute_equity_curve(session, [member_id])
+    from core.cache import cached
+    data = await cached(
+        f"member:perf:{member_id}",
+        lambda: compute_equity_curve(session, [member_id]),
+        ttl=3600,
+    )
     return create_response(data=data)
 
 _MIRROR_TIERS = ['PRO', 'PREMIUM', 'ENTERPRISE']
@@ -462,7 +467,14 @@ async def get_member_portfolio_holdings(
         if not member:
             raise HTTPException(status_code=404, detail="Member not found")
 
-        result = await reconstruct_holdings(session, [member_id])
+        from core.cache import cached
+        cached_result = await cached(
+            f"member:holdings:{member_id}",
+            lambda: reconstruct_holdings(session, [member_id]),
+            ttl=3600,
+        )
+        # Copy so adding member info doesn't mutate the shared cached dict.
+        result = {**cached_result}
         result["member"] = {
             "id": str(member.id),
             "name": getattr(member, "display_name", None) or member.full_name,
@@ -584,6 +596,8 @@ async def create_mirror_portfolio(
 ) -> ResponseEnvelope[Dict[str, Any]]:
     """Create a mirror portfolio that combines one or more members' trades. **Pro+**."""
     logger.info(f"Creating mirror portfolio for user {current_user.id} ({len(body.member_ids)} members)")
+    from core.quotas import enforce_quota
+    await enforce_quota(session, current_user, "mirror_portfolios")  # before try: propagate 403
     try:
         service = MirrorPortfolioService(session)
         mirror = await service.create(current_user.id, body.name, body.description, body.member_ids)
@@ -660,8 +674,10 @@ async def get_mirror_holdings(
     if not mirror:
         raise HTTPException(status_code=404, detail="Mirror portfolio not found")
     member_ids = [m.member_id for m in mirror.members]
-    result = await service.compute_holdings(member_ids)
-    result["mirror"] = _serialize_mirror(mirror)
+    from core.cache import cached
+    key = "mirror:holdings:" + ":".join(sorted(str(m) for m in member_ids))
+    cached_result = await cached(key, lambda: service.compute_holdings(member_ids), ttl=3600)
+    result = {**cached_result, "mirror": _serialize_mirror(mirror)}
     return create_response(data=result)
 
 
@@ -677,5 +693,7 @@ async def get_mirror_performance(
     if not mirror:
         raise HTTPException(status_code=404, detail="Mirror portfolio not found")
     member_ids = [m.member_id for m in mirror.members]
-    data = await compute_equity_curve(session, member_ids)
+    from core.cache import cached
+    key = "mirror:perf:" + ":".join(sorted(str(m) for m in member_ids))
+    data = await cached(key, lambda: compute_equity_curve(session, member_ids), ttl=3600)
     return create_response(data=data)

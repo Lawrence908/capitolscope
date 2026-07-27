@@ -817,28 +817,59 @@ async def get_member_trades(
 
 @router.get(
     "/{trade_id}",
-    response_model=ResponseEnvelope[CongressionalTradeDetail],
+    response_model=ResponseEnvelope[Dict[str, Any]],
     responses={
         200: {"description": "Trade details retrieved successfully"},
-        401: {"description": "Not authenticated"},
         404: {"description": "Trade not found"},
         500: {"description": "Internal server error"}
     }
 )
 async def get_trade(
-    trade_id: int,
+    trade_id: str,
     session: AsyncSession = Depends(get_db_session),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> ResponseEnvelope[CongressionalTradeDetail]:
-    """
-    Get a specific congressional trade by ID.
-    **Authenticated Feature**: Requires user authentication.
-    """
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Get a single congressional trade by its UUID, with the member's details."""
     logger.info(f"Getting trade by ID: trade_id={trade_id}")
-    
-    # TODO: Implement actual trade retrieval from database
-    # For now, return a placeholder
-    return create_response(data=None, error="Trade detail endpoint ready - database models needed")
+    from uuid import UUID as _UUID
+    try:
+        _UUID(trade_id)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=404, detail="Trade not found")
+
+    from sqlalchemy import select
+    from sqlalchemy.orm import selectinload
+    from domains.congressional.models import CongressionalTrade
+
+    row = (await session.execute(
+        select(CongressionalTrade)
+        .options(selectinload(CongressionalTrade.member))
+        .where(CongressionalTrade.id == trade_id)
+    )).scalar_one_or_none()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Trade not found")
+
+    m = getattr(row, "member", None)
+    return create_response(data={
+        "id": str(row.id),
+        "member_id": str(row.member_id),
+        "member_name": getattr(m, "display_name", None) or getattr(m, "full_name", None),
+        "party": getattr(m, "party", None),
+        "state": getattr(m, "state", None),
+        "chamber": getattr(m, "chamber", None),
+        "ticker": row.ticker,
+        "asset_name": row.asset_name,
+        "asset_type": row.asset_type,
+        "raw_asset_description": row.raw_asset_description,
+        "transaction_type": row.transaction_type,
+        "transaction_date": row.transaction_date.isoformat() if row.transaction_date else None,
+        "notification_date": row.notification_date.isoformat() if row.notification_date else None,
+        "amount_min": row.amount_min,
+        "amount_max": row.amount_max,
+        "amount_exact": row.amount_exact,
+        "owner": row.owner,
+        "document_url": row.document_url,
+        "security_id": str(row.security_id) if row.security_id else None,
+    })
 
 
 @router.post(

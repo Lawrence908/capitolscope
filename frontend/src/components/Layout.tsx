@@ -14,8 +14,10 @@ import {
   StarIcon,
   BellIcon,
   Squares2X2Icon,
+  ScaleIcon,
 } from '@heroicons/react/24/outline';
 import DarkModeToggle from './DarkModeToggle';
+import NotificationBell from './notifications/NotificationBell';
 import { Eyebrow } from './ui';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -55,6 +57,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, tier: 'free' },
     { name: 'Trade Browser', href: '/trades', icon: DocumentMagnifyingGlassIcon, tier: 'free' },
     { name: 'Members', href: '/members', icon: UserGroupIcon, tier: 'free' },
+    { name: 'Compare', href: '/compare', icon: ScaleIcon, tier: 'free' },
     { name: 'Scrutiny', href: '/scrutiny', icon: SparklesIcon, tier: 'free' },
     { name: 'Trade Alerts', href: '/alerts', icon: BellIcon, tier: 'free' },
     { name: 'Analytics', href: '/analytics', icon: ChartBarIcon, tier: 'pro' },
@@ -231,6 +234,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="hidden font-data text-[11px] uppercase tracking-[0.1em] text-content-faint lg:block">
                   Updated {new Date().toLocaleDateString()}
                 </div>
+                <NotificationBell />
                 <DarkModeToggle />
 
                 {/* User Menu */}

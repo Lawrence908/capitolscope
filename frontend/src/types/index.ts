@@ -170,12 +170,19 @@ export interface MirrorHolding {
   security_id: string;
   ticker?: string | null;
   name?: string | null;
+  sector?: string | null;
   shares: number;
   cost_basis: number;
   current_price: number;
   market_value: number;
   unrealized_gain: number;
   return_pct: number | null;
+}
+
+export interface SectorAllocation {
+  sector: string;
+  market_value: number;
+  weight_pct: number | null;
 }
 
 export interface MirrorHoldingsTotals {
@@ -187,9 +194,117 @@ export interface MirrorHoldingsTotals {
   holdings_count: number;
 }
 
+export interface MemberComparisonEntry {
+  member_id: string;
+  member?: { id: string; name?: string | null; party?: string | null; state?: string | null; chamber?: string | null };
+  totals: MirrorHoldingsTotals;
+  sector_allocation: SectorAllocation[];
+  top_holdings: MirrorHolding[];
+}
+
+export interface MemberComparisonResult {
+  members: MemberComparisonEntry[];
+  overlap: {
+    count: number;
+    common_securities: {
+      security_id: string;
+      ticker?: string | null;
+      name?: string | null;
+      held_by: string[];
+      combined_value: number;
+    }[];
+  };
+}
+
 export interface MirrorHoldingsResult {
   holdings: MirrorHolding[];
+  sector_allocation?: SectorAllocation[];
   totals: MirrorHoldingsTotals;
   meta?: { member_count: number; priced_trades: number };
   mirror?: MirrorPortfolio;
+  member?: {
+    id: string;
+    name?: string | null;
+    party?: string | null;
+    state?: string | null;
+    chamber?: string | null;
+  };
+}
+
+// ---- In-app notifications (bell) ----
+export interface InboxNotification {
+  id: string;
+  title: string;
+  message: string;
+  type: string | null;
+  priority: string;
+  is_read: boolean;
+  read_at?: string | null;
+  created_at?: string | null;
+  extra_data: Record<string, unknown>;
+}
+
+export interface InboxResult {
+  items: InboxNotification[];
+  total: number;
+  unread: number;
+}
+
+export interface NotificationSubscription {
+  email_enabled: boolean;
+  push_enabled: boolean;
+  sms_enabled: boolean;
+  trade_alerts: boolean;
+  portfolio_updates: boolean;
+  market_alerts: boolean;
+  newsletter: boolean;
+  email_frequency: 'instant' | 'daily' | 'weekly';
+  alert_threshold: number;
+}
+
+// ---- Equity curve (Mirror/member performance vs SPY) ----
+export interface EquityPoint {
+  date: string;
+  portfolio_value: number;
+  spy_value: number | null;
+}
+
+export interface EquityCurveResult {
+  series: EquityPoint[];
+  summary: {
+    start_date?: string;
+    end_date?: string;
+    has_benchmark?: boolean;
+    portfolio_value?: number;
+    spy_value?: number | null;
+    vs_spy_pct?: number | null;
+  };
+}
+
+// ---- Security-matching coverage (data quality) ----
+export interface AssetTypeCoverage {
+  asset_type: string;
+  total: number;
+  matched: number;
+  match_rate: number | null;
+}
+
+export interface SecurityCoverage {
+  total_trades: number;
+  matched_trades: number;
+  match_rate: number;
+  untickered_trades: number;
+  securities_total: number;
+  securities_priced: number;
+  by_asset_type: AssetTypeCoverage[];
+}
+
+// Shape returned by /trades/analytics/top-trading-members (member analytics, not CongressMember).
+export interface TopTradingMember {
+  id?: string;
+  member_name?: string;
+  party?: string | null;
+  state?: string | null;
+  chamber?: string | null;
+  trade_count?: number;
 }

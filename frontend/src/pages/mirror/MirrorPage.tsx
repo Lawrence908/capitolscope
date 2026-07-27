@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../../services/api';
-import type { CongressMember, MirrorPortfolio, MirrorHoldingsResult } from '../../types';
+import type {
+  CongressMember, MirrorPortfolio, MirrorHoldingsResult, EquityCurveResult,
+} from '../../types';
 import { PageHeader, Panel, Spinner } from '../../components/ui/scaffold';
-import { PartyTag } from '../../components/ui/primitives';
 import { fmtMoney } from '../../components/ui/format';
+import { MemberPicker, MemberChip } from '../../components/members/MemberPicker';
+import LineChart from '../../components/charts/LineChart';
 
 /** Format an already-percentage number (e.g. 68.85 -> "+68.9%"). */
 const pct = (n: number | null | undefined, signed = false): string => {
@@ -15,100 +18,6 @@ const pct = (n: number | null | undefined, signed = false): string => {
 const toneForReturn = (n: number | null | undefined): string =>
   n == null ? 'text-content' : n >= 0 ? 'text-accent' : 'text-sev-flag';
 
-// ---- member search + add ----------------------------------------------------
-
-const MemberPicker: React.FC<{
-  onAdd: (m: CongressMember) => void;
-  excludeIds: Set<string>;
-}> = ({ onAdd, excludeIds }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<CongressMember[]>([]);
-  const [searching, setSearching] = useState(false);
-
-  useEffect(() => {
-    const q = query.trim();
-    if (q.length < 2) {
-      setResults([]);
-      return;
-    }
-    let cancelled = false;
-    setSearching(true);
-    const t = setTimeout(async () => {
-      try {
-        const res = await apiClient.getMembers({ search: q }, 1, 8);
-        if (!cancelled) setResults(res.items);
-      } catch {
-        if (!cancelled) setResults([]);
-      } finally {
-        if (!cancelled) setSearching(false);
-      }
-    }, 250);
-    return () => {
-      cancelled = true;
-      clearTimeout(t);
-    };
-  }, [query]);
-
-  return (
-    <div>
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search members to add…"
-        className="w-full rounded-md border border-line bg-surface px-3 py-2 font-ui text-sm text-content placeholder:text-content-faint focus:border-accent focus:outline-none"
-      />
-      {searching && <div className="mt-2 font-data text-[11px] uppercase tracking-[0.14em] text-content-faint">Searching…</div>}
-      {results.length > 0 && (
-        <ul className="mt-2 divide-y divide-line rounded-md border border-line">
-          {results.map((m) => {
-            const already = excludeIds.has(m.id);
-            return (
-              <li key={m.id} className="flex items-center justify-between gap-2 px-3 py-2">
-                <span className="flex min-w-0 items-center gap-2">
-                  <PartyTag party={m.party} />
-                  <span className="truncate font-ui text-sm text-content">{m.full_name}</span>
-                  <span className="font-data text-[11px] text-content-faint">{m.state || ''}</span>
-                </span>
-                <button
-                  type="button"
-                  disabled={already}
-                  onClick={() => onAdd(m)}
-                  className="shrink-0 rounded-md border border-line px-2 py-1 font-data text-[11px] uppercase tracking-[0.12em] text-content hover:border-accent hover:text-accent disabled:opacity-40"
-                >
-                  {already ? 'Added' : 'Add'}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
-  );
-};
-
-// ---- member chip -----------------------------------------------------------
-
-const MemberChip: React.FC<{ label: string; party?: string | null; onRemove?: () => void }> = ({
-  label,
-  party,
-  onRemove,
-}) => (
-  <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1">
-    <PartyTag party={party} />
-    <span className="font-ui text-xs text-content">{label}</span>
-    {onRemove && (
-      <button
-        type="button"
-        onClick={onRemove}
-        className="font-data text-xs text-content-faint hover:text-sev-flag"
-        title="Remove member"
-      >
-        ✕
-      </button>
-    )}
-  </span>
-);
-
 // ---- main page -------------------------------------------------------------
 
 const MirrorPage: React.FC = () => {
@@ -116,6 +25,7 @@ const MirrorPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [holdings, setHoldings] = useState<MirrorHoldingsResult | null>(null);
   const [loadingHoldings, setLoadingHoldings] = useState(false);
+  const [performance, setPerformance] = useState<EquityCurveResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // create form
@@ -154,9 +64,21 @@ const MirrorPage: React.FC = () => {
     }
   }, []);
 
+  const loadPerformance = useCallback(async (id: string) => {
+    setPerformance(null);
+    try {
+      setPerformance(await apiClient.getMirrorPerformance(id));
+    } catch {
+      /* performance is non-critical; leave it null */
+    }
+  }, []);
+
   useEffect(() => {
-    if (selectedId) void loadHoldings(selectedId);
-  }, [selectedId, loadHoldings]);
+    if (selectedId) {
+      void loadHoldings(selectedId);
+      void loadPerformance(selectedId);
+    }
+  }, [selectedId, loadHoldings, loadPerformance]);
 
   const createMirror = async () => {
     if (!newName.trim() || newMembers.length === 0) return;
@@ -338,6 +260,50 @@ const MirrorPage: React.FC = () => {
                 </div>
                 <MemberPicker excludeIds={new Set(selected.member_ids)} onAdd={addMemberToSelected} />
               </Panel>
+
+              {performance && performance.series.length > 1 && (
+                <Panel
+                  title="Performance vs SPY"
+                  right={
+                    performance.summary.vs_spy_pct != null ? (
+                      <span
+                        className={`font-data text-[11px] uppercase tracking-[0.12em] ${
+                          performance.summary.vs_spy_pct >= 0 ? 'text-accent' : 'text-sev-flag'
+                        }`}
+                      >
+                        {pct(performance.summary.vs_spy_pct, true)} vs SPY
+                      </span>
+                    ) : undefined
+                  }
+                  bodyClassName="p-4"
+                >
+                  <LineChart
+                    height={320}
+                    data={{
+                      labels: performance.series.map((p) => p.date.slice(0, 7)),
+                      datasets: [
+                        {
+                          label: 'Mirror',
+                          data: performance.series.map((p) => p.portfolio_value),
+                          borderColor: '#1f9e88',
+                          backgroundColor: 'rgba(31,158,136,0.12)',
+                          borderWidth: 2,
+                          fill: true,
+                          tension: 0.25,
+                        },
+                        {
+                          label: 'SPY (same cash flows)',
+                          data: performance.series.map((p) => p.spy_value ?? Number.NaN),
+                          borderColor: '#9aa5b1',
+                          borderWidth: 1.5,
+                          fill: false,
+                          tension: 0.25,
+                        },
+                      ],
+                    }}
+                  />
+                </Panel>
+              )}
 
               <Panel
                 title="Combined holdings"

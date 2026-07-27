@@ -10,6 +10,8 @@ import {
 } from 'chart.js';
 import type { ChartOptions } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { useTheme } from '../../contexts/ThemeContext';
+import { chartTheme } from './chartTheme';
 
 ChartJS.register(
   CategoryScale,
@@ -39,6 +41,8 @@ interface BarChartProps {
 }
 
 const BarChart: React.FC<BarChartProps> = ({ data, title, height = 400, className = '' }) => {
+  const { isDarkMode } = useTheme();
+  const c = chartTheme(isDarkMode);
   const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -46,7 +50,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, title, height = 400, classNam
       legend: {
         position: 'top' as const,
         labels: {
-          color: '#9ca3af', // text-gray-400
+          color: c.label,
           font: {
             size: 12,
           },
@@ -55,41 +59,41 @@ const BarChart: React.FC<BarChartProps> = ({ data, title, height = 400, classNam
       title: {
         display: !!title,
         text: title,
-        color: '#f9fafb', // text-gray-100
+        color: c.title,
         font: {
           size: 16,
           weight: 'bold',
         },
       },
       tooltip: {
-        backgroundColor: '#374151', // bg-gray-700
-        titleColor: '#f9fafb', // text-gray-100
-        bodyColor: '#d1d5db', // text-gray-300
-        borderColor: '#4b5563', // border-gray-600
+        backgroundColor: c.tooltipBg,
+        titleColor: c.tooltipTitle,
+        bodyColor: c.tooltipBody,
+        borderColor: c.tooltipBorder,
         borderWidth: 1,
       },
     },
     scales: {
       x: {
         ticks: {
-          color: '#9ca3af', // text-gray-400
+          color: c.tick,
           font: {
             size: 11,
           },
         },
         grid: {
-          color: '#374151', // border-gray-700
+          color: c.grid,
         },
       },
       y: {
         ticks: {
-          color: '#9ca3af', // text-gray-400
+          color: c.tick,
           font: {
             size: 11,
           },
         },
         grid: {
-          color: '#374151', // border-gray-700
+          color: c.grid,
         },
       },
     },

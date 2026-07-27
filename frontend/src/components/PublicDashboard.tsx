@@ -6,14 +6,14 @@ import {
   ArrowTrendingUpIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
-import type { CongressionalTrade, CongressMember, DataQualityStats } from '../types';
+import type { CongressionalTrade, DataQualityStats, TopTradingMember } from '../types';
 import apiClient from '../services/api';
 import { HubFooter } from './HubFooter';
 
 const PublicDashboard: React.FC = () => {
   const [stats, setStats] = useState<DataQualityStats | null>(null);
   const [recentTrades, setRecentTrades] = useState<CongressionalTrade[]>([]);
-  const [topMembers, setTopMembers] = useState<CongressMember[]>([]);
+  const [topMembers, setTopMembers] = useState<TopTradingMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,9 +30,9 @@ const PublicDashboard: React.FC = () => {
           apiClient.getTopTradingMembers(10),
         ]);
 
-        setStats(statsResponse.data);
+        setStats(statsResponse);
         setRecentTrades(tradesResponse.items || []);
-        setTopMembers(membersResponse.data || []);
+        setTopMembers(membersResponse || []);
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard error:', err);
@@ -169,8 +169,8 @@ const PublicDashboard: React.FC = () => {
                 className="card-interactive p-4 lg:p-6 transition-all duration-200"
               >
                 <div className="flex items-center">
-                  <div className={`p-2 lg:p-3 rounded-lg ${stat.color}`}>
-                    <Icon className="h-5 w-5 lg:h-6 lg:w-6 text-white" />
+                  <div className="rounded-md bg-accent/10 p-2 lg:p-3">
+                    <Icon className="h-5 w-5 lg:h-6 lg:w-6 text-accent" />
                   </div>
                   <div className="ml-3 lg:ml-4">
                     <p className="text-xs lg:text-sm font-medium text-body">
@@ -221,7 +221,7 @@ const PublicDashboard: React.FC = () => {
                       {trade.estimated_value ? `$${(trade.estimated_value / 100).toLocaleString()}` : 'N/A'}
                     </p>
                     <p className="text-xs text-body">
-                      {new Date(trade.transaction_date).toLocaleDateString()}
+                      {trade.transaction_date ? new Date(trade.transaction_date).toLocaleDateString() : "—"}
                     </p>
                   </div>
                 </div>

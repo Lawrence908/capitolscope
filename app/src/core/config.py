@@ -104,7 +104,25 @@ class Settings(BaseSettings):
     SENDGRID_API_KEY: Optional[SecretStr] = Field(None, description="SendGrid API key")
     SENDGRID_FROM_EMAIL: Optional[str] = Field("noreply@capitolscope.com", description="SendGrid from email address")
     SENDGRID_FROM_NAME: Optional[str] = Field("CapitolScope", description="SendGrid from name")
-    
+
+    # Web push (VAPID) — required for browser push notifications
+    VAPID_PUBLIC_KEY: Optional[str] = Field(None, description="VAPID public key (base64url)")
+    VAPID_PRIVATE_KEY: Optional[SecretStr] = Field(None, description="VAPID private key")
+    VAPID_SUBJECT: Optional[str] = Field("mailto:capitolscope@gmail.com", description="VAPID subject (mailto: or https:)")
+
+    # SMS (Twilio) — required for SMS alerts
+    TWILIO_ACCOUNT_SID: Optional[str] = Field(None, description="Twilio account SID")
+    TWILIO_AUTH_TOKEN: Optional[SecretStr] = Field(None, description="Twilio auth token")
+    TWILIO_FROM_NUMBER: Optional[str] = Field(None, description="Twilio sender phone number (E.164)")
+
+    @property
+    def push_configured(self) -> bool:
+        return bool(self.VAPID_PUBLIC_KEY and self.VAPID_PRIVATE_KEY)
+
+    @property
+    def sms_configured(self) -> bool:
+        return bool(self.TWILIO_ACCOUNT_SID and self.TWILIO_AUTH_TOKEN and self.TWILIO_FROM_NUMBER)
+
     # External APIs
     ALPHA_VANTAGE_API_KEY: Optional[SecretStr] = Field(None, description="Alpha Vantage API key")
     POLYGON_API_KEY: Optional[SecretStr] = Field(None, description="Polygon API key")

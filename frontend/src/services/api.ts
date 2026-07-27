@@ -12,6 +12,11 @@ import type {
   APIError,
   MirrorPortfolio,
   MirrorHoldingsResult,
+  MemberComparisonResult,
+  InboxResult,
+  NotificationSubscription,
+  EquityCurveResult,
+  TopTradingMember,
 } from '../types';
 
 class APIClient {
@@ -263,6 +268,11 @@ class APIClient {
   }
 
   // Data Quality
+  async getSecurityCoverage(): Promise<import('../types').SecurityCoverage> {
+    const response = await this.client.get('/api/v1/trades/data-quality/coverage');
+    return response.data?.data as import('../types').SecurityCoverage;
+  }
+
   async getDataQualityStats(): Promise<DataQualityStats> {
     const response = await this.client.get('/api/v1/trades/data-quality/stats');
     return response.data;
@@ -292,7 +302,7 @@ class APIClient {
   }
 
   // Analytics
-  async getTopTradingMembers(limit: number = 10): Promise<CongressMember[]> {
+  async getTopTradingMembers(limit: number = 10): Promise<TopTradingMember[]> {
     const response = await this.client.get(`/api/v1/trades/analytics/top-trading-members?limit=${limit}`);
     return response.data.data;
   }
@@ -433,6 +443,69 @@ class APIClient {
   async getMirrorHoldings(id: string): Promise<MirrorHoldingsResult> {
     const response = await this.client.get(`/api/v1/portfolios/mirror/${id}/holdings`);
     return response.data?.data as MirrorHoldingsResult;
+  }
+
+  async getMirrorPerformance(id: string): Promise<EquityCurveResult> {
+    const response = await this.client.get(`/api/v1/portfolios/mirror/${id}/performance`);
+    return response.data?.data as EquityCurveResult;
+  }
+
+  async getMemberPerformance(memberId: string): Promise<EquityCurveResult> {
+    const response = await this.client.get(
+      `/api/v1/portfolios/member/${encodeURIComponent(memberId)}/performance`
+    );
+    return response.data?.data as EquityCurveResult;
+  }
+
+  async getMemberPortfolio(memberId: string): Promise<MirrorHoldingsResult> {
+    const response = await this.client.get(
+      `/api/v1/portfolios/member/${encodeURIComponent(memberId)}/holdings`
+    );
+    return response.data?.data as MirrorHoldingsResult;
+  }
+
+  async compareMemberPortfolios(memberIds: string[]): Promise<MemberComparisonResult> {
+    const response = await this.client.get(
+      `/api/v1/portfolios/members/compare?member_ids=${encodeURIComponent(memberIds.join(','))}`
+    );
+    return response.data?.data as MemberComparisonResult;
+  }
+
+  // ---- In-app notification inbox (bell) ----
+  async getInbox(params?: { unreadOnly?: boolean; limit?: number; skip?: number }): Promise<InboxResult> {
+    const q = new URLSearchParams();
+    if (params?.unreadOnly) q.set('unread_only', 'true');
+    if (params?.limit != null) q.set('limit', String(params.limit));
+    if (params?.skip != null) q.set('skip', String(params.skip));
+    const qs = q.toString();
+    const response = await this.client.get(`/api/v1/notifications/inbox${qs ? `?${qs}` : ''}`);
+    return (response.data?.data as InboxResult) ?? { items: [], total: 0, unread: 0 };
+  }
+
+  async getInboxUnreadCount(): Promise<number> {
+    const response = await this.client.get('/api/v1/notifications/inbox/unread-count');
+    return (response.data?.data?.unread as number) ?? 0;
+  }
+
+  async markInboxRead(id: string): Promise<void> {
+    await this.client.post(`/api/v1/notifications/inbox/${encodeURIComponent(id)}/read`);
+  }
+
+  async markInboxAllRead(): Promise<void> {
+    await this.client.post('/api/v1/notifications/inbox/read-all');
+  }
+
+  // ---- Notification subscription / preferences ----
+  async getSubscriptions(): Promise<NotificationSubscription> {
+    const response = await this.client.get('/api/v1/notifications/subscriptions');
+    return response.data?.data as NotificationSubscription;
+  }
+
+  async updateSubscriptions(
+    data: Partial<NotificationSubscription>
+  ): Promise<NotificationSubscription> {
+    const response = await this.client.put('/api/v1/notifications/subscriptions', data);
+    return response.data?.data as NotificationSubscription;
   }
 
   // ---- Scrutiny analytics ----

@@ -28,11 +28,13 @@ const PremiumSignup = React.lazy(() => import('./components/PremiumSignup'));
 const AlertDashboard = React.lazy(() => import('./pages/alerts/AlertDashboard'));
 const ScrutinyCommand = React.lazy(() => import('./pages/scrutiny/ScrutinyCommand'));
 const MirrorPage = React.lazy(() => import('./pages/mirror/MirrorPage'));
+const AssetPage = React.lazy(() => import('./pages/asset/AssetPage'));
+const ComparePage = React.lazy(() => import('./pages/compare/ComparePage'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center h-64">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+  <div className="flex min-h-[16rem] items-center justify-center bg-surface">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-accent" />
   </div>
 );
 
@@ -98,6 +100,15 @@ const App: React.FC = () => {
                 </Layout>
               </ProtectedRoute>
             } />
+            <Route path="/assets/:ticker" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <AssetPage />
+                  </Suspense>
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/members" element={
               <ProtectedRoute>
                 <Layout>
@@ -146,6 +157,15 @@ const App: React.FC = () => {
                     </Suspense>
                   </Layout>
                 </PremiumRoute>
+              </ProtectedRoute>
+            } />
+            <Route path="/compare" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <ComparePage />
+                  </Suspense>
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/data-quality" element={

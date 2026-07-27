@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { logger, LogComponent, LogLevel } from '../core/logging';
+import { logger, LogComponent } from '../core/logging';
 
 /**
  * Hook for logging component lifecycle and interactions
@@ -19,23 +19,23 @@ export const useLogger = (componentName: string) => {
   }, [componentName]);
 
   // Logging methods for this component
-  const logDebug = useCallback((message: string, data?: Record<string, any>) => {
+  const logDebug = useCallback((message: string, data?: Record<string, unknown>) => {
     logger.debug(LogComponent.COMPONENTS, `[${componentName}] ${message}`, data);
   }, [componentName]);
 
-  const logInfo = useCallback((message: string, data?: Record<string, any>) => {
+  const logInfo = useCallback((message: string, data?: Record<string, unknown>) => {
     logger.info(LogComponent.COMPONENTS, `[${componentName}] ${message}`, data);
   }, [componentName]);
 
-  const logWarning = useCallback((message: string, data?: Record<string, any>) => {
+  const logWarning = useCallback((message: string, data?: Record<string, unknown>) => {
     logger.warning(LogComponent.COMPONENTS, `[${componentName}] ${message}`, data);
   }, [componentName]);
 
-  const logError = useCallback((message: string, data?: Record<string, any>) => {
+  const logError = useCallback((message: string, data?: Record<string, unknown>) => {
     logger.error(LogComponent.COMPONENTS, `[${componentName}] ${message}`, data);
   }, [componentName]);
 
-  const logUserAction = useCallback((action: string, data?: Record<string, any>) => {
+  const logUserAction = useCallback((action: string, data?: Record<string, unknown>) => {
     logger.userAction(action, componentName, data);
   }, [componentName]);
 
@@ -57,15 +57,15 @@ export const useLogger = (componentName: string) => {
  * Hook for logging API calls and data fetching
  */
 export const useApiLogger = () => {
-  const logRequest = useCallback((method: string, url: string, data?: any) => {
+  const logRequest = useCallback((method: string, url: string, data?: unknown) => {
     logger.apiRequest(method, url, data);
   }, []);
 
-  const logResponse = useCallback((method: string, url: string, status: number, data?: any) => {
+  const logResponse = useCallback((method: string, url: string, status: number, data?: unknown) => {
     logger.apiResponse(method, url, status, data);
   }, []);
 
-  const logError = useCallback((method: string, url: string, error: any) => {
+  const logError = useCallback((method: string, url: string, error: unknown) => {
     logger.apiError(method, url, error);
   }, []);
 
@@ -80,11 +80,11 @@ export const useApiLogger = () => {
  * Hook for logging user interactions
  */
 export const useInteractionLogger = () => {
-  const logClick = useCallback((element: string, data?: Record<string, any>) => {
+  const logClick = useCallback((element: string, data?: Record<string, unknown>) => {
     logger.userAction('click', element, data);
   }, []);
 
-  const logFormSubmit = useCallback((formName: string, data?: Record<string, any>) => {
+  const logFormSubmit = useCallback((formName: string, data?: Record<string, unknown>) => {
     logger.userAction('form_submit', formName, data);
   }, []);
 
@@ -100,7 +100,7 @@ export const useInteractionLogger = () => {
     logger.userAction('search', 'search', { query, results });
   }, []);
 
-  const logFilter = useCallback((filterType: string, value: any) => {
+  const logFilter = useCallback((filterType: string, value: unknown) => {
     logger.userAction('filter', filterType, { value });
   }, []);
 

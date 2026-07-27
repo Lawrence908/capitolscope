@@ -28,8 +28,13 @@ const rgba = (hex: string, a: number) => {
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 };
 
-// Lazy load chart components to reduce bundle size
-const ChartComponents = React.lazy(() => import('./charts'));
+// Lazy load chart components to reduce bundle size (each is a default export).
+const ChartComponents = {
+  BarChart: React.lazy(() => import('./charts/BarChart')),
+  LineChart: React.lazy(() => import('./charts/LineChart')),
+  PieChart: React.lazy(() => import('./charts/PieChart')),
+  DoughnutChart: React.lazy(() => import('./charts/DoughnutChart')),
+};
 
 // Loading component for charts
 const ChartLoadingSpinner = () => (
@@ -154,11 +159,11 @@ const Analytics: React.FC = () => {
                   total_value: member.total_value || 0,
                 }))
               : [],
-          topTradedTickers: topTradedTickers.status === 'fulfilled' ? topTradedTickers.value : [],
-          partyDistribution: partyDistribution.status === 'fulfilled' ? partyDistribution.value : {},
-          chamberDistribution: chamberDistribution.status === 'fulfilled' ? chamberDistribution.value : {},
-          amountDistribution: amountDistribution.status === 'fulfilled' ? amountDistribution.value : {},
-          volumeOverTime: volumeOverTime.status === 'fulfilled' ? volumeOverTime.value : [],
+          topTradedTickers: topTradedTickers.status === 'fulfilled' ? (topTradedTickers.value ?? []) : [],
+          partyDistribution: partyDistribution.status === 'fulfilled' ? (partyDistribution.value ?? {}) : {},
+          chamberDistribution: chamberDistribution.status === 'fulfilled' ? (chamberDistribution.value ?? {}) : {},
+          amountDistribution: amountDistribution.status === 'fulfilled' ? (amountDistribution.value ?? {}) : {},
+          volumeOverTime: volumeOverTime.status === 'fulfilled' ? (volumeOverTime.value ?? []) : [],
         };
 
         setData(analyticsData);

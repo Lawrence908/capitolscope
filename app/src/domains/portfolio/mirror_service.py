@@ -137,9 +137,10 @@ def build_holdings(
 ) -> Dict[str, Any]:
     """Value open positions at the latest price and roll up portfolio totals.
 
-    ``security_meta`` maps security_id -> {"ticker", "name"}.
+    ``security_meta`` maps security_id -> {"ticker", "name", "sector"}.
     """
     holdings: List[Dict[str, Any]] = []
+    sector_mv: Dict[str, float] = {}
     total_mv = 0.0
     total_cost = 0.0
     total_realized = 0.0
@@ -156,10 +157,12 @@ def build_holdings(
         unrealized = market_value - cost_basis
         return_pct = (unrealized / cost_basis * 100.0) if cost_basis > 0 else None
         meta = security_meta.get(sid, {})
+        sector = meta.get("sector") or "Unknown"
         holdings.append({
             "security_id": str(sid),
             "ticker": meta.get("ticker"),
             "name": meta.get("name"),
+            "sector": sector,
             "shares": round(pos["shares"], 4),
             "cost_basis": round(cost_basis, 2),
             "current_price": round(last, 2),
@@ -167,6 +170,7 @@ def build_holdings(
             "unrealized_gain": round(unrealized, 2),
             "return_pct": round(return_pct, 2) if return_pct is not None else None,
         })
+        sector_mv[sector] = sector_mv.get(sector, 0.0) + market_value
         total_mv += market_value
         total_cost += cost_basis
 
@@ -174,8 +178,19 @@ def build_holdings(
     total_unrealized = total_mv - total_cost
     total_return = (total_unrealized / total_cost * 100.0) if total_cost > 0 else None
 
+    # Sector allocation as a share of market value (largest first).
+    sector_allocation = [
+        {
+            "sector": sec,
+            "market_value": round(mv, 2),
+            "weight_pct": round(mv / total_mv * 100.0, 2) if total_mv > 0 else None,
+        }
+        for sec, mv in sorted(sector_mv.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+
     return {
         "holdings": holdings,
+        "sector_allocation": sector_allocation,
         "totals": {
             "market_value": round(total_mv, 2),
             "cost_basis": round(total_cost, 2),
@@ -265,43 +280,227 @@ class MirrorPortfolioService:
 
     async def compute_holdings(self, member_ids: List) -> Dict[str, Any]:
         """Load the members' priced trades and reconstruct combined holdings."""
-        from domains.congressional.models import CongressionalTrade
-        from domains.securities.models import Security, DailyPrice
+        return await reconstruct_holdings(self.session, member_ids)
 
-        if not member_ids:
-            return build_holdings({}, PriceBook([]), {})
 
-        trades = (await self.session.execute(
-            select(CongressionalTrade).where(
-                and_(
-                    CongressionalTrade.member_id.in_(member_ids),
-                    CongressionalTrade.security_id.isnot(None),
-                )
+async def reconstruct_holdings(session: AsyncSession, member_ids: List) -> Dict[str, Any]:
+    """Reconstruct combined holdings + returns for a set of members.
+
+    Shared by mirror portfolios (many members) and the member-portfolio view
+    (one member). Loads the members' priced trades, the relevant price series,
+    and security/sector metadata, then replays and values the positions.
+    """
+    from domains.congressional.models import CongressionalTrade
+    from domains.securities.models import Security, DailyPrice, Sector
+
+    if not member_ids:
+        return build_holdings({}, PriceBook([]), {})
+
+    trades = (await session.execute(
+        select(CongressionalTrade).where(
+            and_(
+                CongressionalTrade.member_id.in_(member_ids),
+                CongressionalTrade.security_id.isnot(None),
             )
-        )).scalars().all()
-        if not trades:
-            return build_holdings({}, PriceBook([]), {})
+        )
+    )).scalars().all()
+    if not trades:
+        return build_holdings({}, PriceBook([]), {})
 
-        security_ids = list({t.security_id for t in trades})
+    security_ids = list({t.security_id for t in trades})
 
-        price_rows = (await self.session.execute(
-            select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
-            .where(DailyPrice.security_id.in_(security_ids))
-        )).all()
-        pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+    price_rows = (await session.execute(
+        select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
+        .where(DailyPrice.security_id.in_(security_ids))
+    )).all()
+    pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
 
-        sec_rows = (await self.session.execute(
-            select(Security.id, Security.ticker, Security.name).where(Security.id.in_(security_ids))
-        )).all()
-        security_meta = {r.id: {"ticker": r.ticker, "name": r.name} for r in sec_rows}
+    sec_rows = (await session.execute(
+        select(Security.id, Security.ticker, Security.name, Sector.name.label("sector"))
+        .select_from(Security)
+        .join(Sector, Security.sector_gics_code == Sector.gics_code, isouter=True)
+        .where(Security.id.in_(security_ids))
+    )).all()
+    security_meta = {
+        r.id: {"ticker": r.ticker, "name": r.name, "sector": r.sector} for r in sec_rows
+    }
 
-        positions = replay_positions(trades, pricebook)
-        result = build_holdings(positions, pricebook, security_meta)
-        result["meta"] = {
-            "member_count": len(set(member_ids)),
-            "priced_trades": len(trades),
+    positions = replay_positions(trades, pricebook)
+    result = build_holdings(positions, pricebook, security_meta)
+    result["meta"] = {
+        "member_count": len(set(member_ids)),
+        "priced_trades": len(trades),
+    }
+    return result
+
+
+def _month_starts(start: date, end: date) -> List[date]:
+    """Month-start valuation dates from ``start`` to ``end``, plus ``end`` itself."""
+    dates: List[date] = []
+    y, m = start.year, start.month
+    while (y, m) <= (end.year, end.month):
+        dates.append(date(y, m, 1))
+        m += 1
+        if m > 12:
+            m = 1
+            y += 1
+    if not dates or dates[-1] != end:
+        dates.append(end)
+    return dates
+
+
+def compute_equity_series(trades, pricebook: PriceBook, spy_sid, valuation_dates: List[date]) -> List[Dict[str, Any]]:
+    """Portfolio value over time vs the same cash flows invested in SPY.
+
+    Advances through ``valuation_dates`` in order, applying each trade once as its
+    date passes (incremental replay), and values the open positions + the mirrored
+    SPY position at every date. Each purchase also buys ``midpoint`` dollars of SPY
+    on the trade date; each sale removes the proportional SPY exposure.
+    """
+    positions: Dict[Any, Dict[str, float]] = {}
+    spy_shares = 0.0
+    ordered = sorted(trades, key=lambda t: t.transaction_date or date.min)
+    ti = 0
+    series: List[Dict[str, Any]] = []
+
+    for d in valuation_dates:
+        while ti < len(ordered) and (ordered[ti].transaction_date or date.min) <= d:
+            t = ordered[ti]
+            ti += 1
+            price = pricebook.price_on_or_before(t.security_id, t.transaction_date)
+            if not price or price <= 0:
+                continue
+            dollars = midpoint_dollars(t)
+            if dollars <= 0:
+                continue
+            shares = dollars / price
+            pos = positions.setdefault(t.security_id, {"shares": 0.0, "cost": 0.0})
+            ttype = (t.transaction_type or "").upper()
+            spy_price = pricebook.price_on_or_before(spy_sid, t.transaction_date) if spy_sid else None
+
+            if ttype == "P":
+                pos["shares"] += shares
+                pos["cost"] += dollars
+                if spy_price and spy_price > 0:
+                    spy_shares += dollars / spy_price
+            elif ttype == "S" and pos["shares"] > 0:
+                sold = min(shares, pos["shares"])
+                avg = pos["cost"] / pos["shares"]
+                pos["cost"] -= avg * sold
+                pos["shares"] -= sold
+                if spy_price and spy_price > 0 and spy_shares > 0:
+                    spy_shares -= min(dollars / spy_price, spy_shares)
+
+        pv = 0.0
+        for sid, pos in positions.items():
+            if pos["shares"] <= _SHARE_EPSILON:
+                continue
+            p = pricebook.price_on_or_before(sid, d)
+            if p:
+                pv += pos["shares"] * p
+        spy_p = pricebook.price_on_or_before(spy_sid, d) if spy_sid else None
+        series.append({
+            "date": d.isoformat(),
+            "portfolio_value": round(pv, 2),
+            "spy_value": round(spy_shares * spy_p, 2) if spy_p else None,
+        })
+
+    return series
+
+
+async def compute_equity_curve(session: AsyncSession, member_ids: List) -> Dict[str, Any]:
+    """Monthly equity curve for a set of members, benchmarked against SPY."""
+    from domains.congressional.models import CongressionalTrade
+    from domains.securities.models import Security, DailyPrice
+
+    empty = {"series": [], "summary": {}}
+    if not member_ids:
+        return empty
+
+    trades = (await session.execute(
+        select(CongressionalTrade).where(and_(
+            CongressionalTrade.member_id.in_(member_ids),
+            CongressionalTrade.security_id.isnot(None),
+        ))
+    )).scalars().all()
+    trades = [t for t in trades if t.transaction_date]
+    if not trades:
+        return empty
+
+    security_ids = list({t.security_id for t in trades})
+
+    spy_sid = (await session.execute(
+        select(Security.id).where(Security.ticker == "SPY")
+    )).scalar_one_or_none()
+    price_ids = security_ids + ([spy_sid] if spy_sid else [])
+
+    price_rows = (await session.execute(
+        select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
+        .where(DailyPrice.security_id.in_(price_ids))
+    )).all()
+    pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+
+    start = min(t.transaction_date for t in trades)
+    end = max((r.price_date for r in price_rows), default=start)
+    dates = _month_starts(start, end)
+
+    series = compute_equity_series(trades, pricebook, spy_sid, dates)
+
+    summary: Dict[str, Any] = {"start_date": start.isoformat(), "end_date": end.isoformat(),
+                               "has_benchmark": spy_sid is not None}
+    if series:
+        pv = series[-1]["portfolio_value"]
+        sv = series[-1]["spy_value"]
+        summary["portfolio_value"] = pv
+        summary["spy_value"] = sv
+        summary["vs_spy_pct"] = round((pv / sv - 1) * 100, 2) if sv else None
+    return {"series": series, "summary": summary}
+
+
+async def compare_member_holdings(session: AsyncSession, member_ids: List) -> Dict[str, Any]:
+    """Reconstruct each member's portfolio and surface cross-member overlap.
+
+    Returns a per-member summary (totals + top holdings + sector allocation) plus
+    the set of securities held by more than one member (the most useful signal
+    when comparing members). Intended for a small number of members (2-5).
+    """
+    members_out: List[Dict[str, Any]] = []
+    # security_id -> {ticker, name, holders: {member_id: market_value}}
+    overlap_index: Dict[str, Dict[str, Any]] = {}
+
+    for mid in _dedupe(member_ids):
+        result = await reconstruct_holdings(session, [mid])
+        holdings = result["holdings"]
+        members_out.append({
+            "member_id": str(mid),
+            "totals": result["totals"],
+            "sector_allocation": result.get("sector_allocation", [])[:6],
+            "top_holdings": holdings[:5],
+        })
+        for h in holdings:
+            entry = overlap_index.setdefault(
+                h["security_id"],
+                {"security_id": h["security_id"], "ticker": h["ticker"], "name": h["name"], "holders": {}},
+            )
+            entry["holders"][str(mid)] = h["market_value"]
+
+    common = [
+        {
+            "security_id": e["security_id"],
+            "ticker": e["ticker"],
+            "name": e["name"],
+            "held_by": list(e["holders"].keys()),
+            "combined_value": round(sum(e["holders"].values()), 2),
         }
-        return result
+        for e in overlap_index.values()
+        if len(e["holders"]) > 1
+    ]
+    common.sort(key=lambda c: c["combined_value"], reverse=True)
+
+    return {
+        "members": members_out,
+        "overlap": {"common_securities": common, "count": len(common)},
+    }
 
 
 def _dedupe(seq: List) -> List:

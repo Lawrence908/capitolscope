@@ -2,12 +2,12 @@
  * Logging utilities and helper functions
  */
 
-import { logger, LogComponent, LogLevel } from '../core/logging';
+import { logger, LogComponent } from '../core/logging';
 
 /**
  * Utility to log performance metrics
  */
-export const logPerformance = (name: string, startTime: number, additionalData?: Record<string, any>) => {
+export const logPerformance = (name: string, startTime: number, additionalData?: Record<string, unknown>) => {
   const duration = performance.now() - startTime;
   logger.performance(name, duration, 'ms');
   
@@ -26,9 +26,9 @@ export const logUserInteraction = (
   action: string,
   element: string,
   startTime?: number,
-  additionalData?: Record<string, any>
+  additionalData?: Record<string, unknown>
 ) => {
-  const data: Record<string, any> = {
+  const data: Record<string, unknown> = {
     action,
     element,
     ...additionalData,
@@ -48,7 +48,7 @@ export const logApiCall = async <T>(
   method: string,
   url: string,
   apiCall: () => Promise<T>,
-  additionalData?: Record<string, any>
+  additionalData?: Record<string, unknown>
 ): Promise<T> => {
   const startTime = performance.now();
   
@@ -59,7 +59,7 @@ export const logApiCall = async <T>(
     
     logger.apiResponse(method, url, 200, { duration, ...additionalData });
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     const duration = performance.now() - startTime;
     logger.apiError(method, url, { error, duration, ...additionalData });
     throw error;
@@ -70,7 +70,7 @@ export const logApiCall = async <T>(
  * Utility to log component lifecycle events
  */
 export const logComponentLifecycle = {
-  mount: (componentName: string, props?: any) => {
+  mount: (componentName: string, props?: unknown) => {
     logger.componentMount(componentName, props);
   },
   
@@ -78,7 +78,7 @@ export const logComponentLifecycle = {
     logger.componentUnmount(componentName);
   },
   
-  update: (componentName: string, prevProps?: any, nextProps?: any) => {
+  update: (componentName: string, prevProps?: unknown, nextProps?: unknown) => {
     logger.debug(LogComponent.COMPONENTS, `Component Updated: ${componentName}`, {
       prevProps,
       nextProps,
@@ -116,11 +116,11 @@ export const logNavigation = {
  * Utility to log form interactions
  */
 export const logFormInteraction = {
-  submit: (formName: string, data?: any) => {
+  submit: (formName: string, data?: unknown) => {
     logger.userAction('form_submit', formName, { data });
   },
   
-  fieldChange: (formName: string, fieldName: string, value: any) => {
+  fieldChange: (formName: string, fieldName: string, value: unknown) => {
     logger.debug(LogComponent.INTERACTIONS, `Form field change: ${formName}.${fieldName}`, {
       fieldName,
       value: typeof value === 'string' ? value.substring(0, 100) : value, // Truncate long strings
@@ -144,7 +144,7 @@ export const logSearchAndFilter = {
     logger.userAction('search', source, { query, results });
   },
   
-  filter: (filterType: string, value: any, results: number) => {
+  filter: (filterType: string, value: unknown, results: number) => {
     logger.userAction('filter', filterType, { value, results });
   },
   
@@ -161,7 +161,7 @@ export const logSearchAndFilter = {
  * Utility to log data operations
  */
 export const logDataOperation = {
-  fetch: (source: string, success: boolean, count?: number, error?: any) => {
+  fetch: (source: string, success: boolean, count?: number, error?: unknown) => {
     if (success) {
       logger.info(LogComponent.DATA, `Data fetch from ${source}`, { count });
     } else {
@@ -177,7 +177,7 @@ export const logDataOperation = {
     }
   },
   
-  update: (entity: string, action: string, success: boolean, error?: any) => {
+  update: (entity: string, action: string, success: boolean, error?: unknown) => {
     if (success) {
       logger.info(LogComponent.DATA, `Data update: ${entity} ${action}`);
     } else {
@@ -214,7 +214,7 @@ export const logAuthEvent = {
 /**
  * Utility to log errors with context
  */
-export const logError = (error: Error, context: string, additionalData?: Record<string, any>) => {
+export const logError = (error: Error, context: string, additionalData?: Record<string, unknown>) => {
   logger.error(LogComponent.ERRORS, `Error in ${context}`, {
     error: {
       name: error.name,
@@ -229,7 +229,7 @@ export const logError = (error: Error, context: string, additionalData?: Record<
 /**
  * Utility to log warnings with context
  */
-export const logWarning = (message: string, context: string, additionalData?: Record<string, any>) => {
+export const logWarning = (message: string, context: string, additionalData?: Record<string, unknown>) => {
   logger.warning(LogComponent.GENERAL, `Warning in ${context}: ${message}`, {
     context,
     ...additionalData,
@@ -239,7 +239,7 @@ export const logWarning = (message: string, context: string, additionalData?: Re
 /**
  * Utility to log info messages with context
  */
-export const logInfo = (message: string, context: string, additionalData?: Record<string, any>) => {
+export const logInfo = (message: string, context: string, additionalData?: Record<string, unknown>) => {
   logger.info(LogComponent.GENERAL, `Info from ${context}: ${message}`, {
     context,
     ...additionalData,
@@ -249,7 +249,7 @@ export const logInfo = (message: string, context: string, additionalData?: Recor
 /**
  * Utility to log debug messages with context
  */
-export const logDebug = (message: string, context: string, additionalData?: Record<string, any>) => {
+export const logDebug = (message: string, context: string, additionalData?: Record<string, unknown>) => {
   logger.debug(LogComponent.GENERAL, `Debug from ${context}: ${message}`, {
     context,
     ...additionalData,
@@ -263,11 +263,11 @@ export const createPerformanceTimer = (name: string) => {
   const startTime = performance.now();
   
   return {
-    end: (additionalData?: Record<string, any>) => {
+    end: (additionalData?: Record<string, unknown>) => {
       logPerformance(name, startTime, additionalData);
     },
     
-    checkpoint: (checkpointName: string, additionalData?: Record<string, any>) => {
+    checkpoint: (checkpointName: string, additionalData?: Record<string, unknown>) => {
       const currentTime = performance.now();
       const duration = currentTime - startTime;
       logger.performance(`${name} - ${checkpointName}`, duration, 'ms');
@@ -287,7 +287,7 @@ export const createPerformanceTimer = (name: string) => {
  */
 export const logMemoryUsage = (context: string) => {
   if ('memory' in performance) {
-    const memory = (performance as any).memory;
+    const memory = (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
     logger.info(LogComponent.PERFORMANCE, 'Memory usage', {
       context,
       used: memory.usedJSHeapSize,

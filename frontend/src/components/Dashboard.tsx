@@ -9,7 +9,7 @@ import {
   XCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import type { CongressionalTrade, CongressMember, DataQualityStats } from '../types';
+import type { CongressionalTrade, DataQualityStats, TopTradingMember } from '../types';
 import apiClient from '../services/api';
 import stripeService from '../services/stripeService';
 import AnalyticsDebug from './AnalyticsDebug';
@@ -134,7 +134,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DataQualityStats | null>(null);
   const [recentTrades, setRecentTrades] = useState<CongressionalTrade[]>([]);
-  const [topMembers, setTopMembers] = useState<CongressMember[]>([]);
+  const [topMembers, setTopMembers] = useState<TopTradingMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [paymentModal, setPaymentModal] = useState<{
@@ -161,9 +161,9 @@ const Dashboard: React.FC = () => {
           apiClient.getTopTradingMembers(10),
         ]);
 
-        setStats(statsResponse.data);
+        setStats(statsResponse);
         setRecentTrades(tradesResponse.items || []);
-        setTopMembers(membersResponse.data || []);
+        setTopMembers(membersResponse || []);
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard error:', err);
@@ -184,7 +184,7 @@ const Dashboard: React.FC = () => {
       setPaymentModal({
         isOpen: true,
         type: 'success',
-        message: paymentSuccess.message,
+        message: paymentSuccess.message ?? '',
         tier: paymentSuccess.tier,
       });
       // Clean up URL params
@@ -195,7 +195,7 @@ const Dashboard: React.FC = () => {
       setPaymentModal({
         isOpen: true,
         type: 'cancelled',
-        message: paymentCancelled.message,
+        message: paymentCancelled.message ?? '',
       });
       // Clean up URL params
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -325,7 +325,7 @@ const Dashboard: React.FC = () => {
                       {trade.estimated_value ? fmtMoney(trade.estimated_value / 100) : '—'}
                     </p>
                     <p className="font-data text-[11px] tabular-nums text-content-faint">
-                      {new Date(trade.transaction_date).toLocaleDateString()}
+                      {trade.transaction_date ? new Date(trade.transaction_date).toLocaleDateString() : "—"}
                     </p>
                   </div>
                 </div>

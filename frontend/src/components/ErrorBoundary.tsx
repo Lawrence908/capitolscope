@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 import { logger, LogComponent } from '../core/logging';
 
 interface Props {
@@ -68,12 +69,12 @@ export class ErrorBoundary extends Component<Props, State> {
 
       // Default fallback UI
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-            <div className="flex items-center mb-4">
+        <div className="flex min-h-screen items-center justify-center bg-surface px-4">
+          <div className="card w-full max-w-md p-6">
+            <div className="mb-4 flex items-center">
               <div className="flex-shrink-0">
                 <svg
-                  className="h-8 w-8 text-red-500"
+                  className="h-8 w-8 text-sev-flag"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -87,38 +88,33 @@ export class ErrorBoundary extends Component<Props, State> {
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Something went wrong
-                </h3>
+                <h3 className="font-display text-lg font-medium text-content">Something went wrong</h3>
               </div>
             </div>
             <div className="mb-4">
-              <p className="text-sm text-gray-500">
+              <p className="font-ui text-sm text-content-muted">
                 We're sorry, but something unexpected happened. Our team has been notified
                 and is working to fix the issue.
               </p>
             </div>
             <div className="flex space-x-3">
-              <button
-                onClick={() => window.location.reload()}
-                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-              >
+              <button onClick={() => window.location.reload()} className="btn-primary text-sm">
                 Reload Page
               </button>
               <button
                 onClick={() => this.setState({ hasError: false, error: undefined, errorInfo: undefined })}
-                className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                className="btn-secondary text-sm"
               >
                 Try Again
               </button>
             </div>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-4">
-                <summary className="cursor-pointer text-sm font-medium text-gray-700">
+                <summary className="cursor-pointer font-data text-[11px] uppercase tracking-[0.12em] text-content-faint">
                   Error Details (Development)
                 </summary>
-                <div className="mt-2 p-3 bg-gray-100 rounded-md">
-                  <pre className="text-xs text-gray-600 whitespace-pre-wrap">
+                <div className="mt-2 rounded-md border border-line bg-surface-inset p-3">
+                  <pre className="whitespace-pre-wrap font-data text-xs text-content-muted">
                     {this.state.error.toString()}
                     {this.state.errorInfo?.componentStack}
                   </pre>
@@ -137,6 +133,7 @@ export class ErrorBoundary extends Component<Props, State> {
 /**
  * Higher-order component for wrapping components with error boundary
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
   fallback?: ReactNode,
@@ -156,8 +153,9 @@ export const withErrorBoundary = <P extends object>(
 /**
  * Hook for manually logging errors in functional components
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useErrorLogger = () => {
-  const logError = (error: Error, context?: string, additionalData?: Record<string, any>) => {
+  const logError = (error: Error, context?: string, additionalData?: Record<string, unknown>) => {
     logger.error(LogComponent.ERRORS, `Error in ${context || 'component'}`, {
       error: {
         name: error.name,
@@ -169,7 +167,7 @@ export const useErrorLogger = () => {
     });
   };
 
-  const logAsyncError = (error: Error, operation: string, additionalData?: Record<string, any>) => {
+  const logAsyncError = (error: Error, operation: string, additionalData?: Record<string, unknown>) => {
     logger.error(LogComponent.ERRORS, `Async operation failed: ${operation}`, {
       error: {
         name: error.name,

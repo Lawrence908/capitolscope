@@ -27,7 +27,7 @@ export function useScrutiny() {
   const [loading, setLoading] = useState<Partial<Record<Section, boolean>>>({});
   const [error, setError] = useState<string | null>(null);
 
-  const fetchers: Record<Section, () => Promise<any>> = {
+  const fetchers: Record<Section, () => Promise<unknown>> = {
     scrutiny: () => apiClient.getScrutinyScores(10, 200),
     clusters: () => apiClient.getClusters({ limit: 80 }),
     conflicts: () => apiClient.getConflicts(3, 80),
@@ -40,8 +40,9 @@ export function useScrutiny() {
     try {
       const result = await fetchers[section]();
       setData((d) => ({ ...d, [section]: result }));
-    } catch (e: any) {
-      setError(e?.response?.data?.error?.message || e?.message || 'Failed to load analytics');
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { error?: { message?: string } } }; message?: string };
+      setError(err?.response?.data?.error?.message || err?.message || 'Failed to load analytics');
     } finally {
       setLoading((l) => ({ ...l, [section]: false }));
     }

@@ -28,6 +28,7 @@ import re
 from domains.congressional.models import CongressionalTrade
 from domains.securities.models import Security
 from domains.securities.ticker_cleaning import resolve_ticker
+from domains.securities.name_matching import build_name_index, resolve_ticker_by_name
 from domains.securities.universe import fetch_active_us_tickers
 
 logger = logging.getLogger(__name__)
@@ -41,7 +42,10 @@ _FUND_RE = re.compile(r"^[A-Z]{5}X$")
 def backfill_security_matching_sync(session: Session, batch_size: int = 2000) -> Dict[str, Any]:
     universe_meta = fetch_active_us_tickers()
     universe = set(universe_meta.keys())
-    logger.info("Loaded active universe: %d symbols", len(universe))
+    # Company-name -> ticker index (recovers un-tickered trades that are plain
+    # company names, e.g. "NextEra Energy, Inc").
+    name_index = build_name_index(universe_meta)
+    logger.info("Loaded active universe: %d symbols, %d name keys", len(universe), len(name_index))
 
     # Preload existing securities: TICKER -> id
     sec_map: Dict[str, Any] = {}
@@ -57,11 +61,19 @@ def backfill_security_matching_sync(session: Session, batch_size: int = 2000) ->
         "security_id_set": 0,
         "ticker_normalised": 0,
         "ticker_cleared_as_junk": 0,
+        "name_matched": 0,
         "unresolved": 0,
     }
 
     for i, trade in enumerate(trades, 1):
         symbol = resolve_ticker(trade.ticker, trade.raw_asset_description, universe)
+
+        # Fallback: recover a ticker from the company name for un-tickered trades.
+        if not symbol:
+            name_symbol = resolve_ticker_by_name(trade.raw_asset_description, name_index)
+            if name_symbol:
+                symbol = name_symbol
+                stats["name_matched"] += 1
 
         if symbol:
             sid = sec_map.get(symbol)

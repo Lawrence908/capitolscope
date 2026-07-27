@@ -405,9 +405,140 @@ async def export_portfolio_data(
 # ============================================================================
 
 from pydantic import BaseModel, Field  # noqa: E402
-from domains.portfolio.mirror_service import MirrorPortfolioService  # noqa: E402
+from domains.portfolio.mirror_service import (  # noqa: E402
+    MirrorPortfolioService, reconstruct_holdings, compare_member_holdings, compute_equity_curve,
+)
+
+
+@router.get(
+    "/member/{member_id}/performance",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={200: {"description": "OK"}, 401: {"description": "Not authenticated"}},
+)
+async def get_member_performance(
+    member_id: str = Path(..., description="Congress member UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Monthly equity curve for a member's reconstructed portfolio, benchmarked vs SPY."""
+    data = await compute_equity_curve(session, [member_id])
+    return create_response(data=data)
 
 _MIRROR_TIERS = ['PRO', 'PREMIUM', 'ENTERPRISE']
+
+
+@router.get(
+    "/member/{member_id}/holdings",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Reconstructed member portfolio retrieved successfully"},
+        401: {"description": "Not authenticated"},
+        404: {"description": "Member not found"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def get_member_portfolio_holdings(
+    member_id: str = Path(..., description="Congress member UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Reconstructed portfolio for a single congress member: combined holdings,
+    returns, and sector allocation, derived from their disclosed trades.
+
+    Uses the shares-from-price model (see mirror_service); only the ~37% of
+    trades with a matched security are priceable, so this is an approximation.
+
+    **Authenticated Feature**: Requires user authentication.
+    """
+    logger.info(f"Getting reconstructed portfolio: member_id={member_id}, user_id={current_user.id}")
+    try:
+        from domains.congressional.models import CongressMember
+        from sqlalchemy import select as _select
+
+        member = (await session.execute(
+            _select(CongressMember).where(CongressMember.id == member_id)
+        )).scalar_one_or_none()
+        if not member:
+            raise HTTPException(status_code=404, detail="Member not found")
+
+        result = await reconstruct_holdings(session, [member_id])
+        result["member"] = {
+            "id": str(member.id),
+            "name": getattr(member, "display_name", None) or member.full_name,
+            "party": member.party,
+            "state": member.state,
+            "chamber": member.chamber,
+        }
+        return create_response(data=result)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error reconstructing member portfolio: {e}")
+        raise HTTPException(status_code=500, detail="Failed to reconstruct member portfolio")
+
+
+@router.get(
+    "/members/compare",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Member portfolio comparison retrieved successfully"},
+        400: {"description": "Invalid member_ids"},
+        401: {"description": "Not authenticated"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def compare_member_portfolios(
+    member_ids: str = Query(..., description="Comma-separated congress member UUIDs (2-5)"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """
+    Compare the reconstructed portfolios of 2-5 members side by side, including
+    the securities they hold in common (overlap).
+
+    **Authenticated Feature**: Requires user authentication.
+    """
+    from uuid import UUID as _UUID
+
+    ids = [x.strip() for x in member_ids.split(",") if x.strip()]
+    if not (2 <= len(ids) <= 5):
+        raise HTTPException(status_code=400, detail="Provide between 2 and 5 member IDs")
+    try:
+        for i in ids:
+            _UUID(i)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="All member IDs must be valid UUIDs")
+
+    logger.info(f"Comparing member portfolios: {ids}, user_id={current_user.id}")
+    try:
+        from domains.congressional.models import CongressMember
+        from sqlalchemy import select as _select
+
+        result = await compare_member_holdings(session, ids)
+
+        members = (await session.execute(
+            _select(CongressMember).where(CongressMember.id.in_(ids))
+        )).scalars().all()
+        info = {
+            str(m.id): {
+                "id": str(m.id),
+                "name": getattr(m, "display_name", None) or m.full_name,
+                "party": m.party,
+                "state": m.state,
+                "chamber": m.chamber,
+            }
+            for m in members
+        }
+        for row in result["members"]:
+            row["member"] = info.get(row["member_id"])
+
+        return create_response(data=result)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error comparing member portfolios: {e}")
+        raise HTTPException(status_code=500, detail="Failed to compare member portfolios")
 
 
 class MirrorCreateRequest(BaseModel):
@@ -532,3 +663,19 @@ async def get_mirror_holdings(
     result = await service.compute_holdings(member_ids)
     result["mirror"] = _serialize_mirror(mirror)
     return create_response(data=result)
+
+
+@router.get("/mirror/{mirror_id}/performance", response_model=ResponseEnvelope[Dict[str, Any]])
+async def get_mirror_performance(
+    mirror_id: str = Path(..., description="Mirror portfolio UUID"),
+    session: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(require_subscription(_MIRROR_TIERS)),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Monthly equity curve for a mirror portfolio, benchmarked vs SPY. **Pro+**."""
+    service = MirrorPortfolioService(session)
+    mirror = await service.get(mirror_id, current_user.id)
+    if not mirror:
+        raise HTTPException(status_code=404, detail="Mirror portfolio not found")
+    member_ids = [m.member_id for m in mirror.members]
+    data = await compute_equity_curve(session, member_ids)
+    return create_response(data=data)

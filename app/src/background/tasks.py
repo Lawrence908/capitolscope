@@ -592,7 +592,7 @@ def process_new_trade_notifications(self, doc_id: str, member_id: str, transacti
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
-def process_pending_trade_alerts(self, lookback_hours: int = 48):
+def process_pending_trade_alerts(self, lookback_hours: int = 48, cadences=None):
     """Batched trade-alert digest sender.
 
     Scans trades inserted in the last ``lookback_hours``, matches them against
@@ -600,9 +600,16 @@ def process_pending_trade_alerts(self, lookback_hours: int = 48):
     single digest email per user. Dedup is enforced via NotificationDelivery so
     a match is only ever emailed once even though this runs on a schedule and is
     also nudged by ingestion. Safe to run repeatedly.
+
+    ``cadences`` selects which users to send to based on their subscription
+    ``email_frequency`` (instant / daily / weekly); users with no subscription
+    default to instant. Defaults to ``["instant"]`` so the 10-minute beat and
+    the ingestion nudge only ping instant subscribers; daily/weekly beats pass
+    their own cadence with a larger lookback.
     """
+    cadences = cadences or ["instant"]
     try:
-        logger.info(f"Processing pending trade alerts (lookback={lookback_hours}h)")
+        logger.info(f"Processing pending trade alerts (lookback={lookback_hours}h, cadences={cadences})")
 
         async def _run():
             from collections import defaultdict
@@ -661,6 +668,11 @@ def process_pending_trade_alerts(self, lookback_hours: int = 48):
                     if not per_user:
                         return {"status": "success", "trades": len(trades), "matches": len(matches), "digests_sent": 0}
 
+                    # Route by each user's digest cadence; only send to users whose
+                    # cadence is in this run's set (missing subscription -> instant).
+                    from domains.notifications.subscription_service import SubscriptionService
+                    user_cadence = await SubscriptionService(session).get_cadences(list(per_user.keys()))
+
                     users = (
                         await session.execute(select(User).where(User.id.in_(list(per_user.keys()))))
                     ).scalars().all()
@@ -668,7 +680,11 @@ def process_pending_trade_alerts(self, lookback_hours: int = 48):
 
                     service = NotificationService(session)
                     digests_sent = 0
+                    skipped_cadence = 0
                     for user_id, user_matches in per_user.items():
+                        if user_cadence.get(user_id, "instant") not in cadences:
+                            skipped_cadence += 1
+                            continue  # not this run's cadence; a later beat handles them
                         user = user_by_id.get(user_id)
                         if not user or not user.email:
                             logger.warning(f"Skipping digest for missing/emailless user {user_id}")
@@ -682,6 +698,7 @@ def process_pending_trade_alerts(self, lookback_hours: int = 48):
                         "matches": len(matches),
                         "users_notified": len(per_user),
                         "digests_sent": digests_sent,
+                        "skipped_cadence": skipped_cadence,
                     }
             finally:
                 await manager.close()

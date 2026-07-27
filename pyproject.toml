@@ -200,11 +200,12 @@ pythonpath = ["app/src"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-# NOTE: no --cov-fail-under gate yet. The suite is being grown from zero to
-# "right the ship"; a hard coverage floor would fail an otherwise-green run and
-# discourage incremental additions. Re-introduce a floor (e.g. --cov-fail-under
-# =60) once coverage of the core domains is established. Coverage is still
-# measured and reported below for visibility.
+# Coverage is measured on every run and reported below. The hard floor
+# (--cov-fail-under) is enforced in CI (.github/workflows/tests.yml), NOT here in
+# addopts: a floor in addopts would fail any single-file/subset local run (which
+# necessarily has low total coverage). The CI floor ratchets up as coverage of
+# the core domains grows; raise it whenever the full-suite number clears the next
+# threshold.
 addopts = [
     "--strict-markers",
     "--strict-config",

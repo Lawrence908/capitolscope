@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MemberAlertForm } from './MemberAlertForm';
 import { AmountAlertForm } from './AmountAlertForm';
 import { TickerAlertForm } from './TickerAlertForm';
-import { CreateAlertData } from '../../hooks/useAlerts';
+import type { CreateAlertData } from '../../hooks/useAlerts';
 
 interface CreateAlertModalProps {
   isOpen: boolean;
@@ -51,7 +51,7 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
       await onSubmit({
         alert_type: selectedType as 'member_trades' | 'amount_threshold' | 'ticker_trades',
         ...formData,
-      });
+      } as CreateAlertData);
       // Reset form
       setSelectedType('');
       setFormData({});
@@ -142,7 +142,7 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
             <button
               onClick={handleSubmit}
               disabled={isSubmitting || !formData || Object.keys(formData).length === 0}
-              className="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-strong disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-accent text-[#071310] rounded-lg hover:bg-accent-strong disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Creating...' : 'Create Alert'}
             </button>

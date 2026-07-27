@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiClient } from '../../services/api';
 
 interface NotificationSettings {
   email_enabled: boolean;
@@ -8,6 +9,18 @@ interface NotificationSettings {
   quiet_hours_start: string;
   quiet_hours_end: string;
 }
+
+// Map between the UI's frequency values and the API's cadence values.
+const UI_TO_API: Record<NotificationSettings['frequency'], 'instant' | 'daily' | 'weekly'> = {
+  immediate: 'instant',
+  daily_digest: 'daily',
+  weekly_digest: 'weekly',
+};
+const API_TO_UI: Record<'instant' | 'daily' | 'weekly', NotificationSettings['frequency']> = {
+  instant: 'immediate',
+  daily: 'daily_digest',
+  weekly: 'weekly_digest',
+};
 
 export const NotificationPreferences: React.FC = () => {
   const [settings, setSettings] = useState<NotificationSettings>({
@@ -23,21 +36,35 @@ export const NotificationPreferences: React.FC = () => {
   const [testEmailSent, setTestEmailSent] = useState(false);
 
   useEffect(() => {
-    // Load settings from API or localStorage
-    // For now, using mock data
+    // Quiet-hours are UI-only (not modeled server-side) — keep them local.
     const savedSettings = localStorage.getItem('notification_preferences');
-    if (savedSettings) {
-      setSettings(JSON.parse(savedSettings));
-    }
+    const local = savedSettings ? JSON.parse(savedSettings) : {};
+    // Channel + cadence come from the API.
+    apiClient
+      .getSubscriptions()
+      .then((sub) => {
+        setSettings((prev) => ({
+          ...prev,
+          ...local,
+          email_enabled: sub.email_enabled,
+          frequency: API_TO_UI[sub.email_frequency] ?? 'immediate',
+        }));
+      })
+      .catch((error) => {
+        console.error('Failed to load preferences:', error);
+        if (savedSettings) setSettings((prev) => ({ ...prev, ...local }));
+      });
   }, []);
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Save to API
-      // await apiClient.updateNotificationPreferences(settings);
-      
-      // For now, save to localStorage
+      // Server-backed fields: channel toggle + digest cadence.
+      await apiClient.updateSubscriptions({
+        email_enabled: settings.email_enabled,
+        email_frequency: UI_TO_API[settings.frequency],
+      });
+      // Quiet-hours remain local-only for now.
       localStorage.setItem('notification_preferences', JSON.stringify(settings));
       setLastSaved(new Date());
     } catch (error) {
@@ -110,7 +137,7 @@ export const NotificationPreferences: React.FC = () => {
                   <button
                     onClick={handleTestEmail}
                     disabled={!settings.email_address}
-                    className="px-4 py-2 bg-surface-inset text-white rounded-lg hover:bg-surface-inset disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-surface-inset text-content rounded-lg hover:bg-surface-inset disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {testEmailSent ? '✓ Sent' : 'Test'}
                   </button>
@@ -209,7 +236,7 @@ export const NotificationPreferences: React.FC = () => {
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="px-6 py-2 bg-accent text-white rounded-lg hover:bg-accent-strong disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2 bg-accent text-[#071310] rounded-lg hover:bg-accent-strong disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSaving ? 'Saving...' : 'Save Preferences'}
         </button>

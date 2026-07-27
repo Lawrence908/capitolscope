@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLogger, useInteractionLogger, usePerformanceLogger } from '../hooks/useLogger';
-import { logPerformance, logUserInteraction, createPerformanceTimer } from '../utils/logging';
+import { createPerformanceTimer } from '../utils/logging';
 
 /**
  * Example component demonstrating how to use the logging system
@@ -33,7 +33,7 @@ const LoggingExample: React.FC = () => {
     
     // Log user interaction
     logClick('example-button', { count });
-    logUserAction('button_click', 'LoggingExample', { count });
+    logUserAction('button_click', { count });
     
     // Simulate some work
     setIsLoading(true);
@@ -54,7 +54,7 @@ const LoggingExample: React.FC = () => {
     
     // Log form submission
     logFormSubmit('example-form', { count });
-    logUserAction('form_submit', 'LoggingExample', { count });
+    logUserAction('form_submit', { count });
     
     logInfo('Form submitted', { count });
   };

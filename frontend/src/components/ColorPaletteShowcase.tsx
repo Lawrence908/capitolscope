@@ -1,216 +1,222 @@
-import React from 'react';
+import React, { useState } from 'react';
+import DarkModeToggle from './DarkModeToggle';
+import {
+  Eyebrow,
+  PageHeader,
+  Panel,
+  StatTile,
+  Tabs,
+  Spinner,
+  PartyTag,
+  Meter,
+  FactorBar,
+  FACTOR_COLORS,
+  FACTOR_LABELS,
+  FACTOR_ORDER,
+  partyMeta,
+} from './ui';
+
+/** Living style guide for the "Scrutiny" design system. Everything here is
+ *  driven by the real token classes and palette constants, so it stays honest
+ *  and is theme-aware — toggle light/dark with the switch in the corner. */
+
+const TokenSwatch: React.FC<{ box: string; name: string; note?: string }> = ({ box, name, note }) => (
+  <div className="space-y-2">
+    <div className={`h-16 rounded-md border border-line ${box}`} />
+    <p className="font-data text-xs text-content">{name}</p>
+    {note && <p className="font-ui text-[11px] text-content-faint">{note}</p>}
+  </div>
+);
+
+const HexSwatch: React.FC<{ hex: string; name: string; note?: string }> = ({ hex, name, note }) => (
+  <div className="space-y-2">
+    <div className="h-16 rounded-md border border-line" style={{ background: hex }} />
+    <p className="font-data text-xs text-content">{name}</p>
+    <p className="font-data text-[11px] uppercase text-content-faint">{hex}</p>
+    {note && <p className="font-ui text-[11px] text-content-faint">{note}</p>}
+  </div>
+);
+
+const Section: React.FC<{ title: React.ReactNode; children: React.ReactNode }> = ({ title, children }) => (
+  <div className="mb-8">
+    <Panel title={title}>
+      <div className="p-5">{children}</div>
+    </Panel>
+  </div>
+);
+
+const SEV = [
+  { hex: '#7aa8d6', name: 'sev.info', note: 'steel — cluster / info' },
+  { hex: '#d6a24e', name: 'sev.watch', note: 'amber — watch / exchange' },
+  { hex: '#d6707b', name: 'sev.flag', note: 'oxblood — flag / sell' },
+];
 
 const ColorPaletteShowcase: React.FC = () => {
-  const colorCategories = [
-    {
-      name: 'Background Colors',
-      colors: [
-        { name: 'bg-primary', hex: '#101626', description: 'Very dark blue/black' },
-        { name: 'bg-secondary', hex: '#1a2332', description: 'Lighter dark blue for cards' },
-        { name: 'bg-tertiary', hex: '#2a3441', description: 'Elevated card background' },
-      ]
-    },
-    {
-      name: 'Primary Accent Colors (Teal/Cyan)',
-      colors: [
-        { name: 'primary-50', hex: '#e6f7f8', description: 'Lightest teal' },
-        { name: 'primary-100', hex: '#b3e8ea', description: 'Light teal' },
-        { name: 'primary-200', hex: '#80d9dc', description: 'Medium light teal' },
-        { name: 'primary-300', hex: '#4dcace', description: 'Medium teal' },
-        { name: 'primary-400', hex: '#13c4c3', description: 'Main neon accent' },
-        { name: 'primary-500', hex: '#1a6b9f', description: 'Primary UI' },
-        { name: 'primary-600', hex: '#1a5a8f', description: 'Darker teal' },
-        { name: 'primary-700', hex: '#1a497f', description: 'Dark teal' },
-        { name: 'primary-800', hex: '#1a386f', description: 'Very dark teal' },
-        { name: 'primary-900', hex: '#1a275f', description: 'Darkest teal' },
-      ]
-    },
-    {
-      name: 'Secondary Accent Colors (Fuchsia/Magenta)',
-      colors: [
-        { name: 'secondary-50', hex: '#fce6f3', description: 'Lightest fuchsia' },
-        { name: 'secondary-100', hex: '#f7b3d9', description: 'Light fuchsia' },
-        { name: 'secondary-200', hex: '#f280bf', description: 'Medium light fuchsia' },
-        { name: 'secondary-300', hex: '#ed4da5', description: 'Medium fuchsia' },
-        { name: 'secondary-400', hex: '#e846a8', description: 'Data viz accent' },
-        { name: 'secondary-500', hex: '#d633a8', description: 'Main fuchsia' },
-        { name: 'secondary-600', hex: '#c63398', description: 'Darker fuchsia' },
-        { name: 'secondary-700', hex: '#b63388', description: 'Dark fuchsia' },
-        { name: 'secondary-800', hex: '#a63378', description: 'Very dark fuchsia' },
-        { name: 'secondary-900', hex: '#963368', description: 'Darkest fuchsia' },
-      ]
-    },
-    {
-      name: 'Semantic Colors',
-      colors: [
-        { name: 'success', hex: '#00ff88', description: 'Success green (neon)' },
-        { name: 'warning', hex: '#ffaa00', description: 'Warning yellow/orange (neon)' },
-        { name: 'error', hex: '#ff0040', description: 'Error red (neon)' },
-        { name: 'info', hex: '#13c4c3', description: 'Info blue (matches primary)' },
-      ]
-    }
-  ];
-
-  const componentExamples = [
-    {
-      name: 'Buttons',
-      components: [
-        { type: 'btn-primary', text: 'Primary Button', className: 'btn-primary' },
-        { type: 'btn-secondary', text: 'Secondary Button', className: 'btn-secondary' },
-        { type: 'btn-outline', text: 'Outline Button', className: 'btn-outline' },
-      ]
-    },
-    {
-      name: 'Cards',
-      components: [
-        { type: 'card', text: 'Standard Card', className: 'card p-6' },
-        { type: 'card-glow', text: 'Glow Card', className: 'card-glow p-6' },
-        { type: 'card-elevated', text: 'Elevated Card', className: 'card-elevated p-6' },
-      ]
-    },
-    {
-      name: 'Text Effects',
-      components: [
-        { type: 'text-glow-primary', text: 'Primary Glow Text', className: 'text-glow-primary text-2xl font-bold' },
-        { type: 'text-glow-secondary', text: 'Secondary Glow Text', className: 'text-glow-secondary text-2xl font-bold' },
-      ]
-    }
-  ];
+  const [tab, setTab] = useState<'a' | 'b' | 'c'>('a');
 
   return (
-    <div className="min-h-screen bg-bg-primary circuit-bg p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-glow-primary mb-4">
-            Capitol Scope
-          </h1>
-          <h2 className="text-3xl font-semibold text-neutral-200 mb-2">
-            Cyberpunk Color Palette
-          </h2>
-          <p className="text-neutral-400 text-lg">
-            Unified color system for the Capitol Scope frontend
-          </p>
+    <div className="min-h-screen bg-surface font-ui text-content">
+      <div className="pointer-events-none fixed inset-x-0 top-0 h-64" style={{ background: 'radial-gradient(120% 60% at 50% 0%, rgba(67,168,151,0.08), transparent 70%)' }} />
+      <div className="relative mx-auto max-w-[1200px] px-6 py-10">
+        <div className="mb-2 flex justify-end">
+          <DarkModeToggle />
         </div>
 
-        {/* Color Categories */}
-        <div className="space-y-12">
-          {colorCategories.map((category) => (
-            <div key={category.name} className="card p-8">
-              <h3 className="text-2xl font-bold text-primary-400 mb-6">
-                {category.name}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {category.colors.map((color) => (
-                  <div key={color.name} className="space-y-2">
-                    <div 
-                      className="h-20 rounded-lg border border-neutral-700 shadow-lg"
-                      style={{ backgroundColor: color.hex }}
-                    />
-                    <div>
-                      <p className="font-mono text-sm text-neutral-300">{color.name}</p>
-                      <p className="font-mono text-xs text-neutral-500">{color.hex}</p>
-                      <p className="text-xs text-neutral-400 mt-1">{color.description}</p>
-                    </div>
-                  </div>
-                ))}
+        <PageHeader
+          eyebrow="CapitolScope · Design System"
+          title="Style Guide"
+          subtitle="The Scrutiny oversight-dossier language: semantic tokens themed for light and dark, domain color-coding, typography, and the shared component primitives. Everything below is live — toggle the theme to see both."
+        />
+
+        {/* Semantic surfaces */}
+        <Section title="Surfaces & lines">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <TokenSwatch box="bg-surface" name="surface" note="page background" />
+            <TokenSwatch box="bg-surface-raised" name="surface-raised" note="cards / panels" />
+            <TokenSwatch box="bg-surface-inset" name="surface-inset" note="bar tracks / stripes" />
+            <TokenSwatch box="bg-surface border-2 border-line" name="line" note="borders / dividers" />
+          </div>
+        </Section>
+
+        {/* Text tokens */}
+        <Section title="Text">
+          <div className="space-y-3">
+            <p className="font-ui text-2xl text-content">content — primary text &amp; headings</p>
+            <p className="font-ui text-lg text-content-muted">content-muted — body copy</p>
+            <p className="font-ui text-sm text-content-faint">content-faint — labels, captions, metadata</p>
+          </div>
+        </Section>
+
+        {/* Accent */}
+        <Section title="Accent (verdigris)">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <TokenSwatch box="bg-accent" name="accent" note="#1f9e88 light / #43a897 dark" />
+            <TokenSwatch box="bg-accent-strong" name="accent-strong" note="hover" />
+            <TokenSwatch box="bg-accent-2" name="accent-2" note="brass — secondary accent" />
+            <div className="space-y-2">
+              <div className="flex h-16 items-center justify-center rounded-md bg-accent">
+                <span className="font-ui text-sm font-semibold text-[#071310]">Aa buttons</span>
               </div>
+              <p className="font-data text-xs text-content">on-accent ink</p>
+              <p className="font-ui text-[11px] text-content-faint">#071310</p>
             </div>
-          ))}
-        </div>
+          </div>
+        </Section>
 
-        {/* Component Examples */}
-        <div className="mt-16">
-          <h3 className="text-3xl font-bold text-primary-400 mb-8 text-center">
-            Component Examples
-          </h3>
-          <div className="space-y-12">
-            {componentExamples.map((section) => (
-              <div key={section.name} className="card p-8">
-                <h4 className="text-xl font-bold text-secondary-400 mb-6">
-                  {section.name}
-                </h4>
-                <div className="flex flex-wrap gap-4">
-                  {section.components.map((component) => (
-                    <div key={component.type} className={component.className}>
-                      {component.text}
-                    </div>
-                  ))}
-                </div>
+        {/* Party */}
+        <Section title="Party color-coding">
+          <div className="flex flex-wrap items-center gap-6">
+            {['Democratic', 'Republican', 'Independent'].map((p) => (
+              <div key={p} className="flex items-center gap-3">
+                <PartyTag party={p} />
+                <div className="h-8 w-8 rounded-md border border-line" style={{ background: partyMeta(p).color }} />
+                <span className="font-ui text-sm text-content-muted">{p}</span>
               </div>
             ))}
           </div>
-        </div>
+        </Section>
 
-        {/* Data Visualization Examples */}
-        <div className="mt-16">
-          <h3 className="text-3xl font-bold text-primary-400 mb-8 text-center">
-            Data Visualization Examples
-          </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Bar Chart Example */}
-            <div className="card p-8">
-              <h4 className="text-xl font-bold text-secondary-400 mb-6">Bar Chart</h4>
-              <div className="flex items-end justify-center space-x-2 h-40">
-                <div className="chart-bar w-8 h-16 rounded-t"></div>
-                <div className="chart-bar w-8 h-24 rounded-t"></div>
-                <div className="chart-bar w-8 h-32 rounded-t"></div>
-                <div className="chart-bar w-8 h-20 rounded-t"></div>
-                <div className="chart-bar w-8 h-28 rounded-t"></div>
-                <div className="chart-bar w-8 h-36 rounded-t"></div>
-              </div>
-            </div>
-
-            {/* Line Chart Example */}
-            <div className="card p-8">
-              <h4 className="text-xl font-bold text-secondary-400 mb-6">Line Chart</h4>
-              <div className="relative h-40">
-                <svg className="w-full h-full" viewBox="0 0 300 150">
-                  <path
-                    d="M 0 120 L 50 80 L 100 60 L 150 40 L 200 20 L 250 10 L 300 5"
-                    stroke="#e846a8"
-                    strokeWidth="3"
-                    fill="none"
-                    className="drop-shadow-[0_0_10px_rgba(232,70,168,0.5)]"
-                  />
-                  <circle cx="50" cy="80" r="4" fill="#e846a8" className="drop-shadow-[0_0_5px_rgba(232,70,168,0.8)]" />
-                  <circle cx="100" cy="60" r="4" fill="#e846a8" className="drop-shadow-[0_0_5px_rgba(232,70,168,0.8)]" />
-                  <circle cx="150" cy="40" r="4" fill="#e846a8" className="drop-shadow-[0_0_5px_rgba(232,70,168,0.8)]" />
-                  <circle cx="200" cy="20" r="4" fill="#e846a8" className="drop-shadow-[0_0_5px_rgba(232,70,168,0.8)]" />
-                  <circle cx="250" cy="10" r="4" fill="#e846a8" className="drop-shadow-[0_0_5px_rgba(232,70,168,0.8)]" />
-                  <circle cx="300" cy="5" r="4" fill="#e846a8" className="drop-shadow-[0_0_5px_rgba(232,70,168,0.8)]" />
-                </svg>
-              </div>
-            </div>
+        {/* Factor fingerprint */}
+        <Section title="Scrutiny factors">
+          <div className="mb-4 max-w-md">
+            <FactorBar contributions={{ edge: 28, event: 14, conflict: 20, cluster: 12, lag: 16, size: 10 }} height={12} />
           </div>
-        </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {FACTOR_ORDER.map((k) => (
+              <div key={k} className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-sm" style={{ background: FACTOR_COLORS[k] }} />
+                <span className="font-data text-xs text-content-muted">{FACTOR_LABELS[k]}</span>
+              </div>
+            ))}
+          </div>
+        </Section>
 
-        {/* Usage Guidelines */}
-        <div className="mt-16 card p-8">
-          <h3 className="text-3xl font-bold text-primary-400 mb-8 text-center">
-            Usage Guidelines
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Severity */}
+        <Section title="Severity">
+          <div className="grid grid-cols-3 gap-4">
+            {SEV.map((s) => (
+              <HexSwatch key={s.name} hex={s.hex} name={s.name} note={s.note} />
+            ))}
+          </div>
+        </Section>
+
+        {/* Typography */}
+        <Section title="Typography">
+          <div className="space-y-4">
             <div>
-              <h4 className="text-xl font-bold text-secondary-400 mb-4">Typography</h4>
-              <ul className="space-y-2 text-neutral-300">
-                <li>• Primary Text: Use <code className="text-primary-400">neutral-100</code> or <code className="text-primary-400">neutral-200</code></li>
-                <li>• Secondary Text: Use <code className="text-primary-400">neutral-400</code></li>
-                <li>• Accent Text: Use <code className="text-primary-400">primary-400</code> or <code className="text-primary-400">secondary-400</code></li>
-                <li>• Headings: Use <code className="text-primary-400">primary-300</code> or <code className="text-primary-400">secondary-300</code></li>
-              </ul>
+              <Eyebrow>font-display · Newsreader serif</Eyebrow>
+              <p className="mt-1 font-display text-4xl font-medium text-content">Congressional Oversight</p>
             </div>
             <div>
-              <h4 className="text-xl font-bold text-secondary-400 mb-4">Interactive Elements</h4>
-              <ul className="space-y-2 text-neutral-300">
-                <li>• Primary Buttons: <code className="text-primary-400">primary-400</code> background</li>
-                <li>• Secondary Buttons: <code className="text-primary-400">secondary-400</code> background</li>
-                <li>• Links: <code className="text-primary-400">primary-400</code> with hover effects</li>
-                <li>• Focus States: Use <code className="text-primary-400">primary-400</code> or <code className="text-primary-400">secondary-400</code></li>
-              </ul>
+              <Eyebrow>font-ui · Public Sans</Eyebrow>
+              <p className="mt-1 font-ui text-lg text-content-muted">The quick brown fox jumps over the lazy dog.</p>
+            </div>
+            <div>
+              <Eyebrow>font-data · IBM Plex Mono</Eyebrow>
+              <p className="mt-1 font-data text-lg tabular-nums text-content">$1,234,567 · 42.7% · +18.3</p>
             </div>
           </div>
-        </div>
+        </Section>
+
+        {/* Components */}
+        <Section title="Buttons">
+          <div className="flex flex-wrap gap-3">
+            <button className="btn-primary">Primary</button>
+            <button className="btn-secondary">Secondary</button>
+            <button className="btn-outline">Outline</button>
+            <button className="btn-ghost">Ghost</button>
+          </div>
+        </Section>
+
+        <Section title="Inputs">
+          <div className="grid max-w-lg gap-3">
+            <input className="input-field" placeholder="Text input…" />
+            <select className="input-field">
+              <option>Select option</option>
+            </select>
+          </div>
+        </Section>
+
+        <Section title="Stat tiles">
+          <div className="flex flex-wrap gap-8">
+            <StatTile label="Total Trades" value="56,205" />
+            <StatTile label="Highest Score" value="87.4" tone="brass" />
+            <StatTile label="Members Flagged" value="23" tone="flag" />
+            <StatTile label="Avg Alpha 30d" value="+4.2%" tone="accent" />
+          </div>
+        </Section>
+
+        <Section title="Tabs">
+          <Tabs
+            items={[
+              { id: 'a', label: 'Leaderboard' },
+              { id: 'b', label: 'Clusters' },
+              { id: 'c', label: 'Conflicts' },
+            ]}
+            active={tab}
+            onChange={setTab}
+          />
+        </Section>
+
+        <Section title="Meters">
+          <div className="max-w-md space-y-3">
+            <Meter value={0.85} />
+            <Meter value={0.55} color={partyMeta('R').color} />
+            <Meter value={0.3} color={FACTOR_COLORS.lag} />
+          </div>
+        </Section>
+
+        <Section title="Spinner">
+          <Spinner label="Computing signals" className="h-32" />
+        </Section>
+
+        <footer className="mt-8 border-t border-line pt-4">
+          <p className="font-data text-[10px] leading-relaxed text-content-faint">
+            One system, two themes. Use the semantic tokens (bg-surface, text-content, border-line,
+            text-accent) and the shared components in <span className="text-content">components/ui</span> for
+            any new UI — never raw palette colors.
+          </p>
+        </footer>
       </div>
     </div>
   );

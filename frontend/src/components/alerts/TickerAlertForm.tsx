@@ -51,8 +51,11 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
     setSearchResults(filtered);
   };
 
+  // searchStocks is a pure filter over a static list; intentionally re-run only
+  // when the query changes (adding it as a dep would re-run every render).
   useEffect(() => {
     searchStocks(searchQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   useEffect(() => {

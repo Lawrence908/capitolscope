@@ -154,6 +154,45 @@ class TestContainment:
         assert resolve_ticker_by_containment("Cigna 3.2% Notes Due 2027", ni, cidx) is None
 
 
+class TestSecurityMatcher:
+    """The shared resolver used by both the backfill and live ingestion."""
+
+    def _matcher(self):
+        from domains.securities.matching import SecurityMatcher
+        # Small in-memory universe avoids any network/Polygon load.
+        universe_meta = {
+            "AAPL": {"name": "Apple Inc.", "active": True, "asset_type": "STOCK"},
+            "TSM": {"name": "Taiwan Semiconductor Manufacturing Company", "active": True, "asset_type": "STOCK"},
+            "MON": {"name": "Monument Circle Acquisition Corp.", "active": True, "asset_type": "STOCK"},
+        }
+        return SecurityMatcher(universe_meta=universe_meta)
+
+    def test_name_and_containment(self):
+        m = self._matcher()
+        assert m.resolve(None, "Apple Inc. Common Stock") == ("AAPL", "name")
+        assert m.resolve(None, "Taiwan Semiconductor") == ("TSM", "containment")
+
+    def test_fixed_income_never_matches(self):
+        m = self._matcher()
+        assert m.resolve(None, "Apple Inc 3.25% Notes Due 2029") == (None, "fixed_income")
+        # Not even via a stored ticker.
+        assert m.resolve("AAPL", "Apple Inc 3.25% Notes Due 2029") == (None, "fixed_income")
+
+    def test_reused_ticker_name_is_not_matched(self):
+        m = self._matcher()
+        # "Monsanto" -> MON, but MON is now an unrelated active SPAC: must not match.
+        assert m.resolve("MON", "Monsanto Company") == (None, "unresolved")
+
+    def test_embedded_fund_symbol(self):
+        m = self._matcher()
+        assert m.resolve(None, "BLF FedFund TDDXX") == ("TDDXX", "fund")
+
+    def test_security_seed_flags_fund_and_delisted(self):
+        m = self._matcher()
+        assert m.security_seed("TDDXX", "fund", "BLF FedFund")["asset_type_code"] == "MF"
+        assert m.security_seed("AAPL", "name")["is_active"] is True
+
+
 class TestFundTicker:
     def test_extracts_embedded_fund_symbol(self):
         from domains.securities.ticker_cleaning import extract_fund_ticker

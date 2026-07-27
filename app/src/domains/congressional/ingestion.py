@@ -28,6 +28,7 @@ from domains.congressional.models import CongressMember, CongressionalTrade
 from domains.congressional.schemas import TradeOwner, FilingStatus, TransactionType
 from domains.congressional.data_quality import DataQualityEnhancer, QualityReport, ImportStatistics
 from domains.securities.models import Security
+from domains.securities.matching import SecurityMatcher
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +106,9 @@ class CongressionalDataIngestion:
         self.data_quality = DataQualityEnhancer()
         self.statistics = ImportStatistics()
         self.external_session = session  # For sync operations
+        # Built lazily on first use (loads the securities universe + indexes):
+        # the validated ticker/security resolver shared with the weekly backfill.
+        self._matcher: Optional[SecurityMatcher] = None
         # Error collector
         self.error_counts = {}
         self.error_samples = {}
@@ -133,15 +137,25 @@ class CongressionalDataIngestion:
     def _load_ticker_database(self):
         """Load known ticker symbols from securities table."""
         with db_manager.sync_session_scope() as session:  # Use sync session scope
-            securities = session.query(Security).filter(Security.is_active == True).all()
-            
+            # Include delisted (is_active=False) securities so historical matches
+            # (Twitter, United Technologies, ...) can link to their seeded rows.
+            securities = session.query(Security).all()
+
             self.known_tickers = {s.ticker.upper() for s in securities}
             self.ticker_to_security = {s.ticker.upper(): s for s in securities}
-            
+
             # Also store by name for fuzzy matching
             self.company_names = {s.name.upper(): s.ticker.upper() for s in securities}
-            
+
         logger.info(f"Loaded {len(self.known_tickers)} known tickers")
+
+    @property
+    def matcher(self) -> SecurityMatcher:
+        """Validated ticker/security resolver (shared with the backfill), built
+        on first access so lightweight importer uses don't pay the load cost."""
+        if self._matcher is None:
+            self._matcher = SecurityMatcher()
+        return self._matcher
     
     def _load_member_mapping(self):
         """Load congress member name to ID mapping."""
@@ -568,20 +582,22 @@ class CongressionalDataIngestion:
                 self.record_error('member_not_found', trade_record.doc_id, trade_record.member_name, 'Could not resolve member', trade_record.source_line)
                 return None
                 
-            # Enhance ticker extraction
+            # Descriptive extraction — kept only for the asset_name / asset_type
+            # metadata; the ticker it guesses is NOT trusted (greedy regex).
             ticker_result = self.data_quality.extract_ticker(trade_record.raw_asset_description)
-            
+
+            # Authoritative ticker + security via the validated matcher (same
+            # resolver the weekly backfill uses: universe-validated, alias/
+            # containment, fixed-income and reused-ticker guards).
+            symbol, _method = self.matcher.resolve(None, trade_record.raw_asset_description)
+            security_id = self._resolve_security_id(symbol) if symbol else None
+
             # Normalize amount
             amount_result = self.data_quality.normalize_amount(trade_record.amount)
-            
+
             # Normalize owner
             owner_result = self.data_quality.normalize_owner(trade_record.owner)
-            
-            # Resolve security ID
-            security_id = None
-            if ticker_result.ticker:
-                security_id = self._resolve_security_id(ticker_result.ticker)
-                
+
             # Create processed trade
             processed_trade = ProcessedTrade(
                 doc_id=trade_record.doc_id,
@@ -597,11 +613,11 @@ class CongressionalDataIngestion:
                 filing_status=self._parse_filing_status(trade_record.filing_status),
                 comment=trade_record.comment,
                 cap_gains_over_200=trade_record.cap_gains_over_200,
-                ticker=ticker_result.ticker,
+                ticker=symbol,
                 asset_name=ticker_result.asset_name,
                 asset_type=ticker_result.asset_type,
                 security_id=security_id,
-                ticker_confidence=ticker_result.confidence,
+                ticker_confidence=Decimal('0.99') if symbol else Decimal('0.0'),
                 amount_confidence=amount_result.confidence,
                 parsed_successfully=True,
                 parsing_notes=ticker_result.notes + amount_result.notes + owner_result.notes

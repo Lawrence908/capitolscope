@@ -21,6 +21,8 @@ services:
     depends_on:
       capitolscope-redis:
         condition: service_healthy
+      capitolscope-postgres:
+        condition: service_healthy
     env_file:
       - .env
     working_dir: /app/src
@@ -65,6 +67,30 @@ services:
       retries: 5
       start_period: 5s
 
+  capitolscope-postgres:
+    image: postgres:17-alpine
+    container_name: capitolscope-postgres
+    restart: unless-stopped
+    networks:
+      - capitolscope-internal
+    environment:
+      POSTGRES_USER: capitolscope
+      POSTGRES_PASSWORD: ${CAPITOLSCOPE_DB_PASSWORD}
+      POSTGRES_DB: capitolscope
+    ports:
+      # localhost-only bind for psql/pg_dump admin; not reachable off-host
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - capitolscope_postgres_data:/var/lib/postgresql/data
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U capitolscope -d capitolscope"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   capitolscope-worker:
     build:
       context: .
@@ -79,6 +105,8 @@ services:
       - ./legacy:/app/legacy
     depends_on:
       capitolscope-redis:
+        condition: service_healthy
+      capitolscope-postgres:
         condition: service_healthy
       capitolscope:
         condition: service_healthy
@@ -120,6 +148,8 @@ services:
       - ./legacy:/app/legacy
     depends_on:
       capitolscope-redis:
+        condition: service_healthy
+      capitolscope-postgres:
         condition: service_healthy
       capitolscope:
         condition: service_healthy
@@ -185,3 +215,4 @@ networks:
 
 volumes:
   capitolscope_redis_data:
+  capitolscope_postgres_data:

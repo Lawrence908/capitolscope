@@ -41,6 +41,35 @@ CORPORATE_FORM_SUFFIXES = {
 _TICKER_RE = re.compile(r"^[A-Z][A-Z0-9.\-]{0,6}$")
 _PAREN_TICKER_RE = re.compile(r"\(([A-Z]{1,6}(?:[.\-][A-Z]{1,3})?)\)")
 
+# Open-end mutual & money-market fund symbols are 5 letters ending in X by FINRA
+# convention (VFIAX, TDDXX). They are not in the listed-equity/OTC universe, but
+# the symbol embedded in the disclosure text is itself authoritative.
+_FUND_TICKER_RE = re.compile(r"\b([A-Z]{4}X)\b")
+# Fund-context cue: only trust a 5-letter/X token when the text reads like a fund.
+_FUND_CONTEXT_RE = re.compile(
+    r"\b(fund|fedfund|money market|money mkt|portfolio|treasury|income|"
+    r"index|trust|shares|admiral|investor|institutional)\b",
+    re.I,
+)
+# Common 5-letter words ending in X that are not fund symbols.
+_FUND_STOPWORDS = {"INDEX", "XEROX", "FEDEX", "RELAX", "LATEX", "ANNEX", "HELIX"}
+
+
+def extract_fund_ticker(text: Optional[str]) -> Optional[str]:
+    """Return an embedded 5-letter mutual/money-market fund symbol (…X), or None.
+
+    Guards against false positives (the word "INDEX" also fits …X): the text must
+    read like a fund, and the symbol is the *last* qualifying token ("BLF FedFund
+    TDDXX" -> TDDXX; funds place the symbol at the end), excluding common words.
+    """
+    if not text:
+        return None
+    up = text.upper()
+    if not _FUND_CONTEXT_RE.search(text):
+        return None
+    candidates = [m for m in _FUND_TICKER_RE.findall(up) if m not in _FUND_STOPWORDS]
+    return candidates[-1] if candidates else None
+
 
 def looks_like_ticker(token: str) -> bool:
     """Cheap structural check before the (authoritative) universe lookup."""

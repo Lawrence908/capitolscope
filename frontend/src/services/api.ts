@@ -251,22 +251,6 @@ class APIClient {
     return response.data;
   }
 
-  async getMemberTrades(
-    memberId: number,
-    page: number = 1,
-    perPage: number = 50
-  ): Promise<PaginatedResponse<CongressionalTrade>> {
-    const params = new URLSearchParams({
-      page: page.toString(),
-      per_page: perPage.toString(),
-    });
-
-    const response = await this.client.get(
-      `/api/v1/congressional/members/${memberId}/trades?${params}`
-    );
-    return response.data;
-  }
-
   // Data Quality
   async getSecurityCoverage(): Promise<import('../types').SecurityCoverage> {
     const response = await this.client.get('/api/v1/trades/data-quality/coverage');
@@ -275,7 +259,7 @@ class APIClient {
 
   async getDataQualityStats(): Promise<DataQualityStats> {
     const response = await this.client.get('/api/v1/trades/data-quality/stats');
-    return response.data;
+    return response.data.data;
   }
 
   // Search

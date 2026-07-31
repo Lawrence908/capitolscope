@@ -14,6 +14,28 @@ const pct = (n: number | null | undefined, signed = false): string => {
 const returnTone = (n: number | null | undefined): string =>
   n == null ? 'text-content' : n >= 0 ? 'text-accent' : 'text-sev-flag';
 
+/** Map a raw disclosure transaction code (P/S/E/…) to a readable label. */
+const txnLabel = (t: string | null | undefined): string => {
+  switch ((t || '').toUpperCase()) {
+    case 'P': return 'Purchase';
+    case 'S': return 'Sale';
+    case 'S (PARTIAL)': return 'Partial sale';
+    case 'E': return 'Exchange';
+    default: return t || '—';
+  }
+};
+
+/** Render a trade's amount from the exact value or the disclosed cents range. */
+const tradeAmount = (t: CongressionalTrade): string => {
+  if (t.amount_exact != null) return fmtMoney(t.amount_exact / 100);
+  if (t.amount_min != null && t.amount_max != null) {
+    return `${fmtMoney(t.amount_min / 100)} – ${fmtMoney(t.amount_max / 100)}`;
+  }
+  if (t.amount_min != null) return fmtMoney(t.amount_min / 100);
+  if (t.estimated_value != null) return fmtMoney(t.estimated_value / 100);
+  return '—';
+};
+
 const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="rounded-sm bg-surface-inset px-2 py-0.5 font-data text-[11px] uppercase tracking-[0.1em] text-content-muted">
     {children}
@@ -23,7 +45,7 @@ const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 const MemberProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [member, setMember] = useState<CongressMember | null>(null);
-  const [recentTrades] = useState<CongressionalTrade[]>([]);
+  const [recentTrades, setRecentTrades] = useState<CongressionalTrade[]>([]);
   const [portfolio, setPortfolio] = useState<MirrorHoldingsResult | null>(null);
   const [portfolioLoading, setPortfolioLoading] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -64,6 +86,23 @@ const MemberProfile: React.FC = () => {
       })
       .finally(() => {
         if (!cancelled) setPortfolioLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    apiClient
+      .getTrades({ member_ids: [id], sort_by: 'transaction_date', sort_order: 'desc' }, 1, 10)
+      .then((data) => {
+        if (!cancelled) setRecentTrades(data.items ?? []);
+      })
+      .catch((err) => {
+        console.error('Error fetching member trades:', err);
+        if (!cancelled) setRecentTrades([]);
       });
     return () => {
       cancelled = true;
@@ -156,17 +195,20 @@ const MemberProfile: React.FC = () => {
             <div className="divide-y divide-line">
               {recentTrades.map((trade) => (
                 <div key={trade.id} className="flex items-center justify-between px-4 py-3">
-                  <div className="flex-1">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-data font-medium text-content">{trade.ticker || 'Unknown'}</span>
-                      <span className="font-ui text-xs capitalize text-content-faint">{trade.transaction_type}</span>
+                      <span className="font-ui text-xs text-content-faint">{txnLabel(trade.transaction_type)}</span>
                     </div>
+                    {trade.asset_name ? (
+                      <div className="mt-0.5 truncate font-ui text-[11px] text-content-muted">{trade.asset_name}</div>
+                    ) : null}
                     <div className="mt-0.5 font-data text-[11px] tabular-nums text-content-faint">
                       {trade.transaction_date ? new Date(trade.transaction_date).toLocaleDateString() : "—"}
                     </div>
                   </div>
                   <div className="ml-2 text-right font-data text-sm tabular-nums text-content">
-                    {trade.estimated_value ? fmtMoney(trade.estimated_value / 100) : '—'}
+                    {tradeAmount(trade)}
                   </div>
                 </div>
               ))}

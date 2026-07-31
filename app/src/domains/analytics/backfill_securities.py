@@ -18,7 +18,7 @@ Idempotent: re-running only fills gaps and fixes mismatches.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -27,9 +27,7 @@ import re
 
 from domains.congressional.models import CongressionalTrade
 from domains.securities.models import Security
-from domains.securities.ticker_cleaning import resolve_ticker
-from domains.securities.name_matching import build_name_index, resolve_ticker_by_name
-from domains.securities.universe import fetch_active_us_tickers
+from domains.securities.matching import SecurityMatcher
 
 logger = logging.getLogger(__name__)
 
@@ -38,14 +36,40 @@ logger = logging.getLogger(__name__)
 # rather than clearing them as junk.
 _FUND_RE = re.compile(r"^[A-Z]{5}X$")
 
+# Backfill stat key per resolution method returned by SecurityMatcher.resolve.
+_METHOD_STAT = {
+    "name": "name_matched",
+    "alias": "alias_matched",
+    "containment": "containment_matched",
+    "fund": "fund_matched",
+}
 
-def backfill_security_matching_sync(session: Session, batch_size: int = 2000) -> Dict[str, Any]:
-    universe_meta = fetch_active_us_tickers()
-    universe = set(universe_meta.keys())
-    # Company-name -> ticker index (recovers un-tickered trades that are plain
-    # company names, e.g. "NextEra Energy, Inc").
-    name_index = build_name_index(universe_meta)
-    logger.info("Loaded active universe: %d symbols, %d name keys", len(universe), len(name_index))
+
+def backfill_security_matching_sync(
+    session: Session,
+    batch_size: int = 2000,
+    dry_run: bool = False,
+    matcher: Optional[SecurityMatcher] = None,
+) -> Dict[str, Any]:
+    """Re-resolve ``security_id`` for every congressional trade.
+
+    Resolution is delegated to :class:`SecurityMatcher` (the same resolver live
+    ingestion uses, so the two paths cannot drift). Pass a prebuilt ``matcher``
+    to reuse its loaded universe/indexes; otherwise one is built here.
+
+    With ``dry_run=True`` nothing is written: the same resolution waterfall runs
+    and the stats report what *would* match, which is the projected match-rate
+    accuracy measure (no securities are seeded, no trades are mutated).
+    """
+    if matcher is None:
+        matcher = SecurityMatcher()
+
+    # We load every trade once and then commit in batches inside the loop. With
+    # the default expire_on_commit, each commit expires all ~56k already-loaded
+    # trade objects, so the next trade.<attr> access reloads that row with its
+    # own single-row SELECT -> a millions-of-round-trips N+1 against the remote
+    # DB. This is a single-writer backfill, so keep the loaded rows un-expired.
+    session.expire_on_commit = False
 
     # Preload existing securities: TICKER -> id
     sec_map: Dict[str, Any] = {}
@@ -62,29 +86,28 @@ def backfill_security_matching_sync(session: Session, batch_size: int = 2000) ->
         "ticker_normalised": 0,
         "ticker_cleared_as_junk": 0,
         "name_matched": 0,
+        "alias_matched": 0,
+        "containment_matched": 0,
+        "fund_matched": 0,
         "unresolved": 0,
     }
 
     for i, trade in enumerate(trades, 1):
-        symbol = resolve_ticker(trade.ticker, trade.raw_asset_description, universe)
-
-        # Fallback: recover a ticker from the company name for un-tickered trades.
-        if not symbol:
-            name_symbol = resolve_ticker_by_name(trade.raw_asset_description, name_index)
-            if name_symbol:
-                symbol = name_symbol
-                stats["name_matched"] += 1
+        symbol, method = matcher.resolve(trade.ticker, trade.raw_asset_description)
+        if method in _METHOD_STAT:
+            stats[_METHOD_STAT[method]] += 1
 
         if symbol:
+            if dry_run:
+                # Count what would match without seeding or mutating anything.
+                if (trade.security_id is None
+                        or (trade.ticker or "").strip().upper() != symbol):
+                    stats["security_id_set"] += 1
+                continue
+
             sid = sec_map.get(symbol)
             if sid is None:
-                meta = universe_meta.get(symbol, {})
-                sec = Security(
-                    ticker=symbol,
-                    name=(meta.get("name") or trade.asset_name or symbol)[:200],
-                    asset_type_code=meta.get("asset_type", "STOCK"),
-                    currency="USD",
-                )
+                sec = Security(currency="USD", **matcher.security_seed(symbol, method, trade.asset_name))
                 session.add(sec)
                 session.flush()  # obtain generated id
                 sid = sec.id
@@ -99,6 +122,8 @@ def backfill_security_matching_sync(session: Session, batch_size: int = 2000) ->
                 stats["ticker_normalised"] += 1
         else:
             stats["unresolved"] += 1
+            if dry_run:
+                continue
             # Enforce the invariant "ticker column holds a validated symbol or
             # null". Resolution already failed against the parenthetical and the
             # listed universe, so a leftover ticker is name-word noise (GROUP,
@@ -117,9 +142,18 @@ def backfill_security_matching_sync(session: Session, batch_size: int = 2000) ->
                         stats["security_id_cleared"] = stats.get("security_id_cleared", 0) + 1
                     stats["ticker_cleared_as_junk"] += 1
 
-        if i % batch_size == 0:
+        if not dry_run and i % batch_size == 0:
             session.commit()
             logger.info("backfill progress: %d/%d", i, len(trades))
+
+    if dry_run:
+        stats["would_match_total"] = stats["trades_scanned"] - stats["unresolved"]
+        stats["match_rate_pct"] = round(
+            100.0 * stats["would_match_total"] / max(1, stats["trades_scanned"]), 1
+        )
+        logger.info("Security matching DRY RUN: %s", stats)
+        session.rollback()
+        return stats
 
     session.commit()
     logger.info("Security matching backfill complete: %s", stats)

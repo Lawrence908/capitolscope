@@ -73,10 +73,17 @@ def backfill_prices_sync(
     for idx, ticker in enumerate(tickers, 1):
         security_id = mapping[ticker]
         try:
+            # Only pull the dates inside the window we're about to (re)fetch. The
+            # daily refresh backfills ~10 days, so reading a ticker's entire
+            # multi-year history here just to dedupe it was pure egress (this was
+            # the single biggest daily_prices read on the wire).
             existing = {
                 r[0] for r in session.execute(
-                    text("SELECT price_date FROM daily_prices WHERE security_id = :sid"),
-                    {"sid": security_id},
+                    text(
+                        "SELECT price_date FROM daily_prices "
+                        "WHERE security_id = :sid AND price_date >= CAST(:start AS DATE)"
+                    ),
+                    {"sid": security_id, "start": start},
                 ).fetchall()
             }
             hist = yf.Ticker(ticker).history(start=start, end=end, auto_adjust=False)

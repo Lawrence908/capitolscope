@@ -14,11 +14,11 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import time
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 from fastapi import APIRouter, Query
 
+from core.analytics_cache import cached as _shared_cached
 from core.database import get_sync_db_session
 from core.responses import success_response
 
@@ -26,60 +26,15 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# name -> (expires_at, payload)
-_CACHE: Dict[str, Tuple[float, Any]] = {}
-_TTL_SECONDS = 1800  # 30 minutes
-
-# Each signal engine runs several aggregate queries and takes ~10s cold; a burst
-# of visitors hitting an expired key would otherwise each launch its own compute
-# and contend for CPU + the sync DB pool, ballooning every one of them past the
-# frontend's 30s timeout. A per-key lock collapses concurrent cold requests into
-# a single compute; the _REFRESHING set does the same for background refreshes.
-_LOCKS: Dict[str, asyncio.Lock] = {}
-_REFRESHING: set[str] = set()
-
-
-def _store(key: str, data: Any) -> None:
-    _CACHE[key] = (time.time() + _TTL_SECONDS, data)
-
-
-def _refresh_in_background(key: str, fn) -> None:
-    """Recompute an expired key without blocking the caller (single-flight)."""
-    if key in _REFRESHING:
-        return
-    _REFRESHING.add(key)
-
-    async def _run():
-        try:
-            _store(key, await asyncio.to_thread(fn))
-        except Exception:
-            logger.exception("background refresh failed for analytics key %s", key)
-        finally:
-            _REFRESHING.discard(key)
-
-    asyncio.create_task(_run())
+# Congressional disclosures only change once a day (the sync task runs daily), so
+# a long soft TTL keeps these whole-table aggregates off the wire without serving
+# stale numbers: 6h soft expiry, shared across workers and restarts via Redis.
+_TTL_SECONDS = 6 * 60 * 60
 
 
 async def _cached(key: str, fn) -> Any:
-    hit = _CACHE.get(key)
-    if hit and hit[0] > time.time():
-        return hit[1]  # fresh
-    if hit:
-        # Stale-while-revalidate: serve the stale payload instantly and refresh
-        # in the background so nobody waits on the recompute after the first warm.
-        _refresh_in_background(key, fn)
-        return hit[1]
-
-    # Cold (no cached value yet): compute under a per-key lock so concurrent
-    # callers share the single in-flight compute instead of stampeding.
-    lock = _LOCKS.setdefault(key, asyncio.Lock())
-    async with lock:
-        hit = _CACHE.get(key)
-        if hit and hit[0] > time.time():
-            return hit[1]  # filled while we waited on the lock
-        data = await asyncio.to_thread(fn)
-        _store(key, data)
-        return data
+    """Shared, Redis-backed, stale-while-revalidate cache (see core.analytics_cache)."""
+    return await _shared_cached(key, fn, ttl=_TTL_SECONDS, namespace="analytics")
 
 
 @router.get("/scrutiny", summary="Composite Scrutiny Score leaderboard")
@@ -284,8 +239,10 @@ async def warm_caches() -> None:
             logger.warning("analytics cache warm failed for %s: %s", key, exc)
 
 
-async def cache_warmer_loop(interval: int = 1500) -> None:
-    """Refresh the dashboard caches a little before the 30-minute TTL expires."""
+async def cache_warmer_loop(interval: int = 4 * 60 * 60) -> None:
+    """Keep the dashboard caches warm just inside the 6h soft TTL. Warming every
+    4h (vs the old 25 min) cuts the full-table scans that dominate DB egress by
+    ~10x while still refreshing well within a day of new disclosures landing."""
     while True:
         await warm_caches()
         await asyncio.sleep(interval)

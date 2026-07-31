@@ -64,6 +64,13 @@ def backfill_security_matching_sync(
     if matcher is None:
         matcher = SecurityMatcher()
 
+    # We load every trade once and then commit in batches inside the loop. With
+    # the default expire_on_commit, each commit expires all ~56k already-loaded
+    # trade objects, so the next trade.<attr> access reloads that row with its
+    # own single-row SELECT -> a millions-of-round-trips N+1 against the remote
+    # DB. This is a single-writer backfill, so keep the loaded rows un-expired.
+    session.expire_on_commit = False
+
     # Preload existing securities: TICKER -> id
     sec_map: Dict[str, Any] = {}
     for sec in session.execute(select(Security)).scalars():

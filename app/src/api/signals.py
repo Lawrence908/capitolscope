@@ -17,12 +17,12 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import time
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 
+from core.analytics_cache import cached as _shared_cached
 from core.config import get_settings
 from core.database import get_sync_db_session
 from core.responses import success_response
@@ -34,8 +34,9 @@ router = APIRouter()
 # disclosed-amount midpoint, in dollars
 _NOTIONAL_SQL = "COALESCE(t.amount_exact, (t.amount_min + t.amount_max) / 2.0, t.amount_min, t.amount_max, 0)"
 
-_CACHE: Dict[str, Tuple[float, Any]] = {}
-_TTL = 900  # 15 minutes
+# Disclosures update daily; a 6h soft TTL (shared across workers/restarts via
+# Redis) keeps these whole-table aggregates off the wire without going stale.
+_TTL = 6 * 60 * 60
 
 
 # ---------------------------------------------------------------- auth
@@ -49,13 +50,8 @@ async def require_api_key(x_api_key: Optional[str] = Header(None, alias="X-API-K
 
 
 async def _cached(key: str, fn):
-    now = time.time()
-    hit = _CACHE.get(key)
-    if hit and hit[0] > now:
-        return hit[1]
-    data = await asyncio.to_thread(fn)
-    _CACHE[key] = (now + _TTL, data)
-    return data
+    """Shared, Redis-backed, stale-while-revalidate cache (see core.analytics_cache)."""
+    return await _shared_cached(key, fn, ttl=_TTL, namespace="signals")
 
 
 def _now_iso() -> str:
@@ -384,8 +380,11 @@ async def warm_caches() -> None:
         logger.warning("signals cache warm failed: %s", exc)
 
 
-async def cache_warmer_loop(interval: int = 600) -> None:
-    """Refresh the heavy caches a little before the 15-minute TTL expires."""
+async def cache_warmer_loop(interval: int = 4 * 60 * 60) -> None:
+    """Keep the heavy caches warm just inside the 6h soft TTL. Warming every 4h
+    (vs the old 10 min) is the single biggest cut to Supabase egress: each warm
+    cycle full-scans congressional_trades, and external pollers (Zeus/canary)
+    now read the shared warm value instead of triggering their own recompute."""
     while True:
         await warm_caches()
         await asyncio.sleep(interval)

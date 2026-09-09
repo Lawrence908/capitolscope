@@ -58,8 +58,8 @@ services:
       '
     volumes:
       - capitolscope_redis_data:/data
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+    # Not watchtower-enabled: stateful, and it is the Celery broker for the
+    # worker and scheduler. Update deliberately rather than at 4 AM.
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-prodpassword}", "ping"]
       interval: 10s

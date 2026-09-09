@@ -8,6 +8,15 @@ data access operations. Supports CAP-10 (Transaction List) and CAP-11 (Member Pr
 import logging
 logger = logging.getLogger(__name__)
 
+def _enum_values(items):
+    """Normalize a list of enum members or raw strings to their string values.
+
+    When the trades query model is bound from query params via ``Query()``,
+    enum list-fields (transaction_types, parties, ...) may arrive as plain
+    strings rather than Enum members, so ``.value`` can't be assumed.
+    """
+    return [getattr(i, "value", i) for i in items]
+
 from datetime import date, datetime, timedelta
 from typing import List, Optional, Dict, Any, Tuple
 from decimal import Decimal
@@ -136,10 +145,10 @@ class CongressMemberRepository(CRUDBase[CongressMember, CongressMemberCreate, Co
         
         # Apply filters
         if query.parties:
-            stmt = stmt.where(CongressMember.party.in_([p.value for p in query.parties]))
+            stmt = stmt.where(CongressMember.party.in_(_enum_values(query.parties)))
         
         if query.chambers:
-            stmt = stmt.where(CongressMember.chamber.in_([c.value for c in query.chambers]))
+            stmt = stmt.where(CongressMember.chamber.in_(_enum_values(query.chambers)))
         
         if query.states:
             stmt = stmt.where(CongressMember.state.in_(query.states))
@@ -382,10 +391,10 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
             stmt = stmt.where(or_(*name_filters))
         
         if query.parties:
-            stmt = stmt.where(CongressMember.party.in_([p.value for p in query.parties]))
+            stmt = stmt.where(CongressMember.party.in_(_enum_values(query.parties)))
         
         if query.chambers:
-            stmt = stmt.where(CongressMember.chamber.in_([c.value for c in query.chambers]))
+            stmt = stmt.where(CongressMember.chamber.in_(_enum_values(query.chambers)))
         
         if query.states:
             stmt = stmt.where(CongressMember.state.in_(query.states))
@@ -397,10 +406,10 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
             stmt = stmt.where(CongressionalTrade.asset_type.in_(query.asset_types))
         
         if query.transaction_types:
-            stmt = stmt.where(CongressionalTrade.transaction_type.in_([t.value for t in query.transaction_types]))
+            stmt = stmt.where(CongressionalTrade.transaction_type.in_(_enum_values(query.transaction_types)))
         
         if query.owners:
-            stmt = stmt.where(CongressionalTrade.owner.in_([o.value for o in query.owners]))
+            stmt = stmt.where(CongressionalTrade.owner.in_(_enum_values(query.owners)))
         
         # Date filters
         if query.transaction_date_from:
@@ -445,9 +454,9 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
         if query.member_ids:
             count_stmt = count_stmt.where(CongressionalTrade.member_id.in_(query.member_ids))
         if query.parties:
-            count_stmt = count_stmt.where(CongressMember.party.in_([p.value for p in query.parties]))
+            count_stmt = count_stmt.where(CongressMember.party.in_(_enum_values(query.parties)))
         if query.chambers:
-            count_stmt = count_stmt.where(CongressMember.chamber.in_([c.value for c in query.chambers]))
+            count_stmt = count_stmt.where(CongressMember.chamber.in_(_enum_values(query.chambers)))
         if query.states:
             count_stmt = count_stmt.where(CongressMember.state.in_(query.states))
         if query.tickers:
@@ -455,9 +464,9 @@ class CongressionalTradeRepository(CRUDBase[CongressionalTrade, CongressionalTra
         if query.asset_types:
             count_stmt = count_stmt.where(CongressionalTrade.asset_type.in_(query.asset_types))
         if query.transaction_types:
-            count_stmt = count_stmt.where(CongressionalTrade.transaction_type.in_([t.value for t in query.transaction_types]))
+            count_stmt = count_stmt.where(CongressionalTrade.transaction_type.in_(_enum_values(query.transaction_types)))
         if query.owners:
-            count_stmt = count_stmt.where(CongressionalTrade.owner.in_([o.value for o in query.owners]))
+            count_stmt = count_stmt.where(CongressionalTrade.owner.in_(_enum_values(query.owners)))
         if query.transaction_date_from:
             count_stmt = count_stmt.where(CongressionalTrade.transaction_date >= query.transaction_date_from)
         if query.transaction_date_to:

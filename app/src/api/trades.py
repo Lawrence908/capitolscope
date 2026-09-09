@@ -2,7 +2,7 @@
 Congressional trades API endpoints.
 """
 
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query, Security, Path
 from fastapi.responses import JSONResponse, StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -39,7 +39,7 @@ router = APIRouter()
     }
 )
 async def get_trades(
-    filters: CongressionalTradeQuery = Depends(),
+    filters: Annotated[CongressionalTradeQuery, Query()],
     session: AsyncSession = Depends(get_db_session),
     # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
 ) -> ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]]:
@@ -799,62 +799,6 @@ async def test_trades(
     except Exception as e:
         logger.error(f"Test failed: {e}", exc_info=True)
         return create_response(data=None, error=str(e))
-
-
-@router.get(
-    "/member/{member_id}",
-    response_model=ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]],
-    responses={
-        200: {"description": "Member trades retrieved successfully"},
-        401: {"description": "Not authenticated"},
-        404: {"description": "Member not found"},
-        500: {"description": "Internal server error"}
-    }
-)
-async def get_member_trades(
-    member_id: str,  # Changed from int to str to accept UUID
-    session: AsyncSession = Depends(get_db_session),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
-) -> ResponseEnvelope[PaginatedResponse[CongressionalTradeSummary]]:
-    """
-    Get trades for a specific congress member.
-    
-    **Authenticated Feature**: Requires user authentication.
-    """
-    logger.info(f"Getting trades for member: member_id={member_id}, skip={skip}, limit={limit}")
-    
-    # Enhanced features for authenticated users
-    # premium_features = current_user.is_premium  # Temporarily disabled
-    
-    # TODO: Implement actual member trade retrieval from database
-    data = {
-        "member_id": member_id,
-        "trades": [],
-        "total": 0,
-        "skip": skip,
-        "limit": limit,
-        # "premium_features": premium_features,  # Temporarily disabled
-        # "user_tier": current_user.subscription_tier,  # Temporarily disabled
-    }
-    
-    # Create pagination meta
-    pagination_meta = PaginationMeta(
-        page=1,
-        per_page=limit,
-        total=0,
-        pages=1,
-        has_next=False,
-        has_prev=False
-    )
-    
-    paginated_data = PaginatedResponse(
-        items=[],
-        meta=pagination_meta
-    )
-    
-    return create_response(data=paginated_data)
 
 
 @router.get(

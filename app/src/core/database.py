@@ -59,7 +59,10 @@ class DatabaseManager:
                         "application_name": "capitolscope",
                         "timezone": "UTC",
                     },
-                    "ssl": "require" if "supabase.co" in settings.database_url else ("prefer" if settings.is_development else "require"),
+                    # Supabase requires SSL; a local/homelab Postgres container
+                    # serves plaintext, so "prefer" (try SSL, fall back) instead
+                    # of forcing "require" and failing the connection outright.
+                    "ssl": "require" if "supabase.co" in settings.database_url else "prefer",
                 }
             )
             

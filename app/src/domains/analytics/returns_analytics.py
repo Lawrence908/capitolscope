@@ -216,14 +216,23 @@ def compute_member_size_anomaly(session: Session, min_trades: int = 8) -> Dict[s
 
 def compute_disclosure_lag_stats(session: Session) -> Dict[str, Any]:
     """Overall filing-timeliness picture plus the worst late filers."""
-    lags = [r[0] for r in session.execute(text(
+    # Aggregate the overall stats in Postgres instead of streaming one row per
+    # trade back to the app just to average them (that raw pull was ~one row per
+    # trade x every warm cycle, and dominated this engine's egress).
+    overall = session.execute(text(
+        f"""
+        SELECT COUNT(*) AS total,
+               AVG(lag) AS avg_lag,
+               PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY lag) AS median_lag,
+               COUNT(*) FILTER (WHERE lag > {STOCK_ACT_LIMIT_DAYS}) AS late
+        FROM (
+            SELECT (notification_date - transaction_date) AS lag
+            FROM congressional_trades
+            WHERE notification_date IS NOT NULL AND transaction_date IS NOT NULL
+              AND notification_date >= transaction_date
+        ) s
         """
-        SELECT (notification_date - transaction_date) AS lag
-        FROM congressional_trades
-        WHERE notification_date IS NOT NULL AND transaction_date IS NOT NULL
-          AND notification_date >= transaction_date
-        """
-    )).fetchall()]
+    )).one()
 
     late_by_member = session.execute(text(
         f"""
@@ -242,12 +251,12 @@ def compute_disclosure_lag_stats(session: Session) -> Dict[str, Any]:
         """
     )).fetchall()
 
-    total = len(lags)
-    late = sum(1 for l in lags if l > STOCK_ACT_LIMIT_DAYS)
+    total = int(overall.total or 0)
+    late = int(overall.late or 0)
     return {
         "trades_with_lag": total,
-        "avg_lag_days": round(mean(lags), 1) if lags else None,
-        "median_lag_days": median(lags) if lags else None,
+        "avg_lag_days": round(float(overall.avg_lag), 1) if overall.avg_lag is not None else None,
+        "median_lag_days": int(overall.median_lag) if overall.median_lag is not None else None,
         "late_filings": late,
         "late_pct": round(late / total, 4) if total else None,
         "stock_act_limit_days": STOCK_ACT_LIMIT_DAYS,

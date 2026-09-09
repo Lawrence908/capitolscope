@@ -1,22 +1,24 @@
-// Hub Footer: single card-like button linking back to main site
-import './HubFooter.css';
-
+// Shared hub footer. Markup mirrors the canonical block in
+// daedalus-infra/proxy/shared-footer/footer.html and is styled solely by
+// /shared-footer/footer.css, linked from index.html. Do not style it locally:
+// a local copy forks the shared component and drifts.
 export function HubFooter() {
   return (
     <footer className="chrislawrence-footer">
-      <div className="container text-center">
-        <a
-          href="https://chrislawrence.ca"
-          className="hub-home-btn"
-          aria-label="Visit main site chrislawrence.ca to view all projects"
-        >
-          <span className="hub-home-text">Visit main site: chrislawrence.ca</span>
-        </a>
-      </div>
+      <a href="https://chrislawrence.ca" className="footer-home-link" aria-label="Back to chrislawrence.ca">
+        <img
+          src="/shared-footer/logo-portrait.png"
+          alt="Chris Lawrence"
+          className="footer-logo"
+          width={32}
+          height={32}
+          loading="lazy"
+          onError={(e) => e.currentTarget.remove()}
+        />
+        <span className="footer-home-link-text">Back to chrislawrence.ca</span>
+      </a>
     </footer>
   );
 }
 
 export default HubFooter;
-
-

@@ -235,6 +235,17 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         """Get the database URL for SQLAlchemy."""
+        # Explicit local provider (homelab Postgres container) wins outright, so
+        # the DB target no longer depends on whether SUPABASE_URL is populated.
+        if self.DATABASE_PROVIDER.lower() == "local" and self.DATABASE_HOST:
+            password = self.DATABASE_PASSWORD.get_secret_value() if self.DATABASE_PASSWORD else ""
+            return (
+                f"postgresql+asyncpg://"
+                f"{self.DATABASE_USER}:{quote_plus(password)}@"
+                f"{self.DATABASE_HOST}:{self.DATABASE_PORT}/"
+                f"{self.DATABASE_NAME}"
+            )
+
         # Use explicit provider setting
         if self.DATABASE_PROVIDER.lower() == "supabase" and self.SUPABASE_URL:
             # Extract project reference from Supabase URL
@@ -285,6 +296,19 @@ class Settings(BaseSettings):
     @property
     def database_url_sync(self) -> str:
         """Get the synchronous database URL for migrations."""
+        # Honor an explicit local provider BEFORE the Supabase fallback. This is
+        # the URL Alembic and the sync import scripts use; without this branch,
+        # migrations would keep targeting Supabase whenever SUPABASE_URL is set
+        # (a required field), even after the app has moved to local Postgres.
+        if self.DATABASE_PROVIDER.lower() == "local":
+            password = self.DATABASE_PASSWORD.get_secret_value() if self.DATABASE_PASSWORD else ""
+            return (
+                f"postgresql://"
+                f"{self.DATABASE_USER}:{quote_plus(password)}@"
+                f"{self.DATABASE_HOST}:{self.DATABASE_PORT}/"
+                f"{self.DATABASE_NAME}"
+            )
+
         # Prioritize Supabase if configured
         if self.SUPABASE_URL:
             # Extract project reference from Supabase URL

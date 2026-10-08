@@ -1,0 +1,16 @@
+{
+  "$schema": "https://paseo.sh/schemas/paseo.project.v1.json",
+  "worktree": {
+    "setup": [
+      "[ -f \"$PASEO_SOURCE_CHECKOUT_PATH/.env\" ] && cp \"$PASEO_SOURCE_CHECKOUT_PATH/.env\" .env || true",
+      "uv sync --frozen --extra dev",
+      "cd frontend && npm ci"
+    ]
+  },
+  "scripts": {
+    "verify": { "command": "cd frontend && node_modules/.bin/eslint . --max-warnings 0 && node_modules/.bin/tsc -p tsconfig.app.json --noEmit && cd .. && uv run --frozen pytest -m \"not db\" --cov-fail-under=30" },
+    "test": { "command": "uv run --frozen pytest -m \"not db\" --cov-fail-under=30" },
+    "lint": { "command": "cd frontend && node_modules/.bin/eslint . --max-warnings 0" },
+    "typecheck": { "command": "cd frontend && node_modules/.bin/tsc -p tsconfig.app.json --noEmit" }
+  }
+}

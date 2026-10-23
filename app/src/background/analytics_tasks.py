@@ -43,6 +43,29 @@ def refresh_member_committees(self):
 
 
 @celery_app.task(base=DatabaseTask, bind=True)
+def refresh_member_identities(self, apply: bool = False):
+    """Fill party/chamber/state/bioguide for members missing them, from
+    congress-legislators. Dry-run unless ``apply=True``; not on the beat
+    schedule (run by hand after reviewing a dry run)."""
+    _ensure_db()
+    from collections import Counter
+
+    from domains.congressional.member_enrichment import load_legislator_records, run_enrichment
+    current, historical = load_legislator_records()
+    from sqlalchemy import text
+    with get_sync_db_session() as session:
+        if not apply:
+            session.execute(text("SET TRANSACTION READ ONLY"))
+        summary = run_enrichment(session, current, historical, apply=apply)
+    results = summary["results"]
+    counts = dict(Counter(r.status for r in results))
+    trades = {s: sum(r.member.trade_count for r in results if r.status == s) for s in counts}
+    result = {"apply": apply, "members": counts, "trades": trades, "updated_rows": summary["updated_rows"]}
+    logger.info("refresh_member_identities done: %s", result)
+    return {"status": "success", "result": result, "timestamp": datetime.utcnow().isoformat()}
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
 def refresh_security_matching(self):
     """Weekly: re-resolve security_id for trades against the current universe."""
     _ensure_db()

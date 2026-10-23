@@ -76,3 +76,26 @@ def test_owner_and_government_security_code(rows):
 ])
 def test_parse_amount(raw, expected):
     assert parse_amount(raw) == expected
+
+
+# Older layout (2014-era): single-digit dates, garbled glyph case in labels and
+# tickers, ticker wrapped onto its own line, numeric line ids.
+OLD = """Name: Mr. Lamar Smith
+apple Inc. (aaPL) S 12/10/2013 01/2/2014 $1,001 - $15,000
+FILINg STaTUS: New
+SUbHoLdINg oF: MERRILL LYNCH INVESTMENT aCCoUNTS
+Cameron International Corporation S 12/11/2013 01/2/2014 $1,001 - $15,000
+(CaM)
+FILINg STaTUS: New
+2000080752 FedEx Corporation (FDX) P 3/4/2015 3/20/2015 $15,001 - $50,000
+FILINg STaTUS: New
+"""
+
+
+def test_old_layout():
+    rows = parse_ptr_text(OLD)
+    assert [r.ticker for r in rows] == ["AAPL", "CAM", "FDX"]
+    assert rows[0].notification_date == date(2014, 1, 2)
+    assert rows[1].asset == "Cameron International Corporation (CaM)"
+    assert rows[2].asset == "FedEx Corporation (FDX)"
+    assert all("STATUS" not in r.asset.upper() for r in rows)

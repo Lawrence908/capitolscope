@@ -143,7 +143,8 @@ def _restore_full_assets(pdf_path, records):
         return records
 
     def _n(s):
-        return _re.sub(r"[^a-z0-9]", "", (s or "").lower())
+        s = _re.sub(r"^\s*\d{6,}\s+", "", s or "")
+        return _re.sub(r"[^a-z0-9]", "", s.lower())
 
     def _d(s):
         m = _re.match(r"(\d{1,2})/(\d{1,2})/(\d{4})", (s or "").strip())

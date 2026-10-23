@@ -748,7 +748,8 @@ class CongressionalDataIngestion:
         duplicate being inserted.
         """
         def _n(s: Optional[str]) -> str:
-            return re.sub(r"[^a-z0-9]", "", (s or "").lower())
+            s = re.sub(r"^\s*\d{6,}\s+", "", s or "")  # older PDFs prefix a line id
+            return re.sub(r"[^a-z0-9]", "", s.lower())
 
         candidates = self.session.query(CongressionalTrade).filter(
             CongressionalTrade.doc_id == trade.doc_id,

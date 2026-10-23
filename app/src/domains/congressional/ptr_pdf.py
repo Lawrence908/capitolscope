@@ -17,21 +17,26 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import date
 from typing import List, Optional
 
 _TXN = re.compile(
     r"^(?:(?P<owner>SP|JT|DC)\s+)?(?P<asset>.+?)\s+"
     r"(?P<type>P|S|E)(?:\s+\((?:partial|full)\))?\s+"
-    r"(?P<tdate>\d{2}/\d{2}/\d{4})\s+(?P<ndate>\d{2}/\d{2}/\d{4})\s+"
+    r"(?P<tdate>\d{1,2}/\d{1,2}/\d{4})\s+(?P<ndate>\d{1,2}/\d{1,2}/\d{4})\s+"
     r"(?P<amount>\$[\d,]+(?:\s*-\s*(?:\$[\d,]+)?)?|Spouse/DC Over \$1,000,000|Over \$[\d,]+)\s*$"
 )
-# "F<nul..> S<nul..>: New" in extracted text (the label glyphs drop out).
-_STATUS = re.compile(r"^F[\s\x00]+S[\s\x00]*:")
-_SUBHOLDING = re.compile(r"^S[\s\x00]+O[\s\x00]*:")
-_DESCRIPTION = re.compile(r"^D[\s\x00]+:")
-_TYPE_CODE = re.compile(r"\[([A-Z]{2})\]")
-_PAREN_TICKER = re.compile(r"\(([A-Z][A-Z0-9.\-]{0,9})\)")
+# Record-closing label lines. Newer PDFs drop the label glyphs ("F<nul> S<nul>:
+# New"); older ones keep the words with garbled case ("FILINg STaTUS: New",
+# "SUbHoLdINg oF:").
+_STATUS = re.compile(r"^(?:F[\s\x00]+S[\s\x00]*:|filing\s+status\s*:)", re.I)
+_SUBHOLDING = re.compile(r"^(?:S[\s\x00]+O[\s\x00]*:|subholding\s+of\s*:|location\s*:|comments?\s*:)", re.I)
+_DESCRIPTION = re.compile(r"^(?:D[\s\x00]+:|description\s*:)", re.I)
+_TYPE_CODE = re.compile(r"\[([A-Za-z]{2})\]")
+# Older PDFs garble glyph case inside tickers ("(aaPL)", "(Md)"): match any
+# case and upper-case the result. Excludes "(partial)"-style words by length.
+_PAREN_TICKER = re.compile(r"\(([A-Za-z][A-Za-z0-9.\-]{0,5})\)")
+_LINE_ID = re.compile(r"^\d{6,}\s+")
 _AMOUNT_TAIL = re.compile(r"\$[\d,]+\s*$")
 
 
@@ -50,7 +55,8 @@ class PtrRow:
 
 
 def _d(s: str) -> date:
-    return datetime.strptime(s, "%m/%d/%Y").date()
+    m, d, y = (int(x) for x in s.split("/"))
+    return date(y, m, d)
 
 
 def parse_amount(text: str) -> tuple[Optional[int], Optional[int]]:
@@ -75,8 +81,9 @@ def parse_ptr_text(text: str) -> List[PtrRow]:
         if cur is None:
             return
         asset = re.sub(r"\s+", " ", " ".join(cur["asset"])).strip()
-        codes = _TYPE_CODE.findall(asset)
-        tickers = _PAREN_TICKER.findall(asset)
+        asset = _LINE_ID.sub("", asset)
+        codes = [c.upper() for c in _TYPE_CODE.findall(asset)]
+        tickers = [t.upper() for t in _PAREN_TICKER.findall(asset) if t.lower() not in ("partial", "full")]
         asset_clean = _TYPE_CODE.sub("", asset).strip()
         amin, amax = parse_amount(cur["amount"])
         rows.append(PtrRow(

@@ -51,8 +51,31 @@ TYPE_CODE_CATEGORY = {
 }
 
 
+_GENERIC = {"the", "inc", "corp", "corporation", "co", "company", "common", "stock", "class", "group",
+            "holdings", "holding", "ltd", "plc", "sa", "nv", "ag", "trust", "fund", "shares", "of", "and",
+            "unsponsored", "sponsored", "adr", "ads"}
+
+
+def _sig(name: Optional[str]) -> List[str]:
+    return [t for t in re.findall(r"[a-z0-9]+", (name or "").lower()) if t not in _GENERIC and len(t) > 1]
+
+
+def names_consistent(asset_text: str, company: str) -> bool:
+    """The listed company name must start like the filed asset text.
+
+    Guards against reused tickers (Spectra Energy's SE is now Sea Ltd).
+    """
+    a = _sig(re.sub(r"\([^)]*\)", " ", asset_text))
+    b = _sig(company)
+    if not a or not b:
+        return False
+    return a[0] == b[0] or (len(a[0]) >= 4 and (b[0].startswith(a[0]) or a[0].startswith(b[0])))
+
+
 def norm(s: Optional[str]) -> str:
-    return re.sub(r"[^a-z0-9]", "", (s or "").lower())
+    """Comparable form: no leading numeric line id, alphanumerics only, lower case."""
+    s = re.sub(r"^\s*\d{6,}\s+", "", s or "")
+    return re.sub(r"[^a-z0-9]", "", s.lower())
 
 
 def filing_years() -> Dict[str, str]:
@@ -142,6 +165,10 @@ def build_plan(session, docs: List[str], matcher) -> Dict[str, object]:
                 symbol, method = matcher.resolve(row.ticker, row.asset)
             upd = {"trade_id": tid, "full_asset": row.asset[:1000], "old_asset": raw, "type_code": row.type_code,
                    "category": TYPE_CODE_CATEGORY.get(row.type_code or "")}
+            company = (matcher.universe_meta.get(symbol) or {}).get("name") or "" if symbol else ""
+            if symbol and not names_consistent(row.asset, company):
+                stats["ticker name mismatch (not linked)"] += 1
+                symbol = None
             if symbol and not sid:
                 upd["symbol"] = symbol
                 upd["method"] = method

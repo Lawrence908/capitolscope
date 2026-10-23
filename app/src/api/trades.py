@@ -24,8 +24,60 @@ from domains.congressional.schemas import (
 )
 from schemas.base import ResponseEnvelope, PaginatedResponse, PaginationMeta, create_response
 from domains.congressional.schemas import CongressionalTradeQuery
+from domains.congressional.trade_links import (
+    DISCLOSURE_LIMIT_DAYS,
+    days_to_disclose,
+    downsample,
+    filing_document_url,
+    infer_chamber,
+    is_amended,
+    is_late,
+    price_on_or_before,
+    summarize_ticker_trades,
+)
+from datetime import date as _date_cls
 
 router = APIRouter()
+
+# Caps for the "related" lists on the trade permalink and the ticker page.
+RELATED_LIMIT = 25
+TICKER_TRADES_LIMIT = 500
+PRICE_POINTS_MAX = 1500
+
+
+def clamp_transaction_date_to(requested: Optional[_date_cls], today: _date_cls) -> _date_cls:
+    """Upper bound for feed transaction dates: the requested bound, never past today."""
+    return min(requested, today) if requested else today
+
+
+def trade_feed_item(trade: Any, member: Any) -> Dict[str, Any]:
+    """A trade shaped like the frontend ``CongressionalTrade`` feed row."""
+    doc_id = getattr(trade, "doc_id", None)
+    tdate = getattr(trade, "transaction_date", None)
+    ndate = getattr(trade, "notification_date", None)
+    return {
+        "id": str(trade.id),
+        "doc_id": doc_id,
+        "member_id": str(trade.member_id) if getattr(trade, "member_id", None) else None,
+        "member_name": getattr(member, "full_name", None),
+        "member_party": getattr(member, "party", None),
+        "member_state": getattr(member, "state", None),
+        "member_district": getattr(member, "district", None),
+        "member_chamber": infer_chamber(getattr(member, "chamber", None), doc_id),
+        "ticker": getattr(trade, "ticker", None),
+        "asset_name": getattr(trade, "asset_name", None) or getattr(trade, "raw_asset_description", None),
+        "asset_type": getattr(trade, "asset_type", None),
+        "transaction_type": getattr(trade, "transaction_type", None),
+        "transaction_date": tdate.isoformat() if tdate else None,
+        "notification_date": ndate.isoformat() if ndate else None,
+        "days_to_disclose": days_to_disclose(tdate, ndate),
+        "amount_min": getattr(trade, "amount_min", None),
+        "amount_max": getattr(trade, "amount_max", None),
+        "amount_exact": getattr(trade, "amount_exact", None),
+        "owner": getattr(trade, "owner", None),
+        "filing_status": getattr(trade, "filing_status", None),
+        "security_id": str(trade.security_id) if getattr(trade, "security_id", None) else None,
+    }
 
 # TODO: Update frontend TradeFilters to match CongressionalTradeQuery model
 @router.get(
@@ -65,8 +117,19 @@ async def get_trades(
         # Create service
         trade_service = CongressionalTradeService(trade_repo, member_repo)
         
+        # Public feeds never show future-dated transactions (parse errors in
+        # the source filings): cap the transaction date at today.
+        filters.transaction_date_to = clamp_transaction_date_to(filters.transaction_date_to, _date_cls.today())
+
         logger.info(f"Calling trade_service.get_trades_with_filters with transaction_types: {filters.transaction_types}")
         trades, total_count = await trade_service.get_trades_with_filters(filters)
+        # Many former members have no chamber on record; the filing id tells
+        # House (numeric Clerk id) from Senate (eFD UUID).
+        for t in trades:
+            if not t.member_chamber:
+                inferred = infer_chamber(None, t.doc_id)
+                if inferred:
+                    t.member_chamber = inferred
         logger.info(f"Service returned {len(trades)} trades (total_count={total_count}) for transaction_types: {filters.transaction_types}")
         
         # Calculate pagination
@@ -575,7 +638,7 @@ async def export_trades_csv(
 async def delete_trade(
     trade_id: int,
     session: AsyncSession = Depends(get_db_session),
-    # current_user: User = Depends(require_admin()),  # Temporarily disabled for development
+    current_user: User = Depends(require_admin()),
 ) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Delete a congressional trade record.
@@ -803,6 +866,96 @@ async def test_trades(
         return create_response(data=None, error=str(e))
 
 
+async def _security_prices(session: AsyncSession, security_id: Any) -> List[tuple]:
+    """Ascending (date, close) pairs for a security. Closes are whole dollars."""
+    from domains.securities.models import DailyPrice
+
+    rows = (await session.execute(
+        select(DailyPrice.price_date, DailyPrice.close_price)
+        .where(DailyPrice.security_id == security_id)
+        .order_by(DailyPrice.price_date.asc())
+    )).all()
+    return [(r[0], r[1]) for r in rows]
+
+
+async def _security_info(session: AsyncSession, security_id: Any) -> Optional[Dict[str, Any]]:
+    from domains.securities.models import Security, Sector
+
+    row = (await session.execute(
+        select(Security.id, Security.ticker, Security.name, Sector.name, Security.asset_type_code)
+        .outerjoin(Sector, Sector.gics_code == Security.sector_gics_code)
+        .where(Security.id == security_id)
+    )).first()
+    if row is None:
+        return None
+    return {
+        "id": str(row[0]),
+        "ticker": row[1],
+        "name": row[2],
+        "sector": row[3],
+        "asset_type": row[4],
+    }
+
+
+@router.get(
+    "/ticker/{ticker}",
+    response_model=ResponseEnvelope[Dict[str, Any]],
+    responses={
+        200: {"description": "Ticker page data retrieved successfully"},
+        500: {"description": "Internal server error"},
+    },
+)
+async def get_ticker_page(
+    ticker: str = Path(..., min_length=1, max_length=20),
+    limit: int = Query(TICKER_TRADES_LIMIT, ge=1, le=2000, description="Max trades to return"),
+    session: AsyncSession = Depends(get_db_session),
+) -> ResponseEnvelope[Dict[str, Any]]:
+    """Public ticker page: security info, daily closes (whole dollars) and every
+    disclosed congressional trade in the ticker (newest first, no future dates)."""
+    from domains.securities.models import Security, DailyPrice
+
+    sym = ticker.strip().upper()
+    today = _date_cls.today()
+
+    # Securities carrying this ticker (delisted names can share one); prefer
+    # the one with the most price history for the chart.
+    sec_rows = (await session.execute(
+        select(Security.id, func.count(DailyPrice.id))
+        .outerjoin(DailyPrice, DailyPrice.security_id == Security.id)
+        .where(func.upper(Security.ticker) == sym)
+        .group_by(Security.id)
+        .order_by(func.count(DailyPrice.id).desc())
+    )).all()
+    security_ids = [r[0] for r in sec_rows]
+    primary_id = security_ids[0] if security_ids else None
+
+    match = CongressionalTrade.ticker == sym
+    if security_ids:
+        match = or_(match, CongressionalTrade.security_id.in_(security_ids))
+    rows = (await session.execute(
+        select(CongressionalTrade, CongressMember)
+        .join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
+        .where(match, CongressionalTrade.transaction_date <= today)
+        .order_by(CongressionalTrade.transaction_date.desc(), CongressionalTrade.notification_date.desc())
+    )).all()
+    items = [trade_feed_item(t, m) for t, m in rows]
+
+    security = await _security_info(session, primary_id) if primary_id else None
+    series = await _security_prices(session, primary_id) if primary_id else []
+    prices = downsample([[d.isoformat(), int(c)] for d, c in series if c is not None], PRICE_POINTS_MAX)
+
+    return create_response(data={
+        "ticker": sym,
+        "security": security,
+        "stats": summarize_ticker_trades(items),
+        "prices": prices,
+        "latest_close": prices[-1][1] if prices else None,
+        "latest_close_date": prices[-1][0] if prices else None,
+        "total": len(items),
+        "trades": items[:limit],
+    })
+
+
 @router.get(
     "/{trade_id}",
     response_model=ResponseEnvelope[Dict[str, Any]],
@@ -816,7 +969,9 @@ async def get_trade(
     trade_id: str,
     session: AsyncSession = Depends(get_db_session),
 ) -> ResponseEnvelope[Dict[str, Any]]:
-    """Get a single congressional trade by its UUID, with the member's details."""
+    """Public trade permalink: one disclosed trade with its member, security,
+    disclosure timing, a link to the original filing and related trades (the
+    rest of the same filing, and this member's other trades in the ticker)."""
     logger.info(f"Getting trade by ID: trade_id={trade_id}")
     from uuid import UUID as _UUID
     try:
@@ -824,39 +979,85 @@ async def get_trade(
     except (ValueError, TypeError):
         raise HTTPException(status_code=404, detail="Trade not found")
 
-    from sqlalchemy import select
-    from sqlalchemy.orm import selectinload
-    from domains.congressional.models import CongressionalTrade
-
-    row = (await session.execute(
-        select(CongressionalTrade)
-        .options(selectinload(CongressionalTrade.member))
+    found = (await session.execute(
+        select(CongressionalTrade, CongressMember)
+        .join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
         .where(CongressionalTrade.id == trade_id)
-    )).scalar_one_or_none()
-    if row is None:
+    )).first()
+    if found is None:
         raise HTTPException(status_code=404, detail="Trade not found")
+    row, m = found
 
-    m = getattr(row, "member", None)
+    item = trade_feed_item(row, m)
+    amended = is_amended(row.filing_status)
+    days = item["days_to_disclose"]
+    chamber = item["member_chamber"]
+    doc_url = filing_document_url(row.doc_id, row.document_url, row.notification_date, chamber)
+    today = _date_cls.today()
+
+    security = await _security_info(session, row.security_id) if row.security_id else None
+    prices = None
+    if row.security_id:
+        series = await _security_prices(session, row.security_id)
+        if series:
+            prices = {
+                "at_trade": price_on_or_before(series, row.transaction_date),
+                "at_disclosure": price_on_or_before(series, row.notification_date),
+                "latest": series[-1][1],
+                "latest_date": series[-1][0].isoformat(),
+            }
+
+    async def _related(*conds) -> Dict[str, Any]:
+        base = and_(CongressionalTrade.id != row.id, CongressionalTrade.transaction_date <= today, *conds)
+        total = await session.scalar(select(func.count(CongressionalTrade.id)).where(base)) or 0
+        rel = (await session.execute(
+            select(CongressionalTrade, CongressMember)
+            .join(CongressMember, CongressionalTrade.member_id == CongressMember.id)
+            .where(base)
+            .order_by(CongressionalTrade.transaction_date.desc())
+            .limit(RELATED_LIMIT)
+        )).all()
+        return {"total": int(total), "items": [trade_feed_item(t, mm) for t, mm in rel]}
+
+    same_filing = await _related(CongressionalTrade.doc_id == row.doc_id)
+    if row.ticker or row.security_id:
+        same_asset = or_(
+            *([CongressionalTrade.ticker == row.ticker] if row.ticker else []),
+            *([CongressionalTrade.security_id == row.security_id] if row.security_id else []),
+        )
+        same_ticker = await _related(CongressionalTrade.member_id == row.member_id, same_asset)
+    else:
+        same_ticker = {"total": 0, "items": []}
+
     return create_response(data={
-        "id": str(row.id),
-        "member_id": str(row.member_id),
-        "member_name": getattr(m, "display_name", None) or getattr(m, "full_name", None),
-        "party": getattr(m, "party", None),
-        "state": getattr(m, "state", None),
-        "chamber": getattr(m, "chamber", None),
-        "ticker": row.ticker,
-        "asset_name": row.asset_name,
-        "asset_type": row.asset_type,
+        **item,
+        # Legacy flat keys kept for older clients.
+        "member_name": item["member_name"],
+        "party": item["member_party"],
+        "state": item["member_state"],
+        "chamber": chamber,
         "raw_asset_description": row.raw_asset_description,
-        "transaction_type": row.transaction_type,
-        "transaction_date": row.transaction_date.isoformat() if row.transaction_date else None,
-        "notification_date": row.notification_date.isoformat() if row.notification_date else None,
-        "amount_min": row.amount_min,
-        "amount_max": row.amount_max,
-        "amount_exact": row.amount_exact,
-        "owner": row.owner,
-        "document_url": row.document_url,
-        "security_id": str(row.security_id) if row.security_id else None,
+        "comment": row.comment,
+        "member": {
+            "id": item["member_id"],
+            "name": getattr(m, "full_name", None),
+            "party": getattr(m, "party", None),
+            "state": getattr(m, "state", None),
+            "district": getattr(m, "district", None),
+            "chamber": chamber,
+            "image_url": getattr(m, "image_url", None),
+        },
+        "security": security,
+        "prices": prices,
+        "is_amended": amended,
+        "is_late": is_late(days, amended),
+        "days_late": (days - DISCLOSURE_LIMIT_DAYS) if is_late(days, amended) else 0,
+        "document_url": doc_url,
+        "document_url_derived": bool(doc_url) and not (row.document_url or "").strip(),
+        "related": {
+            "same_filing": same_filing,
+            "same_ticker_by_member": same_ticker,
+        },
     })
 
 
@@ -873,7 +1074,7 @@ async def get_trade(
 async def flag_trade(
     trade_id: int,
     session: AsyncSession = Depends(get_db_session),
-    # current_user: User = Depends(get_current_active_user),  # Temporarily disabled for development
+    current_user: User = Depends(get_current_active_user),
 ) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Flag a trade for review.

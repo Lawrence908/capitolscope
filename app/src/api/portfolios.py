@@ -413,21 +413,45 @@ from domains.portfolio.mirror_service import (  # noqa: E402
 @router.get(
     "/member/{member_id}/performance",
     response_model=ResponseEnvelope[Dict[str, Any]],
-    responses={200: {"description": "OK"}, 401: {"description": "Not authenticated"}},
+    responses={200: {"description": "OK"}, 404: {"description": "Member not found"}},
 )
 async def get_member_performance(
     member_id: str = Path(..., description="Congress member UUID"),
     session: AsyncSession = Depends(get_db_session),
-    current_user: User = Depends(get_current_active_user),
 ) -> ResponseEnvelope[Dict[str, Any]]:
-    """Monthly equity curve for a member's reconstructed portfolio, benchmarked vs SPY."""
+    """
+    Monthly equity curve for a member's reconstructed portfolio, benchmarked vs SPY.
+
+    **Public**: no authentication required (member pages are public). The member
+    must exist before anything is computed or cached, so arbitrary IDs cannot
+    grow the cache.
+    """
+    member_uuid = await _require_member(session, member_id)
     from core.cache import cached
     data = await cached(
-        f"member:perf:{member_id}",
-        lambda: compute_equity_curve(session, [member_id]),
+        f"member:perf:{member_uuid}",
+        lambda: compute_equity_curve(session, [member_uuid]),
         ttl=3600,
     )
     return create_response(data=data)
+
+
+async def _require_member(session: AsyncSession, member_id: str):
+    """Validate a member UUID and confirm the member exists (404 otherwise)."""
+    from uuid import UUID as _UUID
+    from domains.congressional.models import CongressMember
+    from sqlalchemy import select as _select
+
+    try:
+        member_uuid = _UUID(member_id)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=404, detail="Member not found")
+    found = (await session.execute(
+        _select(CongressMember.id).where(CongressMember.id == member_uuid)
+    )).scalar_one_or_none()
+    if not found:
+        raise HTTPException(status_code=404, detail="Member not found")
+    return member_uuid
 
 _MIRROR_TIERS = ['PRO', 'PREMIUM', 'ENTERPRISE']
 
@@ -437,7 +461,6 @@ _MIRROR_TIERS = ['PRO', 'PREMIUM', 'ENTERPRISE']
     response_model=ResponseEnvelope[Dict[str, Any]],
     responses={
         200: {"description": "Reconstructed member portfolio retrieved successfully"},
-        401: {"description": "Not authenticated"},
         404: {"description": "Member not found"},
         500: {"description": "Internal server error"}
     }
@@ -445,7 +468,6 @@ _MIRROR_TIERS = ['PRO', 'PREMIUM', 'ENTERPRISE']
 async def get_member_portfolio_holdings(
     member_id: str = Path(..., description="Congress member UUID"),
     session: AsyncSession = Depends(get_db_session),
-    current_user: User = Depends(get_current_active_user),
 ) -> ResponseEnvelope[Dict[str, Any]]:
     """
     Reconstructed portfolio for a single congress member: combined holdings,
@@ -454,23 +476,28 @@ async def get_member_portfolio_holdings(
     Uses the shares-from-price model (see mirror_service); only the ~37% of
     trades with a matched security are priceable, so this is an approximation.
 
-    **Authenticated Feature**: Requires user authentication.
+    **Public**: no authentication required (member pages are public).
     """
-    logger.info(f"Getting reconstructed portfolio: member_id={member_id}, user_id={current_user.id}")
+    logger.info(f"Getting reconstructed portfolio: member_id={member_id}")
+    from uuid import UUID as _UUID
+    try:
+        member_uuid = _UUID(member_id)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=404, detail="Member not found")
     try:
         from domains.congressional.models import CongressMember
         from sqlalchemy import select as _select
 
         member = (await session.execute(
-            _select(CongressMember).where(CongressMember.id == member_id)
+            _select(CongressMember).where(CongressMember.id == member_uuid)
         )).scalar_one_or_none()
         if not member:
             raise HTTPException(status_code=404, detail="Member not found")
 
         from core.cache import cached
         cached_result = await cached(
-            f"member:holdings:{member_id}",
-            lambda: reconstruct_holdings(session, [member_id]),
+            f"member:holdings:{member_uuid}",
+            lambda: reconstruct_holdings(session, [member_uuid]),
             ttl=3600,
         )
         # Copy so adding member info doesn't mutate the shared cached dict.

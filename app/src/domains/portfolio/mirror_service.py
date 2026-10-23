@@ -22,6 +22,7 @@ tested; MirrorPortfolioService wires it to the database.
 
 import bisect
 import logging
+import asyncio
 from datetime import date
 from typing import Any, Dict, List, Optional
 from uuid import UUID
@@ -313,7 +314,12 @@ async def reconstruct_holdings(session: AsyncSession, member_ids: List) -> Dict[
         select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
         .where(DailyPrice.security_id.in_(security_ids))
     )).all()
-    pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+    # CPU-bound work runs in a worker thread: these endpoints are public and
+    # a cold member can take tens of seconds, which must not stall the event
+    # loop for every other request.
+    pricebook = await asyncio.to_thread(
+        lambda: PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+    )
 
     sec_rows = (await session.execute(
         select(Security.id, Security.ticker, Security.name, Sector.name.label("sector"))
@@ -325,8 +331,9 @@ async def reconstruct_holdings(session: AsyncSession, member_ids: List) -> Dict[
         r.id: {"ticker": r.ticker, "name": r.name, "sector": r.sector} for r in sec_rows
     }
 
-    positions = replay_positions(trades, pricebook)
-    result = build_holdings(positions, pricebook, security_meta)
+    result = await asyncio.to_thread(
+        lambda: build_holdings(replay_positions(trades, pricebook), pricebook, security_meta)
+    )
     result["meta"] = {
         "member_count": len(set(member_ids)),
         "priced_trades": len(trades),
@@ -438,13 +445,15 @@ async def compute_equity_curve(session: AsyncSession, member_ids: List) -> Dict[
         select(DailyPrice.security_id, DailyPrice.price_date, DailyPrice.close_price)
         .where(DailyPrice.security_id.in_(price_ids))
     )).all()
-    pricebook = PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+    pricebook = await asyncio.to_thread(
+        lambda: PriceBook([(r.security_id, r.price_date, r.close_price) for r in price_rows])
+    )
 
     start = min(t.transaction_date for t in trades)
     end = max((r.price_date for r in price_rows), default=start)
     dates = _month_starts(start, end)
 
-    series = compute_equity_series(trades, pricebook, spy_sid, dates)
+    series = await asyncio.to_thread(compute_equity_series, trades, pricebook, spy_sid, dates)
 
     summary: Dict[str, Any] = {"start_date": start.isoformat(), "end_date": end.isoformat(),
                                "has_benchmark": spy_sid is not None}

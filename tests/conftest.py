@@ -97,6 +97,11 @@ def make_settings(monkeypatch):
         base.update(overrides)
         monkeypatch.delenv("SECRET_KEY", raising=False)
         monkeypatch.delenv("JWT_SECRET_KEY", raising=False)
+        # Some modules call load_dotenv() at import time and leak the real
+        # .env into os.environ; clear what tests assert defaults for.
+        for leaked in ("REDIS_PASSWORD", "REDIS_HOST", "REDIS_USER", "REDIS_DB", "REDIS_PORT", "REDIS_URL"):
+            if leaked not in overrides:
+                monkeypatch.delenv(leaked, raising=False)
         for key, value in base.items():
             monkeypatch.setenv(key, str(value))
         return Settings(_env_file=None)

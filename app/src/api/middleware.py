@@ -1,6 +1,7 @@
 """
 Custom middleware for FastAPI application.
 """
+import ipaddress
 
 import time
 from typing import Callable, Dict, Any
@@ -40,6 +41,31 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         return response
 
 
+def real_client_ip(request: Request) -> str:
+    """The visitor's IP, not the reverse proxy's.
+
+    Public traffic arrives Cloudflare -> cloudflared -> Caddy -> API, so the
+    socket peer is always a private Docker address. Forwarding headers are
+    only trusted when the peer is private (a proxy we run); a direct public
+    caller cannot spoof them. Preference: CF-Connecting-IP (set by
+    Cloudflare), X-Real-IP (set by Caddy), first X-Forwarded-For hop.
+    """
+    peer = request.client.host if request.client else ""
+    try:
+        trusted = ipaddress.ip_address(peer).is_private or ipaddress.ip_address(peer).is_loopback
+    except ValueError:
+        trusted = False
+    if trusted:
+        for header in ("cf-connecting-ip", "x-real-ip"):
+            value = (request.headers.get(header) or "").strip()
+            if value:
+                return value
+        forwarded = (request.headers.get("x-forwarded-for") or "").split(",")[0].strip()
+        if forwarded:
+            return forwarded
+    return peer or "unknown"
+
+
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """
     Basic rate limiting middleware.
@@ -55,8 +81,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if not settings.RATE_LIMIT_ENABLED:
             return await call_next(request)
         
-        # Get client IP
-        client_ip = request.client.host if request.client else "unknown"
+        client_ip = real_client_ip(request)
         current_time = time.time()
         
         # Initialize client request history
@@ -134,17 +159,23 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     # Interactive API docs load assets from a CDN, so a strict CSP would break
     # them; everything else this API serves is JSON and gets a locked-down policy.
     _DOCS_PATHS = ("/docs", "/redoc", "/openapi.json")
+    # /share/* returns the SPA's own index.html (with page meta injected); it
+    # must load the SPA's scripts and styles, so it gets the frontend's policy
+    # (no CSP, SAMEORIGIN framing) instead of the JSON lockdown.
+    _SPA_SHELL_PATHS = ("/share/",)
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
         response = await call_next(request)
+        path = request.url.path
+        spa_shell = path.startswith(self._SPA_SHELL_PATHS)
 
         response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-Frame-Options"] = "SAMEORIGIN" if spa_shell else "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
-        if not request.url.path.startswith(self._DOCS_PATHS):
+        if not spa_shell and not path.startswith(self._DOCS_PATHS):
             response.headers["Content-Security-Policy"] = (
                 "default-src 'none'; frame-ancestors 'none'; base-uri 'none'"
             )

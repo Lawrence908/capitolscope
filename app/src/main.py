@@ -47,6 +47,7 @@ from core.database import init_database, close_database
 from core.logging import configure_logging, setup_file_logging
 from core.email import email_service
 from api import trades, members, auth, health, portfolios, market_data, notifications, dev_endpoints, stripe, analytics, signals
+from api import public as public_api
 from api.middleware import (
     RateLimitMiddleware,
     RequestLoggingMiddleware,
@@ -234,6 +235,13 @@ app.include_router(market_data.router, prefix=f"{settings.API_V1_PREFIX}/market-
 app.include_router(notifications.router, prefix=f"{settings.API_V1_PREFIX}/notifications", tags=["Notifications"])
 app.include_router(analytics.router, prefix=f"{settings.API_V1_PREFIX}/analytics", tags=["Analytics"])
 app.include_router(signals.router, prefix=f"{settings.API_V1_PREFIX}/signals", tags=["Signals"])
+app.include_router(public_api.router, prefix=f"{settings.API_V1_PREFIX}/public", tags=["Public"])
+from api import admin_social  # noqa: E402
+app.include_router(admin_social.router, prefix=f"{settings.API_V1_PREFIX}/admin/social", tags=["Admin: social"])
+# Link previews: card PNGs + server-rendered share shells (Caddy rewrites /t, /members/{id}, /assets/{t} to /share/...)
+from api import og as og_api, share as share_api  # noqa: E402
+app.include_router(og_api.router, prefix=f"{settings.API_V1_PREFIX}/og", tags=["Social cards"])
+app.include_router(share_api.router, prefix="/share", include_in_schema=False)
 
 # Development endpoints (disabled - using real database endpoints)
 # app.include_router(dev_endpoints.router, prefix=f"{settings.API_V1_PREFIX}/congressional", tags=["Development"])

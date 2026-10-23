@@ -405,7 +405,8 @@ async def get_member_trades(
             "doc_id": t.doc_id,
             "document_url": t.document_url,
             "ticker": t.ticker,
-            "asset_name": t.asset_name,
+            "asset_name": t.asset_name or t.raw_asset_description,
+            "security_id": str(t.security_id) if t.security_id else None,
             "asset_type": t.asset_type,
             "owner": t.owner,
             "transaction_type": t.transaction_type,
@@ -418,6 +419,9 @@ async def get_member_trades(
         }
         for t in trades
     ]
+    from api.trades import apply_security_names  # local import: avoid router import cycles
+
+    await apply_security_names(session, items)
     pages = (total + limit - 1) // limit
     return create_response(PaginatedResponse[Dict[str, Any]](
         items=items,

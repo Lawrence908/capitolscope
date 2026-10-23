@@ -50,6 +50,34 @@ def clamp_transaction_date_to(requested: Optional[_date_cls], today: _date_cls) 
     return min(requested, today) if requested else today
 
 
+async def apply_security_names(session: AsyncSession, items: Any) -> None:
+    """Show the matched security's name instead of the parsed PDF asset text.
+
+    Parsed asset descriptions are often garbled ("Alphabet . - Class C",
+    "Third Bancorp -."); when a trade is matched to a security, its listed
+    name is the trustworthy label. Works on feed dicts and on objects.
+    """
+    def sid(it):
+        v = it.get("security_id") if isinstance(it, dict) else getattr(it, "security_id", None)
+        return str(v) if v else None
+
+    ids = {sid(it) for it in items} - {None}
+    if not ids:
+        return
+    from domains.securities.models import Security
+
+    rows = (await session.execute(select(Security.id, Security.name).where(Security.id.in_(list(ids))))).all()
+    names = {str(i): n for i, n in rows if n}
+    for it in items:
+        name = names.get(sid(it) or "")
+        if not name:
+            continue
+        if isinstance(it, dict):
+            it["asset_name"] = name
+        else:
+            setattr(it, "asset_name", name)
+
+
 def trade_feed_item(trade: Any, member: Any) -> Dict[str, Any]:
     """A trade shaped like the frontend ``CongressionalTrade`` feed row."""
     doc_id = getattr(trade, "doc_id", None)
@@ -130,6 +158,7 @@ async def get_trades(
                 inferred = infer_chamber(None, t.doc_id)
                 if inferred:
                     t.member_chamber = inferred
+        await apply_security_names(session, trades)
         logger.info(f"Service returned {len(trades)} trades (total_count={total_count}) for transaction_types: {filters.transaction_types}")
         
         # Calculate pagination
@@ -939,6 +968,7 @@ async def get_ticker_page(
         .order_by(CongressionalTrade.transaction_date.desc(), CongressionalTrade.notification_date.desc())
     )).all()
     items = [trade_feed_item(t, m) for t, m in rows]
+    await apply_security_names(session, items)
 
     security = await _security_info(session, primary_id) if primary_id else None
     series = await _security_prices(session, primary_id) if primary_id else []
@@ -989,6 +1019,7 @@ async def get_trade(
     row, m = found
 
     item = trade_feed_item(row, m)
+    await apply_security_names(session, [item])
     amended = is_amended(row.filing_status)
     days = item["days_to_disclose"]
     chamber = item["member_chamber"]
@@ -1017,7 +1048,9 @@ async def get_trade(
             .order_by(CongressionalTrade.transaction_date.desc())
             .limit(RELATED_LIMIT)
         )).all()
-        return {"total": int(total), "items": [trade_feed_item(t, mm) for t, mm in rel]}
+        rel_items = [trade_feed_item(t, mm) for t, mm in rel]
+        await apply_security_names(session, rel_items)
+        return {"total": int(total), "items": rel_items}
 
     same_filing = await _related(CongressionalTrade.doc_id == row.doc_id)
     if row.ticker or row.security_id:

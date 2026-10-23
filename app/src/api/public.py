@@ -49,7 +49,7 @@ ACTIVE_WINDOW_DAYS = 60
 _TRADE_COLUMNS = """
     t.id, t.member_id, m.full_name, m.party, m.state, m.chamber, m.district,
     COALESCE(se.ticker, t.ticker) AS ticker,
-    COALESCE(t.asset_name, se.name, t.raw_asset_description) AS asset_name,
+    COALESCE(se.name, t.asset_name, t.raw_asset_description) AS asset_name,
     t.asset_type, t.transaction_type, t.transaction_date, t.notification_date,
     t.amount_min, t.amount_max, t.amount_exact, t.filing_status, t.owner
 """

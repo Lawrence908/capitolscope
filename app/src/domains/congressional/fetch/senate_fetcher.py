@@ -228,6 +228,13 @@ class SenateDisclosureFetcher:
         report_kind = (text_match.group(1).strip() if text_match else "").lower()
         is_electronic = "/ptr/" in href  # paper filings route to /paper/
         uuid_match = re.search(r"/ptr/([0-9a-fA-F-]+)/?", href)
+        # eFD titles a PTR "Periodic Transaction Report for <date originally
+        # filed>" and re-filings as "... for <that date> (amendment N)". An
+        # amendment's submitted date is when it was RE-filed, which can be
+        # years after the trades; the disclosure date that matters for lag is
+        # the original filing date in the title.
+        amend_match = re.search(r"\(amendment\s*(\d+)\)", report_kind)
+        orig_match = re.search(r"\bfor\s+(\d{1,2}/\d{1,2}/\d{4})", report_kind)
         return {
             "first_name": first.strip(),
             "last_name": last.strip(),
@@ -237,6 +244,8 @@ class SenateDisclosureFetcher:
             "submitted_date": date_str.strip(),
             "is_electronic": is_electronic,
             "report_kind": report_kind,
+            "amendment": int(amend_match.group(1)) if amend_match else 0,
+            "original_filed_date": orig_match.group(1) if orig_match else "",
         }
 
     # -- report parsing -----------------------------------------------------
@@ -248,6 +257,11 @@ class SenateDisclosureFetcher:
         table = soup.find("table")
         if not table or not table.find("tbody"):
             return []
+
+        is_amendment = bool(report.get("amendment"))
+        notification_date = report.get("submitted_date", "")
+        if is_amendment and report.get("original_filed_date"):
+            notification_date = report["original_filed_date"]
 
         rows: List[Dict[str, str]] = []
         for tr in table.find("tbody").find_all("tr"):
@@ -274,9 +288,9 @@ class SenateDisclosureFetcher:
                     "Owner": owner,
                     "Amount": amount,
                     "Transaction Date": txn_date,
-                    "Notification Date": report.get("submitted_date", ""),
+                    "Notification Date": notification_date,
                     "Description": comment,
-                    "filing_status": "New",
+                    "filing_status": "Amendment" if is_amendment else "New",
                     "cap_gains_over_200": "false",
                 }
             )

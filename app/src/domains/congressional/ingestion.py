@@ -755,6 +755,26 @@ class CongressionalDataIngestion:
         security = self.ticker_to_security.get(ticker_upper)
         return security.id if security else None
     
+    def _amendment_repeats_original(self, trade: ProcessedTrade) -> bool:
+        """True when an amended filing lists a trade already stored from another filing.
+
+        Amendments re-list every transaction of the original report, so
+        importing them verbatim double-counts the unchanged ones. Only rows
+        that differ (corrections or additions) are kept.
+        """
+        query = self.session.query(CongressionalTrade.id).filter(
+            CongressionalTrade.member_id == trade.member_id,
+            CongressionalTrade.doc_id != trade.doc_id,
+            CongressionalTrade.transaction_date == trade.transaction_date,
+            CongressionalTrade.transaction_type == trade.transaction_type,
+            CongressionalTrade.amount_min.is_not_distinct_from(trade.amount_min),
+        )
+        if trade.ticker:
+            query = query.filter(CongressionalTrade.ticker == trade.ticker)
+        else:
+            query = query.filter(CongressionalTrade.raw_asset_description == trade.raw_asset_description)
+        return query.first() is not None
+
     def _parse_filing_status(self, status: str) -> Optional[FilingStatus]:
         """Parse filing status string."""
         if not status:
@@ -833,6 +853,12 @@ class CongressionalDataIngestion:
                 ).first()
                 if existing:
                     logger.debug(f"Duplicate trade found, skipping: {trade.doc_id}")
+                    continue
+                if (
+                    trade.filing_status == FilingStatus.AMENDMENT
+                    and self._amendment_repeats_original(trade)
+                ):
+                    logger.debug(f"Amendment repeats an existing trade, skipping: {trade.doc_id}")
                     continue
                 db_trade = CongressionalTrade(
                     doc_id=trade.doc_id,

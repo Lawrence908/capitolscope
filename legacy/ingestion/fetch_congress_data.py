@@ -123,6 +123,48 @@ def configure_rate_limiting(request_delay=2.0, max_concurrent=3, max_retries=3, 
     logger.info(f"  Retry delay: {RETRY_DELAY}s")
 
 # Define the CongressTrades class
+def _restore_full_assets(pdf_path, records):
+    """Replace each record's first-line asset text with the full multi-line cell.
+
+    The improved parser keeps only the first line of the asset cell, losing
+    the "(TICKER) [TYPE]" that House PTRs wrap onto the next line. Re-parse
+    the same PDF with domains.congressional.ptr_pdf and, for each record with
+    exactly one matching row (same dates, type, and the first-line text as a
+    prefix), take the full text and ticker. Best effort: any failure leaves
+    the records unchanged.
+    """
+    try:
+        import re as _re
+        from domains.congressional.ptr_pdf import parse_ptr_pdf
+
+        rows = parse_ptr_pdf(pdf_path)
+    except Exception as exc:  # parser or import unavailable: keep old behaviour
+        logger.debug("full-asset restore skipped for %s: %s", pdf_path, exc)
+        return records
+
+    def _n(s):
+        return _re.sub(r"[^a-z0-9]", "", (s or "").lower())
+
+    def _d(s):
+        m = _re.match(r"(\d{1,2})/(\d{1,2})/(\d{4})", (s or "").strip())
+        return (int(m.group(3)), int(m.group(1)), int(m.group(2))) if m else None
+
+    for rec in records or []:
+        key = _d(rec.transaction_date)
+        cands = [
+            r for r in rows
+            if (r.transaction_date.year, r.transaction_date.month, r.transaction_date.day) == key
+            and r.transaction_type == (rec.transaction_type or "").strip()[:1].upper()
+            and _n(r.asset).startswith(_n(rec.asset))
+        ]
+        if len(cands) == 1:
+            row = cands[0]
+            rec.asset = row.asset + (f" [{row.type_code}]" if row.type_code else "")
+            if row.ticker:
+                rec.ticker = row.ticker
+    return records
+
+
 class CongressTrades:
     """
     A class to process congressional trading data.
@@ -904,6 +946,8 @@ class CongressTrades:
                         member=member
                     )
                     
+                    improved_records = _restore_full_assets(self.pdf_path + pdf_file_name, improved_records)
+
                     # Convert TradeRecord list to DataFrame
                     if improved_records:
                         logger.info(f"Improved parser found {len(improved_records)} records for {doc_id}")

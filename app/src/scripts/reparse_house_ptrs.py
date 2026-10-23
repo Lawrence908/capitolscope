@@ -132,7 +132,7 @@ def build_plan(session, docs: List[str], matcher) -> Dict[str, object]:
         for r in rows:
             by_key[(r.transaction_date, r.transaction_type, r.amount_min_cents)].append(r)
         for tid, tdate, ttype, amin, raw, ticker, sid in trades:
-            cands = [r for r in by_key.get((tdate, ttype, amin), []) if norm(r.asset).startswith(norm(raw)[:20])]
+            cands = [r for r in by_key.get((tdate, ttype, amin), []) if norm(r.asset).startswith(norm(raw))]
             if len(cands) != 1:
                 stats["no unique pdf row" if not cands else "several pdf rows"] += 1
                 continue

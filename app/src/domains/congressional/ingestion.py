@@ -738,6 +738,37 @@ class CongressionalDataIngestion:
         security = self.ticker_to_security.get(ticker_upper)
         return security.id if security else None
     
+    def _find_existing_trade(self, trade: ProcessedTrade) -> Optional[CongressionalTrade]:
+        """The stored row for this filing line, if any.
+
+        Matches on filing, trade date, type and lower amount bound, with the
+        asset text compared as a prefix either way: older rows hold text cut at
+        the first PDF line, newer parses carry the full cell. When the incoming
+        text is fuller, the stored row is upgraded in place instead of a
+        duplicate being inserted.
+        """
+        def _n(s: Optional[str]) -> str:
+            return re.sub(r"[^a-z0-9]", "", (s or "").lower())
+
+        candidates = self.session.query(CongressionalTrade).filter(
+            CongressionalTrade.doc_id == trade.doc_id,
+            CongressionalTrade.transaction_date == trade.transaction_date,
+            CongressionalTrade.transaction_type == trade.transaction_type,
+            CongressionalTrade.amount_min.is_not_distinct_from(trade.amount_min),
+        ).all()
+        new = _n(trade.raw_asset_description)
+        for row in candidates:
+            old = _n(row.raw_asset_description)
+            # Whole-string prefix (truncated text is a prefix of the full cell);
+            # a short shared lead like "libertymediacorporation" is not enough.
+            if old == new or (old and new.startswith(old)) or (new and old.startswith(new)):
+                if len(new) > len(old):
+                    row.raw_asset_description = trade.raw_asset_description
+                    if trade.ticker and not row.ticker:
+                        row.ticker = trade.ticker
+                return row
+        return None
+
     def _amendment_repeats_original(self, trade: ProcessedTrade) -> bool:
         """True when an amended filing lists a trade already stored from another filing.
 
@@ -831,11 +862,7 @@ class CongressionalDataIngestion:
                 # Dedup on the filing itself, not the member: a filing belongs to
                 # one filer, and keying on member_id re-inserted every trade whose
                 # attribution was later corrected.
-                existing = self.session.query(CongressionalTrade).filter(
-                    CongressionalTrade.doc_id == trade.doc_id,
-                    CongressionalTrade.transaction_date == trade.transaction_date,
-                    CongressionalTrade.raw_asset_description == trade.raw_asset_description
-                ).first()
+                existing = self._find_existing_trade(trade)
                 if existing:
                     logger.debug(f"Duplicate trade found, skipping: {trade.doc_id}")
                     continue

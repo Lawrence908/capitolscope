@@ -13,7 +13,7 @@ celery_app = Celery(
     "capitolscope",
     broker=settings.CELERY_BROKER_URL,
     backend=settings.CELERY_RESULT_BACKEND,
-    include=['background.tasks', 'background.analytics_tasks']
+    include=['background.tasks', 'background.analytics_tasks', 'background.social_tasks']
 )
 
 # Celery configuration
@@ -39,6 +39,16 @@ celery_app.conf.beat_schedule = {
         # business hours, so a morning and an evening run (ET) keep new trades
         # under ~12h old. The import is idempotent by doc_id.
         'schedule': crontab(hour='14,23', minute=0),
+    },
+    # Public X account: draft from newly ingested trades shortly after each
+    # sync (also chained from the sync task), publish one queued post per run.
+    'draft-social-posts': {
+        'task': 'background.social_tasks.draft_social_posts',
+        'schedule': crontab(hour='14,23', minute=45),
+    },
+    'publish-social-posts': {
+        'task': 'background.social_tasks.publish_social_posts',
+        'schedule': 900.0,
     },
     'update-stock-prices': {
         'task': 'background.tasks.update_stock_prices',

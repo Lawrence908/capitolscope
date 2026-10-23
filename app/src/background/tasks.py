@@ -406,6 +406,14 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
             "timestamp": datetime.utcnow().isoformat(),
         }
         logger.info("Congressional trades sync completed: response=%s", response)
+        if status != "failed":
+            # Draft posts for the public X account from the trades just landed.
+            try:
+                from background.social_tasks import draft_social_posts
+
+                draft_social_posts.delay()
+            except Exception as exc:  # never fail the sync over social drafting
+                logger.warning("could not queue social drafting: %s", exc)
         return response
         
     except Exception as exc:

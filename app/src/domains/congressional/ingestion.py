@@ -828,9 +828,11 @@ class CongressionalDataIngestion:
         inserted = 0
         for trade in trades:
             try:
+                # Dedup on the filing itself, not the member: a filing belongs to
+                # one filer, and keying on member_id re-inserted every trade whose
+                # attribution was later corrected.
                 existing = self.session.query(CongressionalTrade).filter(
                     CongressionalTrade.doc_id == trade.doc_id,
-                    CongressionalTrade.member_id == trade.member_id,
                     CongressionalTrade.transaction_date == trade.transaction_date,
                     CongressionalTrade.raw_asset_description == trade.raw_asset_description
                 ).first()

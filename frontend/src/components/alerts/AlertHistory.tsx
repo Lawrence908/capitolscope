@@ -45,29 +45,18 @@ export const AlertHistory: React.FC = () => {
     void loadNotifications();
   }, [loadNotifications]);
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'sent':
-        return '✅';
-      case 'failed':
-        return '❌';
-      case 'pending':
-        return '⏳';
-      default:
-        return '📧';
-    }
-  };
-
+  // Bulletin status stamps: delivered = filled ink, failed = red outline,
+  // pending = ink outline.
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'sent':
-        return 'text-accent bg-accent/10';
+        return 'border-content bg-content text-surface';
       case 'failed':
-        return 'text-sev-flag bg-sev-flag/10';
+        return 'border-accent text-accent';
       case 'pending':
-        return 'text-sev-watch bg-sev-watch/10';
+        return 'border-content text-content';
       default:
-        return 'text-content-muted bg-surface-inset';
+        return 'border-line text-content-muted';
     }
   };
 
@@ -93,25 +82,25 @@ export const AlertHistory: React.FC = () => {
   if (loading) {
     return (
       <div className="p-8 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto"></div>
-        <p className="text-content-muted mt-2">Loading notification history...</p>
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+        <p className="mt-3 font-ui text-[11px] font-semibold uppercase tracking-[0.14em] text-content-faint">Loading notification history</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="py-6">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h3 className="text-lg font-semibold text-content">Alert History</h3>
-          <p className="text-content-muted">View your notification delivery history and status</p>
+          <h3 className="font-display text-3xl font-extrabold leading-none text-content">Alert history</h3>
+          <p className="mt-1 font-ui text-sm text-content-muted">Your notification delivery history and status</p>
         </div>
         
         <div className="flex space-x-4">
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
-            className="border border-line rounded-lg px-3 py-2 text-sm"
+            className="input-field text-sm"
           >
             <option value="1d">Last 24 hours</option>
             <option value="7d">Last 7 days</option>
@@ -122,7 +111,7 @@ export const AlertHistory: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-line rounded-lg px-3 py-2 text-sm"
+            className="input-field text-sm"
           >
             <option value="all">All Status</option>
             <option value="sent">Delivered</option>
@@ -133,35 +122,31 @@ export const AlertHistory: React.FC = () => {
       </div>
 
       {notifications.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-content-faint text-6xl mb-4">📬</div>
-          <h3 className="text-lg font-medium text-content mb-2">No notifications found</h3>
-          <p className="text-content-muted">
+        <div className="border-t border-line py-12 text-center">
+          <h3 className="mb-2 font-display text-3xl font-extrabold leading-none text-content">No notifications found</h3>
+          <p className="font-ui text-sm text-content-muted">
             No notifications have been sent in the selected time period.
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="divide-y divide-line border-t-2 border-content">
           {notifications.map((notification) => (
             <div
               key={notification.id}
-              className="bg-surface-raised border border-line rounded-lg p-6 hover:shadow-md transition-shadow"
+              className="py-5 transition-colors hover:bg-surface-inset"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <span className="text-lg">
-                      {getStatusIcon(notification.delivery_status)}
-                    </span>
-                    <h4 className="font-semibold text-content">
+                    <h4 className="font-display text-xl font-extrabold leading-none text-content">
                       {notification.alert_name}
                     </h4>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(notification.delivery_status)}`}>
+                    <span className={`border-2 px-1.5 py-px font-display text-[12px] font-extrabold uppercase leading-tight tracking-[0.04em] ${getStatusColor(notification.delivery_status)}`}>
                       {notification.delivery_status.charAt(0).toUpperCase() + notification.delivery_status.slice(1)}
                     </span>
                   </div>
                   
-                  <div className="text-content-muted mb-3">
+                  <div className="mb-3 font-ui text-sm text-content-muted">
                     <strong>{notification.trade_details.member_name}</strong> made a{' '}
                     {notification.trade_details.transaction_type?.toLowerCase()} of{' '}
                     {notification.trade_details.ticker && (
@@ -172,14 +157,14 @@ export const AlertHistory: React.FC = () => {
                     )}
                   </div>
                   
-                  <div className="flex items-center text-sm text-content-faint space-x-4">
-                    <span>📅 {formatDate(notification.triggered_at)}</span>
-                    <span>📧 Email notification</span>
+                  <div className="flex items-center space-x-4 font-ui text-xs text-content-faint">
+                    <span className="tabular-nums">{formatDate(notification.triggered_at)}</span>
+                    <span>Email notification</span>
                   </div>
                   
                   {notification.error_message && (
-                    <div className="mt-3 p-3 bg-sev-flag/10 border border-sev-flag/30 rounded-lg">
-                      <p className="text-sm text-sev-flag">
+                    <div className="mt-3 border-l-4 border-accent bg-surface-inset p-3">
+                      <p className="font-ui text-sm text-content">
                         <strong>Error:</strong> {notification.error_message}
                       </p>
                     </div>
@@ -188,11 +173,11 @@ export const AlertHistory: React.FC = () => {
                 
                 <div className="flex space-x-2">
                   {notification.delivery_status === 'failed' && (
-                    <button className="px-3 py-1 text-xs font-medium text-sev-info bg-sev-info/10 hover:bg-sev-info/10 rounded">
+                    <button className="btn-secondary px-3 py-1 text-xs">
                       Retry
                     </button>
                   )}
-                  <button className="px-3 py-1 text-xs font-medium text-content-muted bg-surface-inset hover:bg-surface-inset rounded">
+                  <button className="btn-outline px-3 py-1 text-xs">
                     View Details
                   </button>
                 </div>

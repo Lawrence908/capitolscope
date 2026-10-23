@@ -5,20 +5,28 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  Filler,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
 import type { ChartOptions } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { useTheme } from '../../contexts/ThemeContext';
-import { chartTheme } from './chartTheme';
+import {
+  categoryAxis,
+  legendOptions,
+  titleOptions,
+  tooltipOptions,
+  useChartTheme,
+  valueAxis,
+} from './chartTheme';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  Filler,
   Title,
   Tooltip,
   Legend
@@ -34,6 +42,7 @@ export interface LineChartData {
     borderWidth?: number;
     fill?: boolean;
     tension?: number;
+    borderDash?: number[];
   }[];
 }
 
@@ -44,70 +53,44 @@ interface LineChartProps {
   className?: string;
 }
 
+/** Thick ink strokes, no point dots, hairline value grid only. */
 const LineChart: React.FC<LineChartProps> = ({ data, title, height = 400, className = '' }) => {
-  const { isDarkMode } = useTheme();
-  const c = chartTheme(isDarkMode);
+  const t = useChartTheme();
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    elements: {
+      point: { radius: 0, hoverRadius: 4, hitRadius: 8 },
+      line: { borderCapStyle: 'square' },
+    },
     plugins: {
-      legend: {
-        position: 'top' as const,
-        labels: {
-          color: c.label,
-          font: {
-            size: 12,
-          },
-        },
-      },
-      title: {
-        display: !!title,
-        text: title,
-        color: c.title,
-        font: {
-          size: 16,
-          weight: 'bold',
-        },
-      },
-      tooltip: {
-        backgroundColor: c.tooltipBg,
-        titleColor: c.tooltipTitle,
-        bodyColor: c.tooltipBody,
-        borderColor: c.tooltipBorder,
-        borderWidth: 1,
-      },
+      legend: { ...legendOptions(t), display: data.datasets.length > 1 },
+      title: titleOptions(t, title),
+      tooltip: tooltipOptions(t),
     },
     scales: {
-      x: {
-        ticks: {
-          color: c.label,
-          font: {
-            size: 11,
-          },
-        },
-        grid: {
-          color: c.grid,
-        },
-      },
-      y: {
-        ticks: {
-          color: c.label,
-          font: {
-            size: 11,
-          },
-        },
-        grid: {
-          color: c.grid,
-        },
-      },
+      x: { ...categoryAxis(t), ticks: { ...categoryAxis(t).ticks, maxTicksLimit: 8, autoSkip: true } },
+      y: valueAxis(t),
     },
+  };
+
+  const themed = {
+    ...data,
+    datasets: data.datasets.map((d, i) => ({
+      ...d,
+      borderColor: d.borderColor ?? (i === 0 ? t.ink : t.bench),
+      backgroundColor: d.backgroundColor ?? 'transparent',
+      borderWidth: d.borderWidth ?? (i === 0 ? 3 : 2),
+      pointHoverBackgroundColor: d.borderColor ?? (i === 0 ? t.ink : t.bench),
+    })),
   };
 
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <Line data={data} options={options} />
+      <Line data={themed} options={options} />
     </div>
   );
 };
 
-export default LineChart; 
+export default LineChart;

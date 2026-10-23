@@ -74,12 +74,12 @@ const ScrutinyCommand: React.FC = () => {
       <PageHeader
         eyebrow="Composite Signal"
         title="Scrutiny"
-        subtitle="A single, explainable read on who is worth a closer look. Four signals — trading edge, committee conflict, herding, and filing delay — blended and ranked across public STOCK Act disclosures. Leads for scrutiny, not verdicts."
+        subtitle="A single, explainable read on who is worth a closer look. Four signals (trading edge, committee conflict, herding and filing delay) blended and ranked across public STOCK Act disclosures. Leads for scrutiny, not verdicts."
         stats={
           summary.top
             ? [
                 { label: 'Members scored', value: summary.n },
-                { label: 'Highest score', value: summary.top.scrutiny_score.toFixed(1), tone: 'brass' },
+                { label: 'Highest score', value: summary.top.scrutiny_score.toFixed(1), tone: 'accent' },
               ]
             : undefined
         }
@@ -93,7 +93,7 @@ const ScrutinyCommand: React.FC = () => {
       </PageHeader>
 
       {error && (
-        <div className="mb-4 rounded-md border border-sev-flag/40 px-4 py-3 font-ui text-sm status-error">
+        <div className="mb-4 border-l-4 border-accent bg-surface-inset px-4 py-3 font-ui text-sm text-content">
           {error}
         </div>
       )}
@@ -103,7 +103,7 @@ const ScrutinyCommand: React.FC = () => {
           <Spinner label="Computing signals" />
         ) : (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_1fr]">
-            <section className="overflow-hidden rounded-md border border-line bg-surface-raised">
+            <section className="section-rule overflow-hidden bg-surface-raised">
               <LegendRow />
               <div className="max-h-[72vh] overflow-y-auto">
                 <Leaderboard
@@ -117,7 +117,7 @@ const ScrutinyCommand: React.FC = () => {
                 />
               </div>
             </section>
-            <aside className="h-fit rounded-md border border-line bg-surface-raised lg:sticky lg:top-6 lg:min-h-[60vh]">
+            <aside className="h-fit border-2 border-content bg-surface-raised lg:sticky lg:top-6 lg:min-h-[60vh]">
               <MemberDossier
                 member={selected}
                 missingName={missingName}
@@ -132,8 +132,8 @@ const ScrutinyCommand: React.FC = () => {
         (loading.clusters || !data.clusters ? (
           <Spinner label="Detecting herds" />
         ) : (
-          <section className="overflow-hidden rounded-md border border-line bg-surface-raised">
-            <div className="flex items-center justify-between border-b border-line px-4 py-3">
+          <section className="section-rule overflow-hidden bg-surface-raised">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line py-3">
               <Eyebrow>{data.clusters.clusters_found} cluster events · ranked by notability</Eyebrow>
               <span className="font-ui text-[11px] text-content-faint">
                 N members trading the same ticker &amp; side within 14 days
@@ -151,8 +151,8 @@ const ScrutinyCommand: React.FC = () => {
         (loading.conflicts || !data.conflicts ? (
           <Spinner label="Mapping committees" />
         ) : (
-          <section className="overflow-hidden rounded-md border border-line bg-surface-raised">
-            <div className="border-b border-line px-4 py-3">
+          <section className="section-rule overflow-hidden bg-surface-raised">
+            <div className="border-b border-line py-3">
               <Eyebrow>
                 {data.conflicts.total_conflict_trades.toLocaleString()} conflict trades ·{' '}
                 {data.conflicts.members_flagged} members
@@ -171,7 +171,7 @@ const ScrutinyCommand: React.FC = () => {
         (loading.lag || !data.lag ? (
           <Spinner label="Reading the clock" />
         ) : (
-          <section className="overflow-hidden rounded-md border border-line bg-surface-raised">
+          <section className="section-rule overflow-hidden bg-surface-raised">
             <LagView lag={data.lag} onSelectMember={selectByName} />
           </section>
         ))}
@@ -185,7 +185,7 @@ const ScrutinyCommand: React.FC = () => {
         }}
       />
 
-      <p className="mt-8 border-t border-line pt-4 font-data text-[10px] leading-relaxed text-content-faint">
+      <p className="mt-8 border-t border-line pt-4 font-ui text-[11px] leading-relaxed text-content-faint">
         Built on public STOCK Act disclosures. Amounts are disclosed-range midpoints. Scores are
         percentile-ranked prioritisation aids, not accusations.
       </p>

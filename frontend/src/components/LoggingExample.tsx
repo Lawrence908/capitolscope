@@ -87,66 +87,66 @@ const LoggingExample: React.FC = () => {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Logging System Example</h2>
+      <h2 className="mb-4 font-display text-4xl font-extrabold leading-none text-content">Logging System Example</h2>
       
       <div className="space-y-4">
-        <div className="bg-gray-100 p-4 rounded">
-          <h3 className="font-semibold mb-2">Counter Example</h3>
-          <p className="mb-2">Count: {count}</p>
+        <div className="section-rule py-4">
+          <h3 className="mb-2 font-display text-xl font-extrabold leading-none text-content">Counter Example</h3>
+          <p className="mb-2 font-ui text-sm text-content-muted">Count: {count}</p>
           <button
             onClick={handleButtonClick}
             disabled={isLoading}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+            className="btn-primary disabled:opacity-50"
           >
             {isLoading ? 'Loading...' : 'Increment Counter'}
           </button>
         </div>
 
-        <div className="bg-gray-100 p-4 rounded">
-          <h3 className="font-semibold mb-2">Form Example</h3>
+        <div className="section-rule py-4">
+          <h3 className="mb-2 font-display text-xl font-extrabold leading-none text-content">Form Example</h3>
           <form onSubmit={handleFormSubmit} className="space-y-2">
             <input
               type="text"
               value={count.toString()}
               readOnly
-              className="border rounded px-3 py-2 w-full"
+              className="input-field"
             />
             <button
               type="submit"
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="btn-secondary"
             >
               Submit Form
             </button>
           </form>
         </div>
 
-        <div className="bg-gray-100 p-4 rounded">
-          <h3 className="font-semibold mb-2">Error Example</h3>
+        <div className="section-rule py-4">
+          <h3 className="mb-2 font-display text-xl font-extrabold leading-none text-content">Error Example</h3>
           <button
             onClick={handleError}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="btn-primary"
           >
             Trigger Error
           </button>
         </div>
 
-        <div className="bg-gray-100 p-4 rounded">
-          <h3 className="font-semibold mb-2">Performance Example</h3>
+        <div className="section-rule py-4">
+          <h3 className="mb-2 font-display text-xl font-extrabold leading-none text-content">Performance Example</h3>
           <button
             onClick={handlePerformanceTest}
-            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+            className="btn-secondary"
           >
             Run Performance Test
           </button>
         </div>
 
-        <div className="bg-blue-50 p-4 rounded">
-          <h3 className="font-semibold mb-2">Logging Information</h3>
-          <p className="text-sm text-gray-600">
+        <div className="border-l-4 border-content bg-surface-inset p-4">
+          <h3 className="mb-2 font-display text-xl font-extrabold leading-none text-content">Logging Information</h3>
+          <p className="font-ui text-sm text-content-muted">
             This component demonstrates various logging patterns. Check the browser console
             and developer tools to see the structured logging output.
           </p>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="font-ui text-sm text-content-muted mt-2">
             In development mode, logs are also stored in localStorage under 'capitolscope_logs'.
           </p>
         </div>

@@ -6,47 +6,42 @@ const TermsOfService: React.FC = () => {
   return (
     <div className="min-h-screen bg-surface">
       {/* Header */}
-      <header className="bg-surface-raised shadow-lg border-b border-accent/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4 sm:py-6">
-            <Link to="/dashboard" className="flex items-center">
-              <img 
-                src="/capitol-scope-logo.png" 
-                alt="CapitolScope Logo" 
-                className="h-10 w-10 rounded-lg"
-                loading="lazy"
-                width="40"
-                height="40"
-              />
-              <h1 className="ml-3 text-lg sm:text-xl font-bold text-glow-primary">CapitolScope</h1>
+      <header className="bg-slab text-slab-on">
+        <div className="mx-auto flex h-[68px] max-w-[1320px] items-center justify-between px-4 sm:px-8">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="CapitolScope home">
+            <span aria-hidden="true" className="block h-9 w-1.5 bg-accent" />
+            <span className="font-display text-[21px] font-extrabold leading-[0.82] tracking-[0.02em] text-slab-on">
+              CAPITOL
+              <br />
+              SCOPE
+            </span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <DarkModeToggle />
+            <Link
+              to="/dashboard"
+              className="font-ui text-sm font-semibold text-slab-muted transition-colors hover:text-slab-on"
+            >
+              ← Back to Dashboard
             </Link>
-            <div className="flex items-center gap-4">
-              <DarkModeToggle />
-              <Link
-                to="/dashboard"
-                className="text-sm sm:text-base text-content-muted hover:text-accent transition-colors duration-300"
-              >
-                ← Back to Dashboard
-              </Link>
-            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="card p-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-accent dark:text-glow-primary mb-8">
+        <div>
+          <h1 className="mb-6 border-b-[3px] border-content pb-6 font-display text-6xl font-extrabold leading-[0.9] text-content sm:text-7xl">
             Terms of Service
           </h1>
           
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <p className="text-sm text-content-muted mb-8">
+          <div className="max-w-none font-ui text-[15px] leading-relaxed">
+            <p className="mb-8 text-sm text-content-faint">
               <strong>Last updated:</strong> August 15, 2025
             </p>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 1. Acceptance of Terms
               </h2>
               <p className="text-content-muted mb-4">
@@ -57,8 +52,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 2. Description of Service
               </h2>
               <p className="text-content-muted mb-4">
@@ -74,11 +69,11 @@ const TermsOfService: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 3. User Accounts and Registration
               </h2>
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 3.1 Account Creation
               </h3>
               <p className="text-content-muted mb-4">
@@ -92,7 +87,7 @@ const TermsOfService: React.FC = () => {
                 <li>Notify us immediately of any unauthorized use</li>
               </ul>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 3.2 Account Termination
               </h3>
               <p className="text-content-muted">
@@ -100,11 +95,11 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 4. Subscription Terms
               </h2>
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 4.1 Subscription Tiers
               </h3>
               <p className="text-content-muted mb-4">
@@ -117,7 +112,7 @@ const TermsOfService: React.FC = () => {
                 <li><strong>Enterprise Tier:</strong> Custom pricing for organizations</li>
               </ul>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 4.2 Billing and Payment
               </h3>
               <ul className="list-disc pl-6 mb-4 text-content-muted">
@@ -128,7 +123,7 @@ const TermsOfService: React.FC = () => {
                 <li>Failed payments may result in service suspension</li>
               </ul>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 4.3 Cancellation
               </h3>
               <p className="text-content-muted">
@@ -136,8 +131,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 5. Acceptable Use Policy
               </h2>
               <p className="text-content-muted mb-4">
@@ -155,11 +150,11 @@ const TermsOfService: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 6. Data and Content
               </h2>
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 6.1 Data Sources
               </h3>
               <p className="text-content-muted mb-4">
@@ -172,7 +167,7 @@ const TermsOfService: React.FC = () => {
                 <li>User-generated content and portfolios</li>
               </ul>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 6.2 Data Accuracy
               </h3>
               <p className="text-content-muted mb-4">
@@ -185,7 +180,7 @@ const TermsOfService: React.FC = () => {
                 <li>Availability of all historical data</li>
               </ul>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 6.3 User Content
               </h3>
               <p className="text-content-muted">
@@ -193,8 +188,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 7. Intellectual Property
               </h2>
               <p className="text-content-muted mb-4">
@@ -205,8 +200,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 8. Privacy and Data Protection
               </h2>
               <p className="text-content-muted mb-4">
@@ -217,25 +212,25 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 9. Disclaimers and Limitations
               </h2>
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 9.1 Service Availability
               </h3>
               <p className="text-content-muted mb-4">
                 We strive to maintain high availability but cannot guarantee uninterrupted access. The Service may be temporarily unavailable due to maintenance, updates, or technical issues.
               </p>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 9.2 Investment Disclaimer
               </h3>
               <p className="text-content-muted mb-4">
                 <strong>IMPORTANT:</strong> CapitolScope is for informational purposes only. We do not provide investment advice, and the information provided should not be considered as such. Always consult with qualified financial advisors before making investment decisions.
               </p>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 9.3 Limitation of Liability
               </h3>
               <p className="text-content-muted">
@@ -243,8 +238,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 10. Indemnification
               </h2>
               <p className="text-content-muted">
@@ -252,8 +247,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 11. Governing Law and Dispute Resolution
               </h2>
               <p className="text-content-muted mb-4">
@@ -264,8 +259,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 12. Changes to Terms
               </h2>
               <p className="text-content-muted mb-4">
@@ -281,8 +276,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 13. Severability
               </h2>
               <p className="text-content-muted">
@@ -290,8 +285,8 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 14. Entire Agreement
               </h2>
               <p className="text-content-muted">
@@ -299,14 +294,14 @@ const TermsOfService: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 15. Contact Information
               </h2>
               <p className="text-content-muted mb-4">
                 If you have any questions about these Terms of Service, please contact us:
               </p>
-              <div className="bg-surface-inset dark:bg-surface-inset p-4 rounded-lg">
+              <div className="border-l-4 border-content bg-surface-inset p-4">
                 <p className="text-content-muted">
                   <strong>Email:</strong> capitolscope@gmail.com<br />
                   <strong>Address:</strong> CapitolScope Legal Team<br />

@@ -29,11 +29,11 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ isOpen, onClose, title, message
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4 text-center">
-        <div className="relative transform overflow-hidden rounded-lg bg-surface border border-accent/20 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+        <div className="relative transform overflow-hidden border-2 border-content bg-surface-raised px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
           <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
             <button
               type="button"
-              className="rounded-md bg-surface text-content-faint hover:text-content-faint focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+              className="text-content-faint hover:text-content focus:outline-none focus-ring"
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
@@ -42,10 +42,10 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ isOpen, onClose, title, message
           </div>
           <div className="sm:flex sm:items-start">
             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10">
-              <ExclamationTriangleIcon className="h-6 w-6 text-sev-flag dark:text-sev-flag" />
+              <ExclamationTriangleIcon className="h-6 w-6 text-accent" />
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="text-base font-semibold leading-6 text-content">
+              <h3 className="font-display text-3xl font-extrabold leading-none text-content">
                 {title}
               </h3>
               <div className="mt-2">
@@ -58,7 +58,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ isOpen, onClose, title, message
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
             <button
               type="button"
-              className="inline-flex w-full justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold text-[#071310] shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:ml-3 sm:w-auto"
+              className="btn-primary inline-flex w-full justify-center text-sm focus-ring sm:ml-3 sm:w-auto"
               onClick={onClose}
             >
               OK
@@ -85,11 +85,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4 text-center">
-        <div className="relative transform overflow-hidden rounded-lg bg-surface border border-accent/20 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+        <div className="relative transform overflow-hidden border-2 border-content bg-surface-raised px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
           <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
             <button
               type="button"
-              className="rounded-md bg-surface text-content-faint hover:text-content-faint focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+              className="text-content-faint hover:text-content focus:outline-none focus-ring"
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
@@ -99,13 +99,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
           <div className="sm:flex sm:items-start">
             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10">
               {type === 'success' ? (
-                <CheckIcon className="h-6 w-6 text-accent dark:text-accent" />
+                <CheckIcon className="h-6 w-6 text-content" />
               ) : (
-                <ExclamationTriangleIcon className="h-6 w-6 text-sev-flag dark:text-sev-flag" />
+                <ExclamationTriangleIcon className="h-6 w-6 text-accent" />
               )}
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="text-base font-semibold leading-6 text-content">
+              <h3 className="font-display text-3xl font-extrabold leading-none text-content">
                 {type === 'success' ? 'Payment Successful!' : 'Payment Cancelled'}
               </h3>
               <div className="mt-2">
@@ -118,7 +118,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
             <button
               type="button"
-              className="inline-flex w-full justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold text-[#071310] shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:ml-3 sm:w-auto"
+              className="btn-primary inline-flex w-full justify-center text-sm focus-ring sm:ml-3 sm:w-auto"
               onClick={onClose}
             >
               {type === 'success' ? 'Get Started' : 'OK'}
@@ -481,29 +481,24 @@ const PremiumSignup: React.FC = () => {
   return (
     <div className="min-h-screen bg-surface">
       {/* Header */}
-      <header className="bg-surface-raised shadow-lg border-b border-accent/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4 sm:py-6">
-                          <Link to="/dashboard" className="flex items-center">
-                <img 
-                  src="/capitol-scope-logo.png" 
-                  alt="CapitolScope Logo" 
-                  className="h-10 w-10 rounded-lg/20"
-                  loading="lazy"
-                  width="40"
-                  height="40"
-                />
-                <h1 className="ml-3 text-lg sm:text-xl font-bold text-glow-primary">CapitolScope</h1>
-              </Link>
-            <div className="flex items-center gap-4">
-              <DarkModeToggle />
-              <Link
-                to="/dashboard"
-                className="text-sm sm:text-base text-content-muted hover:text-accent transition-colors duration-300"
-              >
-                ← Back to Dashboard
-              </Link>
-            </div>
+      <header className="bg-slab text-slab-on">
+        <div className="mx-auto flex h-[68px] max-w-[1320px] items-center justify-between px-4 sm:px-8">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="CapitolScope home">
+            <span aria-hidden="true" className="block h-9 w-1.5 bg-accent" />
+            <span className="font-display text-[21px] font-extrabold leading-[0.82] tracking-[0.02em] text-slab-on">
+              CAPITOL
+              <br />
+              SCOPE
+            </span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <DarkModeToggle />
+            <Link
+              to="/dashboard"
+              className="font-ui text-sm font-semibold text-slab-muted transition-colors hover:text-slab-on"
+            >
+              ← Back to Dashboard
+            </Link>
           </div>
         </div>
       </header>
@@ -512,21 +507,21 @@ const PremiumSignup: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Redirect Banner */}
         {redirectInfo && (
-          <div className="mb-8 p-4 lg:p-6 bg-sev-watch/10 dark:bg-sev-watch/10 border border-sev-watch/30 dark:border-sev-watch/30 rounded-lg">
+          <div className="mb-8 border-l-4 border-accent bg-surface-inset p-4 lg:p-6">
             <div className="flex items-center">
-              <ExclamationTriangleIcon className="h-5 w-5 text-sev-watch dark:text-sev-watch mr-3" />
+              <ExclamationTriangleIcon className="mr-3 h-5 w-5 flex-shrink-0 text-accent" />
               <div>
-                <h3 className="text-lg font-semibold text-sev-watch dark:text-sev-watch">
+                <h3 className="font-display text-2xl font-extrabold leading-none text-content">
                   {redirectInfo.featureName ? `${redirectInfo.featureName} Requires ${redirectInfo.requiredTier?.toUpperCase()} Subscription` : 'Premium Feature Access Required'}
                 </h3>
-                <p className="text-sev-watch dark:text-sev-watch mt-1">
+                <p className="mt-1 font-ui text-sm text-content-muted">
                   {redirectInfo.featureName 
                     ? `You need a ${redirectInfo.requiredTier} subscription to access ${redirectInfo.featureName}.`
                     : 'This feature requires a premium subscription. Choose a plan below to continue.'
                   }
                 </p>
                 {redirectInfo.from && (
-                  <p className="text-sev-watch dark:text-sev-watch text-sm mt-1">
+                  <p className="mt-1 font-ui text-xs text-content-faint">
                     Redirected from: {redirectInfo.from}
                   </p>
                 )}
@@ -535,35 +530,35 @@ const PremiumSignup: React.FC = () => {
           </div>
         )}
 
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-accent dark:text-glow-primary sm:text-5xl mb-4">
+        <div className="mb-8 border-b-[3px] border-content pb-6 sm:mb-10">
+          <h1 className="font-display text-6xl font-extrabold leading-[0.9] text-content sm:text-7xl">
             Choose Your Plan
           </h1>
-          <p className="mt-4 text-lg sm:text-xl text-content-muted max-w-3xl mx-auto">
+          <p className="mt-4 max-w-3xl font-ui text-[17px] text-content-muted">
             Unlock advanced features to get deeper insights into congressional trading activity and stay ahead of the market.
           </p>
         </div>
 
         {/* Pricing Toggle */}
-        <div className="flex justify-center mb-6 sm:mb-8">
-          <div className="card p-1">
+        <div className="mb-8 flex">
+          <div className="border-2 border-content">
             <div className="flex">
               <button
                 onClick={() => setSelectedPlan('monthly')}
-                className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
+                className={`px-4 py-2 font-display text-lg font-extrabold uppercase tracking-[0.02em] transition-colors ${
                   selectedPlan === 'monthly'
-                    ? 'bg-accent text-[#071310]'
-                    : 'text-content-muted hover:text-accent'
+                    ? 'bg-content text-surface'
+                    : 'text-content-muted hover:text-content'
                 }`}
               >
                 Monthly
               </button>
               <button
                 onClick={() => setSelectedPlan('yearly')}
-                className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
+                className={`px-4 py-2 font-display text-lg font-extrabold uppercase tracking-[0.02em] transition-colors ${
                   selectedPlan === 'yearly'
-                    ? 'bg-accent text-[#071310]'
-                    : 'text-content-muted hover:text-accent'
+                    ? 'bg-content text-surface'
+                    : 'text-content-muted hover:text-content'
                 }`}
               >
                 Yearly
@@ -573,18 +568,18 @@ const PremiumSignup: React.FC = () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-12">
+        <div className="mb-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Free Plan */}
-          <div className="card p-6">
-                          <div className="text-center">
-                <h3 className="text-lg font-semibold text-content">Free</h3>
+          <div className="flex flex-col border-2 border-content p-6">
+                          <div>
+                <h3 className="font-display text-4xl font-extrabold uppercase leading-none text-content">Free</h3>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-accent dark:text-accent">$0</span>
-                  <span className="text-content-muted">/{plans[selectedPlan].free.period}</span>
+                  <span className="font-display text-6xl font-extrabold leading-none tabular-nums text-content">$0</span>
+                  <span className="ml-1 font-ui text-sm text-content-faint">/{plans[selectedPlan].free.period}</span>
                 </div>
-                <p className="mt-2 text-sm text-content-muted">Perfect for getting started</p>
+                <p className="mt-2 font-ui text-sm text-content-muted">Perfect for getting started</p>
               </div>
-            <div className="mt-6">
+            <div className="mt-auto pt-6">
               <button
                 onClick={() => handleUpgrade('free')}
                 disabled={isLoading}
@@ -596,22 +591,22 @@ const PremiumSignup: React.FC = () => {
           </div>
 
           {/* Pro Plan */}
-          <div className="card border-accent p-6 relative">
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-accent text-[#071310] px-3 py-1 rounded-full text-xs font-medium">Most Popular</span>
+          <div className="relative flex flex-col border-[3px] border-content p-6 pt-10">
+            <div className="absolute inset-x-0 top-0">
+              <span className="block bg-slab px-3 py-1 text-center font-ui text-[11px] font-bold uppercase tracking-[0.12em] text-slab-on">Most popular</span>
             </div>
-                          <div className="text-center">
-                <h3 className="text-lg font-semibold text-content">Pro</h3>
+                          <div>
+                <h3 className="font-display text-4xl font-extrabold uppercase leading-none text-content">Pro</h3>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-accent dark:text-accent">${plans[selectedPlan].pro.price}</span>
-                  <span className="text-content-muted">/{plans[selectedPlan].pro.period}</span>
+                  <span className="font-display text-6xl font-extrabold leading-none tabular-nums text-content">${plans[selectedPlan].pro.price}</span>
+                  <span className="ml-1 font-ui text-sm text-content-faint">/{plans[selectedPlan].pro.period}</span>
                 </div>
                 {plans[selectedPlan].pro.savings && (
-                  <p className="mt-2 text-sm text-success font-medium">{plans[selectedPlan].pro.savings}</p>
+                  <p className="mt-2 font-ui text-sm font-bold text-content">{plans[selectedPlan].pro.savings}</p>
                 )}
-                <p className="mt-2 text-sm text-content-muted">For serious investors</p>
+                <p className="mt-2 font-ui text-sm text-content-muted">For serious investors</p>
               </div>
-            <div className="mt-6">
+            <div className="mt-auto pt-6">
               <button
                 onClick={() => handleUpgrade('pro')}
                 disabled={isLoading}
@@ -623,23 +618,23 @@ const PremiumSignup: React.FC = () => {
           </div>
 
           {/* Premium Plan */}
-          <div className="card p-6">
-                          <div className="text-center">
-                <h3 className="text-lg font-semibold text-content">Premium</h3>
+          <div className="flex flex-col border-2 border-content p-6">
+                          <div>
+                <h3 className="font-display text-4xl font-extrabold uppercase leading-none text-content">Premium</h3>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-accent dark:text-accent">${plans[selectedPlan].premium.price}</span>
-                  <span className="text-content-muted">/{plans[selectedPlan].premium.period}</span>
+                  <span className="font-display text-6xl font-extrabold leading-none tabular-nums text-content">${plans[selectedPlan].premium.price}</span>
+                  <span className="ml-1 font-ui text-sm text-content-faint">/{plans[selectedPlan].premium.period}</span>
                 </div>
                 {plans[selectedPlan].premium.savings && (
-                  <p className="mt-2 text-sm text-success font-medium">{plans[selectedPlan].premium.savings}</p>
+                  <p className="mt-2 font-ui text-sm font-bold text-content">{plans[selectedPlan].premium.savings}</p>
                 )}
-                <p className="mt-2 text-sm text-content-muted">For power users</p>
+                <p className="mt-2 font-ui text-sm text-content-muted">For power users</p>
               </div>
-            <div className="mt-6">
+            <div className="mt-auto pt-6">
               <button
                 onClick={() => handleUpgrade('premium')}
                 disabled={isLoading}
-                className="w-full btn-primary disabled:opacity-50"
+                className="w-full btn-secondary disabled:opacity-50"
               >
                 {isLoading ? 'Processing...' : 'Upgrade to Premium'}
               </button>
@@ -647,23 +642,23 @@ const PremiumSignup: React.FC = () => {
           </div>
 
           {/* Enterprise Plan */}
-          <div className="card p-6">
-                          <div className="text-center">
-                <h3 className="text-lg font-semibold text-content">Enterprise</h3>
+          <div className="flex flex-col border-2 border-content p-6">
+                          <div>
+                <h3 className="font-display text-4xl font-extrabold uppercase leading-none text-content">Enterprise</h3>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-accent dark:text-accent">${plans[selectedPlan].enterprise.price}</span>
-                  <span className="text-content-muted">/{plans[selectedPlan].enterprise.period}</span>
+                  <span className="font-display text-6xl font-extrabold leading-none tabular-nums text-content">${plans[selectedPlan].enterprise.price}</span>
+                  <span className="ml-1 font-ui text-sm text-content-faint">/{plans[selectedPlan].enterprise.period}</span>
                 </div>
                 {plans[selectedPlan].enterprise.savings && (
-                  <p className="mt-2 text-sm text-success font-medium">{plans[selectedPlan].enterprise.savings}</p>
+                  <p className="mt-2 font-ui text-sm font-bold text-content">{plans[selectedPlan].enterprise.savings}</p>
                 )}
-                <p className="mt-2 text-sm text-content-muted">For organizations</p>
+                <p className="mt-2 font-ui text-sm text-content-muted">For organizations</p>
               </div>
-            <div className="mt-6">
+            <div className="mt-auto pt-6">
               <button
                 onClick={() => handleUpgrade('enterprise')}
                 disabled={isLoading}
-                className="w-full btn-primary disabled:opacity-50"
+                className="w-full btn-secondary disabled:opacity-50"
               >
                 {isLoading ? 'Processing...' : 'Contact Sales'}
               </button>
@@ -672,61 +667,61 @@ const PremiumSignup: React.FC = () => {
         </div>
 
         {/* Features Table */}
-        <div className="card overflow-hidden">
-          <div className="px-6 py-4 border-b border-accent/20">
-            <h2 className="text-xl font-semibold text-accent dark:text-accent">Feature Comparison</h2>
+        <div className="section-rule overflow-hidden">
+          <div className="border-b border-line py-3">
+            <h2 className="font-display text-4xl font-extrabold leading-none text-content">Feature comparison</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-surface-raised">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-content-faint uppercase tracking-wider">Feature</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-content-faint uppercase tracking-wider">Free</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-content-faint uppercase tracking-wider">Pro</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-content-faint uppercase tracking-wider">Premium</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-content-faint uppercase tracking-wider">Enterprise</th>
+              <thead>
+                <tr className="border-b-2 border-content">
+                  <th className="px-6 py-3 text-left font-display text-lg font-extrabold uppercase tracking-[0.02em] text-content">Feature</th>
+                  <th className="px-6 py-3 text-center font-display text-lg font-extrabold uppercase tracking-[0.02em] text-content">Free</th>
+                  <th className="px-6 py-3 text-center font-display text-lg font-extrabold uppercase tracking-[0.02em] text-content">Pro</th>
+                  <th className="px-6 py-3 text-center font-display text-lg font-extrabold uppercase tracking-[0.02em] text-content">Premium</th>
+                  <th className="px-6 py-3 text-center font-display text-lg font-extrabold uppercase tracking-[0.02em] text-content">Enterprise</th>
                 </tr>
               </thead>
-              <tbody className="bg-surface divide-y divide-line">
+              <tbody className="divide-y divide-line">
                 {features.map((feature, index) => {
                   const Icon = feature.icon;
                   return (
-                    <tr key={index} className="hover:bg-surface-raised dark:hover:bg-surface-raised transition-colors duration-200">
+                    <tr key={index} className="transition-colors hover:bg-surface-inset">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <Icon className="h-5 w-5 text-accent mr-3" />
+                          <Icon className="mr-3 h-5 w-5 text-content" />
                           <div>
-                            <div className="text-sm font-medium text-content">{feature.name}</div>
-                            <div className="text-sm text-content-muted">{feature.description}</div>
+                            <div className="font-ui text-sm font-bold text-content">{feature.name}</div>
+                            <div className="font-ui text-sm text-content-muted">{feature.description}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {feature.free ? (
-                          <CheckIcon className="h-5 w-5 text-success mx-auto" />
+                          <CheckIcon className="mx-auto h-5 w-5 text-content" />
                         ) : (
-                          <span className="text-content-faint dark:text-content-muted">—</span>
+                          <span className="text-content-faint" aria-label="Not included">–</span>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {feature.pro ? (
-                          <CheckIcon className="h-5 w-5 text-success mx-auto" />
+                          <CheckIcon className="mx-auto h-5 w-5 text-content" />
                         ) : (
-                          <span className="text-content-faint dark:text-content-muted">—</span>
+                          <span className="text-content-faint" aria-label="Not included">–</span>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {feature.premium ? (
-                          <CheckIcon className="h-5 w-5 text-success mx-auto" />
+                          <CheckIcon className="mx-auto h-5 w-5 text-content" />
                         ) : (
-                          <span className="text-content-faint dark:text-content-muted">—</span>
+                          <span className="text-content-faint" aria-label="Not included">–</span>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {feature.enterprise ? (
-                          <CheckIcon className="h-5 w-5 text-success mx-auto" />
+                          <CheckIcon className="mx-auto h-5 w-5 text-content" />
                         ) : (
-                          <span className="text-content-faint dark:text-content-muted">—</span>
+                          <span className="text-content-faint" aria-label="Not included">–</span>
                         )}
                       </td>
                     </tr>
@@ -738,49 +733,49 @@ const PremiumSignup: React.FC = () => {
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-16 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-accent dark:text-glow-primary text-center mb-8">
+        <div className="mt-16 max-w-3xl">
+          <h2 className="mb-6 border-t-[3px] border-content pt-3 font-display text-4xl font-extrabold leading-none text-content">
             Frequently Asked Questions
           </h2>
                       <div className="space-y-6">
-              <div className="card p-6">
-                <h3 className="text-lg font-medium text-content">
+              <div className="border-b border-line pb-5">
+                <h3 className="font-ui text-base font-bold text-content">
                   Can I cancel my subscription anytime?
                 </h3>
                 <p className="mt-2 text-content-muted">
                   Yes, you can cancel your subscription at any time. You'll continue to have access to your current tier features until the end of your current billing period.
                 </p>
               </div>
-              <div className="card p-6">
-                <h3 className="text-lg font-medium text-content">
+              <div className="border-b border-line pb-5">
+                <h3 className="font-ui text-base font-bold text-content">
                   What payment methods do you accept?
                 </h3>
                 <p className="mt-2 text-content-muted">
                   We accept all major credit cards, debit cards, and PayPal. All payments are processed securely through Stripe.
                 </p>
               </div>
-              <div className="card p-6">
-                <h3 className="text-lg font-medium text-content">
+              <div className="border-b border-line pb-5">
+                <h3 className="font-ui text-base font-bold text-content">
                   Is there a free trial?
                 </h3>
                 <p className="mt-2 text-content-muted">
                   Yes! You can try Premium features free for 7 days. No credit card required to start your trial.
                 </p>
               </div>
-              <div className="card p-6">
-                <h3 className="text-lg font-medium text-content">
+              <div className="border-b border-line pb-5">
+                <h3 className="font-ui text-base font-bold text-content">
                   How often is the data updated?
                 </h3>
                 <p className="mt-2 text-content-muted">
                   Our congressional trading data is updated daily from official sources. Premium users get real-time alerts when new trades are reported.
                 </p>
               </div>
-              <div className="card p-6">
-                <h3 className="text-lg font-medium text-content">
+              <div className="border-b border-line pb-5">
+                <h3 className="font-ui text-base font-bold text-content">
                   How does your free tier compare to Capitol Trades?
                 </h3>
                 <p className="mt-2 text-content-muted">
-                  Our free tier includes trade alerts, basic portfolio analytics, and CSV export—features that Capitol Trades reserves for paid users. We believe in transparency and want to give you more value from the start.
+                  Our free tier includes trade alerts, basic portfolio analytics, and CSV export: features that Capitol Trades reserves for paid users. We believe in transparency and want to give you more value from the start.
                 </p>
               </div>
             </div>
@@ -788,9 +783,9 @@ const PremiumSignup: React.FC = () => {
 
         {/* Current Subscription Info */}
         {subscriptionInfo && (
-          <div className="mt-16 max-w-2xl mx-auto">
-            <div className="card p-6">
-              <h2 className="text-xl font-semibold text-accent mb-4">Current Subscription</h2>
+          <div className="mt-16 max-w-2xl">
+            <div className="section-rule pt-3">
+              <h2 className="mb-4 font-display text-4xl font-extrabold leading-none text-content">Current subscription</h2>
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-content-muted">Plan:</span>
@@ -801,7 +796,7 @@ const PremiumSignup: React.FC = () => {
                 <div className="flex justify-between">
                   <span className="text-content-muted">Status:</span>
                   <span className={`font-medium ${
-                    subscriptionInfo.status === 'active' ? 'text-success' : 'text-warning'
+                    subscriptionInfo.status === 'active' ? 'text-content' : 'text-accent'
                   }`}>
                     {subscriptionInfo.status}
                   </span>
@@ -815,9 +810,9 @@ const PremiumSignup: React.FC = () => {
                   </div>
                 )}
                 {subscriptionInfo.cancel_at_period_end && (
-                  <div className="bg-warning/10 border border-warning/20 rounded-lg p-3">
-                    <p className="text-warning text-sm">
-                      ⚠️ Your subscription will be canceled at the end of the current billing period.
+                  <div className="border-l-4 border-accent bg-surface-inset p-3">
+                    <p className="font-ui text-sm text-content">
+                      Your subscription will be canceled at the end of the current billing period.
                     </p>
                   </div>
                 )}
@@ -852,7 +847,7 @@ const PremiumSignup: React.FC = () => {
         <div className="mt-16 text-center">
           <p className="text-content-muted">
             Have questions? Contact us at{' '}
-            <a href="mailto:capitolscope@gmail.com" className="text-accent dark:text-accent hover:text-accent-strong dark:hover:text-accent transition-colors duration-300">
+            <a href="mailto:capitolscope@gmail.com" className="font-semibold text-accent transition-colors hover:text-accent-strong">
               capitolscope@gmail.com
             </a>
           </p>

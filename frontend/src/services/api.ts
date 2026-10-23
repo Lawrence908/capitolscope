@@ -160,6 +160,8 @@ class APIClient {
     };
     if (filters.party && partyToCode[filters.party]) {
       params.append('parties', partyToCode[filters.party]);
+    } else if (filters.party) {
+      params.append('parties', filters.party);
     }
     if (filters.state) {
       params.append('states', filters.state);
@@ -169,6 +171,15 @@ class APIClient {
     }
     if (filters.search) {
       params.append('search', filters.search);
+    }
+    if (filters.has_trades) {
+      params.append('has_trades', 'true');
+    }
+    if (filters.sort_by) {
+      params.append('sort_by', filters.sort_by);
+    }
+    if (filters.sort_order) {
+      params.append('sort_order', filters.sort_order);
     }
 
     const response = await this.client.get(`/api/v1/members/?${params}`);
@@ -200,6 +211,34 @@ class APIClient {
   async getMember(id: string): Promise<CongressMember> {
     const response = await this.client.get(`/api/v1/members/${id}`);
     return response.data.data; // Extract the data field from the response envelope
+  }
+
+  /** Public per-member disclosure stats (timing, late count, volume range in cents). */
+  async getMemberStats(id: string): Promise<import('../types').MemberDisclosureStats> {
+    const response = await this.client.get(`/api/v1/members/${encodeURIComponent(id)}/stats`);
+    return response.data?.data;
+  }
+
+  /** Public per-member trades, newest filing first; future-dated trades excluded. */
+  async getMemberTrades(
+    id: string,
+    page: number = 1,
+    perPage: number = 50
+  ): Promise<PaginatedResponse<CongressionalTrade>> {
+    const response = await this.client.get(
+      `/api/v1/members/${encodeURIComponent(id)}/trades?page=${page}&limit=${perPage}`
+    );
+    const raw = response.data?.data;
+    const meta = raw?.meta ?? {};
+    return {
+      items: raw?.items ?? [],
+      total: meta.total ?? 0,
+      page: meta.page ?? page,
+      per_page: meta.per_page ?? perPage,
+      pages: meta.pages ?? 0,
+      has_next: Boolean(meta.has_next),
+      has_prev: Boolean(meta.has_prev),
+    };
   }
 
   async getMemberProfile(id: number): Promise<MemberProfile> {
@@ -524,8 +563,72 @@ class APIClient {
     return res.data?.data;
   }
 
+  /** Public trade permalink: trade, member, security, timing, related trades. */
+  async getTradeDetail(id: string): Promise<import('../types').TradeDetail> {
+    const res = await this.client.get(`/api/v1/trades/${encodeURIComponent(id)}`);
+    return res.data?.data;
+  }
+
+  /** CSV export of trades (Pro+; the API returns 401/403 otherwise). */
+  async exportTradesCsv(params: { ticker?: string; member_id?: string } = {}): Promise<Blob> {
+    const q = new URLSearchParams();
+    if (params.ticker) q.append('ticker', params.ticker);
+    if (params.member_id) q.append('member_id', params.member_id);
+    const res = await this.client.get(`/api/v1/trades/export/csv?${q}`, { responseType: 'blob' });
+    return res.data as Blob;
+  }
+
+  /** Public ticker page: security, whole-dollar closes, congressional trades. */
+  async getTickerPage(ticker: string): Promise<import('../types').TickerPageData> {
+    const res = await this.client.get(`/api/v1/trades/ticker/${encodeURIComponent(ticker)}`);
+    return res.data?.data;
+  }
+
   async getTickerTrades(ticker: string): Promise<import('../types/scrutiny').TickerDetail> {
     const res = await this.client.get(`/api/v1/analytics/ticker/${encodeURIComponent(ticker)}`);
+    return res.data?.data;
+  }
+
+  // ---- Public (anonymous) feed: homepage + late filers ----
+  async getPublicHome(): Promise<import('../types/public').PublicHome> {
+    const res = await this.client.get('/api/v1/public/home');
+    return res.data?.data;
+  }
+
+  async getPublicLate(days = 365, perMember = 50): Promise<import('../types/public').PublicLate> {
+    const res = await this.client.get(`/api/v1/public/late?days=${days}&per_member=${perMember}`);
+    return res.data?.data;
+  }
+
+  // ---- Admin: X post review queue ----
+  async getSocialStatus(): Promise<import('../types/social').SocialStatus> {
+    const res = await this.client.get('/api/v1/admin/social/status');
+    return res.data?.data;
+  }
+
+  async getSocialPosts(status?: string): Promise<import('../types/social').SocialPost[]> {
+    const q = status ? `?status=${encodeURIComponent(status)}` : '';
+    const res = await this.client.get(`/api/v1/admin/social/posts${q}`);
+    return res.data?.data ?? [];
+  }
+
+  async editSocialPost(id: string, text: string): Promise<import('../types/social').SocialPost> {
+    const res = await this.client.patch(`/api/v1/admin/social/posts/${id}`, { text });
+    return res.data?.data;
+  }
+
+  async approveSocialPost(id: string): Promise<import('../types/social').SocialPost> {
+    const res = await this.client.post(`/api/v1/admin/social/posts/${id}/approve`);
+    return res.data?.data;
+  }
+
+  async rejectSocialPost(id: string): Promise<import('../types/social').SocialPost> {
+    const res = await this.client.post(`/api/v1/admin/social/posts/${id}/reject`);
+    return res.data?.data;
+  }
+
+  async draftSocialPostsNow(): Promise<{ task_id: string }> {
+    const res = await this.client.post('/api/v1/admin/social/draft-now');
     return res.data?.data;
   }
 }

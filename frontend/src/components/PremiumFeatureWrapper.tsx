@@ -40,8 +40,8 @@ const PremiumFeatureWrapper: React.FC<PremiumFeatureWrapperProps> = ({
   };
 
   const PremiumBadge = () => (
-    <div className="flex items-center text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-full">
-      <StarIcon className="h-3 w-3 mr-1" />
+    <div className="inline-flex items-center border-2 border-content px-1.5 py-px font-display text-[12px] font-extrabold uppercase leading-tight tracking-[0.04em] text-content">
+      <StarIcon className="mr-1 h-3 w-3" />
       {requiredTier === 'pro' ? 'Pro' : requiredTier === 'premium' ? 'Premium' : 'Enterprise'}
     </div>
   );

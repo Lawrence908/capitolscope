@@ -73,19 +73,19 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
     <div className="space-y-6">
       {/* Member Selection */}
       <div>
-        <label className="block text-sm font-medium text-content-muted mb-2">
+        <label className="mb-2 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
           Select Congress Member
         </label>
         
         {selectedMember ? (
-          <div className="flex items-center space-x-4 p-4 border border-line rounded-lg bg-surface-inset">
-            <div className="w-12 h-12 bg-surface-inset rounded-full flex items-center justify-center">
-              <span className="text-lg font-bold text-content-muted">
+          <div className="flex items-center space-x-4 p-4 border border-line bg-surface-inset">
+            <div className="flex h-12 w-12 items-center justify-center bg-slab">
+              <span className="font-display text-xl font-extrabold text-slab-on">
                 {selectedMember.first_name[0]}{selectedMember.last_name[0]}
               </span>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-content">
+              <h3 className="font-display text-2xl font-extrabold leading-none text-content">
                 {selectedMember.first_name} {selectedMember.last_name}
               </h3>
               <p className="text-sm text-content-muted">
@@ -105,31 +105,31 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for a congress member..."
-              className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              placeholder="Search for a congress member"
+              className="input-field"
             />
             
             {isSearching && (
               <div className="absolute right-3 top-2.5">
-                <div className="animate-spin h-5 w-5 border-2 border-accent border-t-transparent rounded-full"></div>
+                <div className="animate-spin h-5 w-5 border-2 border-line border-t-accent rounded-full"></div>
               </div>
             )}
             
             {searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 bg-surface-raised border border-line rounded-lg mt-1 max-h-64 overflow-y-auto z-10 shadow-lg">
+              <div className="absolute top-full left-0 right-0 bg-surface-raised border-2 border-content mt-1 max-h-64 overflow-y-auto z-10 shadow-lg">
                 {searchResults.map((member) => (
                   <button
                     key={member.id}
                     onClick={() => handleMemberSelect(member)}
                     className="w-full flex items-center space-x-3 p-3 hover:bg-surface-inset text-left"
                   >
-                    <div className="w-10 h-10 bg-surface-inset rounded-full flex items-center justify-center">
-                      <span className="text-sm font-bold text-content-muted">
+                    <div className="flex h-10 w-10 items-center justify-center bg-surface-inset">
+                      <span className="font-display text-base font-extrabold text-content">
                         {member.first_name[0]}{member.last_name[0]}
                       </span>
                     </div>
                     <div>
-                      <div className="font-medium text-content">
+                      <div className="font-ui font-bold text-content">
                         {member.first_name} {member.last_name}
                       </div>
                       <div className="text-sm text-content-muted">
@@ -146,7 +146,7 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
 
       {/* Alert Name */}
       <div>
-        <label className="block text-sm font-medium text-content-muted mb-2">
+        <label className="mb-2 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
           Alert Name
         </label>
         <input
@@ -154,7 +154,7 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
           value={alertName}
           onChange={(e) => setAlertName(e.target.value)}
           placeholder="Enter a name for this alert"
-          className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+          className="input-field"
         />
         <p className="text-sm text-content-faint mt-1">
           Give your alert a descriptive name so you can easily identify it
@@ -163,9 +163,9 @@ export const MemberAlertForm: React.FC<MemberAlertFormProps> = ({ onDataChange }
 
       {/* Preview */}
       {selectedMember && alertName && (
-        <div className="bg-sev-info/10 border border-sev-info/30 rounded-lg p-4">
-          <h4 className="font-medium text-sev-info mb-2">Alert Preview</h4>
-          <p className="text-sev-info">
+        <div className="border-l-4 border-content bg-surface-inset p-4">
+          <h4 className="mb-1 font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">Alert Preview</h4>
+          <p className="font-ui text-sm text-content">
             You will receive notifications whenever{' '}
             <span className="font-semibold">
               {selectedMember.first_name} {selectedMember.last_name}

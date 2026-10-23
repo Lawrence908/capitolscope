@@ -5,7 +5,7 @@
  * observability and debugging in both development and production.
  */
 
-// const-object "enums" (erasable — TS enums are disallowed by erasableSyntaxOnly).
+// const-object "enums" (erasable; TS enums are disallowed by erasableSyntaxOnly).
 export const LogLevel = {
   DEBUG: 'DEBUG',
   INFO: 'INFO',

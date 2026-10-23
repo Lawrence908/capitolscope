@@ -88,9 +88,11 @@ const DisclosureRow: React.FC<{
       </div>
 
       <div className="hidden w-28 flex-col items-center sm:flex">
-        <DisclosureGauge days={days} size="sm" />
-        <span className={`mt-0.5 font-ui text-[11px] ${days != null && days > 45 ? 'font-bold text-accent' : 'text-content-faint'}`}>
-          {gaugeCaption(days)}
+        {/* Amended filings are never counted as late: the filing date is the
+            amendment's, not the original disclosure's. */}
+        <DisclosureGauge days={amended ? null : days} size="sm" />
+        <span className={`mt-0.5 font-ui text-[11px] ${!amended && days != null && days > 45 ? 'font-bold text-accent' : 'text-content-faint'}`}>
+          {amended ? 'Amended filing' : gaugeCaption(days)}
         </span>
       </div>
     </div>

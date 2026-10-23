@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { AuthShell, AuthAlert, AuthNote, ButtonSpinner } from './AuthShell';
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -141,39 +142,38 @@ const RegisterPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
-          <p className="mt-4 text-content-faint">Loading...</p>
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+          <p className="mt-4 font-ui text-[11px] font-semibold uppercase tracking-[0.14em] text-content-faint">Loading</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto mb-6">
-            <img 
-              src="/capitol-scope-logo.png" 
-              alt="CapitolScope Logo" 
-              className="h-70 w-70 mx-auto rounded-full"
-            />
-          </div>
-          <h2 className="font-display text-3xl font-medium tracking-[-0.01em] text-content">
-            Join CapitolScope
-          </h2>
-          <p className="mt-2 text-sm text-content-faint">
-            Create your account to get started
+    <AuthShell
+      eyebrow="Create account"
+      title="Join CapitolScope"
+      subtitle="Create your account to get started."
+      note={
+        <AuthNote title="Free tier includes">
+          <ul className="list-inside list-disc space-y-0.5">
+            <li>Access to congressional trading data</li>
+            <li>Basic search and filtering</li>
+            <li>Member profiles and trade history</li>
+            <li>Email notifications for major trades</li>
+            <li>Community discussions</li>
+          </ul>
+          <p className="mt-2">
+            Premium features coming soon: advanced analytics, real-time alerts, portfolio tracking and more.
           </p>
-        </div>
-
-        {/* Registration Form */}
-        <form className="card mt-8 space-y-6 p-6 sm:p-8" onSubmit={handleSubmit}>
+        </AuthNote>
+      }
+    >
+      <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-content-muted">
+              <label htmlFor="email" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                 Email address *
               </label>
               <input
@@ -186,14 +186,14 @@ const RegisterPage: React.FC = () => {
                 onChange={handleInputChange}
                 className={`mt-1 input-field ${
                   validationErrors.email 
-                    ? 'border-error focus:ring-error focus:border-error' 
+                    ? 'border-accent' 
                     : ''
                 }`}
                 placeholder="Enter your email"
                 aria-describedby={validationErrors.email ? "email-error" : undefined}
               />
               {validationErrors.email && (
-                <p id="email-error" className="mt-1 text-sm text-error">
+                <p id="email-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                   {validationErrors.email}
                 </p>
               )}
@@ -202,7 +202,7 @@ const RegisterPage: React.FC = () => {
             {/* Name Fields */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="first_name" className="block text-sm font-medium text-content-muted">
+                <label htmlFor="first_name" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                   First name
                 </label>
                 <input
@@ -214,21 +214,21 @@ const RegisterPage: React.FC = () => {
                   onChange={handleInputChange}
                   className={`mt-1 input-field ${
                     validationErrors.first_name 
-                      ? 'border-error focus:ring-error focus:border-error' 
+                      ? 'border-accent' 
                       : ''
                   }`}
                   placeholder="First name"
                   aria-describedby={validationErrors.first_name ? "first-name-error" : undefined}
                 />
                 {validationErrors.first_name && (
-                  <p id="first-name-error" className="mt-1 text-sm text-error">
+                  <p id="first-name-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                     {validationErrors.first_name}
                   </p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="last_name" className="block text-sm font-medium text-content-muted">
+                <label htmlFor="last_name" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                   Last name
                 </label>
                 <input
@@ -240,14 +240,14 @@ const RegisterPage: React.FC = () => {
                   onChange={handleInputChange}
                   className={`mt-1 input-field ${
                     validationErrors.last_name 
-                      ? 'border-error focus:ring-error focus:border-error' 
+                      ? 'border-accent' 
                       : ''
                   }`}
                   placeholder="Last name"
                   aria-describedby={validationErrors.last_name ? "last-name-error" : undefined}
                 />
                 {validationErrors.last_name && (
-                  <p id="last-name-error" className="mt-1 text-sm text-error">
+                  <p id="last-name-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                     {validationErrors.last_name}
                   </p>
                 )}
@@ -256,7 +256,7 @@ const RegisterPage: React.FC = () => {
 
             {/* Username Field */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-content-muted">
+              <label htmlFor="username" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                 Username (optional)
               </label>
               <input
@@ -268,14 +268,14 @@ const RegisterPage: React.FC = () => {
                 onChange={handleInputChange}
                 className={`mt-1 input-field ${
                   validationErrors.username 
-                    ? 'border-error focus:ring-error focus:border-error' 
+                    ? 'border-accent' 
                     : ''
                 }`}
                 placeholder="Choose a username"
                 aria-describedby={validationErrors.username ? "username-error" : undefined}
               />
               {validationErrors.username && (
-                <p id="username-error" className="mt-1 text-sm text-error">
+                <p id="username-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                   {validationErrors.username}
                 </p>
               )}
@@ -283,7 +283,7 @@ const RegisterPage: React.FC = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-content-muted">
+              <label htmlFor="password" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                 Password *
               </label>
               <input
@@ -296,14 +296,14 @@ const RegisterPage: React.FC = () => {
                 onChange={handleInputChange}
                 className={`mt-1 input-field ${
                   validationErrors.password 
-                    ? 'border-error focus:ring-error focus:border-error' 
+                    ? 'border-accent' 
                     : ''
                 }`}
                 placeholder="Create a strong password"
                 aria-describedby={validationErrors.password ? "password-error" : undefined}
               />
               {validationErrors.password && (
-                <p id="password-error" className="mt-1 text-sm text-error">
+                <p id="password-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                   {validationErrors.password}
                 </p>
               )}
@@ -311,7 +311,7 @@ const RegisterPage: React.FC = () => {
 
             {/* Confirm Password Field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-content-muted">
+              <label htmlFor="confirmPassword" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                 Confirm password *
               </label>
               <input
@@ -324,14 +324,14 @@ const RegisterPage: React.FC = () => {
                 onChange={handleInputChange}
                 className={`mt-1 input-field ${
                   validationErrors.confirmPassword 
-                    ? 'border-error focus:ring-error focus:border-error' 
+                    ? 'border-accent' 
                     : ''
                 }`}
                 placeholder="Confirm your password"
                 aria-describedby={validationErrors.confirmPassword ? "confirm-password-error" : undefined}
               />
               {validationErrors.confirmPassword && (
-                <p id="confirm-password-error" className="mt-1 text-sm text-error">
+                <p id="confirm-password-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                   {validationErrors.confirmPassword}
                 </p>
               )}
@@ -346,46 +346,35 @@ const RegisterPage: React.FC = () => {
               type="checkbox"
               checked={formData.terms_accepted}
               onChange={handleInputChange}
-              className="h-4 w-4 text-accent focus:ring-accent border-accent rounded"
+              className="h-4 w-4 accent-[var(--accent)]"
               aria-describedby={validationErrors.terms_accepted ? "terms-error" : undefined}
             />
-            <label htmlFor="terms_accepted" className="ml-2 block text-sm text-content-muted">
+            <label htmlFor="terms_accepted" className="ml-2 block font-ui text-sm text-content-muted">
               I agree to the{' '}
               <Link
                 to="/terms"
-                className="font-medium text-accent hover:text-accent-strong"
+                className="font-semibold text-accent hover:text-accent-strong hover:underline underline-offset-2"
               >
                 Terms of Service
               </Link>{' '}
               and{' '}
               <Link
                 to="/privacy"
-                className="font-medium text-accent hover:text-accent-strong"
+                className="font-semibold text-accent hover:text-accent-strong hover:underline underline-offset-2"
               >
                 Privacy Policy
               </Link>
             </label>
           </div>
           {validationErrors.terms_accepted && (
-            <p id="terms-error" className="text-sm text-error">
+            <p id="terms-error" className="font-ui text-sm font-semibold text-accent">
               {validationErrors.terms_accepted}
             </p>
           )}
 
           {/* Error Message */}
           {error && (
-            <div className="rounded-md bg-error/10 border border-error/20 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-error" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-error">{error}</p>
-                </div>
-              </div>
-            </div>
+            <AuthAlert tone="error">{error}</AuthAlert>
           )}
 
           {/* Submit Button */}
@@ -393,15 +382,15 @@ const RegisterPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn-primary w-full"
+              className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="flex items-center justify-center">
+                  <ButtonSpinner />
                   Creating account...
                 </div>
               ) : (
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                   </svg>
@@ -413,36 +402,18 @@ const RegisterPage: React.FC = () => {
 
           {/* Sign In Link */}
           <div className="text-center">
-            <p className="text-sm text-content-faint">
+            <p className="font-ui text-sm text-content-faint">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="font-medium text-accent hover:text-accent-strong"
+                className="font-semibold text-accent hover:text-accent-strong hover:underline underline-offset-2"
               >
                 Sign in
               </Link>
             </p>
           </div>
         </form>
-
-        {/* Subscription Tiers Info */}
-        <div className="mt-8 card p-4">
-          <h3 className="text-sm font-medium text-accent mb-2">
-            🎯 Free Tier Features
-          </h3>
-          <ul className="text-xs text-content-faint space-y-1">
-            <li>• Access to congressional trading data</li>
-            <li>• Basic search and filtering</li>
-            <li>• Member profiles and trade history</li>
-            <li>• Email notifications for major trades</li>
-            <li>• Community discussions</li>
-          </ul>
-          <p className="text-xs text-content-faint mt-2">
-            Premium features coming soon: Advanced analytics, real-time alerts, portfolio tracking, and more.
-          </p>
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 };
 

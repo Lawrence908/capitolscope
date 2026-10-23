@@ -95,14 +95,14 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
     <div className="space-y-6">
       {/* Stock Selection */}
       <div>
-        <label className="block text-sm font-medium text-content-muted mb-2">
+        <label className="mb-2 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
           Select Stock Symbol
         </label>
         
         {selectedStock ? (
-          <div className="flex items-center justify-between p-4 border border-line rounded-lg bg-surface-inset">
+          <div className="flex items-center justify-between p-4 border border-line bg-surface-inset">
             <div>
-              <h3 className="font-semibold text-content">
+              <h3 className="font-display text-3xl font-extrabold leading-none text-content">
                 {selectedStock.symbol}
               </h3>
               <p className="text-sm text-content-muted">
@@ -122,12 +122,12 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value.toUpperCase())}
-              placeholder="Search for a stock symbol (e.g., TSLA, AAPL)..."
-              className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              placeholder="Search for a stock symbol (e.g. TSLA, AAPL)"
+              className="input-field"
             />
             
             {searchQuery && searchResults.length === 0 && (
-              <div className="absolute top-full left-0 right-0 bg-surface-raised border border-line rounded-lg mt-1 p-3 shadow-lg">
+              <div className="absolute top-full left-0 right-0 bg-surface-raised border-2 border-content mt-1 p-3 shadow-lg">
                 <div className="text-center">
                   <p className="text-content-muted mb-2">No matches found</p>
                   <button
@@ -141,7 +141,7 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
             )}
             
             {searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 bg-surface-raised border border-line rounded-lg mt-1 max-h-64 overflow-y-auto z-10 shadow-lg">
+              <div className="absolute top-full left-0 right-0 bg-surface-raised border-2 border-content mt-1 max-h-64 overflow-y-auto z-10 shadow-lg">
                 {searchResults.map((stock) => (
                   <button
                     key={stock.symbol}
@@ -149,7 +149,7 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
                     className="w-full flex items-center justify-between p-3 hover:bg-surface-inset text-left"
                   >
                     <div>
-                      <div className="font-semibold text-content">
+                      <div className="font-display text-xl font-extrabold leading-none text-content">
                         {stock.symbol}
                       </div>
                       <div className="text-sm text-content-muted">
@@ -183,7 +183,7 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
       {/* Popular Stocks */}
       {!selectedStock && !searchQuery && (
         <div>
-          <label className="block text-sm font-medium text-content-muted mb-3">
+          <label className="mb-3 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
             Popular Stocks
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -191,9 +191,9 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
               <button
                 key={stock.symbol}
                 onClick={() => handleStockSelect(stock)}
-                className="p-3 border border-line rounded-lg hover:border-accent hover:bg-accent/10 text-left transition-colors"
+                className="p-3 border border-line hover:border-content hover:bg-surface-inset text-left transition-colors"
               >
-                <div className="font-semibold text-content">{stock.symbol}</div>
+                <div className="font-display text-xl font-extrabold leading-none text-content">{stock.symbol}</div>
                 <div className="text-xs text-content-muted truncate">{stock.name}</div>
               </button>
             ))}
@@ -203,7 +203,7 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
 
       {/* Alert Name */}
       <div>
-        <label className="block text-sm font-medium text-content-muted mb-2">
+        <label className="mb-2 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
           Alert Name
         </label>
         <input
@@ -211,7 +211,7 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
           value={alertName}
           onChange={(e) => setAlertName(e.target.value)}
           placeholder="Enter a name for this alert"
-          className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+          className="input-field"
         />
         <p className="text-sm text-content-faint mt-1">
           Give your alert a descriptive name so you can easily identify it
@@ -220,9 +220,9 @@ export const TickerAlertForm: React.FC<TickerAlertFormProps> = ({ onDataChange }
 
       {/* Preview */}
       {selectedStock && alertName && (
-        <div className="bg-accent-2/10 border border-accent-2/30 rounded-lg p-4">
-          <h4 className="font-medium text-accent-2 mb-2">Alert Preview</h4>
-          <p className="text-accent-2">
+        <div className="border-l-4 border-content bg-surface-inset p-4">
+          <h4 className="mb-1 font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">Alert Preview</h4>
+          <p className="font-ui text-sm text-content">
             You will receive notifications whenever any congress member files a trade disclosure 
             for <span className="font-semibold">{selectedStock.symbol}</span> ({selectedStock.name}).
           </p>

@@ -10,8 +10,14 @@ import {
 } from 'chart.js';
 import type { ChartOptions } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { useTheme } from '../../contexts/ThemeContext';
-import { chartTheme } from './chartTheme';
+import {
+  categoryAxis,
+  legendOptions,
+  titleOptions,
+  tooltipOptions,
+  useChartTheme,
+  valueAxis,
+} from './chartTheme';
 
 ChartJS.register(
   CategoryScale,
@@ -40,70 +46,40 @@ interface BarChartProps {
   className?: string;
 }
 
+/** Solid ink bars, hairline value grid, no category gridlines. */
 const BarChart: React.FC<BarChartProps> = ({ data, title, height = 400, className = '' }) => {
-  const { isDarkMode } = useTheme();
-  const c = chartTheme(isDarkMode);
+  const t = useChartTheme();
   const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
+    elements: { bar: { borderRadius: 0, borderWidth: 0 } },
     plugins: {
-      legend: {
-        position: 'top' as const,
-        labels: {
-          color: c.label,
-          font: {
-            size: 12,
-          },
-        },
-      },
-      title: {
-        display: !!title,
-        text: title,
-        color: c.title,
-        font: {
-          size: 16,
-          weight: 'bold',
-        },
-      },
-      tooltip: {
-        backgroundColor: c.tooltipBg,
-        titleColor: c.tooltipTitle,
-        bodyColor: c.tooltipBody,
-        borderColor: c.tooltipBorder,
-        borderWidth: 1,
-      },
+      // A single series needs no legend; the panel/title names it.
+      legend: { ...legendOptions(t), display: data.datasets.length > 1 },
+      title: titleOptions(t, title),
+      tooltip: tooltipOptions(t),
     },
     scales: {
-      x: {
-        ticks: {
-          color: c.tick,
-          font: {
-            size: 11,
-          },
-        },
-        grid: {
-          color: c.grid,
-        },
-      },
-      y: {
-        ticks: {
-          color: c.tick,
-          font: {
-            size: 11,
-          },
-        },
-        grid: {
-          color: c.grid,
-        },
-      },
+      x: categoryAxis(t),
+      y: valueAxis(t),
     },
+  };
+
+  const themed = {
+    ...data,
+    datasets: data.datasets.map((d) => ({
+      ...d,
+      backgroundColor: d.backgroundColor ?? t.ink,
+      borderColor: d.borderColor ?? t.ink,
+      borderWidth: d.borderWidth ?? 0,
+    })),
   };
 
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <Bar data={data} options={options} />
+      <Bar data={themed} options={options} />
     </div>
   );
 };
 
-export default BarChart; 
+export default BarChart;

@@ -23,6 +23,42 @@ export interface CongressMember {
   portfolio_value?: number | null;
   created_at: string;
   updated_at: string;
+  // Member directory aggregates (GET /members/) and detail extras (GET /members/:id)
+  last_filing_date?: string | null;
+  last_trade_date?: string | null;
+  avg_days_to_disclose?: number | null;
+  late_count?: number | null;
+  committees?: string[] | null;
+  leadership_roles?: string[] | null;
+  term_start?: string | null;
+}
+
+/** GET /members/:id/stats: per-member disclosure statistics (amounts in cents). */
+export interface MemberDisclosureStats {
+  member_id: string;
+  total_trades: number;
+  purchase_count: number;
+  sale_count: number;
+  exchange_count: number;
+  amended_count: number;
+  trades_last_12_months: number;
+  first_trade_date: string | null;
+  last_trade_date: string | null;
+  first_filing_date: string | null;
+  last_filing_date: string | null;
+  timed_trades: number;
+  avg_days_to_disclose: number | null;
+  median_days_to_disclose: number | null;
+  max_days_to_disclose: number | null;
+  avg_days_last_12_months: number | null;
+  median_days_last_12_months: number | null;
+  late_count: number;
+  late_pct: number | null;
+  late_count_last_12_months: number;
+  volume_min: number;
+  volume_max: number;
+  volume_open_ended: boolean;
+  disclosure_limit_days: number;
 }
 
 // Congressional Trade Types
@@ -47,6 +83,72 @@ export interface CongressionalTrade {
   owner?: string | null;
   created_at?: string;
   updated_at?: string;
+  // Present on the trade permalink / ticker page feeds.
+  doc_id?: string | null;
+  member_district?: string | null;
+  days_to_disclose?: number | null;
+}
+
+// Trade permalink (/trades/{id}) and ticker page (/trades/ticker/{sym}).
+export interface TradeRelatedList {
+  total: number;
+  items: CongressionalTrade[];
+}
+
+export interface TradeSecurityInfo {
+  id: string;
+  ticker: string | null;
+  name: string | null;
+  sector: string | null;
+  asset_type: string | null;
+}
+
+export interface TradeDetail extends CongressionalTrade {
+  raw_asset_description?: string | null;
+  comment?: string | null;
+  member: {
+    id: string | null;
+    name: string | null;
+    party: string | null;
+    state: string | null;
+    district: string | null;
+    chamber: string | null;
+    image_url: string | null;
+  };
+  security: TradeSecurityInfo | null;
+  /** Closes in whole dollars. */
+  prices: { at_trade: number | null; at_disclosure: number | null; latest: number | null; latest_date: string | null } | null;
+  is_amended: boolean;
+  is_late: boolean;
+  days_late: number;
+  document_url: string | null;
+  document_url_derived: boolean;
+  related: {
+    same_filing: TradeRelatedList;
+    same_ticker_by_member: TradeRelatedList;
+  };
+}
+
+export interface TickerPageData {
+  ticker: string;
+  security: TradeSecurityInfo | null;
+  stats: {
+    trades: number;
+    members: number;
+    buys: number;
+    sells: number;
+    other: number;
+    late: number;
+    first_trade_date: string | null;
+    latest_trade_date: string | null;
+    latest_filing_date: string | null;
+  };
+  /** [ISO date, close in whole dollars], ascending. */
+  prices: [string, number][];
+  latest_close: number | null;
+  latest_close_date: string | null;
+  total: number;
+  trades: CongressionalTrade[];
 }
 
 // API Response Types
@@ -93,6 +195,10 @@ export interface MemberFilters {
   chamber?: 'House' | 'Senate';
   in_office?: boolean;
   search?: string;
+  /** Only members with at least one disclosed trade. */
+  has_trades?: boolean;
+  sort_by?: 'name' | 'trades' | 'last_filing' | 'avg_days' | 'late' | 'volume' | 'state' | 'chamber' | 'party';
+  sort_order?: 'asc' | 'desc';
 }
 
 // Data Quality Types

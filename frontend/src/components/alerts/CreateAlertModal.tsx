@@ -24,21 +24,21 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
       id: 'member_trades',
       name: 'Member Trades',
       description: 'Get notified when a specific congress member makes trades',
-      icon: '👤',
+      icon: 'M',
       example: 'MTG, Nancy Pelosi, etc.',
     },
     {
       id: 'amount_threshold',
       name: 'Large Trades',
       description: 'Get notified when any member makes trades above a certain amount',
-      icon: '💰',
+      icon: '$',
       example: '$1M+, $500K+, etc.',
     },
     {
       id: 'ticker_trades',
       name: 'Stock Alerts',
       description: 'Get notified when any member trades a specific stock',
-      icon: '📈',
+      icon: 'T',
       example: 'TSLA, AAPL, NVDA, etc.',
     },
   ];
@@ -77,15 +77,15 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-surface-raised rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-line">
-          <h2 className="text-xl font-semibold text-content">Create New Trade Alert</h2>
+      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto border-2 border-content bg-surface-raised">
+        <div className="bg-slab p-6 text-slab-on">
+          <h2 className="font-display text-4xl font-extrabold leading-none text-slab-on">Create a trade alert</h2>
         </div>
         
         <div className="p-6">
           {!selectedType ? (
             <div className="space-y-4">
-              <p className="text-content-muted text-center mb-6">
+              <p className="mb-6 font-ui text-sm text-content-muted">
                 Choose the type of trade alert you want to create
               </p>
               
@@ -93,18 +93,18 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
                 <button
                   key={type.id}
                   onClick={() => setSelectedType(type.id)}
-                  className="w-full p-6 border border-line rounded-lg hover:border-accent hover:bg-accent/10 transition-colors text-left"
+                  className="w-full border-2 border-line p-5 text-left transition-colors hover:border-content hover:bg-surface-inset"
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="text-2xl">{type.icon}</div>
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-slab font-display text-2xl font-extrabold text-slab-on">{type.icon}</div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-content mb-2">
+                      <h3 className="mb-1 font-display text-2xl font-extrabold leading-none text-content">
                         {type.name}
                       </h3>
-                      <p className="text-content-muted mb-2">
+                      <p className="mb-2 font-ui text-sm text-content-muted">
                         {type.description}
                       </p>
-                      <p className="text-sm text-accent font-medium">
+                      <p className="font-ui text-xs font-semibold text-content-faint">
                         Example: {type.example}
                       </p>
                     </div>
@@ -117,11 +117,11 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setSelectedType('')}
-                  className="text-content-faint hover:text-content-muted text-sm"
+                  className="font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-accent hover:text-accent-strong"
                 >
                   ← Back
                 </button>
-                <h3 className="font-semibold text-lg">
+                <h3 className="font-display text-2xl font-extrabold leading-none text-content">
                   {alertTypes.find(t => t.id === selectedType)?.name}
                 </h3>
               </div>
@@ -134,7 +134,7 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
         <div className="p-6 border-t border-line flex justify-end space-x-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-content-muted border border-line rounded-lg hover:bg-surface-inset"
+            className="btn-outline"
           >
             Cancel
           </button>
@@ -142,9 +142,9 @@ export const CreateAlertModal: React.FC<CreateAlertModalProps> = ({
             <button
               onClick={handleSubmit}
               disabled={isSubmitting || !formData || Object.keys(formData).length === 0}
-              className="px-4 py-2 bg-accent text-[#071310] rounded-lg hover:bg-accent-strong disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Creating...' : 'Create Alert'}
+              {isSubmitting ? 'Creating…' : 'Create alert'}
             </button>
           )}
         </div>

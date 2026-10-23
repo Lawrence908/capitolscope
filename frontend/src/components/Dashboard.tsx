@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  UserGroupIcon,
-  DocumentTextIcon,
-  ArrowTrendingUpIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
   XCircleIcon,
@@ -13,16 +10,8 @@ import type { CongressionalTrade, DataQualityStats, TopTradingMember } from '../
 import apiClient from '../services/api';
 import stripeService from '../services/stripeService';
 import AnalyticsDebug from './AnalyticsDebug';
-import {
-  PageHeader,
-  Panel,
-  Spinner,
-  Meter,
-  PartyTag,
-  fmtAmountRange,
-  partyMeta,
-  type Tone,
-} from './ui';
+import DisclosureRow from './trades/DisclosureRow';
+import { PageHeader, Panel, Spinner, PartyTag, partyMeta } from './ui';
 
 // Payment Modal Component
 interface PaymentModalProps {
@@ -68,11 +57,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="fixed inset-0 bg-black/60" onClick={onClose} />
       <div className="flex min-h-full items-center justify-center p-4 text-center">
-        <div className="card-elevated relative w-full max-w-lg transform overflow-hidden px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:p-6">
+        <div className="relative w-full max-w-lg transform overflow-hidden border-2 border-content bg-surface-raised px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:p-6">
           <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
             <button
               type="button"
-              className="rounded-md text-content-faint transition-colors hover:text-content focus:outline-none"
+              className="text-content-faint transition-colors hover:text-content focus:outline-none"
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
@@ -84,18 +73,18 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
               {type === 'success' ? (
                 <CheckCircleIcon className="h-6 w-6 text-accent" />
               ) : (
-                <XCircleIcon className="h-6 w-6 text-sev-flag" />
+                <XCircleIcon className="h-6 w-6 text-content" />
               )}
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="font-display text-lg font-medium leading-6 text-content">
-                {type === 'success' ? 'Payment Successful' : 'Payment Cancelled'}
+              <h3 className="font-display text-3xl font-extrabold leading-none text-content">
+                {type === 'success' ? 'Payment successful' : 'Payment cancelled'}
               </h3>
               <div className="mt-2">
                 <p className="font-ui text-sm text-content-muted">
                   {message}
                   {tier && type === 'success' && (
-                    <span className="mt-1 block font-medium text-accent">
+                    <span className="mt-1 block font-semibold text-content">
                       Welcome to {tier.charAt(0).toUpperCase() + tier.slice(1)} tier.
                     </span>
                   )}
@@ -104,13 +93,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, type, mess
                 {/* Show unlocked features for successful payments */}
                 {type === 'success' && tier && tier !== 'free' && (
                   <div className="mt-4">
-                    <h4 className="mb-2 font-data text-[11px] uppercase tracking-[0.14em] text-content-faint">
+                    <h4 className="mb-2 font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                       You now have access to
                     </h4>
                     <ul className="space-y-1 font-ui text-sm text-content-muted">
                       {getTierFeatures(tier).map((feature, index) => (
                         <li key={index} className="flex items-center">
-                          <CheckCircleIcon className="mr-2 h-4 w-4 flex-shrink-0 text-accent" />
+                          <CheckCircleIcon className="mr-2 h-4 w-4 flex-shrink-0 text-content" />
                           {feature}
                         </li>
                       ))}
@@ -212,195 +201,186 @@ const Dashboard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="flex items-center gap-3 rounded-md border border-sev-flag/40 px-4 py-3 status-error">
-        <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0" />
+      <div className="flex items-center gap-3 border-l-4 border-accent bg-surface-inset px-4 py-3 text-content">
+        <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0 text-accent" />
         <p className="font-ui text-sm">{error}</p>
       </div>
     );
   }
 
-  const statCards: { title: string; value: string; icon: typeof DocumentTextIcon; tone: Tone; link: string }[] = [
+  const statCards: { title: string; value: string; caption: string; accent?: boolean; link: string }[] = [
     {
-      title: 'Total Trades',
+      title: 'Total trades',
       value: stats?.total_trades?.toLocaleString() || '0',
-      icon: DocumentTextIcon,
-      tone: 'accent',
+      caption: 'disclosed transactions on file',
       link: '/trades',
     },
     {
-      title: 'Congress Members',
+      title: 'Congress members',
       value: stats?.unique_members?.toLocaleString() || '0',
-      icon: UserGroupIcon,
-      tone: 'steel',
+      caption: 'members with at least one filing',
       link: '/members',
     },
     {
-      title: 'Unique Tickers',
+      title: 'Unique tickers',
       value: stats?.unique_tickers?.toLocaleString() || '0',
-      icon: ArrowTrendingUpIcon,
-      tone: 'brass',
+      caption: 'distinct securities traded',
       link: '/trades',
     },
     {
-      title: 'Missing Tickers',
+      title: 'Missing tickers',
       value: `${stats?.null_ticker_percentage?.toFixed(1) || '0'}%`,
-      icon: ExclamationTriangleIcon,
-      tone: 'flag',
+      caption: 'filings with no ticker reported',
+      accent: true,
       link: '/data-quality',
     },
   ];
 
-  const toneText: Record<Tone, string> = {
-    default: 'text-content',
-    accent: 'text-accent',
-    brass: 'text-accent-2',
-    flag: 'text-sev-flag',
-    steel: 'text-sev-info',
-    coral: 'text-sev-watch',
-  };
-
   const partyEntries = Object.entries(stats?.party_distribution || {});
   const partyTotal = partyEntries.reduce((sum, [, count]) => sum + Number(count), 0);
+  const maxMemberTrades = Math.max(1, ...topMembers.map((m) => m.total_trades ?? 0));
+
+  const sectionLink = 'font-ui text-[12px] font-bold uppercase tracking-[0.08em] text-content hover:text-accent';
 
   return (
     <div>
       <PageHeader
-        eyebrow="CapitolScope · Overview"
+        eyebrow="Overview"
         title="Dashboard"
-        subtitle="Congressional trading at a glance — disclosure volume, the most active members, and the latest filings, drawn from public STOCK Act data."
+        subtitle="Congressional trading at a glance: disclosure volume, the most active members and the latest filings, drawn from public STOCK Act data."
       />
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {statCards.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Link key={stat.title} to={stat.link} className="card-interactive group p-5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="font-data text-[10px] uppercase tracking-[0.14em] text-content-faint">
-                    {stat.title}
-                  </div>
-                  <div className={`mt-2 font-data text-3xl font-medium tabular-nums ${toneText[stat.tone]}`}>
-                    {stat.value}
-                  </div>
-                </div>
-                <Icon className={`h-5 w-5 ${toneText[stat.tone]}`} />
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* Recent trades and top members */}
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Panel
-          title="Recent Trades"
-          right={
-            <Link to="/trades" className="font-data text-[11px] uppercase tracking-[0.1em] text-accent hover:text-accent-strong">
-              View all →
-            </Link>
-          }
-        >
-          <div className="divide-y divide-line">
-            {recentTrades && recentTrades.length > 0 ? (
-              recentTrades.map((trade, index) => (
-                <div key={trade.id || `trade-${index}`} className="flex items-center justify-between gap-3 px-4 py-3">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-ui text-sm font-medium text-content">
-                      {trade.member_name || 'Unknown'}
-                    </p>
-                    <p className="mt-0.5 font-ui text-xs text-content-faint">
-                      {trade.ticker ? (
-                        <span className="font-data text-content-muted">{trade.ticker}</span>
-                      ) : (
-                        <span>No ticker</span>
-                      )}
-                      {' · '}
-                      <span className="capitalize">{trade.transaction_type || 'Unknown'}</span>
-                    </p>
-                  </div>
-                  <div className="ml-2 text-right">
-                    <p className="font-data text-sm tabular-nums text-content">
-                      {fmtAmountRange(trade.amount_min, trade.amount_max)}
-                    </p>
-                    <p className="font-data text-[11px] tabular-nums text-content-faint">
-                      {trade.transaction_date ? new Date(trade.transaction_date).toLocaleDateString() : "—"}
-                    </p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="px-4 py-6 text-center font-ui text-sm text-content-faint">
-                No recent trades available
-              </div>
-            )}
-          </div>
-        </Panel>
-
-        <Panel
-          title="Top Trading Members"
-          right={
-            <Link to="/members" className="font-data text-[11px] uppercase tracking-[0.1em] text-accent hover:text-accent-strong">
-              View all →
-            </Link>
-          }
-        >
-          <div className="divide-y divide-line">
-            {topMembers && topMembers.length > 0 ? (
-              topMembers.map((member, index) => (
-                <div key={member.member_id || `member-${index}`} className="flex items-center justify-between gap-3 px-4 py-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="truncate font-ui text-sm font-medium text-content">{member.member_name}</p>
-                      <PartyTag party={member.member_party} />
-                    </div>
-                    <p className="mt-0.5 font-ui text-xs text-content-faint">{member.member_state}</p>
-                  </div>
-                  <div className="ml-2 text-right">
-                    <p className="font-data text-sm tabular-nums text-content">{(member.total_trades ?? 0).toLocaleString()} trades</p>
-                    <p className="font-data text-[11px] uppercase tracking-[0.08em] text-content-faint">{member.member_chamber}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="px-4 py-6 text-center font-ui text-sm text-content-faint">No top members available</div>
-            )}
-          </div>
-        </Panel>
-      </div>
-
-      {/* Party distribution — proportion bars */}
-      {partyEntries.length > 0 && (
-        <div className="mt-6">
-          <Panel title="Party Distribution">
-            <div className="space-y-4 p-4">
-              {partyEntries.map(([party, count]) => {
-                const meta = partyMeta(party);
-                const frac = partyTotal ? Number(count) / partyTotal : 0;
-                return (
-                  <div key={party}>
-                    <div className="mb-1.5 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <PartyTag party={party} />
-                        <span className="font-ui text-sm text-content-muted">{party}</span>
-                      </div>
-                      <span className="font-data text-sm tabular-nums text-content">
-                        {Number(count).toLocaleString()}
-                        <span className="ml-2 text-content-faint">{(frac * 100).toFixed(1)}%</span>
-                      </span>
-                    </div>
-                    <Meter value={frac} color={meta.color} height={8} />
-                  </div>
-                );
-              })}
+      {/* Stat rail */}
+      <div className="grid grid-cols-2 lg:grid-cols-4">
+        {statCards.map((stat, i) => (
+          <Link
+            key={stat.title}
+            to={stat.link}
+            className={`group border-t-[3px] border-content py-4 pr-4 transition-colors hover:bg-surface-inset ${
+              i > 0 ? 'lg:border-l lg:border-l-line lg:pl-4' : ''
+            } ${i % 2 === 1 ? 'border-l border-l-line pl-4' : ''}`}
+          >
+            <div className="font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-content-faint">
+              {stat.title}
             </div>
+            <div
+              className={`mt-1 font-display text-5xl font-extrabold leading-none tabular-nums ${
+                stat.accent ? 'text-accent' : 'text-content'
+              }`}
+            >
+              {stat.value}
+            </div>
+            <div className="mt-1.5 font-ui text-[12px] text-content-faint group-hover:text-content-muted">
+              {stat.caption}
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Latest disclosures + most active */}
+      <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
+        <Panel
+          title="Latest disclosures"
+          right={
+            <Link to="/trades" className={sectionLink}>
+              All trades →
+            </Link>
+          }
+        >
+          {recentTrades && recentTrades.length > 0 ? (
+            recentTrades.map((trade, index) => (
+              <DisclosureRow key={trade.id || `trade-${index}`} trade={trade} />
+            ))
+          ) : (
+            <div className="py-6 font-ui text-sm text-content-faint">No recent trades available</div>
+          )}
+        </Panel>
+
+        <div className="space-y-10">
+          <Panel
+            title="Most active"
+            right={
+              <Link to="/members" className={sectionLink}>
+                All members →
+              </Link>
+            }
+          >
+            {topMembers && topMembers.length > 0 ? (
+              <div className="divide-y divide-line">
+                {topMembers.map((member, index) => {
+                  const n = member.total_trades ?? 0;
+                  const row = (
+                    <>
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex min-w-0 items-center gap-2">
+                          <PartyTag party={member.member_party} />
+                          <span className="truncate font-ui text-sm font-bold text-content">{member.member_name}</span>
+                          <span className="shrink-0 font-ui text-xs text-content-faint">
+                            {[member.member_state, member.member_chamber].filter(Boolean).join(' · ')}
+                          </span>
+                        </div>
+                        <span className="font-display text-2xl font-extrabold leading-none tabular-nums text-content">
+                          {n.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 h-2 bg-surface-inset">
+                        <div className="h-full bg-content" style={{ width: `${(n / maxMemberTrades) * 100}%` }} />
+                      </div>
+                    </>
+                  );
+                  return member.member_id ? (
+                    <Link
+                      key={member.member_id}
+                      to={`/members/${member.member_id}`}
+                      className="block py-2.5 transition-colors hover:bg-surface-inset"
+                    >
+                      {row}
+                    </Link>
+                  ) : (
+                    <div key={`member-${index}`} className="py-2.5">
+                      {row}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="py-6 font-ui text-sm text-content-faint">No top members available</div>
+            )}
           </Panel>
+
+          {/* Party distribution: identical ink bars, labelled (never color-coded) */}
+          {partyEntries.length > 0 && (
+            <Panel title="Trades by party">
+              <div className="space-y-4 py-4">
+                {partyEntries.map(([party, count]) => {
+                  const meta = partyMeta(party);
+                  const frac = partyTotal ? Number(count) / partyTotal : 0;
+                  return (
+                    <div key={party}>
+                      <div className="mb-1.5 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <PartyTag party={party} />
+                          <span className="font-ui text-sm font-semibold text-content">{meta.name === 'Unknown' ? party : meta.name}</span>
+                        </div>
+                        <span className="font-ui text-sm tabular-nums text-content-muted">
+                          <span className="font-display text-xl font-extrabold text-content">{Number(count).toLocaleString()}</span>
+                          <span className="ml-2">{(frac * 100).toFixed(1)}%</span>
+                        </span>
+                      </div>
+                      <div className="h-2 bg-surface-inset">
+                        <div className="h-full bg-content" style={{ width: `${Math.max(1, frac * 100)}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Panel>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Analytics Debug (for troubleshooting) */}
-      <div className="mt-6">
+      <div className="mt-10">
         <AnalyticsDebug />
       </div>
 

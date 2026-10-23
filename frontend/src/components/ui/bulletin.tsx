@@ -156,7 +156,7 @@ export const DisclosureGauge: React.FC<{
             size === 'lg' ? 'text-5xl' : 'text-2xl'
           } ${late ? 'text-accent' : 'text-content'}`}
         >
-          {valueLabel ?? (known ? `${days} day${days === 1 ? '' : 's'}` : '—')}
+          {valueLabel ?? (known ? `${days} day${days === 1 ? '' : 's'}` : '–')}
         </span>
       )}
     </span>
@@ -169,7 +169,7 @@ export const TradeStamp: React.FC<{ type: string | null | undefined; className?:
   className = '',
 }) => {
   const t = (type || '').trim().toUpperCase();
-  const label = t.startsWith('P') ? 'BOUGHT' : t.startsWith('S') ? 'SOLD' : t.startsWith('E') ? 'EXCHANGED' : '—';
+  const label = t.startsWith('P') ? 'BOUGHT' : t.startsWith('S') ? 'SOLD' : t.startsWith('E') ? 'EXCHANGED' : '–';
   const filled = label === 'BOUGHT';
   return (
     <span

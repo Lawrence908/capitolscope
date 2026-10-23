@@ -36,7 +36,7 @@ export const NotificationPreferences: React.FC = () => {
   const [testEmailSent, setTestEmailSent] = useState(false);
 
   useEffect(() => {
-    // Quiet-hours are UI-only (not modeled server-side) — keep them local.
+    // Quiet-hours are UI-only (not modeled server-side), so keep them local.
     const savedSettings = localStorage.getItem('notification_preferences');
     const local = savedSettings ? JSON.parse(savedSettings) : {};
     // Channel + cadence come from the API.
@@ -91,19 +91,18 @@ export const NotificationPreferences: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="space-y-8 py-6">
       <div>
-        <h3 className="text-lg font-semibold text-content mb-4">Notification Preferences</h3>
-        <p className="text-content-muted mb-6">
+        <h3 className="mb-2 font-display text-3xl font-extrabold leading-none text-content">Notification preferences</h3>
+        <p className="font-ui text-sm text-content-muted">
           Configure how and when you want to receive trade alert notifications.
         </p>
       </div>
 
       {/* Email Settings */}
-      <div className="bg-surface-inset rounded-lg p-6">
-        <h4 className="font-medium text-content mb-4 flex items-center">
-          <span className="mr-2">📧</span>
-          Email Notifications
+      <div className="border-t-[3px] border-content pt-5">
+        <h4 className="mb-4 font-display text-2xl font-extrabold leading-none text-content">
+          Email notifications
         </h4>
         
         <div className="space-y-4">
@@ -123,7 +122,7 @@ export const NotificationPreferences: React.FC = () => {
           {settings.email_enabled && (
             <div className="ml-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-content-muted mb-1">
+                <label className="mb-1 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                   Email Address
                 </label>
                 <div className="flex space-x-2">
@@ -132,12 +131,12 @@ export const NotificationPreferences: React.FC = () => {
                     value={settings.email_address}
                     onChange={(e) => setSettings({ ...settings, email_address: e.target.value })}
                     placeholder="your-email@example.com"
-                    className="flex-1 px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                    className="input-field flex-1"
                   />
                   <button
                     onClick={handleTestEmail}
                     disabled={!settings.email_address}
-                    className="px-4 py-2 bg-surface-inset text-content rounded-lg hover:bg-surface-inset disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {testEmailSent ? '✓ Sent' : 'Test'}
                   </button>
@@ -145,7 +144,7 @@ export const NotificationPreferences: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-content-muted mb-2">
+                <label className="mb-2 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                   Notification Frequency
                 </label>
                 <div className="space-y-2">
@@ -164,7 +163,7 @@ export const NotificationPreferences: React.FC = () => {
                         className="mt-1 h-4 w-4 text-accent border-line focus:ring-accent"
                       />
                       <div>
-                        <div className="font-medium text-content">{option.label}</div>
+                        <div className="font-ui font-bold text-content">{option.label}</div>
                         <div className="text-sm text-content-muted">{option.description}</div>
                       </div>
                     </label>
@@ -177,10 +176,9 @@ export const NotificationPreferences: React.FC = () => {
       </div>
 
       {/* Quiet Hours */}
-      <div className="bg-surface-inset rounded-lg p-6">
-        <h4 className="font-medium text-content mb-4 flex items-center">
-          <span className="mr-2">🌙</span>
-          Quiet Hours
+      <div className="border-t-[3px] border-content pt-5">
+        <h4 className="mb-4 font-display text-2xl font-extrabold leading-none text-content">
+          Quiet hours
         </h4>
         
         <div className="space-y-4">
@@ -200,25 +198,25 @@ export const NotificationPreferences: React.FC = () => {
           {settings.quiet_hours_enabled && (
             <div className="ml-6 grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-content-muted mb-1">
+                <label className="mb-1 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                   Start Time
                 </label>
                 <input
                   type="time"
                   value={settings.quiet_hours_start}
                   onChange={(e) => setSettings({ ...settings, quiet_hours_start: e.target.value })}
-                  className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="input-field"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-content-muted mb-1">
+                <label className="mb-1 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                   End Time
                 </label>
                 <input
                   type="time"
                   value={settings.quiet_hours_end}
                   onChange={(e) => setSettings({ ...settings, quiet_hours_end: e.target.value })}
-                  className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="input-field"
                 />
               </div>
             </div>
@@ -236,7 +234,7 @@ export const NotificationPreferences: React.FC = () => {
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="px-6 py-2 bg-accent text-[#071310] rounded-lg hover:bg-accent-strong disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSaving ? 'Saving...' : 'Save Preferences'}
         </button>

@@ -6,47 +6,42 @@ const PrivacyPolicy: React.FC = () => {
   return (
     <div className="min-h-screen bg-surface">
       {/* Header */}
-      <header className="bg-surface-raised shadow-lg border-b border-accent/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4 sm:py-6">
-            <Link to="/dashboard" className="flex items-center">
-              <img 
-                src="/capitol-scope-logo.png" 
-                alt="CapitolScope Logo" 
-                className="h-10 w-10 rounded-lg"
-                loading="lazy"
-                width="40"
-                height="40"
-              />
-              <h1 className="ml-3 text-lg sm:text-xl font-bold text-glow-primary">CapitolScope</h1>
+      <header className="bg-slab text-slab-on">
+        <div className="mx-auto flex h-[68px] max-w-[1320px] items-center justify-between px-4 sm:px-8">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="CapitolScope home">
+            <span aria-hidden="true" className="block h-9 w-1.5 bg-accent" />
+            <span className="font-display text-[21px] font-extrabold leading-[0.82] tracking-[0.02em] text-slab-on">
+              CAPITOL
+              <br />
+              SCOPE
+            </span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <DarkModeToggle />
+            <Link
+              to="/dashboard"
+              className="font-ui text-sm font-semibold text-slab-muted transition-colors hover:text-slab-on"
+            >
+              ← Back to Dashboard
             </Link>
-            <div className="flex items-center gap-4">
-              <DarkModeToggle />
-              <Link
-                to="/dashboard"
-                className="text-sm sm:text-base text-content-muted hover:text-accent transition-colors duration-300"
-              >
-                ← Back to Dashboard
-              </Link>
-            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="card p-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-accent dark:text-glow-primary mb-8">
+        <div>
+          <h1 className="mb-6 border-b-[3px] border-content pb-6 font-display text-6xl font-extrabold leading-[0.9] text-content sm:text-7xl">
             Privacy Policy
           </h1>
           
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <p className="text-sm text-content-muted mb-8">
+          <div className="max-w-none font-ui text-[15px] leading-relaxed">
+            <p className="mb-8 text-sm text-content-faint">
               <strong>Last updated:</strong> August 15, 2025
             </p>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 1. Introduction
               </h2>
               <p className="text-content-muted mb-4">
@@ -57,12 +52,12 @@ const PrivacyPolicy: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 2. Information We Collect
               </h2>
               
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 2.1 Personal Information
               </h3>
               <ul className="list-disc pl-6 mb-4 text-content-muted">
@@ -72,7 +67,7 @@ const PrivacyPolicy: React.FC = () => {
                 <li><strong>Communication Data:</strong> Support requests, feedback, and email communications</li>
               </ul>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 2.2 Usage Information
               </h3>
               <ul className="list-disc pl-6 mb-4 text-content-muted">
@@ -81,7 +76,7 @@ const PrivacyPolicy: React.FC = () => {
                 <li><strong>Analytics Data:</strong> Performance metrics, error logs, and user behavior analytics</li>
               </ul>
 
-              <h3 className="text-xl font-medium text-content mb-3">
+              <h3 className="mb-2 mt-5 font-ui text-base font-bold text-content">
                 2.3 Public Data
               </h3>
               <p className="text-content-muted mb-4">
@@ -94,8 +89,8 @@ const PrivacyPolicy: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 3. How We Use Your Information
               </h2>
               <ul className="list-disc pl-6 mb-4 text-content-muted">
@@ -109,8 +104,8 @@ const PrivacyPolicy: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 4. Information Sharing and Disclosure
               </h2>
               <p className="text-content-muted mb-4">
@@ -125,8 +120,8 @@ const PrivacyPolicy: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 5. Data Security
               </h2>
               <p className="text-content-muted mb-4">
@@ -141,8 +136,8 @@ const PrivacyPolicy: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 6. Data Retention
               </h2>
               <p className="text-content-muted mb-4">
@@ -156,8 +151,8 @@ const PrivacyPolicy: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 7. Your Rights and Choices
               </h2>
               <p className="text-content-muted mb-4">
@@ -173,8 +168,8 @@ const PrivacyPolicy: React.FC = () => {
               </ul>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 8. Cookies and Tracking Technologies
               </h2>
               <p className="text-content-muted mb-4">
@@ -191,8 +186,8 @@ const PrivacyPolicy: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 9. Third-Party Services
               </h2>
               <p className="text-content-muted mb-4">
@@ -209,8 +204,8 @@ const PrivacyPolicy: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 10. Children's Privacy
               </h2>
               <p className="text-content-muted">
@@ -218,8 +213,8 @@ const PrivacyPolicy: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 11. International Data Transfers
               </h2>
               <p className="text-content-muted">
@@ -227,8 +222,8 @@ const PrivacyPolicy: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 12. Changes to This Privacy Policy
               </h2>
               <p className="text-content-muted mb-4">
@@ -244,14 +239,14 @@ const PrivacyPolicy: React.FC = () => {
               </p>
             </section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-accent dark:text-accent mb-4">
+            <section className="mb-10">
+              <h2 className="mb-4 border-t-[3px] border-content pt-3 font-display text-3xl font-extrabold leading-none text-content">
                 13. Contact Us
               </h2>
               <p className="text-content-muted mb-4">
                 If you have any questions about this Privacy Policy or our data practices, please contact us:
               </p>
-              <div className="bg-surface-inset dark:bg-surface-inset p-4 rounded-lg">
+              <div className="border-l-4 border-content bg-surface-inset p-4">
                 <p className="text-content-muted">
                   <strong>Email:</strong> capitolscope@gmail.com<br />
                   <strong>Address:</strong> CapitolScope Privacy Team<br />

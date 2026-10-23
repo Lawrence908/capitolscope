@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
   XCircleIcon,
-  InformationCircleIcon,
-  DocumentTextIcon,
-  UserGroupIcon,
-  ChartBarIcon
 } from '@heroicons/react/24/outline';
 import type { DataQualityStats } from '../types';
 import apiClient from '../services/api';
+import { Panel, Spinner, StatTile } from './ui';
 
 interface DataQualityMetric {
   name: string;
@@ -53,51 +50,39 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
     return 'error';
   };
 
+  // Bulletin status: ink for good and watch, the brand red only for problems.
   const getStatusIcon = (status: 'good' | 'warning' | 'error') => {
     switch (status) {
       case 'good':
-        return <CheckCircleIcon className="h-5 w-5 text-accent" />;
+        return <CheckCircleIcon className="h-5 w-5 text-content" />;
       case 'warning':
-        return <ExclamationTriangleIcon className="h-5 w-5 text-sev-watch" />;
+        return <ExclamationTriangleIcon className="h-5 w-5 text-content" />;
       case 'error':
-        return <XCircleIcon className="h-5 w-5 text-sev-flag" />;
+        return <XCircleIcon className="h-5 w-5 text-accent" />;
     }
   };
 
-  const getStatusColor = (status: 'good' | 'warning' | 'error') => {
-    switch (status) {
-      case 'good':
-        return 'bg-accent/10 dark:bg-accent/10 border-accent/30 dark:border-accent/30';
-      case 'warning':
-        return 'bg-sev-watch/10 dark:bg-sev-watch/10 border-sev-watch/30 dark:border-sev-watch/30';
-      case 'error':
-        return 'bg-sev-flag/10 dark:bg-sev-flag/10 border-sev-flag/30 dark:border-sev-flag/30';
-    }
+  const STATUS_STAMP: Record<'good' | 'warning' | 'error', { label: string; className: string }> = {
+    good: { label: 'Good', className: 'border-content bg-content text-surface' },
+    warning: { label: 'Watch', className: 'border-content text-content' },
+    error: { label: 'Flag', className: 'border-accent text-accent' },
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
-      </div>
-    );
+    return <Spinner label="Loading data quality" />;
   }
 
   if (error) {
     return (
-      <div className="bg-sev-flag/10 dark:bg-sev-flag/10 border border-sev-flag/30 dark:border-sev-flag/30 rounded-md p-4">
-        <div className="flex">
-          <XCircleIcon className="h-5 w-5 text-sev-flag" />
-          <div className="ml-3">
-            <p className="text-sm text-sev-flag dark:text-sev-flag">{error}</p>
-          </div>
-        </div>
+      <div className="flex items-center gap-3 border-l-4 border-accent bg-surface-inset p-4">
+        <XCircleIcon className="h-5 w-5 flex-shrink-0 text-accent" />
+        <p className="font-ui text-sm text-content">{error}</p>
       </div>
     );
   }
 
   if (!stats) {
-    return <div className="p-6">No data quality stats available.</div>;
+    return <div className="py-6 font-ui text-sm text-content-faint">No data quality stats available.</div>;
   }
 
   // Calculate data quality metrics
@@ -137,156 +122,110 @@ const DataQualityDashboard: React.FC<DataQualityDashboardProps> = ({ className =
   ];
 
   return (
-    <div className={`space-y-4 lg:space-y-6 ${className}`}>
-      {/* Header */}
-      <div className="card p-4 lg:p-6">
-        <div className="flex items-center gap-3">
-          <InformationCircleIcon className="h-6 w-6 lg:h-8 lg:w-8 text-sev-info" />
-          <div>
-            <h2 className="text-xl lg:text-2xl font-bold text-content">Data Quality Dashboard</h2>
-            <p className="text-sm lg:text-base text-content-muted mt-1">
-              Monitor data completeness and identify quality issues
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
-        <div className="card p-4 lg:p-6">
-          <div className="flex items-center gap-3">
-            <DocumentTextIcon className="h-6 w-6 lg:h-8 lg:w-8 text-sev-info" />
-            <div>
-              <div className="text-xl lg:text-2xl font-bold text-content">
-                {stats.total_trades?.toLocaleString() || '0'}
-              </div>
-              <div className="text-xs lg:text-sm text-content-muted">Total Trades</div>
+    <div className={`space-y-10 ${className}`}>
+      {/* Header + summary stats */}
+      <Panel title="Data quality" right={<span className="font-ui text-[12px] text-content-faint">Completeness of the disclosure record</span>}>
+        <div className="grid grid-cols-1 sm:grid-cols-3">
+          {[
+            { label: 'Total trades', value: stats.total_trades?.toLocaleString() || '0' },
+            { label: 'Unique members', value: stats.unique_members?.toLocaleString() || '0' },
+            { label: 'Unique securities', value: stats.unique_tickers?.toLocaleString() || '0' },
+          ].map((t, i) => (
+            <div key={t.label} className={`border-b border-line py-4 ${i > 0 ? 'sm:border-l sm:pl-4' : ''}`}>
+              <StatTile label={t.label} value={t.value} size="lg" />
             </div>
-          </div>
+          ))}
         </div>
-
-        <div className="card p-4 lg:p-6">
-          <div className="flex items-center gap-3">
-            <UserGroupIcon className="h-6 w-6 lg:h-8 lg:w-8 text-accent" />
-            <div>
-              <div className="text-xl lg:text-2xl font-bold text-content">
-                {stats.unique_members?.toLocaleString() || '0'}
-              </div>
-              <div className="text-xs lg:text-sm text-content-muted">Unique Members</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="card p-4 lg:p-6">
-          <div className="flex items-center gap-3">
-            <ChartBarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-accent-2" />
-            <div>
-              <div className="text-xl lg:text-2xl font-bold text-content">
-                {stats.unique_tickers?.toLocaleString() || '0'}
-              </div>
-              <div className="text-xs lg:text-sm text-content-muted">Unique Securities</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </Panel>
 
       {/* Data Quality Metrics */}
-      <div className="space-y-4">
-        <h3 className="text-base lg:text-lg font-semibold text-content">
-          Data Completeness Metrics
-        </h3>
-        
-        {metrics.map((metric, index) => (
-          <div key={index} className={`card p-4 lg:p-6 border ${getStatusColor(metric.status)}`}>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center gap-3">
-                {getStatusIcon(metric.status)}
-                <div>
-                  <h4 className="font-semibold text-content text-sm lg:text-base">
-                    {metric.name}
-                  </h4>
-                  <p className="text-xs lg:text-sm text-content-muted">
-                    {metric.description}
-                  </p>
+      <Panel title="Completeness metrics">
+        <div className="divide-y divide-line">
+          {metrics.map((metric, index) => {
+            const stamp = STATUS_STAMP[metric.status];
+            return (
+              <div key={index} className="py-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    {getStatusIcon(metric.status)}
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-ui text-sm font-bold text-content lg:text-base">{metric.name}</h4>
+                        <span
+                          className={`border-2 px-1.5 py-px font-display text-[12px] font-extrabold uppercase leading-tight tracking-[0.04em] ${stamp.className}`}
+                        >
+                          {stamp.label}
+                        </span>
+                      </div>
+                      <p className="font-ui text-xs text-content-muted lg:text-sm">{metric.description}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-display text-3xl font-extrabold leading-none tabular-nums text-content">
+                      {metric.percentage.toFixed(1)}%
+                    </div>
+                    <div className="mt-1 font-ui text-xs tabular-nums text-content-faint">
+                      {metric.value.toLocaleString()} / {metric.total.toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="mt-3 h-2 w-full bg-surface-inset">
+                  <div
+                    className={`h-2 ${metric.status === 'error' ? 'bg-accent' : 'bg-content'}`}
+                    style={{ width: `${Math.min(metric.percentage, 100)}%` }}
+                  ></div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-xl lg:text-2xl font-bold text-content">
-                  {metric.percentage.toFixed(1)}%
-                </div>
-                <div className="text-xs lg:text-sm text-content-muted">
-                  {metric.value.toLocaleString()} / {metric.total.toLocaleString()}
-                </div>
+            );
+          })}
+        </div>
+      </Panel>
+
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+        {/* Issues Summary */}
+        <Panel title="Issues">
+          <div className="space-y-3 py-4">
+            {stats.trades_without_ticker > 0 && (
+              <div className="flex items-center gap-2 font-ui text-sm">
+                <XCircleIcon className="h-4 w-4 flex-shrink-0 text-accent" />
+                <span className="text-content-muted">
+                  {stats.trades_without_ticker.toLocaleString()} trades missing ticker data ({stats.null_ticker_percentage.toFixed(1)}%)
+                </span>
               </div>
-            </div>
-            
-            {/* Progress bar */}
-            <div className="mt-4">
-              <div className="w-full bg-surface-inset dark:bg-surface-inset rounded-full h-2">
-                <div 
-                  className={`h-2 rounded-full ${
-                    metric.status === 'good' ? 'bg-accent/100' :
-                    metric.status === 'warning' ? 'bg-sev-watch/100' : 'bg-sev-flag/100'
-                  }`}
-                  style={{ width: `${Math.min(metric.percentage, 100)}%` }}
-                ></div>
+            )}
+
+            {stats.trades_with_ticker > 0 && (
+              <div className="flex items-center gap-2 font-ui text-sm">
+                <CheckCircleIcon className="h-4 w-4 flex-shrink-0 text-content" />
+                <span className="text-content-muted">
+                  {stats.trades_with_ticker.toLocaleString()} trades have ticker data ({(100 - stats.null_ticker_percentage).toFixed(1)}%)
+                </span>
               </div>
-            </div>
+            )}
+
+            {stats.trades_without_ticker === 0 && (
+              <div className="flex items-center gap-2 font-ui text-sm">
+                <CheckCircleIcon className="h-4 w-4 flex-shrink-0 text-content" />
+                <span className="text-content-muted">All trades have ticker data: excellent data quality.</span>
+              </div>
+            )}
           </div>
-        ))}
-      </div>
+        </Panel>
 
-      {/* Issues Summary */}
-      <div className="card p-4 lg:p-6">
-        <h3 className="text-base lg:text-lg font-semibold text-content mb-4">
-          Data Quality Issues
-        </h3>
-        
-        <div className="space-y-3">
-          {stats.trades_without_ticker > 0 && (
-            <div className="flex items-center gap-2 text-sm">
-              <XCircleIcon className="h-4 w-4 text-sev-flag" />
-              <span className="text-content-muted">
-                {stats.trades_without_ticker.toLocaleString()} trades missing ticker data ({stats.null_ticker_percentage.toFixed(1)}%)
-              </span>
-            </div>
-          )}
-          
-          {stats.trades_with_ticker > 0 && (
-            <div className="flex items-center gap-2 text-sm">
-              <CheckCircleIcon className="h-4 w-4 text-accent" />
-              <span className="text-content-muted">
-                {stats.trades_with_ticker.toLocaleString()} trades have ticker data ({(100 - stats.null_ticker_percentage).toFixed(1)}%)
-              </span>
-            </div>
-          )}
-          
-          {stats.trades_without_ticker === 0 && (
-            <div className="flex items-center gap-2 text-sm">
-              <CheckCircleIcon className="h-4 w-4 text-accent" />
-              <span className="text-content-muted">
-                All trades have ticker data - excellent data quality!
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Recommendations */}
-      <div className="card p-4 lg:p-6 bg-sev-info/10 dark:bg-sev-info/10 border border-sev-info/30 dark:border-sev-info/30">
-        <h3 className="text-base lg:text-lg font-semibold text-content mb-4">
-          Recommendations
-        </h3>
-        
-        <div className="space-y-2 text-xs lg:text-sm text-content-muted">
-          <p>• Run SQL audit queries to identify specific data issues</p>
-          <p>• Update import scripts to validate data during ingestion</p>
-          <p>• Implement data quality monitoring alerts</p>
-          <p>• Create data cleaning scripts for identified issues</p>
-        </div>
+        {/* Recommendations */}
+        <Panel title="Recommendations">
+          <ul className="list-inside list-disc space-y-2 py-4 font-ui text-sm text-content-muted">
+            <li>Run SQL audit queries to identify specific data issues</li>
+            <li>Update import scripts to validate data during ingestion</li>
+            <li>Implement data quality monitoring alerts</li>
+            <li>Create data cleaning scripts for identified issues</li>
+          </ul>
+        </Panel>
       </div>
     </div>
   );
 };
 
-export default DataQualityDashboard; 
+export default DataQualityDashboard;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { logger, LogComponent } from '../core/logging';
-import { Eyebrow } from './ui';
+import { AuthShell, AuthAlert, AuthNote, ButtonSpinner } from './AuthShell';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -97,43 +97,29 @@ const LoginPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
-          <p className="mt-4 text-content-faint">Loading...</p>
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+          <p className="mt-4 font-ui text-[11px] font-semibold uppercase tracking-[0.14em] text-content-faint">Loading</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
-      {/* atmosphere: subtle verdigris glow from the top */}
-      <div
-        className="pointer-events-none fixed inset-x-0 top-0 h-64"
-        style={{ background: 'radial-gradient(120% 60% at 50% 0%, rgba(67,168,151,0.08), transparent 70%)' }}
-      />
-      <div className="relative max-w-md w-full">
-        {/* Header */}
-        <div className="text-center">
-          <img
-            src="/capitol-scope-logo.png"
-            alt="CapitolScope Logo"
-            className="mx-auto mb-5 h-14 w-14 rounded-full"
-          />
-          <Eyebrow>CapitolScope · Oversight</Eyebrow>
-          <h2 className="mt-2 font-display text-3xl font-medium tracking-[-0.01em] text-content">
-            Welcome back
-          </h2>
-          <p className="mt-2 font-ui text-sm text-content-faint">
-            Sign in to your account to continue
-          </p>
-        </div>
-
-        {/* Login Form */}
-        <form className="card mt-8 space-y-6 p-6 sm:p-8" onSubmit={handleSubmit}>
+    <AuthShell
+      eyebrow="Sign in"
+      title="Welcome back"
+      subtitle="Sign in to your account to continue."
+      note={
+        <AuthNote title="Beta">
+          CapitolScope is currently in beta. Sign up to get early access to congressional trading insights and help us improve the platform.
+        </AuthNote>
+      }
+    >
+      <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-content-muted">
+              <label htmlFor="email" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                 Email address
               </label>
               <input
@@ -146,14 +132,14 @@ const LoginPage: React.FC = () => {
                 onChange={handleInputChange}
                 className={`mt-1 input-field ${
                   validationErrors.email 
-                    ? 'border-error focus:ring-error focus:border-error' 
+                    ? 'border-accent' 
                     : ''
                 }`}
                 placeholder="Enter your email"
                 aria-describedby={validationErrors.email ? "email-error" : undefined}
               />
               {validationErrors.email && (
-                <p id="email-error" className="mt-1 text-sm text-error">
+                <p id="email-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                   {validationErrors.email}
                 </p>
               )}
@@ -161,7 +147,7 @@ const LoginPage: React.FC = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-content-muted">
+              <label htmlFor="password" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                 Password
               </label>
               <input
@@ -174,14 +160,14 @@ const LoginPage: React.FC = () => {
                 onChange={handleInputChange}
                 className={`mt-1 input-field ${
                   validationErrors.password 
-                    ? 'border-error focus:ring-error focus:border-error' 
+                    ? 'border-accent' 
                     : ''
                 }`}
                 placeholder="Enter your password"
                 aria-describedby={validationErrors.password ? "password-error" : undefined}
               />
               {validationErrors.password && (
-                <p id="password-error" className="mt-1 text-sm text-error">
+                <p id="password-error" className="mt-1 font-ui text-sm font-semibold text-accent">
                   {validationErrors.password}
                 </p>
               )}
@@ -197,9 +183,9 @@ const LoginPage: React.FC = () => {
                 type="checkbox"
                 checked={formData.remember_me}
                 onChange={handleInputChange}
-                className="h-4 w-4 text-accent focus:ring-accent border-accent rounded"
+                className="h-4 w-4 accent-[var(--accent)]"
               />
-              <label htmlFor="remember_me" className="ml-2 block text-sm text-content-muted">
+              <label htmlFor="remember_me" className="ml-2 block font-ui text-sm text-content-muted">
                 Remember me
               </label>
             </div>
@@ -207,7 +193,7 @@ const LoginPage: React.FC = () => {
             <div className="text-sm">
               <Link
                 to="/forgot-password"
-                className="font-medium text-accent hover:text-accent-strong"
+                className="font-semibold text-accent hover:text-accent-strong hover:underline underline-offset-2"
               >
                 Forgot your password?
               </Link>
@@ -216,18 +202,7 @@ const LoginPage: React.FC = () => {
 
           {/* Error Message */}
           {error && (
-            <div className="rounded-md bg-error/10 border border-error/20 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-error" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-error">Error: {error}</p>
-                </div>
-              </div>
-            </div>
+            <AuthAlert tone="error">{error}</AuthAlert>
           )}
 
 
@@ -236,15 +211,15 @@ const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn-primary w-full"
+              className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="flex items-center justify-center">
+                  <ButtonSpinner />
                   Signing in...
                 </div>
               ) : (
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                   </svg>
@@ -256,29 +231,18 @@ const LoginPage: React.FC = () => {
 
           {/* Sign Up Link */}
           <div className="text-center">
-            <p className="text-sm text-content-faint">
+            <p className="font-ui text-sm text-content-faint">
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="font-medium text-accent hover:text-accent-strong"
+                className="font-semibold text-accent hover:text-accent-strong hover:underline underline-offset-2"
               >
                 Sign up for free
               </Link>
             </p>
           </div>
         </form>
-
-        {/* Demo Account Info */}
-        <div className="mt-8 card p-4">
-          <h3 className="text-sm font-medium text-accent mb-2">
-            🚀 Beta Testing
-          </h3>
-          <p className="text-xs text-content-faint">
-            CapitolScope is currently in beta. Sign up to get early access to congressional trading insights and help us improve the platform.
-          </p>
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 };
 

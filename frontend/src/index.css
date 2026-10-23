@@ -150,7 +150,8 @@
   .input-field:focus { border-color: var(--accent); }
 
   .input-field-error {
-    @apply border-error focus:ring-error focus:border-error;
+    border-color: var(--accent);
+    --tw-ring-color: var(--accent);
   }
 
   /* Navigation */

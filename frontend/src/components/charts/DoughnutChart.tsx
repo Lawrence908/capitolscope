@@ -2,16 +2,17 @@ import React from 'react';
 import {
   Chart as ChartJS,
   ArcElement,
+  Title,
   Tooltip,
   Legend,
 } from 'chart.js';
 import type { ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { useTheme } from '../../contexts/ThemeContext';
-import { chartTheme } from './chartTheme';
+import { legendOptions, neutralRamp, titleOptions, tooltipOptions, useChartTheme } from './chartTheme';
 
 ChartJS.register(
   ArcElement,
+  Title,
   Tooltip,
   Legend
 );
@@ -34,38 +35,20 @@ interface DoughnutChartProps {
   className?: string;
 }
 
+/**
+ * Neutral-ramp slices (ink to gray) separated by surface-colored gaps.
+ * The legend labels every slice, so meaning never rides on color alone.
+ */
 const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, title, height = 400, className = '' }) => {
-  const { isDarkMode } = useTheme();
-  const c = chartTheme(isDarkMode);
+  const t = useChartTheme();
   const options: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'right' as const,
-        labels: {
-          color: c.label,
-          font: {
-            size: 12,
-          },
-          padding: 20,
-        },
-      },
-      title: {
-        display: !!title,
-        text: title,
-        color: c.title,
-        font: {
-          size: 16,
-          weight: 'bold',
-        },
-      },
+      legend: legendOptions(t, 'right'),
+      title: titleOptions(t, title),
       tooltip: {
-        backgroundColor: c.tooltipBg,
-        titleColor: c.tooltipTitle,
-        bodyColor: c.tooltipBody,
-        borderColor: c.tooltipBorder,
-        borderWidth: 1,
+        ...tooltipOptions(t),
         callbacks: {
           label: function(context) {
             const label = context.label || '';
@@ -79,11 +62,21 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, title, height = 400
     },
   };
 
+  const themed = {
+    ...data,
+    datasets: data.datasets.map((d) => ({
+      ...d,
+      backgroundColor: d.backgroundColor ?? neutralRamp(t, d.data.length),
+      borderColor: d.borderColor ?? t.surface,
+      borderWidth: d.borderWidth ?? 2,
+    })),
+  };
+
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <Doughnut data={data} options={options} />
+      <Doughnut data={themed} options={options} />
     </div>
   );
 };
 
-export default DoughnutChart; 
+export default DoughnutChart;

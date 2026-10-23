@@ -21,20 +21,20 @@ const Row: React.FC<{
   <div className="py-4 border-b border-line last:border-b-0">
     <div className="flex items-baseline justify-between">
       <div className="flex items-center gap-2">
-        <span className="h-2.5 w-2.5 rounded-[2px]" style={{ background: FACTOR_COLORS[factorKey] }} />
-        <span className="font-ui font-semibold text-content">{title}</span>
-        <span className="font-data text-[10px] text-content-faint tracking-wide">
+        <span className="h-2.5 w-2.5" style={{ background: FACTOR_COLORS[factorKey] }} />
+        <span className="font-ui font-bold text-content">{title}</span>
+        <span className="font-ui text-[11px] text-content-faint">
           w{(weight * 100).toFixed(0)}
         </span>
       </div>
-      <span className="font-data text-sm tabular-nums text-content-muted">
+      <span className="font-display text-xl font-extrabold leading-none tabular-nums text-content">
         +{contribution.toFixed(1)}
-        <span className="text-content-faint text-[10px]"> pts</span>
+        <span className="font-ui text-[11px] font-normal text-content-faint"> pts</span>
       </span>
     </div>
     <div className="mt-2">
       <Meter value={percentile} color={FACTOR_COLORS[factorKey]} />
-      <div className="mt-1.5 flex items-center justify-between font-data text-[11px] text-content-faint">
+      <div className="mt-1.5 flex items-center justify-between font-ui text-[11px] text-content-faint">
         <span>{detail}</span>
         <span className="tabular-nums">{(percentile * 100).toFixed(0)}th pctile</span>
       </div>
@@ -50,7 +50,7 @@ const BackLink: React.FC<{ origin?: DossierOrigin | null; onBack?: () => void }>
     <button
       type="button"
       onClick={onBack}
-      className="group mb-3 flex items-center gap-1.5 font-data text-[11px] tracking-wide text-verdigris-500 transition-colors hover:text-verdigris-400"
+      className="group mb-3 flex items-center gap-1.5 font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-accent transition-colors hover:text-accent-strong"
     >
       <span className="transition-transform group-hover:-translate-x-0.5">←</span>
       Back to {origin.label}
@@ -73,8 +73,8 @@ export const MemberDossier: React.FC<{
         )}
         {missingName ? (
           <>
-            <div className="font-display text-lg text-content">{missingName}</div>
-            <div className="font-data text-[11px] uppercase tracking-[0.16em] text-sev-watch">
+            <div className="font-display text-3xl font-extrabold leading-none text-content">{missingName}</div>
+            <div className="font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-accent">
               Not in the scored cohort
             </div>
             <p className="font-ui text-sm text-content-faint max-w-[26ch]">
@@ -84,7 +84,7 @@ export const MemberDossier: React.FC<{
           </>
         ) : (
           <>
-            <div className="font-data text-[11px] uppercase tracking-[0.2em] text-content-faint">
+            <div className="font-display text-2xl font-extrabold uppercase leading-none text-content-faint">
               Select a subject
             </div>
             <p className="font-ui text-sm text-content-faint max-w-[22ch]">
@@ -99,21 +99,23 @@ export const MemberDossier: React.FC<{
   return (
     <div className="flex h-full flex-col">
       {/* header */}
-      <div className="border-b border-line px-6 pb-5 pt-6">
+      <div className="bg-slab px-6 pb-5 pt-6 text-slab-on">
         <BackLink origin={origin} onBack={onBack} />
         <Eyebrow>Dossier</Eyebrow>
-        <h2 className="mt-2 font-display text-2xl leading-tight text-content">{member.member}</h2>
-        <div className="mt-2 flex items-center gap-2.5 font-data text-[11px] text-content-faint">
-          <PartyTag party={member.party} />
-          <span>{member.chamber || '—'}</span>
+        <h2 className="mt-2 font-display text-4xl font-extrabold uppercase leading-[0.95] text-slab-on">{member.member}</h2>
+        <div className="mt-2 flex items-center gap-2.5 font-ui text-[12px] text-slab-muted">
+          <span className="inline-flex bg-surface">
+            <PartyTag party={member.party} />
+          </span>
+          <span>{member.chamber || '–'}</span>
           <span>·</span>
           <span className="tabular-nums">{member.trades} scored trades</span>
         </div>
         <div className="mt-4 flex items-end gap-3">
-          <span className="font-data text-5xl font-medium tabular-nums leading-none text-brass-500">
+          <span className="font-display text-6xl font-extrabold tabular-nums leading-none text-slab-on">
             {member.scrutiny_score.toFixed(1)}
           </span>
-          <span className="pb-1 font-data text-[10px] uppercase tracking-[0.16em] text-content-faint">
+          <span className="pb-1 font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-slab-muted">
             Scrutiny<br />score
           </span>
         </div>
@@ -162,7 +164,7 @@ export const MemberDossier: React.FC<{
           percentile={f.lag.percentile}
           weight={f.lag.weight}
           contribution={f.lag.contribution}
-          detail={`${fmtPct(f.lag.late_pct, 0)} late · ${f.lag.avg_lag_days ?? '—'}d avg`}
+          detail={`${fmtPct(f.lag.late_pct, 0)} late · ${f.lag.avg_lag_days ?? '–'}d avg`}
         />
         <Row
           factorKey="size"

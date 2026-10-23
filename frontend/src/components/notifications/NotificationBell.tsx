@@ -89,28 +89,28 @@ const NotificationBell: React.FC = () => {
       <button
         type="button"
         onClick={openPanel}
-        className="relative rounded-lg p-2 text-content-muted transition-colors hover:bg-surface-inset hover:text-content"
-        aria-label="Notifications"
+        className="relative p-2 text-current transition-opacity hover:opacity-80"
+        aria-label={unread > 0 ? `Notifications, ${unread} unread` : 'Notifications'}
       >
         <BellIcon className="h-5 w-5" />
         {unread > 0 && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-sev-flag px-1 font-data text-[10px] font-medium leading-none text-white">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 font-ui text-[10px] font-bold leading-none text-accent-on">
             {unread > 9 ? '9+' : unread}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-80 overflow-hidden rounded-md border border-line bg-surface-raised shadow-xl">
+        <div className="absolute right-0 z-50 mt-2 w-80 overflow-hidden border-2 border-content bg-surface-raised text-content shadow-xl">
           <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
-            <span className="font-data text-[11px] uppercase tracking-[0.14em] text-content-faint">
+            <span className="font-display text-lg font-extrabold leading-none text-content">
               Notifications
             </span>
             {unread > 0 && (
               <button
                 type="button"
                 onClick={markAll}
-                className="font-data text-[11px] uppercase tracking-[0.1em] text-accent hover:text-accent-strong"
+                className="font-ui text-xs font-semibold text-accent hover:text-accent-strong"
               >
                 Mark all read
               </button>
@@ -147,7 +147,7 @@ const NotificationBell: React.FC = () => {
                         <span className="block truncate font-ui text-xs text-content-faint">
                           {n.message}
                         </span>
-                        <span className="mt-0.5 block font-data text-[10px] uppercase tracking-[0.1em] text-content-faint">
+                        <span className="mt-0.5 block font-ui text-[11px] text-content-faint">
                           {timeAgo(n.created_at)}
                         </span>
                       </span>
@@ -161,7 +161,7 @@ const NotificationBell: React.FC = () => {
           <Link
             to="/alerts"
             onClick={() => setOpen(false)}
-            className="block border-t border-line px-4 py-2.5 text-center font-data text-[11px] uppercase tracking-[0.12em] text-accent hover:bg-surface-inset"
+            className="block border-t border-line px-4 py-2.5 text-center font-ui text-sm font-semibold text-accent hover:bg-surface-inset"
           >
             View all alerts
           </Link>

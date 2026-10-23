@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthShell, AuthAlert, AuthNote, ButtonSpinner } from './AuthShell';
 
 const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -56,28 +57,20 @@ const ForgotPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <div className="mx-auto mb-6">
-            <img 
-              src="/capitol-scope-logo.png" 
-              alt="CapitolScope Logo" 
-              className="h-70 w-70 mx-auto rounded-full"
-            />
-          </div>
-          <h2 className="text-center font-display text-3xl font-medium tracking-[-0.01em] text-content">
-            Reset your password
-          </h2>
-          <p className="mt-2 text-center text-sm text-content-faint">
-            Enter your email address and we'll send you a link to reset your password.
-          </p>
-        </div>
-
-        <form className="card mt-8 space-y-6 p-6 sm:p-8" onSubmit={handleSubmit}>
+    <AuthShell
+      eyebrow="Account"
+      title="Reset your password"
+      subtitle="Enter your email address and we'll send you a link to reset your password."
+      note={
+        <AuthNote title="Need help?">
+          If you don't receive an email within a few minutes, check your spam folder. The reset link will expire in 24 hours.
+        </AuthNote>
+      }
+    >
+      <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Email Field */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-content-muted">
+            <label htmlFor="email" className="block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
               Email address
             </label>
             <div className="mt-1">
@@ -90,13 +83,13 @@ const ForgotPasswordPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`input-field ${
-                  validationErrors.email ? 'border-error focus:ring-error focus:border-error' : ''
+                  validationErrors.email ? 'border-accent' : ''
                 }`}
                 placeholder="Enter your email address"
               />
             </div>
             {validationErrors.email && (
-              <p className="mt-2 text-sm text-error">
+              <p className="mt-2 font-ui text-sm font-semibold text-accent">
                 {validationErrors.email}
               </p>
             )}
@@ -104,34 +97,12 @@ const ForgotPasswordPage: React.FC = () => {
 
           {/* Success Message */}
           {message && (
-            <div className="rounded-md bg-success/10 border border-success/20 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-success" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-success">{message}</p>
-                </div>
-              </div>
-            </div>
+            <AuthAlert tone="success">{message}</AuthAlert>
           )}
 
           {/* Error Message */}
           {error && (
-            <div className="rounded-md bg-error/10 border border-error/20 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-error" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-error">{error}</p>
-                </div>
-              </div>
-            </div>
+            <AuthAlert tone="error">{error}</AuthAlert>
           )}
 
           {/* Submit Button */}
@@ -139,15 +110,15 @@ const ForgotPasswordPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn-primary w-full"
+              className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="flex items-center justify-center">
+                  <ButtonSpinner />
                   Sending reset email...
                 </div>
               ) : (
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -159,29 +130,18 @@ const ForgotPasswordPage: React.FC = () => {
 
           {/* Back to Login Link */}
           <div className="text-center">
-            <p className="text-sm text-content-faint">
+            <p className="font-ui text-sm text-content-faint">
               Remember your password?{' '}
               <Link
                 to="/login"
-                className="font-medium text-accent hover:text-accent-strong"
+                className="font-semibold text-accent hover:text-accent-strong hover:underline underline-offset-2"
               >
                 Sign in
               </Link>
             </p>
           </div>
         </form>
-
-        {/* Help Text */}
-        <div className="mt-8 card p-4">
-          <h3 className="text-sm font-medium text-accent mb-2">
-            💡 Need help?
-          </h3>
-          <p className="text-xs text-content-faint">
-            If you don't receive an email within a few minutes, check your spam folder. The reset link will expire in 24 hours.
-          </p>
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 };
 

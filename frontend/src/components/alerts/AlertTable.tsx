@@ -33,16 +33,17 @@ export const AlertTable: React.FC<AlertTableProps> = ({
     }
   };
 
+  // Square letter code per alert type (Bulletin chips, no emoji).
   const getAlertTypeIcon = (type: string) => {
     switch (type) {
       case 'member_trades':
-        return '👤';
+        return 'M';
       case 'amount_threshold':
-        return '💰';
+        return '$';
       case 'ticker_trades':
-        return '📈';
+        return 'T';
       default:
-        return '🔔';
+        return '?';
     }
   };
 
@@ -101,24 +102,24 @@ export const AlertTable: React.FC<AlertTableProps> = ({
   if (loading) {
     return (
       <div className="p-8 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto"></div>
-        <p className="text-content-muted mt-2">Loading alerts...</p>
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+        <p className="mt-3 font-ui text-[11px] font-semibold uppercase tracking-[0.14em] text-content-faint">Loading alerts</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <div className="py-6">
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="mb-6 flex flex-wrap gap-4">
         <div>
-          <label className="block text-sm font-medium text-content-muted mb-1">
-            Alert Type
+          <label className="mb-1 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
+            Alert type
           </label>
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="border border-line rounded-lg px-3 py-2 text-sm"
+            className="input-field text-sm"
           >
             <option value="all">All Types</option>
             <option value="member_trades">Member Trades</option>
@@ -128,13 +129,13 @@ export const AlertTable: React.FC<AlertTableProps> = ({
         </div>
         
         <div>
-          <label className="block text-sm font-medium text-content-muted mb-1">
+          <label className="mb-1 block font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
             Status
           </label>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="border border-line rounded-lg px-3 py-2 text-sm"
+            className="input-field text-sm"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active</option>
@@ -145,10 +146,9 @@ export const AlertTable: React.FC<AlertTableProps> = ({
 
       {/* Table */}
       {sortedAlerts.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-content-faint text-6xl mb-4">🔔</div>
-          <h3 className="text-lg font-medium text-content mb-2">No alerts found</h3>
-          <p className="text-content-muted">
+        <div className="border-t border-line py-12 text-center">
+          <h3 className="mb-2 font-display text-3xl font-extrabold leading-none text-content">No alerts found</h3>
+          <p className="font-ui text-sm text-content-muted">
             {alerts.length === 0 
               ? "You haven't created any alerts yet. Click 'Create Alert' to get started!"
               : "No alerts match your current filters. Try adjusting the filters above."
@@ -159,8 +159,8 @@ export const AlertTable: React.FC<AlertTableProps> = ({
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead>
-              <tr className="border-b border-line">
-                <th className="text-left py-3 px-4 font-medium text-content-muted">
+              <tr className="border-b-2 border-content font-ui text-[11px] uppercase tracking-[0.08em]">
+                <th className="text-left py-3 px-4 font-bold text-content-faint">
                   <button
                     onClick={() => handleSort('alert_type')}
                     className="flex items-center space-x-1 hover:text-content"
@@ -171,7 +171,7 @@ export const AlertTable: React.FC<AlertTableProps> = ({
                     )}
                   </button>
                 </th>
-                <th className="text-left py-3 px-4 font-medium text-content-muted">
+                <th className="text-left py-3 px-4 font-bold text-content-faint">
                   <button
                     onClick={() => handleSort('name')}
                     className="flex items-center space-x-1 hover:text-content"
@@ -182,9 +182,9 @@ export const AlertTable: React.FC<AlertTableProps> = ({
                     )}
                   </button>
                 </th>
-                <th className="text-left py-3 px-4 font-medium text-content-muted">Target</th>
-                <th className="text-left py-3 px-4 font-medium text-content-muted">Status</th>
-                <th className="text-left py-3 px-4 font-medium text-content-muted">
+                <th className="text-left py-3 px-4 font-bold text-content-faint">Target</th>
+                <th className="text-left py-3 px-4 font-bold text-content-faint">Status</th>
+                <th className="text-left py-3 px-4 font-bold text-content-faint">
                   <button
                     onClick={() => handleSort('created_at')}
                     className="flex items-center space-x-1 hover:text-content"
@@ -195,7 +195,7 @@ export const AlertTable: React.FC<AlertTableProps> = ({
                     )}
                   </button>
                 </th>
-                <th className="text-right py-3 px-4 font-medium text-content-muted">Actions</th>
+                <th className="text-right py-3 px-4 font-bold text-content-faint">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -203,48 +203,46 @@ export const AlertTable: React.FC<AlertTableProps> = ({
                 <tr key={alert.id} className="border-b border-line hover:bg-surface-inset">
                   <td className="py-4 px-4">
                     <div className="flex items-center space-x-2">
-                      <span className="text-lg">{getAlertTypeIcon(alert.alert_type)}</span>
-                      <span className="text-sm font-medium text-content-muted">
+                      <span className="inline-flex h-[18px] w-[18px] items-center justify-center border-2 border-content font-display text-[12px] font-extrabold leading-none text-content">
+                        {getAlertTypeIcon(alert.alert_type)}
+                      </span>
+                      <span className="font-ui text-sm font-semibold text-content-muted">
                         {getAlertTypeLabel(alert.alert_type)}
                       </span>
                     </div>
                   </td>
                   <td className="py-4 px-4">
-                    <div className="font-medium text-content">{alert.name}</div>
+                    <div className="font-ui font-bold text-content">{alert.name}</div>
                   </td>
                   <td className="py-4 px-4">
-                    <div className="text-content-muted">
+                    <div className="font-ui text-sm text-content-muted">
                       {alert.target_name || alert.target_symbol || 
                         (alert.threshold_value ? `$${alert.threshold_value.toLocaleString()}+` : '-')}
                     </div>
                   </td>
                   <td className="py-4 px-4">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    <span className={`inline-flex items-center border-2 border-content px-1.5 py-px font-display text-[12px] font-extrabold uppercase leading-tight tracking-[0.04em] ${
                       alert.is_active
-                        ? 'bg-accent/10 text-accent'
-                        : 'bg-surface-inset text-content'
+                        ? 'bg-content text-surface'
+                        : 'text-content-faint'
                     }`}>
                       {alert.is_active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-content-muted">
+                  <td className="py-4 px-4 font-ui text-sm tabular-nums text-content-muted">
                     {formatDate(alert.created_at)}
                   </td>
                   <td className="py-4 px-4 text-right">
                     <div className="flex items-center justify-end space-x-2">
                       <button
                         onClick={() => handleToggleAlert(alert)}
-                        className={`px-3 py-1 text-xs font-medium rounded ${
-                          alert.is_active
-                            ? 'text-orange-700 bg-orange-100 hover:bg-orange-200'
-                            : 'text-accent bg-accent/10 hover:bg-accent/10'
-                        }`}
+                        className={`${alert.is_active ? 'btn-outline' : 'btn-secondary'} px-3 py-1 text-xs`}
                       >
                         {alert.is_active ? 'Pause' : 'Activate'}
                       </button>
                       <button
                         onClick={() => handleDeleteAlert(alert)}
-                        className="px-3 py-1 text-xs font-medium text-sev-flag bg-sev-flag/10 hover:bg-sev-flag/10 rounded"
+                        className="btn-ghost px-3 py-1 text-xs text-accent hover:text-accent-strong"
                       >
                         Delete
                       </button>

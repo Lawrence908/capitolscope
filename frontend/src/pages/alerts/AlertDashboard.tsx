@@ -30,9 +30,9 @@ export const AlertDashboard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="rounded-md border border-sev-flag/40 p-6 status-error">
-        <h2 className="mb-2 font-display text-lg text-content">Error Loading Alerts</h2>
-        <p className="font-ui text-sm">{error}</p>
+      <div className="border-l-4 border-accent bg-surface-inset p-6">
+        <h2 className="mb-2 font-display text-3xl font-extrabold leading-none text-content">Error loading alerts</h2>
+        <p className="font-ui text-sm text-content-muted">{error}</p>
         <button onClick={() => refetch()} className="btn-primary mt-4 text-sm">
           Try Again
         </button>
@@ -43,9 +43,9 @@ export const AlertDashboard: React.FC = () => {
   return (
     <div>
       <PageHeader
-        eyebrow="CapitolScope · Alerts"
+        eyebrow="Alerts"
         title="Trade Alerts"
-        subtitle="Get notified when congress members make trades matching your criteria — by member, ticker, or amount."
+        subtitle="Get notified when congress members make trades matching your criteria: by member, ticker or amount."
         actions={
           <button onClick={() => setIsCreateModalOpen(true)} className="btn-primary text-sm">
             Create Alert
@@ -54,19 +54,17 @@ export const AlertDashboard: React.FC = () => {
       />
 
       {/* Stats */}
-      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div className="card p-5">
-          <StatTile label="Active Alerts" value={stats?.activeAlerts || 0} tone="accent" hint="Currently monitoring" />
-        </div>
-        <div className="card p-5">
-          <StatTile label="Notifications Today" value={stats?.notificationsToday || 0} hint="Alerts triggered" />
-        </div>
-        <div className="card p-5">
-          <StatTile label="Total Triggered" value={stats?.totalTriggered || 0} hint="All time" />
-        </div>
-        <div className="card p-5">
-          <StatTile label="Delivery Rate" value={`${stats?.deliveryRate || 0}%`} tone="brass" hint="Email success rate" />
-        </div>
+      <div className="section-rule mb-8 grid grid-cols-2 md:grid-cols-4">
+        {[
+          { label: 'Active alerts', value: stats?.activeAlerts || 0, hint: 'Currently monitoring' },
+          { label: 'Notifications today', value: stats?.notificationsToday || 0, hint: 'Alerts triggered' },
+          { label: 'Total triggered', value: stats?.totalTriggered || 0, hint: 'All time' },
+          { label: 'Delivery rate', value: `${stats?.deliveryRate || 0}%`, hint: 'Email success rate' },
+        ].map((s, i) => (
+          <div key={s.label} className={`border-b border-line py-4 pr-4 ${i > 0 ? 'md:border-l md:pl-4' : ''} ${i % 2 === 1 ? 'border-l pl-4' : ''}`}>
+            <StatTile label={s.label} value={s.value} hint={s.hint} size="lg" />
+          </div>
+        ))}
       </div>
 
       {/* Tabs */}
@@ -83,7 +81,7 @@ export const AlertDashboard: React.FC = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="card overflow-hidden">
+      <div className="section-rule overflow-hidden">
         {selectedTab === 'alerts' && (
           <AlertTable
             alerts={alerts}

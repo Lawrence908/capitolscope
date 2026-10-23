@@ -70,11 +70,11 @@ export class ErrorBoundary extends Component<Props, State> {
       // Default fallback UI
       return (
         <div className="flex min-h-screen items-center justify-center bg-surface px-4">
-          <div className="card w-full max-w-md p-6">
+          <div className="w-full max-w-md border-2 border-content bg-surface-raised p-6">
             <div className="mb-4 flex items-center">
               <div className="flex-shrink-0">
                 <svg
-                  className="h-8 w-8 text-sev-flag"
+                  className="h-8 w-8 text-accent"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -88,7 +88,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="font-display text-lg font-medium text-content">Something went wrong</h3>
+                <h3 className="font-display text-3xl font-extrabold leading-none text-content">Something went wrong</h3>
               </div>
             </div>
             <div className="mb-4">
@@ -110,11 +110,11 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-4">
-                <summary className="cursor-pointer font-data text-[11px] uppercase tracking-[0.12em] text-content-faint">
+                <summary className="cursor-pointer font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
                   Error Details (Development)
                 </summary>
-                <div className="mt-2 rounded-md border border-line bg-surface-inset p-3">
-                  <pre className="whitespace-pre-wrap font-data text-xs text-content-muted">
+                <div className="mt-2 border-l-4 border-accent bg-surface-inset p-3">
+                  <pre className="whitespace-pre-wrap font-mono text-xs text-content-muted">
                     {this.state.error.toString()}
                     {this.state.errorInfo?.componentStack}
                   </pre>

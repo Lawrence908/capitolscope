@@ -7,20 +7,25 @@ import { PageHeader, Panel, Spinner } from '../../components/ui/scaffold';
 import { fmtMoney } from '../../components/ui/format';
 import { MemberPicker, MemberChip } from '../../components/members/MemberPicker';
 import LineChart from '../../components/charts/LineChart';
+import { useChartTheme } from '../../components/charts/chartTheme';
 
 /** Format an already-percentage number (e.g. 68.85 -> "+68.9%"). */
 const pct = (n: number | null | undefined, signed = false): string => {
-  if (n == null) return '—';
+  if (n == null) return '–';
   const s = `${n.toFixed(1)}%`;
   return signed && n >= 0 ? `+${s}` : s;
 };
 
+/** Signed return with an arrow; negatives in the accent, positives in ink. */
+const arrow = (n: number | null | undefined): string => (n == null ? '' : n >= 0 ? '▲ ' : '▼ ');
+
 const toneForReturn = (n: number | null | undefined): string =>
-  n == null ? 'text-content' : n >= 0 ? 'text-accent' : 'text-sev-flag';
+  n == null ? 'text-content' : n >= 0 ? 'text-content' : 'text-accent';
 
 // ---- main page -------------------------------------------------------------
 
 const MirrorPage: React.FC = () => {
+  const ct = useChartTheme();
   const [mirrors, setMirrors] = useState<MirrorPortfolio[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [holdings, setHoldings] = useState<MirrorHoldingsResult | null>(null);
@@ -141,12 +146,12 @@ const MirrorPage: React.FC = () => {
       <PageHeader
         eyebrow="Portfolio"
         title="Mirror Portfolios"
-        subtitle="Combine any set of members into one synthetic portfolio. Positions are reconstructed from disclosed trades and valued at the latest close — an approximation of what mirroring those members would look like."
+        subtitle="Combine any set of members into one synthetic portfolio. Positions are reconstructed from disclosed trades and valued at the latest close: an approximation of what mirroring those members would look like."
         stats={
           totals
             ? [
                 { label: 'Market value', value: fmtMoney(totals.market_value) },
-                { label: 'Total return', value: pct(totals.return_pct, true), tone: (totals.return_pct ?? 0) >= 0 ? 'accent' : 'flag' },
+                { label: 'Total return', value: `${arrow(totals.return_pct)}${pct(totals.return_pct, true)}`, tone: (totals.return_pct ?? 0) >= 0 ? 'default' : 'accent' },
                 { label: 'Holdings', value: String(totals.holdings_count) },
               ]
             : undefined
@@ -154,7 +159,7 @@ const MirrorPage: React.FC = () => {
       />
 
       {error && (
-        <div className="mb-4 rounded-md border border-sev-flag/40 px-4 py-3 font-ui text-sm text-sev-flag">
+        <div className="mb-4 border-l-4 border-accent bg-surface-inset px-4 py-3 font-ui text-sm text-content">
           {error}
         </div>
       )}
@@ -164,7 +169,7 @@ const MirrorPage: React.FC = () => {
         <div className="space-y-6">
           <Panel title="Your mirrors">
             {mirrors.length === 0 ? (
-              <p className="px-4 py-4 font-ui text-sm text-content-faint">No mirrors yet. Create one below.</p>
+              <p className="px-1 py-4 font-ui text-sm text-content-faint">No mirrors yet. Create one below.</p>
             ) : (
               <ul className="divide-y divide-line">
                 {mirrors.map((m) => (
@@ -172,12 +177,12 @@ const MirrorPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setSelectedId(m.id)}
-                      className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-surface-inset ${
-                        m.id === selectedId ? 'bg-surface-inset' : ''
+                      className={`flex w-full items-center justify-between px-1 py-3 text-left transition-colors hover:bg-surface-inset ${
+                        m.id === selectedId ? 'bg-surface-inset shadow-[inset_3px_0_0_var(--accent)] pl-3' : ''
                       }`}
                     >
-                      <span className="font-ui text-sm text-content">{m.name}</span>
-                      <span className="font-data text-[11px] uppercase tracking-[0.12em] text-content-faint">
+                      <span className={`font-ui text-sm ${m.id === selectedId ? 'font-bold' : ''} text-content`}>{m.name}</span>
+                      <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-content-faint">
                         {m.member_count} member{m.member_count === 1 ? '' : 's'}
                       </span>
                     </button>
@@ -187,12 +192,12 @@ const MirrorPage: React.FC = () => {
             )}
           </Panel>
 
-          <Panel title="Create mirror" bodyClassName="p-4 space-y-3">
+          <Panel title="Create mirror" bodyClassName="py-4 px-1 space-y-3">
             <input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Portfolio name"
-              className="w-full rounded-md border border-line bg-surface px-3 py-2 font-ui text-sm text-content placeholder:text-content-faint focus:border-accent focus:outline-none"
+              className="input-field text-sm"
             />
             {newMembers.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
@@ -214,7 +219,7 @@ const MirrorPage: React.FC = () => {
               type="button"
               disabled={creating || !newName.trim() || newMembers.length === 0}
               onClick={createMirror}
-              className="w-full rounded-md bg-accent px-4 py-2 font-data text-xs uppercase tracking-[0.12em] text-[#071310] transition-opacity hover:opacity-90 disabled:opacity-40"
+              className="btn-primary w-full text-sm disabled:cursor-not-allowed disabled:opacity-40"
             >
               {creating ? 'Creating…' : 'Create mirror'}
             </button>
@@ -237,16 +242,16 @@ const MirrorPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={deleteSelected}
-                    className="font-data text-[11px] uppercase tracking-[0.12em] text-content-faint hover:text-sev-flag"
+                    className="font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-content-faint hover:text-accent"
                   >
                     Delete
                   </button>
                 }
-                bodyClassName="p-4 space-y-3"
+                bodyClassName="py-4 px-1 space-y-3"
               >
                 <div className="flex flex-wrap gap-1.5">
                   {selected.members.length === 0 ? (
-                    <span className="font-ui text-sm text-content-faint">No members — add some below.</span>
+                    <span className="font-ui text-sm text-content-faint">No members yet; add some below.</span>
                   ) : (
                     selected.members.map((m) => (
                       <MemberChip
@@ -267,15 +272,15 @@ const MirrorPage: React.FC = () => {
                   right={
                     performance.summary.vs_spy_pct != null ? (
                       <span
-                        className={`font-data text-[11px] uppercase tracking-[0.12em] ${
-                          performance.summary.vs_spy_pct >= 0 ? 'text-accent' : 'text-sev-flag'
+                        className={`font-display text-xl font-extrabold leading-none tabular-nums ${
+                          performance.summary.vs_spy_pct >= 0 ? 'text-content' : 'text-accent'
                         }`}
                       >
-                        {pct(performance.summary.vs_spy_pct, true)} vs SPY
+                        {arrow(performance.summary.vs_spy_pct)}{pct(performance.summary.vs_spy_pct, true)} vs SPY
                       </span>
                     ) : undefined
                   }
-                  bodyClassName="p-4"
+                  bodyClassName="py-4"
                 >
                   <LineChart
                     height={320}
@@ -285,19 +290,19 @@ const MirrorPage: React.FC = () => {
                         {
                           label: 'Mirror',
                           data: performance.series.map((p) => p.portfolio_value),
-                          borderColor: '#1f9e88',
-                          backgroundColor: 'rgba(31,158,136,0.12)',
-                          borderWidth: 2,
-                          fill: true,
-                          tension: 0.25,
+                          borderColor: ct.ink,
+                          backgroundColor: 'transparent',
+                          borderWidth: 4,
+                          fill: false,
+                          tension: 0,
                         },
                         {
                           label: 'SPY (same cash flows)',
                           data: performance.series.map((p) => p.spy_value ?? Number.NaN),
-                          borderColor: '#9aa5b1',
-                          borderWidth: 1.5,
+                          borderColor: ct.bench,
+                          borderWidth: 3,
                           fill: false,
-                          tension: 0.25,
+                          tension: 0,
                         },
                       ],
                     }}
@@ -309,7 +314,7 @@ const MirrorPage: React.FC = () => {
                 title="Combined holdings"
                 right={
                   holdings?.meta ? (
-                    <span className="font-data text-[11px] uppercase tracking-[0.12em] text-content-faint">
+                    <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-content-faint">
                       {holdings.meta.priced_trades} priced trades
                     </span>
                   ) : undefined
@@ -318,41 +323,41 @@ const MirrorPage: React.FC = () => {
                 {loadingHoldings ? (
                   <Spinner label="Reconstructing positions" />
                 ) : !holdings || holdings.holdings.length === 0 ? (
-                  <p className="px-4 py-12 text-center font-ui text-sm text-content-faint">
+                  <p className="px-1 py-12 text-center font-ui text-sm text-content-faint">
                     No priced holdings. Add members with matched, priced trades.
                   </p>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full text-left">
                       <thead>
-                        <tr className="border-b border-line font-data text-[10px] uppercase tracking-[0.14em] text-content-faint">
-                          <th className="px-4 py-2">Ticker</th>
-                          <th className="px-4 py-2 text-right">Shares</th>
-                          <th className="px-4 py-2 text-right">Cost basis</th>
-                          <th className="px-4 py-2 text-right">Market value</th>
-                          <th className="px-4 py-2 text-right">Return</th>
+                        <tr className="border-b-2 border-content font-ui text-[11px] font-bold uppercase tracking-[0.08em] text-content-faint">
+                          <th className="px-2 py-2">Ticker</th>
+                          <th className="px-2 py-2 text-right">Shares</th>
+                          <th className="px-2 py-2 text-right">Cost basis</th>
+                          <th className="px-2 py-2 text-right">Market value</th>
+                          <th className="px-2 py-2 text-right">Return</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-line">
                         {holdings.holdings.map((h) => (
                           <tr key={h.security_id} className="hover:bg-surface-inset">
-                            <td className="px-4 py-2">
-                              <span className="font-data text-sm text-content">{h.ticker || '—'}</span>
+                            <td className="px-2 py-2">
+                              <span className="font-display text-xl font-extrabold leading-none text-content">{h.ticker || '–'}</span>
                               {h.name && (
                                 <span className="ml-2 font-ui text-xs text-content-faint">{h.name}</span>
                               )}
                             </td>
-                            <td className="px-4 py-2 text-right font-data text-sm tabular-nums text-content-muted">
+                            <td className="px-2 py-2 text-right font-ui text-sm tabular-nums text-content-muted">
                               {h.shares.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </td>
-                            <td className="px-4 py-2 text-right font-data text-sm tabular-nums text-content-muted">
+                            <td className="px-2 py-2 text-right font-ui text-sm tabular-nums text-content-muted">
                               {fmtMoney(h.cost_basis)}
                             </td>
-                            <td className="px-4 py-2 text-right font-data text-sm tabular-nums text-content">
+                            <td className="px-2 py-2 text-right font-ui text-sm font-semibold tabular-nums text-content">
                               {fmtMoney(h.market_value)}
                             </td>
-                            <td className={`px-4 py-2 text-right font-data text-sm tabular-nums ${toneForReturn(h.return_pct)}`}>
-                              {pct(h.return_pct, true)}
+                            <td className={`px-2 py-2 text-right font-ui text-sm font-semibold tabular-nums ${toneForReturn(h.return_pct)}`}>
+                              {arrow(h.return_pct)}{pct(h.return_pct, true)}
                             </td>
                           </tr>
                         ))}

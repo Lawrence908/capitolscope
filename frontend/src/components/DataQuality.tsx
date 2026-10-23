@@ -17,11 +17,11 @@ const DataQuality: React.FC = () => {
     <div className="space-y-4 lg:space-y-6">
       {/* Premium Upgrade Banner for Free Users */}
       {isFree && (
-        <div className="flex flex-col gap-4 rounded-md border border-accent/40 bg-accent/10 p-4 sm:flex-row sm:items-center sm:justify-between lg:p-6">
+        <div className="flex flex-col gap-4 bg-surface-inset p-4 sm:flex-row sm:items-center sm:justify-between lg:p-6">
           <div className="flex items-center">
             <SparklesIcon className="mr-3 h-6 w-6 flex-shrink-0 text-accent" />
             <div>
-              <h4 className="font-display text-lg font-medium text-content">Unlock Data Quality Insights</h4>
+              <h4 className="font-display text-2xl font-extrabold leading-none text-content">Unlock data quality insights</h4>
               <p className="font-ui text-sm text-content-muted">
                 Comprehensive data quality metrics and validation tools.
               </p>

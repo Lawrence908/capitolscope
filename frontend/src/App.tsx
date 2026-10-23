@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -8,7 +8,6 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ResetPasswordPage from './components/ResetPasswordPage';
-import LandingPage from './components/LandingPage';
 import PublicDashboard from './components/PublicDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import PremiumRoute from './components/PremiumRoute';
@@ -31,6 +30,7 @@ const AssetPage = React.lazy(() => import('./pages/asset/AssetPage'));
 const ComparePage = React.lazy(() => import('./pages/compare/ComparePage'));
 const TradePage = React.lazy(() => import('./pages/trade/TradePage'));
 const LateFilersPage = React.lazy(() => import('./pages/late/LateFilersPage'));
+const SocialQueuePage = React.lazy(() => import('./pages/admin/SocialQueuePage'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -47,8 +47,12 @@ const App: React.FC = () => {
           <Router>
             <Routes>
             {/* Public routes */}
-            <Route path="/" element={<PublicDashboard />} />
-            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/" element={
+              <Layout>
+                <PublicDashboard />
+              </Layout>
+            } />
+            <Route path="/landing" element={<Navigate to="/" replace />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/login" element={
@@ -195,6 +199,17 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
             
+            {/* Admin: X post review queue (API enforces the admin role) */}
+            <Route path="/admin/social" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <SocialQueuePage />
+                  </Suspense>
+                </Layout>
+              </ProtectedRoute>
+            } />
+
             {/* Public data pages: open to everyone (shareable from X). Tools stay gated. */}
             <Route path="/t/:tradeId" element={
               <Layout>
@@ -211,8 +226,8 @@ const App: React.FC = () => {
               </Layout>
             } />
 
-            {/* Catch all route - redirect to public dashboard */}
-            <Route path="*" element={<PublicDashboard />} />
+            {/* Catch all route: redirect to the homepage */}
+            <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Router>
         </AuthProvider>

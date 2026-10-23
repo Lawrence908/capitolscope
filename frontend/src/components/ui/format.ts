@@ -5,7 +5,7 @@
 
 // ---- formatters ----
 export const fmtMoney = (n: number | null | undefined): string => {
-  if (n == null) return '—';
+  if (n == null) return '–';
   const abs = Math.abs(n);
   if (abs >= 1e9) return `$${(n / 1e9).toFixed(1)}B`;
   if (abs >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
@@ -19,17 +19,17 @@ export const fmtAmountRange = (
   maxCents: number | null | undefined,
 ): string => {
   const usd = (c: number) => `$${Math.round(c / 100).toLocaleString('en-US')}`;
-  if (minCents == null && maxCents == null) return '—';
+  if (minCents == null && maxCents == null) return '–';
   if (minCents != null && maxCents != null && maxCents !== minCents) return `${usd(minCents)}–${usd(maxCents)}`;
   if (minCents != null && maxCents == null) return `${usd(minCents)}+`;
   return usd((minCents ?? maxCents) as number);
 };
 
 export const fmtPct = (n: number | null | undefined, digits = 1): string =>
-  n == null ? '—' : `${(n * 100).toFixed(digits)}%`;
+  n == null ? '–' : `${(n * 100).toFixed(digits)}%`;
 
 export const fmtSigned = (n: number | null | undefined): string => {
-  if (n == null) return '—';
+  if (n == null) return '–';
   const v = (n * 100).toFixed(1);
   return `${n >= 0 ? '+' : ''}${v}%`;
 };
@@ -59,13 +59,15 @@ export const affiliation = (
 };
 
 // ---- factor fingerprint palette (stacked contributions out of 100) ----
+// Bulletin: factors are an ink-to-gray ramp (stacked in FACTOR_ORDER), with
+// brand red reserved for committee conflict, the most consequential factor.
 export const FACTOR_COLORS: Record<string, string> = {
-  edge: '#43a897', // verdigris — trading edge / alpha
-  event: '#e0906a', // coral — pre-earnings positioning
-  conflict: '#d6707b', // oxblood — committee conflict
-  cluster: '#7aa8d6', // steel — herding involvement
-  lag: '#cca85a', // brass — disclosure lag
-  size: '#9d8bc4', // amethyst — trade-size anomaly
+  edge: '#121417', // trading edge / alpha
+  event: '#4a4f57', // pre-earnings positioning
+  conflict: '#c5302a', // committee conflict
+  cluster: '#757b84', // herding involvement
+  lag: '#9ca1a9', // disclosure lag
+  size: '#c4c8ce', // trade-size anomaly
 };
 
 export const FACTOR_LABELS: Record<string, string> = {

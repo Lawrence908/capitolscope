@@ -12,21 +12,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import PremiumFeatureWrapper from './PremiumFeatureWrapper';
 import apiClient from '../services/api';
-import { PageHeader, Panel, StatTile, Spinner, fmtMoney, partyMeta } from './ui';
-
-// Design-system accent hexes (canvas can't read CSS vars; these read on both themes)
-const C = {
-  verdigris: '#43a897',
-  steel: '#7aa8d6',
-  brass: '#cca85a',
-  oxblood: '#d6707b',
-  amethyst: '#9d8bc4',
-  faint: '#90a29d',
-};
-const rgba = (hex: string, a: number) => {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
-};
+import { PageHeader, Panel, StatTile, Spinner, fmtMoney } from './ui';
+import { neutralRamp, useChartTheme, withAlpha } from './charts/chartTheme';
 
 // Lazy load chart components to reduce bundle size (each is a default export).
 const ChartComponents = {
@@ -39,8 +26,8 @@ const ChartComponents = {
 // Loading component for charts
 const ChartLoadingSpinner = () => (
   <div className="flex h-64 items-center justify-center gap-3">
-    <div className="h-6 w-6 animate-spin rounded-full border-2 border-line border-t-accent" />
-    <span className="font-data text-[11px] uppercase tracking-[0.18em] text-content-faint">Loading chart</span>
+    <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-line border-t-accent" />
+    <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.14em] text-content-faint">Loading chart</span>
   </div>
 );
 
@@ -75,6 +62,7 @@ interface AnalyticsData {
 
 const Analytics: React.FC = () => {
   const { user } = useAuth();
+  const ct = useChartTheme();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -204,8 +192,8 @@ const Analytics: React.FC = () => {
 
   if (error && !data) {
     return (
-      <div className="flex items-center gap-3 rounded-md border border-sev-flag/40 px-4 py-3 status-error">
-        <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0" />
+      <div className="flex items-center gap-3 border-l-4 border-accent bg-surface-inset px-4 py-3 text-content">
+        <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0 text-accent" />
         <p className="font-ui text-sm">{error}</p>
       </div>
     );
@@ -222,9 +210,9 @@ const Analytics: React.FC = () => {
       {
         label: 'Total Trades',
         data: data.topTradingMembers?.map((member) => member.total_trades) || [],
-        backgroundColor: rgba(C.verdigris, 0.8),
-        borderColor: C.verdigris,
-        borderWidth: 1,
+        backgroundColor: ct.ink,
+        borderColor: ct.ink,
+        borderWidth: 0,
       },
     ],
   };
@@ -235,9 +223,9 @@ const Analytics: React.FC = () => {
       {
         label: 'Trade Count',
         data: data.topTradedTickers?.map((ticker) => ticker.count) || [],
-        backgroundColor: rgba(C.steel, 0.8),
-        borderColor: C.steel,
-        borderWidth: 1,
+        backgroundColor: ct.ink,
+        borderColor: ct.ink,
+        borderWidth: 0,
       },
     ],
   };
@@ -248,8 +236,9 @@ const Analytics: React.FC = () => {
       {
         label: 'Trades by Party',
         data: Object.values(data.partyDistribution || {}),
-        backgroundColor: Object.keys(data.partyDistribution || {}).map((p) => rgba(partyMeta(p).color, 0.8)),
-        borderColor: Object.keys(data.partyDistribution || {}).map((p) => partyMeta(p).color),
+        // Parties are never color-coded: a neutral ramp, labelled in the legend.
+        backgroundColor: neutralRamp(ct, Object.keys(data.partyDistribution || {}).length),
+        borderColor: ct.surface,
         borderWidth: 2,
       },
     ],
@@ -261,8 +250,8 @@ const Analytics: React.FC = () => {
       {
         label: 'Trades by Chamber',
         data: Object.values(data.chamberDistribution || {}),
-        backgroundColor: [rgba(C.brass, 0.8), rgba(C.verdigris, 0.8), rgba(C.faint, 0.8)],
-        borderColor: [C.brass, C.verdigris, C.faint],
+        backgroundColor: neutralRamp(ct, Object.keys(data.chamberDistribution || {}).length),
+        borderColor: ct.surface,
         borderWidth: 2,
       },
     ],
@@ -274,9 +263,9 @@ const Analytics: React.FC = () => {
       {
         label: 'Number of Trades',
         data: Object.values(data.amountDistribution || {}),
-        backgroundColor: rgba(C.brass, 0.8),
-        borderColor: C.brass,
-        borderWidth: 1,
+        backgroundColor: ct.ink,
+        borderColor: ct.ink,
+        borderWidth: 0,
       },
     ],
   };
@@ -287,11 +276,11 @@ const Analytics: React.FC = () => {
       {
         label: 'Trade Volume',
         data: data.volumeOverTime?.map((item) => item.volume / 100) || [], // Convert cents to dollars
-        borderColor: C.verdigris,
-        backgroundColor: rgba(C.verdigris, 0.12),
-        borderWidth: 2,
+        borderColor: ct.ink,
+        backgroundColor: withAlpha(ct.ink, 0.06),
+        borderWidth: 3,
         fill: true,
-        tension: 0.4,
+        tension: 0,
       },
     ],
   };
@@ -302,9 +291,9 @@ const Analytics: React.FC = () => {
   return (
     <div>
       <PageHeader
-        eyebrow="CapitolScope · Analytics"
+        eyebrow="Analytics"
         title="Analytics"
-        subtitle="Comprehensive analysis of congressional trading — top members and securities, party and chamber breakdowns, amount distribution, and volume over time."
+        subtitle="Who trades most, what they trade, how big the trades are, and how disclosure volume moves over time."
         actions={
           <div className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-content-faint" />
@@ -324,11 +313,11 @@ const Analytics: React.FC = () => {
       <div className="space-y-6">
         {/* Premium Upgrade Banner for Free Users */}
         {isFree && (
-          <div className="flex flex-col gap-4 rounded-md border border-accent/40 bg-accent/10 p-4 sm:flex-row sm:items-center sm:justify-between lg:p-6">
+          <div className="flex flex-col gap-4 bg-surface-inset p-4 sm:flex-row sm:items-center sm:justify-between lg:p-6">
             <div className="flex items-center">
               <SparklesIcon className="mr-3 h-6 w-6 flex-shrink-0 text-accent" />
               <div>
-                <h4 className="font-display text-lg font-medium text-content">Unlock Advanced Analytics</h4>
+                <h4 className="font-display text-2xl font-extrabold leading-none text-content">Unlock advanced analytics</h4>
                 <p className="font-ui text-sm text-content-muted">
                   Comprehensive trading analytics, advanced charts, and detailed insights.
                 </p>
@@ -342,10 +331,10 @@ const Analytics: React.FC = () => {
 
         {/* Partial Loading Indicator */}
         {partialLoading && (
-          <div className="flex items-center gap-3 rounded-md border border-sev-watch/40 bg-sev-watch/10 p-4">
-            <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0 text-sev-watch" />
+          <div className="flex items-center gap-3 border-l-4 border-content bg-surface-inset p-4">
+            <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0 text-content" />
             <div>
-              <h4 className="font-ui text-sm font-medium text-content">Loading partial data</h4>
+              <h4 className="font-ui text-sm font-bold text-content">Loading partial data</h4>
               <p className="font-ui text-sm text-content-faint">
                 Some analytics are still loading; the page will update automatically.
               </p>
@@ -419,19 +408,17 @@ const Analytics: React.FC = () => {
         </PremiumFeatureWrapper>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="card p-4 lg:p-5">
-            <StatTile label="Total Members" value={data.topTradingMembers.length} />
-          </div>
-          <div className="card p-4 lg:p-5">
-            <StatTile label="Total Securities" value={data.topTradedTickers.length} tone="steel" />
-          </div>
-          <div className="card p-4 lg:p-5">
-            <StatTile label="Total Trades" value={totalTrades.toLocaleString()} tone="accent" />
-          </div>
-          <div className="card p-4 lg:p-5">
-            <StatTile label="Total Volume" value={fmtMoney(totalVolume)} tone="brass" />
-          </div>
+        <div className="section-rule grid grid-cols-2 lg:grid-cols-4">
+          {[
+            { label: 'Members charted', value: data.topTradingMembers.length },
+            { label: 'Securities charted', value: data.topTradedTickers.length },
+            { label: 'Total trades', value: totalTrades.toLocaleString() },
+            { label: 'Total volume', value: fmtMoney(totalVolume) },
+          ].map((s, i) => (
+            <div key={s.label} className={`border-b border-line p-4 lg:p-5 ${i > 0 ? 'lg:border-l' : ''} ${i % 2 === 1 ? 'border-l' : ''}`}>
+              <StatTile label={s.label} value={s.value} size="lg" />
+            </div>
+          ))}
         </div>
       </div>
     </div>

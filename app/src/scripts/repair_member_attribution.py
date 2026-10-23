@@ -54,8 +54,8 @@ from domains.congressional.member_resolution import (  # noqa: E402
     Filer,
     chamber_from_doc_id,
     parse_state_dst,
+    identity_fields,
     resolve_filer,
-    term_on,
 )
 
 DATA_DIR = Path(os.environ.get("CAPITOLSCOPE_DATA_DIR", "/app/data/congress"))
@@ -107,25 +107,6 @@ def filer_for(doc_id: str, on: date, house: dict, senate: dict) -> Optional[File
             return None
         return Filer(first=r.get("first_name") or "", last=r.get("last_name") or "", chamber="Senate", on=on)
     return None
-
-
-def identity_fields(leg, on: Optional[date]) -> Dict[str, Any]:
-    t = term_on(leg, on) or term_on(leg, None)
-    starts = [x.start for x in leg.terms]
-    ends = [x.end for x in leg.terms]
-    first = leg.nickname or leg.first
-    return {
-        "bioguide_id": leg.bioguide,
-        "first_name": first,
-        "last_name": leg.last,
-        "full_name": f"{first} {leg.last}".strip(),
-        "party": t.party if t else None,
-        "chamber": t.chamber if t else None,
-        "state": t.state if t else None,
-        "district": t.district if t else None,
-        "term_start": min(starts) if starts else None,
-        "term_end": None if leg.is_current else (max(ends) if ends else None),
-    }
 
 
 def build_plan(session, index) -> Dict[str, Any]:

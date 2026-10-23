@@ -20,7 +20,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import date, timedelta
-from typing import List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from .member_enrichment import (
     Legislator,
@@ -168,3 +168,23 @@ def term_on(leg: Legislator, on: Optional[date], chamber: Optional[str] = None) 
         if earlier:
             return max(earlier, key=lambda t: t.start)
     return max(terms, key=lambda t: t.start) if terms else None
+
+
+def identity_fields(leg: Legislator, on: Optional[date]) -> Dict[str, Any]:
+    """congress_members column values for a legislator as of a date."""
+    t = term_on(leg, on) or term_on(leg, None)
+    starts = [x.start for x in leg.terms]
+    ends = [x.end for x in leg.terms]
+    first = leg.nickname or leg.first
+    return {
+        "bioguide_id": leg.bioguide,
+        "first_name": first,
+        "last_name": leg.last,
+        "full_name": f"{first} {leg.last}".strip(),
+        "party": t.party if t else None,
+        "chamber": t.chamber if t else None,
+        "state": t.state if t else None,
+        "district": t.district if t else None,
+        "term_start": min(starts) if starts else None,
+        "term_end": None if leg.is_current else (max(ends) if ends else None),
+    }

@@ -46,7 +46,11 @@ class TradeRecord:
     filing_status: Optional[str] = None
     comment: Optional[str] = None
     cap_gains_over_200: bool = False
-    
+    # Filer name as the source lists it (separate fields; "member_name" is a
+    # display string and must not be split by position)
+    filer_first: str = ""
+    filer_last: str = ""
+
     # Processing metadata
     source_line: str = ""
     line_number: int = 0
@@ -391,6 +395,8 @@ class CongressionalDataIngestion:
             return TradeRecord(
                 doc_id=doc_id,
                 member_name=member_name,
+                filer_first=first_name,
+                filer_last=last_name,
                 raw_asset_description=raw_asset.strip(),
                 transaction_type=transaction_type.strip(),
                 transaction_date=transaction_date,
@@ -634,56 +640,33 @@ class CongressionalDataIngestion:
             return None
     
     def _resolve_member_id(self, member_name: str, trade_record: 'TradeRecord' = None) -> Optional[int]:
-        """Resolve member name to ID with fuzzy matching and auto-creation if not found."""
+        """Resolve the filer to a member.
+
+        Identity-based (surname + state/chamber + term dates against
+        congress-legislators, see member_resolution). No substring or fuzzy
+        fallback: those credited filings to whoever shared a first name. An
+        unresolvable filer is recorded as an import error and skipped rather
+        than guessed or auto-created from raw text.
+        """
         if not member_name:
             return None
-            
-        # Normalize and split name
+        if trade_record is not None and trade_record.filer_last:
+            resolver = self._member_resolver()
+            if resolver is not None:
+                return resolver.resolve(self, trade_record)
+        # Resolver unavailable (dataset could not be loaded): exact names only.
         normalized_name = member_name.upper().strip()
-        name_parts = normalized_name.split()
-        first_name = name_parts[1] if len(name_parts) > 1 else ''
-        last_name = name_parts[-1] if len(name_parts) > 0 else ''
+        return self.member_mapping.get(normalized_name)
 
-        # Try exact match first
-        if normalized_name in self.member_mapping:
-            return self.member_mapping[normalized_name]
-            
-        # Try first + last name only (ignore prefix)
-        fl_name = f"{first_name} {last_name}".strip().upper()
-        if fl_name in self.member_mapping:
-            return self.member_mapping[fl_name]
+    def _member_resolver(self):
+        if not hasattr(self, "_resolver_cache"):
+            try:
+                self._resolver_cache = _FilerResolver.load(self.session)
+            except Exception as exc:  # dataset/network problems must not crash the import
+                logger.warning("member resolver unavailable, exact-name matching only: %s", exc)
+                self._resolver_cache = None
+        return self._resolver_cache
 
-        # Try last, first
-        lf_name = f"{last_name}, {first_name}".strip().upper()
-        if lf_name in self.member_mapping:
-            return self.member_mapping[lf_name]
-
-        # Try partial match on first name (case-insensitive)
-        for key in self.member_mapping.keys():
-            if last_name in key and (first_name[:2] in key):
-                logger.debug(f"Partial match for member: {member_name} -> {key}")
-                return self.member_mapping[key]
-
-        # Fuzzy match with lower threshold
-        best_match = process.extractOne(
-            fl_name,
-            self.member_mapping.keys(),
-            scorer=fuzz.ratio,
-            score_cutoff=70
-        )
-        if best_match:
-            logger.debug(f"Fuzzy matched member: {member_name} -> {best_match[0]}")
-            return self.member_mapping[best_match[0]]
-            
-        # If still not found, auto-create member if trade_record is provided
-        if trade_record:
-            new_member_id = self.create_member_from_trade(trade_record)
-            if new_member_id:
-                logger.info(f"Auto-created new member: {trade_record.member_name}")
-                return new_member_id
-
-        return None
-    
     def create_member_from_trade(self, trade_record: 'TradeRecord') -> Optional[int]:
         """Create a new CongressMember from trade record and add to DB. Log and export."""
         # Only use first and last name, ignore prefix
@@ -1343,3 +1326,55 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+class _FilerResolver:
+    """Filer -> member id via legislator identity (bioguide)."""
+
+    def __init__(self, index, house_states, bioguide_to_member):
+        self.index = index
+        self.house_states = house_states          # doc_id -> (state, district)
+        self.bioguide_to_member = bioguide_to_member
+
+    @classmethod
+    def load(cls, session) -> "_FilerResolver":
+        import glob
+        import os
+
+        from domains.congressional.member_enrichment import build_index, load_legislator_records
+        from domains.congressional.member_resolution import parse_state_dst
+
+        data_root = os.environ.get("CAPITOLSCOPE_DATA_DIR", "/app/data/congress")
+        leg_dir = os.environ.get("CAPITOLSCOPE_LEGISLATORS_DIR", os.path.join(os.path.dirname(data_root), "legislators"))
+        current, historical = load_legislator_records(leg_dir if os.path.isfile(os.path.join(leg_dir, "legislators-current.json")) else None)
+        index, _ = build_index(current, historical)
+        house_states = {}
+        for f in glob.glob(os.path.join(data_root, "csv", "*FD_docIDlist.csv")):
+            with open(f, newline="", encoding="utf-8", errors="replace") as fh:
+                for r in pycsv.DictReader(fh):
+                    house_states[(r.get("DocID") or "").strip()] = parse_state_dst(r.get("StateDst"))
+        rows = session.query(CongressMember.id, CongressMember.bioguide_id).filter(CongressMember.bioguide_id.isnot(None)).all()
+        return cls(index, house_states, {b: i for i, b in rows})
+
+    def resolve(self, ingester, rec) -> Optional[Any]:
+        from domains.congressional.member_resolution import (
+            Filer, chamber_from_doc_id, identity_fields, resolve_filer,
+        )
+
+        state, district = self.house_states.get(str(rec.doc_id).strip(), (None, None))
+        filer = Filer(first=rec.filer_first, last=rec.filer_last, state=state, district=district,
+                      chamber=chamber_from_doc_id(str(rec.doc_id)), on=rec.notification_date)
+        res = resolve_filer(filer, self.index)
+        if res.status != "matched":
+            ingester.record_error("member_unresolved", rec.doc_id, rec.member_name,
+                                  f"{res.status}: {res.reason}; candidates={list(res.candidates)[:3]}", rec.source_line)
+            return None
+        bio = res.legislator.bioguide
+        if bio in self.bioguide_to_member:
+            return self.bioguide_to_member[bio]
+        fields = identity_fields(res.legislator, rec.notification_date)
+        member = CongressMember(**fields)
+        ingester.session.add(member)
+        ingester.session.flush()
+        self.bioguide_to_member[bio] = member.id
+        logger.info("created member %s (%s) from filing %s", fields["full_name"], bio, rec.doc_id)
+        return member.id

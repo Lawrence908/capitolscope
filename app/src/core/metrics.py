@@ -9,7 +9,7 @@ cardinality.
 
 import time
 
-from prometheus_client import Counter, Histogram, CONTENT_TYPE_LATEST, generate_latest
+from prometheus_client import Counter, Gauge, Histogram, CONTENT_TYPE_LATEST, generate_latest
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
@@ -50,6 +50,37 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
             REQUEST_COUNT.labels(request.method, path, status).inc()
 
 
+INGESTION_LAST_SUCCESS = Gauge(
+    "capitolscope_ingestion_last_success_timestamp_seconds",
+    "Unix time of the last successful disclosure sync per source (0 if none on record)",
+    ["source"],
+)
+INGESTION_CONSECUTIVE_FAILURES = Gauge(
+    "capitolscope_ingestion_consecutive_failures",
+    "Consecutive failed sync runs per disclosure source",
+    ["source"],
+)
+
+
+def refresh_ingestion_gauges() -> None:
+    """Update ingestion gauges from the sync checkpoint (cheap file read; never raises)."""
+    try:
+        from datetime import datetime
+
+        from domains.congressional.fetch.freshness import read_checkpoint, summarize_ingestion
+
+        summary = summarize_ingestion(read_checkpoint())
+        for source, info in summary["sources"].items():
+            ts = info.get("last_success_at")
+            INGESTION_LAST_SUCCESS.labels(source).set(
+                datetime.fromisoformat(ts).timestamp() if ts else 0
+            )
+            INGESTION_CONSECUTIVE_FAILURES.labels(source).set(info.get("consecutive_failures") or 0)
+    except Exception:  # metrics must never break the scrape
+        pass
+
+
 def metrics_response() -> Response:
     """Render the Prometheus exposition format for the /metrics endpoint."""
+    refresh_ingestion_gauges()
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)

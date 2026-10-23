@@ -7,6 +7,7 @@ from typing import Dict, Any
 import time
 
 from fastapi import APIRouter
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 import logging
 
@@ -85,6 +86,11 @@ async def detailed_health_check() -> ResponseEnvelope[Dict[str, Any]]:
 
     # Check Congress.gov API health
     congress_api_health = await check_congress_api_health()
+
+    # Disclosure ingestion freshness (reads the sync checkpoint; no I/O beyond a file)
+    from domains.congressional.fetch.freshness import read_checkpoint, summarize_ingestion
+
+    ingestion_health = summarize_ingestion(read_checkpoint())
     
     # Calculate response time
     response_time = (time.time() - start_time) * 1000
@@ -96,6 +102,8 @@ async def detailed_health_check() -> ResponseEnvelope[Dict[str, Any]]:
     if redis_health["status"] not in ("healthy", "not_configured"):
         overall_status = "degraded"
     if congress_api_health["status"] != "healthy":
+        overall_status = "degraded"
+    if ingestion_health["status"] == "stale":
         overall_status = "degraded"
     
     data = {
@@ -109,6 +117,7 @@ async def detailed_health_check() -> ResponseEnvelope[Dict[str, Any]]:
             "database": database_health,
             "redis": redis_health,
             "congress_api": congress_api_health,
+            "ingestion": ingestion_health,
         },
         "configuration": {
             "debug": settings.DEBUG,
@@ -120,8 +129,9 @@ async def detailed_health_check() -> ResponseEnvelope[Dict[str, Any]]:
     # Return success or error based on overall status
     if overall_status == "healthy":
         return create_response(data=data)
-    else:
-        return create_response(error="System degraded - check service health")
+    # Degraded: 503 for monitors, but keep the per-check detail in the body.
+    envelope = create_response(data=data, error="System degraded - check service health")
+    return JSONResponse(status_code=503, content=jsonable_encoder(envelope))
 
 
 @router.get(

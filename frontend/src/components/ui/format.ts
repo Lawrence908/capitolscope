@@ -35,14 +35,27 @@ export const fmtSigned = (n: number | null | undefined): string => {
 };
 
 // ---- party ----
+// Neutrality rule: parties are never color-coded (red is the brand accent).
+// Charts that must separate parties use matched neutral grays plus labels.
 export const partyMeta = (p: string | null | undefined) => {
   // Match single-letter codes (D/R/I) and full names (Democratic/Republican/
   // Independent) by first letter, so every disclosure format resolves.
   const key = (p || '').trim().toUpperCase();
-  if (key.startsWith('D')) return { label: 'DEM', color: '#7aa8d6' };
-  if (key.startsWith('R')) return { label: 'REP', color: '#d6707b' };
-  if (key.startsWith('I')) return { label: 'IND', color: '#cca85a' };
-  return { label: '—', color: '#90a29d' };
+  if (key.startsWith('D')) return { label: 'D', name: 'Democrat', color: '#4a4f57' };
+  if (key.startsWith('R')) return { label: 'R', name: 'Republican', color: '#9ca1a9' };
+  if (key.startsWith('I')) return { label: 'I', name: 'Independent', color: '#757b84' };
+  return { label: '?', name: 'Unknown', color: '#c4c8ce' };
+};
+
+/** "R-AL", "D-NJ-5" style affiliation tag; falls back gracefully. */
+export const affiliation = (
+  party: string | null | undefined,
+  state: string | null | undefined,
+  district?: string | null,
+): string => {
+  const p = partyMeta(party).label;
+  const parts = [p === '?' ? null : p, state || null, district || null].filter(Boolean);
+  return parts.join('-');
 };
 
 // ---- factor fingerprint palette (stacked contributions out of 100) ----
@@ -65,3 +78,25 @@ export const FACTOR_LABELS: Record<string, string> = {
 };
 
 export const FACTOR_ORDER = ['edge', 'event', 'conflict', 'cluster', 'lag', 'size'];
+
+// ---- disclosure timing ----
+/** The STOCK Act deadline: transactions must be disclosed within 45 days. */
+export const DISCLOSURE_LIMIT_DAYS = 45;
+
+export const daysToDisclose = (
+  transactionDate: string | null | undefined,
+  notificationDate: string | null | undefined,
+): number | null => {
+  if (!transactionDate || !notificationDate) return null;
+  const t = Date.parse(transactionDate);
+  const n = Date.parse(notificationDate);
+  if (Number.isNaN(t) || Number.isNaN(n)) return null;
+  return Math.max(0, Math.round((n - t) / 86_400_000));
+};
+
+export const gaugeCaption = (days: number | null | undefined): string => {
+  if (days == null) return 'Disclosure date unknown';
+  if (days === 0) return 'Disclosed same day';
+  if (days > DISCLOSURE_LIMIT_DAYS) return `${days - DISCLOSURE_LIMIT_DAYS} days late`;
+  return `Disclosed in ${days} day${days === 1 ? '' : 's'}`;
+};

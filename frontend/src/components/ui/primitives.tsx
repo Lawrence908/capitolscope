@@ -3,14 +3,15 @@ import type { DossierOrigin } from '../../types/scrutiny';
 import { partyMeta, FACTOR_COLORS, FACTOR_LABELS, FACTOR_ORDER } from './format';
 
 /* ------------------------------------------------------------------ *
- * Shared design-system components — the "Scrutiny" oversight-dossier
- * language, made theme-aware (light + dark) via semantic tokens.
+ * Shared design-system components ("Bulletin"), theme-aware (light +
+ * dark) via semantic tokens.
  * All bar/meter tracks use `bg-surface-inset`; accents use `text-accent`
  * so everything works in both themes. Consumed site-wide.
  * (Formatters + palette constants live in ./format.)
  * ------------------------------------------------------------------ */
 
-// ---- party badge ----
+// ---- party chip ----
+// Identical ink square for every party (no party colors; see partyMeta).
 export const PartyTag: React.FC<{ party: string | null | undefined; className?: string }> = ({
   party,
   className = '',
@@ -18,8 +19,9 @@ export const PartyTag: React.FC<{ party: string | null | undefined; className?: 
   const m = partyMeta(party);
   return (
     <span
-      className={`font-data text-[10px] tracking-[0.14em] px-1.5 py-0.5 rounded-sm ${className}`}
-      style={{ color: m.color, background: `${m.color}1a` }}
+      title={m.name}
+      aria-label={m.name}
+      className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center border-2 border-content font-display text-[12px] font-extrabold leading-none text-content ${className}`}
     >
       {m.label}
     </span>

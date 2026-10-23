@@ -3,43 +3,56 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ *
- * Design-system tokens — the "Scrutiny" oversight-dossier language.
+ * Design-system tokens: "Bulletin" (news graphics desk).
+ * Ink on paper, heavy slabs, condensed headlines, one brand red.
  * Semantic variables, themed once here; components consume them via the
  * Tailwind color utilities (bg-surface, text-content-muted, border-line,
- * text-accent, ...) so a single value change re-skins both themes.
+ * text-accent, bg-slab, ...) so a single value change re-skins both themes.
+ *
+ * Neutrality rule: red is the BRAND accent (and the gauge's late zone),
+ * never a party color. Parties are shown with identical ink chips.
  * ------------------------------------------------------------------ */
 :root {
-  /* Light "paper" theme */
-  --surface: #f6f5f1;         /* page background */
-  --surface-raised: #ffffff;  /* cards, panels */
-  --surface-inset: #e9e7e0;   /* bar/meter tracks, table stripes */
-  --line: #e0ded5;            /* borders, dividers */
-  --content: #1a201e;         /* primary text / headings */
-  --content-muted: #4c554f;   /* body text */
-  --content-faint: #737b76;   /* labels, captions */
-  --accent: #1f9e88;          /* vivid verdigris — punchier on light */
-  --accent-strong: #38b39c;   /* hover */
-  --accent-2: #9a7b32;        /* brass, darkened for light contrast */
+  --surface: #ffffff;         /* page background */
+  --surface-raised: #ffffff;  /* panels sit on rules, not boxes */
+  --surface-inset: #ecedef;   /* bands, meter and gauge tracks */
+  --line: #d5d7db;            /* hairlines between rows */
+  --content: #121417;         /* ink: text, rules, data marks */
+  --content-muted: #4a4f57;   /* body copy */
+  --content-faint: #6b7079;   /* captions, axes */
+  --accent: #c5302a;          /* brand red */
+  --accent-strong: #a8241f;   /* hover / pressed */
+  --accent-2: #121417;        /* secondary mark = ink */
+  --on-accent: #ffffff;
+  --slab: #121417;            /* masthead, member header, card footer */
+  --on-slab: #ffffff;
+  --slab-muted: #a9aeb6;
+  --hatch: #121417;           /* 45-degree hatch = late filing */
+  --bench: #9ca1a9;           /* benchmark (SPY) line */
 }
 
 .dark {
-  /* Dark "ink" theme — the original Scrutiny palette */
-  --surface: #0b110f;         /* ink-950 */
-  --surface-raised: #0f1613;  /* ink-900 */
-  --surface-inset: #1e2b26;   /* ink-700 */
-  --line: #24322d;            /* ink-600 */
-  --content: #e7eeec;         /* fog-200 */
-  --content-muted: #c3cec9;   /* fog-300 */
-  --content-faint: #90a29d;   /* fog-500 */
-  --accent: #43a897;          /* verdigris-500 */
-  --accent-strong: #5cc0af;   /* verdigris-400 */
-  --accent-2: #cca85a;        /* brass-500 */
+  --surface: #1b1d21;
+  --surface-raised: #202328;
+  --surface-inset: #2a2d33;
+  --line: #3a3e45;
+  --content: #f3f3ef;
+  --content-muted: #c4c8ce;
+  --content-faint: #9aa0a8;
+  --accent: #d6362f;          /* same brand red, lifted slightly for dark */
+  --accent-strong: #e8544c;
+  --accent-2: #f3f3ef;
+  --on-accent: #ffffff;
+  --slab: #f3f3ef;            /* slabs invert in dark mode */
+  --on-slab: #16181b;
+  --slab-muted: #5e636b;
+  --hatch: #f3f3ef;
+  --bench: #6f747c;
 }
 
 @layer base {
   body {
     @apply bg-surface text-content font-ui transition-colors duration-300;
-    font-feature-settings: 'ss01', 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   /* Mono numerics line up in tables and stat tiles */
@@ -57,7 +70,6 @@
 
   ::-webkit-scrollbar-thumb {
     background: var(--line);
-    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -66,34 +78,45 @@
 }
 
 @layer components {
-  /* Buttons */
+  /* Buttons: square, heavy. Primary = brand red; secondary = 2px ink box. */
   .btn-primary {
-    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200;
+    @apply px-4 py-2 font-ui font-semibold transition-colors duration-150;
     background: var(--accent);
-    color: #071310;
+    color: var(--on-accent);
   }
   .btn-primary:hover { background: var(--accent-strong); }
 
   .btn-secondary {
-    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200 border;
-    background: var(--surface-inset);
+    @apply px-4 py-2 font-ui font-semibold transition-colors duration-150 border-2;
+    background: transparent;
     color: var(--content);
-    border-color: var(--line);
+    border-color: var(--content);
   }
-  .btn-secondary:hover { border-color: var(--accent); }
+  .btn-secondary:hover { background: var(--content); color: var(--surface); }
 
   .btn-outline {
-    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200 border;
+    @apply px-4 py-2 font-ui font-semibold transition-colors duration-150 border-2;
     border-color: var(--line);
     color: var(--content-muted);
   }
-  .btn-outline:hover { background: var(--surface-inset); color: var(--content); }
+  .btn-outline:hover { border-color: var(--content); color: var(--content); }
 
   .btn-ghost {
-    @apply px-4 py-2 rounded-md font-ui font-medium transition-all duration-200;
+    @apply px-4 py-2 font-ui font-semibold transition-colors duration-150;
     color: var(--content-muted);
   }
   .btn-ghost:hover { background: var(--surface-inset); color: var(--content); }
+
+  /* Slab: inverted ink band (masthead, member header, card footer) */
+  .slab { background: var(--slab); color: var(--on-slab); }
+
+  /* 45-degree hatch: the one mark that means "filed late" */
+  .hatch {
+    background-image: repeating-linear-gradient(-45deg, var(--hatch) 0 3px, transparent 3px 7px);
+  }
+
+  /* Section opener: heavy ink rule above a condensed heading */
+  .section-rule { border-top: 3px solid var(--content); }
 
   /* Cards / panels */
   .card {
@@ -140,13 +163,14 @@
   .nav-link-active {
     color: var(--content);
     background: var(--surface-inset);
-    box-shadow: inset 2px 0 0 var(--accent);
+    box-shadow: inset 3px 0 0 var(--accent);
   }
 
   /* Typography */
   .text-heading {
-    @apply font-display font-medium;
+    @apply font-display font-extrabold;
     color: var(--content);
+    letter-spacing: -0.005em;
   }
 
   .text-subheading {
@@ -160,9 +184,9 @@
 
   /* Mono eyebrow / caption label */
   .eyebrow {
-    @apply font-data uppercase;
+    @apply font-ui font-bold uppercase;
     font-size: 11px;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     color: var(--accent);
   }
 
@@ -200,7 +224,8 @@
   
   /* Focus States */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    --tw-ring-color: var(--accent);
   }
 }
 

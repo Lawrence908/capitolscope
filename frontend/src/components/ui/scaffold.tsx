@@ -2,8 +2,8 @@ import React from 'react';
 import { Eyebrow } from './primitives';
 
 /* ------------------------------------------------------------------ *
- * Page scaffolding shared across the whole app: the Scrutiny masthead
- * (PageHeader), stat tiles, bordered panels, mono tab bar, and spinner.
+ * Page scaffolding shared across the whole app ("Bulletin"): condensed
+ * headline masthead (PageHeader), stat tiles, ruled panels, tab bar, spinner.
  * ------------------------------------------------------------------ */
 
 export type Tone = 'default' | 'accent' | 'brass' | 'flag' | 'steel' | 'coral';
@@ -28,10 +28,10 @@ export const StatTile: React.FC<{
   const figure = size === 'lg' ? 'text-4xl' : size === 'sm' ? 'text-xl' : 'text-3xl';
   return (
     <div>
-      <div className="font-data text-[10px] uppercase tracking-[0.14em] text-content-faint">
+      <div className="font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-content-faint">
         {label}
       </div>
-      <div className={`mt-1 font-data ${figure} font-medium tabular-nums ${TONE_TEXT[tone]}`}>
+      <div className={`mt-1 font-display ${figure} font-extrabold leading-none tabular-nums ${TONE_TEXT[tone]}`}>
         {value}
       </div>
       {hint != null && (
@@ -51,15 +51,15 @@ export const PageHeader: React.FC<{
   children?: React.ReactNode;
   className?: string;
 }> = ({ eyebrow, title, subtitle, stats, actions, children, className = '' }) => (
-  <header className={`mb-6 border-b border-line pb-6 ${className}`}>
+  <header className={`mb-8 border-b-[3px] border-content pb-6 ${className}`}>
     <div className="flex flex-wrap items-end justify-between gap-6">
       <div>
         {eyebrow != null && <Eyebrow>{eyebrow}</Eyebrow>}
-        <h1 className="mt-2 font-display text-4xl font-medium leading-[0.98] tracking-[-0.01em] text-content">
+        <h1 className="mt-2 font-display text-5xl font-extrabold leading-[0.92] tracking-[-0.005em] text-content sm:text-6xl">
           {title}
         </h1>
         {subtitle != null && (
-          <p className="mt-3 max-w-[54ch] font-ui text-sm leading-relaxed text-content-faint">
+          <p className="mt-3 max-w-[60ch] font-ui text-[15px] leading-relaxed text-content-muted">
             {subtitle}
           </p>
         )}
@@ -85,10 +85,14 @@ export const Panel: React.FC<{
   bodyClassName?: string;
   children: React.ReactNode;
 }> = ({ title, right, className = '', bodyClassName = '', children }) => (
-  <section className={`overflow-hidden rounded-md border border-line bg-surface-raised ${className}`}>
+  <section className={`overflow-hidden border-t-[3px] border-content bg-surface-raised ${className}`}>
     {(title != null || right != null) && (
-      <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
-        {title != null ? <Eyebrow>{title}</Eyebrow> : <span />}
+      <div className="flex items-baseline justify-between gap-3 border-b border-line px-1 py-3">
+        {title != null ? (
+          <h2 className="font-display text-2xl font-extrabold leading-none text-content">{title}</h2>
+        ) : (
+          <span />
+        )}
         {right}
       </div>
     )}
@@ -114,9 +118,9 @@ export const Tabs = <T extends string>({
         key={t.id}
         type="button"
         onClick={() => onChange(t.id)}
-        className={`font-data text-xs uppercase tracking-[0.12em] px-4 py-2 rounded-t-md border-b-2 transition-colors ${
+        className={`font-display text-lg font-extrabold uppercase tracking-[0.02em] px-3 py-1.5 border-b-[3px] transition-colors ${
           active === t.id
-            ? 'border-accent text-content bg-surface-raised'
+            ? 'border-accent text-content'
             : 'border-transparent text-content-faint hover:text-content'
         }`}
       >
@@ -132,8 +136,8 @@ export const Spinner: React.FC<{ label?: string; className?: string }> = ({
   className = '',
 }) => (
   <div className={`flex h-72 flex-col items-center justify-center gap-4 ${className}`}>
-    <div className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-accent" />
-    <span className="font-data text-[11px] uppercase tracking-[0.2em] text-content-faint">
+    <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-line border-t-accent" />
+    <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.14em] text-content-faint">
       {label}
     </span>
   </div>

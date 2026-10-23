@@ -26,7 +26,16 @@ export default {
           DEFAULT: 'var(--accent)',
           strong: 'var(--accent-strong)',
           2: 'var(--accent-2)',
+          on: 'var(--on-accent)',
         },
+        // Bulletin: inverted ink bands, the late-filing hatch, benchmark line
+        slab: {
+          DEFAULT: 'var(--slab)',
+          on: 'var(--on-slab)',
+          muted: 'var(--slab-muted)',
+        },
+        hatch: 'var(--hatch)',
+        bench: 'var(--bench)',
         // Supabase-inspired palette
         bg: {
           primary: '#0d1117',      // GitHub dark background
@@ -115,10 +124,11 @@ export default {
           500: '#cca85a',
           wash: '#2b2616',
         },
+        // Severity: "flag" is the brand red so alerts and late marks match.
         sev: {
-          info: '#7aa8d6',
-          watch: '#d6a24e',
-          flag: '#d6707b',
+          info: '#5b7fa6',
+          watch: '#b7832f',
+          flag: 'var(--accent)',
         },
       },
       // Clean shadows - subtle and minimal
@@ -137,10 +147,11 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
-        // Scrutiny design system
-        display: ['Newsreader', 'Iowan Old Style', 'Georgia', 'serif'],
-        ui: ['Public Sans', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
-        data: ['IBM Plex Mono', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+        // Bulletin design system: condensed civic-signage display face for
+        // headlines, tickers and big numbers; newspaper Franklin for the rest.
+        display: ['"Big Shoulders Display"', '"Arial Narrow"', 'Impact', 'sans-serif'],
+        ui: ['"Libre Franklin"', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        data: ['"Libre Franklin"', 'system-ui', 'sans-serif'],
       },
       // Spacing for clean layouts
       spacing: {
@@ -149,10 +160,17 @@ export default {
         '128': '32rem',
       },
       // Border radius for clean, modern look
+      // Bulletin is square-cornered everywhere; only rounded-full survives
+      // (avatars, dots).
       borderRadius: {
-        'xl': '0.75rem',
-        '2xl': '1rem',
-        '3xl': '1.5rem',
+        none: '0',
+        sm: '0',
+        DEFAULT: '0',
+        md: '0',
+        lg: '0',
+        xl: '0',
+        '2xl': '0',
+        '3xl': '0',
       }
     },
   },

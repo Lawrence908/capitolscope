@@ -41,6 +41,15 @@ BACKUP_DIR = Path(os.environ.get("CAPITOLSCOPE_BACKUP_DIR", "/app/data/backups")
 PTR_URL = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{year}/{doc_id}.pdf"
 USER_AGENT = "CapitolScope disclosure research (capitolscope@gmail.com)"
 
+# House PTR asset type codes -> congressional_trades.asset_type categories.
+TYPE_CODE_CATEGORY = {
+    "ST": "STOCK", "EF": "ETF", "MF": "MUTUAL_FUND", "OP": "OPTION",
+    "GS": "BOND", "CS": "BOND", "AB": "BOND", "BA": "CASH",
+    "PS": "PRIVATE", "OI": "PRIVATE", "PE": "PRIVATE", "HN": "PRIVATE",
+    "CT": "CRYPTOCURRENCY", "RE": "REAL_ESTATE", "RS": "REIT",
+    "OT": "OTHER", "IH": "OTHER", "OL": "OTHER", "VA": "OTHER", "WU": "OTHER",
+}
+
 
 def norm(s: Optional[str]) -> str:
     return re.sub(r"[^a-z0-9]", "", (s or "").lower())
@@ -131,14 +140,15 @@ def build_plan(session, docs: List[str], matcher) -> Dict[str, object]:
             symbol, method = (None, "fixed_income")
             if row.type_code in (None, "ST", "EF", "OP", "MF", "OL", "OT", "PS", "RS"):
                 symbol, method = matcher.resolve(row.ticker, row.asset)
-            upd = {"trade_id": tid, "full_asset": row.asset[:1000], "old_asset": raw, "type_code": row.type_code}
+            upd = {"trade_id": tid, "full_asset": row.asset[:1000], "old_asset": raw, "type_code": row.type_code,
+                   "category": TYPE_CODE_CATEGORY.get(row.type_code or "")}
             if symbol and not sid:
                 upd["symbol"] = symbol
                 upd["method"] = method
                 stats["security recovered"] += 1
             elif not sid:
                 stats[f"still unmatched ({row.type_code or 'no code'})"] += 1
-            if row.asset != raw or "symbol" in upd:
+            if row.asset != raw or "symbol" in upd or upd["category"]:
                 updates.append(upd)
                 stats["text restored"] += int(row.asset != raw)
     return {"docs": len(docs), "stats": dict(stats), "updates": updates}
@@ -152,7 +162,7 @@ def apply(session, matcher, updates: List[Dict[str, object]]) -> Dict[str, int]:
     bak = BACKUP_DIR / f"ptr_reparse_{stamp}.json"
     ids = [u["trade_id"] for u in updates]
     prior = session.execute(text(
-        "SELECT id::text, raw_asset_description, ticker, security_id::text FROM congressional_trades WHERE id = ANY(CAST(:ids AS uuid[]))"
+        "SELECT id::text, raw_asset_description, ticker, security_id::text, asset_type FROM congressional_trades WHERE id = ANY(CAST(:ids AS uuid[]))"
     ), {"ids": ids}).all()
     bak.write_text(json.dumps([list(r) for r in prior]), encoding="utf-8")
     print(f"backup: {bak}")
@@ -162,6 +172,9 @@ def apply(session, matcher, updates: List[Dict[str, object]]) -> Dict[str, int]:
     for u in updates:
         params = {"tid": u["trade_id"], "asset": u["full_asset"]}
         sql = "UPDATE congressional_trades SET raw_asset_description = :asset, updated_at = now()"
+        if u.get("category"):
+            sql += ", asset_type = :category"
+            params["category"] = u["category"]
         sym = u.get("symbol")
         if sym:
             if sym not in sec_map:

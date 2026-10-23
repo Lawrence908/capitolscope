@@ -102,3 +102,21 @@ export const gaugeCaption = (days: number | null | undefined): string => {
   if (days > DISCLOSURE_LIMIT_DAYS) return `${days - DISCLOSURE_LIMIT_DAYS} days late`;
   return `Disclosed in ${days} day${days === 1 ? '' : 's'}`;
 };
+
+// ---- asset category (trades without a listed ticker) ----
+const ASSET_CATEGORY_LABEL: Record<string, string> = {
+  STOCK: 'STOCK',
+  ETF: 'ETF',
+  MUTUAL_FUND: 'FUND',
+  OPTION: 'OPTION',
+  BOND: 'BOND',
+  CASH: 'CASH',
+  PRIVATE: 'PRIVATE',
+  CRYPTOCURRENCY: 'CRYPTO',
+  REAL_ESTATE: 'REAL ESTATE',
+  REIT: 'REIT',
+};
+
+/** Short label for an asset with no ticker, e.g. "BOND", "PRIVATE". */
+export const assetCategoryLabel = (assetType: string | null | undefined): string =>
+  ASSET_CATEGORY_LABEL[(assetType || '').toUpperCase()] ?? 'OTHER ASSET';

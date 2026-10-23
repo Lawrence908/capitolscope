@@ -6,6 +6,7 @@ import {
   PartyTag,
   TradeStamp,
   affiliation,
+  assetCategoryLabel,
   daysToDisclose,
   fmtAmountRange,
   gaugeCaption,
@@ -52,7 +53,9 @@ const DisclosureRow: React.FC<{
               {ticker}
             </Link>
           ) : (
-            <span className="font-display text-xl font-extrabold leading-none text-content-faint">NO TICKER</span>
+            <span className="font-display text-xl font-extrabold leading-none text-content-faint">
+              {assetCategoryLabel(trade.asset_type)}
+            </span>
           )}
           <TradeStamp type={trade.transaction_type} />
         </div>

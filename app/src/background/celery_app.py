@@ -35,7 +35,10 @@ celery_app.conf.update(
 celery_app.conf.beat_schedule = {
     'sync-congressional-trades': {
         'task': 'background.tasks.sync_congressional_trades',
-        'schedule': 86400.0,  # Daily orchestrated fetch + import
+        # Twice daily at fixed times: House/Senate post filings during US
+        # business hours, so a morning and an evening run (ET) keep new trades
+        # under ~12h old. The import is idempotent by doc_id.
+        'schedule': crontab(hour='14,23', minute=0),
     },
     'update-stock-prices': {
         'task': 'background.tasks.update_stock_prices',

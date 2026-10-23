@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from .alerts import emit_ingestion_alert
+from .alerts import emit_source_alerts, evaluate_source_health
 from .base import ensure_dir, utc_now_iso
 from .house_fetcher import HouseDisclosureFetcher
 from .senate_fetcher import SenateDisclosureFetcher
@@ -95,27 +95,28 @@ class DisclosureSyncOrchestrator:
             "csv_directory": str(self.csv_dir),
             "prior_checkpoint_exists": bool(prior_state),
         }
+        source_streaks, source_alerts = evaluate_source_health(
+            prior_state.get("source_streaks"),
+            source_health={"house": house_ok, "senate": senate_ok},
+            source_errors={"house": house_errors, "senate": senate_errors},
+        )
+        result["source_streaks"] = source_streaks
         self.state.write(
             {
                 "last_run": result["finished_at"],
                 "last_status": status,
                 "last_date_from": date_from,
                 "last_errors": all_errors,
+                "source_streaks": source_streaks,
             }
         )
         run_manifest = self.state.write_run_manifest(result)
         result["run_manifest"] = str(run_manifest)
 
+        # One email per source state change (down / reminder / recovered),
+        # not one per degraded run; every degraded run is still logged.
         if status != "success":
-            emit_ingestion_alert(
-                summary=f"Congressional fetch orchestration {status}",
-                errors=all_errors,
-                context={
-                    "date_from": date_from,
-                    "house_ok": house_ok,
-                    "senate_ok": senate_ok,
-                    "run_manifest": str(run_manifest),
-                },
-            )
+            logger.warning("Congressional fetch orchestration %s: %s", status, all_errors)
+        emit_source_alerts(source_alerts, context={"run_manifest": str(run_manifest)})
 
         return result

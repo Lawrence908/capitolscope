@@ -20,6 +20,7 @@ from domains.congressional.crud import (
 )
 from domains.congressional.ingestion import CongressionalDataIngestion
 from domains.congressional.fetch import DisclosureSyncOrchestrator
+from domains.congressional.fetch.alerts import emit_ingestion_alert
 from domains.securities.ingestion import (
     populate_securities_from_major_indices,
     ingest_price_data_for_all_securities
@@ -382,8 +383,23 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
         logger.info("Starting import after fetch orchestration: csv_directory=%s", csv_directory)
         import_result = import_congressional_data_csvs.run(csv_directory)
 
+        # Report the run honestly: a degraded fetch (one source down) or a
+        # failed import must not surface as "success" in the task result.
+        import_status = ((import_result or {}).get("results") or {}).get("status") or (
+            (import_result or {}).get("status", "unknown")
+        )
+        if import_status not in ("success", "no_files"):
+            status = "failed" if fetch_result.get("status") == "failed" else "partial"
+            emit_ingestion_alert(
+                summary=f"Congressional import {import_status}",
+                errors=[str((import_result or {}).get("error", "import did not report success"))],
+                context={"csv_directory": csv_directory},
+            )
+        else:
+            status = fetch_result.get("status", "unknown")
+
         response = {
-            "status": "success",
+            "status": status,
             "date_from": date_from,
             "fetch": fetch_result,
             "import": import_result,
@@ -394,6 +410,12 @@ def sync_congressional_trades(self, date_from: Optional[str] = None):
         
     except Exception as exc:
         logger.error(f"Congressional trades sync failed: date_from={date_from}, error={str(exc)}", exc_info=True)
+        if self.request.retries >= 3:
+            emit_ingestion_alert(
+                summary="Congressional trades sync failed after all retries",
+                errors=[f"{type(exc).__name__}: {exc}"],
+                context={"date_from": date_from},
+            )
         raise self.retry(exc=exc, countdown=300, max_retries=3)
 
 

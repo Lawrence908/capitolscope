@@ -123,11 +123,24 @@ class SenateDisclosureFetcher:
         else:
             self.session = _http.Session()
             self.session.headers.update({"User-Agent": USER_AGENT})
+        # senate.gov's Akamai edge rejects non-US source IPs outright (every
+        # page, every TLS fingerprint, real browsers too). From a non-US host
+        # the fetch must egress via a US proxy, e.g. "socks5h://100.x.y.z:1080"
+        # or "http://user:pass@host:port".
+        self.proxy = os.environ.get("CAPITOLSCOPE_SENATE_PROXY", "").strip() or None
+        if self.proxy:
+            self.session.proxies = {"http": self.proxy, "https": self.proxy}
 
     # -- auth ---------------------------------------------------------------
 
     def _csrf(self) -> str:
         resp = self.session.get(HOME_URL, timeout=self.timeout)
+        if resp.status_code == 403 and "Access Denied" in resp.text:
+            raise RuntimeError(
+                "blocked by senate.gov edge (Akamai 403 Access Denied); this usually "
+                "means a non-US source IP. Route via CAPITOLSCOPE_SENATE_PROXY"
+                + (" (proxy is set, so the proxy IP is blocked too)" if self.proxy else "")
+            )
         resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "html.parser")
         token_el = soup.find("input", {"name": "csrfmiddlewaretoken"})

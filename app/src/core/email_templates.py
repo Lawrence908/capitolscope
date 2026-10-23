@@ -13,6 +13,7 @@ serif for display, a system sans for body, monospace for data), and a light
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import List, Optional, Tuple
 
 # --- palette (light "paper" translation of the app tokens) ---
@@ -155,7 +156,7 @@ def render_email(
               {note_html}
               {links_html}
               <p style="margin:6px 0;font-family:{MONO};font-size:11px;letter-spacing:0.04em;color:{FAINT};">
-                © 2025 CapitolScope · Built on public STOCK Act disclosures
+                © {datetime.now().year} CapitolScope · Built on public STOCK Act disclosures
               </p>
             </td>
           </tr>

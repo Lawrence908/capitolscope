@@ -177,20 +177,17 @@ services:
       retries: 1
 
   # Frontend React/Vite Application
+  # Production: static Vite build served by nginx (frontend/Dockerfile).
+  # Rebuild to deploy frontend changes: docker compose up -d --build capitolscope-frontend
   capitolscope-frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: https://capitolscope.chrislawrence.ca
     container_name: capitolscope-frontend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - ./frontend/logs:/app/logs
     ports:
       - "8121:5173"
-    environment:
-      - NODE_ENV=production
-      - VITE_API_URL=https://capitolscope.chrislawrence.ca
     networks:
       - web
       - capitolscope-internal
@@ -198,11 +195,33 @@ services:
       - capitolscope
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5173"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:5173/"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+
+  # Local development: Vite dev server with hot reload and the toolchain
+  # (eslint, tsc) available. Not started by default:
+  #   docker compose --profile dev up -d capitolscope-frontend-dev    (http://localhost:8122)
+  #   docker compose --profile dev run --rm capitolscope-frontend-dev sh -c 'node_modules/.bin/eslint .'
+  capitolscope-frontend-dev:
+    profiles: ["dev"]
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: capitolscope-frontend-dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "8122:5173"
+    environment:
+      - VITE_API_URL=https://capitolscope.chrislawrence.ca
+    networks:
+      - capitolscope-internal
     security_opt:
       - no-new-privileges:true
 

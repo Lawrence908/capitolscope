@@ -9,6 +9,7 @@ import {
 import type { CongressionalTrade, DataQualityStats, TopTradingMember } from '../types';
 import apiClient from '../services/api';
 import { HubFooter } from './HubFooter';
+import { fmtAmountRange } from './ui';
 
 const PublicDashboard: React.FC = () => {
   const [stats, setStats] = useState<DataQualityStats | null>(null);
@@ -218,7 +219,7 @@ const PublicDashboard: React.FC = () => {
                   </div>
                   <div className="text-right ml-2">
                     <p className="text-xs lg:text-sm text-heading">
-                      {trade.estimated_value ? `$${(trade.estimated_value / 100).toLocaleString()}` : 'N/A'}
+                      {fmtAmountRange(trade.amount_min, trade.amount_max)}
                     </p>
                     <p className="text-xs text-body">
                       {trade.transaction_date ? new Date(trade.transaction_date).toLocaleDateString() : "—"}
@@ -256,20 +257,20 @@ const PublicDashboard: React.FC = () => {
             </div>
             <div className="space-y-3 lg:space-y-4">
               {topMembers && topMembers.length > 0 ? topMembers.slice(0, 5).map((member, index) => (
-                <div key={member.id || `member-${index}`} className="flex items-center justify-between py-2 border-b border-line last:border-b-0">
+                <div key={member.member_id || `member-${index}`} className="flex items-center justify-between py-2 border-b border-line last:border-b-0">
                   <div className="flex-1 min-w-0">
                     <p className="text-xs lg:text-sm font-medium text-heading truncate">
                       {member.member_name}
                     </p>
                     <p className="text-xs lg:text-sm text-body">
-                      {member.party} • {member.state}
+                      {[member.member_party, member.member_state].filter(Boolean).join(' • ') || '—'}
                     </p>
                   </div>
                   <div className="text-right ml-2">
                     <p className="text-xs lg:text-sm text-heading">
-                      {member.trade_count || 0} trades
+                      {(member.total_trades ?? 0).toLocaleString()} trades
                     </p>
-                    <p className="text-xs text-body">{member.chamber}</p>
+                    <p className="text-xs text-body">{member.member_chamber}</p>
                   </div>
                 </div>
               )) : (
@@ -350,7 +351,7 @@ const PublicDashboard: React.FC = () => {
                 height="32"
               />
               <span className="ml-3 text-sm text-body">
-                © 2025 CapitolScope. All rights reserved.
+                © {new Date().getFullYear()} CapitolScope. All rights reserved.
               </span>
             </div>
             

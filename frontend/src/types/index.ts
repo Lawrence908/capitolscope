@@ -301,10 +301,11 @@ export interface SecurityCoverage {
 
 // Shape returned by /trades/analytics/top-trading-members (member analytics, not CongressMember).
 export interface TopTradingMember {
-  id?: string;
+  member_id?: string;
   member_name?: string;
-  party?: string | null;
-  state?: string | null;
-  chamber?: string | null;
-  trade_count?: number;
+  member_party?: string | null;
+  member_state?: string | null;
+  member_chamber?: string | null;
+  total_trades?: number;
+  total_value?: number | null;
 }

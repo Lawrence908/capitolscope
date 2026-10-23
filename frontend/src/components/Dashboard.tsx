@@ -19,7 +19,7 @@ import {
   Spinner,
   Meter,
   PartyTag,
-  fmtMoney,
+  fmtAmountRange,
   partyMeta,
   type Tone,
 } from './ui';
@@ -322,7 +322,7 @@ const Dashboard: React.FC = () => {
                   </div>
                   <div className="ml-2 text-right">
                     <p className="font-data text-sm tabular-nums text-content">
-                      {trade.estimated_value ? fmtMoney(trade.estimated_value / 100) : '—'}
+                      {fmtAmountRange(trade.amount_min, trade.amount_max)}
                     </p>
                     <p className="font-data text-[11px] tabular-nums text-content-faint">
                       {trade.transaction_date ? new Date(trade.transaction_date).toLocaleDateString() : "—"}
@@ -349,17 +349,17 @@ const Dashboard: React.FC = () => {
           <div className="divide-y divide-line">
             {topMembers && topMembers.length > 0 ? (
               topMembers.map((member, index) => (
-                <div key={member.id || `member-${index}`} className="flex items-center justify-between gap-3 px-4 py-3">
+                <div key={member.member_id || `member-${index}`} className="flex items-center justify-between gap-3 px-4 py-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <p className="truncate font-ui text-sm font-medium text-content">{member.member_name}</p>
-                      <PartyTag party={member.party} />
+                      <PartyTag party={member.member_party} />
                     </div>
-                    <p className="mt-0.5 font-ui text-xs text-content-faint">{member.state}</p>
+                    <p className="mt-0.5 font-ui text-xs text-content-faint">{member.member_state}</p>
                   </div>
                   <div className="ml-2 text-right">
-                    <p className="font-data text-sm tabular-nums text-content">{member.trade_count || 0} trades</p>
-                    <p className="font-data text-[11px] uppercase tracking-[0.08em] text-content-faint">{member.chamber}</p>
+                    <p className="font-data text-sm tabular-nums text-content">{(member.total_trades ?? 0).toLocaleString()} trades</p>
+                    <p className="font-data text-[11px] uppercase tracking-[0.08em] text-content-faint">{member.member_chamber}</p>
                   </div>
                 </div>
               ))

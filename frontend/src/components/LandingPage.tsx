@@ -156,7 +156,7 @@ const LandingPage: React.FC = () => {
                 height="32"
               />
               <span className="ml-3 text-sm text-body">
-                © 2025 CapitolScope. All rights reserved.
+                © {new Date().getFullYear()} CapitolScope. All rights reserved.
               </span>
             </div>
             

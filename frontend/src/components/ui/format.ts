@@ -13,6 +13,18 @@ export const fmtMoney = (n: number | null | undefined): string => {
   return `$${n.toFixed(0)}`;
 };
 
+/** Disclosed amount range from cents, e.g. 1500100/5000000 -> "$15,001–$50,000". */
+export const fmtAmountRange = (
+  minCents: number | null | undefined,
+  maxCents: number | null | undefined,
+): string => {
+  const usd = (c: number) => `$${Math.round(c / 100).toLocaleString('en-US')}`;
+  if (minCents == null && maxCents == null) return '—';
+  if (minCents != null && maxCents != null && maxCents !== minCents) return `${usd(minCents)}–${usd(maxCents)}`;
+  if (minCents != null && maxCents == null) return `${usd(minCents)}+`;
+  return usd((minCents ?? maxCents) as number);
+};
+
 export const fmtPct = (n: number | null | undefined, digits = 1): string =>
   n == null ? '—' : `${(n * 100).toFixed(digits)}%`;
 

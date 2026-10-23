@@ -12,7 +12,6 @@ import LandingPage from './components/LandingPage';
 import PublicDashboard from './components/PublicDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import PremiumRoute from './components/PremiumRoute';
-import ColorPaletteShowcase from './components/ColorPaletteShowcase';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 
@@ -48,7 +47,6 @@ const App: React.FC = () => {
             {/* Public routes */}
             <Route path="/" element={<PublicDashboard />} />
             <Route path="/landing" element={<LandingPage />} />
-            <Route path="/colors" element={<ColorPaletteShowcase />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/login" element={

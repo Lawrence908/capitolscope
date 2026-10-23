@@ -661,7 +661,9 @@ async def get_data_quality_stats(
         party_distribution = {}
         party_result = await session.execute(party_distribution_query)
         for party, count in party_result:
-            party_name = "Democratic" if party == "D" else "Republican" if party == "R" else "Independent"
+            # Members missing metadata (mostly former members) must not be
+            # folded into "Independent"; only party "I" is Independent.
+            party_name = {"D": "Democratic", "R": "Republican", "I": "Independent"}.get(party, "Unknown")
             party_distribution[party_name] = count
         
         # Get chamber distribution
@@ -673,7 +675,7 @@ async def get_data_quality_stats(
         chamber_distribution = {}
         chamber_result = await session.execute(chamber_distribution_query)
         for chamber, count in chamber_result:
-            chamber_distribution[chamber] = count
+            chamber_distribution[chamber or "Unknown"] = count
         
         stats = {
             "total_trades": total_trades,

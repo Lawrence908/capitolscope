@@ -222,7 +222,20 @@ def summarize(plan: Dict[str, Any]) -> None:
 _COLS = ("bioguide_id", "first_name", "last_name", "full_name", "party", "chamber", "state", "district", "term_start", "term_end")
 
 
-def apply_plan(session, plan: Dict[str, Any]) -> Dict[str, int]:
+def apply_plan(session, plan: Dict[str, Any], commit: bool = True) -> Dict[str, int]:
+    """Apply the plan. commit=False runs every statement and rolls back (test)."""
+    if commit:
+        _backup(session)
+    result = _apply_statements(session, plan)
+    if commit:
+        session.commit()
+    else:
+        session.rollback()
+        result["rolled_back"] = True
+    return result
+
+
+def _backup(session) -> None:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
     members_bak = BACKUP_DIR / f"congress_members_{stamp}.json"
@@ -236,11 +249,14 @@ def apply_plan(session, plan: Dict[str, Any]) -> Dict[str, int]:
             w.writerow([tid, mid])
     print(f"backups: {members_bak} {trades_bak}")
 
+
+def _apply_statements(session, plan: Dict[str, Any]) -> Dict[str, int]:
+
     set_sql = ", ".join(f"{c} = :{c}" for c in _COLS)
     for c in plan["creates"]:
         session.execute(text(
-            "INSERT INTO congress_members (id, created_at, updated_at, " + ", ".join(_COLS) + ") "
-            "VALUES (:member_id, now(), now(), " + ", ".join(f":{c}" for c in _COLS) + ")"
+            "INSERT INTO congress_members (id, created_at, updated_at, is_active, " + ", ".join(_COLS) + ") "
+            "VALUES (:member_id, now(), now(), true, " + ", ".join(f":{c}" for c in _COLS) + ")"
         ), c)
     for a in plan["adopts"]:
         session.execute(text(f"UPDATE congress_members SET {set_sql}, updated_at = now() WHERE id = :member_id"), a)
@@ -266,7 +282,6 @@ def apply_plan(session, plan: Dict[str, Any]) -> Dict[str, int]:
         "DELETE FROM congress_members m WHERE NOT EXISTS (SELECT 1 FROM congressional_trades t WHERE t.member_id = m.id)"
         " AND m.bioguide_id IS NULL" + (f" AND {refs}" if refs else "")
     )).rowcount
-    session.commit()
     return {"created": len(plan["creates"]), "adopted": len(plan["adopts"]), "refreshed": len(plan["refresh"]),
             "moved_filings": len(plan["moves"]), "deleted_empty_members": deleted}
 
@@ -274,6 +289,7 @@ def apply_plan(session, plan: Dict[str, Any]) -> Dict[str, int]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--apply", action="store_true", help="write changes (default: dry run)")
+    ap.add_argument("--test-apply", action="store_true", help="run every write, then roll back (no backup)")
     ap.add_argument("--legislators-dir", help="dir with legislators-current.json / -historical.json (default: download)")
     ap.add_argument("--plan-out", default=str(DATA_DIR / "state" / "member_repair_plan.json"))
     args = ap.parse_args()
@@ -287,7 +303,7 @@ def main() -> int:
     index, _ = build_index(current, historical)
 
     with get_sync_db_session() as session:
-        if not args.apply:
+        if not (args.apply or args.test_apply):
             session.execute(text("SET TRANSACTION READ ONLY"))
         plan = build_plan(session, index)
         Path(args.plan_out).parent.mkdir(parents=True, exist_ok=True)
@@ -296,6 +312,8 @@ def main() -> int:
         print(f"\nplan written to {args.plan_out}")
         if args.apply:
             print("\napplied:", apply_plan(session, plan))
+        elif args.test_apply:
+            print("\ntest apply (rolled back):", apply_plan(session, plan, commit=False))
         else:
             print("\nDRY RUN: nothing written. Re-run with --apply to apply.")
     return 0

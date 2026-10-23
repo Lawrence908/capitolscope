@@ -23,12 +23,21 @@ def _ensure_db():
         run_async_task(db_manager.initialize())
 
 
+def _tables_ready(session) -> bool:
+    """False until the social_posts migration (e7a1c3d5f9b2) has been applied."""
+    from sqlalchemy import inspect
+
+    return inspect(session.get_bind()).has_table("social_posts")
+
+
 @celery_app.task(base=DatabaseTask, bind=True)
 def draft_social_posts(self):
     _ensure_db()
     from domains.social.service import draft_posts
 
     with get_sync_db_session() as session:
+        if not _tables_ready(session):
+            return {"status": "not_migrated"}
         result = draft_posts(session)
     logger.info("draft_social_posts: %s", result)
     return {"status": "success", **result}
@@ -40,7 +49,9 @@ def publish_social_posts(self):
     from domains.social.service import publish_next
 
     with get_sync_db_session() as session:
+        if not _tables_ready(session):
+            return {"status": "not_migrated"}
         result = publish_next(session)
-    if result.get("status") not in ("disabled", "outside_window", "queue_empty", "min_gap"):
+    if result.get("status") not in ("disabled", "outside_window", "queue_empty", "min_gap", "not_migrated"):
         logger.info("publish_social_posts: %s", result)
     return result

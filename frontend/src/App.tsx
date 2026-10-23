@@ -29,6 +29,8 @@ const ScrutinyCommand = React.lazy(() => import('./pages/scrutiny/ScrutinyComman
 const MirrorPage = React.lazy(() => import('./pages/mirror/MirrorPage'));
 const AssetPage = React.lazy(() => import('./pages/asset/AssetPage'));
 const ComparePage = React.lazy(() => import('./pages/compare/ComparePage'));
+const TradePage = React.lazy(() => import('./pages/trade/TradePage'));
+const LateFilersPage = React.lazy(() => import('./pages/late/LateFilersPage'));
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -81,49 +83,39 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
             <Route path="/trades" element={
-              <ProtectedRoute>
                 <Layout>
                   <Suspense fallback={<LoadingSpinner />}>
                     <TradeBrowser />
                   </Suspense>
                 </Layout>
-              </ProtectedRoute>
             } />
             <Route path="/transactions" element={
-              <ProtectedRoute>
                 <Layout>
                   <Suspense fallback={<LoadingSpinner />}>
                     <TradeBrowser />
                   </Suspense>
                 </Layout>
-              </ProtectedRoute>
             } />
             <Route path="/assets/:ticker" element={
-              <ProtectedRoute>
                 <Layout>
                   <Suspense fallback={<LoadingSpinner />}>
                     <AssetPage />
                   </Suspense>
                 </Layout>
-              </ProtectedRoute>
             } />
             <Route path="/members" element={
-              <ProtectedRoute>
                 <Layout>
                   <Suspense fallback={<LoadingSpinner />}>
                     <MembersBrowser />
                   </Suspense>
                 </Layout>
-              </ProtectedRoute>
             } />
             <Route path="/members/:id" element={
-              <ProtectedRoute>
                 <Layout>
                   <Suspense fallback={<LoadingSpinner />}>
                     <MemberProfile />
                   </Suspense>
                 </Layout>
-              </ProtectedRoute>
             } />
             <Route path="/analytics" element={
               <ProtectedRoute>
@@ -203,6 +195,22 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
             
+            {/* Public data pages: open to everyone (shareable from X). Tools stay gated. */}
+            <Route path="/t/:tradeId" element={
+              <Layout>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <TradePage />
+                </Suspense>
+              </Layout>
+            } />
+            <Route path="/late" element={
+              <Layout>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <LateFilersPage />
+                </Suspense>
+              </Layout>
+            } />
+
             {/* Catch all route - redirect to public dashboard */}
             <Route path="*" element={<PublicDashboard />} />
             </Routes>

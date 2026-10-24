@@ -190,7 +190,18 @@ def build_plan(session, docs: List[str], matcher) -> Dict[str, object]:
     return {"docs": len(docs), "stats": dict(stats), "updates": updates}
 
 
-def apply(session, matcher, updates: List[Dict[str, object]]) -> Dict[str, int]:
+def _load_all_models() -> None:
+    """Import every domain model so SQLAlchemy can configure relationships
+    (Security -> MemberPortfolio etc.) outside the app process."""
+    import domains.congressional.models  # noqa: F401
+    import domains.notifications.models  # noqa: F401
+    import domains.portfolio.models  # noqa: F401
+    import domains.securities.models  # noqa: F401
+    import domains.users.models  # noqa: F401
+
+
+def apply(session, matcher, updates: List[Dict[str, object]], commit: bool = True) -> Dict[str, int]:
+    _load_all_models()
     from domains.securities.models import Security
 
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
@@ -223,8 +234,11 @@ def apply(session, matcher, updates: List[Dict[str, object]]) -> Dict[str, int]:
             params.update({"sid": sec_map[sym], "sym": sym})
             linked += 1
         session.execute(text(sql + " WHERE id = :tid"), params)
-    session.commit()
-    return {"updated": len(updates), "linked": linked, "securities_created": created}
+    if commit:
+        session.commit()
+    else:
+        session.rollback()
+    return {"updated": len(updates), "linked": linked, "securities_created": created, "committed": commit}
 
 
 def main() -> int:
@@ -232,6 +246,9 @@ def main() -> int:
     ap.add_argument("--download-only", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--all-filings", action="store_true", help="every House filing, not only ones with unmatched trades")
+    ap.add_argument("--test-apply", action="store_true", help="run the writes, then roll back")
+    ap.add_argument("--max-docs", type=int, default=0, help="limit filings (quick tests)")
+    ap.add_argument("--from-plan", action="store_true", help="apply the saved plan instead of re-parsing")
     args = ap.parse_args()
 
     import asyncio
@@ -241,9 +258,11 @@ def main() -> int:
 
     asyncio.run(db_manager.initialize())
     with get_sync_db_session() as session:
-        if not args.apply:
+        if not (args.apply or args.test_apply):
             session.execute(text("SET TRANSACTION READ ONLY"))
         docs = target_docs(session, args.all_filings)
+        if args.max_docs:
+            docs = docs[: args.max_docs]
         print(f"target filings: {len(docs)}")
         if args.download_only:
             print("download:", dict(download(docs, filing_years())))
@@ -251,7 +270,14 @@ def main() -> int:
         from domains.securities.matching import SecurityMatcher
 
         matcher = SecurityMatcher()
-        plan = build_plan(session, docs, matcher)
+        plan_path = DATA_DIR / "state" / "ptr_reparse_plan.json"
+        if args.from_plan:
+            plan = json.loads(plan_path.read_text(encoding="utf-8"))
+            print(f"loaded saved plan: {len(plan['updates'])} updates")
+        else:
+            plan = build_plan(session, docs, matcher)
+            if not args.max_docs:
+                plan_path.write_text(json.dumps(plan), encoding="utf-8")
         for k, v in sorted(plan["stats"].items(), key=lambda kv: -kv[1]):
             print(f"  {k}: {v}")
         sample = [u for u in plan["updates"] if u.get("symbol")]
@@ -260,6 +286,8 @@ def main() -> int:
             print(f"  {u['old_asset'][:34]!r:38} -> {u['symbol']:6} {u['full_asset'][:50]}")
         if args.apply:
             print("\napplied:", apply(session, matcher, plan["updates"]))
+        elif args.test_apply:
+            print("\ntest apply (rolled back):", apply(session, matcher, plan["updates"], commit=False))
         else:
             print("\nDRY RUN: nothing written.")
     return 0

@@ -133,7 +133,9 @@ def build_plan(session, docs: List[str], matcher) -> Dict[str, object]:
 
     stats: Counter = Counter()
     updates: List[Dict[str, object]] = []
-    for doc in docs:
+    for i, doc in enumerate(docs, 1):
+        if i % 200 == 0:
+            print(f"  ... {i}/{len(docs)} filings parsed {dict(stats)}", flush=True)
         path = PDF_DIR / f"{doc}.pdf"
         if not path.exists():
             stats["pdf missing"] += 1

@@ -169,6 +169,13 @@ def build_plan(session, docs: List[str], matcher) -> Dict[str, object]:
             if symbol and not names_consistent(row.asset, company):
                 stats["ticker name mismatch (not linked)"] += 1
                 symbol = None
+            if symbol:
+                text_l = row.asset.lower()
+                meta_type = str((matcher.universe_meta.get(symbol) or {}).get("asset_type") or "").upper()
+                # A mutual fund must not link to the same manager's ETF (Angel Oak fund -> CARY).
+                if "fund" in text_l and "etf" not in text_l and meta_type in ("ETF", "EF") and row.type_code != "EF":
+                    stats["fund vs ETF mismatch (not linked)"] += 1
+                    symbol = None
             if symbol and not sid:
                 upd["symbol"] = symbol
                 upd["method"] = method

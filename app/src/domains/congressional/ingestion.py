@@ -620,7 +620,10 @@ class CongressionalDataIngestion:
                 comment=trade_record.comment,
                 cap_gains_over_200=trade_record.cap_gains_over_200,
                 ticker=symbol,
-                asset_name=ticker_result.asset_name,
+                # Display name = the filed text minus line ids and [TYPE] codes.
+                # The extractor's "cleaned" name drops real words ("Waste
+                # Management, Inc" -> "Management,"), so it is only a fallback.
+                asset_name=_display_asset_name(trade_record.raw_asset_description) or ticker_result.asset_name,
                 asset_type=ticker_result.asset_type,
                 security_id=security_id,
                 ticker_confidence=Decimal('0.99') if symbol else Decimal('0.0'),
@@ -1408,3 +1411,12 @@ class _FilerResolver:
         self.bioguide_to_member[bio] = member.id
         logger.info("created member %s (%s) from filing %s", fields["full_name"], bio, rec.doc_id)
         return member.id
+
+
+def _display_asset_name(raw: Optional[str]) -> Optional[str]:
+    """Human-readable asset name from the filed text."""
+    if not raw:
+        return None
+    text = re.sub(r"^\s*\d{6,}\s+", "", raw)
+    text = re.sub(r"\s*\[[A-Za-z]{2}\]", "", text).strip()
+    return text[:300] or None

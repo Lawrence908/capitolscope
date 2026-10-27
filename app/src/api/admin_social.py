@@ -154,9 +154,12 @@ async def reject_post(
 
 
 @router.post("/draft-now")
-async def draft_now(current_user: User = Depends(require_admin())):
-    """Queue a drafting run now (normally runs after each sync)."""
-    from background.social_tasks import draft_social_posts
+async def draft_now(
+    kind: str = Query("trades", pattern="^(trades|weekly)$"),
+    current_user: User = Depends(require_admin()),
+):
+    """Queue a drafting run now: new-trade posts (normally after each sync) or the weekly recap."""
+    from background.social_tasks import draft_social_posts, draft_weekly_recap
 
-    task = draft_social_posts.delay()
-    return create_response(data={"task_id": task.id})
+    task = (draft_weekly_recap if kind == "weekly" else draft_social_posts).delay()
+    return create_response(data={"task_id": task.id, "kind": kind})

@@ -55,3 +55,16 @@ def publish_social_posts(self):
     if result.get("status") not in ("disabled", "outside_window", "queue_empty", "min_gap", "not_migrated"):
         logger.info("publish_social_posts: %s", result)
     return result
+
+
+@celery_app.task(base=DatabaseTask, bind=True)
+def draft_weekly_recap(self):
+    _ensure_db()
+    from domains.social.service import draft_weekly_recap as _draft
+
+    with get_sync_db_session() as session:
+        if not _tables_ready(session):
+            return {"status": "not_migrated"}
+        result = _draft(session)
+    logger.info("draft_weekly_recap: %s", result)
+    return result

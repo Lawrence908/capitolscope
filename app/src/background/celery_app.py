@@ -46,6 +46,10 @@ celery_app.conf.beat_schedule = {
         'task': 'background.social_tasks.draft_social_posts',
         'schedule': crontab(hour='14,23', minute=45),
     },
+    'draft-weekly-recap': {
+        'task': 'background.social_tasks.draft_weekly_recap',
+        'schedule': crontab(hour=14, minute=0, day_of_week=0),  # Sundays 14:00 UTC (10am ET)
+    },
     'publish-social-posts': {
         'task': 'background.social_tasks.publish_social_posts',
         'schedule': 900.0,

@@ -255,3 +255,83 @@ def publish_next(session: Session, now: Optional[datetime] = None, client=None) 
 
 def today_utc() -> date:
     return datetime.now(timezone.utc).date()
+
+
+# -- weekly recap ---------------------------------------------------------------
+
+
+def _member_title(full_name: str, chamber: Optional[str], party: Optional[str], state: Optional[str]) -> str:
+    ch = (chamber or "").lower()
+    prefix = "Sen." if ch.startswith("s") else "Rep." if ch.startswith("h") else ""
+    aff = "-".join(p for p in ((party or "")[:1].upper() or None, state) if p)
+    return f"{prefix} {full_name}{f' ({aff})' if aff else ''}".strip()
+
+
+def collect_weekly_stats(session: Session, end: date):
+    from sqlalchemy import text
+
+    from .recap import LateFiler, MemberCount, TickerFlow, WeeklyStats
+
+    start = end - timedelta(days=6)
+    window = """
+        FROM congressional_trades t JOIN congress_members m ON m.id = t.member_id
+        WHERE t.notification_date BETWEEN :start AND :end AND t.transaction_date <= :end
+    """
+    late = "(t.notification_date - t.transaction_date) > 45 AND coalesce(t.filing_status, 'N') <> 'A'"
+    p = {"start": start, "end": end}
+    tot = session.execute(text(f"""
+        SELECT count(*), count(DISTINCT t.member_id),
+               count(*) FILTER (WHERE t.transaction_type = 'P'), count(*) FILTER (WHERE t.transaction_type = 'S'),
+               coalesce(sum(t.amount_min), 0), coalesce(sum(coalesce(t.amount_max, t.amount_min)), 0),
+               count(*) FILTER (WHERE {late})
+        {window}"""), p).one()
+    active = session.execute(text(f"""
+        SELECT m.full_name, m.chamber, m.party, m.state, count(*),
+               count(*) FILTER (WHERE t.transaction_type = 'P'), count(*) FILTER (WHERE t.transaction_type = 'S')
+        {window} GROUP BY m.id ORDER BY count(*) DESC, m.full_name LIMIT 5"""), p).all()
+
+    def flows(kind: str):
+        return session.execute(text(f"""
+            SELECT t.ticker, count(DISTINCT t.member_id), count(*)
+            {window} AND t.transaction_type = :kind AND t.ticker IS NOT NULL AND t.security_id IS NOT NULL
+            GROUP BY t.ticker ORDER BY count(DISTINCT t.member_id) DESC, count(*) DESC, t.ticker LIMIT 5"""),
+            {**p, "kind": kind}).all()
+
+    lates = session.execute(text(f"""
+        SELECT m.full_name, m.chamber, m.party, m.state, count(*), max(t.notification_date - t.transaction_date)
+        {window} AND {late} GROUP BY m.id ORDER BY count(*) DESC, m.full_name LIMIT 5"""), p).all()
+
+    return WeeklyStats(
+        start=start, end=end, trades=tot[0], members=tot[1], buys=tot[2], sells=tot[3],
+        amount_min_cents=int(tot[4]), amount_max_cents=int(tot[5]), late_trades=tot[6],
+        most_active=[MemberCount(_member_title(r[0], r[1], r[2], r[3]), r[4], r[5], r[6]) for r in active],
+        most_bought=[TickerFlow(r[0], r[1], 0, r[2]) for r in flows("P")],
+        most_sold=[TickerFlow(r[0], 0, r[1], r[2]) for r in flows("S")],
+        late_filers=[LateFiler(_member_title(r[0], r[1], r[2], r[3]), r[4], int(r[5])) for r in lates],
+    )
+
+
+def draft_weekly_recap(session: Session, now: Optional[datetime] = None) -> Dict[str, Any]:
+    """Draft one weekly thread (skipped if one was drafted in the last 6 days or the week was empty)."""
+    from .recap import compose_weekly_thread
+
+    now = now or datetime.now(timezone.utc)
+    recent = session.execute(
+        select(func.count()).select_from(SocialPost).where(
+            SocialPost.kind == "weekly", SocialPost.created_at >= now - timedelta(days=6)
+        )
+    ).scalar_one()
+    if recent:
+        return {"status": "already_drafted"}
+    stats = collect_weekly_stats(session, now.date())
+    if stats.trades == 0:
+        return {"status": "empty_week"}
+    lead, replies, link = compose_weekly_thread(stats, base_url())
+    post = SocialPost(platform="x", kind="weekly", status="draft", score=100,
+                      reasons=[f"weekly recap: {stats.trades} trades, {stats.members} members"],
+                      text=lead, thread=replies, link_url=link, image_url="/api/v1/og/default.png")
+    session.add(post)
+    session.commit()
+    if mode() == "review":
+        _notify_reviewers([post])
+    return {"status": "drafted", "post_id": str(post.id), "replies": len(replies)}

@@ -76,6 +76,18 @@ const PostCard: React.FC<{ post: SocialPost; onChange: () => void }> = ({ post, 
         <div className={`mt-1 font-ui text-xs ${length > X_LIMIT ? 'font-bold text-accent' : 'text-content-faint'}`}>
           {length} / {X_LIMIT}
         </div>
+        {post.thread.length > 0 && (
+          <div className="mt-3 space-y-2">
+            <div className="font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-content-faint">
+              Thread replies ({post.thread.length})
+            </div>
+            {post.thread.map((reply, i) => (
+              <pre key={i} className="whitespace-pre-wrap border-l-2 border-line pl-3 font-ui text-sm leading-relaxed text-content-muted">
+                {reply}
+              </pre>
+            ))}
+          </div>
+        )}
 
         {post.error && (
           <p className="mt-2 border-l-4 border-accent bg-surface-inset px-3 py-2 font-ui text-sm text-content">{post.error}</p>
@@ -169,9 +181,9 @@ const SocialQueuePage: React.FC = () => {
     void load();
   }, [load]);
 
-  const draftNow = async () => {
+  const draftNow = async (kind: 'trades' | 'weekly' = 'trades') => {
     try {
-      await apiClient.draftSocialPostsNow();
+      await apiClient.draftSocialPostsNow(kind);
       setNotice('Drafting run queued. Refresh in a minute.');
     } catch (e) {
       setError(errorMessage(e));
@@ -191,9 +203,14 @@ const SocialQueuePage: React.FC = () => {
             : 'Drafts from newly disclosed trades. Nothing posts until it is approved.'
         }
         actions={
-          <button type="button" className="btn-secondary" onClick={draftNow}>
-            Draft now
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className="btn-secondary" onClick={() => draftNow('trades')}>
+              Draft new trades
+            </button>
+            <button type="button" className="btn-outline" onClick={() => draftNow('weekly')}>
+              Draft weekly recap
+            </button>
+          </div>
         }
       />
 

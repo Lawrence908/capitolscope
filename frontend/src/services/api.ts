@@ -627,8 +627,8 @@ class APIClient {
     return res.data?.data;
   }
 
-  async draftSocialPostsNow(): Promise<{ task_id: string }> {
-    const res = await this.client.post('/api/v1/admin/social/draft-now');
+  async draftSocialPostsNow(kind: 'trades' | 'weekly' = 'trades'): Promise<{ task_id: string }> {
+    const res = await this.client.post(`/api/v1/admin/social/draft-now?kind=${kind}`);
     return res.data?.data;
   }
 }
